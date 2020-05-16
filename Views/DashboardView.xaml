@@ -61,7 +61,6 @@
             <ListView x:Name="lvGames" HorizontalAlignment="Left" Height="336" VerticalAlignment="Top" Width="605" SelectionChanged="lvGames_SelectionChanged" FontSize="24" GridViewColumnHeader.Click="onHeaderClick">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="{Binding lvGamesID}" Width="0" DisplayMemberBinding="{Binding listGameID}"/>
                         <GridViewColumn Header="{Binding lvGamesIcon}" Width="50">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
@@ -69,9 +68,58 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn x:Name="hGameTitle" Header="{Binding lvGamesTitle}" Width="300" DisplayMemberBinding="{Binding listGameTitle}" />
+                        <GridViewColumn x:Name="hGameTitle" Header="{Binding lvGamesTitle}" Width="Auto" DisplayMemberBinding="{Binding listGameTitle}" />
                         <GridViewColumn Header="{Binding lvGamesLastActivity}" DisplayMemberBinding="{Binding Path=listGameLastActivity, StringFormat='dd/MM/yyyy HH:mm:ss'}" />
-                        <GridViewColumn Header="{Binding lvGamesElapsedSeconds}" Width="100" DisplayMemberBinding="{Binding listGameElapsedSeconds}" />
+                        <GridViewColumn Header="{Binding lvGamesElapsedSeconds}" Width="100">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Label Content="{Binding listGameElapsedSeconds}" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Header="avg CPU">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Label Content="{Binding avgCPU}" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="avg GPU">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Label Content="{Binding avgGPU}" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="avg RAM">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Label Content="{Binding avgRAM}" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="avg FPS">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Label Content="{Binding avgFPS}" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="avg CPU T">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Label Content="{Binding avgCPUT}" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="avg GPU T">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Label Content="{Binding avgGPUT}" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
                     </GridView>
                 </ListView.View>
             </ListView>

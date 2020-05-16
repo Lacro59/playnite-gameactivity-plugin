@@ -88,9 +88,8 @@ namespace Dashboard
 
             #region text localization
             // listViewGames
-            lvGamesID = "gameID";
-            lvGamesIcon = "GameIcon";
-            lvGamesTitle = "Title";
+            lvGamesIcon = "Icon";
+            lvGamesTitle = "Name";
             lvGamesLastActivity = "Last session start";
             lvGamesElapsedSeconds = "Elapsed Time";
 
@@ -105,42 +104,16 @@ namespace Dashboard
             InitializeComponent();
 
             // Add column if log details enable.
-            if (settings.HWiNFO_enable)
+            if (!settings.HWiNFO_enable)
             {
                 GridView lvView = (GridView)lvGames.View;
 
-                lvView.Columns.Add(new GridViewColumn
-                {
-                    Header = "avg CPU",
-                    DisplayMemberBinding = new Binding("avgCPU")
-                });
-                lvView.Columns.Add(new GridViewColumn
-                {
-                    Header = "avg GPU",
-                    DisplayMemberBinding = new Binding("avgGPU")
-                });
-                lvView.Columns.Add(new GridViewColumn
-                {
-                    Header = "avg RAM",
-                    DisplayMemberBinding = new Binding("avgRAM")
-                });
-
-                lvView.Columns.Add(new GridViewColumn
-                {
-                    Header = "avg FPS",
-                    DisplayMemberBinding = new Binding("avgFPS")
-                });
-
-                lvView.Columns.Add(new GridViewColumn
-                {
-                    Header = "avg CPU T",
-                    DisplayMemberBinding = new Binding("avgCPUT")
-                });
-                lvView.Columns.Add(new GridViewColumn
-                {
-                    Header = "avg GPU T",
-                    DisplayMemberBinding = new Binding("avgGPUT")
-                });
+                lvView.Columns.RemoveAt(9);
+                lvView.Columns.RemoveAt(8);
+                lvView.Columns.RemoveAt(7);
+                lvView.Columns.RemoveAt(6);
+                lvView.Columns.RemoveAt(5);
+                lvView.Columns.RemoveAt(4);
 
                 lvGames.View = lvView;
             }
