@@ -53,9 +53,9 @@ namespace Dashboard
                 Directory.CreateDirectory(pathActivityDetailsDB);
 
             // Procedure temporaire
-            transformOldData_v01a(api.Paths.ConfigurationPath + "\\Extensions\\Dashboard\\database");
-            transformOldData_v02a(api.Paths.ConfigurationPath + "\\Extensions\\Dashboard\\activity\\", api.Paths.ConfigurationPath + "\\Extensions\\Dashboard\\activityDetails\\");
-            transformOldData_v03a(pathActivityDB, pathActivityDetailsDB, api.Paths.ConfigurationPath + "\\Extensions\\Dashboard\\activity\\", api.Paths.ConfigurationPath + "\\Extensions\\Dashboard\\activityDetails\\");
+            //transformOldData_v01a(api.Paths.ConfigurationPath + "\\Extensions\\Dashboard\\database");
+            //transformOldData_v02a(api.Paths.ConfigurationPath + "\\Extensions\\Dashboard\\activity\\", api.Paths.ConfigurationPath + "\\Extensions\\Dashboard\\activityDetails\\");
+            //transformOldData_v03a(pathActivityDB, pathActivityDetailsDB, api.Paths.ConfigurationPath + "\\Extensions\\Dashboard\\activity\\", api.Paths.ConfigurationPath + "\\Extensions\\Dashboard\\activityDetails\\");
         }
 
         // Transform data v0.1a
