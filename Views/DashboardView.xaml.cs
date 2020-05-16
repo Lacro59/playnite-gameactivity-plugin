@@ -19,6 +19,7 @@ using System.Windows.Data;
 using System.ComponentModel;
 using Dashboard.Database.Collections;
 using Dashboard.Models;
+using Dashboard.Commons;
 
 namespace Dashboard
 {
@@ -64,17 +65,6 @@ namespace Dashboard
 
         bool isMonthSources = true;
         bool isGameTime = true;
-
-        // Icons variables
-        public string steam = "";
-        public string gog = "";
-        public string battleNET = "";
-        public string origin = "";
-        public string xbox = "";
-        public string uplay = "";
-        public string epic = "";
-        public string playnite = "";
-        public string bethesda = "";
 
         // Variables api.
         public readonly IGameDatabaseAPI dbPlaynite;
@@ -278,7 +268,7 @@ namespace Dashboard
                 series.Add((double)item.Value);
                 labels[compteur] = item.Key;
                 if (settingsPlaynite.showLauncherIcons)
-                    labels[compteur] = getLauncherIcon(labels[compteur]);
+                    labels[compteur] = TransformIcon.Get(labels[compteur]);
                 compteur = compteur + 1;
             }
 
@@ -380,7 +370,7 @@ namespace Dashboard
                 {
                     labels[iSource] = (string)listSources[iSource];
                     if (settingsPlaynite.showLauncherIcons)
-                        labels[iSource] = getLauncherIcon((string)listSources[iSource]);
+                        labels[iSource] = TransformIcon.Get((string)listSources[iSource]);
 
                     activityByWeekSeries.Add(new StackedColumnSeries {
                         Title = labels[iSource],
@@ -687,52 +677,6 @@ namespace Dashboard
             var day = (int)CultureInfo.CurrentCulture.Calendar.GetDayOfWeek(date);
             return CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(date.AddDays(4 - (day == 0 ? 7 : day)), CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
         }
-
-        /// <summary>
-        /// Transform launcher name to icon.
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public string getLauncherIcon(string name)
-        {
-            string stringReturn;
-            switch (name.ToLower())
-            {
-                case "steam":
-                    stringReturn = steam;
-                    break;
-                case "gog":
-                    stringReturn = gog;
-                    break;
-                case "battle.net":
-                    stringReturn = battleNET;
-                    break;
-                case "origin":
-                    stringReturn = origin;
-                    break;
-                case "xbox":
-                    stringReturn = xbox;
-                    break;
-                case "uplay":
-                    stringReturn = uplay;
-                    break;
-                case "epic":
-                    stringReturn = epic;
-                    break;
-                case "playnite":
-                    stringReturn = playnite;
-                    break;
-                case "bethesda":
-                    stringReturn = bethesda;
-                    break;
-                default:
-                    stringReturn = name;
-                    break;
-            }
-            return stringReturn;
-        }
-
-
 
         /// <summary>
         /// Get details game activity on selected.
