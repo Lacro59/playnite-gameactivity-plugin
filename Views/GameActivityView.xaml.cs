@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Windows;
-using LiveCharts;
-using LiveCharts.Wpf;
 using Newtonsoft.Json.Linq;
 using Playnite.SDK;
 using Playnite.SDK.Models;
@@ -20,6 +18,8 @@ using System.ComponentModel;
 using GameActivity.Database.Collections;
 using GameActivity.Models;
 using GameActivity.Commons;
+using LiveCharts;
+using LiveCharts.Wpf;
 
 namespace GameActivity
 {
@@ -254,7 +254,7 @@ namespace GameActivity
                 }
             };
             string[] ActivityByMonthLabels = labels;
-            Func<double, string> ActivityByMonthFormatter = value => TimeSpan.FromSeconds(value).ToString(@"hh") + " h " + TimeSpan.FromSeconds(value).ToString(@"mm");
+            Func<double, string> ActivityByMonthFormatter = value => (int)TimeSpan.FromSeconds(value).TotalHours + "h " + TimeSpan.FromSeconds(value).ToString(@"mm") + "min";
 
             acmLabel.Content = activityByMonthTitle;
             acmSeries.Series = ActivityByMonthSeries;
@@ -345,7 +345,8 @@ namespace GameActivity
                     if (settingsPlaynite.showLauncherIcons)
                         labels[iSource] = TransformIcon.Get((string)listSources[iSource]);
 
-                    activityByWeekSeries.Add(new StackedColumnSeries {
+                    activityByWeekSeries.Add(new StackedColumnSeries
+                    {
                         Title = labels[iSource],
                         Values = new ChartValues<double>() {
                             (double)activityByWeek[0][(string)listSources[iSource]],
@@ -353,7 +354,7 @@ namespace GameActivity
                             (double)activityByWeek[2][(string)listSources[iSource]],
                             (double)activityByWeek[3][(string)listSources[iSource]]
                         },
-                        StackMode = StackMode.Values, 
+                        StackMode = StackMode.Values,
                         DataLabels = false
                     });
                 }
@@ -371,7 +372,7 @@ namespace GameActivity
                 "week " + WeekOfYearISO8601(datesPeriodes[2].Monday),
                 "week " + WeekOfYearISO8601(datesPeriodes[3].Monday),
             };
-            Func<double, string> activityByWeekFormatter = value => TimeSpan.FromSeconds(value).ToString(@"hh") + " h " + TimeSpan.FromSeconds(value).ToString(@"mm");
+            Func<double, string> activityByWeekFormatter = value => (int)TimeSpan.FromSeconds(value).TotalHours + "h " + TimeSpan.FromSeconds(value).ToString(@"mm") + "min";
 
             acwLabel.Content = activityByWeekTitle;
             acwSeries.Series = activityByWeekSeries;
@@ -414,7 +415,7 @@ namespace GameActivity
                     listGameTitle = gameTitle,
                     listGameIcon = iconImage,
                     listGameLastActivity = dateSession,
-                    listGameElapsedSeconds = TimeSpan.FromSeconds(elapsedSeconds).ToString(@"hh") + " h " + TimeSpan.FromSeconds(elapsedSeconds).ToString(@"mm"),
+                    listGameElapsedSeconds = (int)TimeSpan.FromSeconds(elapsedSeconds).TotalHours + "h " + TimeSpan.FromSeconds(elapsedSeconds).ToString(@"mm") + "min",
                     avgCPU = listGameActivities[iGame].avgCPU(listGameActivities[iGame].GetLastSession()) + "%",
                     avgGPU = listGameActivities[iGame].avgGPU(listGameActivities[iGame].GetLastSession()) + "%",
                     avgRAM = listGameActivities[iGame].avgRAM(listGameActivities[iGame].GetLastSession()) + "%",
@@ -481,7 +482,7 @@ namespace GameActivity
                 }
             };
             string[] activityForGameLabels = listDate;
-            Func<double, string> activityForGameFormatter = value => TimeSpan.FromSeconds(value).ToString(@"hh") + " h " + TimeSpan.FromSeconds(value).ToString(@"mm");
+            Func<double, string> activityForGameFormatter = value => (int)TimeSpan.FromSeconds(value).TotalHours + "h " + TimeSpan.FromSeconds(value).ToString(@"mm") + "min";
 
             gameLabel.Content = activityForGameTimeTitle;
             gameSeries.Series = activityForGameSeries;
