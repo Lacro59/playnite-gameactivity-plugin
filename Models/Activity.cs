@@ -2,7 +2,7 @@
 using Playnite.SDK;
 using System;
 
-namespace Dashboard.Models
+namespace GameActivity.Models
 {
     /// <summary>
     /// Specifies <see cref="Activity"/> fields.
@@ -33,7 +33,7 @@ namespace Dashboard.Models
             {
                 if (SourceID != Guid.Parse("00000000-0000-0000-0000-000000000000"))
                 {
-                    return Dashboard.DatabaseReference.Sources.Get(SourceID).Name;
+                    return GameActivity.DatabaseReference.Sources.Get(SourceID).Name;
                 }
 
                 return "Playnite";

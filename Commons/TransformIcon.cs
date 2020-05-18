@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dashboard.Commons
+namespace GameActivity.Commons
 {
     /// <summary>
     /// Get icon from name for "font.ttf".

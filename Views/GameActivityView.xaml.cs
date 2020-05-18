@@ -17,16 +17,16 @@ using Newtonsoft.Json;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.ComponentModel;
-using Dashboard.Database.Collections;
-using Dashboard.Models;
-using Dashboard.Commons;
+using GameActivity.Database.Collections;
+using GameActivity.Models;
+using GameActivity.Commons;
 
-namespace Dashboard
+namespace GameActivity
 {
     /// <summary>
-    /// Logique d'interaction pour DashboardMain.xaml.
+    /// Logique d'interaction pour GameActivity.xaml.
     /// </summary>
-    public partial class DashboardMain : Window
+    public partial class GameActivityView : Window
     {
         private static readonly ILogger logger = LogManager.GetLogger();
 
@@ -61,7 +61,7 @@ namespace Dashboard
         public string pathActivityDB { get; set; }
         public string pathActivityDetailsDB { get; set; }
 
-        DashboardSettings settingsPlaynite { get; set; }
+        GameActivitySettings settingsPlaynite { get; set; }
 
         bool isMonthSources = true;
         bool isGameTime = true;
@@ -72,7 +72,7 @@ namespace Dashboard
         public readonly string pathExtentionData;
 
 
-        public DashboardMain(DashboardSettings settings, IGameDatabaseAPI dbAPI, IPlaynitePathsAPI pathsAPI, string pathExtData)
+        public GameActivityView(GameActivitySettings settings, IGameDatabaseAPI dbAPI, IPlaynitePathsAPI pathsAPI, string pathExtData)
         {
             dbPlaynite = dbAPI;
             pathsPlaynite = pathsAPI;
@@ -160,7 +160,7 @@ namespace Dashboard
             // Total hours by source.
             if (isMonthSources)
             {
-                List<GameActivity> listGameActivities = GameActivityDatabases.GetListGameActivity();
+                List<GameActivityClass> listGameActivities = GameActivityDatabases.GetListGameActivity();
                 for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
                 {
                     List<Activity> gameActivities = listGameActivities[iGame].Activities;
@@ -195,7 +195,7 @@ namespace Dashboard
             // Total hours by genres.
             else
             {
-                List<GameActivity> listGameActivities = GameActivityDatabases.GetListGameActivity();
+                List<GameActivityClass> listGameActivities = GameActivityDatabases.GetListGameActivity();
                 for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
                 {
                     List<Genre> listGameListGenres = listGameActivities[iGame].Genres;
@@ -315,7 +315,7 @@ namespace Dashboard
                 activityByWeek.Add(activityByWeek4);
 
 
-                List<GameActivity> listGameActivities = GameActivityDatabases.GetListGameActivity();
+                List<GameActivityClass> listGameActivities = GameActivityDatabases.GetListGameActivity();
                 for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
                 {
                     List<Activity> gameActivities = listGameActivities[iGame].Activities;
@@ -387,7 +387,7 @@ namespace Dashboard
         {
             activityListByGame = new List<listGame>();
 
-            List<GameActivity> listGameActivities = GameActivityDatabases.GetListGameActivity();
+            List<GameActivityClass> listGameActivities = GameActivityDatabases.GetListGameActivity();
             for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
             {
                 string gameID = listGameActivities[iGame].GameID.ToString();
@@ -454,7 +454,7 @@ namespace Dashboard
 
 
             // Search data in periode
-            GameActivity gameActivity = GameActivityDatabases.Get(Guid.Parse(gameID));
+            GameActivityClass gameActivity = GameActivityDatabases.Get(Guid.Parse(gameID));
             List<Activity> gameActivities = gameActivity.Activities;
             for (int iActivity = 0; iActivity < gameActivities.Count; iActivity++)
             {
@@ -496,7 +496,7 @@ namespace Dashboard
         public void getActivityForGamesLogGraphics(string gameID)
         {
             // TODO Get by date for click on time sessions
-            GameActivity gameActivity = GameActivityDatabases.Get(Guid.Parse(gameID));
+            GameActivityClass gameActivity = GameActivityDatabases.Get(Guid.Parse(gameID));
             List<ActivityDetailsData> gameActivitiesDetails = gameActivity.GetLastSessionActivityDetails();
 
             //logger.Info(JsonConvert.SerializeObject(gameActivity.ActivitiesDetails));

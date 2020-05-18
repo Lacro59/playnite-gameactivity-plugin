@@ -10,18 +10,18 @@ using System.Windows.Controls;
 using System.Timers;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using Dashboard.Database.Collections;
-using Dashboard.Models;
+using GameActivity.Database.Collections;
+using GameActivity.Models;
 
-namespace Dashboard
+namespace GameActivity
 {
-    public class Dashboard : Plugin
+    public class GameActivity : Plugin
     {
         private static readonly ILogger logger = LogManager.GetLogger();
 
         public static IGameDatabase DatabaseReference;
 
-        private DashboardSettings settings { get; set; }
+        private GameActivitySettings settings { get; set; }
 
         // TODO Bad integration with structutre application
         private JArray activity { get; set; }
@@ -39,9 +39,9 @@ namespace Dashboard
 
 
         #region Playnite GenericPlugin
-        public Dashboard(IPlayniteAPI api) : base(api)
+        public GameActivity(IPlayniteAPI api) : base(api)
         {
-            settings = new DashboardSettings(this);
+            settings = new GameActivitySettings(this);
 
             pathActivityDB = this.GetPluginUserDataPath() + "\\activity\\";
             pathActivityDetailsDB = this.GetPluginUserDataPath() + "\\activityDetails\\";
@@ -86,7 +86,7 @@ namespace Dashboard
                 }
                 catch (Exception ex)
                 {
-                    logger.Info("Dashboard plugin - transformOldData_v01a - " + ex.Message);
+                    logger.Info("GameActivity - transformOldData_v01a - " + ex.Message);
                 }
             }
         }
@@ -152,17 +152,17 @@ namespace Dashboard
             return new List<ExtensionFunction>
             {
                 new ExtensionFunction(
-                    "Dashboard",
+                    "GameActivity",
                     () =>
                     {
                         // Add code to be execute when user invokes this menu entry.
                         // PlayniteApi.Dialogs.ShowMessage("Code executed from a plugin!");
-                        logger.Info("Dashboard plugin - DashboardMain");
+                        logger.Info("GameActivityView");
 
                         DatabaseReference = PlayniteApi.Database;
 
-                        // Show dashboard
-                        new DashboardMain(settings, PlayniteApi.Database, PlayniteApi.Paths, this.GetPluginUserDataPath()).ShowDialog();
+                        // Show GameActivity
+                        new GameActivityView(settings, PlayniteApi.Database, PlayniteApi.Paths, this.GetPluginUserDataPath()).ShowDialog();
                     })
             };
         }
@@ -251,7 +251,7 @@ namespace Dashboard
             }
             catch (Exception ex)
             {
-                logger.Info("Dashboard plugin - OnGameStopped - " + ex.Message);
+                logger.Info("GameActivity - OnGameStopped - " + ex.Message);
             }
         }
 
@@ -282,7 +282,7 @@ namespace Dashboard
 
         public override UserControl GetSettingsView(bool firstRunSettings)
         {
-            return new DashboardSettingsView();
+            return new GameActivitySettingsView();
         }
         #endregion
 
@@ -293,7 +293,7 @@ namespace Dashboard
         /// </summary>
         public void dataHWiNFO_start()
         {
-            logger.Info("Dashboard plugin - dataHWiNFO_start");
+            logger.Info("GameActivity - dataHWiNFO_start");
 
             t = new Timer(settings.HWiNFO_timeLog * 60000);
             t.AutoReset = true;
@@ -306,7 +306,7 @@ namespace Dashboard
         /// </summary>
         public void dataHWiNFO_stop()
         {
-            logger.Info("Dashboard plugin - dataHWiNFO_stop");
+            logger.Info("GameActivity - dataHWiNFO_stop");
 
             t.AutoReset = false;
             t.Stop();

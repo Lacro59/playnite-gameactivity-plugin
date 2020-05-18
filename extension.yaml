@@ -1,6 +1,6 @@
-﻿Name: Dashboard Plugin
+﻿Name: GameActivity Plugin
 Author: Lacro59
 Version: 0.6a
-Module: Dashboard.dll
+Module: GameActivity.dll
 Type: GenericPlugin
 Icon: icon.png

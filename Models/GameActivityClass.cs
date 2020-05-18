@@ -4,15 +4,15 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Dashboard.Models
+namespace GameActivity.Models
 {
-    class GameActivity
+    class GameActivityClass
     {
         public int CountActivities => Activities.Count;
         public int CountActivitiesDetails => ActivitiesDetails.Count;
 
 
-        public GameActivity(Guid gameId)
+        public GameActivityClass(Guid gameId)
         {
             GameID = gameId;
         }
@@ -38,7 +38,7 @@ namespace Dashboard.Models
         /// </summary>
         public string GameName
         {
-            get => Dashboard.DatabaseReference.Games.Get(GameID).Name;
+            get => GameActivity.DatabaseReference.Games.Get(GameID).Name;
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace Dashboard.Models
         /// </summary>
         public string GameIcon
         {
-            get => Dashboard.DatabaseReference.Games.Get(GameID).Icon;
+            get => GameActivity.DatabaseReference.Games.Get(GameID).Icon;
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace Dashboard.Models
         /// </summary>
         public List<Guid> genreIds
         {
-            get => Dashboard.DatabaseReference.Games.Get(GameID).GenreIds;
+            get => GameActivity.DatabaseReference.Games.Get(GameID).GenreIds;
         }
 
         /// <summary>
@@ -64,9 +64,9 @@ namespace Dashboard.Models
         {
             get
             {
-                if (genreIds?.Any() == true && Dashboard.DatabaseReference != null)
+                if (genreIds?.Any() == true && GameActivity.DatabaseReference != null)
                 {
-                    return new List<Genre>(Dashboard.DatabaseReference?.Genres.Where(a => genreIds.Contains(a.Id)).OrderBy(a => a.Name));
+                    return new List<Genre>(GameActivity.DatabaseReference?.Genres.Where(a => genreIds.Contains(a.Id)).OrderBy(a => a.Name));
                 }
 
                 return null;

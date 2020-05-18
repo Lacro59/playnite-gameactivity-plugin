@@ -6,7 +6,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Windows;
 
-namespace Dashboard.Models
+namespace GameActivity.Models
 {
     class ActivityDetails
     {

@@ -2,25 +2,25 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Playnite.SDK;
-using Dashboard.Models;
+using GameActivity.Models;
 using System.IO;
 using Newtonsoft.Json;
 using System.Collections.Concurrent;
 
-namespace Dashboard.Database.Collections
+namespace GameActivity.Database.Collections
 {
-    class GameActivityCollection : List<GameActivity>
+    class GameActivityCollection : List<GameActivityClass>
     {
         private ILogger logger = LogManager.GetLogger();
 
         private string pathActivityDB = "\\activity\\";
         private string pathActivityDetailsDB = "\\activityDetails\\";
 
-        public ConcurrentDictionary<Guid, GameActivity> Items { get; set; }
+        public ConcurrentDictionary<Guid, GameActivityClass> Items { get; set; }
 
         public int Count => Items.Count;
 
-        public GameActivity this[Guid id]
+        public GameActivityClass this[Guid id]
         {
             get => Get(id);
             set
@@ -38,7 +38,7 @@ namespace Dashboard.Database.Collections
             pathActivityDB = pathExtData + pathActivityDB;
             pathActivityDetailsDB = pathExtData + pathActivityDetailsDB;
 
-            Items = new ConcurrentDictionary<Guid, GameActivity>();
+            Items = new ConcurrentDictionary<Guid, GameActivityClass>();
 
             // Set data games activities.
             if (Directory.Exists(pathActivityDB))
@@ -52,7 +52,7 @@ namespace Dashboard.Database.Collections
                         List<Activity> obj = JsonConvert.DeserializeObject<List<Activity>>(File.ReadAllText(objectFile));
 
                         // Initialize GameActivity
-                        GameActivity objGameActivity = new GameActivity(gameId);
+                        GameActivityClass objGameActivity = new GameActivityClass(gameId);
                         objGameActivity.Activities = obj;
 
                         // Set data games activities details.
@@ -82,7 +82,7 @@ namespace Dashboard.Database.Collections
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public GameActivity Get(Guid id)
+        public GameActivityClass Get(Guid id)
         {
             if (Items.TryGetValue(id, out var item))
             {
@@ -98,9 +98,9 @@ namespace Dashboard.Database.Collections
         /// get list GameActivity in ActivityDatabase.
         /// </summary>
         /// <returns></returns>
-        public List<GameActivity> GetListGameActivity()
+        public List<GameActivityClass> GetListGameActivity()
         {
-            List<GameActivity> list = new List<GameActivity>();
+            List<GameActivityClass> list = new List<GameActivityClass>();
             foreach (var Item in Items)
             {
                 list.Add(Item.Value);

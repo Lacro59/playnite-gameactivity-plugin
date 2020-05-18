@@ -9,7 +9,7 @@ using System.IO.MemoryMappedFiles;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Dashboard
+namespace GameActivity
 {
     class HWiNFODumper
     {

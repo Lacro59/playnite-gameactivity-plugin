@@ -6,11 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dashboard
+namespace GameActivity
 {
-    public class DashboardSettings : ISettings
+    public class GameActivitySettings : ISettings
     {
-        private readonly Dashboard plugin;
+        private readonly GameActivity plugin;
 
         public bool showLauncherIcons { get; set; } = false;
 
@@ -32,17 +32,17 @@ namespace Dashboard
         public bool OptionThatWontBeSaved { get; set; } = false;
 
         // Parameterless constructor must exist if you want to use LoadPluginSettings method.
-        public DashboardSettings()
+        public GameActivitySettings()
         {
         }
 
-        public DashboardSettings(Dashboard plugin)
+        public GameActivitySettings(GameActivity plugin)
         {
             // Injecting your plugin instance is required for Save/Load method because Playnite saves data to a location based on what plugin requested the operation.
             this.plugin = plugin;
 
             // Load saved settings.
-            var savedSettings = plugin.LoadPluginSettings<DashboardSettings>();
+            var savedSettings = plugin.LoadPluginSettings<GameActivitySettings>();
 
             // LoadPluginSettings returns null if not saved data is available.
             if (savedSettings != null)

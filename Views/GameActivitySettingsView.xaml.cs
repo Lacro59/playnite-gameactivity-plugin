@@ -2,11 +2,11 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Dashboard
+namespace GameActivity
 {
-    public partial class DashboardSettingsView : UserControl
+    public partial class GameActivitySettingsView : UserControl
     {
-        public DashboardSettingsView()
+        public GameActivitySettingsView()
         {
             string icoLabel_text = "Show icon for launchers";
             string HWiNFO_enable_text = "Enable log";
