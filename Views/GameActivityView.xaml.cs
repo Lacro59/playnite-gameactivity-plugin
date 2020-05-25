@@ -17,9 +17,9 @@ using System.Windows.Data;
 using System.ComponentModel;
 using GameActivity.Database.Collections;
 using GameActivity.Models;
-using GameActivity.Commons;
 using LiveCharts;
 using LiveCharts.Wpf;
+using PluginCommon;
 
 namespace GameActivity
 {
