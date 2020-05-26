@@ -56,7 +56,7 @@ namespace GameActivity
             return new List<ExtensionFunction>
             {
                 new ExtensionFunction(
-                    "GameActivity",
+                    "Game Activity",
                     () =>
                     {
                         // Add code to be execute when user invokes this menu entry.

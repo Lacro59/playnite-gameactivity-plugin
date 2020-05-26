@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
 using System.Windows;
 using Newtonsoft.Json.Linq;
 using Playnite.SDK;
 using Playnite.SDK.Models;
-using Playnite.SDK.Plugins;
 using System.Windows.Media.Imaging;
 using System.Windows.Controls;
 using System.Linq;
 using System.Globalization;
-using Newtonsoft.Json;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.ComponentModel;
