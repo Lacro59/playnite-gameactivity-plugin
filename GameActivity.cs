@@ -10,8 +10,6 @@ using System.Windows.Controls;
 using System.Timers;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using GameActivity.Database.Collections;
-using GameActivity.Models;
 
 namespace GameActivity
 {
@@ -51,102 +49,6 @@ namespace GameActivity
 
             if (!Directory.Exists(pathActivityDetailsDB))
                 Directory.CreateDirectory(pathActivityDetailsDB);
-
-            //PlayniteApi.Paths.ConfigurationPath
-
-            // Procedure temporaire
-            //transformOldData_v01a(api.Paths.ConfigurationPath + "\\Extensions\\Dashboard\\database");
-            //transformOldData_v02a(api.Paths.ConfigurationPath + "\\Extensions\\Dashboard\\activity\\", api.Paths.ConfigurationPath + "\\Extensions\\Dashboard\\activityDetails\\");
-            //transformOldData_v03a(pathActivityDB, pathActivityDetailsDB, api.Paths.ConfigurationPath + "\\Extensions\\Dashboard\\activity\\", api.Paths.ConfigurationPath + "\\Extensions\\Dashboard\\activityDetails\\");
-        }
-
-        // Transform data v0.1a
-        public void transformOldData_v01a(string pathActivityDB_old)
-        {
-            string pathFileActivityDB = pathActivityDB_old + "\\activity.json";
-
-            if (File.Exists(pathFileActivityDB))
-            {
-                JObject activityDB = JObject.Parse(File.ReadAllText(pathFileActivityDB));
-
-                try
-                {
-                    foreach (var item in activityDB)
-                    {
-                        string gameID = item.Key;
-                        JArray gameDataArray = (JArray)item.Value;
-
-                        if (!File.Exists(pathFileActivityDB))
-                        {
-                            using (StreamWriter sw = File.CreateText(pathActivityDB_old + item.Key + ".json"))
-                            {
-                                sw.WriteLine(JsonConvert.SerializeObject(JsonConvert.SerializeObject(gameDataArray)));
-                            }
-                        }
-                    }
-                    Directory.Delete(pathActivityDB_old, true);
-                }
-                catch (Exception ex)
-                {
-                    logger.Info("GameActivity - transformOldData_v01a - " + ex.Message);
-                }
-            }
-        }
-
-        // Transform data v0.2a
-        public void transformOldData_v02a(string pathActivityDB_old, string pathActivityDetailsDB_old)
-        {
-            if (Directory.Exists(pathActivityDB_old))
-            {
-                string[] filePaths = Directory.GetFiles(pathActivityDB_old, "*.json");
-                for (int iFile = 0; iFile < filePaths.Length; iFile++)
-                {
-                    JArray gameDataArray = JArray.Parse(File.ReadAllText(filePaths[iFile]));
-                    JObject gameDataLog = new JObject();
-                    for (int iData = 0; iData < gameDataArray.Count; iData++)
-                    {
-                        if (gameDataArray[iData]["hwinfo"] != null)
-                        {
-                            string tempDate = Convert.ToDateTime(gameDataArray[iData]["dateSession"]).ToString("o");
-                            gameDataLog.Add(new JProperty(tempDate, gameDataArray[iData]["hwinfo"]));
-                        }
-                    }
-
-                    if (JsonConvert.SerializeObject(gameDataLog) != "{}")
-                    {
-                        string gameID = filePaths[iFile].Replace(pathActivityDB_old, "").Replace(".json", "");
-                        if (!File.Exists(pathActivityDetailsDB_old + gameID + ".json"))
-                        {
-                            using (StreamWriter sw = File.CreateText(pathActivityDetailsDB_old + gameID + ".json"))
-                            {
-                                sw.WriteLine(JsonConvert.SerializeObject(gameDataLog));
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        // Transform data v0.3a
-        public void transformOldData_v03a(string pathActivityDB, string pathActivityDetailsDB, string pathActivityDB_old, string pathActivityDetailsDB_old)
-        {
-            if (Directory.Exists(pathActivityDB_old))
-            {
-                if (Directory.Exists(pathActivityDB))
-                {
-                    Directory.Delete(pathActivityDB);
-                }
-                Directory.Move(pathActivityDB_old, pathActivityDB);
-            }
-
-            if (Directory.Exists(pathActivityDetailsDB_old))
-            {
-                if (Directory.Exists(pathActivityDetailsDB))
-                {
-                    Directory.Delete(pathActivityDetailsDB);
-                }
-                Directory.Move(pathActivityDetailsDB_old, pathActivityDetailsDB);
-            }
         }
 
         public override IEnumerable<ExtensionFunction> GetFunctions()
@@ -158,7 +60,7 @@ namespace GameActivity
                     () =>
                     {
                         // Add code to be execute when user invokes this menu entry.
-                        // PlayniteApi.Dialogs.ShowMessage("Code executed from a plugin!");
+
                         logger.Info("GameActivityView");
 
                         DatabaseReference = PlayniteApi.Database;
