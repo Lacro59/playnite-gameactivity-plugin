@@ -25,6 +25,7 @@ namespace GameActivity
     public partial class GameActivityView : Window
     {
         private static readonly ILogger logger = LogManager.GetLogger();
+        private static IResourceProvider resources = new ResourceProvider();
 
         public JArray listSources { get; set; }
 
@@ -38,19 +39,6 @@ namespace GameActivity
         public int variateurLogTemp = 0;
 
         public List<listGame> activityListByGame { get; set; }
-
-        // Variables graphics activities.
-        public string activityByMonthTitle { get; set; }
-        public string activityByWeekTitle { get; set; }
-        public string activityForGameTimeTitle { get; set; }
-        public string activityForGameLogTitle { get; set; }
-
-        // Variables list games activities.
-        public string lvGamesID { get; set; }
-        public string lvGamesIcon { get; set; }
-        public string lvGamesTitle { get; set; }
-        public string lvGamesLastActivity { get; set; }
-        public string lvGamesElapsedSeconds { get; set; }
 
         // Application variables paths.
         public string pathFileActivityDB { get; set; }
@@ -81,20 +69,6 @@ namespace GameActivity
             // Set dates variables
             yearCurrent = DateTime.Now.Year;
             monthCurrent = DateTime.Now.Month;
-
-            #region text localization
-            // listViewGames
-            lvGamesIcon = "Icon";
-            lvGamesTitle = "Name";
-            lvGamesLastActivity = "Last session start";
-            lvGamesElapsedSeconds = "Elapsed Time";
-
-            // Graphics title
-            activityByMonthTitle = "Total hours";
-            activityByWeekTitle = "Total hours by weeks";
-            activityForGameTimeTitle = "Total hours by day";
-            activityForGameLogTitle = "Last session details";
-            #endregion
 
             // Initialization components
             InitializeComponent();
@@ -254,7 +228,6 @@ namespace GameActivity
             string[] ActivityByMonthLabels = labels;
             Func<double, string> ActivityByMonthFormatter = value => (int)TimeSpan.FromSeconds(value).TotalHours + "h " + TimeSpan.FromSeconds(value).ToString(@"mm") + "min";
 
-            acmLabel.Content = activityByMonthTitle;
             acmSeries.Series = ActivityByMonthSeries;
             acmLabelsX.Labels = ActivityByMonthLabels;
             acmLabelsY.LabelFormatter = ActivityByMonthFormatter;
@@ -372,7 +345,6 @@ namespace GameActivity
             };
             Func<double, string> activityByWeekFormatter = value => (int)TimeSpan.FromSeconds(value).TotalHours + "h " + TimeSpan.FromSeconds(value).ToString(@"mm") + "min";
 
-            acwLabel.Content = activityByWeekTitle;
             acwSeries.Series = activityByWeekSeries;
             acwLabelsX.Labels = activityByWeekLabels;
             acwLabelsY.LabelFormatter = activityByWeekFormatter;
@@ -482,7 +454,7 @@ namespace GameActivity
             string[] activityForGameLabels = listDate;
             Func<double, string> activityForGameFormatter = value => (int)TimeSpan.FromSeconds(value).TotalHours + "h " + TimeSpan.FromSeconds(value).ToString(@"mm") + "min";
 
-            gameLabel.Content = activityForGameTimeTitle;
+            gameLabel.Content = resources.GetString("LOCGameActivityTimeTitle");
             gameSeries.Series = activityForGameSeries;
             gameLabelsX.Labels = activityForGameLabels;
             gameLabelsY.LabelFormatter = activityForGameFormatter;
@@ -594,7 +566,7 @@ namespace GameActivity
             //string[] activityForGameLogLabels = listDate;
             Func<double, string> activityForGameLogFormatter = value => value.ToString("N");
 
-            gameLabel.Content = activityForGameLogTitle;
+            gameLabel.Content = resources.GetString("LOCGameActivityLogTitle");
             gameSeries.Series = activityForGameLogSeries;
             gameLabelsX.Labels = activityForGameLogLabels;
             gameLabelsY.LabelFormatter = activityForGameLogFormatter;

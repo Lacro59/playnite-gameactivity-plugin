@@ -81,16 +81,6 @@ namespace GameActivity
         public List<JsonObj> saveDataToFile()
         {
             byte[] json = new UTF8Encoding(true).GetBytes(JsonConvert.SerializeObject(data, Formatting.Indented));
-
-            //File.WriteAllText("d:\\test.json", JsonConvert.SerializeObject(data, Formatting.Indented));
-
-            //using (FileStream fs = File.Create("d:\\mem_dump.json"))
-            //{
-            //    fs.Write(json, 0, json.Length);
-            //    Console.WriteLine("Success dumped");
-            //    return data;
-            //}
-
             return data;
         }
 

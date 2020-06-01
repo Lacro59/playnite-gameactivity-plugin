@@ -1,0 +1,45 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <!--
+    THIS FILE IS NOT PART OF THE THEME, DO NOT MODIFY!
+    -->
+
+    <!-- 
+    GameActivitySettingsView 
+    -->
+
+    <sys:String x:Key="LOCGameActivityActiveIcon">Afficher les icônes pour les magasins.</sys:String>
+    
+    <sys:String x:Key="LOCGameActivityActiveLog">Activer la journalisation.</sys:String>
+    <sys:String x:Key="LOCGameActivityTimeInterval">Interval de temps</sys:String>
+    <sys:String x:Key="LOCGameActivityTimeLabel">minute(s)</sys:String>
+
+    <sys:String x:Key="LOCGameActivitySensorsID">sensors id</sys:String>
+    <sys:String x:Key="LOCGameActivityElementID">element id</sys:String>
+    
+    <sys:String x:Key="LOCGameActivityGpuUsage">GPU usage</sys:String>
+    <sys:String x:Key="LOCGameActivityFps">FPS</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuTemp">GPU température</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuTemp">CPU température</sys:String>
+
+
+    <!-- 
+    GameActivityView 
+    -->
+    <sys:String x:Key="LOCGameActivitySources">Sources</sys:String>
+    <sys:String x:Key="LOCGameActivityGenres">Genres</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHours">Total d'heures</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByWeeks">Total d'heures par semaine</sys:String>
+
+    <sys:String x:Key="LOCGameActivityTime">Temps</sys:String>
+    <sys:String x:Key="LOCGameActivityLog">Log</sys:String>
+    <sys:String x:Key="LOCGameActivityTimeTitle">Total d'heures par jour</sys:String>
+    <sys:String x:Key="LOCGameActivityLogTitle">Détails de la dernière session</sys:String>
+
+    <sys:String x:Key="LOCGameActivityLvGamesIcon">Icône</sys:String>
+    <sys:String x:Key="LOCGameActivityLvGamesTitle">Nom</sys:String>
+    <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Début dernière session</sys:String>
+    <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Temps passés</sys:String>
+
+</ResourceDictionary>

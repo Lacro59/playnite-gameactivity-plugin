@@ -10,6 +10,9 @@ using System.Windows.Controls;
 using System.Timers;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using MSIAfterburnerNET.HM.Interop;
+using System.Reflection;
+using PluginCommon;
 
 namespace GameActivity
 {
@@ -40,6 +43,12 @@ namespace GameActivity
         public GameActivity(IPlayniteAPI api) : base(api)
         {
             settings = new GameActivitySettings(this);
+
+            // Get plugin's location 
+            string pluginFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+            // Add plugin localization in application ressource.
+            Localization.SetPluginLanguage(pluginFolder, api.Paths.ConfigurationPath);
 
             pathActivityDB = this.GetPluginUserDataPath() + "\\activity\\";
             pathActivityDetailsDB = this.GetPluginUserDataPath() + "\\activityDetails\\";
@@ -232,6 +241,19 @@ namespace GameActivity
             int ramValue = GetRamPercentage();
             int gpuTValue = 0;
             int cpuTValue = 0;
+
+
+            var MSIAfterburner = new MSIAfterburnerNET.HM.HardwareMonitor();
+            logger.Debug(JsonConvert.SerializeObject(MSIAfterburner));
+
+            logger.Debug("GPU_USAGE " + MSIAfterburner.GetEntry(MONITORING_SOURCE_ID.GPU_USAGE).Data);
+            logger.Debug("GPU_TEMPERATURE " + MSIAfterburner.GetEntry(MONITORING_SOURCE_ID.GPU_TEMPERATURE).Data);
+            logger.Debug("CPU_TEMPERATURE " + MSIAfterburner.GetEntry(MONITORING_SOURCE_ID.CPU_TEMPERATURE).Data);
+            logger.Debug("FRAMERATE " + MSIAfterburner.GetEntry(MONITORING_SOURCE_ID.FRAMERATE).Data);
+
+
+
+
 
             foreach (var sensorItems in dataHWinfo)
             {

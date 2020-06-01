@@ -12,8 +12,8 @@
         <ListBox Height="403" VerticalAlignment="Top" Margin="10,10,10,0"/>
 
         <Grid Margin="15,10,12,0" HorizontalAlignment="Center" VerticalAlignment="Top" Height="65" Width="1227">
-            <ToggleButton x:Name="tbMonthSources" IsChecked='True' Content="sources" Width="100" Height="40" Margin="5,0,792,0" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Center" Click="ToggleButtonSources_Checked"/>
-            <ToggleButton x:Name="tbMonthGenres" IsChecked='False' Content="genres" Width="100" Height="40" Margin="110,6,0,6" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Center" Click="ToggleButtonGenres_Checked"/>
+            <ToggleButton x:Name="tbMonthSources" IsChecked='True' Content="{DynamicResource LOCGameActivitySources}" Width="100" Height="40" Margin="5,0,792,0" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Center" Click="ToggleButtonSources_Checked"/>
+            <ToggleButton x:Name="tbMonthGenres" IsChecked='False' Content="{DynamicResource LOCGameActivityGenres}" Width="100" Height="40" Margin="110,6,0,6" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Center" Click="ToggleButtonGenres_Checked"/>
 
             <Button Content="" Height="40" Width="65" Margin="360,0,792,0" FontSize="20" Click="Button_Click_PrevMonth" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Wingdings"/>
             <Label x:Name="activityLabel" Content="month data label" HorizontalAlignment="Center" VerticalAlignment="Center" Height="45" FontSize="24" FontWeight="Bold" MinWidth="50"/>
@@ -38,7 +38,7 @@
                     <lvc:Axis x:Name="acmLabelsY"></lvc:Axis>
                 </lvc:CartesianChart.AxisY>
             </lvc:CartesianChart>
-            <Label x:Name="acmLabel" Content="graphics title" HorizontalAlignment="Center" VerticalAlignment="Top" Height="45" FontSize="20" FontWeight="Bold" MinWidth="50" Grid.Column="1"/>
+            <Label Content="{DynamicResource LOCGameActivityTotalHours}" HorizontalAlignment="Center" VerticalAlignment="Top" Height="45" FontSize="20" FontWeight="Bold" MinWidth="50" Grid.Column="1"/>
         </Grid>
 
         <Grid HorizontalAlignment="Left" Height="321" Margin="637,0,0,13" VerticalAlignment="Bottom" Width="605">
@@ -54,23 +54,23 @@
                     <lvc:Axis x:Name="acwLabelsY"></lvc:Axis>
                 </lvc:CartesianChart.AxisY>
             </lvc:CartesianChart>
-            <Label x:Name="acwLabel" Content="graphics title" HorizontalAlignment="Center" VerticalAlignment="Top" Height="45" FontSize="20" FontWeight="Bold" MinWidth="50"/>
+            <Label x:Name="acwLabel" Content="{DynamicResource LOCGameActivityTotalHoursByWeeks}" HorizontalAlignment="Center" VerticalAlignment="Top" Height="45" FontSize="20" FontWeight="Bold" MinWidth="50"/>
         </Grid>
 
         <Grid Margin="10,0,0,-344" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="1232">
             <ListView x:Name="lvGames" HorizontalAlignment="Left" Height="336" VerticalAlignment="Top" Width="605" SelectionChanged="lvGames_SelectionChanged" FontSize="24" GridViewColumnHeader.Click="onHeaderClick">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="{Binding lvGamesIcon}" Width="50">
+                        <GridViewColumn Header="{DynamicResource LOCGameActivityLvGamesIcon}" Width="50">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Image HorizontalAlignment="Center" Height="32" VerticalAlignment="Center" Width="32" Source="{Binding listGameIcon}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn x:Name="hGameTitle" Header="{Binding lvGamesTitle}" Width="Auto" DisplayMemberBinding="{Binding listGameTitle}" />
-                        <GridViewColumn Header="{Binding lvGamesLastActivity}" DisplayMemberBinding="{Binding Path=listGameLastActivity, StringFormat='dd/MM/yyyy HH:mm:ss'}" />
-                        <GridViewColumn Header="{Binding lvGamesElapsedSeconds}" Width="100">
+                        <GridViewColumn x:Name="hGameTitle" Header="{DynamicResource LOCGameActivityLvGamesTitle}" Width="Auto" DisplayMemberBinding="{Binding listGameTitle}" />
+                        <GridViewColumn Header="{DynamicResource LOCGameActivityLvGamesLastActivity}" DisplayMemberBinding="{Binding Path=listGameLastActivity, StringFormat='dd/MM/yyyy HH:mm:ss'}" />
+                        <GridViewColumn Header="{DynamicResource LOCGameActivityLvGamesElapsedSeconds}" Width="100">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Label Content="{Binding listGameElapsedSeconds}" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
@@ -131,8 +131,8 @@
                     <RowDefinition Height="53*"/>
                 </Grid.RowDefinitions>
 
-                <ToggleButton x:Name="ToggleButtonTime" IsChecked="True" Content="Time" HorizontalAlignment="Left" Height="33" Margin="0,5,5,0" VerticalAlignment="Top" Width="58" Click="ToggleButtonTime_Checked"/>
-                <ToggleButton x:Name="ToggleButtonLog" IsChecked="False" Content="Log" HorizontalAlignment="Left" Height="33" Margin="63,5,0,0" VerticalAlignment="Top" Width="58" Click="ToggleButtonLog_Checked"/>
+                <ToggleButton x:Name="ToggleButtonTime" IsChecked="True" Content="{DynamicResource LOCGameActivityTime}" HorizontalAlignment="Left" Height="33" Margin="0,5,5,0" VerticalAlignment="Top" Width="65" Click="ToggleButtonTime_Checked"/>
+                <ToggleButton x:Name="ToggleButtonLog" IsChecked="False" Content="{DynamicResource LOCGameActivityLog}" HorizontalAlignment="Left" Height="33" Margin="70,5,0,0" VerticalAlignment="Top" Width="65" Click="ToggleButtonLog_Checked"/>
 
                 <Button Content="" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,55,0" Height="25" Width="40" Click="Button_Click_prevGame" FontFamily="Wingdings"></Button>
                 <Button Content="" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,10,0" Height="25" Width="40" Click="Button_Click_nextGame" FontFamily="Wingdings"></Button>

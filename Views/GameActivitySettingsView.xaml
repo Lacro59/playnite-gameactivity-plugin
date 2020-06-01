@@ -10,72 +10,56 @@
 
         <Grid VerticalAlignment="Top" Height="130">
             <CheckBox IsChecked="{Binding showLauncherIcons}" Margin="15,5,15,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
-                <CheckBox.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform/>
-                        <SkewTransform/>
-                        <RotateTransform Angle="-0.073"/>
-                        <TranslateTransform/>
-                    </TransformGroup>
-                </CheckBox.RenderTransform>
-                <Label x:Name="icoLabel" />
+                <Label Content="{DynamicResource LOCGameActivityActiveIcon}" />
             </CheckBox>
 
-            <CheckBox IsChecked="{Binding HWiNFO_enable}" Margin="15,45,15,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Checked="CheckBox_Checked">
-                <CheckBox.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform/>
-                        <SkewTransform/>
-                        <RotateTransform Angle="-0.073"/>
-                        <TranslateTransform/>
-                    </TransformGroup>
-                </CheckBox.RenderTransform>
-                <Label x:Name="hwLabel" />
+            <CheckBox IsChecked="{Binding HWiNFO_enable}" Margin="15,45,15,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+                <Label Content="{DynamicResource LOCGameActivityActiveLog}" />
             </CheckBox>
 
-            <Label x:Name="hwIntervalLabel" Content="time interval" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,80,0,0"/>
-            <Slider x:Name="hwSlider" HorizontalAlignment="Left" Margin="106,84,0,0" VerticalAlignment="Top" Width="222" Minimum="1" Value="{Binding HWiNFO_timeLog}" ValueChanged="Slider_ValueChanged"/>
-            <Label x:Name="hwIntervalLabel_text" Content="minutes" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="334,80,0,0" Width="154"/>
+            <Label Content="{DynamicResource LOCGameActivityTimeInterval}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,80,0,0"/>
+            <Slider x:Name="hwSlider" HorizontalAlignment="Left" Margin="135,84,0,0" VerticalAlignment="Top" Width="222" Minimum="1" Value="{Binding HWiNFO_timeLog}" ValueChanged="Slider_ValueChanged"/>
+            <Label x:Name="labelIntervalLabel_text" Content="{DynamicResource LOCGameActivityTimeLabel}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="363,80,0,0" Width="154"/>
         </Grid>
 
-        <GroupBox x:Name="hwGP" Header="hwInfo" Height="336" Margin="15,-5,15,4" VerticalAlignment="Top">
+        <GroupBox Header="hwInfo" Height="336" Margin="15,-5,15,4" VerticalAlignment="Top">
             <Grid>
-                <GroupBox Header="GPU usage" HorizontalAlignment="Left" VerticalAlignment="Top" Height="130" Width="250" Margin="15,15,0,0">
+                <GroupBox Header="{DynamicResource LOCGameActivityGpuUsage}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="130" Width="250" Margin="15,15,0,0">
                     <Grid>
-                        <Label Content="sensors id" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,10,0,0"/>
+                        <Label Content="{DynamicResource LOCGameActivitySensorsID}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,10,0,0"/>
                         <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding HWiNFO_gpu_sensorsID}" VerticalAlignment="Top" Width="100" Margin="110,10,0,0"/>
 
-                        <Label Content="element id" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,58,0,0"/>
+                        <Label Content="{DynamicResource LOCGameActivityElementID}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,58,0,0"/>
                         <TextBox HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="{Binding HWiNFO_gpu_elementID}" VerticalAlignment="Top" Width="100" Margin="110,58,0,0"/>
                     </Grid>
                 </GroupBox>
 
-                <GroupBox Header="FPS" HorizontalAlignment="Left" VerticalAlignment="Top" Height="130" Width="250" Margin="292,15,0,0">
+                <GroupBox Header="{DynamicResource LOCGameActivityFps}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="130" Width="250" Margin="292,15,0,0">
                     <Grid>
-                        <Label Content="sensors id" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,10,0,0"/>
+                        <Label Content="{DynamicResource LOCGameActivitySensorsID}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,10,0,0"/>
                         <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding HWiNFO_fps_sensorsID}" VerticalAlignment="Top" Width="100" Margin="110,10,0,0"/>
 
-                        <Label Content="element id" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,58,0,0"/>
+                        <Label Content="{DynamicResource LOCGameActivityElementID}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,58,0,0"/>
                         <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding HWiNFO_fps_elementID}" VerticalAlignment="Top" Width="100" Margin="110,58,0,0"/>
                     </Grid>
                 </GroupBox>
 
-                <GroupBox Header="GPU temp" HorizontalAlignment="Left" VerticalAlignment="Top" Height="130" Width="250" Margin="15,166,0,0">
+                <GroupBox Header="{DynamicResource LOCGameActivityGpuTemp}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="130" Width="250" Margin="15,166,0,0">
                     <Grid>
-                        <Label Content="sensors id" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,10,0,0"/>
+                        <Label Content="{DynamicResource LOCGameActivitySensorsID}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,10,0,0"/>
                         <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding HWiNFO_gpuT_sensorsID}" VerticalAlignment="Top" Width="100" Margin="110,10,0,0"/>
 
-                        <Label Content="element id" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,58,0,0"/>
+                        <Label Content="{DynamicResource LOCGameActivityElementID}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,58,0,0"/>
                         <TextBox HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="{Binding HWiNFO_gpuT_elementID}" VerticalAlignment="Top" Width="100" Margin="110,58,0,0"/>
                     </Grid>
                 </GroupBox>
 
-                <GroupBox Header="CPU temp" HorizontalAlignment="Left" VerticalAlignment="Top" Height="130" Width="250" Margin="292,166,0,0">
+                <GroupBox Header="{DynamicResource LOCGameActivityCpuTemp}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="130" Width="250" Margin="292,166,0,0">
                     <Grid>
-                        <Label Content="sensors id" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,10,0,0"/>
+                        <Label Content="{DynamicResource LOCGameActivitySensorsID}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,10,0,0"/>
                         <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding HWiNFO_cpuT_sensorsID}" VerticalAlignment="Top" Width="100" Margin="110,10,0,0"/>
 
-                        <Label Content="element id" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,58,0,0"/>
+                        <Label Content="{DynamicResource LOCGameActivityElementID}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,58,0,0"/>
                         <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding HWiNFO_cpuT_elementID}" VerticalAlignment="Top" Width="100" Margin="110,58,0,0"/>
                     </Grid>
                 </GroupBox>
