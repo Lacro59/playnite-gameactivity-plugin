@@ -37,7 +37,7 @@ namespace GameActivity
                     hwIntervalLabel_text.Content = "(" + slider.Value + " minute)";
                 }
             }
-            catch (Exception ex)
+            catch
             {
 
             }

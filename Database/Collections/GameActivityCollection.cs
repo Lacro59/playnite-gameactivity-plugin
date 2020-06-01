@@ -18,7 +18,7 @@ namespace GameActivity.Database.Collections
 
         public ConcurrentDictionary<Guid, GameActivityClass> Items { get; set; }
 
-        public int Count => Items.Count;
+        public new int Count => Items.Count;
 
         public GameActivityClass this[Guid id]
         {

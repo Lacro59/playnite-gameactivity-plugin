@@ -330,7 +330,7 @@ namespace GameActivity
             PerformanceCounter cpuCounter;
             double cpuUsage = 0;
             int totalCpuUsage = 0;
-            double returnLoopCount = 0;
+            //double returnLoopCount = 0;
 
             cpuCounter = new PerformanceCounter();
             cpuCounter.CategoryName = "Processor";
@@ -353,7 +353,7 @@ namespace GameActivity
             int AvailableRamMemory = 0;
             int UsedRamMemory = 0;
             int RamUsagePercentage = 0;
-            double returnLoopCount = 0;
+            //double returnLoopCount = 0;
             MEMORYSTATUSEX statEX = new MEMORYSTATUSEX();
             statEX.dwLength = (uint)Marshal.SizeOf(typeof(MEMORYSTATUSEX));
             GlobalMemoryStatusEx(ref statEX);

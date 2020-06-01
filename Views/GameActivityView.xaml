@@ -26,9 +26,9 @@
                 <ColumnDefinition/>
                 <ColumnDefinition Width="0*"/>
             </Grid.ColumnDefinitions>
-            <lvc:CartesianChart x:Name="acmSeries" LegendLocation="none" Margin="10,0,0,5" Grid.Column="1" VerticalAlignment="Bottom" Height="265" FontFamily="/GameActivity;component/Ressources/#font">
+            <lvc:CartesianChart x:Name="acmSeries" LegendLocation="none" Margin="10,0,0,5" Grid.Column="1" VerticalAlignment="Bottom" Height="265" FontFamily="/GameActivity;component/Resources/#font">
                 <lvc:CartesianChart.AxisX>
-                    <lvc:Axis x:Name="acmLabelsX" ShowLabels="True" FontSize="14" FontFamily="/GameActivity;component/Ressources/#font">
+                    <lvc:Axis x:Name="acmLabelsX" ShowLabels="True" FontSize="14" FontFamily="/GameActivity;component/Resources/#font">
                         <lvc:Axis.Separator>
                             <lvc:Separator Step="1" />
                         </lvc:Axis.Separator>
@@ -42,7 +42,7 @@
         </Grid>
 
         <Grid HorizontalAlignment="Left" Height="321" Margin="637,0,0,13" VerticalAlignment="Bottom" Width="605">
-            <lvc:CartesianChart x:Name="acwSeries" LegendLocation="none" Margin="0,0,10,5" Height="260" VerticalAlignment="Bottom" FontFamily="/GameActivity;component/Ressources/#font" >
+            <lvc:CartesianChart x:Name="acwSeries" LegendLocation="none" Margin="0,0,10,5" Height="260" VerticalAlignment="Bottom" FontFamily="/GameActivity;component/Resources/#font" >
                 <lvc:CartesianChart.AxisX>
                     <lvc:Axis x:Name="acwLabelsX" ShowLabels="True" FontSize="14">
                         <lvc:Axis.Separator>

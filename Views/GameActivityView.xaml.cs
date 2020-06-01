@@ -14,8 +14,8 @@ using System.ComponentModel;
 using GameActivity.Database.Collections;
 using GameActivity.Models;
 using LiveCharts;
-using LiveCharts.Wpf;
 using PluginCommon;
+using LiveCharts.Wpf;
 
 namespace GameActivity
 {
@@ -167,7 +167,8 @@ namespace GameActivity
                         string sourceName = gameActivities[iActivity].SourceName;
 
                         // Cumul data
-                        if (activityByMonth.ContainsKey(sourceName))
+                        //if (activityByMonth.ContainsKey(sourceName))
+                        if (activityByMonth[sourceName] != null)
                         {
                             if (startOfMonth <= dateSession && dateSession <= endOfMonth)
                             {
@@ -204,7 +205,8 @@ namespace GameActivity
                         for (int iGenre = 0; iGenre < listGameListGenres.Count; iGenre++)
                         {
                             // Cumul data
-                            if (activityByMonth.ContainsKey(listGameListGenres[iGenre].Name))
+                            //if (activityByMonth.ContainsKey(listGameListGenres[iGenre].Name))
+                            if (activityByMonth[listGameListGenres[iGenre].Name] != null)
                             {
                                 if (startOfMonth <= dateSession && dateSession <= endOfMonth)
                                 {

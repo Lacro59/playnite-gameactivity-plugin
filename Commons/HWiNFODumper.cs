@@ -31,12 +31,8 @@ namespace GameActivity
                 accessor.Read(0L, out HWiNFOMemory);
                 return ReadSensorNames();
             }
-            catch (Exception ex)
+            catch
             {
-                //Console.WriteLine("An error occured while opening the HWiNFO shared memory! - " + ex.Message);
-                //Console.WriteLine("Press ENTER to exit program...");
-                //Console.ReadLine();
-                //Environment.Exit(1);
                 return new List<JsonObj>();
             }
         }
