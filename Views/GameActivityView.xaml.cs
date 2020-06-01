@@ -73,6 +73,9 @@ namespace GameActivity
             // Initialization components
             InitializeComponent();
 
+            // Block hidden column.
+            lvElapsedSeconds.IsEnabled = false;
+
             // Add column if log details enable.
             if (!settings.HWiNFO_enable)
             {
@@ -88,6 +91,11 @@ namespace GameActivity
                 lvGames.View = lvView;
             }
 
+
+            // Sorting default.
+            _lastDirection = ListSortDirection.Descending;
+            _lastHeaderClicked = lvLastActivity;
+            _lastHeaderClicked.Content += " ▼";
 
 
             // Graphics game details activities.
@@ -385,7 +393,8 @@ namespace GameActivity
                     listGameTitle = gameTitle,
                     listGameIcon = iconImage,
                     listGameLastActivity = dateSession,
-                    listGameElapsedSeconds = (int)TimeSpan.FromSeconds(elapsedSeconds).TotalHours + "h " + TimeSpan.FromSeconds(elapsedSeconds).ToString(@"mm") + "min",
+                    listGameElapsedSeconds = elapsedSeconds,
+                    listGameElapsedSecondsFormat = (int)TimeSpan.FromSeconds(elapsedSeconds).TotalHours + "h " + TimeSpan.FromSeconds(elapsedSeconds).ToString(@"mm") + "min",
                     avgCPU = listGameActivities[iGame].avgCPU(listGameActivities[iGame].GetLastSession()) + "%",
                     avgGPU = listGameActivities[iGame].avgGPU(listGameActivities[iGame].GetLastSession()) + "%",
                     avgRAM = listGameActivities[iGame].avgRAM(listGameActivities[iGame].GetLastSession()) + "%",
@@ -397,10 +406,28 @@ namespace GameActivity
                 iconImage = null;
             }
 
-            // Sorting default.
             lvGames.ItemsSource = activityListByGame;
-            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(lvGames.ItemsSource);
-            view.SortDescriptions.Add(new SortDescription("listGameLastActivity", ListSortDirection.Descending));
+
+            // Sorting
+            try
+            {
+                var columnBinding = _lastHeaderClicked.Column.DisplayMemberBinding as Binding;
+                var sortBy = columnBinding?.Path.Path ?? _lastHeaderClicked.Column.Header as string;
+
+                // Specific sort with another column
+                if (_lastHeaderClicked.Name == "lvElapsedSecondsFormat")
+                {
+                    columnBinding = lvElapsedSeconds.Column.DisplayMemberBinding as Binding;
+                    sortBy = columnBinding?.Path.Path ?? _lastHeaderClicked.Column.Header as string;
+                }
+                Sort(sortBy, _lastDirection);
+            }
+            // If first view
+            catch
+            {
+                CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(lvGames.ItemsSource);
+                view.SortDescriptions.Add(new SortDescription("listGameLastActivity", ListSortDirection.Descending));
+            }
         }
 
 
@@ -611,6 +638,99 @@ namespace GameActivity
 
 
 
+
+        #region Functions sorting lvGames.
+        private GridViewColumnHeader _lastHeaderClicked = null;
+        private ListSortDirection _lastDirection;
+
+        private void lvGames_onHeaderClick(object sender, RoutedEventArgs e)
+        {
+            lvElapsedSeconds.IsEnabled = true;
+
+            var headerClicked = e.OriginalSource as GridViewColumnHeader;
+            ListSortDirection direction;
+
+            // No sort
+            if (headerClicked.Name == "lvGameIcon")
+            {
+                headerClicked = null;
+            }
+
+            if (headerClicked != null)
+            {
+                if (headerClicked.Role != GridViewColumnHeaderRole.Padding)
+                {
+                    if (headerClicked != _lastHeaderClicked)
+                    {
+                        direction = ListSortDirection.Ascending;
+                    }
+                    else
+                    {
+                        if (_lastDirection == ListSortDirection.Ascending)
+                        {
+                            direction = ListSortDirection.Descending;
+                        }
+                        else
+                        {
+                            direction = ListSortDirection.Ascending;
+                        }
+                    }
+
+                    var columnBinding = headerClicked.Column.DisplayMemberBinding as Binding;
+                    var sortBy = columnBinding?.Path.Path ?? headerClicked.Column.Header as string;
+
+                    // Specific sort with another column
+                    if (headerClicked.Name == "lvElapsedSecondsFormat")
+                    {
+                        columnBinding = lvElapsedSeconds.Column.DisplayMemberBinding as Binding;
+                        sortBy = columnBinding?.Path.Path ?? headerClicked.Column.Header as string;
+                    }
+
+
+                    Sort(sortBy, direction);
+
+                    if (_lastHeaderClicked != null)
+                    {
+                        _lastHeaderClicked.Content = ((string)_lastHeaderClicked.Content).Replace(" ▲", "");
+                        _lastHeaderClicked.Content = ((string)_lastHeaderClicked.Content).Replace(" ▼", "");
+                    }
+
+                    if (direction == ListSortDirection.Ascending)
+                    {
+                        headerClicked.Content += " ▲";
+                    }
+                    else
+                    {
+                        headerClicked.Content += " ▼";
+                    }
+
+                    // Remove arrow from previously sorted header
+                    if (_lastHeaderClicked != null && _lastHeaderClicked != headerClicked)
+                    {
+                        _lastHeaderClicked.Column.HeaderTemplate = null;
+                    }
+
+                    _lastHeaderClicked = headerClicked;
+                    _lastDirection = direction;
+                }
+            }
+
+            lvElapsedSeconds.IsEnabled = false;
+        }
+
+        private void Sort(string sortBy, ListSortDirection direction)
+        {
+            ICollectionView dataView = CollectionViewSource.GetDefaultView(lvGames.ItemsSource);
+
+            dataView.SortDescriptions.Clear();
+            SortDescription sd = new SortDescription(sortBy, direction);
+            dataView.SortDescriptions.Add(sd);
+            dataView.Refresh();
+        }
+        #endregion
+
+
+
         /// <summary>
         /// Get number week.
         /// </summary>
@@ -790,34 +910,6 @@ namespace GameActivity
         }
 
 
-
-        #region Functions sorting lvGames.
-        //https://stackoverflow.com/questions/30787068/wpf-listview-sorting-on-column-click
-        private GridViewColumnHeader lastHeaderClicked = null;
-        private ListSortDirection lastDirection = ListSortDirection.Ascending;
-
-        private void onHeaderClick(object sender, RoutedEventArgs e)
-        {
-            if (!(e.OriginalSource is GridViewColumnHeader ch)) return;
-            var dir = ListSortDirection.Ascending;
-            if (ch == lastHeaderClicked && lastDirection == ListSortDirection.Ascending)
-                dir = ListSortDirection.Descending;
-            sort(ch, dir);
-            lastHeaderClicked = ch; lastDirection = dir;
-        }
-
-        private void sort(GridViewColumnHeader ch, ListSortDirection dir)
-        {
-            var bn = (ch.Column.DisplayMemberBinding as Binding)?.Path.Path;
-            bn = bn ?? ch.Column.Header as string;
-            var dv = CollectionViewSource.GetDefaultView(lvGames.ItemsSource);
-            dv.SortDescriptions.Clear();
-            var sd = new SortDescription(bn, dir);
-            dv.SortDescriptions.Add(sd);
-            dv.Refresh();
-        }
-        #endregion
-
         private void Button_Click_prevGame(object sender, RoutedEventArgs e)
         {
             if (isGameTime)
@@ -863,7 +955,8 @@ namespace GameActivity
         public string listGameID { get; set; }
         public BitmapImage listGameIcon { get; set; }
         public DateTime listGameLastActivity { get; set; }
-        public string listGameElapsedSeconds { get; set; }
+        public long listGameElapsedSeconds { get; set; }
+        public string listGameElapsedSecondsFormat { get; set; }
 
         public string avgCPU { get; set; }
         public string avgGPU { get; set; }

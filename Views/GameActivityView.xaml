@@ -58,10 +58,11 @@
         </Grid>
 
         <Grid Margin="10,0,0,-344" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="1232">
-            <ListView x:Name="lvGames" HorizontalAlignment="Left" Height="336" VerticalAlignment="Top" Width="605" SelectionChanged="lvGames_SelectionChanged" FontSize="24" GridViewColumnHeader.Click="onHeaderClick">
+            <ListView x:Name="lvGames" HorizontalAlignment="Left" Height="336" VerticalAlignment="Top" Width="605" SelectionChanged="lvGames_SelectionChanged" FontSize="24" GridViewColumnHeader.Click="lvGames_onHeaderClick">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="{DynamicResource LOCGameActivityLvGamesIcon}" Width="50">
+                        <GridViewColumn  Width="50">
+                            <GridViewColumnHeader Name="lvGameIcon" Content="{DynamicResource LOCGameActivityLvGamesIcon}"></GridViewColumnHeader>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Image HorizontalAlignment="Center" Height="32" VerticalAlignment="Center" Width="32" Source="{Binding listGameIcon}"/>
@@ -69,11 +70,18 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn x:Name="hGameTitle" Header="{DynamicResource LOCGameActivityLvGamesTitle}" Width="Auto" DisplayMemberBinding="{Binding listGameTitle}" />
-                        <GridViewColumn Header="{DynamicResource LOCGameActivityLvGamesLastActivity}" DisplayMemberBinding="{Binding Path=listGameLastActivity, StringFormat='dd/MM/yyyy HH:mm:ss'}" />
-                        <GridViewColumn Header="{DynamicResource LOCGameActivityLvGamesElapsedSeconds}" Width="100">
+                        <GridViewColumn Width="150" DisplayMemberBinding="{Binding listGameLastActivity, StringFormat='dd/MM/yyyy HH:mm:ss'}">
+                            <GridViewColumnHeader Name="lvLastActivity" Content="{DynamicResource LOCGameActivityLvGamesLastActivity}"></GridViewColumnHeader>
+                        </GridViewColumn>
+
+                        <GridViewColumn Width="0" DisplayMemberBinding="{Binding listGameElapsedSeconds}">
+                            <GridViewColumnHeader Name="lvElapsedSeconds">ElapsedSeconds</GridViewColumnHeader>
+                        </GridViewColumn>
+                        <GridViewColumn  Width="130">
+                            <GridViewColumnHeader Name="lvElapsedSecondsFormat" Content="{DynamicResource LOCGameActivityLvGamesElapsedSeconds}"></GridViewColumnHeader>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Label Content="{Binding listGameElapsedSeconds}" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+                                    <Label Content="{Binding listGameElapsedSecondsFormat}" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>

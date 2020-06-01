@@ -39,7 +39,7 @@
 
     <sys:String x:Key="LOCGameActivityLvGamesIcon">Icône</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesTitle">Nom</sys:String>
-    <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Début dernière session</sys:String>
+    <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Dernière session</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Temps passés</sys:String>
 
 </ResourceDictionary>
