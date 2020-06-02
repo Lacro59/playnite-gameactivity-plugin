@@ -73,8 +73,12 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\CustomersTooltip.xaml.cs">
+      <DependentUpon>CustomersTooltip.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\CustomerVm.cs" />
     <Compile Include="Database\Collections\GameActivityCollection.cs" />
-    <Compile Include="Commons\HWiNFODumper.cs" />
+    <Compile Include="Common\HWiNFODumper.cs" />
     <Compile Include="GameActivity.cs" />
     <Compile Include="GameActivitySettings.cs" />
     <Compile Include="Views\GameActivitySettingsView.xaml.cs">
@@ -242,6 +246,10 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Page Include="Common\CustomersTooltip.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\GameActivitySettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

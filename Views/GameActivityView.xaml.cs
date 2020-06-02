@@ -16,6 +16,10 @@ using GameActivity.Models;
 using LiveCharts;
 using PluginCommon;
 using LiveCharts.Wpf;
+using GameActivity.Common;
+using LiveCharts.Configurations;
+using System.Windows.Media;
+using Newtonsoft.Json;
 
 namespace GameActivity
 {
@@ -117,6 +121,7 @@ namespace GameActivity
             getActivityByListGame();
             #endregion
 
+
             // Set Binding data
             DataContext = this;
         }
@@ -213,12 +218,17 @@ namespace GameActivity
 
 
             // Set data in graphic.
-            ChartValues<double> series = new ChartValues<double>();
+            ChartValues<CustomerVm> series = new ChartValues<CustomerVm>();
             string[] labels = new string[activityByMonth.Count];
             int compteur = 0;
             foreach (var item in activityByMonth)
             {
-                series.Add((double)item.Value);
+                series.Add(new CustomerVm
+                {
+                    Name = item.Key,
+                    Values = (double)item.Value,
+                    ValuesFormat = (int)TimeSpan.FromSeconds((double)item.Value).TotalHours + "h " + TimeSpan.FromSeconds((double)item.Value).ToString(@"mm") + "min"
+                });
                 labels[compteur] = item.Key;
                 if (settingsPlaynite.showLauncherIcons)
                     labels[compteur] = TransformIcon.Get(labels[compteur]);
@@ -234,12 +244,30 @@ namespace GameActivity
                 }
             };
             string[] ActivityByMonthLabels = labels;
-            Func<double, string> ActivityByMonthFormatter = value => (int)TimeSpan.FromSeconds(value).TotalHours + "h " + TimeSpan.FromSeconds(value).ToString(@"mm") + "min";
+            //Func<double, string> ActivityByMonthFormatter = value => (int)TimeSpan.FromSeconds(value).TotalHours + "h " + TimeSpan.FromSeconds(value).ToString(@"mm") + "min";
+
+            //let create a mapper so LiveCharts know how to plot our CustomerViewModel class
+            var customerVmMapper = Mappers.Xy<CustomerVm>()
+                .X((value, index) => index)
+                .Y(value => value.Values);
+
+            //lets save the mapper globally
+            Charting.For<CustomerVm>(customerVmMapper);
 
             acmSeries.Series = ActivityByMonthSeries;
             acmLabelsX.Labels = ActivityByMonthLabels;
-            acmLabelsY.LabelFormatter = ActivityByMonthFormatter;
+            //acmLabelsY.LabelFormatter = ActivityByMonthFormatter;
         }
+
+
+
+        private static JArray RemoveValue(JArray oldArray, dynamic obj)
+        {
+            List<string> newArray = oldArray.ToObject<List<string>>();
+            newArray.Remove(obj);
+            return JArray.FromObject(newArray);
+        }
+
 
         /// <summary>
         /// Get data graphic activity by week.
@@ -316,22 +344,35 @@ namespace GameActivity
                 }
 
 
+                // Check source with data
+                JArray listNotDelete = new JArray();
+                for (int i = 0; i < 4; i++) {
+                    foreach (var item in (JObject)activityByWeek[i])
+                    {
+                        if ((long)item.Value != 0 && listNotDelete.TakeWhile(x => x.ToString() == item.Key).Count() != 1)
+                        {
+                            listNotDelete.Add(item.Key);
+                        }
+                    }
+                }
+
+
                 // Prepare data.
-                string[] labels = new string[listSources.Count];
-                for (int iSource = 0; iSource < listSources.Count; iSource++)
+                string[] labels = new string[listNotDelete.Count];
+                for (int iSource = 0; iSource < listNotDelete.Count; iSource++)
                 {
-                    labels[iSource] = (string)listSources[iSource];
+                    labels[iSource] = (string)listNotDelete[iSource];
                     if (settingsPlaynite.showLauncherIcons)
-                        labels[iSource] = TransformIcon.Get((string)listSources[iSource]);
+                        labels[iSource] = TransformIcon.Get((string)listNotDelete[iSource]);
 
                     activityByWeekSeries.Add(new StackedColumnSeries
                     {
                         Title = labels[iSource],
-                        Values = new ChartValues<double>() {
-                            (double)activityByWeek[0][(string)listSources[iSource]],
-                            (double)activityByWeek[1][(string)listSources[iSource]],
-                            (double)activityByWeek[2][(string)listSources[iSource]],
-                            (double)activityByWeek[3][(string)listSources[iSource]]
+                        Values = new ChartValues<int>() {
+                            (int)activityByWeek[0][(string)listNotDelete[iSource]],
+                            (int)activityByWeek[1][(string)listNotDelete[iSource]],
+                            (int)activityByWeek[2][(string)listNotDelete[iSource]],
+                            (int)activityByWeek[3][(string)listNotDelete[iSource]]
                         },
                         StackMode = StackMode.Values,
                         DataLabels = false
@@ -441,13 +482,19 @@ namespace GameActivity
         {
             DateTime dateStart = DateTime.Now.AddDays(variateurTime);
             string[] listDate = new string[10];
-            ChartValues<double> series = new ChartValues<double>();
+            ChartValues<CustomerVm> series = new ChartValues<CustomerVm>();
 
             // Periode data showned
             for (int iDay = 0; iDay < 10; iDay++)
             {
                 listDate[iDay] = dateStart.AddDays(iDay - 9).ToString("yyyy-MM-dd");
-                series.Add(0);
+                //series.Add(0);
+                series.Add(new CustomerVm
+                {
+                    Name = dateStart.AddDays(iDay - 9).ToString("yyyy-MM-dd"),
+                    Values = 0,
+                    ValuesFormat = (int)TimeSpan.FromSeconds(0).TotalHours + "h " + TimeSpan.FromSeconds(0).ToString(@"mm") + "min"
+                });
             }
 
 
@@ -463,7 +510,15 @@ namespace GameActivity
                 {
                     if (listDate[iDay] == dateSession)
                     {
-                        series[iDay] = series[iDay] + elapsedSeconds;
+                        //series[iDay] = series[iDay] + elapsedSeconds;
+                        string tempName = series[iDay].Name;
+                        double tempElapsed = series[iDay].Values + elapsedSeconds;
+                        series[iDay] = new CustomerVm
+                        {
+                            Name = tempName,
+                            Values = tempElapsed,
+                            ValuesFormat = (int)TimeSpan.FromSeconds(tempElapsed).TotalHours + "h " + TimeSpan.FromSeconds(tempElapsed).ToString(@"mm") + "min"
+                        };
                     }
                 }
             }
@@ -479,12 +534,22 @@ namespace GameActivity
                 }
             };
             string[] activityForGameLabels = listDate;
-            Func<double, string> activityForGameFormatter = value => (int)TimeSpan.FromSeconds(value).TotalHours + "h " + TimeSpan.FromSeconds(value).ToString(@"mm") + "min";
+            //Func<double, string> activityForGameFormatter = value => (int)TimeSpan.FromSeconds(value).TotalHours + "h " + TimeSpan.FromSeconds(value).ToString(@"mm") + "min";
+
+            //let create a mapper so LiveCharts know how to plot our CustomerViewModel class
+            var customerVmMapper = Mappers.Xy<CustomerVm>()
+                .X((value, index) => index)
+                .Y(value => value.Values);
+
+            //lets save the mapper globally
+            Charting.For<CustomerVm>(customerVmMapper);
+
+            gameSeries.DataTooltip = new Common.DefaultTooltip();
 
             gameLabel.Content = resources.GetString("LOCGameActivityTimeTitle");
             gameSeries.Series = activityForGameSeries;
             gameLabelsX.Labels = activityForGameLabels;
-            gameLabelsY.LabelFormatter = activityForGameFormatter;
+            //gameLabelsY.LabelFormatter = activityForGameFormatter;
         }
 
         /// <summary>
@@ -555,16 +620,16 @@ namespace GameActivity
             }
 
             // Set data in graphic.
-            ChartValues<double> CPUseries = new ChartValues<double>();
-            ChartValues<double> GPUseries = new ChartValues<double>();
-            ChartValues<double> RAMseries = new ChartValues<double>();
-            ChartValues<double> FPSseries = new ChartValues<double>();
+            ChartValues<int> CPUseries = new ChartValues<int>();
+            ChartValues<int> GPUseries = new ChartValues<int>();
+            ChartValues<int> RAMseries = new ChartValues<int>();
+            ChartValues<int> FPSseries = new ChartValues<int>();
             for (int iLog = 0; iLog < gameLogsDefinitive.Count; iLog++)
             {
-                CPUseries.Add((double)gameLogsDefinitive[iLog].CPU);
-                GPUseries.Add((double)gameLogsDefinitive[iLog].GPU);
-                RAMseries.Add((double)gameLogsDefinitive[iLog].RAM);
-                FPSseries.Add((double)gameLogsDefinitive[iLog].FPS);
+                CPUseries.Add(gameLogsDefinitive[iLog].CPU);
+                GPUseries.Add(gameLogsDefinitive[iLog].GPU);
+                RAMseries.Add(gameLogsDefinitive[iLog].RAM);
+                FPSseries.Add(gameLogsDefinitive[iLog].FPS);
             }
 
             SeriesCollection activityForGameLogSeries = new SeriesCollection
@@ -592,6 +657,14 @@ namespace GameActivity
             };
             //string[] activityForGameLogLabels = listDate;
             Func<double, string> activityForGameLogFormatter = value => value.ToString("N");
+
+            var converter = new BrushConverter();
+            gameSeries.DataTooltip = new LiveCharts.Wpf.DefaultTooltip();
+            gameSeries.DataTooltip.Background = (Brush)converter.ConvertFromString("#E4555555");
+            gameSeries.DataTooltip.Padding = new Thickness(10); // "10, 10"
+            gameSeries.DataTooltip.BorderThickness = new Thickness(2); //"2";
+            gameSeries.DataTooltip.BorderBrush = (Brush)converter.ConvertFromString("#555555");
+            gameSeries.DataTooltip.Foreground = (Brush)converter.ConvertFromString("White");
 
             gameLabel.Content = resources.GetString("LOCGameActivityLogTitle");
             gameSeries.Series = activityForGameLogSeries;
