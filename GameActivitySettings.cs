@@ -10,8 +10,12 @@ namespace GameActivity
 
         public bool showLauncherIcons { get; set; } = false;
 
-        public bool HWiNFO_enable { get; set; } = false;
-        public int HWiNFO_timeLog { get; set; } = 5;
+        public bool EnableLogging { get; set; } = false;
+        public int TimeIntervalLogging { get; set; } = 5;
+
+        public bool UseMsiAfterburner { get; set; } = false;
+        public bool UseHWiNFO { get; set; } = false;
+
         public string HWiNFO_gpu_sensorsID { get; set; } = string.Empty;
         public string HWiNFO_gpu_elementID { get; set; } = string.Empty;
         public string HWiNFO_fps_sensorsID { get; set; } = string.Empty;
@@ -44,8 +48,13 @@ namespace GameActivity
             if (savedSettings != null)
             {
                 showLauncherIcons = savedSettings.showLauncherIcons;
-                HWiNFO_enable = savedSettings.HWiNFO_enable;
-                HWiNFO_timeLog = savedSettings.HWiNFO_timeLog;
+
+                EnableLogging = savedSettings.EnableLogging;
+                TimeIntervalLogging = savedSettings.TimeIntervalLogging;
+
+                UseMsiAfterburner = savedSettings.UseMsiAfterburner;
+                UseHWiNFO = savedSettings.UseHWiNFO;
+
                 HWiNFO_gpu_sensorsID = savedSettings.HWiNFO_gpu_sensorsID;
                 HWiNFO_gpu_elementID = savedSettings.HWiNFO_gpu_elementID;
                 HWiNFO_fps_sensorsID = savedSettings.HWiNFO_fps_sensorsID;

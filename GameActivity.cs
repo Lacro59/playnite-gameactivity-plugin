@@ -27,7 +27,7 @@ namespace GameActivity
         // TODO Bad integration with structutre application
         private JArray activity { get; set; }
         private JObject activityDetails { get; set; }
-        private JArray HWiNFO { get; set; }
+        private JArray LoggingData { get; set; }
 
         public override Guid Id { get; } = Guid.Parse("afbb1a0d-04a1-4d0c-9afa-c6e42ca855b4");
 
@@ -90,7 +90,7 @@ namespace GameActivity
             // Add code to be executed when game is started running.
 
             // start timer si HWiNFO log is enable.
-            if (settings.HWiNFO_enable)
+            if (settings.EnableLogging)
             {
                 dataHWiNFO_start();
             }
@@ -112,7 +112,7 @@ namespace GameActivity
             }
 
             activityDetails = new JObject();
-            HWiNFO = new JArray();
+            LoggingData = new JArray();
             if (File.Exists(pathActivityDetailsDB + gameID + ".json"))
             {
                 activityDetails = JObject.Parse(File.ReadAllText(pathActivityDetailsDB + gameID + ".json"));
@@ -136,7 +136,7 @@ namespace GameActivity
             // Add code to be executed when game is preparing to be started.
 
             // Stop timer si HWiNFO log is enable.
-            if (settings.HWiNFO_enable)
+            if (settings.EnableLogging)
             {
                 dataHWiNFO_stop();
             }
@@ -156,9 +156,9 @@ namespace GameActivity
                 File.WriteAllText(pathActivityDB + gameID + ".json", JsonConvert.SerializeObject(activity));
 
                 // Write game activity details.
-                if (JsonConvert.SerializeObject(HWiNFO) != "[]")
+                if (JsonConvert.SerializeObject(LoggingData) != "[]")
                 {
-                    activityDetails.Add(new JProperty(dateSession, HWiNFO));
+                    activityDetails.Add(new JProperty(dateSession, LoggingData));
                     File.WriteAllText(pathActivityDetailsDB + gameID + ".json", JsonConvert.SerializeObject(activityDetails));
                 }
             }
@@ -206,9 +206,9 @@ namespace GameActivity
         /// </summary>
         public void dataHWiNFO_start()
         {
-            logger.Info("GameActivity - dataHWiNFO_start");
+            logger.Info("GameActivity - dataLogging_start");
 
-            t = new Timer(settings.HWiNFO_timeLog * 60000);
+            t = new Timer(settings.TimeIntervalLogging * 60000);
             t.AutoReset = true;
             t.Elapsed += new ElapsedEventHandler(OnTimedEvent);
             t.Start();
@@ -219,7 +219,7 @@ namespace GameActivity
         /// </summary>
         public void dataHWiNFO_stop()
         {
-            logger.Info("GameActivity - dataHWiNFO_stop");
+            logger.Info("GameActivity - dataLogging_stop");
 
             t.AutoReset = false;
             t.Stop();
@@ -232,9 +232,6 @@ namespace GameActivity
         /// <param name="e"></param>
         private async void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
-            HWiNFODumper HWinFO = new HWiNFODumper();
-            List<HWiNFODumper.JsonObj> dataHWinfo = HWinFO.ReadMem();
-
             int fpsValue = 0;
             int cpuValue = GetCpuPercentage();
             int gpuValue = 0;
@@ -243,107 +240,111 @@ namespace GameActivity
             int cpuTValue = 0;
 
 
-            var MSIAfterburner = new MSIAfterburnerNET.HM.HardwareMonitor();
-            logger.Debug(JsonConvert.SerializeObject(MSIAfterburner));
-
-            logger.Debug("GPU_USAGE " + MSIAfterburner.GetEntry(MONITORING_SOURCE_ID.GPU_USAGE).Data);
-            logger.Debug("GPU_TEMPERATURE " + MSIAfterburner.GetEntry(MONITORING_SOURCE_ID.GPU_TEMPERATURE).Data);
-            logger.Debug("CPU_TEMPERATURE " + MSIAfterburner.GetEntry(MONITORING_SOURCE_ID.CPU_TEMPERATURE).Data);
-            logger.Debug("FRAMERATE " + MSIAfterburner.GetEntry(MONITORING_SOURCE_ID.FRAMERATE).Data);
-
-
-
-
-
-            foreach (var sensorItems in dataHWinfo)
+            if (settings.UseMsiAfterburner)
             {
-                JObject sensorItemsOBJ = JObject.Parse(JsonConvert.SerializeObject(sensorItems));
+                var MSIAfterburner = new MSIAfterburnerNET.HM.HardwareMonitor();
 
-                string sensorsID = "0x" + ((uint)sensorItemsOBJ["szSensorSensorID"]).ToString("X");
+                fpsValue = (int)MSIAfterburner.GetEntry(MONITORING_SOURCE_ID.FRAMERATE).Data;
+                gpuValue = (int)MSIAfterburner.GetEntry(MONITORING_SOURCE_ID.GPU_USAGE).Data;
+                gpuTValue = (int)MSIAfterburner.GetEntry(MONITORING_SOURCE_ID.GPU_TEMPERATURE).Data;
+                cpuTValue = (int)MSIAfterburner.GetEntry(MONITORING_SOURCE_ID.CPU_TEMPERATURE).Data;
+            }
+            else if (settings.UseHWiNFO)
+            {
+                HWiNFODumper HWinFO = new HWiNFODumper();
+                List<HWiNFODumper.JsonObj> dataHWinfo = HWinFO.ReadMem();
 
-                // Find sensors fps
-                if (sensorsID.ToLower() == settings.HWiNFO_fps_sensorsID.ToLower())
+                foreach (var sensorItems in dataHWinfo)
                 {
-                    // Find data fps
-                    foreach (var items in sensorItemsOBJ["sensors"])
+                    JObject sensorItemsOBJ = JObject.Parse(JsonConvert.SerializeObject(sensorItems));
+
+                    string sensorsID = "0x" + ((uint)sensorItemsOBJ["szSensorSensorID"]).ToString("X");
+
+                    // Find sensors fps
+                    if (sensorsID.ToLower() == settings.HWiNFO_fps_sensorsID.ToLower())
                     {
-                        JObject itemOBJ = JObject.Parse(JsonConvert.SerializeObject(items));
-                        string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
-
-                        //logger.Info("----- " + dataID.ToLower() + " - " + settings.HWiNFO_fps_elementID.ToLower());
-
-                        if (dataID.ToLower() == settings.HWiNFO_fps_elementID.ToLower())
+                        // Find data fps
+                        foreach (var items in sensorItemsOBJ["sensors"])
                         {
-                            fpsValue = (int)Math.Round((Double)itemOBJ["Value"]);
+                            JObject itemOBJ = JObject.Parse(JsonConvert.SerializeObject(items));
+                            string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
+
+                            //logger.Info("----- " + dataID.ToLower() + " - " + settings.HWiNFO_fps_elementID.ToLower());
+
+                            if (dataID.ToLower() == settings.HWiNFO_fps_elementID.ToLower())
+                            {
+                                fpsValue = (int)Math.Round((Double)itemOBJ["Value"]);
+                            }
                         }
                     }
-                }
 
-                // Find sensors gpu usage
-                if (sensorsID.ToLower() == settings.HWiNFO_gpu_sensorsID.ToLower())
-                {
-                    // Find data gpu
-                    foreach (var items in sensorItemsOBJ["sensors"])
+                    // Find sensors gpu usage
+                    if (sensorsID.ToLower() == settings.HWiNFO_gpu_sensorsID.ToLower())
                     {
-                        JObject itemOBJ = JObject.Parse(JsonConvert.SerializeObject(items));
-                        string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
-
-                        //logger.Info("----- " + dataID.ToLower() + " - " + settings.HWiNFO_gpu_elementID.ToLower());
-
-                        if (dataID.ToLower() == settings.HWiNFO_gpu_elementID.ToLower())
+                        // Find data gpu
+                        foreach (var items in sensorItemsOBJ["sensors"])
                         {
-                            gpuValue = (int)Math.Round((Double)itemOBJ["Value"]);
+                            JObject itemOBJ = JObject.Parse(JsonConvert.SerializeObject(items));
+                            string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
+
+                            //logger.Info("----- " + dataID.ToLower() + " - " + settings.HWiNFO_gpu_elementID.ToLower());
+
+                            if (dataID.ToLower() == settings.HWiNFO_gpu_elementID.ToLower())
+                            {
+                                gpuValue = (int)Math.Round((Double)itemOBJ["Value"]);
+                            }
                         }
                     }
-                }
 
-                // Find sensors gpu temp
-                if (sensorsID.ToLower() == settings.HWiNFO_gpuT_sensorsID.ToLower())
-                {
-                    // Find data gpu
-                    foreach (var items in sensorItemsOBJ["sensors"])
+                    // Find sensors gpu temp
+                    if (sensorsID.ToLower() == settings.HWiNFO_gpuT_sensorsID.ToLower())
                     {
-                        JObject itemOBJ = JObject.Parse(JsonConvert.SerializeObject(items));
-                        string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
-
-                        //logger.Info("----- " + dataID.ToLower() + " - " + settings.HWiNFO_gpu_elementID.ToLower());
-
-                        if (dataID.ToLower() == settings.HWiNFO_gpuT_elementID.ToLower())
+                        // Find data gpu
+                        foreach (var items in sensorItemsOBJ["sensors"])
                         {
-                            gpuTValue = (int)Math.Round((Double)itemOBJ["Value"]);
+                            JObject itemOBJ = JObject.Parse(JsonConvert.SerializeObject(items));
+                            string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
+
+                            //logger.Info("----- " + dataID.ToLower() + " - " + settings.HWiNFO_gpu_elementID.ToLower());
+
+                            if (dataID.ToLower() == settings.HWiNFO_gpuT_elementID.ToLower())
+                            {
+                                gpuTValue = (int)Math.Round((Double)itemOBJ["Value"]);
+                            }
                         }
                     }
-                }
 
-                // Find sensors cpu temp
-                if (sensorsID.ToLower() == settings.HWiNFO_cpuT_sensorsID.ToLower())
-                {
-                    // Find data gpu
-                    foreach (var items in sensorItemsOBJ["sensors"])
+                    // Find sensors cpu temp
+                    if (sensorsID.ToLower() == settings.HWiNFO_cpuT_sensorsID.ToLower())
                     {
-                        JObject itemOBJ = JObject.Parse(JsonConvert.SerializeObject(items));
-                        string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
-
-                        //logger.Info("----- " + dataID.ToLower() + " - " + settings.HWiNFO_gpu_elementID.ToLower());
-
-                        if (dataID.ToLower() == settings.HWiNFO_cpuT_elementID.ToLower())
+                        // Find data gpu
+                        foreach (var items in sensorItemsOBJ["sensors"])
                         {
-                            cpuTValue = (int)Math.Round((Double)itemOBJ["Value"]);
+                            JObject itemOBJ = JObject.Parse(JsonConvert.SerializeObject(items));
+                            string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
+
+                            //logger.Info("----- " + dataID.ToLower() + " - " + settings.HWiNFO_gpu_elementID.ToLower());
+
+                            if (dataID.ToLower() == settings.HWiNFO_cpuT_elementID.ToLower())
+                            {
+                                cpuTValue = (int)Math.Round((Double)itemOBJ["Value"]);
+                            }
                         }
                     }
                 }
             }
 
-            JObject HWiNFO_data = new JObject();
-            HWiNFO_data["datelog"] = DateTime.Now.ToUniversalTime().ToString("o");
-            HWiNFO_data["fps"] = fpsValue;
-            HWiNFO_data["cpu"] = cpuValue;
-            HWiNFO_data["gpu"] = gpuValue;
-            HWiNFO_data["ram"] = ramValue;
-            HWiNFO_data["gpuT"] = gpuTValue;
-            HWiNFO_data["cpuT"] = cpuTValue;
 
-            HWiNFO.Add(HWiNFO_data);
+            JObject Data = new JObject();
+            Data["datelog"] = DateTime.Now.ToUniversalTime().ToString("o");
+            Data["fps"] = fpsValue;
+            Data["cpu"] = cpuValue;
+            Data["gpu"] = gpuValue;
+            Data["ram"] = ramValue;
+            Data["gpuT"] = gpuTValue;
+            Data["cpuT"] = cpuTValue;
+
+            LoggingData.Add(Data);
         }
 
         // http://technoblazze.blogspot.com/2015/07/get-ram-and-cpu-usage-in-c.html

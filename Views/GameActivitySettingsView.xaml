@@ -3,67 +3,105 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             mc:Ignorable="d" d:DesignWidth="600" Height="589">
-    <StackPanel VerticalAlignment="Top">
-        <Border BorderBrush="Black" BorderThickness="1" Height="18" Visibility="Hidden"/>
-        <Border BorderBrush="Black" BorderThickness="1" Height="18" Visibility="Hidden"/>
+             mc:Ignorable="d" d:DesignWidth="600" Height="520">
 
-        <Grid VerticalAlignment="Top" Height="130">
-            <CheckBox IsChecked="{Binding showLauncherIcons}" Margin="15,5,15,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+    <DockPanel Margin="20">
+        <StackPanel DockPanel.Dock="Top">
+            <CheckBox IsChecked="{Binding showLauncherIcons}">
                 <Label Content="{DynamicResource LOCGameActivityActiveIcon}" />
             </CheckBox>
+        </StackPanel>
 
-            <CheckBox IsChecked="{Binding HWiNFO_enable}" Margin="15,45,15,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
-                <Label Content="{DynamicResource LOCGameActivityActiveLog}" />
-            </CheckBox>
+        <DockPanel DockPanel.Dock="Bottom" Margin="0,20,0,0">
+            <DockPanel DockPanel.Dock="Top">
+                <StackPanel DockPanel.Dock="Top">
+                    <CheckBox x:Name="cbLogging" IsChecked="{Binding EnableLogging}">
+                        <Label Content="{DynamicResource LOCGameActivityActiveLog}" />
+                    </CheckBox>
+                </StackPanel>
 
-            <Label Content="{DynamicResource LOCGameActivityTimeInterval}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,80,0,0"/>
-            <Slider x:Name="hwSlider" HorizontalAlignment="Left" Margin="135,84,0,0" VerticalAlignment="Top" Width="222" Minimum="1" Value="{Binding HWiNFO_timeLog}" ValueChanged="Slider_ValueChanged"/>
-            <Label x:Name="labelIntervalLabel_text" Content="{DynamicResource LOCGameActivityTimeLabel}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="363,80,0,0" Width="154"/>
-        </Grid>
+                <StackPanel DockPanel.Dock="Bottom" Margin="0,20,0,0" Orientation="Horizontal" IsEnabled="{Binding ElementName=cbLogging, Path=IsChecked, TargetNullValue=false}">
+                    <Label Content="{DynamicResource LOCGameActivityTimeInterval}" Width="130" />
+                    <Slider x:Name="hwSlider" Width="230" Minimum="1" Value="{Binding TimeIntervalLogging}" ValueChanged="Slider_ValueChanged" />
+                    <Label x:Name="labelIntervalLabel_text" Content="{DynamicResource LOCGameActivityTimeLabel}" Width="150" Margin="20,0,0,0" />
+                </StackPanel>
+            </DockPanel>
 
-        <GroupBox Header="hwInfo" Height="336" Margin="15,-5,15,4" VerticalAlignment="Top">
-            <Grid>
-                <GroupBox Header="{DynamicResource LOCGameActivityGpuUsage}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="130" Width="250" Margin="15,15,0,0">
-                    <Grid>
-                        <Label Content="{DynamicResource LOCGameActivitySensorsID}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,10,0,0"/>
-                        <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding HWiNFO_gpu_sensorsID}" VerticalAlignment="Top" Width="100" Margin="110,10,0,0"/>
+            <DockPanel DockPanel.Dock="Bottom" Margin="0,20,0,0" IsEnabled="{Binding ElementName=cbLogging, Path=IsChecked, TargetNullValue=false}">
+                <DockPanel DockPanel.Dock="Top">
+                    <StackPanel DockPanel.Dock="Left" Width="280">
+                        <CheckBox IsChecked="{Binding UseMsiAfterburner}">
+                            <Label Content="{DynamicResource LOCGameActivityUseMsiAfterburner}" />
+                        </CheckBox>
+                    </StackPanel>
 
-                        <Label Content="{DynamicResource LOCGameActivityElementID}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,58,0,0"/>
-                        <TextBox HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="{Binding HWiNFO_gpu_elementID}" VerticalAlignment="Top" Width="100" Margin="110,58,0,0"/>
-                    </Grid>
-                </GroupBox>
+                    <StackPanel DockPanel.Dock="Right">
+                        <CheckBox x:Name="cbHWiNFO" IsChecked="{Binding UseHWiNFO}">
+                            <Label Content="{DynamicResource LOCGameActivityUseHWiNFO}" />
+                        </CheckBox>
+                    </StackPanel>
+                </DockPanel>
 
-                <GroupBox Header="{DynamicResource LOCGameActivityFps}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="130" Width="250" Margin="292,15,0,0">
-                    <Grid>
-                        <Label Content="{DynamicResource LOCGameActivitySensorsID}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,10,0,0"/>
-                        <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding HWiNFO_fps_sensorsID}" VerticalAlignment="Top" Width="100" Margin="110,10,0,0"/>
+                <DockPanel DockPanel.Dock="Bottom" Margin="0,20,0,0"  IsEnabled="{Binding ElementName=cbHWiNFO, Path=IsChecked, TargetNullValue=false}">
+                    <GroupBox Header="HWiNFO">
+                        <DockPanel Margin="10">
+                            <DockPanel DockPanel.Dock="Top">
+                                <StackPanel DockPanel.Dock="Left">
+                                    <GroupBox Header="{DynamicResource LOCGameActivityGpuUsage}" Height="130" Width="250">
+                                        <Grid>
+                                            <Label Content="{DynamicResource LOCGameActivitySensorsID}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,10,0,0"/>
+                                            <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding HWiNFO_gpu_sensorsID}" VerticalAlignment="Top" Width="100" Margin="110,10,0,0"/>
 
-                        <Label Content="{DynamicResource LOCGameActivityElementID}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,58,0,0"/>
-                        <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding HWiNFO_fps_elementID}" VerticalAlignment="Top" Width="100" Margin="110,58,0,0"/>
-                    </Grid>
-                </GroupBox>
+                                            <Label Content="{DynamicResource LOCGameActivityElementID}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,58,0,0"/>
+                                            <TextBox HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="{Binding HWiNFO_gpu_elementID}" VerticalAlignment="Top" Width="100" Margin="110,58,0,0"/>
+                                        </Grid>
+                                    </GroupBox>
+                                </StackPanel>
 
-                <GroupBox Header="{DynamicResource LOCGameActivityGpuTemp}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="130" Width="250" Margin="15,166,0,0">
-                    <Grid>
-                        <Label Content="{DynamicResource LOCGameActivitySensorsID}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,10,0,0"/>
-                        <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding HWiNFO_gpuT_sensorsID}" VerticalAlignment="Top" Width="100" Margin="110,10,0,0"/>
+                                <StackPanel DockPanel.Dock="Right">
+                                    <GroupBox Header="{DynamicResource LOCGameActivityFps}" Height="130" Width="250">
+                                        <Grid>
+                                            <Label Content="{DynamicResource LOCGameActivitySensorsID}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,10,0,0"/>
+                                            <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding HWiNFO_fps_sensorsID}" VerticalAlignment="Top" Width="100" Margin="110,10,0,0"/>
 
-                        <Label Content="{DynamicResource LOCGameActivityElementID}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,58,0,0"/>
-                        <TextBox HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="{Binding HWiNFO_gpuT_elementID}" VerticalAlignment="Top" Width="100" Margin="110,58,0,0"/>
-                    </Grid>
-                </GroupBox>
+                                            <Label Content="{DynamicResource LOCGameActivityElementID}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,58,0,0"/>
+                                            <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding HWiNFO_fps_elementID}" VerticalAlignment="Top" Width="100" Margin="110,58,0,0"/>
+                                        </Grid>
+                                    </GroupBox>
+                                </StackPanel>
+                            </DockPanel>
 
-                <GroupBox Header="{DynamicResource LOCGameActivityCpuTemp}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="130" Width="250" Margin="292,166,0,0">
-                    <Grid>
-                        <Label Content="{DynamicResource LOCGameActivitySensorsID}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,10,0,0"/>
-                        <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding HWiNFO_cpuT_sensorsID}" VerticalAlignment="Top" Width="100" Margin="110,10,0,0"/>
+                            <DockPanel DockPanel.Dock="Top">
+                                <StackPanel DockPanel.Dock="Left">
+                                    <GroupBox Header="{DynamicResource LOCGameActivityGpuTemp}" Height="130" Width="250">
+                                        <Grid>
+                                            <Label Content="{DynamicResource LOCGameActivitySensorsID}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,10,0,0"/>
+                                            <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding HWiNFO_gpuT_sensorsID}" VerticalAlignment="Top" Width="100" Margin="110,10,0,0"/>
 
-                        <Label Content="{DynamicResource LOCGameActivityElementID}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,58,0,0"/>
-                        <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding HWiNFO_cpuT_elementID}" VerticalAlignment="Top" Width="100" Margin="110,58,0,0"/>
-                    </Grid>
-                </GroupBox>
-            </Grid>
-        </GroupBox>
-    </StackPanel>
+                                            <Label Content="{DynamicResource LOCGameActivityElementID}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,58,0,0"/>
+                                            <TextBox HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="{Binding HWiNFO_gpuT_elementID}" VerticalAlignment="Top" Width="100" Margin="110,58,0,0"/>
+                                        </Grid>
+                                    </GroupBox>
+                                </StackPanel>
+
+                                <StackPanel DockPanel.Dock="Right">
+                                    <GroupBox Header="{DynamicResource LOCGameActivityCpuTemp}" Height="130" Width="250">
+                                        <Grid>
+                                            <Label Content="{DynamicResource LOCGameActivitySensorsID}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,10,0,0"/>
+                                            <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding HWiNFO_cpuT_sensorsID}" VerticalAlignment="Top" Width="100" Margin="110,10,0,0"/>
+
+                                            <Label Content="{DynamicResource LOCGameActivityElementID}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,58,0,0"/>
+                                            <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding HWiNFO_cpuT_elementID}" VerticalAlignment="Top" Width="100" Margin="110,58,0,0"/>
+                                        </Grid>
+                                    </GroupBox>
+                                </StackPanel>
+                            </DockPanel>
+                        </DockPanel>
+                    </GroupBox>
+                </DockPanel>
+            </DockPanel>
+        </DockPanel>
+    </DockPanel>
+    
 </UserControl>
+    

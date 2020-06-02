@@ -77,7 +77,7 @@ namespace GameActivity
             lvElapsedSeconds.IsEnabled = false;
 
             // Add column if log details enable.
-            if (!settings.HWiNFO_enable)
+            if (!settings.EnableLogging)
             {
                 GridView lvView = (GridView)lvGames.View;
 

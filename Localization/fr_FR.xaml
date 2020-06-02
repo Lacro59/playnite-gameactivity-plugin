@@ -15,6 +15,9 @@
     <sys:String x:Key="LOCGameActivityTimeInterval">Interval de temps</sys:String>
     <sys:String x:Key="LOCGameActivityTimeLabel">minute(s)</sys:String>
 
+    <sys:String x:Key="LOCGameActivityUseMsiAfterburner">Utiliser MSI Afterburner</sys:String>
+    <sys:String x:Key="LOCGameActivityUseHWiNFO">Utiliser HWiNFO</sys:String>
+
     <sys:String x:Key="LOCGameActivitySensorsID">sensors id</sys:String>
     <sys:String x:Key="LOCGameActivityElementID">element id</sys:String>
     
