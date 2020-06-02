@@ -77,7 +77,7 @@
       <DependentUpon>CustomersTooltip.xaml</DependentUpon>
     </Compile>
     <Compile Include="Common\CustomerVm.cs" />
-    <Compile Include="Database\Collections\GameActivityCollection.cs" />
+    <Compile Include="Database\GameActivityCollection.cs" />
     <Compile Include="Common\HWiNFODumper.cs" />
     <Compile Include="GameActivity.cs" />
     <Compile Include="GameActivitySettings.cs" />
@@ -266,7 +266,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="Resources\playnite-plugincommon.dll" />
+    <None Include="Resources\playnite-plugincommon.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

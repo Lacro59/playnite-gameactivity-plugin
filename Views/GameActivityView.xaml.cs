@@ -19,7 +19,6 @@ using LiveCharts.Wpf;
 using GameActivity.Common;
 using LiveCharts.Configurations;
 using System.Windows.Media;
-using Newtonsoft.Json;
 
 namespace GameActivity
 {
@@ -710,8 +709,6 @@ namespace GameActivity
 
 
 
-
-
         #region Functions sorting lvGames.
         private GridViewColumnHeader _lastHeaderClicked = null;
         private ListSortDirection _lastDirection;
@@ -1013,8 +1010,8 @@ namespace GameActivity
 
 
 
-
-
+        // TODO Show stack time for can select details data
+        // TODO Select details data
         private void GameSeries_DataClick(object sender, ChartPoint chartPoint)
         {
 
