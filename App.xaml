@@ -40,6 +40,8 @@
                 <ResourceDictionary Source="Resources/PlayniteResources/LocSource.xaml" />
                 <!--Default localization-->
                 <ResourceDictionary Source="Localization/LocSource.xaml" />
+                
+                <ResourceDictionary Source="Resources/LiveChartsCommon/Common.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

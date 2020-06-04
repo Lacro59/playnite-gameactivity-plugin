@@ -4,8 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
-             xmlns:local="clr-namespace:GameActivity"
-             xmlns:localLVC="clr-namespace:GameActivity.Common"
+             xmlns:localLVC="clr-namespace:PluginCommon.LiveChartsCommon;assembly=PluginCommon"
              mc:Ignorable="d" Height="800" Width="1260" Background="{DynamicResource WindowBackgourndBrush}"
              ResizeMode="NoResize" Title="GameActivity" WindowStartupLocation="CenterScreen">
 
@@ -29,7 +28,7 @@
             </Grid.ColumnDefinitions>
             <lvc:CartesianChart x:Name="acmSeries" LegendLocation="none" Margin="10,0,0,5" Grid.Column="1" VerticalAlignment="Bottom" Height="265" FontFamily="/GameActivity;component/Resources/#font">
                 <lvc:CartesianChart.DataTooltip>
-                    <localLVC:DefaultTooltip/>
+                    <localLVC:CustomersTooltipForTime ShowIcon="{Binding ShowIcon}"/>
                 </lvc:CartesianChart.DataTooltip>
                 
                 <lvc:CartesianChart.AxisX>
@@ -48,8 +47,13 @@
 
         <Grid HorizontalAlignment="Left" Height="321" Margin="637,0,0,13" VerticalAlignment="Bottom" Width="605">
             <lvc:CartesianChart x:Name="acwSeries" LegendLocation="none" Margin="0,0,10,5" Height="260" VerticalAlignment="Bottom" FontFamily="/GameActivity;component/Resources/#font" >
+                <!--lvc:CartesianChart.DataTooltip>
+                    <lvc:DefaultTooltip Background="{DynamicResource CommonToolTipBackgroundBrush}" Padding="{DynamicResource CommonToolTipPadding}" 
+                                        BorderThickness="{DynamicResource CommonToolTipBorderThickness}"
+                                        BorderBrush="{DynamicResource CommonToolTipBorderBrush}" Foreground="{DynamicResource CommonToolTipForeground}" />
+                </-->
                 <lvc:CartesianChart.DataTooltip>
-                    <lvc:DefaultTooltip Background="#E4555555" Padding="10 10" BorderThickness="2" BorderBrush="#555555" Foreground="White" />
+                    <localLVC:CustomersTooltipForMultipleTime ShowIcon="{Binding ShowIcon}"/>
                 </lvc:CartesianChart.DataTooltip>
 
                 <lvc:CartesianChart.AxisX>
@@ -158,7 +162,7 @@
                 <Grid Height="336" Margin="0" Width="605" Grid.RowSpan="2">
                     <lvc:CartesianChart x:Name="gameSeries" LegendLocation="none" Margin="0,60.5,10,0" Width="595" HorizontalAlignment="Right" DataClick="GameSeries_DataClick">
                         <lvc:CartesianChart.DataTooltip>
-                            <localLVC:DefaultTooltip/>
+                            <localLVC:CustomersTooltipForTime ShowIcon="{Binding ShowIcon}"/>
                         </lvc:CartesianChart.DataTooltip>
 
                         <lvc:CartesianChart.AxisX>

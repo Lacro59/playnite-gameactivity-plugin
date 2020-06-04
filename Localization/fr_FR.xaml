@@ -21,10 +21,20 @@
     <sys:String x:Key="LOCGameActivitySensorsID">sensors id</sys:String>
     <sys:String x:Key="LOCGameActivityElementID">element id</sys:String>
     
-    <sys:String x:Key="LOCGameActivityGpuUsage">GPU usage</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuUsage">GPU utilisation</sys:String>
     <sys:String x:Key="LOCGameActivityFps">FPS</sys:String>
     <sys:String x:Key="LOCGameActivityGpuTemp">GPU température</sys:String>
     <sys:String x:Key="LOCGameActivityCpuTemp">CPU température</sys:String>
+
+    <sys:String x:Key="LOCGameActivityActiveWarning">Activier les avertissements.</sys:String>
+    <sys:String x:Key="LOCGameActivityMinFps">FPS min</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxCpuTemp">Temp CPU max</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxGpuTemp">Temp GPU max</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxCpuUsage">Utilisation CPU max</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxGpuUsage">Utilisation GPU max</sys:String>
+
+    <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">Enregistre les performances CPU, GPU, RAM et FPS durant la session de jeu.</sys:String>
+    <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Affiche un message d'avertissement à la fin de la session de jeu dans les limites définies.</sys:String>
 
 
     <!-- 
@@ -44,5 +54,14 @@
     <sys:String x:Key="LOCGameActivityLvGamesTitle">Nom</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Dernière session</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Temps passés</sys:String>
+
+
+    <!-- 
+    GameActivity
+    -->
+   
+    <sys:String x:Key="LOCGameActivityWarningCaption">Averstissements durant la session de jeu</sys:String>
+    <sys:String x:Key="LOCGameActivityWarningAt">A</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuUsage">CPU utilisation</sys:String>
 
 </ResourceDictionary>

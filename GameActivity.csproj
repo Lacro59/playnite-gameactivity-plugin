@@ -47,13 +47,13 @@
       <HintPath>packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="playnite-plugincommon, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Ressources\playnite-plugincommon.dll</HintPath>
-    </Reference>
     <Reference Include="Playnite.SDK, Version=5.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\PlayniteSDK.5.2.0\lib\net462\Playnite.SDK.dll</HintPath>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="PluginCommon, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Resources\PluginCommon.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -73,10 +73,6 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\CustomersTooltip.xaml.cs">
-      <DependentUpon>CustomersTooltip.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Common\CustomerVm.cs" />
     <Compile Include="Database\GameActivityCollection.cs" />
     <Compile Include="Common\HWiNFODumper.cs" />
     <Compile Include="GameActivity.cs" />
@@ -246,10 +242,11 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Page Include="Common\CustomersTooltip.xaml">
-      <SubType>Designer</SubType>
+    <None Include="Resources\LiveChartsCommon\Common.xaml">
       <Generator>MSBuild:Compile</Generator>
-    </Page>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Page Include="Views\GameActivitySettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -264,9 +261,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <None Include="Resources\playnite-plugincommon.dll" />
+    <None Include="Resources\PluginCommon.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

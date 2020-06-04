@@ -24,7 +24,14 @@ namespace GameActivity
         public string HWiNFO_gpuT_elementID { get; set; } = string.Empty;
         public string HWiNFO_cpuT_sensorsID { get; set; } = string.Empty;
         public string HWiNFO_cpuT_elementID { get; set; } = string.Empty;
-        
+
+        public bool EnableWarning { get; set; } = false;
+        public int MinFps { get; set; }
+        public int MaxCpuTemp { get; set; }
+        public int MaxGpuTemp { get; set; }
+        public int MaxCpuUsage { get; set; }
+        public int MaxGpuUsage { get; set; }
+
 
         // Playnite serializes settings object to a JSON object and saves it as text file.
         // If you want to exclude some property from being saved then use `JsonIgnore` ignore attribute.
@@ -63,6 +70,13 @@ namespace GameActivity
                 HWiNFO_gpuT_elementID = savedSettings.HWiNFO_gpuT_elementID;
                 HWiNFO_cpuT_sensorsID = savedSettings.HWiNFO_cpuT_sensorsID;
                 HWiNFO_cpuT_elementID = savedSettings.HWiNFO_cpuT_elementID;
+
+                EnableWarning = savedSettings.EnableWarning;
+                MinFps = savedSettings.MinFps;
+                MaxCpuTemp = savedSettings.MaxCpuTemp;
+                MaxGpuTemp = savedSettings.MaxGpuTemp;
+                MaxCpuUsage = savedSettings.MaxCpuUsage;
+                MaxGpuUsage = savedSettings.MaxGpuUsage;
             }
         }
 

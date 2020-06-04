@@ -13,12 +13,14 @@ using System.Runtime.InteropServices;
 using MSIAfterburnerNET.HM.Interop;
 using System.Reflection;
 using PluginCommon;
+using System.Windows;
 
 namespace GameActivity
 {
     public class GameActivity : Plugin
     {
         private static readonly ILogger logger = LogManager.GetLogger();
+        private static IResourceProvider resources = new ResourceProvider();
 
         public static IGameDatabase DatabaseReference;
 
@@ -37,7 +39,7 @@ namespace GameActivity
 
         // Variables timer function
         public Timer t { get; set; }
-
+        public List<JArray> WarningsMessage { get; set; }
 
         #region Playnite GenericPlugin
         public GameActivity(IPlayniteAPI api) : base(api)
@@ -48,7 +50,9 @@ namespace GameActivity
             string pluginFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
             // Add plugin localization in application ressource.
-            Localization.SetPluginLanguage(pluginFolder, api.Paths.ConfigurationPath);
+            PluginCommon.Localization.SetPluginLanguage(pluginFolder, api.Paths.ConfigurationPath);
+            // Add common in application ressource.
+            PluginCommon.Common.Load(pluginFolder);
 
             pathActivityDB = this.GetPluginUserDataPath() + "\\activity\\";
             pathActivityDetailsDB = this.GetPluginUserDataPath() + "\\activityDetails\\";
@@ -208,6 +212,7 @@ namespace GameActivity
         {
             logger.Info("GameActivity - dataLogging_start");
 
+            WarningsMessage = new List<JArray>();
             t = new Timer(settings.TimeIntervalLogging * 60000);
             t.AutoReset = true;
             t.Elapsed += new ElapsedEventHandler(OnTimedEvent);
@@ -220,6 +225,12 @@ namespace GameActivity
         public void dataHWiNFO_stop()
         {
             logger.Info("GameActivity - dataLogging_stop");
+
+            if (WarningsMessage.Count != 0)
+            {
+                new WarningsDialogs(resources.GetString("LOCGameActivityWarningCaption"), WarningsMessage).ShowDialog();
+                WarningsMessage = new List<JArray>();
+            }
 
             t.AutoReset = false;
             t.Stop();
@@ -333,6 +344,54 @@ namespace GameActivity
                     }
                 }
             }
+
+
+            // Listing warnings
+            bool WarningMinFps = false;
+            bool WarningMaxCpuTemp = false;
+            bool WarningMaxGpuTemp = false;
+            bool WarningMaxCpuUsage = false;
+            bool WarningMaxGpuUsage = false;
+            if (settings.EnableWarning)
+            {
+                if (settings.MinFps != 0 && settings.MinFps >= fpsValue)
+                {
+                    WarningMinFps = true;
+                }
+                if (settings.MaxCpuTemp != 0 && settings.MaxCpuTemp <= cpuTValue)
+                {
+                    WarningMaxCpuTemp = true;
+                }
+                if (settings.MaxGpuTemp != 0 && settings.MaxGpuTemp <= gpuTValue)
+                {
+                    WarningMaxGpuTemp = true;
+                }
+                if (settings.MaxCpuUsage != 0 && settings.MaxCpuUsage <= cpuValue)
+                {
+                    WarningMaxCpuUsage = true;
+                }
+                if (settings.MaxGpuUsage != 0 && settings.MaxGpuUsage <= gpuValue)
+                {
+                    WarningMaxGpuUsage = true;
+                }
+
+                JArray Message = new JArray
+                {
+                    new JObject (new JProperty("At", resources.GetString("LOCGameActivityWarningAt") + " " + DateTime.Now.ToString("HH:mm"))),
+                    new JObject (new JProperty("Name", resources.GetString("LOCGameActivityFps")), new JProperty("Value", fpsValue), new JProperty("isWarm", WarningMinFps)),
+                    new JObject (new JProperty("Name", resources.GetString("LOCGameActivityCpuTemp")), new JProperty("Value", cpuTValue), new JProperty("isWarm", WarningMaxCpuTemp)),
+                    new JObject (new JProperty("Name", resources.GetString("LOCGameActivityGpuTemp")), new JProperty("Value", gpuTValue), new JProperty("isWarm", WarningMaxGpuTemp)),
+                    new JObject (new JProperty("Name", resources.GetString("LOCGameActivityCpuUsage")), new JProperty("Value", cpuValue), new JProperty("isWarm", WarningMaxCpuUsage)),
+                    new JObject (new JProperty("Name", resources.GetString("LOCGameActivityGpuUsage")), new JProperty("Value", gpuValue), new JProperty("isWarm", WarningMaxGpuUsage))
+                };
+
+                if (WarningMinFps || WarningMaxCpuTemp || WarningMaxGpuTemp || WarningMaxCpuUsage || WarningMaxGpuUsage)
+                {
+                    WarningsMessage.Add(Message);
+                }
+            }
+
+
 
 
             JObject Data = new JObject();
