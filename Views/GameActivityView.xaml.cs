@@ -139,7 +139,7 @@ namespace GameActivity
             DateTime endOfMonth = new DateTime(year, month, DateTime.DaysInMonth(year, month), 23, 59, 59);
 
             JObject activityByMonth = new JObject();
-
+            
             // Total hours by source.
             if (isMonthSources)
             {
@@ -354,10 +354,6 @@ namespace GameActivity
                     {
                         Title = labels[iSource],
                         Values = new ChartValues<CustomerForTime>() {
-                            //(int)activityByWeek[0][(string)listNotDelete[iSource]],
-                            //(int)activityByWeek[1][(string)listNotDelete[iSource]],
-                            //(int)activityByWeek[2][(string)listNotDelete[iSource]],
-                            //(int)activityByWeek[3][(string)listNotDelete[iSource]]
                             new CustomerForTime{Name = (string)listNotDelete[iSource], Values = (int)activityByWeek[0][(string)listNotDelete[iSource]]},
                             new CustomerForTime{Name = (string)listNotDelete[iSource], Values = (int)activityByWeek[1][(string)listNotDelete[iSource]]},
                             new CustomerForTime{Name = (string)listNotDelete[iSource], Values = (int)activityByWeek[2][(string)listNotDelete[iSource]]},
@@ -813,7 +809,7 @@ namespace GameActivity
         }
 
 
-
+        #region Butons click event
         private void Button_Click_PrevMonth(object sender, RoutedEventArgs e)
         {
             DateTime dateNew = new DateTime(yearCurrent, monthCurrent, 1).AddMonths(-1);
@@ -978,7 +974,7 @@ namespace GameActivity
                 getActivityForGamesLogGraphics(gameIDCurrent);
             }
         }
-
+        #endregion
 
 
         // TODO Show stack time for can select details data
@@ -987,6 +983,7 @@ namespace GameActivity
         {
 
         }
+
     }
 
     // Listview games

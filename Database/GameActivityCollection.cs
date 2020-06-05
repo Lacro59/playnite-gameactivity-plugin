@@ -6,6 +6,7 @@ using GameActivity.Models;
 using System.IO;
 using Newtonsoft.Json;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 
 namespace GameActivity.Database.Collections
 {
@@ -45,33 +46,54 @@ namespace GameActivity.Database.Collections
             {
                 Parallel.ForEach(Directory.EnumerateFiles(pathActivityDB, "*.json"), (objectFile) =>
                 {
+                    string objectFileDetails = "";
+
                     try
                     {
-                        // Get game activities.
-                        Guid gameId = Guid.Parse(objectFile.Replace(pathActivityDB, "").Replace(".json", ""));
-                        List<Activity> obj = JsonConvert.DeserializeObject<List<Activity>>(File.ReadAllText(objectFile));
-
-                        // Initialize GameActivity
-                        GameActivityClass objGameActivity = new GameActivityClass(gameId);
-                        objGameActivity.Activities = obj;
-
-                        // Set data games activities details.
-                        if (Directory.Exists(pathActivityDetailsDB))
+                        var JsonStringData = File.ReadAllText(objectFile);
+                        if (JsonStringData == "" || JsonStringData == "{}" || JsonStringData == "[]")
                         {
-                            string objectFileDetails = pathActivityDetailsDB + "\\" + objectFile.Replace(pathActivityDB, "");
-                            if(File.Exists(objectFileDetails))
-                            {
-                                ActivityDetails objDetails = new ActivityDetails(File.ReadAllText(objectFileDetails));
-                                objGameActivity.ActivitiesDetails = objDetails;
-                            };
+                            File.Delete(objectFile);
+                            logger.Info($"GameActivity - Delete empty file {objectFile}");
                         }
+                        else
+                        {
+                            // Get game activities.
+                            Guid gameId = Guid.Parse(objectFile.Replace(pathActivityDB, "").Replace(".json", ""));
+                            List<Activity> obj = JsonConvert.DeserializeObject<List<Activity>>(JsonStringData);
 
-                        // Set GameActivity in collection
-                        Items.TryAdd(gameId, objGameActivity);
+                            // Initialize GameActivity
+                            GameActivityClass objGameActivity = new GameActivityClass(gameId);
+                            objGameActivity.Activities = obj;
+
+                            // Set data games activities details.
+                            if (Directory.Exists(pathActivityDetailsDB))
+                            {
+                                objectFileDetails = pathActivityDetailsDB + "\\" + objectFile.Replace(pathActivityDB, "");
+                                if(File.Exists(objectFileDetails))
+                                {
+                                    var JsonStringDataDetails = File.ReadAllText(objectFileDetails);
+                                    if (JsonStringDataDetails == "" || JsonStringDataDetails == "{}" || JsonStringDataDetails == "[]")
+                                    {
+                                        File.Delete(objectFile);
+                                        logger.Info($"GameActivity - Delete empty file {objectFileDetails}");
+                                    }
+                                    else
+                                    {
+                                        ActivityDetails objDetails = new ActivityDetails(JsonStringDataDetails);
+                                        objGameActivity.ActivitiesDetails = objDetails;
+                                    }
+                                };
+                            }
+
+                            // Set GameActivity in collection
+                            Items.TryAdd(gameId, objGameActivity);
+                        }
                     }
-                    catch (Exception e)
+                    catch (Exception ex)
                     {
-                        logger.Error(e, $"Failed to load item from {objectFile}");
+                        var LineNumber = new StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                        logger.Error(ex, $"GameActivity [{LineNumber}] - Failed to load item from {objectFile} or {objectFileDetails}");
                     }
                 });
             }
