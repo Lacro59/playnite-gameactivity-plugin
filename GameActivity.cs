@@ -13,7 +13,6 @@ using System.Runtime.InteropServices;
 using MSIAfterburnerNET.HM.Interop;
 using System.Reflection;
 using PluginCommon;
-using System.Windows;
 
 namespace GameActivity
 {

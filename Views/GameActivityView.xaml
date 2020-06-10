@@ -1,18 +1,22 @@
-﻿<Window x:Class="GameActivity.GameActivityView"
+﻿<controls:WindowBase
+    xmlns:controls="clr-namespace:Playnite.Controls;assembly=Playnite" x:Class="GameActivity.GameActivityView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
              xmlns:localLVC="clr-namespace:PluginCommon.LiveChartsCommon;assembly=PluginCommon"
-             mc:Ignorable="d" Height="800" Width="1260" Background="{DynamicResource WindowBackgourndBrush}"
-             ResizeMode="NoResize" Title="GameActivity" WindowStartupLocation="CenterScreen">
+             mc:Ignorable="d" Height="800" Width="1260" 
+             d:DesignStyle="{StaticResource WindowDesignStyle}"
+             Style="{DynamicResource StandardWindowStyle}"
+             Background="{DynamicResource WindowBackgourndBrush}"
+             ResizeMode="NoResize" Title="Game Activity" WindowStartupLocation="CenterScreen" WindowStyle="None">
 
     <Grid Margin="0,0,0,345">
         <ListBox Height="403" VerticalAlignment="Top" Margin="10,10,10,0"/>
 
         <Grid Margin="15,10,12,0" HorizontalAlignment="Center" VerticalAlignment="Top" Height="65" Width="1227">
-            <ToggleButton x:Name="tbMonthSources" IsChecked='True' Content="{DynamicResource LOCGameActivitySources}" Width="100" Height="40" Margin="5,0,792,0" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Center" Click="ToggleButtonSources_Checked"/>
+            <ToggleButton x:Name="tbMonthSources" IsChecked='True' Content="{DynamicResource LOCGameActivitySources}" Width="100" Height="40" Margin="5,0,792,0" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Center" Click="ToggleButtonSources_Checked" Loaded="TbMonthSources_Loaded"/>
             <ToggleButton x:Name="tbMonthGenres" IsChecked='False' Content="{DynamicResource LOCGameActivityGenres}" Width="100" Height="40" Margin="110,6,0,6" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Center" Click="ToggleButtonGenres_Checked"/>
 
             <Button Content="" Height="40" Width="65" Margin="360,0,792,0" FontSize="20" Click="Button_Click_PrevMonth" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Wingdings"/>
@@ -28,7 +32,7 @@
             </Grid.ColumnDefinitions>
             <lvc:CartesianChart x:Name="acmSeries" LegendLocation="none" Margin="10,0,0,5" Grid.Column="1" VerticalAlignment="Bottom" Height="265" FontFamily="/GameActivity;component/Resources/#font">
                 <lvc:CartesianChart.DataTooltip>
-                    <localLVC:CustomersTooltipForTime ShowIcon="{Binding ShowIcon}"/>
+                    <localLVC:CustomerToolTipForTime ShowIcon="{Binding ShowIcon}"/>
                 </lvc:CartesianChart.DataTooltip>
                 
                 <lvc:CartesianChart.AxisX>
@@ -53,7 +57,7 @@
                                         BorderBrush="{DynamicResource CommonToolTipBorderBrush}" Foreground="{DynamicResource CommonToolTipForeground}" />
                 </-->
                 <lvc:CartesianChart.DataTooltip>
-                    <localLVC:CustomersTooltipForMultipleTime ShowIcon="{Binding ShowIcon}"/>
+                    <localLVC:CustomerToolTipForMultipleTime ShowIcon="{Binding ShowIcon}"/>
                 </lvc:CartesianChart.DataTooltip>
 
                 <lvc:CartesianChart.AxisX>
@@ -162,7 +166,7 @@
                 <Grid Height="336" Margin="0" Width="605" Grid.RowSpan="2">
                     <lvc:CartesianChart x:Name="gameSeries" LegendLocation="none" Margin="0,60.5,10,0" Width="595" HorizontalAlignment="Right" DataClick="GameSeries_DataClick">
                         <lvc:CartesianChart.DataTooltip>
-                            <localLVC:CustomersTooltipForTime ShowIcon="{Binding ShowIcon}"/>
+                            <localLVC:CustomerToolTipForTime ShowIcon="{Binding ShowIcon}"/>
                         </lvc:CartesianChart.DataTooltip>
 
                         <lvc:CartesianChart.AxisX>
@@ -181,4 +185,4 @@
             </Grid>
         </Grid>
     </Grid>
-</Window>
+</controls:WindowBase>

@@ -18,13 +18,14 @@ using LiveCharts.Wpf;
 using LiveCharts.Configurations;
 using System.Windows.Media;
 using PluginCommon.LiveChartsCommon;
+using Playnite.Controls;
 
 namespace GameActivity
 {
     /// <summary>
     /// Logique d'interaction pour GameActivity.xaml.
     /// </summary>
-    public partial class GameActivityView : Window
+    public partial class GameActivityView : WindowBase
     {
         private static readonly ILogger logger = LogManager.GetLogger();
         private static IResourceProvider resources = new ResourceProvider();
@@ -251,7 +252,7 @@ namespace GameActivity
             Charting.For<CustomerForTime>(customerVmMapper);
 
             acmSeries.Series = ActivityByMonthSeries;
-            ((CustomersTooltipForTime)acmSeries.DataTooltip).ShowIcon = settingsPlaynite.showLauncherIcons;
+            ((CustomerToolTipForTime)acmSeries.DataTooltip).ShowIcon = settingsPlaynite.showLauncherIcons;
             acmLabelsX.Labels = ActivityByMonthLabels;
         }
 
@@ -384,7 +385,7 @@ namespace GameActivity
             Charting.For<CustomerForTime>(customerVmMapper);
 
             acwSeries.Series = activityByWeekSeries;
-            ((CustomersTooltipForMultipleTime)acwSeries.DataTooltip).ShowIcon = settingsPlaynite.showLauncherIcons;
+            ((CustomerToolTipForMultipleTime)acwSeries.DataTooltip).ShowIcon = settingsPlaynite.showLauncherIcons;
             acwLabelsX.Labels = activityByWeekLabels;
         }
 
@@ -530,7 +531,7 @@ namespace GameActivity
             //lets save the mapper globally
             Charting.For<CustomerForTime>(customerVmMapper);
 
-            gameSeries.DataTooltip = new CustomersTooltipForTime();
+            gameSeries.DataTooltip = new CustomerToolTipForTime();
 
             gameLabel.Content = resources.GetString("LOCGameActivityTimeTitle");
             gameSeries.Series = activityForGameSeries;
@@ -984,6 +985,10 @@ namespace GameActivity
 
         }
 
+        private void TbMonthSources_Loaded(object sender, RoutedEventArgs e)
+        {
+            Tools.DesactivePlayniteWindowControl(this);
+        }
     }
 
     // Listview games
