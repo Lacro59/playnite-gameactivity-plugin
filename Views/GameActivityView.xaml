@@ -6,12 +6,17 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
              xmlns:localLVC="clr-namespace:PluginCommon.LiveChartsCommon;assembly=PluginCommon"
+             xmlns:localPlugin="clr-namespace:PluginCommon;assembly=PluginCommon"
              mc:Ignorable="d" Height="800" Width="1260" 
              d:DesignStyle="{StaticResource WindowDesignStyle}"
              Style="{DynamicResource StandardWindowStyle}"
              Background="{DynamicResource WindowBackgourndBrush}"
              ResizeMode="NoResize" Title="Game Activity" WindowStartupLocation="CenterScreen" WindowStyle="None">
 
+    <WindowBase.Resources>
+        <localPlugin:CompareValueConverter x:Key="CompareValueConverter" />
+    </WindowBase.Resources>
+    
     <Grid Margin="0,0,0,345">
         <ListBox Height="403" VerticalAlignment="Top" Margin="10,10,10,0"/>
 
@@ -106,42 +111,126 @@
                         <GridViewColumn Header="avg CPU">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Label Content="{Binding avgCPU}" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+                                    <Label Content="{Binding avgCPU}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                                        <Label.Style>
+                                            <Style TargetType="Label">
+                                                <Setter Property="Foreground">
+                                                    <Setter.Value>
+                                                        <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
+                                                            <Binding Path="avgCPU"/>
+                                                            <Binding Path="maxCPU"/>
+                                                            <Binding Path="enableWarm"/>
+                                                        </MultiBinding>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </Label.Style>
+                                    </Label>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn Header="avg GPU">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Label Content="{Binding avgGPU}" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+                                    <Label Content="{Binding avgGPU}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                                        <Label.Style>
+                                            <Style TargetType="Label">
+                                                <Setter Property="Foreground">
+                                                    <Setter.Value>
+                                                        <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
+                                                            <Binding Path="avgGPU"/>
+                                                            <Binding Path="maxGPU"/>
+                                                            <Binding Path="enableWarm"/>
+                                                        </MultiBinding>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </Label.Style>
+                                    </Label>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn Header="avg RAM">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Label Content="{Binding avgRAM}" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+                                    <Label Content="{Binding avgRAM}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                                        <Label.Style>
+                                            <Style TargetType="Label">
+                                                <Setter Property="Foreground">
+                                                    <Setter.Value>
+                                                        <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
+                                                            <Binding Path="avgRAM"/>
+                                                            <Binding Path="maxRAM"/>
+                                                            <Binding Path="enableWarm"/>
+                                                        </MultiBinding>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </Label.Style>
+                                    </Label>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn Header="avg FPS">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Label Content="{Binding avgFPS}" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+                                    <Label Content="{Binding avgFPS}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                                        <Label.Style>
+                                            <Style TargetType="Label">
+                                                <Setter Property="Foreground">
+                                                    <Setter.Value>
+                                                        <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="0">
+                                                            <Binding Path="avgFPS"/>
+                                                            <Binding Path="minFPS"/>
+                                                            <Binding Path="enableWarm"/>
+                                                        </MultiBinding>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </Label.Style>
+                                    </Label>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn Header="avg CPU T">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Label Content="{Binding avgCPUT}" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+                                    <Label Content="{Binding avgCPUT}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                                        <Label.Style>
+                                            <Style TargetType="Label">
+                                                <Setter Property="Foreground">
+                                                    <Setter.Value>
+                                                        <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
+                                                            <Binding Path="avgCPUT"/>
+                                                            <Binding Path="maxCPUT"/>
+                                                            <Binding Path="enableWarm"/>
+                                                        </MultiBinding>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </Label.Style>
+                                    </Label>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn Header="avg GPU T">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Label Content="{Binding avgGPUT}" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+                                    <Label Content="{Binding avgGPUT}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                                        <Label.Style>
+                                            <Style TargetType="Label">
+                                                <Setter Property="Foreground">
+                                                    <Setter.Value>
+                                                        <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
+                                                            <Binding Path="avgGPUT"/>
+                                                            <Binding Path="maxGPUT"/>
+                                                            <Binding Path="enableWarm"/>
+                                                        </MultiBinding>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </Label.Style>
+                                    </Label>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>

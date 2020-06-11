@@ -431,7 +431,15 @@ namespace GameActivity
                     avgRAM = listGameActivities[iGame].avgRAM(listGameActivities[iGame].GetLastSession()) + "%",
                     avgFPS = listGameActivities[iGame].avgFPS(listGameActivities[iGame].GetLastSession()) + "",
                     avgCPUT = listGameActivities[iGame].avgCPUT(listGameActivities[iGame].GetLastSession()) + "°",
-                    avgGPUT = listGameActivities[iGame].avgGPUT(listGameActivities[iGame].GetLastSession()) + "°"
+                    avgGPUT = listGameActivities[iGame].avgGPUT(listGameActivities[iGame].GetLastSession()) + "°",
+
+                    enableWarm = settingsPlaynite.EnableWarning,
+                    maxCPUT = "" + settingsPlaynite.MaxCpuTemp,
+                    maxGPUT = "" + settingsPlaynite.MaxGpuTemp,
+                    minFPS = "" + settingsPlaynite.MinFps,
+                    maxCPU = "" + settingsPlaynite.MaxCpuUsage,
+                    maxGPU = "" + settingsPlaynite.MaxGpuUsage,
+                    maxRAM = "" + settingsPlaynite.MaxRamUsage
                 });
             
                 iconImage = null;
@@ -636,7 +644,6 @@ namespace GameActivity
             };
             Func<double, string> activityForGameLogFormatter = value => value.ToString("N");
 
-            var converter = new BrushConverter();
             gameSeries.DataTooltip = new LiveCharts.Wpf.DefaultTooltip();
             gameSeries.DataTooltip.Background = (Brush)resources.GetResource("CommonToolTipBackgroundBrush");
             gameSeries.DataTooltip.Padding = new Thickness(10); 
@@ -1007,6 +1014,14 @@ namespace GameActivity
         public string avgFPS { get; set; }
         public string avgCPUT { get; set; }
         public string avgGPUT { get; set; }
+
+        public bool enableWarm { get; set; }
+        public string maxCPUT { get; set; }
+        public string maxGPUT { get; set; }
+        public string minFPS { get; set; }
+        public string maxCPU { get; set; }
+        public string maxGPU { get; set; }
+        public string maxRAM { get; set; }
     }
 
     public class WeekStartEnd

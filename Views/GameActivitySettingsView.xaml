@@ -55,6 +55,11 @@
                         <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding MaxGpuUsage}" Width="35" PreviewTextInput="NumberValidationTextBox" MaxLength="3" />
                     </StackPanel>
 
+                    <StackPanel Orientation="Horizontal" Margin="15,0,0,0">
+                        <Label Content="{DynamicResource LOCGameActivityMaxRamUsage}" Height="23" Width="135"/>
+                        <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding MaxRamUsage}" Width="35" PreviewTextInput="NumberValidationTextBox" MaxLength="3" />
+                    </StackPanel>
+
                 </StackPanel>
 
                 <StackPanel DockPanel.Dock="Bottom" Margin="0,10,0,0" Orientation="Horizontal" 

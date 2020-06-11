@@ -26,11 +26,12 @@ namespace GameActivity
         public string HWiNFO_cpuT_elementID { get; set; } = string.Empty;
 
         public bool EnableWarning { get; set; } = false;
-        public int MinFps { get; set; }
-        public int MaxCpuTemp { get; set; }
-        public int MaxGpuTemp { get; set; }
-        public int MaxCpuUsage { get; set; }
-        public int MaxGpuUsage { get; set; }
+        public int MinFps { get; set; } = 0;
+        public int MaxCpuTemp { get; set; } = 0;
+        public int MaxGpuTemp { get; set; } = 0;
+        public int MaxCpuUsage { get; set; } = 0;
+        public int MaxGpuUsage { get; set; } = 0;
+        public int MaxRamUsage { get; set; } = 0;
 
 
         // Playnite serializes settings object to a JSON object and saves it as text file.
@@ -77,6 +78,7 @@ namespace GameActivity
                 MaxGpuTemp = savedSettings.MaxGpuTemp;
                 MaxCpuUsage = savedSettings.MaxCpuUsage;
                 MaxGpuUsage = savedSettings.MaxGpuUsage;
+                MaxRamUsage = savedSettings.MaxRamUsage;
             }
         }
 

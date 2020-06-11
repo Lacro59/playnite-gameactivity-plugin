@@ -32,6 +32,7 @@
     <sys:String x:Key="LOCGameActivityMaxGpuTemp">Temp GPU max</sys:String>
     <sys:String x:Key="LOCGameActivityMaxCpuUsage">Utilisation CPU max</sys:String>
     <sys:String x:Key="LOCGameActivityMaxGpuUsage">Utilisation GPU max</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxRamUsage">Utilisation RAM max</sys:String>
 
     <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">Enregistre les performances CPU, GPU, RAM et FPS durant la session de jeu.</sys:String>
     <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Affiche un message d'avertissement à la fin de la session de jeu dans les limites définies.</sys:String>

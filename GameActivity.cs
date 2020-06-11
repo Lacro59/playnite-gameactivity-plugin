@@ -351,6 +351,7 @@ namespace GameActivity
             bool WarningMaxGpuTemp = false;
             bool WarningMaxCpuUsage = false;
             bool WarningMaxGpuUsage = false;
+            bool WarningMaxRamUsage = false;
             if (settings.EnableWarning)
             {
                 if (settings.MinFps != 0 && settings.MinFps >= fpsValue)
@@ -373,6 +374,10 @@ namespace GameActivity
                 {
                     WarningMaxGpuUsage = true;
                 }
+                if (settings.MaxRamUsage != 0 && settings.MaxRamUsage <= ramValue)
+                {
+                    WarningMaxRamUsage = true;
+                }
 
                 JArray Message = new JArray
                 {
@@ -381,7 +386,8 @@ namespace GameActivity
                     new JObject (new JProperty("Name", resources.GetString("LOCGameActivityCpuTemp")), new JProperty("Value", cpuTValue), new JProperty("isWarm", WarningMaxCpuTemp)),
                     new JObject (new JProperty("Name", resources.GetString("LOCGameActivityGpuTemp")), new JProperty("Value", gpuTValue), new JProperty("isWarm", WarningMaxGpuTemp)),
                     new JObject (new JProperty("Name", resources.GetString("LOCGameActivityCpuUsage")), new JProperty("Value", cpuValue), new JProperty("isWarm", WarningMaxCpuUsage)),
-                    new JObject (new JProperty("Name", resources.GetString("LOCGameActivityGpuUsage")), new JProperty("Value", gpuValue), new JProperty("isWarm", WarningMaxGpuUsage))
+                    new JObject (new JProperty("Name", resources.GetString("LOCGameActivityGpuUsage")), new JProperty("Value", gpuValue), new JProperty("isWarm", WarningMaxGpuUsage)),
+                    new JObject (new JProperty("Name", resources.GetString("LOCGameActivityRamUsage")), new JProperty("Value", ramValue), new JProperty("isWarm", WarningMaxRamUsage))
                 };
 
                 if (WarningMinFps || WarningMaxCpuTemp || WarningMaxGpuTemp || WarningMaxCpuUsage || WarningMaxGpuUsage)
