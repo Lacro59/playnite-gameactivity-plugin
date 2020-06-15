@@ -93,7 +93,8 @@ namespace GameActivity.Database.Collections
                     catch (Exception ex)
                     {
                         var LineNumber = new StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
-                        logger.Error(ex, $"GameActivity [{LineNumber}] - Failed to load item from {objectFile} or {objectFileDetails}");
+                        string FileName = new StackTrace(ex, true).GetFrame(0).GetFileName();
+                        logger.Error(ex, $"GameActivity [{FileName} {LineNumber}] - Failed to load item from {objectFile} or {objectFileDetails}. ");
                     }
                 });
             }
