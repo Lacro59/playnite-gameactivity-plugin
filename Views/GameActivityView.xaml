@@ -7,7 +7,7 @@
              xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
              xmlns:localLVC="clr-namespace:PluginCommon.LiveChartsCommon;assembly=PluginCommon"
              xmlns:localPlugin="clr-namespace:PluginCommon;assembly=PluginCommon"
-             mc:Ignorable="d" Height="800" Width="1260" 
+             mc:Ignorable="d" Height="740" Width="1260" 
              d:DesignStyle="{StaticResource WindowDesignStyle}"
              Style="{DynamicResource StandardWindowStyle}"
              Background="{DynamicResource WindowBackgourndBrush}"
@@ -16,244 +16,303 @@
     <WindowBase.Resources>
         <localPlugin:CompareValueConverter x:Key="CompareValueConverter" />
     </WindowBase.Resources>
-    
-    <Grid Margin="0,0,0,345">
-        <ListBox Height="403" VerticalAlignment="Top" Margin="10,10,10,0"/>
 
-        <Grid Margin="15,10,12,0" HorizontalAlignment="Center" VerticalAlignment="Top" Height="65" Width="1227">
-            <ToggleButton x:Name="tbMonthSources" IsChecked='True' Content="{DynamicResource LOCGameActivitySources}" Width="100" Height="40" Margin="5,0,792,0" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Center" Click="ToggleButtonSources_Checked" Loaded="TbMonthSources_Loaded"/>
-            <ToggleButton x:Name="tbMonthGenres" IsChecked='False' Content="{DynamicResource LOCGameActivityGenres}" Width="100" Height="40" Margin="110,6,0,6" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Center" Click="ToggleButtonGenres_Checked"/>
+    <DockPanel Margin="10,10,10,0">
 
-            <Button Content="" Height="40" Width="65" Margin="360,0,792,0" FontSize="20" Click="Button_Click_PrevMonth" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Wingdings"/>
-            <Label x:Name="activityLabel" Content="month data label" HorizontalAlignment="Center" VerticalAlignment="Center" Height="45" FontSize="24" FontWeight="Bold" MinWidth="50"/>
-            <Button Content="" Height="40" Width="65" Margin="792,0,360,0" FontSize="20" Click="Button_Click_NextMonth" HorizontalAlignment="Right" VerticalAlignment="Center" FontFamily="Wingdings"/>
-        </Grid>
-
-        <Grid x:Name="gridMonth" HorizontalAlignment="Left" Height="321" Margin="10,0,0,13" VerticalAlignment="Bottom" Width="605">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0*"/>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="0*"/>
-            </Grid.ColumnDefinitions>
-            <lvc:CartesianChart x:Name="acmSeries" LegendLocation="none" Margin="10,0,0,5" Grid.Column="1" VerticalAlignment="Bottom" Height="265" FontFamily="/GameActivity;component/Resources/#font">
-                <lvc:CartesianChart.DataTooltip>
-                    <localLVC:CustomerToolTipForTime ShowIcon="{Binding ShowIcon}"/>
-                </lvc:CartesianChart.DataTooltip>
-                
-                <lvc:CartesianChart.AxisX>
-                    <lvc:Axis x:Name="acmLabelsX" ShowLabels="True" FontSize="14" FontFamily="/GameActivity;component/Resources/#font">
-                        <lvc:Axis.Separator>
-                            <lvc:Separator Step="1" />
-                        </lvc:Axis.Separator>
-                    </lvc:Axis>
-                </lvc:CartesianChart.AxisX>
-                <lvc:CartesianChart.AxisY>
-                    <lvc:Axis x:Name="acmLabelsY"></lvc:Axis>
-                </lvc:CartesianChart.AxisY>
-            </lvc:CartesianChart>
-            <Label Content="{DynamicResource LOCGameActivityTotalHours}" HorizontalAlignment="Center" VerticalAlignment="Top" Height="45" FontSize="20" FontWeight="Bold" MinWidth="50" Grid.Column="1"/>
-        </Grid>
-
-        <Grid HorizontalAlignment="Left" Height="321" Margin="637,0,0,13" VerticalAlignment="Bottom" Width="605">
-            <lvc:CartesianChart x:Name="acwSeries" LegendLocation="none" Margin="0,0,10,5" Height="260" VerticalAlignment="Bottom" FontFamily="/GameActivity;component/Resources/#font" >
-                <!--lvc:CartesianChart.DataTooltip>
-                    <lvc:DefaultTooltip Background="{DynamicResource CommonToolTipBackgroundBrush}" Padding="{DynamicResource CommonToolTipPadding}" 
-                                        BorderThickness="{DynamicResource CommonToolTipBorderThickness}"
-                                        BorderBrush="{DynamicResource CommonToolTipBorderBrush}" Foreground="{DynamicResource CommonToolTipForeground}" />
-                </-->
-                <lvc:CartesianChart.DataTooltip>
-                    <localLVC:CustomerToolTipForMultipleTime ShowIcon="{Binding ShowIcon}"/>
-                </lvc:CartesianChart.DataTooltip>
-
-                <lvc:CartesianChart.AxisX>
-                    <lvc:Axis x:Name="acwLabelsX" ShowLabels="True" FontSize="14">
-                        <lvc:Axis.Separator>
-                            <lvc:Separator Step="1" />
-                        </lvc:Axis.Separator>
-                    </lvc:Axis>
-                </lvc:CartesianChart.AxisX>
-                <lvc:CartesianChart.AxisY>
-                    <lvc:Axis x:Name="acwLabelsY"></lvc:Axis>
-                </lvc:CartesianChart.AxisY>
-            </lvc:CartesianChart>
-            <Label x:Name="acwLabel" Content="{DynamicResource LOCGameActivityTotalHoursByWeeks}" HorizontalAlignment="Center" VerticalAlignment="Top" Height="45" FontSize="20" FontWeight="Bold" MinWidth="50"/>
-        </Grid>
-
-        <Grid Margin="10,0,0,-344" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="1232">
-            <ListView x:Name="lvGames" HorizontalAlignment="Left" Height="336" VerticalAlignment="Top" Width="605" SelectionChanged="lvGames_SelectionChanged" FontSize="24" GridViewColumnHeader.Click="lvGames_onHeaderClick">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn  Width="50">
-                            <GridViewColumnHeader Name="lvGameIcon" Content="{DynamicResource LOCGameActivityLvGamesIcon}"></GridViewColumnHeader>
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Image HorizontalAlignment="Center" Height="32" VerticalAlignment="Center" Width="32" Source="{Binding listGameIcon}"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn x:Name="hGameTitle" Header="{DynamicResource LOCGameActivityLvGamesTitle}" Width="Auto" DisplayMemberBinding="{Binding listGameTitle}" />
-                        <GridViewColumn Width="150" DisplayMemberBinding="{Binding listGameLastActivity, StringFormat='dd/MM/yyyy HH:mm:ss'}">
-                            <GridViewColumnHeader Name="lvLastActivity" Content="{DynamicResource LOCGameActivityLvGamesLastActivity}"></GridViewColumnHeader>
-                        </GridViewColumn>
-
-                        <GridViewColumn Width="0" DisplayMemberBinding="{Binding listGameElapsedSeconds}">
-                            <GridViewColumnHeader Name="lvElapsedSeconds">ElapsedSeconds</GridViewColumnHeader>
-                        </GridViewColumn>
-                        <GridViewColumn  Width="130">
-                            <GridViewColumnHeader Name="lvElapsedSecondsFormat" Content="{DynamicResource LOCGameActivityLvGamesElapsedSeconds}"></GridViewColumnHeader>
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Label Content="{Binding listGameElapsedSecondsFormat}" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-
-                        <GridViewColumn Header="avg CPU">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Label Content="{Binding avgCPU}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
-                                        <Label.Style>
-                                            <Style TargetType="Label">
-                                                <Setter Property="Foreground">
-                                                    <Setter.Value>
-                                                        <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
-                                                            <Binding Path="avgCPU"/>
-                                                            <Binding Path="maxCPU"/>
-                                                            <Binding Path="enableWarm"/>
-                                                        </MultiBinding>
-                                                    </Setter.Value>
-                                                </Setter>
-                                            </Style>
-                                        </Label.Style>
-                                    </Label>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="avg GPU">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Label Content="{Binding avgGPU}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
-                                        <Label.Style>
-                                            <Style TargetType="Label">
-                                                <Setter Property="Foreground">
-                                                    <Setter.Value>
-                                                        <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
-                                                            <Binding Path="avgGPU"/>
-                                                            <Binding Path="maxGPU"/>
-                                                            <Binding Path="enableWarm"/>
-                                                        </MultiBinding>
-                                                    </Setter.Value>
-                                                </Setter>
-                                            </Style>
-                                        </Label.Style>
-                                    </Label>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="avg RAM">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Label Content="{Binding avgRAM}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
-                                        <Label.Style>
-                                            <Style TargetType="Label">
-                                                <Setter Property="Foreground">
-                                                    <Setter.Value>
-                                                        <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
-                                                            <Binding Path="avgRAM"/>
-                                                            <Binding Path="maxRAM"/>
-                                                            <Binding Path="enableWarm"/>
-                                                        </MultiBinding>
-                                                    </Setter.Value>
-                                                </Setter>
-                                            </Style>
-                                        </Label.Style>
-                                    </Label>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="avg FPS">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Label Content="{Binding avgFPS}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
-                                        <Label.Style>
-                                            <Style TargetType="Label">
-                                                <Setter Property="Foreground">
-                                                    <Setter.Value>
-                                                        <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="0">
-                                                            <Binding Path="avgFPS"/>
-                                                            <Binding Path="minFPS"/>
-                                                            <Binding Path="enableWarm"/>
-                                                        </MultiBinding>
-                                                    </Setter.Value>
-                                                </Setter>
-                                            </Style>
-                                        </Label.Style>
-                                    </Label>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="avg CPU T">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Label Content="{Binding avgCPUT}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
-                                        <Label.Style>
-                                            <Style TargetType="Label">
-                                                <Setter Property="Foreground">
-                                                    <Setter.Value>
-                                                        <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
-                                                            <Binding Path="avgCPUT"/>
-                                                            <Binding Path="maxCPUT"/>
-                                                            <Binding Path="enableWarm"/>
-                                                        </MultiBinding>
-                                                    </Setter.Value>
-                                                </Setter>
-                                            </Style>
-                                        </Label.Style>
-                                    </Label>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="avg GPU T">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Label Content="{Binding avgGPUT}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
-                                        <Label.Style>
-                                            <Style TargetType="Label">
-                                                <Setter Property="Foreground">
-                                                    <Setter.Value>
-                                                        <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
-                                                            <Binding Path="avgGPUT"/>
-                                                            <Binding Path="maxGPUT"/>
-                                                            <Binding Path="enableWarm"/>
-                                                        </MultiBinding>
-                                                    </Setter.Value>
-                                                </Setter>
-                                            </Style>
-                                        </Label.Style>
-                                    </Label>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-
-
-            <Grid x:Name="activityForGamesGraphics" HorizontalAlignment="Right" Height="336" Margin="620,0,0,10" VerticalAlignment="Bottom" Width="605">
+        <Border DockPanel.Dock="Top" BorderBrush="{DynamicResource NormalBorderBrush}" BorderThickness="{DynamicResource ControlBorderThickness}" Height="345">
+            <Grid Margin="10">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="31*"/>
-                    <RowDefinition Height="53*"/>
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <ToggleButton x:Name="ToggleButtonTime" IsChecked="True" Content="{DynamicResource LOCGameActivityTime}" HorizontalAlignment="Left" Height="33" Margin="0,5,5,0" VerticalAlignment="Top" Width="65" Click="ToggleButtonTime_Checked"/>
-                <ToggleButton x:Name="ToggleButtonLog" IsChecked="False" Content="{DynamicResource LOCGameActivityLog}" HorizontalAlignment="Left" Height="33" Margin="70,5,0,0" VerticalAlignment="Top" Width="65" Click="ToggleButtonLog_Checked"/>
+                <!-- Navigation -->
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100" />
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="100" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="100" />
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="100" />
+                    </Grid.ColumnDefinitions>
 
-                <Button Content="" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,55,0" Height="25" Width="40" Click="Button_Click_prevGame" FontFamily="Wingdings"></Button>
-                <Button Content="" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,10,0" Height="25" Width="40" Click="Button_Click_nextGame" FontFamily="Wingdings"></Button>
+                    <ToggleButton Grid.Column="0" x:Name="tbMonthSources" IsChecked='True' Content="{DynamicResource LOCGameActivitySources}" Width="100" Height="40" FontSize="20" Click="ToggleButtonSources_Checked" Loaded="TbMonthSources_Loaded"/>
+                    <ToggleButton Grid.Column="2" x:Name="tbMonthGenres" IsChecked='False' Content="{DynamicResource LOCGameActivityGenres}" Width="100" Height="40" FontSize="20" Click="ToggleButtonGenres_Checked"/>
+
+                    <Button Grid.Column="3" Content="" Height="40" Width="65" FontSize="20" Click="Button_Click_PrevMonth" FontFamily="Wingdings"/>
+                    <Label Grid.Column="4" x:Name="activityLabel" Content="month data label" HorizontalAlignment="Center" VerticalAlignment="Center" Height="45" FontSize="24" FontWeight="Bold" MinWidth="50"/>
+                    <Button Grid.Column="5" Content="" Height="40" Width="65" FontSize="20" Click="Button_Click_NextMonth" FontFamily="Wingdings"/>
+                </Grid>
+
+                <!-- Graphics week -->
+                <DockPanel Grid.Row="1">
+                    <Grid Width="600" x:Name="gridMonth" DockPanel.Dock="Left">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0*"/>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="0*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <Label Content="{DynamicResource LOCGameActivityTotalHours}" HorizontalAlignment="Center" VerticalAlignment="Top" Height="30" FontSize="20" FontWeight="Bold" MinWidth="50" Grid.Column="1" Grid.Row="0" />
+
+                        <lvc:CartesianChart x:Name="acmSeries" LegendLocation="none" Grid.Column="1" Grid.Row="1" FontFamily="/GameActivity;component/Resources/#font">
+                            <lvc:CartesianChart.DataTooltip>
+                                <localLVC:CustomerToolTipForTime ShowIcon="{Binding ShowIcon}"/>
+                            </lvc:CartesianChart.DataTooltip>
+
+                            <lvc:CartesianChart.AxisX>
+                                <lvc:Axis x:Name="acmLabelsX" ShowLabels="True" FontSize="14" FontFamily="/GameActivity;component/Resources/#font">
+                                    <lvc:Axis.Separator>
+                                        <lvc:Separator Step="1" />
+                                    </lvc:Axis.Separator>
+                                </lvc:Axis>
+                            </lvc:CartesianChart.AxisX>
+
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis x:Name="acmLabelsY"></lvc:Axis>
+                            </lvc:CartesianChart.AxisY>
+                        </lvc:CartesianChart>
+                    </Grid>
+
+                    <Grid Width="600" DockPanel.Dock="Right">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0*"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="0*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Column="1" Grid.Row="0" x:Name="acwLabel" Content="{DynamicResource LOCGameActivityTotalHoursByWeeks}" Height="30" FontSize="20" FontWeight="Bold" MinWidth="50" HorizontalAlignment="Center"/>
+
+                        <lvc:CartesianChart x:Name="acwSeries" LegendLocation="none" Grid.Column="1" Grid.Row="1" FontFamily="/GameActivity;component/Resources/#font" >
+                            <lvc:CartesianChart.DataTooltip>
+                                <localLVC:CustomerToolTipForMultipleTime ShowIcon="{Binding ShowIcon}"/>
+                            </lvc:CartesianChart.DataTooltip>
+
+                            <lvc:CartesianChart.AxisX>
+                                <lvc:Axis x:Name="acwLabelsX" ShowLabels="True" FontSize="14">
+                                    <lvc:Axis.Separator>
+                                        <lvc:Separator Step="1" />
+                                    </lvc:Axis.Separator>
+                                </lvc:Axis>
+                            </lvc:CartesianChart.AxisX>
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis x:Name="acwLabelsY"></lvc:Axis>
+                            </lvc:CartesianChart.AxisY>
+                        </lvc:CartesianChart>
+                    </Grid>
+
+                    <Grid></Grid>
+                </DockPanel>
+            </Grid>
+        </Border>
+
+        <Grid DockPanel.Dock="Bottom" Height="345" Margin="0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid Name="gridLvGames" Grid.Column="0" Height="330">
+                <ListView x:Name="lvGames" Height="{Binding ActualHeight, ElementName=gridLvGames}" SelectionChanged="lvGames_SelectionChanged" FontSize="24" GridViewColumnHeader.Click="lvGames_onHeaderClick">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn  Width="50">
+                                <GridViewColumnHeader Name="lvGameIcon" Content="{DynamicResource LOCGameActivityLvGamesIcon}"></GridViewColumnHeader>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Image HorizontalAlignment="Center" Height="32" VerticalAlignment="Center" Width="32" Source="{Binding listGameIcon}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn x:Name="hGameTitle" Header="{DynamicResource LOCGameActivityLvGamesTitle}" Width="Auto" DisplayMemberBinding="{Binding listGameTitle}" />
+                            <GridViewColumn Width="150" DisplayMemberBinding="{Binding listGameLastActivity, StringFormat='dd/MM/yyyy HH:mm:ss'}">
+                                <GridViewColumnHeader Name="lvLastActivity" Content="{DynamicResource LOCGameActivityLvGamesLastActivity}"></GridViewColumnHeader>
+                            </GridViewColumn>
+
+                            <GridViewColumn Width="0" DisplayMemberBinding="{Binding listGameElapsedSeconds}">
+                                <GridViewColumnHeader Name="lvElapsedSeconds">ElapsedSeconds</GridViewColumnHeader>
+                            </GridViewColumn>
+                            <GridViewColumn  Width="130">
+                                <GridViewColumnHeader Name="lvElapsedSecondsFormat" Content="{DynamicResource LOCGameActivityLvGamesElapsedSeconds}"></GridViewColumnHeader>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Label Content="{Binding listGameElapsedSecondsFormat}" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Header="avg CPU">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Label Content="{Binding avgCPU}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                                            <Label.Style>
+                                                <Style TargetType="Label">
+                                                    <Setter Property="Foreground">
+                                                        <Setter.Value>
+                                                            <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
+                                                                <Binding Path="avgCPU"/>
+                                                                <Binding Path="maxCPU"/>
+                                                                <Binding Path="enableWarm"/>
+                                                            </MultiBinding>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </Label.Style>
+                                        </Label>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="avg GPU">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Label Content="{Binding avgGPU}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                                            <Label.Style>
+                                                <Style TargetType="Label">
+                                                    <Setter Property="Foreground">
+                                                        <Setter.Value>
+                                                            <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
+                                                                <Binding Path="avgGPU"/>
+                                                                <Binding Path="maxGPU"/>
+                                                                <Binding Path="enableWarm"/>
+                                                            </MultiBinding>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </Label.Style>
+                                        </Label>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="avg RAM">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Label Content="{Binding avgRAM}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                                            <Label.Style>
+                                                <Style TargetType="Label">
+                                                    <Setter Property="Foreground">
+                                                        <Setter.Value>
+                                                            <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
+                                                                <Binding Path="avgRAM"/>
+                                                                <Binding Path="maxRAM"/>
+                                                                <Binding Path="enableWarm"/>
+                                                            </MultiBinding>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </Label.Style>
+                                        </Label>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="avg FPS">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Label Content="{Binding avgFPS}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                                            <Label.Style>
+                                                <Style TargetType="Label">
+                                                    <Setter Property="Foreground">
+                                                        <Setter.Value>
+                                                            <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="0">
+                                                                <Binding Path="avgFPS"/>
+                                                                <Binding Path="minFPS"/>
+                                                                <Binding Path="enableWarm"/>
+                                                            </MultiBinding>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </Label.Style>
+                                        </Label>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="avg CPU T">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Label Content="{Binding avgCPUT}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                                            <Label.Style>
+                                                <Style TargetType="Label">
+                                                    <Setter Property="Foreground">
+                                                        <Setter.Value>
+                                                            <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
+                                                                <Binding Path="avgCPUT"/>
+                                                                <Binding Path="maxCPUT"/>
+                                                                <Binding Path="enableWarm"/>
+                                                            </MultiBinding>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </Label.Style>
+                                        </Label>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="avg GPU T">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Label Content="{Binding avgGPUT}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                                            <Label.Style>
+                                                <Style TargetType="Label">
+                                                    <Setter Property="Foreground">
+                                                        <Setter.Value>
+                                                            <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
+                                                                <Binding Path="avgGPUT"/>
+                                                                <Binding Path="maxGPUT"/>
+                                                                <Binding Path="enableWarm"/>
+                                                            </MultiBinding>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </Label.Style>
+                                        </Label>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Grid>
+
+            <Grid Name="activityForGamesGraphics" Width="600" Grid.Column="2" Margin="0,0,0,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="45"/>
+                    <ColumnDefinition Width="45"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <ToggleButton Grid.Column="0" Grid.Row="0" x:Name="ToggleButtonTime" IsChecked="True" Content="{DynamicResource LOCGameActivityTime}" Height="33" Width="65" Click="ToggleButtonTime_Checked"/>
+                <ToggleButton Grid.Column="1" Grid.Row="0" x:Name="ToggleButtonLog" IsChecked="False" Content="{DynamicResource LOCGameActivityLog}" Height="33" Width="65" Click="ToggleButtonLog_Checked"/>
+
+                <Label Grid.Column="2" Grid.Row="0" x:Name="gameLabel" Content="graphics title" HorizontalAlignment="Center" VerticalAlignment="Top" Height="30" FontSize="20" FontWeight="Bold" />
+
+                <Button Grid.Column="3" Grid.Row="0" Content="" Height="25" Width="40" Click="Button_Click_prevGame" FontFamily="Wingdings"></Button>
+                <Button Grid.Column="4" Grid.Row="0" Content="" Height="25" Width="40" Click="Button_Click_nextGame" FontFamily="Wingdings"></Button>
 
 
-                <Grid Height="336" Margin="0" Width="605" Grid.RowSpan="2">
-                    <lvc:CartesianChart x:Name="gameSeries" LegendLocation="none" Margin="0,60.5,10,0" Width="595" HorizontalAlignment="Right" DataClick="GameSeries_DataClick">
+                <Grid Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="1">
+                    <lvc:CartesianChart x:Name="gameSeries" LegendLocation="none" DataClick="GameSeries_DataClick">
                         <lvc:CartesianChart.DataTooltip>
                             <localLVC:CustomerToolTipForTime ShowIcon="{Binding ShowIcon}"/>
                         </lvc:CartesianChart.DataTooltip>
@@ -269,9 +328,11 @@
                             <lvc:Axis x:Name="gameLabelsY"></lvc:Axis>
                         </lvc:CartesianChart.AxisY>
                     </lvc:CartesianChart>
-                    <Label x:Name="gameLabel" Content="graphics title" HorizontalAlignment="Center" VerticalAlignment="Top" Height="45" FontSize="20" FontWeight="Bold" MinWidth="50"/>
                 </Grid>
             </Grid>
+
+            <Grid></Grid>
         </Grid>
-    </Grid>
+
+    </DockPanel>
 </controls:WindowBase>

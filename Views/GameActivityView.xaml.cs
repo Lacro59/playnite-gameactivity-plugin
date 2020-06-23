@@ -19,6 +19,7 @@ using LiveCharts.Configurations;
 using System.Windows.Media;
 using PluginCommon.LiveChartsCommon;
 using Playnite.Controls;
+using Newtonsoft.Json;
 
 namespace GameActivity
 {
@@ -519,6 +520,7 @@ namespace GameActivity
                 }
             }
 
+            logger.Debug(JsonConvert.SerializeObject(series));
 
             // Set data in graphic.
             SeriesCollection activityForGameSeries = new SeriesCollection
