@@ -252,7 +252,11 @@ namespace GameActivity
             //lets save the mapper globally
             Charting.For<CustomerForTime>(customerVmMapper);
 
+            Func<double, string> activityForGameLogFormatter = value => (int)TimeSpan.FromSeconds(value).TotalHours + "h " + TimeSpan.FromSeconds(value).ToString(@"mm") + "min";
+            acmLabelsY.LabelFormatter = activityForGameLogFormatter;
+
             acmSeries.Series = ActivityByMonthSeries;
+            acmLabelsY.MinValue = 0;
             ((CustomerToolTipForTime)acmSeries.DataTooltip).ShowIcon = settingsPlaynite.showLauncherIcons;
             acmLabelsX.Labels = ActivityByMonthLabels;
         }
@@ -332,34 +336,35 @@ namespace GameActivity
 
 
                 // Check source with data (only view this)
-                JArray listNotDelete = new JArray();
+                JArray listNoDelete = new JArray();
                 for (int i = 0; i < 4; i++) {
                     foreach (var item in (JObject)activityByWeek[i])
                     {
-                        if ((long)item.Value != 0 && listNotDelete.TakeWhile(x => x.ToString() == item.Key).Count() != 1)
+                        if ((long)item.Value != 0 && listNoDelete.TakeWhile(x => x.ToString() == item.Key).Count() != 1)
                         {
-                            listNotDelete.Add(item.Key);
+                            listNoDelete.Add(item.Key);
                         }
                     }
                 }
+                listNoDelete = JArray.FromObject(listNoDelete.Distinct().ToArray());
 
 
                 // Prepare data.
-                string[] labels = new string[listNotDelete.Count];
-                for (int iSource = 0; iSource < listNotDelete.Count; iSource++)
+                string[] labels = new string[listNoDelete.Count];
+                for (int iSource = 0; iSource < listNoDelete.Count; iSource++)
                 {
-                    labels[iSource] = (string)listNotDelete[iSource];
+                    labels[iSource] = (string)listNoDelete[iSource];
                     if (settingsPlaynite.showLauncherIcons)
-                        labels[iSource] = TransformIcon.Get((string)listNotDelete[iSource]);
+                        labels[iSource] = TransformIcon.Get((string)listNoDelete[iSource]);
 
                     activityByWeekSeries.Add(new StackedColumnSeries
                     {
                         Title = labels[iSource],
                         Values = new ChartValues<CustomerForTime>() {
-                            new CustomerForTime{Name = (string)listNotDelete[iSource], Values = (int)activityByWeek[0][(string)listNotDelete[iSource]]},
-                            new CustomerForTime{Name = (string)listNotDelete[iSource], Values = (int)activityByWeek[1][(string)listNotDelete[iSource]]},
-                            new CustomerForTime{Name = (string)listNotDelete[iSource], Values = (int)activityByWeek[2][(string)listNotDelete[iSource]]},
-                            new CustomerForTime{Name = (string)listNotDelete[iSource], Values = (int)activityByWeek[3][(string)listNotDelete[iSource]]}
+                            new CustomerForTime{Name = (string)listNoDelete[iSource], Values = (int)activityByWeek[0][(string)listNoDelete[iSource]]},
+                            new CustomerForTime{Name = (string)listNoDelete[iSource], Values = (int)activityByWeek[1][(string)listNoDelete[iSource]]},
+                            new CustomerForTime{Name = (string)listNoDelete[iSource], Values = (int)activityByWeek[2][(string)listNoDelete[iSource]]},
+                            new CustomerForTime{Name = (string)listNoDelete[iSource], Values = (int)activityByWeek[3][(string)listNoDelete[iSource]]}
                         },
                         StackMode = StackMode.Values,
                         DataLabels = false
@@ -385,7 +390,11 @@ namespace GameActivity
             //lets save the mapper globally
             Charting.For<CustomerForTime>(customerVmMapper);
 
+            Func<double, string> activityForGameLogFormatter = value => (int)TimeSpan.FromSeconds(value).TotalHours + "h " + TimeSpan.FromSeconds(value).ToString(@"mm") + "min";
+            acwLabelsY.LabelFormatter = activityForGameLogFormatter;
+
             acwSeries.Series = activityByWeekSeries;
+            acwLabelsY.MinValue = 0;
             ((CustomerToolTipForMultipleTime)acwSeries.DataTooltip).ShowIcon = settingsPlaynite.showLauncherIcons;
             acwLabelsX.Labels = activityByWeekLabels;
         }
@@ -541,8 +550,11 @@ namespace GameActivity
             //lets save the mapper globally
             Charting.For<CustomerForTime>(customerVmMapper);
 
-            gameSeries.DataTooltip = new CustomerToolTipForTime();
+            Func<double, string> activityForGameLogFormatter = value => (int)TimeSpan.FromSeconds(value).TotalHours + "h " + TimeSpan.FromSeconds(value).ToString(@"mm") + "min";
+            gameLabelsY.LabelFormatter = activityForGameLogFormatter;
 
+            gameSeries.DataTooltip = new CustomerToolTipForTime();
+            gameLabelsY.MinValue = 0;
             gameLabel.Content = resources.GetString("LOCGameActivityTimeTitle");
             gameSeries.Series = activityForGameSeries;
             gameLabelsX.Labels = activityForGameLabels;
@@ -655,6 +667,7 @@ namespace GameActivity
 
             gameLabel.Content = resources.GetString("LOCGameActivityLogTitle");
             gameSeries.Series = activityForGameLogSeries;
+            gameLabelsX.MinValue = 0;
             gameLabelsX.Labels = activityForGameLogLabels;
             gameLabelsY.LabelFormatter = activityForGameLogFormatter;
         }
