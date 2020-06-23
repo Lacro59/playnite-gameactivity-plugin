@@ -64,5 +64,6 @@
     <sys:String x:Key="LOCGameActivityWarningCaption">Warnings during the game session</sys:String>
     <sys:String x:Key="LOCGameActivityWarningAt">At</sys:String>
     <sys:String x:Key="LOCGameActivityCpuUsage">CPU usage</sys:String>
+    <sys:String x:Key="LOCGameActivityRamUsage">RAM usage</sys:String>
 
 </ResourceDictionary>
