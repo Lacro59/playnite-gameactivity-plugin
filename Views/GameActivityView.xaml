@@ -43,9 +43,9 @@
                     <ToggleButton Grid.Column="0" x:Name="tbMonthSources" IsChecked='True' Content="{DynamicResource LOCGameActivitySources}" Width="100" Height="40" FontSize="20" Click="ToggleButtonSources_Checked" Loaded="TbMonthSources_Loaded"/>
                     <ToggleButton Grid.Column="2" x:Name="tbMonthGenres" IsChecked='False' Content="{DynamicResource LOCGameActivityGenres}" Width="100" Height="40" FontSize="20" Click="ToggleButtonGenres_Checked"/>
 
-                    <Button Grid.Column="3" Content="" Height="40" Width="65" FontSize="20" Click="Button_Click_PrevMonth" FontFamily="Wingdings"/>
+                    <Button Grid.Column="3" Content="" Height="35" Width="50" FontSize="20" Click="Button_Click_PrevMonth" FontFamily="Wingdings" />
                     <Label Grid.Column="4" x:Name="activityLabel" Content="month data label" HorizontalAlignment="Center" VerticalAlignment="Center" Height="45" FontSize="24" FontWeight="Bold" MinWidth="50"/>
-                    <Button Grid.Column="5" Content="" Height="40" Width="65" FontSize="20" Click="Button_Click_NextMonth" FontFamily="Wingdings"/>
+                    <Button Grid.Column="5" Content="" Height="35" Width="50" FontSize="20" Click="Button_Click_NextMonth" FontFamily="Wingdings"/>
                 </Grid>
 
                 <!-- Graphics week -->
@@ -305,7 +305,7 @@
                 <ToggleButton Grid.Column="0" Grid.Row="0" x:Name="ToggleButtonTime" IsChecked="True" Content="{DynamicResource LOCGameActivityTime}" Height="33" Width="65" Click="ToggleButtonTime_Checked"/>
                 <ToggleButton Grid.Column="1" Grid.Row="0" x:Name="ToggleButtonLog" IsChecked="False" Content="{DynamicResource LOCGameActivityLog}" Height="33" Width="65" Click="ToggleButtonLog_Checked"/>
 
-                <Label Grid.Column="2" Grid.Row="0" x:Name="gameLabel" Content="graphics title" HorizontalAlignment="Center" VerticalAlignment="Top" Height="30" FontSize="20" FontWeight="Bold" />
+                <Label Grid.Column="2" Grid.Row="0" x:Name="gameLabel" Content="graphics title" HorizontalAlignment="Center" VerticalAlignment="Top" Height="40" FontSize="20" FontWeight="Bold" />
 
                 <Button Grid.Column="3" Grid.Row="0" Content="" Height="25" Width="40" Click="Button_Click_prevGame" FontFamily="Wingdings"></Button>
                 <Button Grid.Column="4" Grid.Row="0" Content="" Height="25" Width="40" Click="Button_Click_nextGame" FontFamily="Wingdings"></Button>

@@ -20,6 +20,7 @@ using System.Windows.Media;
 using PluginCommon.LiveChartsCommon;
 using Playnite.Controls;
 using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace GameActivity
 {
@@ -57,15 +58,17 @@ namespace GameActivity
         public bool ShowIcon { get; set; }
 
         // Variables api.
+        public readonly IPlayniteAPI PlayniteApi;
         public readonly IGameDatabaseAPI dbPlaynite;
         public readonly IPlaynitePathsAPI pathsPlaynite;
         public readonly string pathExtentionData;
 
 
-        public GameActivityView(GameActivitySettings settings, IGameDatabaseAPI dbAPI, IPlaynitePathsAPI pathsAPI, string pathExtData)
+        public GameActivityView(GameActivitySettings settings, IPlayniteAPI PlayniteApi, string pathExtData)
         {
-            dbPlaynite = dbAPI;
-            pathsPlaynite = pathsAPI;
+            this.PlayniteApi = PlayniteApi;
+            dbPlaynite = PlayniteApi.Database;
+            pathsPlaynite = PlayniteApi.Paths;
             settingsPlaynite = settings;
             pathExtentionData = pathExtData;
             
@@ -408,51 +411,63 @@ namespace GameActivity
             activityListByGame = new List<listGame>();
 
             List<GameActivityClass> listGameActivities = GameActivityDatabases.GetListGameActivity();
+            string gameID = "";
             for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
             {
-                string gameID = listGameActivities[iGame].GameID.ToString();
-                string gameTitle = listGameActivities[iGame].GameName;
-                string gameIcon;
-
-                Activity lastSessionActivity = listGameActivities[iGame].GetLastSessionActivity();
-                long elapsedSeconds = lastSessionActivity.ElapsedSeconds;
-                DateTime dateSession = Convert.ToDateTime(lastSessionActivity.DateSession).AddSeconds(-elapsedSeconds).ToLocalTime();
-
-
-                BitmapImage iconImage = new BitmapImage();
-                if (String.IsNullOrEmpty(listGameActivities[iGame].GameIcon) == false)
+                try
                 {
-                    iconImage.BeginInit();
-                    gameIcon = dbPlaynite.GetFullFilePath(listGameActivities[iGame].GameIcon);
-                    iconImage.UriSource = new Uri(gameIcon, UriKind.RelativeOrAbsolute);
-                    iconImage.EndInit();
+                    gameID = listGameActivities[iGame].GameID.ToString();
+                    string gameTitle = listGameActivities[iGame].GameName;
+                    string gameIcon;
+
+                    Activity lastSessionActivity = listGameActivities[iGame].GetLastSessionActivity();
+                    long elapsedSeconds = lastSessionActivity.ElapsedSeconds;
+                    DateTime dateSession = Convert.ToDateTime(lastSessionActivity.DateSession).AddSeconds(-elapsedSeconds).ToLocalTime();
+
+
+                    BitmapImage iconImage = new BitmapImage();
+                    if (String.IsNullOrEmpty(listGameActivities[iGame].GameIcon) == false)
+                    {
+                        iconImage.BeginInit();
+                        gameIcon = dbPlaynite.GetFullFilePath(listGameActivities[iGame].GameIcon);
+                        iconImage.UriSource = new Uri(gameIcon, UriKind.RelativeOrAbsolute);
+                        iconImage.EndInit();
+                    }
+
+                    activityListByGame.Add(new listGame()
+                    {
+                        listGameID = gameID,
+                        listGameTitle = gameTitle,
+                        listGameIcon = iconImage,
+                        listGameLastActivity = dateSession,
+                        listGameElapsedSeconds = elapsedSeconds,
+                        listGameElapsedSecondsFormat = (int)TimeSpan.FromSeconds(elapsedSeconds).TotalHours + "h " + TimeSpan.FromSeconds(elapsedSeconds).ToString(@"mm") + "min",
+                        avgCPU = listGameActivities[iGame].avgCPU(listGameActivities[iGame].GetLastSession()) + "%",
+                        avgGPU = listGameActivities[iGame].avgGPU(listGameActivities[iGame].GetLastSession()) + "%",
+                        avgRAM = listGameActivities[iGame].avgRAM(listGameActivities[iGame].GetLastSession()) + "%",
+                        avgFPS = listGameActivities[iGame].avgFPS(listGameActivities[iGame].GetLastSession()) + "",
+                        avgCPUT = listGameActivities[iGame].avgCPUT(listGameActivities[iGame].GetLastSession()) + "°",
+                        avgGPUT = listGameActivities[iGame].avgGPUT(listGameActivities[iGame].GetLastSession()) + "°",
+
+                        enableWarm = settingsPlaynite.EnableWarning,
+                        maxCPUT = "" + settingsPlaynite.MaxCpuTemp,
+                        maxGPUT = "" + settingsPlaynite.MaxGpuTemp,
+                        minFPS = "" + settingsPlaynite.MinFps,
+                        maxCPU = "" + settingsPlaynite.MaxCpuUsage,
+                        maxGPU = "" + settingsPlaynite.MaxGpuUsage,
+                        maxRAM = "" + settingsPlaynite.MaxRamUsage
+                    });
+
+                    iconImage = null;
                 }
-
-                activityListByGame.Add(new listGame()
+                catch (Exception ex)
                 {
-                    listGameID = gameID,
-                    listGameTitle = gameTitle,
-                    listGameIcon = iconImage,
-                    listGameLastActivity = dateSession,
-                    listGameElapsedSeconds = elapsedSeconds,
-                    listGameElapsedSecondsFormat = (int)TimeSpan.FromSeconds(elapsedSeconds).TotalHours + "h " + TimeSpan.FromSeconds(elapsedSeconds).ToString(@"mm") + "min",
-                    avgCPU = listGameActivities[iGame].avgCPU(listGameActivities[iGame].GetLastSession()) + "%",
-                    avgGPU = listGameActivities[iGame].avgGPU(listGameActivities[iGame].GetLastSession()) + "%",
-                    avgRAM = listGameActivities[iGame].avgRAM(listGameActivities[iGame].GetLastSession()) + "%",
-                    avgFPS = listGameActivities[iGame].avgFPS(listGameActivities[iGame].GetLastSession()) + "",
-                    avgCPUT = listGameActivities[iGame].avgCPUT(listGameActivities[iGame].GetLastSession()) + "°",
-                    avgGPUT = listGameActivities[iGame].avgGPUT(listGameActivities[iGame].GetLastSession()) + "°",
+                    var LineNumber = new StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                    string FileName = new StackTrace(ex, true).GetFrame(0).GetFileName();
+                    logger.Error(ex, $"GameActivity [{FileName} {LineNumber}] - Failed to load listGameActivities from {gameID}. ");
 
-                    enableWarm = settingsPlaynite.EnableWarning,
-                    maxCPUT = "" + settingsPlaynite.MaxCpuTemp,
-                    maxGPUT = "" + settingsPlaynite.MaxGpuTemp,
-                    minFPS = "" + settingsPlaynite.MinFps,
-                    maxCPU = "" + settingsPlaynite.MaxCpuUsage,
-                    maxGPU = "" + settingsPlaynite.MaxGpuUsage,
-                    maxRAM = "" + settingsPlaynite.MaxRamUsage
-                });
-            
-                iconImage = null;
+                    PlayniteApi.Dialogs.ShowErrorMessage($"Failed to load listGameActivities from {gameID}.", "GameActivity error");
+                }
             }
 
             lvGames.ItemsSource = activityListByGame;
@@ -529,7 +544,6 @@ namespace GameActivity
                 }
             }
 
-            logger.Debug(JsonConvert.SerializeObject(series));
 
             // Set data in graphic.
             SeriesCollection activityForGameSeries = new SeriesCollection
@@ -564,11 +578,11 @@ namespace GameActivity
         /// Get data detail for the selected game.
         /// </summary>
         /// <param name="gameID"></param>
-        public void getActivityForGamesLogGraphics(string gameID)
+        public void getActivityForGamesLogGraphics(string gameID, string dateSelected = "")
         {
             // TODO Get by date for click on time sessions
             GameActivityClass gameActivity = GameActivityDatabases.Get(Guid.Parse(gameID));
-            List<ActivityDetailsData> gameActivitiesDetails = gameActivity.GetLastSessionActivityDetails();
+            List<ActivityDetailsData> gameActivitiesDetails = gameActivity.GetSessionActivityDetails(dateSelected);
 
             string[] activityForGameLogLabels = new string[0];
             List<ActivityDetailsData> gameLogsDefinitive = new List<ActivityDetailsData>();
@@ -665,7 +679,15 @@ namespace GameActivity
             gameSeries.DataTooltip.BorderBrush = (Brush)resources.GetResource("CommonToolTipBorderBrush");
             gameSeries.DataTooltip.Foreground = (Brush)resources.GetResource("CommonToolTipForeground");
 
-            gameLabel.Content = resources.GetString("LOCGameActivityLogTitle");
+            if (dateSelected == "")
+            {
+                gameLabel.Content = resources.GetString("LOCGameActivityLogTitle");
+            }
+            else
+            {
+                gameLabel.Content = resources.GetString("LOCGameActivityLogTitleDate") + " " + dateSelected;
+            }
+
             gameSeries.Series = activityForGameLogSeries;
             gameLabelsX.MinValue = 0;
             gameLabelsX.Labels = activityForGameLogLabels;
@@ -1004,6 +1026,18 @@ namespace GameActivity
         // TODO Select details data
         private void GameSeries_DataClick(object sender, ChartPoint chartPoint)
         {
+            int index = (int)chartPoint.X;
+            var data = chartPoint.SeriesView.Values;
+
+            string LabelDataSelected = ((CustomerForTime)data[index]).Name;
+
+            isGameTime = false;
+            ToggleButtonTime.IsChecked = false;
+            ToggleButtonLog.IsChecked = true;
+
+            gameSeries.HideTooltip();
+
+            getActivityForGamesLogGraphics(gameIDCurrent, LabelDataSelected);
 
         }
 

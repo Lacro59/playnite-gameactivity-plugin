@@ -56,11 +56,17 @@ namespace GameActivity
             pathActivityDB = this.GetPluginUserDataPath() + "\\activity\\";
             pathActivityDetailsDB = this.GetPluginUserDataPath() + "\\activityDetails\\";
 
+
+            // Verification & add necessary directory
             if (!Directory.Exists(pathActivityDB))
+            {
                 Directory.CreateDirectory(pathActivityDB);
+            }
 
             if (!Directory.Exists(pathActivityDetailsDB))
+            {
                 Directory.CreateDirectory(pathActivityDetailsDB);
+            }
         }
 
         public override IEnumerable<ExtensionFunction> GetFunctions()
@@ -78,7 +84,7 @@ namespace GameActivity
                         DatabaseReference = PlayniteApi.Database;
 
                         // Show GameActivity
-                        new GameActivityView(settings, PlayniteApi.Database, PlayniteApi.Paths, this.GetPluginUserDataPath()).ShowDialog();
+                        new GameActivityView(settings, PlayniteApi, this.GetPluginUserDataPath()).ShowDialog();
                     })
             };
         }

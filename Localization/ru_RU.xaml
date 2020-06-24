@@ -50,6 +50,7 @@
     <sys:String x:Key="LOCGameActivityLog">Логи</sys:String>
     <sys:String x:Key="LOCGameActivityTimeTitle">Всего часов по дням</sys:String>
     <sys:String x:Key="LOCGameActivityLogTitle">Детали последней сессии</sys:String>
+    <sys:String x:Key="LOCGameActivityLogTitleDate">Session details for</sys:String>
 
     <sys:String x:Key="LOCGameActivityLvGamesIcon">Иконка</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesTitle">Название</sys:String>
