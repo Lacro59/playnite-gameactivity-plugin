@@ -9,9 +9,9 @@
     GameActivitySettingsView 
     -->
 
-    <sys:String x:Key="LOCGameActivityActiveIcon">Показать значок для лаунчера.</sys:String>
+    <sys:String x:Key="LOCGameActivityActiveIcon">Показать значок для лаунчера</sys:String>
     
-    <sys:String x:Key="LOCGameActivityActiveLog">Включить ведение журнала.</sys:String>
+    <sys:String x:Key="LOCGameActivityActiveLog">Включить ведение журнала</sys:String>
     <sys:String x:Key="LOCGameActivityTimeInterval">Временной интервал</sys:String>
     <sys:String x:Key="LOCGameActivityTimeLabel">минут(ы)</sys:String>
 
@@ -26,7 +26,7 @@
     <sys:String x:Key="LOCGameActivityGpuTemp">Температура GPU</sys:String>
     <sys:String x:Key="LOCGameActivityCpuTemp">Температура CPU</sys:String>
 
-    <sys:String x:Key="LOCGameActivityActiveWarning">Включить предупреждения.</sys:String>
+    <sys:String x:Key="LOCGameActivityActiveWarning">Включить предупреждения</sys:String>
     <sys:String x:Key="LOCGameActivityMinFps">Минимальный FPS</sys:String>
     <sys:String x:Key="LOCGameActivityMaxCpuTemp">Макс. температура CPU</sys:String>
     <sys:String x:Key="LOCGameActivityMaxGpuTemp">Макс. температура GPU</sys:String>

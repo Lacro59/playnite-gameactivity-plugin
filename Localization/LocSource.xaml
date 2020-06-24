@@ -9,9 +9,9 @@
     GameActivitySettingsView 
     -->
 
-    <sys:String x:Key="LOCGameActivityActiveIcon">Show icon for launchers.</sys:String>
+    <sys:String x:Key="LOCGameActivityActiveIcon">Show icon for launchers</sys:String>
     
-    <sys:String x:Key="LOCGameActivityActiveLog">Enable logging.</sys:String>
+    <sys:String x:Key="LOCGameActivityActiveLog">Enable logging</sys:String>
     <sys:String x:Key="LOCGameActivityTimeInterval">Time interval</sys:String>
     <sys:String x:Key="LOCGameActivityTimeLabel">minute(s)</sys:String>
 
@@ -26,7 +26,7 @@
     <sys:String x:Key="LOCGameActivityGpuTemp">GPU temperature</sys:String>
     <sys:String x:Key="LOCGameActivityCpuTemp">CPU temperature</sys:String>
 
-    <sys:String x:Key="LOCGameActivityActiveWarning">Enable warnings.</sys:String>
+    <sys:String x:Key="LOCGameActivityActiveWarning">Enable warnings</sys:String>
     <sys:String x:Key="LOCGameActivityMinFps">Min FPS</sys:String>
     <sys:String x:Key="LOCGameActivityMaxCpuTemp">Max CPU temp</sys:String>
     <sys:String x:Key="LOCGameActivityMaxGpuTemp">Max GPU temp</sys:String>

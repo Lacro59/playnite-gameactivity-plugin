@@ -82,6 +82,14 @@ namespace GameActivity
             // Initialization components
             InitializeComponent();
 
+
+            if (!settings.EnableLogging)
+            {
+                ToggleButtonTime.Visibility = Visibility.Hidden;
+                ToggleButtonLog.Visibility = Visibility.Hidden;
+            }
+
+
             // Block hidden column.
             lvElapsedSeconds.IsEnabled = false;
 
@@ -90,6 +98,7 @@ namespace GameActivity
             {
                 GridView lvView = (GridView)lvGames.View;
 
+                lvView.Columns.RemoveAt(10);
                 lvView.Columns.RemoveAt(9);
                 lvView.Columns.RemoveAt(8);
                 lvView.Columns.RemoveAt(7);
@@ -1026,19 +1035,21 @@ namespace GameActivity
         // TODO Select details data
         private void GameSeries_DataClick(object sender, ChartPoint chartPoint)
         {
-            int index = (int)chartPoint.X;
-            var data = chartPoint.SeriesView.Values;
+            if (settingsPlaynite.EnableLogging)
+            {
+                int index = (int)chartPoint.X;
+                var data = chartPoint.SeriesView.Values;
 
-            string LabelDataSelected = ((CustomerForTime)data[index]).Name;
+                string LabelDataSelected = ((CustomerForTime)data[index]).Name;
 
-            isGameTime = false;
-            ToggleButtonTime.IsChecked = false;
-            ToggleButtonLog.IsChecked = true;
+                isGameTime = false;
+                ToggleButtonTime.IsChecked = false;
+                ToggleButtonLog.IsChecked = true;
 
-            gameSeries.HideTooltip();
+                gameSeries.HideTooltip();
 
-            getActivityForGamesLogGraphics(gameIDCurrent, LabelDataSelected);
-
+                getActivityForGamesLogGraphics(gameIDCurrent, LabelDataSelected);
+            }
         }
 
         private void TbMonthSources_Loaded(object sender, RoutedEventArgs e)
