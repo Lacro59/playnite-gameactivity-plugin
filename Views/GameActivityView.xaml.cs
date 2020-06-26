@@ -388,10 +388,10 @@ namespace GameActivity
             // Set data in graphics.
             string[] activityByWeekLabels = new[] 
             {
-                "week " + Tools.WeekOfYearISO8601(datesPeriodes[0].Monday),
-                "week " + Tools.WeekOfYearISO8601(datesPeriodes[1].Monday),
-                "week " + Tools.WeekOfYearISO8601(datesPeriodes[2].Monday),
-                "week " + Tools.WeekOfYearISO8601(datesPeriodes[3].Monday),
+                resources.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[0].Monday),
+                resources.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[1].Monday),
+                resources.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[2].Monday),
+                resources.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[3].Monday)
             };
 
             //let create a mapper so LiveCharts know how to plot our CustomerViewModel class

@@ -46,11 +46,13 @@
     <sys:String x:Key="LOCGameActivityTotalHours">Total d'heures</sys:String>
     <sys:String x:Key="LOCGameActivityTotalHoursByWeeks">Total d'heures par semaine</sys:String>
 
+    <sys:String x:Key="LOCGameActivityWeekLabel">Semaine</sys:String>
+    
     <sys:String x:Key="LOCGameActivityTime">Temps</sys:String>
     <sys:String x:Key="LOCGameActivityLog">Log</sys:String>
     <sys:String x:Key="LOCGameActivityTimeTitle">Total d'heures par jour</sys:String>
     <sys:String x:Key="LOCGameActivityLogTitle">Détails de la dernière session</sys:String>
-    <sys:String x:Key="LOCGameActivityLogTitleDate">Détails pour la session du</sys:String>
+    <sys:String x:Key="LOCGameActivityLogTitleDate">Détails session du</sys:String>
 
     <sys:String x:Key="LOCGameActivityLvGamesIcon">Icône</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesTitle">Nom</sys:String>

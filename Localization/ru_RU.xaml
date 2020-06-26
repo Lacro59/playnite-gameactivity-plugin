@@ -46,6 +46,8 @@
     <sys:String x:Key="LOCGameActivityTotalHours">Всего часов</sys:String>
     <sys:String x:Key="LOCGameActivityTotalHoursByWeeks">Всего часов по неделям</sys:String>
 
+    <sys:String x:Key="LOCGameActivityWeekLabel">Week</sys:String>
+    
     <sys:String x:Key="LOCGameActivityTime">Время</sys:String>
     <sys:String x:Key="LOCGameActivityLog">Логи</sys:String>
     <sys:String x:Key="LOCGameActivityTimeTitle">Всего часов по дням</sys:String>

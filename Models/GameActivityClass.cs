@@ -1,13 +1,16 @@
-﻿using Playnite.SDK.Models;
+﻿using Playnite.SDK;
+using Playnite.SDK.Models;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+
 
 namespace GameActivity.Models
 {
     class GameActivityClass
     {
+        private static readonly ILogger logger = LogManager.GetLogger();
+
         public int CountActivities => Activities.Count;
         public int CountActivitiesDetails => ActivitiesDetails.Count;
 
