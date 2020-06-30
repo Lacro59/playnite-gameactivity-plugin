@@ -304,6 +304,7 @@ namespace GameActivity
             JObject activityByWeek2 = new JObject();
             JObject activityByWeek3 = new JObject();
             JObject activityByWeek4 = new JObject();
+            JObject activityByWeek5 = new JObject();
 
             JArray activityByWeek = new JArray();
             SeriesCollection activityByWeekSeries = new SeriesCollection();
@@ -317,13 +318,14 @@ namespace GameActivity
                     activityByWeek2.Add((string)listSources[iSource], 0);
                     activityByWeek3.Add((string)listSources[iSource], 0);
                     activityByWeek4.Add((string)listSources[iSource], 0);
+                    activityByWeek5.Add((string)listSources[iSource], 0);
                 }
 
                 activityByWeek.Add(activityByWeek1);
                 activityByWeek.Add(activityByWeek2);
                 activityByWeek.Add(activityByWeek3);
                 activityByWeek.Add(activityByWeek4);
-
+                activityByWeek.Add(activityByWeek5);
 
                 List<GameActivityClass> listGameActivities = GameActivityDatabases.GetListGameActivity();
                 for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
@@ -349,7 +351,7 @@ namespace GameActivity
 
                 // Check source with data (only view this)
                 JArray listNoDelete = new JArray();
-                for (int i = 0; i < 4; i++) {
+                for (int i = 0; i < activityByWeek.Count; i++) {
                     foreach (var item in (JObject)activityByWeek[i])
                     {
                         if ((long)item.Value != 0 && listNoDelete.TakeWhile(x => x.ToString() == item.Key).Count() != 1)
@@ -369,15 +371,22 @@ namespace GameActivity
                     if (settingsPlaynite.showLauncherIcons)
                         labels[iSource] = TransformIcon.Get((string)listNoDelete[iSource]);
 
-                    activityByWeekSeries.Add(new StackedColumnSeries
-                    {
-                        Title = labels[iSource],
-                        Values = new ChartValues<CustomerForTime>() {
+                    IChartValues Values = new ChartValues<CustomerForTime>() {
                             new CustomerForTime{Name = (string)listNoDelete[iSource], Values = (int)activityByWeek[0][(string)listNoDelete[iSource]]},
                             new CustomerForTime{Name = (string)listNoDelete[iSource], Values = (int)activityByWeek[1][(string)listNoDelete[iSource]]},
                             new CustomerForTime{Name = (string)listNoDelete[iSource], Values = (int)activityByWeek[2][(string)listNoDelete[iSource]]},
                             new CustomerForTime{Name = (string)listNoDelete[iSource], Values = (int)activityByWeek[3][(string)listNoDelete[iSource]]}
-                        },
+                        };
+
+                    if (datesPeriodes.Count == 5)
+                    {
+                        Values.Add(new CustomerForTime { Name = (string)listNoDelete[iSource], Values = (int)activityByWeek[4][(string)listNoDelete[iSource]] });
+                    }
+
+                    activityByWeekSeries.Add(new StackedColumnSeries
+                    {
+                        Title = labels[iSource],
+                        Values = Values,
                         StackMode = StackMode.Values,
                         DataLabels = false
                     });
