@@ -37,6 +37,8 @@
     <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">Log CPU, GPU, RAM and FPS performance during game session.</sys:String>
     <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Displays a warning message at the end of the game session within the defined limits.</sys:String>
 
+    <sys:String x:Key="LOCGameActivityIntegration">Interface integration (experimental)</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationButtonHeader">Add button in window</sys:String>
 
     <!-- 
     GameActivityView 

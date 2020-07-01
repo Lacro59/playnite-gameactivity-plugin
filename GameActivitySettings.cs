@@ -8,6 +8,8 @@ namespace GameActivity
     {
         private readonly GameActivity plugin;
 
+        public bool EnableIntegrationButtonHeader { get; set; } = false;
+
         public bool showLauncherIcons { get; set; } = false;
 
         public bool EnableLogging { get; set; } = false;
@@ -55,6 +57,8 @@ namespace GameActivity
             // LoadPluginSettings returns null if not saved data is available.
             if (savedSettings != null)
             {
+                EnableIntegrationButtonHeader = savedSettings.EnableIntegrationButtonHeader;
+
                 showLauncherIcons = savedSettings.showLauncherIcons;
 
                 EnableLogging = savedSettings.EnableLogging;

@@ -13,6 +13,9 @@ using System.Runtime.InteropServices;
 using MSIAfterburnerNET.HM.Interop;
 using System.Reflection;
 using PluginCommon;
+using System.Windows;
+using GameActivity.Views.Interface;
+
 
 namespace GameActivity
 {
@@ -24,13 +27,14 @@ namespace GameActivity
         public static IGameDatabase DatabaseReference;
 
         private GameActivitySettings settings { get; set; }
+        public override Guid Id { get; } = Guid.Parse("afbb1a0d-04a1-4d0c-9afa-c6e42ca855b4");
+
+        private readonly IntegrationUI ui = new IntegrationUI();
 
         // TODO Bad integration with structutre application
         private JArray activity { get; set; }
         private JObject activityDetails { get; set; }
         private JArray LoggingData { get; set; }
-
-        public override Guid Id { get; } = Guid.Parse("afbb1a0d-04a1-4d0c-9afa-c6e42ca855b4");
 
         // Paths application data.
         public string pathActivityDB { get; set; }
@@ -39,6 +43,7 @@ namespace GameActivity
         // Variables timer function
         public Timer t { get; set; }
         public List<JArray> WarningsMessage { get; set; }
+
 
         #region Playnite GenericPlugin
         public GameActivity(IPlayniteAPI api) : base(api)
@@ -79,11 +84,8 @@ namespace GameActivity
                     {
                         // Add code to be execute when user invokes this menu entry.
 
-                        logger.Info("GameActivityView");
-
-                        DatabaseReference = PlayniteApi.Database;
-
                         // Show GameActivity
+                        DatabaseReference = PlayniteApi.Database;
                         new GameActivityView(settings, PlayniteApi, this.GetPluginUserDataPath()).ShowDialog();
                     })
             };
@@ -182,9 +184,24 @@ namespace GameActivity
             // Add code to be executed when game is uninstalled.
         }
 
+        private void OnBtHeaderClick(object sender, RoutedEventArgs e)
+        {
+            // Show GameActivity
+            DatabaseReference = PlayniteApi.Database;
+            new GameActivityView(settings, PlayniteApi, this.GetPluginUserDataPath()).ShowDialog();
+        }
+
         public override void OnApplicationStarted()
         {
             // Add code to be executed when Playnite is initialized.
+
+            if (settings.EnableIntegrationButtonHeader)
+            {
+                logger.Info("SuccessStory - Add Header button");
+                Button btHeader = new GameActivityButtonHeader(TransformIcon.Get("GameActivity"));
+                btHeader.Click += OnBtHeaderClick;
+                ui.AddButtonInWindowsHeader(btHeader);
+            }
         }
 
         public override void OnApplicationStopped()

@@ -97,6 +97,9 @@
     <Compile Include="Views\GameActivityView.xaml.cs">
       <DependentUpon>GameActivityView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Interface\GameActivityButtonHeader.xaml.cs">
+      <DependentUpon>GameActivityButtonHeader.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -279,6 +282,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\GameActivityView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Interface\GameActivityButtonHeader.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

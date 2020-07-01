@@ -7,6 +7,7 @@ using System.IO;
 using Newtonsoft.Json;
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using PluginCommon;
 
 namespace GameActivity.Database.Collections
 {
@@ -92,9 +93,7 @@ namespace GameActivity.Database.Collections
                     }
                     catch (Exception ex)
                     {
-                        var LineNumber = new StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
-                        string FileName = new StackTrace(ex, true).GetFrame(0).GetFileName();
-                        logger.Error(ex, $"GameActivity [{FileName} {LineNumber}] - Failed to load item from {objectFile} or {objectFileDetails}. ");
+                        Common.LogError(ex, "GameActivity", $"Failed to load item from {objectFile} or {objectFileDetails}");
                     }
                 });
             }

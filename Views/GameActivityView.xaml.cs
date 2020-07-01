@@ -402,6 +402,18 @@ namespace GameActivity
                 resources.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[2].Monday),
                 resources.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[3].Monday)
             };
+            if (datesPeriodes.Count == 5)
+            {
+                activityByWeekLabels = new[]
+            {
+                resources.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[0].Monday),
+                resources.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[1].Monday),
+                resources.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[2].Monday),
+                resources.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[3].Monday),
+                resources.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[4].Monday)
+            };
+            }
+
 
             //let create a mapper so LiveCharts know how to plot our CustomerViewModel class
             var customerVmMapper = Mappers.Xy<CustomerForTime>()
@@ -480,10 +492,7 @@ namespace GameActivity
                 }
                 catch (Exception ex)
                 {
-                    var LineNumber = new StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
-                    string FileName = new StackTrace(ex, true).GetFrame(0).GetFileName();
-                    logger.Error(ex, $"GameActivity [{FileName} {LineNumber}] - Failed to load listGameActivities from {gameID}. ");
-
+                    Common.LogError(ex, "GameActivity", $"Failed to load listGameActivities from {gameID}");
                     PlayniteApi.Dialogs.ShowErrorMessage($"Failed to load listGameActivities from {gameID}.", "GameActivity error");
                 }
             }
