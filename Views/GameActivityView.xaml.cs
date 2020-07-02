@@ -38,7 +38,7 @@ namespace GameActivity
 
         private GameActivityCollection GameActivityDatabases { get; set; }
 
-        LongToTimePlayedConverter converter = new LongToTimePlayedConverter();
+        private LongToTimePlayedConverter converter = new LongToTimePlayedConverter();
 
         public int yearCurrent;
         public int monthCurrent;
