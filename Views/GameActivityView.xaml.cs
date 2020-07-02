@@ -238,7 +238,7 @@ namespace GameActivity
                 series.Add(new CustomerForTime
                 {
                     Name = item.Key,
-                    Values = (double)item.Value,
+                    Values = (long)item.Value,
                 });
                 labels[compteur] = item.Key;
                 if (settingsPlaynite.showLauncherIcons)
@@ -471,7 +471,6 @@ namespace GameActivity
                         listGameIcon = iconImage,
                         listGameLastActivity = dateSession,
                         listGameElapsedSeconds = elapsedSeconds,
-                        listGameElapsedSecondsFormat = (int)TimeSpan.FromSeconds(elapsedSeconds).TotalHours + "h " + TimeSpan.FromSeconds(elapsedSeconds).ToString(@"mm") + "min",
                         avgCPU = listGameActivities[iGame].avgCPU(listGameActivities[iGame].GetLastSession()) + "%",
                         avgGPU = listGameActivities[iGame].avgGPU(listGameActivities[iGame].GetLastSession()) + "%",
                         avgRAM = listGameActivities[iGame].avgRAM(listGameActivities[iGame].GetLastSession()) + "%",
@@ -542,8 +541,7 @@ namespace GameActivity
                 series.Add(new CustomerForTime
                 {
                     Name = dateStart.AddDays(iDay - 9).ToString("yyyy-MM-dd"),
-                    Values = 0,
-                    //ValuesFormat = (int)TimeSpan.FromSeconds(0).TotalHours + "h " + TimeSpan.FromSeconds(0).ToString(@"mm") + "min"
+                    Values = 0
                 });
             }
 
@@ -561,7 +559,7 @@ namespace GameActivity
                     if (listDate[iDay] == dateSession)
                     {
                         string tempName = series[iDay].Name;
-                        double tempElapsed = series[iDay].Values + elapsedSeconds;
+                        long tempElapsed = series[iDay].Values + elapsedSeconds;
                         series[iDay] = new CustomerForTime
                         {
                             Name = tempName,
@@ -1084,7 +1082,6 @@ namespace GameActivity
         public BitmapImage listGameIcon { get; set; }
         public DateTime listGameLastActivity { get; set; }
         public long listGameElapsedSeconds { get; set; }
-        public string listGameElapsedSecondsFormat { get; set; }
 
         public string avgCPU { get; set; }
         public string avgGPU { get; set; }

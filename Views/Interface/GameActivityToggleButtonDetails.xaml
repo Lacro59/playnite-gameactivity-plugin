@@ -3,8 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:pcon="clr-namespace:Playnite.Converters;assembly=Playnite"
              xmlns:local="clr-namespace:GameActivity.Views.Interface"
              mc:Ignorable="d" Width="150" Height="40">
+
+    <ToggleButton.Resources>
+        <pcon:LongToTimePlayedConverter x:Key="LongToTimePlayedConverter" />
+    </ToggleButton.Resources>
 
     <ToggleButton.Style>
         <Style TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource BaseStyle}">
@@ -80,7 +85,7 @@
                 </Style>
             </Label.Style>
         </Label>
-        <Label Grid.Column="2" Grid.Row="2" Content="1h 23min" FontSize="10" Name="ga_labelButtonData">
+        <Label Grid.Column="2" Grid.Row="2" Content="{Binding PlaytimeCurrent, Mode=OneWay, Converter={StaticResource LongToTimePlayedConverter}}" FontSize="10">
             <Label.Style>
                 <Style TargetType="Label">
                     <Setter Property="Padding" Value="5,3,5,5" />

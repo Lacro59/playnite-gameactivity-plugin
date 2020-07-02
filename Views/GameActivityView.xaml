@@ -6,6 +6,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
              xmlns:localLVC="clr-namespace:PluginCommon.LiveChartsCommon;assembly=PluginCommon"
+             xmlns:pcon="clr-namespace:Playnite.Converters;assembly=Playnite"
              xmlns:localPlugin="clr-namespace:PluginCommon;assembly=PluginCommon"
              mc:Ignorable="d" Height="740" Width="1260" 
              d:DesignStyle="{StaticResource WindowDesignStyle}"
@@ -14,6 +15,7 @@
              ResizeMode="NoResize" Title="Game Activity" WindowStartupLocation="CenterScreen" WindowStyle="None">
 
     <WindowBase.Resources>
+        <pcon:LongToTimePlayedConverter x:Key="LongToTimePlayedConverter" />
         <localPlugin:CompareValueConverter x:Key="CompareValueConverter" />
     </WindowBase.Resources>
 
@@ -152,7 +154,8 @@
                                 <GridViewColumnHeader Name="lvElapsedSecondsFormat" Content="{DynamicResource LOCGameActivityLvGamesElapsedSeconds}"></GridViewColumnHeader>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Label Content="{Binding listGameElapsedSecondsFormat}" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+                                        <Label Content="{Binding listGameElapsedSeconds, Mode=OneWay, Converter={StaticResource LongToTimePlayedConverter}}"
+                                               HorizontalAlignment="Center" VerticalAlignment="Stretch" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>

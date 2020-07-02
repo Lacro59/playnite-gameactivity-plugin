@@ -9,11 +9,15 @@ namespace GameActivity.Views.Interface
     /// </summary>
     public partial class GameActivityToggleButtonDetails : ToggleButton
     {
+        public long PlaytimeCurrent { get; set; }
+
         public GameActivityToggleButtonDetails(long Playtime)
         {
             InitializeComponent();
 
-            ga_labelButtonData.Content = (int)TimeSpan.FromSeconds(Playtime).TotalHours + "h " + TimeSpan.FromSeconds(Playtime).ToString(@"mm") + "min";
+            PlaytimeCurrent = Playtime;
+
+            DataContext = this;
         }
     }
 }

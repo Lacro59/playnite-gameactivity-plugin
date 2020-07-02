@@ -67,7 +67,7 @@ namespace GameActivity.Views.Interface
                     if (listDate[iDay] == dateSession)
                     {
                         string tempName = series[iDay].Name;
-                        double tempElapsed = series[iDay].Values + elapsedSeconds;
+                        long tempElapsed = series[iDay].Values + elapsedSeconds;
                         series[iDay] = new CustomerForTime
                         {
                             Name = tempName,
