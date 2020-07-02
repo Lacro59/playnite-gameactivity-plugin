@@ -97,8 +97,20 @@
     <Compile Include="Views\GameActivityView.xaml.cs">
       <DependentUpon>GameActivityView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Interface\GameActivityButtonDetails.xaml.cs">
+      <DependentUpon>GameActivityButtonDetails.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Interface\GameActivityButtonHeader.xaml.cs">
       <DependentUpon>GameActivityButtonHeader.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Interface\GameActivityGameGraphicTime.xaml.cs">
+      <DependentUpon>GameActivityGameGraphicTime.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Interface\GameActivityToggleButton.xaml.cs">
+      <DependentUpon>GameActivityToggleButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Interface\GameActivityToggleButtonDetails.xaml.cs">
+      <DependentUpon>GameActivityToggleButtonDetails.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -285,7 +297,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Interface\GameActivityButtonDetails.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Interface\GameActivityButtonHeader.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Interface\GameActivityGameGraphicTime.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Interface\GameActivityToggleButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Interface\GameActivityToggleButtonDetails.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

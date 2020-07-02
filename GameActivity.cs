@@ -15,6 +15,11 @@ using System.Reflection;
 using PluginCommon;
 using System.Windows;
 using GameActivity.Views.Interface;
+using Playnite.SDK.Events;
+using GameActivity.Database.Collections;
+using GameActivity.Models;
+using System.Windows.Media;
+using System.Windows.Controls.Primitives;
 
 
 namespace GameActivity
@@ -30,6 +35,8 @@ namespace GameActivity
         public override Guid Id { get; } = Guid.Parse("afbb1a0d-04a1-4d0c-9afa-c6e42ca855b4");
 
         private readonly IntegrationUI ui = new IntegrationUI();
+
+        private GameActivityCollection GameActivityDatabases;
 
         // TODO Bad integration with structutre application
         private JArray activity { get; set; }
@@ -177,6 +184,11 @@ namespace GameActivity
             {
                 logger.Info("GameActivity - OnGameStopped - " + ex.Message);
             }
+
+
+            // Refresh integration interface
+            GameActivity.isFirstLoad = true;
+            Integration();
         }
 
         public override void OnGameUninstalled(Game game)
@@ -199,10 +211,284 @@ namespace GameActivity
             {
                 logger.Info("SuccessStory - Add Header button");
                 Button btHeader = new GameActivityButtonHeader(TransformIcon.Get("GameActivity"));
+                btHeader.SetValue(TextBlock.FontWeightProperty, FontWeights.Bold);
                 btHeader.Click += OnBtHeaderClick;
                 ui.AddButtonInWindowsHeader(btHeader);
             }
         }
+
+
+        private Game GameSelected { get; set; }
+        private StackPanel PART_ElemDescription = null;
+
+        public static bool isFirstLoad = true;
+
+        private void OnGameSelectedToggleButtonClick(object sender, RoutedEventArgs e)
+        {
+            if (PART_ElemDescription != null)
+            {
+                if ((bool)((ToggleButton)sender).IsChecked)
+                {
+                    for (int i = 0; i < PART_ElemDescription.Children.Count; i++)
+                    {
+                        if (((FrameworkElement)PART_ElemDescription.Children[i]).Name == "PART_GameActivity")
+                        {
+                            ((FrameworkElement)PART_ElemDescription.Children[i]).Visibility = Visibility.Visible;
+
+                            // Uncheck other integratio ToggleButton
+                            foreach (ToggleButton sp in Tools.FindVisualChildren<ToggleButton>(Application.Current.MainWindow))
+                            {
+                                if (sp.Name == "PART_ScToggleButton")
+                                {
+                                    sp.IsChecked = false;
+                                    break;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            ((FrameworkElement)PART_ElemDescription.Children[i]).Visibility = Visibility.Collapsed;
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < PART_ElemDescription.Children.Count; i++)
+                    {
+                        if (((FrameworkElement)PART_ElemDescription.Children[i]).Name == "PART_GameActivity")
+                        {
+                            ((FrameworkElement)PART_ElemDescription.Children[i]).Visibility = Visibility.Collapsed;
+                        }
+                        else
+                        {
+                            if (((FrameworkElement)PART_ElemDescription.Children[i]).Name != "PART_Achievements")
+                            {
+                                ((FrameworkElement)PART_ElemDescription.Children[i]).Visibility = Visibility.Visible;
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.Error("GameActivity - PART_ElemDescription not found in OnGameSelectedToggleButtonClick()");
+            }
+        }
+
+        public override void OnGameSelected(GameSelectionEventArgs args)
+        {
+            try
+            {
+                if (args.NewValue != null && args.NewValue.Count == 1)
+                {
+                    GameSelected = args.NewValue[0];
+
+                    // Reset view visibility
+                    if (PART_ElemDescription != null)
+                    {
+                        for (int i = 0; i < PART_ElemDescription.Children.Count; i++)
+                        {
+                            if ((((FrameworkElement)PART_ElemDescription.Children[i]).Name != "PART_GameActivity") && (((FrameworkElement)PART_ElemDescription.Children[i]).Name != "PART_Achievements"))
+                            {
+                                ((FrameworkElement)PART_ElemDescription.Children[i]).Visibility = Visibility.Visible;
+                            }
+                        }
+                    }
+
+                    Integration();
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex, "GameActivity", $"OnGameSelected() ");
+            }
+        }
+
+        private void OnBtGameSelectedActionBarClick(object sender, RoutedEventArgs e)
+        {
+            // Show GameActivity
+            DatabaseReference = PlayniteApi.Database;
+            new GameActivityView(settings, PlayniteApi, this.GetPluginUserDataPath()).ShowDialog();
+        }
+
+        private void Integration()
+        {
+            try
+            {
+                // Refresh database
+                if (GameActivity.isFirstLoad)
+                {
+                    GameActivityDatabases = new GameActivityCollection();
+                    GameActivityDatabases.InitializeCollection(this.GetPluginUserDataPath());
+                    GameActivity.isFirstLoad = false;
+                }
+
+
+                GameActivityClass SelectedGameGameActivity = GameActivityDatabases.Get(GameSelected.Id);
+
+
+                // Search game description
+                if (PART_ElemDescription == null)
+                {
+                    foreach (StackPanel sp in Tools.FindVisualChildren<StackPanel>(Application.Current.MainWindow))
+                    {
+                        if (sp.Name == "PART_ElemDescription")
+                        {
+                            PART_ElemDescription = sp;
+                            break;
+                        }
+                    }
+                }
+
+
+                // Delete
+                logger.Info("GameActivity - Delete");
+                ui.RemoveButtonInGameSelectedActionBarButtonOrToggleButton("PART_GaButton");
+                ui.RemoveButtonInGameSelectedActionBarButtonOrToggleButton("PART_GaToggleButton");
+                ui.RemoveElementInGameSelectedDescription("PART_GameActivity");
+                ui.ClearElementInCustomTheme("PART_GameActivty_Graphic");
+
+
+                // Reset resources
+                //List<ResourcesList> resourcesLists = new List<ResourcesList>();
+                //ui.AddResources(resourcesLists);
+
+
+                // No game activity
+                if (SelectedGameGameActivity == null)
+                {
+                    logger.Info("GameActivity - No activity for " + GameSelected.Name);
+                    return;
+                }
+
+
+                // Add resources
+                //ui.AddResources(resourcesLists);
+
+
+                // Auto integration
+                if (settings.EnableIntegrationInDescription || settings.EnableIntegrationInDescriptionWithToggle)
+                {
+                    if (settings.EnableIntegrationInDescriptionWithToggle)
+                    {
+                        ToggleButton tb = new ToggleButton();
+                        if (settings.IntegrationToggleDetails)
+                        {
+                            tb = new GameActivityToggleButtonDetails(SelectedGameGameActivity.GetLastSessionActivity().ElapsedSeconds);
+                        }
+                        else
+                        {
+                            tb = new GameActivityToggleButton();
+                            tb.Content = resources.GetString("LOCGameActivityTitle");
+                        }
+                        
+                        tb.IsChecked = false;
+                        tb.Name = "PART_GaToggleButton";
+                        tb.Width = 150;
+                        tb.HorizontalAlignment = HorizontalAlignment.Right;
+                        tb.VerticalAlignment = VerticalAlignment.Stretch;
+                        tb.Margin = new Thickness(10, 0, 0, 0);
+                        tb.Click += OnGameSelectedToggleButtonClick;
+                        
+                        ui.AddButtonInGameSelectedActionBarButtonOrToggleButton(tb);
+                    }
+
+
+                    // Add game activity elements
+                    StackPanel GaSp = CreateGa(SelectedGameGameActivity, settings.IntegrationShowTitle, settings.IntegrationShowGraphic, false);
+
+                    if (settings.EnableIntegrationInDescriptionWithToggle)
+                    {
+                        GaSp.Visibility = Visibility.Collapsed;
+                    }
+
+                    ui.AddElementInGameSelectedDescription(GaSp, settings.IntegrationTopGameDetails);
+                }
+
+
+                // Auto adding button
+                if (settings.EnableIntegrationButton || settings.EnableIntegrationButtonDetails)
+                {
+                    Button bt = new Button();
+                    if (settings.EnableIntegrationButton)
+                    {
+                        bt.Content = resources.GetString("LOCGameActivityTitle");
+                    }
+
+                    if (settings.EnableIntegrationButtonDetails)
+                    {
+                        bt = new GameActivityButtonDetails(SelectedGameGameActivity.GetLastSessionActivity().ElapsedSeconds);
+                    }
+
+                    bt.Name = "PART_GaButton";
+                    bt.Width = 150;
+                    bt.HorizontalAlignment = HorizontalAlignment.Right;
+                    bt.VerticalAlignment = VerticalAlignment.Stretch;
+                    bt.Margin = new Thickness(10, 0, 0, 0);
+                    bt.Click += OnBtGameSelectedActionBarClick;
+
+                    ui.AddButtonInGameSelectedActionBarButtonOrToggleButton(bt);
+                }
+
+
+                // Custom theme
+                if (settings.EnableIntegrationInCustomTheme)
+                {
+                    // Create 
+                    StackPanel spGaG = CreateGa(SelectedGameGameActivity, false, true, true);
+
+                    ui.AddElementInCustomTheme(spGaG, "PART_GameActivty_Graphic");
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex, "GameActivity", $"Impossible integration");
+            }
+        }
+
+        // Create FrameworkElement with game activity datas
+        public StackPanel CreateGa(GameActivityClass gameActivity, bool ShowTitle, bool ShowGraphic, bool IsCustom = false)
+        {
+            StackPanel spGa = new StackPanel();
+            spGa.Name = "PART_GameActivity";
+
+            if (ShowTitle)
+            {
+                TextBlock tbGa = new TextBlock();
+                tbGa.Name = "PART_GameActivity_TextBlock";
+                tbGa.Text = resources.GetString("LOCGameActivityTitle");
+                tbGa.Style = (Style)resources.GetResource("BaseTextBlockStyle");
+                tbGa.Margin = new Thickness(0, 15, 0, 10);
+
+                Separator sep = new Separator();
+                sep.Name = "PART_GameActivity_Separator";
+                sep.Background = (Brush)resources.GetResource("PanelSeparatorBrush");
+
+                spGa.Children.Add(tbGa);
+                spGa.Children.Add(sep);
+                spGa.UpdateLayout();
+            }
+
+            if (ShowGraphic)
+            {
+                StackPanel spGaG = new StackPanel();
+                if (!IsCustom)
+                {
+                    spGaG.Name = "PART_GameActivty_Graphic";
+                    spGaG.Height = 120;
+                    spGaG.MaxHeight = 120;
+                    spGaG.Margin = new Thickness(0, 5, 0, 5);
+                }
+
+                spGaG.Children.Add(new GameActivityGameGraphicTime(settings, gameActivity));
+
+                spGa.Children.Add(spGaG);
+                spGa.UpdateLayout();
+            }
+
+            return spGa;
+        }
+
 
         public override void OnApplicationStopped()
         {

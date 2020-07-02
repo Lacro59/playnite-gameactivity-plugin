@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             mc:Ignorable="d" d:DesignWidth="600">
+             mc:Ignorable="d">
 
     <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
         <DockPanel Margin="20">
@@ -44,10 +44,54 @@
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="35"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="35"/>
                         </Grid.RowDefinitions>
 
-                        <CheckBox Grid.Column="0" Grid.Row="0" IsChecked="{Binding EnableIntegrationButtonHeader}" Margin="0,5,0,0" VerticalAlignment="Center">
+                        <CheckBox Grid.Column="0" Grid.Row="0" IsChecked="{Binding EnableIntegrationInDescription}" Name="Ga_IntegrationInDescription" Margin="0,5,0,0" Click="Checkbox_Click" VerticalAlignment="Center">
+                            <Label Content="{DynamicResource LOCGameActivityIntegrationInDescription}" />
+                        </CheckBox>
+                        <CheckBox Grid.Column="2" Grid.Row="0" IsChecked="{Binding EnableIntegrationInDescriptionWithToggle}" Name="Ga_IntegrationInDescriptionWithToggle" Margin="0,5,0,0" Click="Checkbox_Click" VerticalAlignment="Center">
+                            <Label Content="{DynamicResource LOCGameActivityIntegrationInDescriptionWithToggle}" />
+                        </CheckBox>
+
+                        <CheckBox Grid.Column="0" Grid.Row="1" IsChecked="{Binding IntegrationTopGameDetails}" Margin="30,0,0,0" IsEnabled="{Binding ElementName=Ga_IntegrationInDescription, Path=IsChecked}" VerticalAlignment="Center">
+                            <Label Content="{DynamicResource LOCGameActivityIntegrationTopGameDetails}" />
+                        </CheckBox>
+                        <CheckBox Grid.Column="0" Grid.Row="2" IsChecked="{Binding IntegrationShowTitle}" Margin="30,0,0,0" IsEnabled="{Binding ElementName=Ga_IntegrationInDescription, Path=IsChecked}" VerticalAlignment="Center">
+                            <Label Content="{DynamicResource LOCGameActivityIntegrationShowTitle}" />
+                        </CheckBox>
+                        <CheckBox Grid.Column="0" Grid.Row="3" IsChecked="{Binding IntegrationShowGraphic}" Margin="30,0,0,0" IsEnabled="{Binding ElementName=Ga_IntegrationInDescription, Path=IsChecked}" VerticalAlignment="Center">
+                            <Label Content="{DynamicResource LOCGameActivityIntegrationShowGraphic}" />
+                        </CheckBox>
+
+                        <CheckBox Grid.Column="2" Grid.Row="1" IsChecked="{Binding IntegrationToggleDetails}" Margin="30,0,0,0" IsEnabled="{Binding ElementName=Ga_IntegrationInDescriptionWithToggle, Path=IsChecked}" VerticalAlignment="Center">
+                            <Label Content="{DynamicResource LOCGameActivityIntegrationToggleDetails}" />
+                        </CheckBox>
+                        <CheckBox Grid.Column="2" Grid.Row="2" IsChecked="{Binding IntegrationShowTitle}" Margin="30,0,0,0" IsEnabled="{Binding ElementName=Ga_IntegrationInDescriptionWithToggle, Path=IsChecked}" VerticalAlignment="Center">
+                            <Label Content="{DynamicResource LOCGameActivityIntegrationShowTitle}" />
+                        </CheckBox>
+                        <CheckBox Grid.Column="2" Grid.Row="3" IsChecked="{Binding IntegrationShowGraphic}" Margin="30,0,0,0" IsEnabled="{Binding ElementName=Ga_IntegrationInDescriptionWithToggle, Path=IsChecked}" VerticalAlignment="Center">
+                            <Label Content="{DynamicResource LOCGameActivityIntegrationShowGraphic}" />
+                        </CheckBox>
+
+                        <CheckBox Grid.Column="0" Grid.Row="4" IsChecked="{Binding EnableIntegrationButton}" Margin="0,0,0,0" Name="Ga_IntegrationInButton" Click="Checkbox_Click" VerticalAlignment="Center">
+                            <Label Content="{DynamicResource LOCGameActivityIntegrationButton}" />
+                        </CheckBox>
+                        <CheckBox Grid.Column="2" Grid.Row="4" IsChecked="{Binding EnableIntegrationButtonDetails}" Margin="0,0,0,0" Name="Ga_IntegrationInButtonDetails" Click="Checkbox_Click" VerticalAlignment="Center">
+                            <Label Content="{DynamicResource LOCGameActivityIntegrationButtonDetails}" />
+                        </CheckBox>
+
+                        <CheckBox Grid.Column="0" Grid.Row="5" IsChecked="{Binding EnableIntegrationButtonHeader}" Margin="0,5,0,0" VerticalAlignment="Center">
                             <Label Content="{DynamicResource LOCGameActivityIntegrationButtonHeader}" />
+                        </CheckBox>
+
+                        <CheckBox Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="3" IsChecked="{Binding EnableIntegrationInCustomTheme}" Margin="0,0,0,0" Name="Ga_IntegrationInCustomTheme" Click="Checkbox_Click" VerticalAlignment="Center">
+                            <Label Content="{DynamicResource LOCGameActivityIntegrationInCustomTheme}" />
                         </CheckBox>
                     </Grid>
                 </StackPanel>

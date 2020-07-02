@@ -8,7 +8,7 @@ using System.Windows;
 
 namespace GameActivity.Models
 {
-    class ActivityDetails
+    public class ActivityDetails
     {
         private static readonly ILogger logger = LogManager.GetLogger();
 
@@ -71,7 +71,7 @@ namespace GameActivity.Models
 
 
 
-    class ActivityDetailsData
+    public class ActivityDetailsData
     {
         /// <summary>
         /// Gets or sets date log.

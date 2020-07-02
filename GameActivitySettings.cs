@@ -8,7 +8,20 @@ namespace GameActivity
     {
         private readonly GameActivity plugin;
 
+        public bool EnableIntegrationInDescription { get; set; } = false;
+        public bool EnableIntegrationInDescriptionWithToggle { get; set; } = false;
+
         public bool EnableIntegrationButtonHeader { get; set; } = false;
+
+        public bool IntegrationShowTitle { get; set; } = true;
+        public bool IntegrationShowGraphic { get; set; } = true;
+        public bool IntegrationTopGameDetails { get; set; } = true;
+        public bool IntegrationToggleDetails { get; set; } = true;
+
+        public bool EnableIntegrationInCustomTheme { get; set; } = false;
+
+        public bool EnableIntegrationButton { get; set; } = false;
+        public bool EnableIntegrationButtonDetails { get; set; } = false;
 
         public bool showLauncherIcons { get; set; } = false;
 
@@ -57,7 +70,20 @@ namespace GameActivity
             // LoadPluginSettings returns null if not saved data is available.
             if (savedSettings != null)
             {
+                EnableIntegrationInDescription = savedSettings.EnableIntegrationInDescription;
+                EnableIntegrationInDescriptionWithToggle = savedSettings.EnableIntegrationInDescriptionWithToggle;
+
                 EnableIntegrationButtonHeader = savedSettings.EnableIntegrationButtonHeader;
+
+                IntegrationShowTitle = savedSettings.IntegrationShowTitle;
+                IntegrationShowGraphic = savedSettings.IntegrationShowGraphic;
+                IntegrationTopGameDetails = savedSettings.IntegrationTopGameDetails;
+                IntegrationToggleDetails = savedSettings.IntegrationToggleDetails;
+
+                EnableIntegrationInCustomTheme = savedSettings.EnableIntegrationInCustomTheme;
+
+                EnableIntegrationButton = savedSettings.EnableIntegrationButton;
+                EnableIntegrationButtonDetails = savedSettings.EnableIntegrationButtonDetails;
 
                 showLauncherIcons = savedSettings.showLauncherIcons;
 

@@ -14,7 +14,7 @@ namespace GameActivity.Models
         elapsedSeconds
     }
 
-    class Activity
+    public class Activity
     {
         private static readonly ILogger logger = LogManager.GetLogger();
 

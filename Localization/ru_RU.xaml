@@ -1,9 +1,11 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
-    <!--
-    THIS FILE IS NOT PART OF THE THEME, DO NOT MODIFY!
+
+    <!--  
+    MainView
     -->
+    <sys:String x:Key="LOCGameActivityTitle">Activity</sys:String>
 
     <!-- 
     GameActivitySettingsView 
@@ -38,6 +40,15 @@
     <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Отображает предупреждающее сообщение в конце сеанса игры в кратце.</sys:String>
 
     <sys:String x:Key="LOCGameActivityIntegration">Интеграция интерфейса (экспериментальная)</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationInDescription">Отображать в описании игры</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationInDescriptionWithToggle">С кнопкой переключения</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationShowTitle">Названия</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationShowGraphic">Показать график</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationTopGameDetails">Выше описания</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">Прогрес на кнопке</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationInCustomTheme">Пользовательская интеграция темы (если интегрирована)</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationButton">Добавить кнопку</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationButtonDetails">Добавить кнопку с деталями</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationButtonHeader">Add button in window</sys:String>
 
     <!-- 

@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace GameActivity.Models
 {
-    class GameActivityClass
+    public class GameActivityClass
     {
         private static readonly ILogger logger = LogManager.GetLogger();
 

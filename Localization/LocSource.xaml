@@ -1,9 +1,11 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
-    <!--
-    THIS FILE IS NOT PART OF THE THEME, DO NOT MODIFY!
+
+    <!--  
+    MainView
     -->
+    <sys:String x:Key="LOCGameActivityTitle">Activity</sys:String>
 
     <!-- 
     GameActivitySettingsView 
@@ -38,6 +40,15 @@
     <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Displays a warning message at the end of the game session within the defined limits.</sys:String>
 
     <sys:String x:Key="LOCGameActivityIntegration">Interface integration (experimental)</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationInDescription">On game description</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationInDescriptionWithToggle">With toggle button</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationShowTitle">Show title</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationShowGraphic">Show graphic</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationTopGameDetails">Above description</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">Toggle button with details</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationInCustomTheme">Custom theme integration (if integrated)</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationButton">Add button</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationButtonDetails">Add button with details</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationButtonHeader">Add button in window</sys:String>
 
     <!-- 
