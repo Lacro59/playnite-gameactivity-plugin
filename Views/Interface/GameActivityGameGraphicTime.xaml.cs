@@ -2,10 +2,12 @@
 using LiveCharts;
 using LiveCharts.Configurations;
 using LiveCharts.Wpf;
+using Playnite.Converters;
 using PluginCommon;
 using PluginCommon.LiveChartsCommon;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -99,7 +101,8 @@ namespace GameActivity.Views.Interface
             //lets save the mapper globally
             Charting.For<CustomerForTime>(customerVmMapper);
 
-            Func<double, string> activityForGameLogFormatter = value => (int)TimeSpan.FromSeconds(value).TotalHours + "h " + TimeSpan.FromSeconds(value).ToString(@"mm") + "min";
+            LongToTimePlayedConverter converter = new LongToTimePlayedConverter();
+            Func<double, string> activityForGameLogFormatter = value => (string)converter.Convert((long)value, null, null, CultureInfo.CurrentCulture);
             gameLabelsY.LabelFormatter = activityForGameLogFormatter;
 
             gameSeries.DataTooltip = new CustomerToolTipForTime();

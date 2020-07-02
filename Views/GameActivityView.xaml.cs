@@ -21,6 +21,8 @@ using PluginCommon.LiveChartsCommon;
 using Playnite.Controls;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using Playnite.Converters;
+using System.Globalization;
 
 namespace GameActivity
 {
@@ -35,6 +37,8 @@ namespace GameActivity
         public JArray listSources { get; set; }
 
         private GameActivityCollection GameActivityDatabases { get; set; }
+
+        LongToTimePlayedConverter converter = new LongToTimePlayedConverter();
 
         public int yearCurrent;
         public int monthCurrent;
@@ -264,7 +268,7 @@ namespace GameActivity
             //lets save the mapper globally
             Charting.For<CustomerForTime>(customerVmMapper);
 
-            Func<double, string> activityForGameLogFormatter = value => (int)TimeSpan.FromSeconds(value).TotalHours + "h " + TimeSpan.FromSeconds(value).ToString(@"mm") + "min";
+            Func<double, string> activityForGameLogFormatter = value => (string)converter.Convert((long)value, null, null, CultureInfo.CurrentCulture);
             acmLabelsY.LabelFormatter = activityForGameLogFormatter;
 
             acmSeries.Series = ActivityByMonthSeries;
@@ -423,7 +427,7 @@ namespace GameActivity
             //lets save the mapper globally
             Charting.For<CustomerForTime>(customerVmMapper);
 
-            Func<double, string> activityForGameLogFormatter = value => (int)TimeSpan.FromSeconds(value).TotalHours + "h " + TimeSpan.FromSeconds(value).ToString(@"mm") + "min";
+            Func<double, string> activityForGameLogFormatter = value => (string)converter.Convert((long)value, null, null, CultureInfo.CurrentCulture); 
             acwLabelsY.LabelFormatter = activityForGameLogFormatter;
 
             acwSeries.Series = activityByWeekSeries;
@@ -589,7 +593,7 @@ namespace GameActivity
             //lets save the mapper globally
             Charting.For<CustomerForTime>(customerVmMapper);
 
-            Func<double, string> activityForGameLogFormatter = value => (int)TimeSpan.FromSeconds(value).TotalHours + "h " + TimeSpan.FromSeconds(value).ToString(@"mm") + "min";
+            Func<double, string> activityForGameLogFormatter = value => (string)converter.Convert((long)value, null, null, CultureInfo.CurrentCulture);
             gameLabelsY.LabelFormatter = activityForGameLogFormatter;
 
             gameSeries.DataTooltip = new CustomerToolTipForTime();
