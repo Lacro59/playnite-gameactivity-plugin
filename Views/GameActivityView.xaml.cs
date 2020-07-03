@@ -164,28 +164,35 @@ namespace GameActivity
                 List<GameActivityClass> listGameActivities = GameActivityDatabases.GetListGameActivity();
                 for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
                 {
-                    List<Activity> gameActivities = listGameActivities[iGame].Activities;
-                    for (int iActivity = 0; iActivity < gameActivities.Count; iActivity++)
+                    try
                     {
-                        long elapsedSeconds = gameActivities[iActivity].ElapsedSeconds;
-                        DateTime dateSession = Convert.ToDateTime(gameActivities[iActivity].DateSession).AddSeconds(-elapsedSeconds).ToLocalTime();
-                        string sourceName = gameActivities[iActivity].SourceName;
+                        List<Activity> gameActivities = listGameActivities[iGame].Activities;
+                        for (int iActivity = 0; iActivity < gameActivities.Count; iActivity++)
+                        {
+                            long elapsedSeconds = gameActivities[iActivity].ElapsedSeconds;
+                            DateTime dateSession = Convert.ToDateTime(gameActivities[iActivity].DateSession).AddSeconds(-elapsedSeconds).ToLocalTime();
+                            string sourceName = gameActivities[iActivity].SourceName;
 
-                        // Cumul data
-                        if (activityByMonth[sourceName] != null)
-                        {
-                            if (startOfMonth <= dateSession && dateSession <= endOfMonth)
+                            // Cumul data
+                            if (activityByMonth[sourceName] != null)
                             {
-                                activityByMonth[sourceName] = (long)activityByMonth[sourceName] + elapsedSeconds;
+                                if (startOfMonth <= dateSession && dateSession <= endOfMonth)
+                                {
+                                    activityByMonth[sourceName] = (long)activityByMonth[sourceName] + elapsedSeconds;
+                                }
+                            }
+                            else
+                            {
+                                if (startOfMonth <= dateSession && dateSession <= endOfMonth)
+                                {
+                                    activityByMonth.Add(new JProperty(sourceName, elapsedSeconds));
+                                }
                             }
                         }
-                        else
-                        {
-                            if (startOfMonth <= dateSession && dateSession <= endOfMonth)
-                            {
-                                activityByMonth.Add(new JProperty(sourceName, elapsedSeconds));
-                            }
-                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Common.LogError(ex, "GameActivity", $"Error in getActivityByMonth({year}, {month}) with {listGameActivities[iGame].GameName}");
                     }
                 }
 
@@ -199,31 +206,38 @@ namespace GameActivity
                 List<GameActivityClass> listGameActivities = GameActivityDatabases.GetListGameActivity();
                 for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
                 {
-                    List<Genre> listGameListGenres = listGameActivities[iGame].Genres;
-                    List <Activity> gameActivities = listGameActivities[iGame].Activities;
-                    for (int iActivity = 0; iActivity < gameActivities.Count; iActivity++)
+                    try
                     {
-                        long elapsedSeconds = gameActivities[iActivity].ElapsedSeconds;
-                        DateTime dateSession = Convert.ToDateTime(gameActivities[iActivity].DateSession).AddSeconds(-elapsedSeconds).ToLocalTime();
-
-                        for (int iGenre = 0; iGenre < listGameListGenres.Count; iGenre++)
+                        List<Genre> listGameListGenres = listGameActivities[iGame].Genres;
+                        List<Activity> gameActivities = listGameActivities[iGame].Activities;
+                        for (int iActivity = 0; iActivity < gameActivities.Count; iActivity++)
                         {
-                            // Cumul data
-                            if (activityByMonth[listGameListGenres[iGenre].Name] != null)
+                            long elapsedSeconds = gameActivities[iActivity].ElapsedSeconds;
+                            DateTime dateSession = Convert.ToDateTime(gameActivities[iActivity].DateSession).AddSeconds(-elapsedSeconds).ToLocalTime();
+
+                            for (int iGenre = 0; iGenre < listGameListGenres.Count; iGenre++)
                             {
-                                if (startOfMonth <= dateSession && dateSession <= endOfMonth)
+                                // Cumul data
+                                if (activityByMonth[listGameListGenres[iGenre].Name] != null)
                                 {
-                                    activityByMonth[listGameListGenres[iGenre].Name] = (long)activityByMonth[listGameListGenres[iGenre].Name] + elapsedSeconds;
+                                    if (startOfMonth <= dateSession && dateSession <= endOfMonth)
+                                    {
+                                        activityByMonth[listGameListGenres[iGenre].Name] = (long)activityByMonth[listGameListGenres[iGenre].Name] + elapsedSeconds;
+                                    }
                                 }
-                            }
-                            else
-                            {
-                                if (startOfMonth <= dateSession && dateSession <= endOfMonth)
+                                else
                                 {
-                                    activityByMonth.Add(new JProperty(listGameListGenres[iGenre].Name, elapsedSeconds));
+                                    if (startOfMonth <= dateSession && dateSession <= endOfMonth)
+                                    {
+                                        activityByMonth.Add(new JProperty(listGameListGenres[iGenre].Name, elapsedSeconds));
+                                    }
                                 }
                             }
                         }
+                    }
+                    catch(Exception ex)
+                    {
+                        Common.LogError(ex, "GameActivity", $"Error in getActivityByMonth({year}, {month}) with {listGameActivities[iGame].GameName}");
                     }
                 }
 
