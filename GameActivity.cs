@@ -305,7 +305,7 @@ namespace GameActivity
         {
             // Show GameActivity
             DatabaseReference = PlayniteApi.Database;
-            new GameActivityView(settings, PlayniteApi, this.GetPluginUserDataPath()).ShowDialog();
+            new GameActivityView(settings, PlayniteApi, this.GetPluginUserDataPath(), GameSelected).ShowDialog();
         }
 
         private void Integration()

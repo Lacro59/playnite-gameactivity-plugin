@@ -67,7 +67,7 @@ namespace GameActivity
         public readonly string pathExtentionData;
 
 
-        public GameActivityView(GameActivitySettings settings, IPlayniteAPI PlayniteApi, string pathExtData)
+        public GameActivityView(GameActivitySettings settings, IPlayniteAPI PlayniteApi, string pathExtData, Game GameSelected = null)
         {
             this.PlayniteApi = PlayniteApi;
             dbPlaynite = PlayniteApi.Database;
@@ -136,6 +136,20 @@ namespace GameActivity
 
             getActivityByListGame();
             #endregion
+
+
+            // Set game selected
+            if (GameSelected != null)
+            {
+                for (int i = 0; i < lvGames.Items.Count; i++)
+                {
+                    if (((listGame)lvGames.Items[i]).listGameTitle == GameSelected.Name)
+                    {
+                        lvGames.SelectedIndex = i;
+                    }
+                }
+            }
+            lvGames.ScrollIntoView(lvGames.SelectedItem);
 
 
             // Set Binding data
