@@ -103,6 +103,9 @@
     <Compile Include="Views\Interface\GameActivityButtonHeader.xaml.cs">
       <DependentUpon>GameActivityButtonHeader.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Interface\GameActivityGameGraphicLog.xaml.cs">
+      <DependentUpon>GameActivityGameGraphicLog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Interface\GameActivityGameGraphicTime.xaml.cs">
       <DependentUpon>GameActivityGameGraphicTime.xaml</DependentUpon>
     </Compile>
@@ -302,6 +305,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Interface\GameActivityButtonHeader.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Interface\GameActivityGameGraphicLog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

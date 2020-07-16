@@ -45,6 +45,7 @@
     <sys:String x:Key="LOCGameActivityIntegrationInDescriptionWithToggle">With toggle button</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationShowTitle">Show title</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationShowGraphic">Show graphic</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationShowGraphicLog">Show graphic with last log</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationTopGameDetails">Above description</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">Toggle button with details</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationInCustomTheme">Custom theme integration (if integrated)</sys:String>

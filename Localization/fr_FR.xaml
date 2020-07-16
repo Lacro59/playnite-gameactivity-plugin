@@ -44,6 +44,7 @@
     <sys:String x:Key="LOCGameActivityIntegrationInDescriptionWithToggle">Avec un bouton à bascule</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationShowTitle">Afficher le titre</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationShowGraphic">Afficher le graphique</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationShowGraphicLog">Afficher graphique avec derniers log</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationTopGameDetails">Au dessus de la description</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">Bouton à bascule avec détails</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationInCustomTheme">Intgération dans les thèmes personnalisés (si intégré)</sys:String>

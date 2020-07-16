@@ -15,6 +15,7 @@ namespace GameActivity
 
         public bool IntegrationShowTitle { get; set; } = true;
         public bool IntegrationShowGraphic { get; set; } = true;
+        public bool IntegrationShowGraphicLog { get; set; } = true;
         public bool IntegrationTopGameDetails { get; set; } = true;
         public bool IntegrationToggleDetails { get; set; } = true;
 
@@ -77,6 +78,7 @@ namespace GameActivity
 
                 IntegrationShowTitle = savedSettings.IntegrationShowTitle;
                 IntegrationShowGraphic = savedSettings.IntegrationShowGraphic;
+                IntegrationShowGraphicLog = savedSettings.IntegrationShowGraphicLog;
                 IntegrationTopGameDetails = savedSettings.IntegrationTopGameDetails;
                 IntegrationToggleDetails = savedSettings.IntegrationToggleDetails;
 

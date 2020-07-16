@@ -1,16 +1,16 @@
 ﻿using GameActivity.Models;
 using LiveCharts;
 using LiveCharts.Configurations;
+using LiveCharts.Events;
 using LiveCharts.Wpf;
 using Playnite.Converters;
-using PluginCommon;
+using Playnite.SDK;
 using PluginCommon.LiveChartsCommon;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
-
 
 namespace GameActivity.Views.Interface
 {
@@ -19,14 +19,18 @@ namespace GameActivity.Views.Interface
     /// </summary>
     public partial class GameActivityGameGraphicTime : UserControl
     {
-        public GameActivityGameGraphicTime(GameActivitySettings settings, GameActivityClass gameActivity)
+        private static readonly ILogger logger = LogManager.GetLogger();
+
+        public event DataClickHandler gameSeriesDataClick;
+
+        public GameActivityGameGraphicTime(GameActivitySettings settings, GameActivityClass gameActivity, int variateurTime = 0)
         {
             InitializeComponent();
 
-            GetActivityForGamesTimeGraphics(gameActivity);
+            GetActivityForGamesTimeGraphics(gameActivity, variateurTime);
         }
 
-        public void GetActivityForGamesTimeGraphics(GameActivityClass gameActivity, int variateurTime = 0)
+        public void GetActivityForGamesTimeGraphics(GameActivityClass gameActivity, int variateurTime)
         {
             //DateTime dateStart = DateTime.Now.AddDays(variateurTime);
             string[] listDate = new string[10];
@@ -115,15 +119,16 @@ namespace GameActivity.Views.Interface
             gameLabelsX.Labels = activityForGameLabels;
         }
 
-        private void GameSeries_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        private void GameSeries_Loaded(object sender, RoutedEventArgs e)
         {
-            foreach (StackPanel sp in Tools.FindVisualChildren<StackPanel>(Application.Current.MainWindow))
-            {
-                if (sp.Name == "PART_GameActivty_Graphic")
-                {
-                    gameSeries.Height = sp.MaxHeight;
-                }
-            }
+            var parent = ((FrameworkElement)((FrameworkElement)gameSeries.Parent).Parent);
+            gameSeries.Height = parent.ActualHeight;
+        }
+
+        private void GameSeries_DataClick(object sender, ChartPoint chartPoint)
+        {
+            if (this.gameSeriesDataClick != null)
+                this.gameSeriesDataClick(this, chartPoint);
         }
     }
 }

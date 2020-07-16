@@ -44,6 +44,7 @@
     <sys:String x:Key="LOCGameActivityIntegrationInDescription">Отображать в описании игры</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationInDescriptionWithToggle">С кнопкой переключения</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationShowTitle">Названия</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationShowGraphicLog">Show graphic with last log</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationShowGraphic">Показать график</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationTopGameDetails">Выше описания</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">Прогрес на кнопке</sys:String>

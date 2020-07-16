@@ -16,13 +16,12 @@ using LiveCharts;
 using PluginCommon;
 using LiveCharts.Wpf;
 using LiveCharts.Configurations;
-using System.Windows.Media;
 using PluginCommon.LiveChartsCommon;
 using Playnite.Controls;
-using Newtonsoft.Json;
-using System.Diagnostics;
 using Playnite.Converters;
 using System.Globalization;
+using GameActivity.Views.Interface;
+using LiveCharts.Events;
 
 namespace GameActivity
 {
@@ -54,7 +53,7 @@ namespace GameActivity
         public string pathActivityDB { get; set; }
         public string pathActivityDetailsDB { get; set; }
 
-        GameActivitySettings settingsPlaynite { get; set; }
+        GameActivitySettings settings { get; set; }
 
         public bool isMonthSources = true;
         public bool isGameTime = true;
@@ -73,7 +72,7 @@ namespace GameActivity
             this.PlayniteApi = PlayniteApi;
             dbPlaynite = PlayniteApi.Database;
             pathsPlaynite = PlayniteApi.Paths;
-            settingsPlaynite = settings;
+            this.settings = settings;
             pathExtentionData = pathExtData;
             
             pathActivityDB = pathExtentionData + "\\activity\\";
@@ -140,7 +139,7 @@ namespace GameActivity
 
 
             // Set Binding data
-            ShowIcon = settingsPlaynite.showLauncherIcons;
+            ShowIcon = this.settings.showLauncherIcons;
             DataContext = this;
         }
 
@@ -259,7 +258,7 @@ namespace GameActivity
                     Values = (long)item.Value,
                 });
                 labels[compteur] = item.Key;
-                if (settingsPlaynite.showLauncherIcons)
+                if (settings.showLauncherIcons)
                     labels[compteur] = TransformIcon.Get(labels[compteur]);
                 compteur = compteur + 1;
             }
@@ -287,7 +286,7 @@ namespace GameActivity
 
             acmSeries.Series = ActivityByMonthSeries;
             acmLabelsY.MinValue = 0;
-            ((CustomerToolTipForTime)acmSeries.DataTooltip).ShowIcon = settingsPlaynite.showLauncherIcons;
+            ((CustomerToolTipForTime)acmSeries.DataTooltip).ShowIcon = settings.showLauncherIcons;
             acmLabelsX.Labels = ActivityByMonthLabels;
         }
 
@@ -386,7 +385,7 @@ namespace GameActivity
                 for (int iSource = 0; iSource < listNoDelete.Count; iSource++)
                 {
                     labels[iSource] = (string)listNoDelete[iSource];
-                    if (settingsPlaynite.showLauncherIcons)
+                    if (settings.showLauncherIcons)
                         labels[iSource] = TransformIcon.Get((string)listNoDelete[iSource]);
 
                     IChartValues Values = new ChartValues<CustomerForTime>() {
@@ -446,7 +445,7 @@ namespace GameActivity
 
             acwSeries.Series = activityByWeekSeries;
             acwLabelsY.MinValue = 0;
-            ((CustomerToolTipForMultipleTime)acwSeries.DataTooltip).ShowIcon = settingsPlaynite.showLauncherIcons;
+            ((CustomerToolTipForMultipleTime)acwSeries.DataTooltip).ShowIcon = settings.showLauncherIcons;
             acwLabelsX.Labels = activityByWeekLabels;
         }
 
@@ -496,13 +495,13 @@ namespace GameActivity
                         avgCPUT = listGameActivities[iGame].avgCPUT(listGameActivities[iGame].GetLastSession()) + "°",
                         avgGPUT = listGameActivities[iGame].avgGPUT(listGameActivities[iGame].GetLastSession()) + "°",
 
-                        enableWarm = settingsPlaynite.EnableWarning,
-                        maxCPUT = "" + settingsPlaynite.MaxCpuTemp,
-                        maxGPUT = "" + settingsPlaynite.MaxGpuTemp,
-                        minFPS = "" + settingsPlaynite.MinFps,
-                        maxCPU = "" + settingsPlaynite.MaxCpuUsage,
-                        maxGPU = "" + settingsPlaynite.MaxGpuUsage,
-                        maxRAM = "" + settingsPlaynite.MaxRamUsage
+                        enableWarm = settings.EnableWarning,
+                        maxCPUT = "" + settings.MaxCpuTemp,
+                        maxGPUT = "" + settings.MaxGpuTemp,
+                        minFPS = "" + settings.MinFps,
+                        maxCPU = "" + settings.MaxCpuUsage,
+                        maxGPU = "" + settings.MaxGpuUsage,
+                        maxRAM = "" + settings.MaxRamUsage
                     });
 
                     iconImage = null;
@@ -547,78 +546,16 @@ namespace GameActivity
         /// <param name="variateur"></param>
         public void getActivityForGamesTimeGraphics(string gameID)
         {
-            DateTime dateStart = DateTime.Now.AddDays(variateurTime);
-            string[] listDate = new string[10];
-            ChartValues<CustomerForTime> series = new ChartValues<CustomerForTime>();
-
-            // Periode data showned
-            for (int iDay = 0; iDay < 10; iDay++)
-            {
-                listDate[iDay] = dateStart.AddDays(iDay - 9).ToString("yyyy-MM-dd");
-                //series.Add(0);
-                series.Add(new CustomerForTime
-                {
-                    Name = dateStart.AddDays(iDay - 9).ToString("yyyy-MM-dd"),
-                    Values = 0
-                });
-            }
-
-
-            // Search data in periode
+            gameSeriesContener.Children.Clear();
             GameActivityClass gameActivity = GameActivityDatabases.Get(Guid.Parse(gameID));
             List<Activity> gameActivities = gameActivity.Activities;
-            for (int iActivity = 0; iActivity < gameActivities.Count; iActivity++)
-            {
-                long elapsedSeconds = gameActivities[iActivity].ElapsedSeconds;
-                string dateSession = Convert.ToDateTime(gameActivities[iActivity].DateSession).ToLocalTime().ToString("yyyy-MM-dd");
 
-                for (int iDay = 0; iDay < 10; iDay++)
-                {
-                    if (listDate[iDay] == dateSession)
-                    {
-                        string tempName = series[iDay].Name;
-                        long tempElapsed = series[iDay].Values + elapsedSeconds;
-                        series[iDay] = new CustomerForTime
-                        {
-                            Name = tempName,
-                            Values = tempElapsed,
-                        };
-                    }
-                }
-            }
+            var graph = new GameActivityGameGraphicTime(settings, gameActivity, variateurTime);
+            graph.gameSeriesDataClick += new DataClickHandler(GameSeries_DataClick);
+            gameSeriesContener.Children.Add(graph);
+            gameSeriesContener.UpdateLayout();
 
-
-            // Set data in graphic.
-            SeriesCollection activityForGameSeries = new SeriesCollection
-            {
-                new ColumnSeries
-                {
-                    Title = "",
-                    Values = series
-                }
-            };
-            for (int iDay = 0; iDay < listDate.Length; iDay++)
-            {
-                listDate[iDay] = Convert.ToDateTime(listDate[iDay]).ToString(Playnite.Common.Constants.DateUiFormat);
-            }
-            string[] activityForGameLabels = listDate;
-
-            //let create a mapper so LiveCharts know how to plot our CustomerViewModel class
-            var customerVmMapper = Mappers.Xy<CustomerForTime>()
-                .X((value, index) => index)
-                .Y(value => value.Values);
-
-            //lets save the mapper globally
-            Charting.For<CustomerForTime>(customerVmMapper);
-
-            Func<double, string> activityForGameLogFormatter = value => (string)converter.Convert((long)value, null, null, CultureInfo.CurrentCulture);
-            gameLabelsY.LabelFormatter = activityForGameLogFormatter;
-
-            gameSeries.DataTooltip = new CustomerToolTipForTime();
-            gameLabelsY.MinValue = 0;
             gameLabel.Content = resources.GetString("LOCGameActivityTimeTitle");
-            gameSeries.Series = activityForGameSeries;
-            gameLabelsX.Labels = activityForGameLabels;
         }
 
         /// <summary>
@@ -627,104 +564,11 @@ namespace GameActivity
         /// <param name="gameID"></param>
         public void getActivityForGamesLogGraphics(string gameID, string dateSelected = "")
         {
-            // TODO Get by date for click on time sessions
+            gameSeriesContener.Children.Clear();
             GameActivityClass gameActivity = GameActivityDatabases.Get(Guid.Parse(gameID));
-            List<ActivityDetailsData> gameActivitiesDetails = gameActivity.GetSessionActivityDetails(dateSelected);
-
-            string[] activityForGameLogLabels = new string[0];
-            List<ActivityDetailsData> gameLogsDefinitive = new List<ActivityDetailsData>();
-            if (gameActivitiesDetails.Count > 0) {
-                if (gameActivitiesDetails.Count > 10)
-                {
-                    // Variateur
-                    int conteurEnd = gameActivitiesDetails.Count + variateurLog;
-                    int conteurStart = conteurEnd - 10;
-
-                    if (conteurEnd > gameActivitiesDetails.Count)
-                    {
-                        int temp = conteurEnd - gameActivitiesDetails.Count;
-                        conteurEnd = gameActivitiesDetails.Count;
-                        conteurStart = conteurEnd - 10;
-
-                        variateurLog = variateurLogTemp;
-                    }
-
-                    if (conteurStart < 0)
-                    {
-                        conteurStart = 0;
-                        conteurEnd = 10;
-
-                        variateurLog = variateurLogTemp;
-                    }
-
-                    variateurLogTemp = variateurLog;
-
-                    // Create data
-                    int sCount = 0;
-                    activityForGameLogLabels = new string[10];
-                    for (int iLog = conteurStart; iLog < conteurEnd; iLog++)
-                    {
-                        gameLogsDefinitive.Add(gameActivitiesDetails[iLog]);
-                        activityForGameLogLabels[sCount] = Convert.ToDateTime(gameActivitiesDetails[iLog].Datelog).ToLocalTime().ToString(Playnite.Common.Constants.TimeUiFormat);
-                        sCount += 1;
-                    }
-                }
-                else
-                {
-                    gameLogsDefinitive = gameActivitiesDetails;
-
-                    activityForGameLogLabels = new string[gameActivitiesDetails.Count];
-                    for (int iLog = 0; iLog < gameActivitiesDetails.Count; iLog++)
-                    {
-                        activityForGameLogLabels[iLog] = Convert.ToDateTime(gameActivitiesDetails[iLog].Datelog).ToLocalTime().ToString(Playnite.Common.Constants.TimeUiFormat);
-                    }
-                }
-            }
-
-            // Set data in graphic.
-            ChartValues<int> CPUseries = new ChartValues<int>();
-            ChartValues<int> GPUseries = new ChartValues<int>();
-            ChartValues<int> RAMseries = new ChartValues<int>();
-            ChartValues<int> FPSseries = new ChartValues<int>();
-            for (int iLog = 0; iLog < gameLogsDefinitive.Count; iLog++)
-            {
-                CPUseries.Add(gameLogsDefinitive[iLog].CPU);
-                GPUseries.Add(gameLogsDefinitive[iLog].GPU);
-                RAMseries.Add(gameLogsDefinitive[iLog].RAM);
-                FPSseries.Add(gameLogsDefinitive[iLog].FPS);
-            }
-
-            SeriesCollection activityForGameLogSeries = new SeriesCollection
-            {
-                new ColumnSeries
-                {
-                    Title = "cpu usage (%)",
-                    Values = CPUseries
-                },
-                new ColumnSeries
-                {
-                    Title = "gpu usage (%)",
-                    Values = GPUseries
-                },
-                new ColumnSeries
-                {
-                    Title = "ram usage (%)",
-                    Values = RAMseries
-                },
-                new LineSeries
-                {
-                    Title = "fps",
-                    Values = FPSseries
-                }
-            };
-            Func<double, string> activityForGameLogFormatter = value => value.ToString("N");
-
-            gameSeries.DataTooltip = new LiveCharts.Wpf.DefaultTooltip();
-            gameSeries.DataTooltip.Background = (Brush)resources.GetResource("CommonToolTipBackgroundBrush");
-            gameSeries.DataTooltip.Padding = new Thickness(10); 
-            gameSeries.DataTooltip.BorderThickness = (Thickness)resources.GetResource("CommonToolTipBorderThickness"); 
-            gameSeries.DataTooltip.BorderBrush = (Brush)resources.GetResource("CommonToolTipBorderBrush");
-            gameSeries.DataTooltip.Foreground = (Brush)resources.GetResource("CommonToolTipForeground");
+            List<Activity> gameActivities = gameActivity.Activities;
+            gameSeriesContener.Children.Add(new GameActivityGameGraphicLog(settings, gameActivity, dateSelected, variateurLog, false));
+            gameSeriesContener.UpdateLayout();
 
             if (dateSelected == "")
             {
@@ -732,14 +576,9 @@ namespace GameActivity
             }
             else
             {
-                gameLabel.Content = resources.GetString("LOCGameActivityLogTitleDate") + " " 
+                gameLabel.Content = resources.GetString("LOCGameActivityLogTitleDate") + " "
                     + Convert.ToDateTime(dateSelected).ToString(Playnite.Common.Constants.DateUiFormat);
             }
-
-            gameSeries.Series = activityForGameLogSeries;
-            gameLabelsX.MinValue = 0;
-            gameLabelsX.Labels = activityForGameLogLabels;
-            gameLabelsY.LabelFormatter = activityForGameLogFormatter;
         }
         #endregion
 
@@ -1074,7 +913,7 @@ namespace GameActivity
         // TODO Select details data
         private void GameSeries_DataClick(object sender, ChartPoint chartPoint)
         {
-            if (settingsPlaynite.EnableLogging)
+            if (settings.EnableLogging)
             {
                 int index = (int)chartPoint.X;
                 var data = chartPoint.SeriesView.Values;

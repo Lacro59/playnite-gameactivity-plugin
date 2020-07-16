@@ -21,21 +21,18 @@ using GameActivity.Models;
 using System.Windows.Media;
 using System.Windows.Controls.Primitives;
 
-
 namespace GameActivity
 {
     public class GameActivity : Plugin
     {
         private static readonly ILogger logger = LogManager.GetLogger();
         private static IResourceProvider resources = new ResourceProvider();
-
         public static IGameDatabase DatabaseReference;
 
         private GameActivitySettings settings { get; set; }
         public override Guid Id { get; } = Guid.Parse("afbb1a0d-04a1-4d0c-9afa-c6e42ca855b4");
 
         private readonly IntegrationUI ui = new IntegrationUI();
-
         private GameActivityCollection GameActivityDatabases;
 
         // TODO Bad integration with structutre application
@@ -347,6 +344,7 @@ namespace GameActivity
                 ui.RemoveButtonInGameSelectedActionBarButtonOrToggleButton("PART_GaToggleButton");
                 ui.RemoveElementInGameSelectedDescription("PART_GameActivity");
                 ui.ClearElementInCustomTheme("PART_GameActivty_Graphic");
+                ui.ClearElementInCustomTheme("PART_GameActivty_GraphicLog");
 
 
                 // Reset resources
@@ -395,7 +393,7 @@ namespace GameActivity
 
 
                     // Add game activity elements
-                    StackPanel GaSp = CreateGa(SelectedGameGameActivity, settings.IntegrationShowTitle, settings.IntegrationShowGraphic, false);
+                    StackPanel GaSp = CreateGa(SelectedGameGameActivity, settings.IntegrationShowTitle, settings.IntegrationShowGraphic, settings.IntegrationShowGraphicLog, false);
 
                     if (settings.EnableIntegrationInDescriptionWithToggle)
                     {
@@ -435,9 +433,11 @@ namespace GameActivity
                 if (settings.EnableIntegrationInCustomTheme)
                 {
                     // Create 
-                    StackPanel spGaG = CreateGa(SelectedGameGameActivity, false, true, true);
-
+                    StackPanel spGaG = CreateGa(SelectedGameGameActivity, false, true, false, true);
                     ui.AddElementInCustomTheme(spGaG, "PART_GameActivty_Graphic");
+
+                    StackPanel spGaGL = CreateGa(SelectedGameGameActivity, false, false, true, true);
+                    ui.AddElementInCustomTheme(spGaGL, "PART_GameActivty_GraphicLog");
                 }
             }
             catch (Exception ex)
@@ -447,7 +447,7 @@ namespace GameActivity
         }
 
         // Create FrameworkElement with game activity datas
-        public StackPanel CreateGa(GameActivityClass gameActivity, bool ShowTitle, bool ShowGraphic, bool IsCustom = false)
+        public StackPanel CreateGa(GameActivityClass gameActivity, bool ShowTitle, bool ShowGraphic, bool ShowGraphicLog, bool IsCustom = false)
         {
             StackPanel spGa = new StackPanel();
             spGa.Name = "PART_GameActivity";
@@ -483,6 +483,23 @@ namespace GameActivity
                 spGaG.Children.Add(new GameActivityGameGraphicTime(settings, gameActivity));
 
                 spGa.Children.Add(spGaG);
+                spGa.UpdateLayout();
+            }
+
+            if (ShowGraphicLog)
+            {
+                StackPanel spGaGL = new StackPanel();
+                if (!IsCustom)
+                {
+                    spGaGL.Name = "PART_GameActivty_GraphicLog";
+                    spGaGL.Height = 120;
+                    spGaGL.MaxHeight = 120;
+                    spGaGL.Margin = new Thickness(0, 5, 0, 5);
+                }
+
+                spGaGL.Children.Add(new GameActivityGameGraphicLog(settings, gameActivity));
+
+                spGa.Children.Add(spGaGL);
                 spGa.UpdateLayout();
             }
 
