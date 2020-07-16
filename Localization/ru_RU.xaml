@@ -5,6 +5,7 @@
     <!--  
     MainView
     -->
+    <sys:String x:Key="LOCGameActivity">Игровая Активность</sys:String>
     <sys:String x:Key="LOCGameActivityTitle">Activity</sys:String>
 
     <!-- 

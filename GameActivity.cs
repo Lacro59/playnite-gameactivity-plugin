@@ -86,7 +86,7 @@ namespace GameActivity
             return new List<ExtensionFunction>
             {
                 new ExtensionFunction(
-                    "Game Activity",
+                    resources.GetString("LOCGameActivity"),
                     () =>
                     {
                         // Add code to be execute when user invokes this menu entry.
