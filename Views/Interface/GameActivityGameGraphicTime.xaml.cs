@@ -89,6 +89,10 @@ namespace GameActivity.Views.Interface
                     Values = series
                 }
             };
+            for (int iDay = 0; iDay < listDate.Length; iDay++)
+            {
+                listDate[iDay] = Convert.ToDateTime(listDate[iDay]).ToString(Playnite.Common.Constants.DateUiFormat);
+            }
             string[] activityForGameLabels = listDate;
 
 

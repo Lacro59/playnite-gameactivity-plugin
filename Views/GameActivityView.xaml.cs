@@ -597,6 +597,10 @@ namespace GameActivity
                     Values = series
                 }
             };
+            for (int iDay = 0; iDay < listDate.Length; iDay++)
+            {
+                listDate[iDay] = Convert.ToDateTime(listDate[iDay]).ToString(Playnite.Common.Constants.DateUiFormat);
+            }
             string[] activityForGameLabels = listDate;
 
             //let create a mapper so LiveCharts know how to plot our CustomerViewModel class
@@ -661,7 +665,7 @@ namespace GameActivity
                     for (int iLog = conteurStart; iLog < conteurEnd; iLog++)
                     {
                         gameLogsDefinitive.Add(gameActivitiesDetails[iLog]);
-                        activityForGameLogLabels[sCount] = Convert.ToDateTime(gameActivitiesDetails[iLog].Datelog).ToLocalTime().ToString("HH:mm");
+                        activityForGameLogLabels[sCount] = Convert.ToDateTime(gameActivitiesDetails[iLog].Datelog).ToLocalTime().ToString(Playnite.Common.Constants.TimeUiFormat);
                         sCount += 1;
                     }
                 }
@@ -672,7 +676,7 @@ namespace GameActivity
                     activityForGameLogLabels = new string[gameActivitiesDetails.Count];
                     for (int iLog = 0; iLog < gameActivitiesDetails.Count; iLog++)
                     {
-                        activityForGameLogLabels[iLog] = Convert.ToDateTime(gameActivitiesDetails[iLog].Datelog).ToLocalTime().ToString("HH:mm");
+                        activityForGameLogLabels[iLog] = Convert.ToDateTime(gameActivitiesDetails[iLog].Datelog).ToLocalTime().ToString(Playnite.Common.Constants.TimeUiFormat);
                     }
                 }
             }
@@ -728,7 +732,8 @@ namespace GameActivity
             }
             else
             {
-                gameLabel.Content = resources.GetString("LOCGameActivityLogTitleDate") + " " + dateSelected;
+                gameLabel.Content = resources.GetString("LOCGameActivityLogTitleDate") + " " 
+                    + Convert.ToDateTime(dateSelected).ToString(Playnite.Common.Constants.DateUiFormat);
             }
 
             gameSeries.Series = activityForGameLogSeries;

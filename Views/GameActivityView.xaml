@@ -17,6 +17,7 @@
     <WindowBase.Resources>
         <pcon:LongToTimePlayedConverter x:Key="LongToTimePlayedConverter" />
         <localPlugin:CompareValueConverter x:Key="CompareValueConverter" />
+        <localPlugin:LocalDateTimeConverter x:Key="LocalDateTimeConverter" />
     </WindowBase.Resources>
 
     <DockPanel Margin="10,10,10,0">
@@ -143,7 +144,7 @@
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <GridViewColumn x:Name="hGameTitle" Header="{DynamicResource LOCGameActivityLvGamesTitle}" Width="Auto" DisplayMemberBinding="{Binding listGameTitle}" />
-                            <GridViewColumn Width="150" DisplayMemberBinding="{Binding listGameLastActivity, StringFormat='dd/MM/yyyy HH:mm:ss'}">
+                            <GridViewColumn Width="150" DisplayMemberBinding="{Binding listGameLastActivity, Converter={StaticResource LocalDateTimeConverter}}">
                                 <GridViewColumnHeader Name="lvLastActivity" Content="{DynamicResource LOCGameActivityLvGamesLastActivity}"></GridViewColumnHeader>
                             </GridViewColumn>
 
