@@ -6,7 +6,7 @@
     MainView
     -->
     <sys:String x:Key="LOCGameActivity">Игровая Активность</sys:String>
-    <sys:String x:Key="LOCGameActivityTitle">Activity</sys:String>
+    <sys:String x:Key="LOCGameActivityTitle">Активность</sys:String>
 
     <!-- 
     GameActivitySettingsView 
@@ -51,7 +51,7 @@
     <sys:String x:Key="LOCGameActivityIntegrationInCustomTheme">Пользовательская интеграция темы (если интегрирована)</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationButton">Добавить кнопку</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationButtonDetails">Добавить кнопку с деталями</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationButtonHeader">Add button in window</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationButtonHeader">Добавить кнопку в окне</sys:String>
 
     <!-- 
     GameActivityView 
