@@ -62,6 +62,18 @@ namespace GameActivity
             // Add common in application ressource.
             PluginCommon.Common.Load(pluginFolder);
 
+            // Check version
+            if (settings.EnableCheckVersion)
+            {
+                CheckVersion cv = new CheckVersion();
+
+                if (cv.Check("GameActivity", pluginFolder))
+                {
+                    cv.ShowNotification(api, "GameActivity - " + resources.GetString("LOCUpdaterWindowTitle"));
+                }
+            }
+
+
             pathActivityDB = this.GetPluginUserDataPath() + "\\activity\\";
             pathActivityDetailsDB = this.GetPluginUserDataPath() + "\\activityDetails\\";
 
