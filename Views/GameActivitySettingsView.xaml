@@ -158,13 +158,13 @@
                 <DockPanel DockPanel.Dock="Bottom" Margin="0,15,0,0" IsEnabled="{Binding ElementName=cbLogging, Path=IsChecked, TargetNullValue=false}">
                     <DockPanel DockPanel.Dock="Top">
                         <StackPanel DockPanel.Dock="Left" Width="280">
-                            <CheckBox IsChecked="{Binding UseMsiAfterburner}">
+                            <CheckBox Name="cbUseMsiAfterburner" IsChecked="{Binding UseMsiAfterburner}" Click="CbLogging_Click">
                                 <Label Content="{DynamicResource LOCGameActivityUseMsiAfterburner}" />
                             </CheckBox>
                         </StackPanel>
 
                         <StackPanel DockPanel.Dock="Right">
-                            <CheckBox x:Name="cbHWiNFO" IsChecked="{Binding UseHWiNFO}">
+                            <CheckBox Name="cbUseHWiNFO" IsChecked="{Binding UseHWiNFO}" Click="CbLogging_Click">
                                 <Label Content="{DynamicResource LOCGameActivityUseHWiNFO}" />
                             </CheckBox>
                         </StackPanel>

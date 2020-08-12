@@ -46,7 +46,7 @@ namespace GameActivity
 
         // Variables timer function
         public Timer t { get; set; }
-        public List<JArray> WarningsMessage { get; set; }
+        public List<WarningData> WarningsMessage { get; set; }
 
 
         #region Playnite GenericPlugin
@@ -218,12 +218,92 @@ namespace GameActivity
 
             if (settings.EnableIntegrationButtonHeader)
             {
-                logger.Info("SuccessStory - Add Header button");
+                logger.Info("GameActivity - Add Header button");
                 Button btHeader = new GameActivityButtonHeader(TransformIcon.Get("GameActivity"));
                 btHeader.SetValue(TextBlock.FontWeightProperty, FontWeights.Bold);
                 btHeader.Click += OnBtHeaderClick;
                 ui.AddButtonInWindowsHeader(btHeader);
             }
+
+
+            CheckGoodForLogging(true);
+        }
+
+        private bool CheckGoodForLogging(bool WithNotification = false)
+        {
+            if (settings.EnableLogging && settings.UseHWiNFO)
+            {
+                bool runHWiNFO = false;
+                Process[] pname = Process.GetProcessesByName("HWiNFO32");
+                if (pname.Length != 0)
+                {
+                    runHWiNFO = true;
+                }
+                else
+                {
+                    pname = Process.GetProcessesByName("HWiNFO64");
+                    if (pname.Length != 0)
+                    {
+                        runHWiNFO = true;
+                    }
+                }
+
+                if (!runHWiNFO && WithNotification)
+                {
+                    PlayniteApi.Notifications.Add(new NotificationMessage(
+                        $"GameActivity-runHWiNFO",
+                        resources.GetString("LOCGameActivityNotificationHWiNFO"),
+                        NotificationType.Error,
+                        () => OpenSettingsView()
+                    ));
+                }
+
+                if (!runHWiNFO)
+                {
+                    logger.Error("GameActivity - No HWiNFO running");
+                }
+
+                if (!WithNotification)
+                {
+                    return runHWiNFO;
+                }
+            }
+            if (settings.EnableLogging && settings.UseMsiAfterburner)
+            {
+                bool runMSI = false;
+                Process[] pname = Process.GetProcessesByName("RTSS");
+                if (pname.Length != 0)
+                {
+                    runMSI = true;
+                }
+                pname = Process.GetProcessesByName("RTSS");
+                if (pname.Length != 0)
+                {
+                    runMSI = true;
+                }
+
+                if (!runMSI && WithNotification)
+                {
+                    PlayniteApi.Notifications.Add(new NotificationMessage(
+                        $"IsThereAnyDeal-runMSI",
+                        resources.GetString("LOCGameActivityNotificationMSIAfterBurner"),
+                        NotificationType.Error,
+                        () => OpenSettingsView()
+                    ));
+                }
+
+                if (!runMSI)
+                {
+                    logger.Error("GameActivity - No MSI Afterburner running");
+                }
+
+                if (!WithNotification)
+                {
+                    return runMSI;
+                }
+            }
+
+            return false;
         }
 
 
@@ -549,7 +629,7 @@ namespace GameActivity
         {
             logger.Info("GameActivity - dataLogging_start");
 
-            WarningsMessage = new List<JArray>();
+            WarningsMessage = new List<WarningData>();
             t = new Timer(settings.TimeIntervalLogging * 60000);
             t.AutoReset = true;
             t.Elapsed += new ElapsedEventHandler(OnTimedEvent);
@@ -566,7 +646,7 @@ namespace GameActivity
             if (WarningsMessage.Count != 0)
             {
                 new WarningsDialogs(resources.GetString("LOCGameActivityWarningCaption"), WarningsMessage).ShowDialog();
-                WarningsMessage = new List<JArray>();
+                WarningsMessage = new List<WarningData>();
             }
 
             t.AutoReset = false;
@@ -588,7 +668,7 @@ namespace GameActivity
             int cpuTValue = 0;
 
 
-            if (settings.UseMsiAfterburner)
+            if (settings.UseMsiAfterburner && CheckGoodForLogging())
             {
                 var MSIAfterburner = new MSIAfterburnerNET.HM.HardwareMonitor();
 
@@ -628,7 +708,7 @@ namespace GameActivity
                     Common.LogError(ex, "GameActivity", "Fail get cpuTValue");
                 }
             }
-            else if (settings.UseHWiNFO)
+            else if (settings.UseHWiNFO && CheckGoodForLogging())
             {
                 HWiNFODumper HWinFO = new HWiNFODumper();
                 List<HWiNFODumper.JsonObj> dataHWinfo = HWinFO.ReadMem();
@@ -755,15 +835,15 @@ namespace GameActivity
                     WarningMaxRamUsage = true;
                 }
 
-                JArray Message = new JArray
+                WarningData Message = new WarningData
                 {
-                    new JObject (new JProperty("At", resources.GetString("LOCGameActivityWarningAt") + " " + DateTime.Now.ToString("HH:mm"))),
-                    new JObject (new JProperty("Name", resources.GetString("LOCGameActivityFps")), new JProperty("Value", fpsValue), new JProperty("isWarm", WarningMinFps)),
-                    new JObject (new JProperty("Name", resources.GetString("LOCGameActivityCpuTemp")), new JProperty("Value", cpuTValue), new JProperty("isWarm", WarningMaxCpuTemp)),
-                    new JObject (new JProperty("Name", resources.GetString("LOCGameActivityGpuTemp")), new JProperty("Value", gpuTValue), new JProperty("isWarm", WarningMaxGpuTemp)),
-                    new JObject (new JProperty("Name", resources.GetString("LOCGameActivityCpuUsage")), new JProperty("Value", cpuValue), new JProperty("isWarm", WarningMaxCpuUsage)),
-                    new JObject (new JProperty("Name", resources.GetString("LOCGameActivityGpuUsage")), new JProperty("Value", gpuValue), new JProperty("isWarm", WarningMaxGpuUsage)),
-                    new JObject (new JProperty("Name", resources.GetString("LOCGameActivityRamUsage")), new JProperty("Value", ramValue), new JProperty("isWarm", WarningMaxRamUsage))
+                    At = resources.GetString("LOCGameActivityWarningAt") + " " + DateTime.Now.ToString("HH:mm"),
+                    FpsData = new Data { Name = resources.GetString("LOCGameActivityFps"), Value = fpsValue, isWarm = WarningMinFps },
+                    CpuTempData = new Data { Name = resources.GetString("LOCGameActivityCpuTemp"), Value = cpuTValue, isWarm = WarningMaxCpuTemp },
+                    GpuTempData = new Data { Name = resources.GetString("LOCGameActivityGpuTemp"), Value = gpuTValue, isWarm = WarningMaxGpuTemp },
+                    CpuUsageData = new Data { Name = resources.GetString("LOCGameActivityCpuUsage"), Value = cpuValue, isWarm = WarningMaxCpuUsage },
+                    GpuUsageData = new Data { Name = resources.GetString("LOCGameActivityGpuUsage"), Value = gpuValue, isWarm = WarningMaxGpuUsage },
+                    RamUsageData = new Data { Name = resources.GetString("LOCGameActivityRamUsage"), Value = ramValue, isWarm = WarningMaxRamUsage },
                 };
 
                 if (WarningMinFps || WarningMaxCpuTemp || WarningMaxGpuTemp || WarningMaxCpuUsage || WarningMaxGpuUsage)

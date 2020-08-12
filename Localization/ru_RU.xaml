@@ -84,4 +84,7 @@
     <sys:String x:Key="LOCGameActivityCpuUsage">Использ. CPU</sys:String>
     <sys:String x:Key="LOCGameActivityRamUsage">Использ. RAM</sys:String>
 
+    <sys:String x:Key="LOCGameActivityNotificationHWiNFO">Logging with HWiNFO is activate without application running.</sys:String>
+    <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">Logging with MSI AfterBurner is activate without application running.</sys:String>
+
 </ResourceDictionary>

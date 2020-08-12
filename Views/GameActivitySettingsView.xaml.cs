@@ -78,5 +78,19 @@ namespace GameActivity
                 Ga_IntegrationInButtonDetails.IsChecked = false;
             }
         }
+
+        private void CbLogging_Click(object sender, RoutedEventArgs e)
+        {
+            CheckBox cb = (CheckBox)sender;
+
+            if ((cb.Name == "cbUseMsiAfterburner") && (bool)cb.IsChecked)
+            {
+                cbUseHWiNFO.IsChecked = false;
+            }
+            if ((cb.Name == "cbUseHWiNFO") && (bool)cb.IsChecked)
+            {
+                cbUseMsiAfterburner.IsChecked = false;
+            }
+        }
     }
 }

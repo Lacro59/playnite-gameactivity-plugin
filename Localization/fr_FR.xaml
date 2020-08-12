@@ -82,5 +82,8 @@
     <sys:String x:Key="LOCGameActivityWarningAt">A</sys:String>
     <sys:String x:Key="LOCGameActivityCpuUsage">CPU utilisation</sys:String>
     <sys:String x:Key="LOCGameActivityRamUsage">RAM utilisation</sys:String>
+    
+    <sys:String x:Key="LOCGameActivityNotificationHWiNFO">Journalisation activer avec HWiNFO alors qu'il est non exécuté.</sys:String>
+    <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">Journalisation activer avec MSI AFterburner alors qu'il est non exécuté.</sys:String>
 
 </ResourceDictionary>
