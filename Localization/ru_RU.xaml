@@ -40,7 +40,7 @@
     <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">Журнал производительности процессора, графического процессора, оперативной памяти и FPS во время игровой сессии.</sys:String>
     <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Отображает предупреждающее сообщение в конце сеанса игры в кратце.</sys:String>
 
-    <sys:String x:Key="LOCGameActivityIntegration">Интеграция интерфейса (экспериментальная)</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegration">Интеграция интерфейса</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationInDescription">Отображать в описании игры</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationInDescriptionWithToggle">С кнопкой переключения</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationShowTitle">Названия</sys:String>
