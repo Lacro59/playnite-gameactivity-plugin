@@ -83,6 +83,10 @@ namespace GameActivity.Views.Interface
                     }
                 }
             }
+            else
+            {
+                return;
+            }
 
             // Set data in graphic.
             ChartValues<int> CPUseries = new ChartValues<int>();
