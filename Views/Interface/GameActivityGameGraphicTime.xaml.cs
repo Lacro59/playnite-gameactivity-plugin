@@ -23,6 +23,7 @@ namespace GameActivity.Views.Interface
 
         public event DataClickHandler gameSeriesDataClick;
 
+
         public GameActivityGameGraphicTime(GameActivitySettings settings, GameActivityClass gameActivity, int variateurTime = 0)
         {
             InitializeComponent();
@@ -32,9 +33,17 @@ namespace GameActivity.Views.Interface
 
         public void GetActivityForGamesTimeGraphics(GameActivityClass gameActivity, int variateurTime)
         {
-            //DateTime dateStart = DateTime.Now.AddDays(variateurTime);
             string[] listDate = new string[10];
-            ChartValues<CustomerForTime> series = new ChartValues<CustomerForTime>();
+            ChartValues<CustomerForTime> series1 = new ChartValues<CustomerForTime>();
+            ChartValues<CustomerForTime> series2 = new ChartValues<CustomerForTime>();
+            ChartValues<CustomerForTime> series3 = new ChartValues<CustomerForTime>();
+            ChartValues<CustomerForTime> series4 = new ChartValues<CustomerForTime>();
+            ChartValues<CustomerForTime> series5 = new ChartValues<CustomerForTime>();
+
+            bool HasData2 = false;
+            bool HasData3 = false;
+            bool HasData4 = false;
+            bool HasData5 = false;
 
             List<Activity> gameActivities = gameActivity.Activities;
 
@@ -54,7 +63,27 @@ namespace GameActivity.Views.Interface
             for (int iDay = 0; iDay < 10; iDay++)
             {
                 listDate[iDay] = dateStart.AddDays(iDay - 9).ToString("yyyy-MM-dd");
-                series.Add(new CustomerForTime
+                series1.Add(new CustomerForTime
+                {
+                    Name = dateStart.AddDays(iDay - 9).ToString("yyyy-MM-dd"),
+                    Values = 0,
+                });
+                series2.Add(new CustomerForTime
+                {
+                    Name = dateStart.AddDays(iDay - 9).ToString("yyyy-MM-dd"),
+                    Values = 0,
+                });
+                series3.Add(new CustomerForTime
+                {
+                    Name = dateStart.AddDays(iDay - 9).ToString("yyyy-MM-dd"),
+                    Values = 0,
+                });
+                series4.Add(new CustomerForTime
+                {
+                    Name = dateStart.AddDays(iDay - 9).ToString("yyyy-MM-dd"),
+                    Values = 0,
+                });
+                series5.Add(new CustomerForTime
                 {
                     Name = dateStart.AddDays(iDay - 9).ToString("yyyy-MM-dd"),
                     Values = 0,
@@ -72,27 +101,86 @@ namespace GameActivity.Views.Interface
                 {
                     if (listDate[iDay] == dateSession)
                     {
-                        string tempName = series[iDay].Name;
-                        long tempElapsed = series[iDay].Values + elapsedSeconds;
-                        series[iDay] = new CustomerForTime
+                        string tempName = series1[iDay].Name;
+
+                        if (series1[iDay].Values == 0)
                         {
-                            Name = tempName,
-                            Values = tempElapsed,
-                        };
+                            series1[iDay] = new CustomerForTime
+                            {
+                                Name = tempName,
+                                Values = elapsedSeconds,
+                            };
+                            continue;
+                        }
+
+                        if (series2[iDay].Values == 0)
+                        {
+                            HasData2 = true;
+                            series2[iDay] = new CustomerForTime
+                            {
+                                Name = tempName,
+                                Values = elapsedSeconds,
+                            };
+                            continue;
+                        }
+
+                        if (series3[iDay].Values == 0)
+                        {
+                            HasData3 = true;
+                            series3[iDay] = new CustomerForTime
+                            {
+                                Name = tempName,
+                                Values = elapsedSeconds,
+                            };
+                            continue;
+                        }
+
+                        if (series4[iDay].Values == 0)
+                        {
+                            HasData4 = true;
+                            series4[iDay] = new CustomerForTime
+                            {
+                                Name = tempName,
+                                Values = elapsedSeconds,
+                            };
+                            continue;
+                        }
+
+                        if (series5[iDay].Values == 0)
+                        {
+                            HasData5 = true;
+                            series5[iDay] = new CustomerForTime
+                            {
+                                Name = tempName,
+                                Values = elapsedSeconds,
+                            };
+                            continue;
+                        }
                     }
                 }
             }
 
 
             // Set data in graphic.
-            SeriesCollection activityForGameSeries = new SeriesCollection
+            SeriesCollection activityForGameSeries = new SeriesCollection();
+            activityForGameSeries.Add (new ColumnSeries { Title = "1", Values = series1 });
+            if (HasData2)
             {
-                new ColumnSeries
-                {
-                    Title = "",
-                    Values = series
-                }
-            };
+                activityForGameSeries.Add(new ColumnSeries { Title = "2", Values = series2 });
+            }
+            if (HasData3)
+            {
+                activityForGameSeries.Add(new ColumnSeries { Title = "3", Values = series3 });
+            }
+            if (HasData4)
+            {
+                activityForGameSeries.Add(new ColumnSeries { Title = "4", Values = series4 });
+            }
+            if (HasData5)
+            {
+                activityForGameSeries.Add(new ColumnSeries { Title = "5", Values = series5 });
+            }
+
             for (int iDay = 0; iDay < listDate.Length; iDay++)
             {
                 listDate[iDay] = Convert.ToDateTime(listDate[iDay]).ToString(Playnite.Common.Constants.DateUiFormat);
@@ -127,8 +215,7 @@ namespace GameActivity.Views.Interface
 
         private void GameSeries_DataClick(object sender, ChartPoint chartPoint)
         {
-            if (this.gameSeriesDataClick != null)
-                this.gameSeriesDataClick(this, chartPoint);
+            this.gameSeriesDataClick?.Invoke(this, chartPoint);
         }
     }
 }

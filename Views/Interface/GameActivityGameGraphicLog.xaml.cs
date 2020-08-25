@@ -21,17 +21,17 @@ namespace GameActivity.Views.Interface
         public int variateurLog = 0;
         public int variateurLogTemp = 0;
 
-        public GameActivityGameGraphicLog(GameActivitySettings settings, GameActivityClass gameActivity, string dateSelected = "", int variateurLog = 0, bool withTitle = true)
+        public GameActivityGameGraphicLog(GameActivitySettings settings, GameActivityClass gameActivity, string dateSelected = "", string title = "", int variateurLog = 0, bool withTitle = true)
         {
             InitializeComponent();
 
             this.variateurLog = variateurLog;
-            GetActivityForGamesLogGraphics(gameActivity, withTitle, dateSelected);
+            GetActivityForGamesLogGraphics(gameActivity, withTitle, dateSelected, title);
         }
 
-        public void GetActivityForGamesLogGraphics(GameActivityClass gameActivity, bool withTitle, string dateSelected = "")
+        public void GetActivityForGamesLogGraphics(GameActivityClass gameActivity, bool withTitle, string dateSelected = "", string title = "")
         {
-            List<ActivityDetailsData> gameActivitiesDetails = gameActivity.GetSessionActivityDetails(dateSelected);
+            List<ActivityDetailsData> gameActivitiesDetails = gameActivity.GetSessionActivityDetails(dateSelected, title);
 
             string[] activityForGameLogLabels = new string[0];
             List<ActivityDetailsData> gameLogsDefinitive = new List<ActivityDetailsData>();

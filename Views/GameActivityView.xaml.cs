@@ -584,17 +584,18 @@ namespace GameActivity
         /// Get data detail for the selected game.
         /// </summary>
         /// <param name="gameID"></param>
-        public void getActivityForGamesLogGraphics(string gameID, string dateSelected = "")
+        public void getActivityForGamesLogGraphics(string gameID, string dateSelected = "", string title = "")
         {
             gameSeriesContener.Children.Clear();
             GameActivityClass gameActivity = GameActivityDatabases.Get(Guid.Parse(gameID));
             List<Activity> gameActivities = gameActivity.Activities;
-            gameSeriesContener.Children.Add(new GameActivityGameGraphicLog(settings, gameActivity, dateSelected, variateurLog, false));
+            gameSeriesContener.Children.Add(new GameActivityGameGraphicLog(settings, gameActivity, dateSelected, title, variateurLog, false));
             gameSeriesContener.UpdateLayout();
 
             if (dateSelected == "")
             {
-                gameLabel.Content = resources.GetString("LOCGameActivityLogTitle");
+                gameLabel.Content = resources.GetString("LOCGameActivityLogTitle") + " (" 
+                    + Convert.ToDateTime(gameActivity.GetLastSession()).ToString(Playnite.Common.Constants.DateUiFormat) + ")";
             }
             else
             {
@@ -938,6 +939,7 @@ namespace GameActivity
             if (settings.EnableLogging)
             {
                 int index = (int)chartPoint.X;
+                string title = chartPoint.SeriesView.Title;
                 var data = chartPoint.SeriesView.Values;
 
                 string LabelDataSelected = ((CustomerForTime)data[index]).Name;
@@ -948,7 +950,7 @@ namespace GameActivity
 
                 gameSeries.HideTooltip();
 
-                getActivityForGamesLogGraphics(gameIDCurrent, LabelDataSelected);
+                getActivityForGamesLogGraphics(gameIDCurrent, LabelDataSelected, title);
             }
         }
 

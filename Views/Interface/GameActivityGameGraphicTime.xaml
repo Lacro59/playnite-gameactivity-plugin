@@ -14,7 +14,7 @@
         </lvc:CartesianChart.DataTooltip>
 
         <lvc:CartesianChart.AxisX>
-            <lvc:Axis Name="gameLabelsX" ShowLabels="True" FontSize="10">
+            <lvc:Axis Name="gameLabelsX" ShowLabels="True" FontSize="10" MinValue="0">
                 <lvc:Axis.Separator>
                     <lvc:Separator Step="1"/>
                 </lvc:Axis.Separator>
@@ -22,7 +22,7 @@
         </lvc:CartesianChart.AxisX>
 
         <lvc:CartesianChart.AxisY>
-            <lvc:Axis Name="gameLabelsY"></lvc:Axis>
+            <lvc:Axis Name="gameLabelsY" MinValue="0"></lvc:Axis>
         </lvc:CartesianChart.AxisY>
     </lvc:CartesianChart>
 

@@ -206,19 +206,27 @@ namespace GameActivity.Models
             return dateLastSession.ToUniversalTime().ToString("o"); ;
         }
 
-        public string GetDateSelectedSession(string dateSelected)
+        public string GetDateSelectedSession(string dateSelected, string title)
         {
             if (!dateSelected.IsNullOrEmpty())
             {
                 dateSelected = Convert.ToDateTime(dateSelected).ToString("yyyy-MM-dd");
             }
 
-            for (int iActivity = (Activities.Count - 1); iActivity >= 0; iActivity--)
+            int indicator = 1;
+            for (int iActivity = 0; iActivity < Activities.Count; iActivity++)
             {
                 DateTime dateTemp = Convert.ToDateTime(Activities[iActivity].DateSession).ToLocalTime();
                 if (dateSelected == dateTemp.ToString("yyyy-MM-dd"))
                 {
-                    return dateTemp.ToUniversalTime().ToString("o");
+                    if (indicator == int.Parse(title))
+                    {
+                        return dateTemp.ToUniversalTime().ToString("o");
+                    }
+                    else
+                    {
+                        indicator += 1;
+                    }
                 }
             }
             return GetLastSession();
@@ -253,9 +261,9 @@ namespace GameActivity.Models
         /// Get the last session activity details.
         /// </summary>
         /// <returns></returns>
-        public List<ActivityDetailsData> GetSessionActivityDetails(string dateSelected = "")
+        public List<ActivityDetailsData> GetSessionActivityDetails(string dateSelected = "", string title = "")
         {
-            string dateLastSession = GetDateSelectedSession(dateSelected);
+            string dateLastSession = GetDateSelectedSession(dateSelected, title);
             return ActivitiesDetails.Get(dateLastSession);
         }
     }
