@@ -208,12 +208,17 @@ namespace GameActivity.Models
 
         public string GetDateSelectedSession(string dateSelected)
         {
-            for (int iActivity = 0; iActivity < Activities.Count; iActivity++)
+            if (!dateSelected.IsNullOrEmpty())
+            {
+                dateSelected = Convert.ToDateTime(dateSelected).ToString("yyyy-MM-dd");
+            }
+
+            for (int iActivity = (Activities.Count - 1); iActivity >= 0; iActivity--)
             {
                 DateTime dateTemp = Convert.ToDateTime(Activities[iActivity].DateSession).ToLocalTime();
                 if (dateSelected == dateTemp.ToString("yyyy-MM-dd"))
                 {
-                    return dateTemp.ToUniversalTime().ToString("o"); ;
+                    return dateTemp.ToUniversalTime().ToString("o");
                 }
             }
             return GetLastSession();
