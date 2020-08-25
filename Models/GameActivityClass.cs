@@ -41,7 +41,15 @@ namespace GameActivity.Models
         /// </summary>
         public string GameName
         {
-            get => GameActivity.DatabaseReference.Games.Get(GameID).Name;
+            get
+            {
+                if (GameActivity.DatabaseReference.Games.Get(GameID) != null)
+                {
+                    return GameActivity.DatabaseReference.Games.Get(GameID).Name;
+                }
+                return null;
+            }
+
         }
 
         /// <summary>

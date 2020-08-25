@@ -478,52 +478,60 @@ namespace GameActivity
                 try
                 {
                     gameID = listGameActivities[iGame].GameID.ToString();
-                    string gameTitle = listGameActivities[iGame].GameName;
-                    string gameIcon;
-
-                    Activity lastSessionActivity = listGameActivities[iGame].GetLastSessionActivity();
-                    long elapsedSeconds = lastSessionActivity.ElapsedSeconds;
-                    DateTime dateSession = Convert.ToDateTime(lastSessionActivity.DateSession).AddSeconds(-elapsedSeconds).ToLocalTime();
-
-
-                    BitmapImage iconImage = new BitmapImage();
-                    if (String.IsNullOrEmpty(listGameActivities[iGame].GameIcon) == false)
+                    if (!listGameActivities[iGame].GameName.IsNullOrEmpty())
                     {
-                        iconImage.BeginInit();
-                        gameIcon = dbPlaynite.GetFullFilePath(listGameActivities[iGame].GameIcon);
-                        iconImage.UriSource = new Uri(gameIcon, UriKind.RelativeOrAbsolute);
-                        iconImage.EndInit();
+                        string gameTitle = listGameActivities[iGame].GameName;
+                        string gameIcon;
+
+                        Activity lastSessionActivity = listGameActivities[iGame].GetLastSessionActivity();
+                        long elapsedSeconds = lastSessionActivity.ElapsedSeconds;
+                        DateTime dateSession = Convert.ToDateTime(lastSessionActivity.DateSession).AddSeconds(-elapsedSeconds).ToLocalTime();
+
+
+                        BitmapImage iconImage = new BitmapImage();
+                        if (String.IsNullOrEmpty(listGameActivities[iGame].GameIcon) == false)
+                        {
+                            iconImage.BeginInit();
+                            gameIcon = dbPlaynite.GetFullFilePath(listGameActivities[iGame].GameIcon);
+                            iconImage.UriSource = new Uri(gameIcon, UriKind.RelativeOrAbsolute);
+                            iconImage.EndInit();
+                        }
+
+                        activityListByGame.Add(new listGame()
+                        {
+                            listGameID = gameID,
+                            listGameTitle = gameTitle,
+                            listGameIcon = iconImage,
+                            listGameLastActivity = dateSession,
+                            listGameElapsedSeconds = elapsedSeconds,
+                            avgCPU = listGameActivities[iGame].avgCPU(listGameActivities[iGame].GetLastSession()) + "%",
+                            avgGPU = listGameActivities[iGame].avgGPU(listGameActivities[iGame].GetLastSession()) + "%",
+                            avgRAM = listGameActivities[iGame].avgRAM(listGameActivities[iGame].GetLastSession()) + "%",
+                            avgFPS = listGameActivities[iGame].avgFPS(listGameActivities[iGame].GetLastSession()) + "",
+                            avgCPUT = listGameActivities[iGame].avgCPUT(listGameActivities[iGame].GetLastSession()) + "°",
+                            avgGPUT = listGameActivities[iGame].avgGPUT(listGameActivities[iGame].GetLastSession()) + "°",
+
+                            enableWarm = settings.EnableWarning,
+                            maxCPUT = "" + settings.MaxCpuTemp,
+                            maxGPUT = "" + settings.MaxGpuTemp,
+                            minFPS = "" + settings.MinFps,
+                            maxCPU = "" + settings.MaxCpuUsage,
+                            maxGPU = "" + settings.MaxGpuUsage,
+                            maxRAM = "" + settings.MaxRamUsage
+                        });
+
+                        iconImage = null;
                     }
-
-                    activityListByGame.Add(new listGame()
+                    // Game is deleted
+                    else
                     {
-                        listGameID = gameID,
-                        listGameTitle = gameTitle,
-                        listGameIcon = iconImage,
-                        listGameLastActivity = dateSession,
-                        listGameElapsedSeconds = elapsedSeconds,
-                        avgCPU = listGameActivities[iGame].avgCPU(listGameActivities[iGame].GetLastSession()) + "%",
-                        avgGPU = listGameActivities[iGame].avgGPU(listGameActivities[iGame].GetLastSession()) + "%",
-                        avgRAM = listGameActivities[iGame].avgRAM(listGameActivities[iGame].GetLastSession()) + "%",
-                        avgFPS = listGameActivities[iGame].avgFPS(listGameActivities[iGame].GetLastSession()) + "",
-                        avgCPUT = listGameActivities[iGame].avgCPUT(listGameActivities[iGame].GetLastSession()) + "°",
-                        avgGPUT = listGameActivities[iGame].avgGPUT(listGameActivities[iGame].GetLastSession()) + "°",
-
-                        enableWarm = settings.EnableWarning,
-                        maxCPUT = "" + settings.MaxCpuTemp,
-                        maxGPUT = "" + settings.MaxGpuTemp,
-                        minFPS = "" + settings.MinFps,
-                        maxCPU = "" + settings.MaxCpuUsage,
-                        maxGPU = "" + settings.MaxGpuUsage,
-                        maxRAM = "" + settings.MaxRamUsage
-                    });
-
-                    iconImage = null;
+                        logger.Warn($"GameActivity - Failed to load GameActivities from {gameID} because the game is deleted");
+                    }
                 }
                 catch (Exception ex)
                 {
-                    Common.LogError(ex, "GameActivity", $"Failed to load listGameActivities from {gameID}");
-                    PlayniteApi.Dialogs.ShowErrorMessage($"Failed to load listGameActivities from {gameID}.", "GameActivity error");
+                    Common.LogError(ex, "GameActivity", $"Failed to load GameActivities from {gameID}");
+                    PlayniteApi.Dialogs.ShowErrorMessage(ex.Message, $"GameActivity error on {gameID}");
                 }
             }
 
