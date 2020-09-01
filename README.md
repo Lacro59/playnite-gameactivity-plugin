@@ -1,6 +1,6 @@
 # playnite-gameactivity-plugin
 Generic plugin for [Playnite](https://playnite.link/) application.
-This plugin create datas from game activy with or without MSI Afterburner or HWiNFO. 
+This plugin create datas from game activy. 
 
 More information here: https://playnite.link/forum/thread-264.html
 
