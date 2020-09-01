@@ -47,6 +47,10 @@
       <HintPath>packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="OpenHardwareMonitorLib, Version=0.9.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Resources\OpenHardwareMonitorLib.dll</HintPath>
+    </Reference>
     <Reference Include="Playnite, Version=7.7.0.26797, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Resources\PlayniteResources\Playnite.dll</HintPath>
@@ -87,6 +91,7 @@
     <Compile Include="Common\HWiNFODumper.cs" />
     <Compile Include="GameActivity.cs" />
     <Compile Include="GameActivitySettings.cs" />
+    <Compile Include="Services\PerfCounter.cs" />
     <Compile Include="Views\GameActivitySettingsView.xaml.cs">
       <DependentUpon>GameActivitySettingsView.xaml</DependentUpon>
     </Compile>
@@ -346,6 +351,9 @@
   <ItemGroup>
     <None Include="Resources\PlayniteResources\Playnite.Common.dll" />
     <None Include="Resources\PlayniteResources\Playnite.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OpenHardwareMonitorLib.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

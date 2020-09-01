@@ -3,6 +3,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
+using System.Windows.Documents;
+using System.Diagnostics;
 
 namespace GameActivity
 {
@@ -91,6 +93,12 @@ namespace GameActivity
             {
                 cbUseMsiAfterburner.IsChecked = false;
             }
+        }
+
+        private void Hyperlink_Click(object sender, RoutedEventArgs e)
+        {
+            Hyperlink link = (Hyperlink)sender;
+            Process.Start((string)link.Tag);
         }
     }
 }

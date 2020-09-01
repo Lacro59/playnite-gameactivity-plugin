@@ -23,7 +23,14 @@
                                         <ToolTip Content="{DynamicResource LOCGameActivityEnableLoggingToolTip}"></ToolTip>
                                     </CheckBox.ToolTip>
 
-                                    <Label Content="{DynamicResource LOCGameActivityActiveLog}" />
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Content="{DynamicResource LOCGameActivityActiveLog}" Margin="0,0,5,0"/>
+
+                                        <Label Content="(Performance Monitor &amp; "/>
+                                        <TextBlock><Hyperlink Tag="https://openhardwaremonitor.org/" Click="Hyperlink_Click">Open Hardware Monitor</Hyperlink></TextBlock>
+                                        <Label Content=")" />
+                                    </StackPanel>
+                                    
                                 </CheckBox>
                             </StackPanel>
 
@@ -90,18 +97,26 @@
                             <DockPanel DockPanel.Dock="Top">
                                 <StackPanel DockPanel.Dock="Left" Width="280">
                                     <CheckBox Name="cbUseMsiAfterburner" IsChecked="{Binding UseMsiAfterburner}" Click="CbLogging_Click">
-                                        <Label Content="{DynamicResource LOCGameActivityUseMsiAfterburner}" />
+                                        <TextBlock>
+                                                <Hyperlink Tag="https://fr.msi.com/page/afterburner" Click="Hyperlink_Click">
+                                                    <Run Text="{DynamicResource LOCGameActivityUseMsiAfterburner}" />
+                                                </Hyperlink>
+                                        </TextBlock>
                                     </CheckBox>
                                 </StackPanel>
 
                                 <StackPanel DockPanel.Dock="Right">
                                     <CheckBox Name="cbUseHWiNFO" IsChecked="{Binding UseHWiNFO}" Click="CbLogging_Click">
-                                        <Label Content="{DynamicResource LOCGameActivityUseHWiNFO}" />
+                                        <TextBlock>
+                                                <Hyperlink Tag="https://www.hwinfo.com/" Click="Hyperlink_Click">
+                                                    <Run Text="{DynamicResource LOCGameActivityUseHWiNFO}" />
+                                                </Hyperlink>
+                                        </TextBlock>
                                     </CheckBox>
                                 </StackPanel>
                             </DockPanel>
 
-                            <DockPanel DockPanel.Dock="Bottom" Margin="0,15,0,0"  IsEnabled="{Binding ElementName=cbHWiNFO, Path=IsChecked, TargetNullValue=false}">
+                            <DockPanel DockPanel.Dock="Bottom" Margin="0,15,0,0"  IsEnabled="{Binding ElementName=cbUseHWiNFO, Path=IsChecked, TargetNullValue=false}">
                                 <GroupBox Header="HWiNFO">
                                     <DockPanel Margin="10,5,10,10">
                                         <DockPanel DockPanel.Dock="Top" HorizontalAlignment="Center">

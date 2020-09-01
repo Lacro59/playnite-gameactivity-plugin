@@ -20,6 +20,7 @@ using GameActivity.Database.Collections;
 using GameActivity.Models;
 using System.Windows.Media;
 using System.Windows.Controls.Primitives;
+using GameActivity.Services;
 
 namespace GameActivity
 {
@@ -661,11 +662,11 @@ namespace GameActivity
         private async void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
             int fpsValue = 0;
-            int cpuValue = GetCpuPercentage();
-            int gpuValue = 0;
-            int ramValue = GetRamPercentage();
-            int gpuTValue = 0;
-            int cpuTValue = 0;
+            int cpuValue = PerfCounter.GetCpuPercentage();
+            int gpuValue = PerfCounter.GetGpuPercentage();
+            int ramValue = PerfCounter.GetRamPercentage();
+            int gpuTValue = PerfCounter.GetGpuTemperature();
+            int cpuTValue = PerfCounter.GetCpuTemperature();
 
 
             if (settings.UseMsiAfterburner && CheckGoodForLogging())
@@ -808,6 +809,7 @@ namespace GameActivity
             bool WarningMaxCpuUsage = false;
             bool WarningMaxGpuUsage = false;
             bool WarningMaxRamUsage = false;
+
             if (settings.EnableWarning)
             {
                 if (settings.MinFps != 0 && settings.MinFps >= fpsValue)
@@ -852,9 +854,6 @@ namespace GameActivity
                 }
             }
 
-
-
-
             JObject Data = new JObject();
             Data["datelog"] = DateTime.Now.ToUniversalTime().ToString("o");
             Data["fps"] = fpsValue;
@@ -865,78 +864,6 @@ namespace GameActivity
             Data["cpuT"] = cpuTValue;
 
             LoggingData.Add(Data);
-        }
-
-        // http://technoblazze.blogspot.com/2015/07/get-ram-and-cpu-usage-in-c.html
-        public int GetCpuPercentage()
-        {
-            PerformanceCounter cpuCounter;
-            double cpuUsage = 0;
-            int totalCpuUsage = 0;
-            //double returnLoopCount = 0;
-
-            cpuCounter = new PerformanceCounter();
-            cpuCounter.CategoryName = "Processor";
-            cpuCounter.CounterName = "% Processor Time";
-            cpuCounter.InstanceName = "_Total";
-            for (int i = 0; i < 5; i++)
-            {
-                cpuUsage += cpuCounter.NextValue();
-                System.Threading.Thread.Sleep(1000);
-            }
-            totalCpuUsage = Convert.ToInt32(Math.Ceiling(cpuUsage / 5));
-            return totalCpuUsage;
-        }
-
-        public int GetRamPercentage()
-        {
-            PerformanceCounter ramCounter;
-            double ramUsage = 0;
-            int TotalRamMemory = 0;
-            int AvailableRamMemory = 0;
-            int UsedRamMemory = 0;
-            int RamUsagePercentage = 0;
-            //double returnLoopCount = 0;
-            MEMORYSTATUSEX statEX = new MEMORYSTATUSEX();
-            statEX.dwLength = (uint)Marshal.SizeOf(typeof(MEMORYSTATUSEX));
-            GlobalMemoryStatusEx(ref statEX);
-
-            double ram = (double)statEX.ullTotalPhys;
-            //float ram = (float)stat.TotalPhysical;
-            ram /= 1024;
-            ram /= 1024;
-
-            TotalRamMemory = Convert.ToInt32(Math.Round(ram, 0));
-            ramCounter = new PerformanceCounter("Memory", "Available MBytes");
-            for (int i = 0; i < 5; i++)
-            {
-                ramUsage += ramCounter.NextValue();
-                System.Threading.Thread.Sleep(1000);
-            }
-            AvailableRamMemory = Convert.ToInt32(Math.Round((ramUsage / 5), 0));
-            UsedRamMemory = TotalRamMemory - AvailableRamMemory;
-            RamUsagePercentage = ((UsedRamMemory * 100) / TotalRamMemory);
-
-            return RamUsagePercentage;
-
-        }
-
-        [return: MarshalAs(UnmanagedType.Bool)]
-        [DllImport("Kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        internal static extern bool GlobalMemoryStatusEx(ref MEMORYSTATUSEX lpBuffer);
-
-        [StructLayout(LayoutKind.Sequential)]
-        internal struct MEMORYSTATUSEX
-        {
-            internal uint dwLength;
-            internal uint dwMemoryLoad;
-            internal ulong ullTotalPhys;
-            internal ulong ullAvailPhys;
-            internal ulong ullTotalPageFile;
-            internal ulong ullAvailPageFile;
-            internal ulong ullTotalVirtual;
-            internal ulong ullAvailVirtual;
-            internal ulong ullAvailExtendedVirtual;
         }
         #endregion
     }
