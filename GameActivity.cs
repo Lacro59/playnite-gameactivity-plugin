@@ -21,6 +21,8 @@ using GameActivity.Models;
 using System.Windows.Media;
 using System.Windows.Controls.Primitives;
 using GameActivity.Services;
+using Playnite.Converters;
+using System.Globalization;
 
 namespace GameActivity
 {
@@ -88,6 +90,13 @@ namespace GameActivity
             if (!Directory.Exists(pathActivityDetailsDB))
             {
                 Directory.CreateDirectory(pathActivityDetailsDB);
+            }
+
+
+            // Custom theme button
+            if (settings.EnableIntegrationInCustomTheme)
+            {
+                EventManager.RegisterClassHandler(typeof(Button), Button.ClickEvent, new RoutedEventHandler(OnCustomThemeButtonClick));
             }
         }
 
@@ -401,6 +410,24 @@ namespace GameActivity
             new GameActivityView(settings, PlayniteApi, this.GetPluginUserDataPath(), GameSelected).ShowDialog();
         }
 
+        private void OnCustomThemeButtonClick(object sender, RoutedEventArgs e)
+        {
+            string ButtonName = "";
+            try
+            {
+                ButtonName = ((Button)sender).Name;
+                if (ButtonName == "PART_GaCustomButton")
+                {
+                    OnBtGameSelectedActionBarClick(sender, e);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex, "GameActivity", "OnCustomThemeButtonClick() error");
+            }
+        }
+
+
         private void Integration()
         {
             try
@@ -436,13 +463,18 @@ namespace GameActivity
                 ui.RemoveButtonInGameSelectedActionBarButtonOrToggleButton("PART_GaButton");
                 ui.RemoveButtonInGameSelectedActionBarButtonOrToggleButton("PART_GaToggleButton");
                 ui.RemoveElementInGameSelectedDescription("PART_GameActivity");
-                ui.ClearElementInCustomTheme("PART_GameActivty_Graphic");
-                ui.ClearElementInCustomTheme("PART_GameActivty_GraphicLog");
+                ui.ClearElementInCustomTheme("PART_GameActivity_Graphic");
+                ui.ClearElementInCustomTheme("PART_GameActivity_GraphicLog");
 
 
                 // Reset resources
-                //List<ResourcesList> resourcesLists = new List<ResourcesList>();
-                //ui.AddResources(resourcesLists);
+                List<ResourcesList> resourcesLists = new List<ResourcesList>();
+                resourcesLists.Add(new ResourcesList { Key = "Ga_HasData", Value = false });
+                resourcesLists.Add(new ResourcesList { Key = "Ga_HasDataLog", Value = false });
+                resourcesLists.Add(new ResourcesList { Key = "Ga_LastDateSession", Value = "" });
+                resourcesLists.Add(new ResourcesList { Key = "Ga_LastDateTimeSession", Value = "" });
+                resourcesLists.Add(new ResourcesList { Key = "Ga_LastPlaytimeSession", Value = "" });
+                ui.AddResources(resourcesLists);
 
 
                 // No game activity
@@ -454,8 +486,38 @@ namespace GameActivity
 
 
                 // Add resources
-                //ui.AddResources(resourcesLists);
+                resourcesLists.Add(new ResourcesList { Key = "Ga_HasData", Value = true });
 
+                try
+                {
+                    var data = SelectedGameGameActivity.GetSessionActivityDetails();
+                    resourcesLists.Add(new ResourcesList { Key = "Ga_HasDataLog", Value = (data.Count > 0) });
+                }
+                catch
+                {
+                }
+
+                try
+                {
+                    resourcesLists.Add(new ResourcesList { Key = "Ga_LastDateSession", Value = Convert.ToDateTime(SelectedGameGameActivity.GetLastSession()).ToString(Playnite.Common.Constants.DateUiFormat) });
+                    resourcesLists.Add(new ResourcesList { Key = "Ga_LastDateTimeSession", Value = Convert.ToDateTime(SelectedGameGameActivity.GetLastSession()).ToString(Playnite.Common.Constants.DateUiFormat) 
+                        + " " + Convert.ToDateTime(SelectedGameGameActivity.GetLastSession()).ToString(Playnite.Common.Constants.TimeUiFormat) });
+                }
+                catch
+                {
+                }
+
+                try
+                {
+                    LongToTimePlayedConverter converter = new LongToTimePlayedConverter();
+                    string playtime = (string)converter.Convert((long)SelectedGameGameActivity.GetLastSessionActivity().ElapsedSeconds, null, null, CultureInfo.CurrentCulture);
+                    resourcesLists.Add(new ResourcesList { Key = "Ga_LastPlaytimeSession", Value = playtime });
+                }
+                catch
+                {
+                }
+
+                ui.AddResources(resourcesLists);
 
                 // Auto integration
                 if (settings.EnableIntegrationInDescription || settings.EnableIntegrationInDescriptionWithToggle)
@@ -527,10 +589,10 @@ namespace GameActivity
                 {
                     // Create 
                     StackPanel spGaG = CreateGa(SelectedGameGameActivity, false, true, false, true);
-                    ui.AddElementInCustomTheme(spGaG, "PART_GameActivty_Graphic");
+                    ui.AddElementInCustomTheme(spGaG, "PART_GameActivity_Graphic");
 
                     StackPanel spGaGL = CreateGa(SelectedGameGameActivity, false, false, true, true);
-                    ui.AddElementInCustomTheme(spGaGL, "PART_GameActivty_GraphicLog");
+                    ui.AddElementInCustomTheme(spGaGL, "PART_GameActivity_GraphicLog");
                 }
             }
             catch (Exception ex)
@@ -567,7 +629,7 @@ namespace GameActivity
                 StackPanel spGaG = new StackPanel();
                 if (!IsCustom)
                 {
-                    spGaG.Name = "PART_GameActivty_Graphic";
+                    spGaG.Name = "PART_GameActivity_Graphic";
                     spGaG.Height = 120;
                     spGaG.MaxHeight = 120;
                     spGaG.Margin = new Thickness(0, 5, 0, 5);
@@ -584,13 +646,13 @@ namespace GameActivity
                 StackPanel spGaGL = new StackPanel();
                 if (!IsCustom)
                 {
-                    spGaGL.Name = "PART_GameActivty_GraphicLog";
+                    spGaGL.Name = "PART_GameActivity_GraphicLog";
                     spGaGL.Height = 120;
                     spGaGL.MaxHeight = 120;
                     spGaGL.Margin = new Thickness(0, 5, 0, 5);
                 }
 
-                spGaGL.Children.Add(new GameActivityGameGraphicLog(settings, gameActivity));
+                spGaGL.Children.Add(new GameActivityGameGraphicLog(settings, gameActivity, "", "", 0, !IsCustom));
 
                 spGa.Children.Add(spGaGL);
                 spGa.UpdateLayout();

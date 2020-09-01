@@ -8,7 +8,7 @@
                     xmlns:localLVC="clr-namespace:PluginCommon.LiveChartsCommon;assembly=PluginCommon"
                     mc:Ignorable="d">
 
-    <lvc:CartesianChart LegendLocation="none" Name="gameSeries" Loaded="GameSeries_Loaded" DataClick="GameSeries_DataClick">
+    <lvc:CartesianChart LegendLocation="none" Name="gameSeries" Loaded="GameSeries_Loaded" DataClick="GameSeries_DataClick" Height="150">
         <lvc:CartesianChart.DataTooltip>
             <localLVC:CustomerToolTipForTime ShowIcon="{Binding ShowIcon}"/>
         </lvc:CartesianChart.DataTooltip>

@@ -209,8 +209,26 @@ namespace GameActivity.Views.Interface
 
         private void GameSeries_Loaded(object sender, RoutedEventArgs e)
         {
+            // Define height & width
             var parent = ((FrameworkElement)((FrameworkElement)gameSeries.Parent).Parent);
-            gameSeries.Height = parent.ActualHeight;
+
+            if (!double.IsNaN(parent.Height))
+            {
+                gameSeries.Height = parent.Height;
+            }
+            else
+            {
+                gameSeries.Height = parent.ActualHeight;
+            }
+
+            if (!double.IsNaN(parent.Width))
+            {
+                gameSeries.Width = parent.Width;
+            }
+            else
+            {
+                gameSeries.Width = parent.ActualWidth;
+            }
         }
 
         private void GameSeries_DataClick(object sender, ChartPoint chartPoint)

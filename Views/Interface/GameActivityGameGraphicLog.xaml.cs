@@ -148,8 +148,26 @@ namespace GameActivity.Views.Interface
 
         private void GameSeriesLog_Loaded(object sender, RoutedEventArgs e)
         {
+            // Define height & width
             var parent = ((FrameworkElement)((FrameworkElement)((FrameworkElement)gameSeriesLog.Parent).Parent).Parent);
-            gameSeriesLog.Height = parent.ActualHeight - lGameSeriesLog.ActualHeight;
+
+            if (!double.IsNaN(parent.Height))
+            {
+                gameSeriesLog.Height = parent.Height;
+            }
+            else
+            {
+                gameSeriesLog.Height = parent.ActualHeight;
+            }
+
+            if (!double.IsNaN(parent.Width))
+            {
+                gameSeriesLog.Width = parent.Width;
+            }
+            else
+            {
+                gameSeriesLog.Height = parent.ActualHeight;
+            }
         }
     }
 }

@@ -11,7 +11,7 @@
     <StackPanel>
         <Label Name="lGameSeriesLog" Visibility="Collapsed"></Label>
         
-        <lvc:CartesianChart LegendLocation="none" Name="gameSeriesLog" Loaded="GameSeriesLog_Loaded">
+        <lvc:CartesianChart LegendLocation="none" Name="gameSeriesLog" Loaded="GameSeriesLog_Loaded" Height="150">
             <lvc:CartesianChart.DataTooltip>
                 <localLVC:CustomerToolTipForMultipleTime ShowIcon="{Binding ShowIcon}"/>
             </lvc:CartesianChart.DataTooltip>
