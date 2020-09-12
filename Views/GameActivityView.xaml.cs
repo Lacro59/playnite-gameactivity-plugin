@@ -22,6 +22,7 @@ using Playnite.Converters;
 using System.Globalization;
 using GameActivity.Views.Interface;
 using LiveCharts.Events;
+using System.Windows.Forms;
 
 namespace GameActivity
 {
@@ -85,6 +86,7 @@ namespace GameActivity
             // Initialization components
             InitializeComponent();
 
+            this.PreviewKeyDown += new KeyEventHandler(HandleEsc);
 
             if (!settings.EnableLogging)
             {
@@ -157,6 +159,13 @@ namespace GameActivity
             DataContext = this;
         }
 
+        private void HandleEsc(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                Close();
+            }
+        }
 
         #region Generate graphics and list
         /// <summary>
