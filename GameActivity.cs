@@ -278,10 +278,12 @@ namespace GameActivity
                     return runHWiNFO;
                 }
             }
+
             if (settings.EnableLogging && settings.UseMsiAfterburner)
             {
                 bool runMSI = false;
-                Process[] pname = Process.GetProcessesByName("RTSS");
+                bool runRTSS = false;
+                Process[] pname = Process.GetProcessesByName("MSIAfterburner");
                 if (pname.Length != 0)
                 {
                     runMSI = true;
@@ -289,10 +291,10 @@ namespace GameActivity
                 pname = Process.GetProcessesByName("RTSS");
                 if (pname.Length != 0)
                 {
-                    runMSI = true;
+                    runRTSS = true;
                 }
 
-                if (!runMSI && WithNotification)
+                if ((!runMSI || !runRTSS) && WithNotification)
                 {
                     PlayniteApi.Notifications.Add(new NotificationMessage(
                         $"IsThereAnyDeal-runMSI",
@@ -304,12 +306,20 @@ namespace GameActivity
 
                 if (!runMSI)
                 {
-                    logger.Error("GameActivity - No MSI Afterburner running");
+                    logger.Warn("GameActivity - No MSI Afterburner running");
+                }
+                if (!runRTSS)
+                {
+                    logger.Warn("GameActivity - No RivaTunerStatisticsServer running");
                 }
 
                 if (!WithNotification)
                 {
-                    return runMSI;
+                    if ((!runMSI || !runRTSS))
+                    {
+                        return false;
+                    }
+                    return true;
                 }
             }
 
