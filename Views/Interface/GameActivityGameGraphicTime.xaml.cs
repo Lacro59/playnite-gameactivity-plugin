@@ -29,6 +29,9 @@ namespace GameActivity.Views.Interface
             InitializeComponent();
 
             GetActivityForGamesTimeGraphics(gameActivity, variateurTime);
+
+            gameLabelsX.ShowLabels = settings.EnableIntegrationAxisGraphic;
+            gameLabelsY.ShowLabels = settings.EnableIntegrationOrdinatesGraphic;
         }
 
         public void GetActivityForGamesTimeGraphics(GameActivityClass gameActivity, int variateurTime)

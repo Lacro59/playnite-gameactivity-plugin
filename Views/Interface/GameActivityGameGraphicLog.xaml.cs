@@ -27,6 +27,9 @@ namespace GameActivity.Views.Interface
 
             this.variateurLog = variateurLog;
             GetActivityForGamesLogGraphics(gameActivity, withTitle, dateSelected, title);
+
+            gameLabelsX.ShowLabels = settings.EnableIntegrationAxisGraphicLog;
+            gameLabelsY.ShowLabels = settings.EnableIntegrationOrdinatesGraphicLog;
         }
 
         public void GetActivityForGamesLogGraphics(GameActivityClass gameActivity, bool withTitle, string dateSelected = "", string title = "")

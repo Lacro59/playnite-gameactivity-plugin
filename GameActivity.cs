@@ -588,11 +588,17 @@ namespace GameActivity
                 if (settings.EnableIntegrationInCustomTheme)
                 {
                     // Create 
-                    StackPanel spGaG = CreateGa(SelectedGameGameActivity, false, true, false, true);
-                    ui.AddElementInCustomTheme(spGaG, "PART_GameActivity_Graphic");
+                    if (settings.IntegrationShowGraphic)
+                    {
+                        StackPanel spGaG = CreateGa(SelectedGameGameActivity, false, true, false, true);
+                        ui.AddElementInCustomTheme(spGaG, "PART_GameActivity_Graphic");
+                    }
 
-                    StackPanel spGaGL = CreateGa(SelectedGameGameActivity, false, false, true, true);
-                    ui.AddElementInCustomTheme(spGaGL, "PART_GameActivity_GraphicLog");
+                    if (settings.IntegrationShowGraphicLog)
+                    {
+                        StackPanel spGaGL = CreateGa(SelectedGameGameActivity, false, false, true, true);
+                        ui.AddElementInCustomTheme(spGaGL, "PART_GameActivity_GraphicLog");
+                    }
                 }
             }
             catch (Exception ex)
@@ -630,8 +636,7 @@ namespace GameActivity
                 if (!IsCustom)
                 {
                     spGaG.Name = "PART_GameActivity_Graphic";
-                    spGaG.Height = 120;
-                    spGaG.MaxHeight = 120;
+                    spGaG.Height = settings.IntegrationShowGraphicHeight;
                     spGaG.Margin = new Thickness(0, 5, 0, 5);
                 }
 
@@ -647,8 +652,7 @@ namespace GameActivity
                 if (!IsCustom)
                 {
                     spGaGL.Name = "PART_GameActivity_GraphicLog";
-                    spGaGL.Height = 120;
-                    spGaGL.MaxHeight = 120;
+                    spGaGL.Height = settings.IntegrationShowGraphicLogHeight;
                     spGaGL.Margin = new Thickness(0, 5, 0, 5);
                 }
 

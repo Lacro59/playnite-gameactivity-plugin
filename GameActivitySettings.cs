@@ -23,6 +23,13 @@ namespace GameActivity
 
         public bool EnableIntegrationInCustomTheme { get; set; } = false;
 
+        public double IntegrationShowGraphicHeight { get; set; } = 120;
+        public double IntegrationShowGraphicLogHeight { get; set; } = 120;
+        public bool EnableIntegrationAxisGraphic { get; set; } = true;
+        public bool EnableIntegrationOrdinatesGraphic { get; set; } = true;
+        public bool EnableIntegrationAxisGraphicLog { get; set; } = true;
+        public bool EnableIntegrationOrdinatesGraphicLog { get; set; } = true;
+
         public bool EnableIntegrationButton { get; set; } = false;
         public bool EnableIntegrationButtonDetails { get; set; } = false;
 
@@ -87,6 +94,13 @@ namespace GameActivity
                 IntegrationToggleDetails = savedSettings.IntegrationToggleDetails;
 
                 EnableIntegrationInCustomTheme = savedSettings.EnableIntegrationInCustomTheme;
+
+                IntegrationShowGraphicHeight = savedSettings.IntegrationShowGraphicHeight;
+                IntegrationShowGraphicLogHeight = savedSettings.IntegrationShowGraphicLogHeight;
+                EnableIntegrationAxisGraphic = savedSettings.EnableIntegrationAxisGraphic;
+                EnableIntegrationOrdinatesGraphic = savedSettings.EnableIntegrationOrdinatesGraphic;
+                EnableIntegrationAxisGraphicLog = savedSettings.EnableIntegrationAxisGraphicLog;
+                EnableIntegrationOrdinatesGraphicLog = savedSettings.EnableIntegrationOrdinatesGraphicLog;
 
                 EnableIntegrationButton = savedSettings.EnableIntegrationButton;
                 EnableIntegrationButtonDetails = savedSettings.EnableIntegrationButtonDetails;

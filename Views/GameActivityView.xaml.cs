@@ -22,7 +22,7 @@ using Playnite.Converters;
 using System.Globalization;
 using GameActivity.Views.Interface;
 using LiveCharts.Events;
-using System.Windows.Forms;
+using System.Windows.Input;
 
 namespace GameActivity
 {
@@ -642,9 +642,12 @@ namespace GameActivity
             JArray arrayReturn = new JArray();
             foreach (GameSource source in dbPlaynite.Sources)
             {
-                arrayReturn.Add(source.Name);
+                if (!arrayReturn.Contains(source.Name))
+                {
+                    arrayReturn.Add(source.Name);
+                }
             }
-            // Source for game add manuelly.
+            // Source for game add manually.
             arrayReturn.Add("Playnite");
             return arrayReturn;
         }

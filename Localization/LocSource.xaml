@@ -53,6 +53,12 @@
     <sys:String x:Key="LOCGameActivityIntegrationButtonDetails">Add button with details</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationButtonHeader">Add button in window</sys:String>
 
+    <sys:String x:Key="LOCGameActivityIntegrationOptions">Selection elements</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicOptions">Graphic options</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabels">Show absciss label</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">Show ordinates label</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicLogOptions">Graphic with log options</sys:String>
+
     <!-- 
     GameActivityView 
     -->
