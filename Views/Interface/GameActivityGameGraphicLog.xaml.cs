@@ -7,6 +7,11 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using PluginCommon;
+using PluginCommon.PlayniteResources;
+using PluginCommon.PlayniteResources.API;
+using PluginCommon.PlayniteResources.Common;
+using PluginCommon.PlayniteResources.Converters;
 
 namespace GameActivity.Views.Interface
 {
@@ -71,7 +76,7 @@ namespace GameActivity.Views.Interface
                     for (int iLog = conteurStart; iLog < conteurEnd; iLog++)
                     {
                         gameLogsDefinitive.Add(gameActivitiesDetails[iLog]);
-                        activityForGameLogLabels[sCount] = Convert.ToDateTime(gameActivitiesDetails[iLog].Datelog).ToLocalTime().ToString(Playnite.Common.Constants.TimeUiFormat);
+                        activityForGameLogLabels[sCount] = Convert.ToDateTime(gameActivitiesDetails[iLog].Datelog).ToLocalTime().ToString(Constants.TimeUiFormat);
                         sCount += 1;
                     }
                 }
@@ -82,7 +87,7 @@ namespace GameActivity.Views.Interface
                     activityForGameLogLabels = new string[gameActivitiesDetails.Count];
                     for (int iLog = 0; iLog < gameActivitiesDetails.Count; iLog++)
                     {
-                        activityForGameLogLabels[iLog] = Convert.ToDateTime(gameActivitiesDetails[iLog].Datelog).ToLocalTime().ToString(Playnite.Common.Constants.TimeUiFormat);
+                        activityForGameLogLabels[iLog] = Convert.ToDateTime(gameActivitiesDetails[iLog].Datelog).ToLocalTime().ToString(Constants.TimeUiFormat);
                     }
                 }
             }
@@ -145,7 +150,7 @@ namespace GameActivity.Views.Interface
             {
                 lGameSeriesLog.Visibility = Visibility.Visible;
                 lGameSeriesLog.Content = resources.GetString("LOCGameActivityLogTitleDate") + " "
-                    + ((DateTime)gameActivitiesDetails[0].Datelog).ToString(Playnite.Common.Constants.DateUiFormat);
+                    + ((DateTime)gameActivitiesDetails[0].Datelog).ToString(Constants.DateUiFormat);
             }
         }
 

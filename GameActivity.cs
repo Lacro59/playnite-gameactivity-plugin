@@ -13,6 +13,10 @@ using System.Runtime.InteropServices;
 using MSIAfterburnerNET.HM.Interop;
 using System.Reflection;
 using PluginCommon;
+using PluginCommon.PlayniteResources;
+using PluginCommon.PlayniteResources.API;
+using PluginCommon.PlayniteResources.Common;
+using PluginCommon.PlayniteResources.Converters;
 using System.Windows;
 using GameActivity.Views.Interface;
 using Playnite.SDK.Events;
@@ -21,7 +25,6 @@ using GameActivity.Models;
 using System.Windows.Media;
 using System.Windows.Controls.Primitives;
 using GameActivity.Services;
-using Playnite.Converters;
 using System.Globalization;
 
 namespace GameActivity
@@ -509,9 +512,9 @@ namespace GameActivity
 
                 try
                 {
-                    resourcesLists.Add(new ResourcesList { Key = "Ga_LastDateSession", Value = Convert.ToDateTime(SelectedGameGameActivity.GetLastSession()).ToString(Playnite.Common.Constants.DateUiFormat) });
-                    resourcesLists.Add(new ResourcesList { Key = "Ga_LastDateTimeSession", Value = Convert.ToDateTime(SelectedGameGameActivity.GetLastSession()).ToString(Playnite.Common.Constants.DateUiFormat) 
-                        + " " + Convert.ToDateTime(SelectedGameGameActivity.GetLastSession()).ToString(Playnite.Common.Constants.TimeUiFormat) });
+                    resourcesLists.Add(new ResourcesList { Key = "Ga_LastDateSession", Value = Convert.ToDateTime(SelectedGameGameActivity.GetLastSession()).ToString(Constants.DateUiFormat) });
+                    resourcesLists.Add(new ResourcesList { Key = "Ga_LastDateTimeSession", Value = Convert.ToDateTime(SelectedGameGameActivity.GetLastSession()).ToString(Constants.DateUiFormat) 
+                        + " " + Convert.ToDateTime(SelectedGameGameActivity.GetLastSession()).ToString(Constants.TimeUiFormat) });
                 }
                 catch
                 {

@@ -14,11 +14,14 @@ using GameActivity.Database.Collections;
 using GameActivity.Models;
 using LiveCharts;
 using PluginCommon;
+using PluginCommon.PlayniteResources;
+using PluginCommon.PlayniteResources.API;
+using PluginCommon.PlayniteResources.Common;
+using PluginCommon.PlayniteResources.Converters;
 using LiveCharts.Wpf;
 using LiveCharts.Configurations;
 using PluginCommon.LiveChartsCommon;
 using Playnite.Controls;
-using Playnite.Converters;
 using System.Globalization;
 using GameActivity.Views.Interface;
 using LiveCharts.Events;
@@ -604,12 +607,12 @@ namespace GameActivity
             if (dateSelected == "")
             {
                 gameLabel.Content = resources.GetString("LOCGameActivityLogTitle") + " (" 
-                    + Convert.ToDateTime(gameActivity.GetLastSession()).ToString(Playnite.Common.Constants.DateUiFormat) + ")";
+                    + Convert.ToDateTime(gameActivity.GetLastSession()).ToString(Constants.DateUiFormat) + ")";
             }
             else
             {
                 gameLabel.Content = resources.GetString("LOCGameActivityLogTitleDate") + " "
-                    + Convert.ToDateTime(dateSelected).ToString(Playnite.Common.Constants.DateUiFormat);
+                    + Convert.ToDateTime(dateSelected).ToString(Constants.DateUiFormat);
             }
         }
         #endregion

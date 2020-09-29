@@ -3,9 +3,13 @@ using LiveCharts;
 using LiveCharts.Configurations;
 using LiveCharts.Events;
 using LiveCharts.Wpf;
-using Playnite.Converters;
 using Playnite.SDK;
+using PluginCommon;
 using PluginCommon.LiveChartsCommon;
+using PluginCommon.PlayniteResources;
+using PluginCommon.PlayniteResources.API;
+using PluginCommon.PlayniteResources.Common;
+using PluginCommon.PlayniteResources.Converters;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -186,7 +190,7 @@ namespace GameActivity.Views.Interface
 
             for (int iDay = 0; iDay < listDate.Length; iDay++)
             {
-                listDate[iDay] = Convert.ToDateTime(listDate[iDay]).ToString(Playnite.Common.Constants.DateUiFormat);
+                listDate[iDay] = Convert.ToDateTime(listDate[iDay]).ToString(Constants.DateUiFormat);
             }
             string[] activityForGameLabels = listDate;
 

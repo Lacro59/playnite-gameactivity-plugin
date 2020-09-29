@@ -1,6 +1,12 @@
-﻿Name: Game Activity
+﻿Id: playnite-gameactivity-plugin
+Name: GameActivity
 Author: Lacro59
-Version: 0.12.1
+Version: 1.0
 Module: GameActivity.dll
 Type: GenericPlugin
 Icon: icon.png
+Links:
+  - Name: Plugin forum
+    Url: https://playnite.link/forum/thread-264.html
+  - Name: Plugin Github
+    Url: https://github.com/Lacro59/playnite-gameactivity-plugin
