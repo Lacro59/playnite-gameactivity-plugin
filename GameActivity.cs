@@ -810,8 +810,6 @@ namespace GameActivity
                                 JObject itemOBJ = JObject.Parse(JsonConvert.SerializeObject(items));
                                 string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
 
-                                //logger.Info("----- " + dataID.ToLower() + " - " + settings.HWiNFO_fps_elementID.ToLower());
-
                                 if (dataID.ToLower() == settings.HWiNFO_fps_elementID.ToLower())
                                 {
                                     fpsValue = (int)Math.Round((Double)itemOBJ["Value"]);
@@ -827,8 +825,6 @@ namespace GameActivity
                             {
                                 JObject itemOBJ = JObject.Parse(JsonConvert.SerializeObject(items));
                                 string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
-
-                                //logger.Info("----- " + dataID.ToLower() + " - " + settings.HWiNFO_gpu_elementID.ToLower());
 
                                 if (dataID.ToLower() == settings.HWiNFO_gpu_elementID.ToLower())
                                 {
@@ -846,8 +842,6 @@ namespace GameActivity
                                 JObject itemOBJ = JObject.Parse(JsonConvert.SerializeObject(items));
                                 string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
 
-                                //logger.Info("----- " + dataID.ToLower() + " - " + settings.HWiNFO_gpu_elementID.ToLower());
-
                                 if (dataID.ToLower() == settings.HWiNFO_gpuT_elementID.ToLower())
                                 {
                                     gpuTValue = (int)Math.Round((Double)itemOBJ["Value"]);
@@ -863,8 +857,6 @@ namespace GameActivity
                             {
                                 JObject itemOBJ = JObject.Parse(JsonConvert.SerializeObject(items));
                                 string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
-
-                                //logger.Info("----- " + dataID.ToLower() + " - " + settings.HWiNFO_gpu_elementID.ToLower());
 
                                 if (dataID.ToLower() == settings.HWiNFO_cpuT_elementID.ToLower())
                                 {
