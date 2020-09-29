@@ -632,7 +632,7 @@ namespace GameActivity
                 tbGa.Name = "PART_GameActivity_TextBlock";
                 tbGa.Text = resources.GetString("LOCGameActivityTitle");
                 tbGa.Style = (Style)resources.GetResource("BaseTextBlockStyle");
-                tbGa.Margin = new Thickness(0, 15, 0, 10);
+                tbGa.Margin = new Thickness(0, 15, 0, 5);
 
                 Separator sep = new Separator();
                 sep.Name = "PART_GameActivity_Separator";

@@ -33,8 +33,11 @@ namespace GameActivity.Views.Interface
             this.variateurLog = variateurLog;
             GetActivityForGamesLogGraphics(gameActivity, withTitle, dateSelected, title);
 
-            gameLabelsX.ShowLabels = settings.EnableIntegrationAxisGraphicLog;
-            gameLabelsY.ShowLabels = settings.EnableIntegrationOrdinatesGraphicLog;
+            if (!settings.IgnoreSettings)
+            {
+                gameLabelsX.ShowLabels = settings.EnableIntegrationAxisGraphicLog;
+                gameLabelsY.ShowLabels = settings.EnableIntegrationOrdinatesGraphicLog;
+            }
         }
 
         public void GetActivityForGamesLogGraphics(GameActivityClass gameActivity, bool withTitle, string dateSelected = "", string title = "")
@@ -159,13 +162,17 @@ namespace GameActivity.Views.Interface
             // Define height & width
             var parent = ((FrameworkElement)((FrameworkElement)((FrameworkElement)gameSeriesLog.Parent).Parent).Parent);
 
+#if DEBUG
+            logger.Debug($"SuccessStory - GameActivityGameGraphicLog() - parent.name: {parent.Name} - parent.Height: {parent.Height} - parent.Width: {parent.Width} -  - lGameSeriesLog.ActualHeight: {lGameSeriesLog.ActualHeight}");
+#endif
+
             if (!double.IsNaN(parent.Height))
             {
-                gameSeriesLog.Height = parent.Height;
+                gameSeriesLog.Height = parent.Height - lGameSeriesLog.ActualHeight;
             }
             else
             {
-                gameSeriesLog.Height = parent.ActualHeight;
+                gameSeriesLog.Height = parent.ActualHeight - lGameSeriesLog.ActualHeight;
             }
 
             if (!double.IsNaN(parent.Width))
@@ -174,7 +181,7 @@ namespace GameActivity.Views.Interface
             }
             else
             {
-                gameSeriesLog.Height = parent.ActualHeight;
+                gameSeriesLog.Width = parent.ActualWidth;
             }
         }
     }

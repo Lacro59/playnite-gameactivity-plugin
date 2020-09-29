@@ -9,6 +9,7 @@ namespace GameActivity
         private readonly GameActivity plugin;
 
         public bool EnableCheckVersion { get; set; } = true;
+        public bool IgnoreSettings { get; set; } = false;
 
         public bool EnableIntegrationInDescription { get; set; } = false;
         public bool EnableIntegrationInDescriptionWithToggle { get; set; } = false;

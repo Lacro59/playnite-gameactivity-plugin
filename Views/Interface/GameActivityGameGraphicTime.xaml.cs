@@ -34,8 +34,11 @@ namespace GameActivity.Views.Interface
 
             GetActivityForGamesTimeGraphics(gameActivity, variateurTime);
 
-            gameLabelsX.ShowLabels = settings.EnableIntegrationAxisGraphic;
-            gameLabelsY.ShowLabels = settings.EnableIntegrationOrdinatesGraphic;
+            if (!settings.IgnoreSettings)
+            {
+                gameLabelsX.ShowLabels = settings.EnableIntegrationAxisGraphic;
+                gameLabelsY.ShowLabels = settings.EnableIntegrationOrdinatesGraphic;
+            }
         }
 
         public void GetActivityForGamesTimeGraphics(GameActivityClass gameActivity, int variateurTime)
@@ -218,6 +221,10 @@ namespace GameActivity.Views.Interface
         {
             // Define height & width
             var parent = ((FrameworkElement)((FrameworkElement)gameSeries.Parent).Parent);
+
+#if DEBUG
+            logger.Debug($"SuccessStory - GameActivityGameGraphicTime() - parent.name: {parent.Name} - parent.Height: {parent.Height} - parent.Width: {parent.Width}");
+#endif
 
             if (!double.IsNaN(parent.Height))
             {
