@@ -6,7 +6,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
              xmlns:localLVC="clr-namespace:PluginCommon.LiveChartsCommon;assembly=PluginCommon"
-             xmlns:pcon="clr-namespace:Playnite.Converters;assembly=Playnite"
+             xmlns:pcon="clr-namespace:PluginCommon.PlayniteResources.Converters;assembly=PluginCommon"
              xmlns:localPlugin="clr-namespace:PluginCommon;assembly=PluginCommon"
              mc:Ignorable="d" Height="740" Width="1260" 
              d:DesignStyle="{StaticResource WindowDesignStyle}"
@@ -18,6 +18,7 @@
         <pcon:LongToTimePlayedConverter x:Key="LongToTimePlayedConverter" />
         <localPlugin:CompareValueConverter x:Key="CompareValueConverter" />
         <localPlugin:LocalDateTimeConverter x:Key="LocalDateTimeConverter" />
+        <FontFamily x:Key="font">pack://application:,,,/PluginCommon;component/Resources/font.ttf#font</FontFamily>
     </WindowBase.Resources>
 
     <DockPanel Margin="10,10,10,0">
@@ -66,13 +67,13 @@
 
                         <Label Content="{DynamicResource LOCGameActivityTotalHours}" HorizontalAlignment="Center" VerticalAlignment="Top" Height="30" FontSize="20" FontWeight="Bold" MinWidth="50" Grid.Column="1" Grid.Row="0" />
 
-                        <lvc:CartesianChart x:Name="acmSeries" LegendLocation="none" Grid.Column="1" Grid.Row="1" FontFamily="/GameActivity;component/Resources/#font">
+                        <lvc:CartesianChart x:Name="acmSeries" LegendLocation="none" Grid.Column="1" Grid.Row="1" FontFamily="{StaticResource font}">
                             <lvc:CartesianChart.DataTooltip>
                                 <localLVC:CustomerToolTipForTime ShowIcon="{Binding ShowIcon}"/>
                             </lvc:CartesianChart.DataTooltip>
 
                             <lvc:CartesianChart.AxisX>
-                                <lvc:Axis x:Name="acmLabelsX" ShowLabels="True" FontSize="14" FontFamily="/GameActivity;component/Resources/#font">
+                                <lvc:Axis x:Name="acmLabelsX" ShowLabels="True" FontSize="14" FontFamily="{StaticResource font}">
                                     <lvc:Axis.Separator>
                                         <lvc:Separator Step="1" />
                                     </lvc:Axis.Separator>
@@ -98,7 +99,7 @@
 
                         <Label Grid.Column="1" Grid.Row="0" x:Name="acwLabel" Content="{DynamicResource LOCGameActivityTotalHoursByWeeks}" Height="30" FontSize="20" FontWeight="Bold" MinWidth="50" HorizontalAlignment="Center"/>
 
-                        <lvc:CartesianChart x:Name="acwSeries" LegendLocation="none" Grid.Column="1" Grid.Row="1" FontFamily="/GameActivity;component/Resources/#font" >
+                        <lvc:CartesianChart x:Name="acwSeries" LegendLocation="none" Grid.Column="1" Grid.Row="1" FontFamily="{StaticResource font}" >
                             <lvc:CartesianChart.DataTooltip>
                                 <localLVC:CustomerToolTipForMultipleTime ShowIcon="{Binding ShowIcon}"/>
                             </lvc:CartesianChart.DataTooltip>
