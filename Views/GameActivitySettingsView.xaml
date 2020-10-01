@@ -390,7 +390,7 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <Label Content="{DynamicResource LOCHeight}" Grid.Column="0" />
-                                <TextBox Text="{Binding IntegrationShowGraphicHeight, FallbackValue=200}" Width="40" Grid.Column="1" />
+                                <TextBox Text="{Binding IntegrationShowGraphicHeight, FallbackValue=200}" Width="40" Grid.Column="1" VerticalAlignment="Center" />
                             </Grid>
 
                             <CheckBox Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" IsChecked="{Binding EnableIntegrationAxisGraphic}">
@@ -474,7 +474,7 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <Label Content="{DynamicResource LOCHeight}" Grid.Column="0" />
-                                <TextBox Text="{Binding IntegrationShowGraphicLogHeight, FallbackValue=200}" Width="40" Grid.Column="1" />
+                                <TextBox Text="{Binding IntegrationShowGraphicLogHeight, FallbackValue=200}" Width="40" Grid.Column="1" VerticalAlignment="Center" />
                             </Grid>
 
                             <CheckBox Grid.Column="0" Grid.Row="1"  VerticalAlignment="Center" IsChecked="{Binding EnableIntegrationAxisGraphicLog}">
