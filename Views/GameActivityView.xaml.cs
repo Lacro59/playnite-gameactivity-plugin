@@ -21,7 +21,6 @@ using PluginCommon.PlayniteResources.Converters;
 using LiveCharts.Wpf;
 using LiveCharts.Configurations;
 using PluginCommon.LiveChartsCommon;
-using Playnite.Controls;
 using System.Globalization;
 using GameActivity.Views.Interface;
 using LiveCharts.Events;
@@ -32,7 +31,7 @@ namespace GameActivity
     /// <summary>
     /// Logique d'interaction pour GameActivity.xaml.
     /// </summary>
-    public partial class GameActivityView : WindowBase
+    public partial class GameActivityView : Window
     {
         private static readonly ILogger logger = LogManager.GetLogger();
         private static IResourceProvider resources = new ResourceProvider();
