@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Playnite.SDK;
+using PluginCommon;
 using System;
 
 namespace GameActivity.Models
@@ -33,7 +34,15 @@ namespace GameActivity.Models
             {
                 if (SourceID != Guid.Parse("00000000-0000-0000-0000-000000000000"))
                 {
-                    return GameActivity.DatabaseReference.Sources.Get(SourceID).Name;
+                    try
+                    {
+                        return GameActivity.DatabaseReference.Sources.Get(SourceID).Name;
+                    }
+                    catch (Exception ex)
+                    {
+                        Common.LogError(ex, "GameActivity", $"Error in ActivitySourceName");
+                        return "Playnite";
+                    }
                 }
 
                 return "Playnite";

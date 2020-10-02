@@ -26,12 +26,12 @@ namespace GameActivity.Views.Interface
         public int variateurLog = 0;
         public int variateurLogTemp = 0;
 
-        public GameActivityGameGraphicLog(GameActivitySettings settings, GameActivityClass gameActivity, string dateSelected = "", string title = "", int variateurLog = 0, bool withTitle = true)
+        public GameActivityGameGraphicLog(GameActivitySettings settings, GameActivityClass gameActivity, string dateSelected = "", string title = "", int variateurLog = 0, bool withTitle = true, int limit = 10)
         {
             InitializeComponent();
 
             this.variateurLog = variateurLog;
-            GetActivityForGamesLogGraphics(gameActivity, withTitle, dateSelected, title);
+            GetActivityForGamesLogGraphics(gameActivity, withTitle, dateSelected, title, limit);
 
             if (!settings.IgnoreSettings)
             {
@@ -40,7 +40,7 @@ namespace GameActivity.Views.Interface
             }
         }
 
-        public void GetActivityForGamesLogGraphics(GameActivityClass gameActivity, bool withTitle, string dateSelected = "", string title = "")
+        public void GetActivityForGamesLogGraphics(GameActivityClass gameActivity, bool withTitle, string dateSelected = "", string title = "", int limit = 10)
         {
             List<ActivityDetailsData> gameActivitiesDetails = gameActivity.GetSessionActivityDetails(dateSelected, title);
 
@@ -48,17 +48,17 @@ namespace GameActivity.Views.Interface
             List<ActivityDetailsData> gameLogsDefinitive = new List<ActivityDetailsData>();
             if (gameActivitiesDetails.Count > 0)
             {
-                if (gameActivitiesDetails.Count > 10)
+                if (gameActivitiesDetails.Count > limit)
                 {
                     // Variateur
                     int conteurEnd = gameActivitiesDetails.Count + variateurLog;
-                    int conteurStart = conteurEnd - 10;
+                    int conteurStart = conteurEnd - limit;
 
                     if (conteurEnd > gameActivitiesDetails.Count)
                     {
                         int temp = conteurEnd - gameActivitiesDetails.Count;
                         conteurEnd = gameActivitiesDetails.Count;
-                        conteurStart = conteurEnd - 10;
+                        conteurStart = conteurEnd - limit;
 
                         variateurLog = variateurLogTemp;
                     }
@@ -66,7 +66,7 @@ namespace GameActivity.Views.Interface
                     if (conteurStart < 0)
                     {
                         conteurStart = 0;
-                        conteurEnd = 10;
+                        conteurEnd = limit;
 
                         variateurLog = variateurLogTemp;
                     }
@@ -75,7 +75,7 @@ namespace GameActivity.Views.Interface
 
                     // Create data
                     int sCount = 0;
-                    activityForGameLogLabels = new string[10];
+                    activityForGameLogLabels = new string[limit];
                     for (int iLog = conteurStart; iLog < conteurEnd; iLog++)
                     {
                         gameLogsDefinitive.Add(gameActivitiesDetails[iLog]);

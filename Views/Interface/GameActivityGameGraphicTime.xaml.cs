@@ -28,11 +28,11 @@ namespace GameActivity.Views.Interface
         public event DataClickHandler gameSeriesDataClick;
 
 
-        public GameActivityGameGraphicTime(GameActivitySettings settings, GameActivityClass gameActivity, int variateurTime = 0)
+        public GameActivityGameGraphicTime(GameActivitySettings settings, GameActivityClass gameActivity, int variateurTime = 0, int limit = 9)
         {
             InitializeComponent();
 
-            GetActivityForGamesTimeGraphics(gameActivity, variateurTime);
+            GetActivityForGamesTimeGraphics(gameActivity, variateurTime, limit);
 
             if (!settings.IgnoreSettings)
             {
@@ -41,9 +41,9 @@ namespace GameActivity.Views.Interface
             }
         }
 
-        public void GetActivityForGamesTimeGraphics(GameActivityClass gameActivity, int variateurTime)
+        public void GetActivityForGamesTimeGraphics(GameActivityClass gameActivity, int variateurTime, int limit)
         {
-            string[] listDate = new string[10];
+            string[] listDate = new string[limit + 1];
             ChartValues<CustomerForTime> series1 = new ChartValues<CustomerForTime>();
             ChartValues<CustomerForTime> series2 = new ChartValues<CustomerForTime>();
             ChartValues<CustomerForTime> series3 = new ChartValues<CustomerForTime>();
@@ -70,36 +70,20 @@ namespace GameActivity.Views.Interface
             dateStart = dateStart.AddDays(variateurTime);
 
             // Periode data showned
-            for (int iDay = 0; iDay < 10; iDay++)
+            for (int i = limit; i >= 0; i--)
             {
-                listDate[iDay] = dateStart.AddDays(iDay - 9).ToString("yyyy-MM-dd");
-                series1.Add(new CustomerForTime
+                listDate[(limit - i)] = dateStart.AddDays(-i).ToString("yyyy-MM-dd");
+                CustomerForTime customerForTime = new CustomerForTime
                 {
-                    Name = dateStart.AddDays(iDay - 9).ToString("yyyy-MM-dd"),
-                    Values = 0,
-                });
-                series2.Add(new CustomerForTime
-                {
-                    Name = dateStart.AddDays(iDay - 9).ToString("yyyy-MM-dd"),
-                    Values = 0,
-                });
-                series3.Add(new CustomerForTime
-                {
-                    Name = dateStart.AddDays(iDay - 9).ToString("yyyy-MM-dd"),
-                    Values = 0,
-                });
-                series4.Add(new CustomerForTime
-                {
-                    Name = dateStart.AddDays(iDay - 9).ToString("yyyy-MM-dd"),
-                    Values = 0,
-                });
-                series5.Add(new CustomerForTime
-                {
-                    Name = dateStart.AddDays(iDay - 9).ToString("yyyy-MM-dd"),
-                    Values = 0,
-                });
+                    Name = dateStart.AddDays(-i).ToString("yyyy-MM-dd"),
+                    Values = 0
+                };
+                series1.Add(customerForTime);
+                series2.Add(customerForTime);
+                series3.Add(customerForTime);
+                series4.Add(customerForTime);
+                series5.Add(customerForTime);
             }
-
 
             // Search data in periode
             for (int iActivity = 0; iActivity < gameActivities.Count; iActivity++)
@@ -107,7 +91,8 @@ namespace GameActivity.Views.Interface
                 long elapsedSeconds = gameActivities[iActivity].ElapsedSeconds;
                 string dateSession = Convert.ToDateTime(gameActivities[iActivity].DateSession).ToLocalTime().ToString("yyyy-MM-dd");
 
-                for (int iDay = 0; iDay < 10; iDay++)
+                //for (int iDay = 0; iDay < 10; iDay++)
+                for (int iDay = limit; iDay >= 0; iDay--)
                 {
                     if (listDate[iDay] == dateSession)
                     {

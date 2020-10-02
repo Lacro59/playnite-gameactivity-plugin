@@ -623,6 +623,8 @@ namespace GameActivity
         // Create FrameworkElement with game activity datas
         public StackPanel CreateGa(GameActivityClass gameActivity, bool ShowTitle, bool ShowGraphic, bool ShowGraphicLog, bool IsCustom = false)
         {
+            settings.IgnoreSettings = false;
+
             StackPanel spGa = new StackPanel();
             spGa.Name = "PART_GameActivity";
 
@@ -653,7 +655,7 @@ namespace GameActivity
                     spGaG.Margin = new Thickness(0, 5, 0, 5);
                 }
 
-                spGaG.Children.Add(new GameActivityGameGraphicTime(settings, gameActivity));
+                spGaG.Children.Add(new GameActivityGameGraphicTime(settings, gameActivity, 0, settings.IntegrationGraphicOptionsCountAbscissa));
 
                 spGa.Children.Add(spGaG);
                 spGa.UpdateLayout();
@@ -669,7 +671,7 @@ namespace GameActivity
                     spGaGL.Margin = new Thickness(0, 5, 0, 5);
                 }
 
-                spGaGL.Children.Add(new GameActivityGameGraphicLog(settings, gameActivity, "", "", 0, !IsCustom));
+                spGaGL.Children.Add(new GameActivityGameGraphicLog(settings, gameActivity, "", "", 0, !IsCustom, settings.IntegrationGraphicLogOptionsCountAbscissa));
 
                 spGa.Children.Add(spGaGL);
                 spGa.UpdateLayout();

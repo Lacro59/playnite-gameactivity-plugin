@@ -72,6 +72,8 @@ namespace GameActivity
 
         public GameActivityView(GameActivitySettings settings, IPlayniteAPI PlayniteApi, string pathExtData, Game GameSelected = null)
         {
+            settings.IgnoreSettings = false;
+
             this.PlayniteApi = PlayniteApi;
             dbPlaynite = PlayniteApi.Database;
             pathsPlaynite = PlayniteApi.Paths;
@@ -583,6 +585,7 @@ namespace GameActivity
             GameActivityClass gameActivity = GameActivityDatabases.Get(Guid.Parse(gameID));
             List<Activity> gameActivities = gameActivity.Activities;
 
+            settings.IgnoreSettings = true;
             var graph = new GameActivityGameGraphicTime(settings, gameActivity, variateurTime);
             graph.gameSeriesDataClick += new DataClickHandler(GameSeries_DataClick);
             gameSeriesContener.Children.Add(graph);

@@ -30,6 +30,8 @@ namespace GameActivity
         public bool EnableIntegrationOrdinatesGraphic { get; set; } = true;
         public bool EnableIntegrationAxisGraphicLog { get; set; } = true;
         public bool EnableIntegrationOrdinatesGraphicLog { get; set; } = true;
+        public int IntegrationGraphicOptionsCountAbscissa { get; set; } = 11;
+        public int IntegrationGraphicLogOptionsCountAbscissa { get; set; } = 11;
 
         public bool EnableIntegrationButton { get; set; } = false;
         public bool EnableIntegrationButtonDetails { get; set; } = false;
@@ -102,6 +104,8 @@ namespace GameActivity
                 EnableIntegrationOrdinatesGraphic = savedSettings.EnableIntegrationOrdinatesGraphic;
                 EnableIntegrationAxisGraphicLog = savedSettings.EnableIntegrationAxisGraphicLog;
                 EnableIntegrationOrdinatesGraphicLog = savedSettings.EnableIntegrationOrdinatesGraphicLog;
+                IntegrationGraphicOptionsCountAbscissa = savedSettings.IntegrationGraphicOptionsCountAbscissa;
+                IntegrationGraphicLogOptionsCountAbscissa = savedSettings.IntegrationGraphicLogOptionsCountAbscissa;
 
                 EnableIntegrationButton = savedSettings.EnableIntegrationButton;
                 EnableIntegrationButtonDetails = savedSettings.EnableIntegrationButtonDetails;

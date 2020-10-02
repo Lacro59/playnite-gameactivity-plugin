@@ -59,10 +59,11 @@
 	    <sys:String x:Key="LOCGameActivityIntegrationInCustomTheme">Пользовательская интеграция темы (если интегрирована)</sys:String>
 	    <sys:String x:Key="LOCGameActivityIntegrationButton">Добавить кнопку</sys:String>
 	    <sys:String x:Key="LOCGameActivityIntegrationButtonDetails">Добавить кнопку с деталями</sys:String>
-	    <sys:String x:Key="LOCGameActivityIntegrationButtonHeader">Добавить кнопку в окне</sys:String>
-	
+        <sys:String x:Key="LOCGameActivityIntegrationButtonHeader">Добавить кнопку в окне</sys:String>
+        <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">Number of data in abscissa</sys:String>
 
-	    <sys:String x:Key="LOCGameActivityIntegrationOptions">Элементы выбора</sys:String>
+
+        <sys:String x:Key="LOCGameActivityIntegrationOptions">Элементы выбора</sys:String>
 	    <sys:String x:Key="LOCGameActivityIntegrationGraphicOptions">Настройки графика</sys:String>
 	    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabels">Show absciss label</sys:String>
 	    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">Показать метки координат</sys:String>
