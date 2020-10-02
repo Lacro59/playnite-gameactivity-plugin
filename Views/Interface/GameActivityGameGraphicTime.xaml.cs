@@ -3,9 +3,13 @@ using LiveCharts;
 using LiveCharts.Configurations;
 using LiveCharts.Events;
 using LiveCharts.Wpf;
-using Playnite.Converters;
 using Playnite.SDK;
+using PluginCommon;
 using PluginCommon.LiveChartsCommon;
+using PluginCommon.PlayniteResources;
+using PluginCommon.PlayniteResources.API;
+using PluginCommon.PlayniteResources.Common;
+using PluginCommon.PlayniteResources.Converters;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -30,8 +34,11 @@ namespace GameActivity.Views.Interface
 
             GetActivityForGamesTimeGraphics(gameActivity, variateurTime);
 
-            gameLabelsX.ShowLabels = settings.EnableIntegrationAxisGraphic;
-            gameLabelsY.ShowLabels = settings.EnableIntegrationOrdinatesGraphic;
+            if (!settings.IgnoreSettings)
+            {
+                gameLabelsX.ShowLabels = settings.EnableIntegrationAxisGraphic;
+                gameLabelsY.ShowLabels = settings.EnableIntegrationOrdinatesGraphic;
+            }
         }
 
         public void GetActivityForGamesTimeGraphics(GameActivityClass gameActivity, int variateurTime)
@@ -186,7 +193,7 @@ namespace GameActivity.Views.Interface
 
             for (int iDay = 0; iDay < listDate.Length; iDay++)
             {
-                listDate[iDay] = Convert.ToDateTime(listDate[iDay]).ToString(Playnite.Common.Constants.DateUiFormat);
+                listDate[iDay] = Convert.ToDateTime(listDate[iDay]).ToString(Constants.DateUiFormat);
             }
             string[] activityForGameLabels = listDate;
 
@@ -214,6 +221,10 @@ namespace GameActivity.Views.Interface
         {
             // Define height & width
             var parent = ((FrameworkElement)((FrameworkElement)gameSeries.Parent).Parent);
+
+#if DEBUG
+            logger.Debug($"SuccessStory - GameActivityGameGraphicTime() - parent.name: {parent.Name} - parent.Height: {parent.Height} - parent.Width: {parent.Width}");
+#endif
 
             if (!double.IsNaN(parent.Height))
             {

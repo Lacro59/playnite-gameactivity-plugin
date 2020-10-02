@@ -7,6 +7,11 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using PluginCommon;
+using PluginCommon.PlayniteResources;
+using PluginCommon.PlayniteResources.API;
+using PluginCommon.PlayniteResources.Common;
+using PluginCommon.PlayniteResources.Converters;
 
 namespace GameActivity.Views.Interface
 {
@@ -28,8 +33,11 @@ namespace GameActivity.Views.Interface
             this.variateurLog = variateurLog;
             GetActivityForGamesLogGraphics(gameActivity, withTitle, dateSelected, title);
 
-            gameLabelsX.ShowLabels = settings.EnableIntegrationAxisGraphicLog;
-            gameLabelsY.ShowLabels = settings.EnableIntegrationOrdinatesGraphicLog;
+            if (!settings.IgnoreSettings)
+            {
+                gameLabelsX.ShowLabels = settings.EnableIntegrationAxisGraphicLog;
+                gameLabelsY.ShowLabels = settings.EnableIntegrationOrdinatesGraphicLog;
+            }
         }
 
         public void GetActivityForGamesLogGraphics(GameActivityClass gameActivity, bool withTitle, string dateSelected = "", string title = "")
@@ -71,7 +79,7 @@ namespace GameActivity.Views.Interface
                     for (int iLog = conteurStart; iLog < conteurEnd; iLog++)
                     {
                         gameLogsDefinitive.Add(gameActivitiesDetails[iLog]);
-                        activityForGameLogLabels[sCount] = Convert.ToDateTime(gameActivitiesDetails[iLog].Datelog).ToLocalTime().ToString(Playnite.Common.Constants.TimeUiFormat);
+                        activityForGameLogLabels[sCount] = Convert.ToDateTime(gameActivitiesDetails[iLog].Datelog).ToLocalTime().ToString(Constants.TimeUiFormat);
                         sCount += 1;
                     }
                 }
@@ -82,7 +90,7 @@ namespace GameActivity.Views.Interface
                     activityForGameLogLabels = new string[gameActivitiesDetails.Count];
                     for (int iLog = 0; iLog < gameActivitiesDetails.Count; iLog++)
                     {
-                        activityForGameLogLabels[iLog] = Convert.ToDateTime(gameActivitiesDetails[iLog].Datelog).ToLocalTime().ToString(Playnite.Common.Constants.TimeUiFormat);
+                        activityForGameLogLabels[iLog] = Convert.ToDateTime(gameActivitiesDetails[iLog].Datelog).ToLocalTime().ToString(Constants.TimeUiFormat);
                     }
                 }
             }
@@ -145,7 +153,7 @@ namespace GameActivity.Views.Interface
             {
                 lGameSeriesLog.Visibility = Visibility.Visible;
                 lGameSeriesLog.Content = resources.GetString("LOCGameActivityLogTitleDate") + " "
-                    + ((DateTime)gameActivitiesDetails[0].Datelog).ToString(Playnite.Common.Constants.DateUiFormat);
+                    + ((DateTime)gameActivitiesDetails[0].Datelog).ToString(Constants.DateUiFormat);
             }
         }
 
@@ -154,13 +162,17 @@ namespace GameActivity.Views.Interface
             // Define height & width
             var parent = ((FrameworkElement)((FrameworkElement)((FrameworkElement)gameSeriesLog.Parent).Parent).Parent);
 
+#if DEBUG
+            logger.Debug($"SuccessStory - GameActivityGameGraphicLog() - parent.name: {parent.Name} - parent.Height: {parent.Height} - parent.Width: {parent.Width} -  - lGameSeriesLog.ActualHeight: {lGameSeriesLog.ActualHeight}");
+#endif
+
             if (!double.IsNaN(parent.Height))
             {
-                gameSeriesLog.Height = parent.Height;
+                gameSeriesLog.Height = parent.Height - lGameSeriesLog.ActualHeight;
             }
             else
             {
-                gameSeriesLog.Height = parent.ActualHeight;
+                gameSeriesLog.Height = parent.ActualHeight - lGameSeriesLog.ActualHeight;
             }
 
             if (!double.IsNaN(parent.Width))
@@ -169,7 +181,7 @@ namespace GameActivity.Views.Interface
             }
             else
             {
-                gameSeriesLog.Height = parent.ActualHeight;
+                gameSeriesLog.Width = parent.ActualWidth;
             }
         }
     }

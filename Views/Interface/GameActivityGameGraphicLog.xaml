@@ -8,10 +8,15 @@
                     xmlns:localLVC="clr-namespace:PluginCommon.LiveChartsCommon;assembly=PluginCommon"
                     mc:Ignorable="d">
 
-    <StackPanel>
-        <Label Name="lGameSeriesLog" Visibility="Collapsed"></Label>
-        
-        <lvc:CartesianChart LegendLocation="none" Name="gameSeriesLog" Loaded="GameSeriesLog_Loaded" Height="150">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0" Name="lGameSeriesLog" Visibility="Collapsed"></Label>
+
+        <lvc:CartesianChart Grid.Row="1" LegendLocation="none" Name="gameSeriesLog" Loaded="GameSeriesLog_Loaded" Height="150">
             <lvc:CartesianChart.DataTooltip>
                 <localLVC:CustomerToolTipForMultipleTime ShowIcon="{Binding ShowIcon}"/>
             </lvc:CartesianChart.DataTooltip>
@@ -28,5 +33,5 @@
                 <lvc:Axis Name="gameLabelsY" MinValue="0"></lvc:Axis>
             </lvc:CartesianChart.AxisY>
         </lvc:CartesianChart>
-    </StackPanel>
+    </Grid>
 </UserControl>

@@ -5,7 +5,7 @@
     <!--  
     MainView
     -->
-    <sys:String x:Key="LOCGameActivity">Game Activity</sys:String>
+    <sys:String x:Key="LOCGameActivity">GameActivity</sys:String>
     <sys:String x:Key="LOCGameActivityTitle">Activity</sys:String>
 
     <!-- 

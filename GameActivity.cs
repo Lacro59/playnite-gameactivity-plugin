@@ -13,6 +13,10 @@ using System.Runtime.InteropServices;
 using MSIAfterburnerNET.HM.Interop;
 using System.Reflection;
 using PluginCommon;
+using PluginCommon.PlayniteResources;
+using PluginCommon.PlayniteResources.API;
+using PluginCommon.PlayniteResources.Common;
+using PluginCommon.PlayniteResources.Converters;
 using System.Windows;
 using GameActivity.Views.Interface;
 using Playnite.SDK.Events;
@@ -21,7 +25,6 @@ using GameActivity.Models;
 using System.Windows.Media;
 using System.Windows.Controls.Primitives;
 using GameActivity.Services;
-using Playnite.Converters;
 using System.Globalization;
 
 namespace GameActivity
@@ -61,7 +64,7 @@ namespace GameActivity
             string pluginFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
             // Add plugin localization in application ressource.
-            PluginCommon.Localization.SetPluginLanguage(pluginFolder, api.Paths.ConfigurationPath);
+            PluginCommon.Localization.SetPluginLanguage(pluginFolder, api.ApplicationSettings.Language);
             // Add common in application ressource.
             PluginCommon.Common.Load(pluginFolder);
 
@@ -509,9 +512,9 @@ namespace GameActivity
 
                 try
                 {
-                    resourcesLists.Add(new ResourcesList { Key = "Ga_LastDateSession", Value = Convert.ToDateTime(SelectedGameGameActivity.GetLastSession()).ToString(Playnite.Common.Constants.DateUiFormat) });
-                    resourcesLists.Add(new ResourcesList { Key = "Ga_LastDateTimeSession", Value = Convert.ToDateTime(SelectedGameGameActivity.GetLastSession()).ToString(Playnite.Common.Constants.DateUiFormat) 
-                        + " " + Convert.ToDateTime(SelectedGameGameActivity.GetLastSession()).ToString(Playnite.Common.Constants.TimeUiFormat) });
+                    resourcesLists.Add(new ResourcesList { Key = "Ga_LastDateSession", Value = Convert.ToDateTime(SelectedGameGameActivity.GetLastSession()).ToString(Constants.DateUiFormat) });
+                    resourcesLists.Add(new ResourcesList { Key = "Ga_LastDateTimeSession", Value = Convert.ToDateTime(SelectedGameGameActivity.GetLastSession()).ToString(Constants.DateUiFormat) 
+                        + " " + Convert.ToDateTime(SelectedGameGameActivity.GetLastSession()).ToString(Constants.TimeUiFormat) });
                 }
                 catch
                 {
@@ -629,7 +632,7 @@ namespace GameActivity
                 tbGa.Name = "PART_GameActivity_TextBlock";
                 tbGa.Text = resources.GetString("LOCGameActivityTitle");
                 tbGa.Style = (Style)resources.GetResource("BaseTextBlockStyle");
-                tbGa.Margin = new Thickness(0, 15, 0, 10);
+                tbGa.Margin = new Thickness(0, 15, 0, 5);
 
                 Separator sep = new Separator();
                 sep.Name = "PART_GameActivity_Separator";
@@ -807,8 +810,6 @@ namespace GameActivity
                                 JObject itemOBJ = JObject.Parse(JsonConvert.SerializeObject(items));
                                 string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
 
-                                //logger.Info("----- " + dataID.ToLower() + " - " + settings.HWiNFO_fps_elementID.ToLower());
-
                                 if (dataID.ToLower() == settings.HWiNFO_fps_elementID.ToLower())
                                 {
                                     fpsValue = (int)Math.Round((Double)itemOBJ["Value"]);
@@ -824,8 +825,6 @@ namespace GameActivity
                             {
                                 JObject itemOBJ = JObject.Parse(JsonConvert.SerializeObject(items));
                                 string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
-
-                                //logger.Info("----- " + dataID.ToLower() + " - " + settings.HWiNFO_gpu_elementID.ToLower());
 
                                 if (dataID.ToLower() == settings.HWiNFO_gpu_elementID.ToLower())
                                 {
@@ -843,8 +842,6 @@ namespace GameActivity
                                 JObject itemOBJ = JObject.Parse(JsonConvert.SerializeObject(items));
                                 string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
 
-                                //logger.Info("----- " + dataID.ToLower() + " - " + settings.HWiNFO_gpu_elementID.ToLower());
-
                                 if (dataID.ToLower() == settings.HWiNFO_gpuT_elementID.ToLower())
                                 {
                                     gpuTValue = (int)Math.Round((Double)itemOBJ["Value"]);
@@ -860,8 +857,6 @@ namespace GameActivity
                             {
                                 JObject itemOBJ = JObject.Parse(JsonConvert.SerializeObject(items));
                                 string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
-
-                                //logger.Info("----- " + dataID.ToLower() + " - " + settings.HWiNFO_gpu_elementID.ToLower());
 
                                 if (dataID.ToLower() == settings.HWiNFO_cpuT_elementID.ToLower())
                                 {
