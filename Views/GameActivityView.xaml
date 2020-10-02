@@ -7,7 +7,7 @@
         xmlns:localLVC="clr-namespace:PluginCommon.LiveChartsCommon;assembly=PluginCommon"
         xmlns:localPlugin="clr-namespace:PluginCommon;assembly=PluginCommon"
         xmlns:pcon="clr-namespace:PluginCommon.PlayniteResources.Converters;assembly=PluginCommon"
-        mc:Ignorable="d" Height="750" Width="1280" 
+        mc:Ignorable="d" Height="760" Width="1280" 
         Background="{DynamicResource WindowBackgourndBrush}"
         ResizeMode="NoResize" Title="Game Activity" WindowStartupLocation="CenterScreen" WindowStyle="SingleBorderWindow">
 
