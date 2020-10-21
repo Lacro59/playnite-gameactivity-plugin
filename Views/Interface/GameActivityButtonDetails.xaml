@@ -82,7 +82,8 @@
                 </Style>
             </Label.Style>
         </Label>
-        <Label Grid.Column="2" Grid.Row="2" Content="{Binding PlaytimeCurrent, Mode=OneWay, Converter={StaticResource LongToTimePlayedConverter}}" FontSize="10">
+        <Label Grid.Column="2" Grid.Row="2" Content="{Binding PlaytimeCurrent, Mode=OneWay, Converter={StaticResource LongToTimePlayedConverter}}" 
+               Name="PART_GaButtonPlaytime" FontSize="10">
             <Label.Style>
                 <Style TargetType="Label">
                     <Setter Property="Padding" Value="5,3,5,5" />

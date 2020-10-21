@@ -1,14 +1,14 @@
 ﻿using System.Windows;
-using System.Windows.Controls.Primitives;
+using System.Windows.Controls;
 
 namespace GameActivity.Views.Interface
 {
     /// <summary>
-    /// Logique d'interaction pour GameActivityToggle.xaml
+    /// Logique d'interaction pour GameActivityButton.xaml
     /// </summary>
-    public partial class GameActivityToggleButton : ToggleButton
+    public partial class GameActivityButton : Button
     {
-        public GameActivityToggleButton(GameActivitySettings settings)
+        public GameActivityButton(GameActivitySettings settings)
         {
             InitializeComponent();
 

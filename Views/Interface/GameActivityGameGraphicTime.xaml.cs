@@ -27,10 +27,18 @@ namespace GameActivity.Views.Interface
 
         public event DataClickHandler gameSeriesDataClick;
 
+        private int _variateurTimeInitial = 0;
+        private int _variateurTime = 0;
+        private int _limit;
+
 
         public GameActivityGameGraphicTime(GameActivitySettings settings, GameActivityClass gameActivity, int variateurTime = 0, int limit = 9)
         {
             InitializeComponent();
+
+            _variateurTimeInitial = variateurTime;
+            _variateurTime = variateurTime;
+            _limit = limit;
 
             GetActivityForGamesTimeGraphics(gameActivity, variateurTime, limit);
 
@@ -208,7 +216,7 @@ namespace GameActivity.Views.Interface
             var parent = ((FrameworkElement)((FrameworkElement)gameSeries.Parent).Parent);
 
 #if DEBUG
-            logger.Debug($"SuccessStory - GameActivityGameGraphicTime() - parent.name: {parent.Name} - parent.Height: {parent.Height} - parent.Width: {parent.Width}");
+            logger.Debug($"GameActivity - GameActivityGameGraphicTime() - parent.name: {parent.Name} - parent.Height: {parent.Height} - parent.Width: {parent.Width}");
 #endif
 
             if (!double.IsNaN(parent.Height))
@@ -233,6 +241,12 @@ namespace GameActivity.Views.Interface
         private void GameSeries_DataClick(object sender, ChartPoint chartPoint)
         {
             this.gameSeriesDataClick?.Invoke(this, chartPoint);
+        }
+
+        public void SetGaData(GameActivityClass gameActivity)
+        {
+            _variateurTime = _variateurTimeInitial;
+            GetActivityForGamesTimeGraphics(gameActivity, _variateurTime, _limit);
         }
     }
 }

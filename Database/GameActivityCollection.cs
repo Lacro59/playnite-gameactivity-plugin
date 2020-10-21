@@ -11,7 +11,7 @@ using PluginCommon;
 
 namespace GameActivity.Database.Collections
 {
-    class GameActivityCollection : List<GameActivityClass>
+    public class GameActivityCollection : List<GameActivityClass>
     {
         private ILogger logger = LogManager.GetLogger();
 

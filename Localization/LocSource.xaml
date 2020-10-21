@@ -2,15 +2,11 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
-    <!--  
-    MainView
-    -->
+    <!-- MainView -->
     <sys:String x:Key="LOCGameActivity">GameActivity</sys:String>
     <sys:String x:Key="LOCGameActivityTitle">Activity</sys:String>
 
-    <!-- 
-    GameActivitySettingsView 
-    -->
+    <!-- GameActivitySettingsView -->
 
     <sys:String x:Key="LOCGameActivityActiveIcon">Show icon for launchers</sys:String>
     
@@ -41,7 +37,7 @@
     <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Displays a warning message at the end of the game session within the defined limits.</sys:String>
 
     <sys:String x:Key="LOCGameActivityIntegration">Interface integration</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationInDescription">On game description</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationInDescription">Show plugin information in game details</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationInDescriptionWithToggle">With toggle button</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationShowTitle">Show title</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationShowGraphic">Show graphic</sys:String>
@@ -49,9 +45,12 @@
     <sys:String x:Key="LOCGameActivityIntegrationTopGameDetails">Above description</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">Toggle button with details</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationInCustomTheme">Custom theme integration (if integrated)</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationButton">Add button</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationButtonDetails">Add button with details</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationButtonHeader">Add button in window</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationButton">Show plugin launch button in game details</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationButtonOptions">Button options</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationInDescriptionOnlyIcon">Only show a icon</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationButtonDetails">Button with details</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationDescriptionOptions">Description integration options</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationButtonHeader">Add plugin button to Playnite window</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">Number of data in abscissa</sys:String>
 
     <sys:String x:Key="LOCGameActivityIntegrationOptions">Selection elements</sys:String>
@@ -60,9 +59,8 @@
     <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">Show ordinates label</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicLogOptions">Graphic with log options</sys:String>
 
-    <!-- 
-    GameActivityView 
-    -->
+    <!-- GameActivityView -->
+    
     <sys:String x:Key="LOCGameActivitySources">Sources</sys:String>
     <sys:String x:Key="LOCGameActivityGenres">Genres</sys:String>
     <sys:String x:Key="LOCGameActivityTotalHours">Total hours</sys:String>
@@ -82,9 +80,7 @@
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Elapsed time</sys:String>
 
 
-    <!-- 
-    GameActivity
-    -->
+    <!-- GameActivity -->
 
     <sys:String x:Key="LOCGameActivityWarningCaption">Warnings during the game session</sys:String>
     <sys:String x:Key="LOCGameActivityWarningAt">At</sys:String>

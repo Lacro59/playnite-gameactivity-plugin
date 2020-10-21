@@ -31,7 +31,7 @@ namespace GameActivity
     /// <summary>
     /// Logique d'interaction pour GameActivity.xaml.
     /// </summary>
-    public partial class GameActivityView : Window
+    public partial class GameActivityView : UserControl
     {
         private static readonly ILogger logger = LogManager.GetLogger();
         private static IResourceProvider resources = new ResourceProvider();
@@ -89,8 +89,6 @@ namespace GameActivity
 
             // Initialization components
             InitializeComponent();
-
-            this.PreviewKeyDown += new KeyEventHandler(HandleEsc);
 
             if (!settings.EnableLogging)
             {
@@ -161,14 +159,6 @@ namespace GameActivity
             // Set Binding data
             ShowIcon = this.settings.showLauncherIcons;
             DataContext = this;
-        }
-
-        private void HandleEsc(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Escape)
-            {
-                Close();
-            }
         }
 
         #region Generate graphics and list
@@ -969,11 +959,6 @@ namespace GameActivity
 
                 getActivityForGamesLogGraphics(gameIDCurrent, LabelDataSelected, title);
             }
-        }
-
-        private void TbMonthSources_Loaded(object sender, RoutedEventArgs e)
-        {
-            Tools.DesactivePlayniteWindowControl(this);
         }
     }
 

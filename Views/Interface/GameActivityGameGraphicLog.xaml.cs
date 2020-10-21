@@ -23,15 +23,26 @@ namespace GameActivity.Views.Interface
         private static readonly ILogger logger = LogManager.GetLogger();
         private static IResourceProvider resources = new ResourceProvider();
 
-        public int variateurLog = 0;
-        public int variateurLogTemp = 0;
+        private string _dateSelected;
+        private string _title;
+        private int _variateurLogInitial = 0;
+        private int _variateurLog = 0;
+        private int _variateurLogTemp = 0;
+        private bool _withTitle;
+        private int _limit;
 
         public GameActivityGameGraphicLog(GameActivitySettings settings, GameActivityClass gameActivity, string dateSelected = "", string title = "", int variateurLog = 0, bool withTitle = true, int limit = 10)
         {
             InitializeComponent();
 
-            this.variateurLog = variateurLog;
-            GetActivityForGamesLogGraphics(gameActivity, withTitle, dateSelected, title, limit);
+            _dateSelected = dateSelected;
+            _title = title;
+            _variateurLogInitial = variateurLog;
+            _variateurLog = variateurLog;
+            _withTitle = withTitle;
+            _limit = limit;
+
+            GetActivityForGamesLogGraphics(gameActivity, _withTitle, _dateSelected, _title, _limit);
 
             if (!settings.IgnoreSettings)
             {
@@ -51,7 +62,7 @@ namespace GameActivity.Views.Interface
                 if (gameActivitiesDetails.Count > limit)
                 {
                     // Variateur
-                    int conteurEnd = gameActivitiesDetails.Count + variateurLog;
+                    int conteurEnd = gameActivitiesDetails.Count + _variateurLog;
                     int conteurStart = conteurEnd - limit;
 
                     if (conteurEnd > gameActivitiesDetails.Count)
@@ -60,7 +71,7 @@ namespace GameActivity.Views.Interface
                         conteurEnd = gameActivitiesDetails.Count;
                         conteurStart = conteurEnd - limit;
 
-                        variateurLog = variateurLogTemp;
+                        _variateurLog = _variateurLogTemp;
                     }
 
                     if (conteurStart < 0)
@@ -68,10 +79,10 @@ namespace GameActivity.Views.Interface
                         conteurStart = 0;
                         conteurEnd = limit;
 
-                        variateurLog = variateurLogTemp;
+                        _variateurLog = _variateurLogTemp;
                     }
 
-                    variateurLogTemp = variateurLog;
+                    _variateurLogTemp = _variateurLog;
 
                     // Create data
                     int sCount = 0;
@@ -163,7 +174,7 @@ namespace GameActivity.Views.Interface
             var parent = ((FrameworkElement)((FrameworkElement)((FrameworkElement)gameSeriesLog.Parent).Parent).Parent);
 
 #if DEBUG
-            logger.Debug($"SuccessStory - GameActivityGameGraphicLog() - parent.name: {parent.Name} - parent.Height: {parent.Height} - parent.Width: {parent.Width} -  - lGameSeriesLog.ActualHeight: {lGameSeriesLog.ActualHeight}");
+            logger.Debug($"GameActivity - GameActivityGameGraphicLog() - parent.name: {parent.Name} - parent.Height: {parent.Height} - parent.Width: {parent.Width} -  - lGameSeriesLog.ActualHeight: {lGameSeriesLog.ActualHeight}");
 #endif
 
             if (!double.IsNaN(parent.Height))
@@ -183,6 +194,12 @@ namespace GameActivity.Views.Interface
             {
                 gameSeriesLog.Width = parent.ActualWidth;
             }
+        }
+
+        public void SetGaData(GameActivityClass gameActivity)
+        {
+            _variateurLog = _variateurLogInitial;
+            GetActivityForGamesLogGraphics(gameActivity, _withTitle, _dateSelected, _title, _limit);
         }
     }
 }

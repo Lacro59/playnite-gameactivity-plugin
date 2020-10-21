@@ -44,40 +44,27 @@ namespace GameActivity
         {
             CheckBox cb = (CheckBox)sender;
 
-            if ((cb.Name == "Ga_IntegrationInDescription") && (bool)cb.IsChecked)
+            if ((cb.Name == "Ga_IntegrationInButtonDetails") && (bool)cb.IsChecked)
             {
-                Ga_IntegrationInCustomTheme.IsChecked = false;
-                Ga_IntegrationInDescriptionWithToggle.IsChecked = false;
+                Ga_IntegrationInDescriptionOnlyIcon.IsChecked = false;
+            }
+            if ((cb.Name == "Ga_IntegrationInDescriptionOnlyIcon") && (bool)cb.IsChecked)
+            {
+                Ga_IntegrationInButtonDetails.IsChecked = false;
             }
             if ((cb.Name == "Ga_IntegrationInDescriptionWithToggle") && (bool)cb.IsChecked)
             {
-                Ga_IntegrationInCustomTheme.IsChecked = false;
-                Ga_IntegrationInDescription.IsChecked = false;
-                Ga_IntegrationInButton.IsChecked = false;
-                Ga_IntegrationInButtonDetails.IsChecked = false;
+
             }
 
-
-            if ((cb.Name == "Ga_IntegrationInButton") && (bool)cb.IsChecked)
+            if ((cb.Name == "Ga_IntegrationInDescription") && (bool)cb.IsChecked)
             {
                 Ga_IntegrationInCustomTheme.IsChecked = false;
-                Ga_IntegrationInDescriptionWithToggle.IsChecked = false;
-                Ga_IntegrationInButtonDetails.IsChecked = false;
-            }
-
-            if ((cb.Name == "Ga_IntegrationInButtonDetails") && (bool)cb.IsChecked)
-            {
-                Ga_IntegrationInCustomTheme.IsChecked = false;
-                Ga_IntegrationInDescriptionWithToggle.IsChecked = false;
-                Ga_IntegrationInButton.IsChecked = false;
             }
 
             if ((cb.Name == "Ga_IntegrationInCustomTheme") && (bool)cb.IsChecked)
             {
                 Ga_IntegrationInDescription.IsChecked = false;
-                Ga_IntegrationInDescriptionWithToggle.IsChecked = false;
-                Ga_IntegrationInButton.IsChecked = false;
-                Ga_IntegrationInButtonDetails.IsChecked = false;
             }
         }
 

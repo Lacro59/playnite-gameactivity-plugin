@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Playnite.SDK;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace GameActivity
 {
@@ -12,6 +13,7 @@ namespace GameActivity
         public bool IgnoreSettings { get; set; } = false;
 
         public bool EnableIntegrationInDescription { get; set; } = false;
+        public bool EnableIntegrationInDescriptionOnlyIcon { get; set; } = true;
         public bool EnableIntegrationInDescriptionWithToggle { get; set; } = false;
 
         public bool EnableIntegrationButtonHeader { get; set; } = false;
@@ -86,6 +88,7 @@ namespace GameActivity
                 EnableCheckVersion = savedSettings.EnableCheckVersion;
 
                 EnableIntegrationInDescription = savedSettings.EnableIntegrationInDescription;
+                EnableIntegrationInDescriptionOnlyIcon = savedSettings.EnableIntegrationInDescriptionOnlyIcon;
                 EnableIntegrationInDescriptionWithToggle = savedSettings.EnableIntegrationInDescriptionWithToggle;
 
                 EnableIntegrationButtonHeader = savedSettings.EnableIntegrationButtonHeader;
@@ -153,6 +156,13 @@ namespace GameActivity
             // Code executed when user decides to confirm changes made since BeginEdit was called.
             // This method should save settings made to Option1 and Option2.
             plugin.SavePluginSettings(this);
+
+            GameActivity.gameActivityUI.RemoveElements();
+            var TaskIntegrationUI = Task.Run(() =>
+            {
+                GameActivity.gameActivityUI.AddElements();
+                GameActivity.gameActivityUI.RefreshElements(GameActivity.GameSelected);
+            });
         }
 
         public bool VerifySettings(out List<string> errors)
