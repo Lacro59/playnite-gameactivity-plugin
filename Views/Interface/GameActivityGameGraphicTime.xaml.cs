@@ -27,6 +27,7 @@ namespace GameActivity.Views.Interface
 
         public event DataClickHandler gameSeriesDataClick;
 
+        private GameActivitySettings _settings;
         private int _variateurTimeInitial = 0;
         private int _variateurTime = 0;
         private int _limit;
@@ -36,6 +37,7 @@ namespace GameActivity.Views.Interface
         {
             InitializeComponent();
 
+            _settings = settings;
             _variateurTimeInitial = variateurTime;
             _variateurTime = variateurTime;
             _limit = limit;
@@ -106,58 +108,70 @@ namespace GameActivity.Views.Interface
                     {
                         string tempName = series1[iDay].Name;
 
-                        if (series1[iDay].Values == 0)
+                        if (_settings.CumulPlaytimeSession)
                         {
                             series1[iDay] = new CustomerForTime
                             {
                                 Name = tempName,
-                                Values = elapsedSeconds,
+                                Values = series1[iDay].Values + elapsedSeconds,
                             };
                             continue;
                         }
-
-                        if (series2[iDay].Values == 0)
+                        else
                         {
-                            HasData2 = true;
-                            series2[iDay] = new CustomerForTime
+                            if (series1[iDay].Values == 0)
                             {
-                                Name = tempName,
-                                Values = elapsedSeconds,
-                            };
-                            continue;
-                        }
+                                series1[iDay] = new CustomerForTime
+                                {
+                                    Name = tempName,
+                                    Values = elapsedSeconds,
+                                };
+                                continue;
+                            }
 
-                        if (series3[iDay].Values == 0)
-                        {
-                            HasData3 = true;
-                            series3[iDay] = new CustomerForTime
+                            if (series2[iDay].Values == 0)
                             {
-                                Name = tempName,
-                                Values = elapsedSeconds,
-                            };
-                            continue;
-                        }
+                                HasData2 = true;
+                                series2[iDay] = new CustomerForTime
+                                {
+                                    Name = tempName,
+                                    Values = elapsedSeconds,
+                                };
+                                continue;
+                            }
 
-                        if (series4[iDay].Values == 0)
-                        {
-                            HasData4 = true;
-                            series4[iDay] = new CustomerForTime
+                            if (series3[iDay].Values == 0)
                             {
-                                Name = tempName,
-                                Values = elapsedSeconds,
-                            };
-                            continue;
-                        }
+                                HasData3 = true;
+                                series3[iDay] = new CustomerForTime
+                                {
+                                    Name = tempName,
+                                    Values = elapsedSeconds,
+                                };
+                                continue;
+                            }
 
-                        if (series5[iDay].Values == 0)
-                        {
-                            HasData5 = true;
-                            series5[iDay] = new CustomerForTime
+                            if (series4[iDay].Values == 0)
                             {
-                                Name = tempName,
-                                Values = elapsedSeconds,
-                            };
-                            continue;
+                                HasData4 = true;
+                                series4[iDay] = new CustomerForTime
+                                {
+                                    Name = tempName,
+                                    Values = elapsedSeconds,
+                                };
+                                continue;
+                            }
+
+                            if (series5[iDay].Values == 0)
+                            {
+                                HasData5 = true;
+                                series5[iDay] = new CustomerForTime
+                                {
+                                    Name = tempName,
+                                    Values = elapsedSeconds,
+                                };
+                                continue;
+                            }
                         }
                     }
                 }

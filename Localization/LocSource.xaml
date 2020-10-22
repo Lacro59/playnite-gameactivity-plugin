@@ -12,6 +12,7 @@
 
     <sys:String x:Key="LOCGameActivityMenuInExtensions">Plugin menus in extensions menu *</sys:String>
     <sys:String x:Key="LOCGameActivityActiveIcon">Show icon for launchers</sys:String>
+    <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">Cumul game session playtime on chart</sys:String>
     
     <sys:String x:Key="LOCGameActivityActiveLog">Enable logging</sys:String>
     <sys:String x:Key="LOCGameActivityTimeInterval">Time interval</sys:String>

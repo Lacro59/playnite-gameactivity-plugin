@@ -40,6 +40,7 @@ namespace GameActivity
         public bool EnableIntegrationButtonDetails { get; set; } = false;
 
         public bool showLauncherIcons { get; set; } = false;
+        public bool CumulPlaytimeSession { get; set; } = false;
 
         public bool EnableLogging { get; set; } = false;
         public int TimeIntervalLogging { get; set; } = 5;
@@ -116,6 +117,7 @@ namespace GameActivity
                 EnableIntegrationButtonDetails = savedSettings.EnableIntegrationButtonDetails;
 
                 showLauncherIcons = savedSettings.showLauncherIcons;
+                CumulPlaytimeSession = savedSettings.CumulPlaytimeSession;
 
                 EnableLogging = savedSettings.EnableLogging;
                 TimeIntervalLogging = savedSettings.TimeIntervalLogging;

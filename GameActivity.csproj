@@ -85,7 +85,7 @@
     <Compile Include="Models\GameActivityClass.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Views\GameActivityUI.cs" />
+    <Compile Include="Services\GameActivityUI.cs" />
     <Compile Include="Views\GameActivityView.xaml.cs">
       <DependentUpon>GameActivityView.xaml</DependentUpon>
     </Compile>
