@@ -149,6 +149,9 @@ namespace GameActivity.Views
                     resourcesLists.Add(new ResourcesList { Key = "Ga_LastDateSession", Value = string.Empty });
                     resourcesLists.Add(new ResourcesList { Key = "Ga_LastDateTimeSession", Value = string.Empty });
                     resourcesLists.Add(new ResourcesList { Key = "Ga_LastPlaytimeSession", Value = string.Empty });
+
+                    resourcesLists.Add(new ResourcesList { Key = "Ga_IntegrationShowGraphic", Value = _Settings.IntegrationShowGraphic });
+                    resourcesLists.Add(new ResourcesList { Key = "true", Value = _Settings.IntegrationShowGraphicLog });
                     ui.AddResources(resourcesLists);
 
 
