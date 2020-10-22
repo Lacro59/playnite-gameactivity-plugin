@@ -25,6 +25,7 @@ using System.Globalization;
 using GameActivity.Views.Interface;
 using LiveCharts.Events;
 using System.Windows.Input;
+using Newtonsoft.Json;
 
 namespace GameActivity
 {
@@ -137,6 +138,7 @@ namespace GameActivity
             #region Get & set datas
             getActivityByMonth(yearCurrent, monthCurrent);
             getActivityByWeek(yearCurrent, monthCurrent);
+            getActivityByDate(yearCurrent, monthCurrent);
 
             getActivityByListGame();
             #endregion
@@ -212,7 +214,10 @@ namespace GameActivity
                     }
                 }
 
-                gridMonth.Width = 605;
+                //gridMonth.Width = 605;
+                Grid.SetColumnSpan(gridMonth, 1);
+                actSeries.Visibility = Visibility.Visible;
+                actLabel.Visibility = Visibility.Visible;
                 acwSeries.Visibility = Visibility.Visible;
                 acwLabel.Visibility = Visibility.Visible;
             }
@@ -257,7 +262,10 @@ namespace GameActivity
                     }
                 }
 
-                gridMonth.Width = 1223;
+                //gridMonth.Width = 1223;
+                Grid.SetColumnSpan(gridMonth, 5);
+                actSeries.Visibility = Visibility.Hidden;
+                actLabel.Visibility = Visibility.Hidden;
                 acwSeries.Visibility = Visibility.Hidden;
                 acwLabel.Visibility = Visibility.Hidden;
             }
@@ -306,6 +314,71 @@ namespace GameActivity
             ((CustomerToolTipForTime)acmSeries.DataTooltip).ShowIcon = settings.showLauncherIcons;
             acmLabelsX.Labels = ActivityByMonthLabels;
         }
+
+        public void getActivityByDate(int year, int month)
+        {
+            DateTime StartDate = new DateTime(year, month, 1, 0, 0, 0);
+            int NumberDayInMonth = DateTime.DaysInMonth(year, month);
+
+            string[] activityByDateLabels = new string[NumberDayInMonth];
+            SeriesCollection activityByDaySeries = new SeriesCollection();
+            ChartValues<CustomerForTime> series = new ChartValues<CustomerForTime>();
+
+            for (int iDay = 0; iDay < NumberDayInMonth; iDay++)
+            {
+                activityByDateLabels[iDay] = Convert.ToDateTime(StartDate.AddDays(iDay)).ToString(Constants.DateUiFormat);
+
+                series.Add(new CustomerForTime
+                {
+                    Name = activityByDateLabels[iDay],
+                    Values = 0
+                });
+
+                List<GameActivityClass> listGameActivities = GameActivityDatabases.GetListGameActivity();
+                for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
+                {
+                    List<Activity> gameActivities = listGameActivities[iGame].Activities;
+                    for (int iActivity = 0; iActivity < gameActivities.Count; iActivity++)
+                    {
+                        long elapsedSeconds = gameActivities[iActivity].ElapsedSeconds;
+                        string dateSession = Convert.ToDateTime(gameActivities[iActivity].DateSession).ToString(Constants.DateUiFormat);
+
+                        if (dateSession == activityByDateLabels[iDay])
+                        {
+                            series[iDay].Values += elapsedSeconds;
+                        }
+                    }
+                }
+            }
+
+#if DEBUG
+            logger.Debug($"GameActivity - activityByDateLabels - {JsonConvert.SerializeObject(activityByDateLabels)}");
+            logger.Debug($"GameActivity - series - {JsonConvert.SerializeObject(series)}");
+#endif
+            activityByDaySeries.Add(new ColumnSeries
+            {
+                Title = "",
+                Values = series
+            });
+
+            //let create a mapper so LiveCharts know how to plot our CustomerViewModel class
+            var customerVmMapper = Mappers.Xy<CustomerForTime>()
+                .X((value, index) => index)
+                .Y(value => value.Values);
+
+            //lets save the mapper globally
+            Charting.For<CustomerForTime>(customerVmMapper);
+
+            Func<double, string> activityForGameLogFormatter = value => (string)converter.Convert((long)value, null, null, CultureInfo.CurrentCulture);
+            actLabelsY.LabelFormatter = activityForGameLogFormatter;
+
+            actSeries.DataTooltip = new CustomerToolTipForTime();
+            actSeries.Series = activityByDaySeries;
+            actLabelsY.MinValue = 0;
+            //((CustomerToolTipForMultipleTime)acwSeries.DataTooltip).ShowIcon = settings.showLauncherIcons;
+            actLabelsX.Labels = activityByDateLabels;
+        }
+
 
         /// <summary>
         /// Get data graphic activity by week.
@@ -781,6 +854,7 @@ namespace GameActivity
             // get data
             getActivityByMonth(yearCurrent, monthCurrent);
             getActivityByWeek(yearCurrent, monthCurrent);
+            getActivityByDate(yearCurrent, monthCurrent);
 
             activityLabel.Content = new DateTime(yearCurrent, monthCurrent, 1).ToString("MMMM yyyy");
         }
@@ -794,6 +868,7 @@ namespace GameActivity
             // get data
             getActivityByMonth(yearCurrent, monthCurrent);
             getActivityByWeek(yearCurrent, monthCurrent);
+            getActivityByDate(yearCurrent, monthCurrent);
 
             activityLabel.Content = new DateTime(yearCurrent, monthCurrent, 1).ToString("MMMM yyyy");
         }

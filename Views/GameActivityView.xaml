@@ -49,8 +49,16 @@
                 </Grid>
 
                 <!-- Graphics week -->
-                <DockPanel Grid.Row="1">
-                    <Grid Width="600" x:Name="gridMonth" DockPanel.Dock="Left">
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid x:Name="gridMonth" Grid.Column="0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="0*"/>
                             <ColumnDefinition Width="*" />
@@ -82,7 +90,39 @@
                         </lvc:CartesianChart>
                     </Grid>
 
-                    <Grid Width="600" DockPanel.Dock="Right">
+
+                    <Grid Grid.Column="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0*"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="0*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Column="1" Grid.Row="0" x:Name="actLabel" Content="{DynamicResource LOCGameActivityTimeTitle}" Height="30" FontSize="20" FontWeight="Bold" MinWidth="50" HorizontalAlignment="Center"/>
+
+                        <lvc:CartesianChart x:Name="actSeries" LegendLocation="none" Grid.Column="1" Grid.Row="1" FontFamily="{StaticResource font}" >
+                            <lvc:CartesianChart.DataTooltip>
+                                <localLVC:CustomerToolTipForMultipleTime ShowIcon="{Binding ShowIcon}"/>
+                            </lvc:CartesianChart.DataTooltip>
+
+                            <lvc:CartesianChart.AxisX>
+                                <lvc:Axis x:Name="actLabelsX" ShowLabels="false">
+                                    <lvc:Axis.Separator>
+                                        <lvc:Separator Step="1" />
+                                    </lvc:Axis.Separator>
+                                </lvc:Axis>
+                            </lvc:CartesianChart.AxisX>
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis x:Name="actLabelsY"></lvc:Axis>
+                            </lvc:CartesianChart.AxisY>
+                        </lvc:CartesianChart>
+                    </Grid>
+
+                    <Grid Grid.Column="4">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="0*"/>
                             <ColumnDefinition/>
@@ -112,9 +152,7 @@
                             </lvc:CartesianChart.AxisY>
                         </lvc:CartesianChart>
                     </Grid>
-
-                    <Grid></Grid>
-                </DockPanel>
+                </Grid>
             </Grid>
         </Border>
 
@@ -331,9 +369,6 @@
                     </lvc:CartesianChart>
                 </Grid>
             </Grid>
-
-            <Grid></Grid>
         </Grid>
-
     </DockPanel>
 </UserControl>
