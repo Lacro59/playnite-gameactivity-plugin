@@ -24,6 +24,9 @@
                         <CheckBox IsChecked="{Binding CumulPlaytimeSession}" Margin="0,15,0,0">
                             <Label Content="{DynamicResource LOCGameActivityCumulPlaytimeSession}" />
                         </CheckBox>
+                        <CheckBox IsChecked="{Binding CumulPlaytimeStore}" Margin="0,15,0,0">
+                            <Label Content="{DynamicResource LOCGameActivityCumulPlaytimeStore}" />
+                        </CheckBox>
                     </StackPanel>
 
                     <DockPanel DockPanel.Dock="Bottom" Margin="0,15,0,0">

@@ -41,6 +41,7 @@ namespace GameActivity
 
         public bool showLauncherIcons { get; set; } = false;
         public bool CumulPlaytimeSession { get; set; } = false;
+        public bool CumulPlaytimeStore { get; set; } = false;
 
         public bool EnableLogging { get; set; } = false;
         public int TimeIntervalLogging { get; set; } = 5;
@@ -118,6 +119,7 @@ namespace GameActivity
 
                 showLauncherIcons = savedSettings.showLauncherIcons;
                 CumulPlaytimeSession = savedSettings.CumulPlaytimeSession;
+                CumulPlaytimeStore = savedSettings.CumulPlaytimeStore;
 
                 EnableLogging = savedSettings.EnableLogging;
                 TimeIntervalLogging = savedSettings.TimeIntervalLogging;

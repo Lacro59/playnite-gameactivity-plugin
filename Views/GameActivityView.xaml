@@ -80,7 +80,7 @@
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
 
-                        <Label Content="{DynamicResource LOCGameActivityTotalHours}" HorizontalAlignment="Center" VerticalAlignment="Top" Height="30" FontSize="20" FontWeight="Bold" MinWidth="50" Grid.Column="1" Grid.Row="0" />
+                        <Label Name="acmLabel" Content="{DynamicResource LOCGameActivityTotalHours}" HorizontalAlignment="Center" VerticalAlignment="Top" Height="30" FontSize="20" FontWeight="Bold" MinWidth="50" Grid.Column="1" Grid.Row="0" />
 
                         <lvc:CartesianChart x:Name="acmSeries" LegendLocation="none" Grid.Column="1" Grid.Row="1" FontFamily="{StaticResource font}">
                             <lvc:CartesianChart.DataTooltip>
@@ -102,7 +102,7 @@
                     </Grid>
 
 
-                    <Grid Grid.Column="2">
+                    <Grid Name="GridDay" Grid.Column="2">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="0*"/>
                             <ColumnDefinition/>
@@ -133,7 +133,7 @@
                         </lvc:CartesianChart>
                     </Grid>
 
-                    <Grid Grid.Column="4">
+                    <Grid Name="GridWeek" Grid.Column="4">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="0*"/>
                             <ColumnDefinition/>

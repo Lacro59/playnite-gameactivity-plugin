@@ -58,7 +58,7 @@ namespace GameActivity
         public string pathActivityDB { get; set; }
         public string pathActivityDetailsDB { get; set; }
 
-        GameActivitySettings settings { get; set; }
+        GameActivitySettings _settings { get; set; }
 
         public bool isMonthSources = true;
         public bool isGameTime = true;
@@ -66,7 +66,7 @@ namespace GameActivity
         public bool ShowIcon { get; set; }
 
         // Variables api.
-        public readonly IPlayniteAPI PlayniteApi;
+        public readonly IPlayniteAPI _PlayniteApi;
         public readonly IGameDatabaseAPI dbPlaynite;
         public readonly IPlaynitePathsAPI pathsPlaynite;
         public readonly string pathExtentionData;
@@ -76,10 +76,10 @@ namespace GameActivity
         {
             settings.IgnoreSettings = false;
 
-            this.PlayniteApi = PlayniteApi;
+            _PlayniteApi = PlayniteApi;
             dbPlaynite = PlayniteApi.Database;
             pathsPlaynite = PlayniteApi.Paths;
-            this.settings = settings;
+            _settings = settings;
             pathExtentionData = pathExtData;
 
             pathActivityDB = pathExtentionData + "\\activity\\";
@@ -183,6 +183,15 @@ namespace GameActivity
                     }
                     lvGames.ScrollIntoView(lvGames.SelectedItem);
 
+                    if(_settings.CumulPlaytimeStore)
+                    {
+                        acmSeries.Visibility = Visibility.Collapsed;
+                        acmLabel.Visibility = Visibility.Collapsed;
+
+                        Grid.SetColumn(GridDay, 0);
+                        Grid.SetColumnSpan(GridDay, 3);
+                    }
+
                     PART_DataLoad.Visibility = Visibility.Collapsed;
                     PART_DataTop.Visibility = Visibility.Visible;
                     PART_DataBottom.Visibility = Visibility.Visible;
@@ -192,7 +201,7 @@ namespace GameActivity
 
 
             // Set Binding data
-            ShowIcon = this.settings.showLauncherIcons;
+            ShowIcon = this._settings.showLauncherIcons;
             DataContext = this;
         }
 
@@ -302,7 +311,7 @@ namespace GameActivity
                     Values = (long)item.Value,
                 });
                 labels[compteur] = item.Key;
-                if (settings.showLauncherIcons)
+                if (_settings.showLauncherIcons)
                     labels[compteur] = TransformIcon.Get(labels[compteur]);
                 compteur = compteur + 1;
             }
@@ -330,6 +339,15 @@ namespace GameActivity
 
             if (isMonthSources)
             {
+                if (_settings.CumulPlaytimeStore)
+                {
+                    acmSeries.Visibility = Visibility.Hidden;
+                    acmLabel.Visibility = Visibility.Hidden;
+
+                    Grid.SetColumn(GridDay, 0);
+                    Grid.SetColumnSpan(GridDay, 3);
+                }
+
                 Grid.SetColumnSpan(gridMonth, 1);
                 actSeries.Visibility = Visibility.Visible;
                 actLabel.Visibility = Visibility.Visible;
@@ -338,6 +356,12 @@ namespace GameActivity
             }
             else
             {
+                if (_settings.CumulPlaytimeStore)
+                {
+                    acmSeries.Visibility = Visibility.Visible;
+                    acmLabel.Visibility = Visibility.Visible;
+                }
+
                 Grid.SetColumnSpan(gridMonth, 5);
                 actSeries.Visibility = Visibility.Hidden;
                 actLabel.Visibility = Visibility.Hidden;
@@ -348,7 +372,7 @@ namespace GameActivity
             acmLabelsY.LabelFormatter = activityForGameLogFormatter;
             acmSeries.Series = ActivityByMonthSeries;
             acmLabelsY.MinValue = 0;
-            ((CustomerToolTipForTime)acmSeries.DataTooltip).ShowIcon = settings.showLauncherIcons;
+            ((CustomerToolTipForTime)acmSeries.DataTooltip).ShowIcon = _settings.showLauncherIcons;
             acmLabelsX.Labels = ActivityByMonthLabels;
         }
 
@@ -408,12 +432,10 @@ namespace GameActivity
 
             Func<double, string> activityForGameLogFormatter = value => (string)converter.Convert((long)value, null, null, CultureInfo.CurrentCulture);
 
-
             actLabelsY.LabelFormatter = activityForGameLogFormatter;
             actSeries.DataTooltip = new CustomerToolTipForTime();
             actSeries.Series = activityByDaySeries;
             actLabelsY.MinValue = 0;
-            //((CustomerToolTipForMultipleTime)acwSeries.DataTooltip).ShowIcon = settings.showLauncherIcons;
             actLabelsX.Labels = activityByDateLabels;
         }
 
@@ -453,6 +475,7 @@ namespace GameActivity
 
             JArray activityByWeek = new JArray();
             SeriesCollection activityByWeekSeries = new SeriesCollection();
+            IChartValues Values = new ChartValues<CustomerForTime>();
 
             if (isMonthSources)
             {
@@ -514,10 +537,10 @@ namespace GameActivity
                 for (int iSource = 0; iSource < listNoDelete.Count; iSource++)
                 {
                     labels[iSource] = (string)listNoDelete[iSource];
-                    if (settings.showLauncherIcons)
+                    if (_settings.showLauncherIcons)
                         labels[iSource] = TransformIcon.Get((string)listNoDelete[iSource]);
 
-                    IChartValues Values = new ChartValues<CustomerForTime>() {
+                    Values = new ChartValues<CustomerForTime>() {
                             new CustomerForTime{Name = (string)listNoDelete[iSource], Values = (int)activityByWeek[0][(string)listNoDelete[iSource]]},
                             new CustomerForTime{Name = (string)listNoDelete[iSource], Values = (int)activityByWeek[1][(string)listNoDelete[iSource]]},
                             new CustomerForTime{Name = (string)listNoDelete[iSource], Values = (int)activityByWeek[2][(string)listNoDelete[iSource]]},
@@ -561,6 +584,45 @@ namespace GameActivity
             }
 
 
+            if (_settings.CumulPlaytimeStore)
+            {
+                ChartValues<CustomerForTime> series = new ChartValues<CustomerForTime>();
+                for(int i = 0; i < activityByWeekSeries.Count; i++)
+                {
+                    for (int j = 0; j < activityByWeekSeries[i].Values.Count; j++)
+                    {
+                        if (series.Count == j)
+                        {
+                            series.Add(new CustomerForTime
+                            {
+                                Name = activityByWeekLabels[j],
+                                Values = ((CustomerForTime)activityByWeekSeries[i].Values[j]).Values
+                            });
+                        }
+                        else
+                        {
+                            series[j].Values += ((CustomerForTime)activityByWeekSeries[i].Values[j]).Values;
+                        }
+                    }
+                }
+#if DEBUG
+                logger.Debug($"GameActivity - CumulPlaytimeStore: {JsonConvert.SerializeObject(series)}");
+#endif
+                activityByWeekSeries = new SeriesCollection();
+                activityByWeekSeries.Add(new ColumnSeries
+                {
+                    Title = string.Empty,
+                    Values = series
+                });
+
+                acwSeries.DataTooltip = new CustomerToolTipForTime();
+            }
+            else
+            {
+                acwSeries.DataTooltip = new CustomerToolTipForMultipleTime();
+                ((CustomerToolTipForMultipleTime)acwSeries.DataTooltip).ShowIcon = _settings.showLauncherIcons;
+            }
+
             //let create a mapper so LiveCharts know how to plot our CustomerViewModel class
             var customerVmMapper = Mappers.Xy<CustomerForTime>()
                 .X((value, index) => index)
@@ -574,7 +636,6 @@ namespace GameActivity
             acwLabelsY.LabelFormatter = activityForGameLogFormatter;
             acwSeries.Series = activityByWeekSeries;
             acwLabelsY.MinValue = 0;
-            ((CustomerToolTipForMultipleTime)acwSeries.DataTooltip).ShowIcon = settings.showLauncherIcons;
             acwLabelsX.Labels = activityByWeekLabels;
         }
 
@@ -626,13 +687,13 @@ namespace GameActivity
                             avgCPUT = listGameActivities[iGame].avgCPUT(listGameActivities[iGame].GetLastSession()) + "°",
                             avgGPUT = listGameActivities[iGame].avgGPUT(listGameActivities[iGame].GetLastSession()) + "°",
 
-                            enableWarm = settings.EnableWarning,
-                            maxCPUT = "" + settings.MaxCpuTemp,
-                            maxGPUT = "" + settings.MaxGpuTemp,
-                            minFPS = "" + settings.MinFps,
-                            maxCPU = "" + settings.MaxCpuUsage,
-                            maxGPU = "" + settings.MaxGpuUsage,
-                            maxRAM = "" + settings.MaxRamUsage
+                            enableWarm = _settings.EnableWarning,
+                            maxCPUT = "" + _settings.MaxCpuTemp,
+                            maxGPUT = "" + _settings.MaxGpuTemp,
+                            minFPS = "" + _settings.MinFps,
+                            maxCPU = "" + _settings.MaxCpuUsage,
+                            maxGPU = "" + _settings.MaxGpuUsage,
+                            maxRAM = "" + _settings.MaxRamUsage
                         });
 
                         iconImage = null;
@@ -646,7 +707,7 @@ namespace GameActivity
                 catch (Exception ex)
                 {
                     Common.LogError(ex, "GameActivity", $"Failed to load GameActivities from {gameID}");
-                    PlayniteApi.Dialogs.ShowErrorMessage(ex.Message, $"GameActivity error on {gameID}");
+                    _PlayniteApi.Dialogs.ShowErrorMessage(ex.Message, $"GameActivity error on {gameID}");
                 }
             }
 
@@ -687,8 +748,8 @@ namespace GameActivity
             GameActivityClass gameActivity = GameActivityDatabases.Get(Guid.Parse(gameID));
             List<Activity> gameActivities = gameActivity.Activities;
 
-            settings.IgnoreSettings = true;
-            var graph = new GameActivityGameGraphicTime(settings, gameActivity, variateurTime);
+            _settings.IgnoreSettings = true;
+            var graph = new GameActivityGameGraphicTime(_settings, gameActivity, variateurTime);
             graph.gameSeriesDataClick += new DataClickHandler(GameSeries_DataClick);
             gameSeriesContener.Children.Add(graph);
             gameSeriesContener.UpdateLayout();
@@ -705,7 +766,7 @@ namespace GameActivity
             gameSeriesContener.Children.Clear();
             GameActivityClass gameActivity = GameActivityDatabases.Get(Guid.Parse(gameID));
             List<Activity> gameActivities = gameActivity.Activities;
-            gameSeriesContener.Children.Add(new GameActivityGameGraphicLog(settings, gameActivity, dateSelected, title, variateurLog, false));
+            gameSeriesContener.Children.Add(new GameActivityGameGraphicLog(_settings, gameActivity, dateSelected, title, variateurLog, false));
             gameSeriesContener.UpdateLayout();
 
             if (dateSelected == "")
@@ -1059,7 +1120,7 @@ namespace GameActivity
         // TODO Select details data
         private void GameSeries_DataClick(object sender, ChartPoint chartPoint)
         {
-            if (settings.EnableLogging)
+            if (_settings.EnableLogging)
             {
                 int index = (int)chartPoint.X;
                 string title = chartPoint.SeriesView.Title;
