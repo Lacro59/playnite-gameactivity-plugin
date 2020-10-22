@@ -79,9 +79,16 @@ namespace GameActivity.Models
         {
             get
             {
-                if (genreIds?.Any() == true && GameActivity.DatabaseReference != null)
+                try
                 {
-                    return new List<Genre>(GameActivity.DatabaseReference?.Genres.Where(a => genreIds.Contains(a.Id)).OrderBy(a => a.Name));
+                    if (genreIds?.Any() == true && GameActivity.DatabaseReference != null)
+                    {
+                        return new List<Genre>(GameActivity.DatabaseReference?.Genres.Where(a => genreIds.Contains(a.Id)).OrderBy(a => a.Name));
+                    }
+                }
+                catch
+                {
+                    return null;
                 }
 
                 return null;

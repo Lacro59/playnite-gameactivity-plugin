@@ -17,9 +17,20 @@
         <FontFamily x:Key="font">pack://application:,,,/PluginCommon;component/Resources/font.ttf#font</FontFamily>
     </UserControl.Resources>
 
-    <DockPanel Margin="10,10,10,0">
+    <Grid Margin="10,10,10,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <Grid Name="PART_DataLoad" Grid.RowSpan="2">
+            <ProgressBar IsIndeterminate="True" Width="350" Height="40" />
+            <TextBlock Text="{DynamicResource LOCDownloadingLabel}"
+                       Style="{DynamicResource BaseTextBlockStyle}"
+                       HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </Grid>
 
-        <Border DockPanel.Dock="Top" BorderBrush="{DynamicResource NormalBorderBrush}" BorderThickness="{DynamicResource ControlBorderThickness}" Height="345">
+        <Border Grid.Row="0" Name="PART_DataTop" BorderBrush="{DynamicResource NormalBorderBrush}" BorderThickness="{DynamicResource ControlBorderThickness}" Height="345">
             <Grid Margin="10">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50" />
@@ -156,7 +167,7 @@
             </Grid>
         </Border>
 
-        <Grid DockPanel.Dock="Bottom" Height="345" Margin="0,10">
+        <Grid Grid.Row="1" Height="345" Margin="0,10" Name="PART_DataBottom">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="10" />
@@ -166,7 +177,7 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <Grid Name="gridLvGames" Grid.Column="0" Height="330">
+            <Grid Name="gridLvGames" Grid.Column="0">
                 <ListView x:Name="lvGames" Height="{Binding ActualHeight, ElementName=gridLvGames}" SelectionChanged="lvGames_SelectionChanged" FontSize="24" GridViewColumnHeader.Click="lvGames_onHeaderClick">
                     <ListView.View>
                         <GridView>
@@ -327,7 +338,7 @@
                 </ListView>
             </Grid>
 
-            <Grid Name="activityForGamesGraphics" Width="600" Grid.Column="2" Margin="0,0,0,8">
+            <Grid Name="activityForGamesGraphics" Grid.Column="2" Margin="0,0,0,8">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="70"/>
                     <ColumnDefinition Width="70"/>
@@ -370,5 +381,5 @@
                 </Grid>
             </Grid>
         </Grid>
-    </DockPanel>
+    </Grid>
 </UserControl>

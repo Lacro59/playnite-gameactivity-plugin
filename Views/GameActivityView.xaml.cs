@@ -26,6 +26,7 @@ using GameActivity.Views.Interface;
 using LiveCharts.Events;
 using System.Windows.Input;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace GameActivity
 {
@@ -80,7 +81,7 @@ namespace GameActivity
             pathsPlaynite = PlayniteApi.Paths;
             this.settings = settings;
             pathExtentionData = pathExtData;
-            
+
             pathActivityDB = pathExtentionData + "\\activity\\";
             pathActivityDetailsDB = pathExtentionData + "\\activityDetails\\";
 
@@ -136,26 +137,58 @@ namespace GameActivity
             #endregion
 
             #region Get & set datas
-            getActivityByMonth(yearCurrent, monthCurrent);
-            getActivityByWeek(yearCurrent, monthCurrent);
-            getActivityByDate(yearCurrent, monthCurrent);
+            PART_DataLoad.Visibility = Visibility.Visible;
+            PART_DataTop.Visibility = Visibility.Collapsed;
+            PART_DataBottom.Visibility = Visibility.Collapsed;
 
-            getActivityByListGame();
-            #endregion
-
-
-            // Set game selected
-            if (GameSelected != null)
+            var task = Task.Run(() =>
             {
-                for (int i = 0; i < lvGames.Items.Count; i++)
+                try
                 {
-                    if (((listGame)lvGames.Items[i]).listGameTitle == GameSelected.Name)
+                    Application.Current.Dispatcher.Invoke(new Action(() =>
                     {
-                        lvGames.SelectedIndex = i;
-                    }
+                        getActivityByMonth(yearCurrent, monthCurrent);
+                    }));
+                    Application.Current.Dispatcher.Invoke(new Action(() =>
+                    {
+                        getActivityByWeek(yearCurrent, monthCurrent);
+                    }));
+                    Application.Current.Dispatcher.Invoke(new Action(() =>
+                    {
+                        getActivityByDay(yearCurrent, monthCurrent);
+                    }));
+                    Application.Current.Dispatcher.Invoke(new Action(() =>
+                    {
+                        getActivityByListGame();
+                    }));
                 }
-            }
-            lvGames.ScrollIntoView(lvGames.SelectedItem);
+                catch (Exception ex)
+                {
+                    Common.LogError(ex, "GameActivity", "Error on task");
+                }
+            })
+            .ContinueWith(antecedent =>
+            {
+                Application.Current.Dispatcher.Invoke(new Action(() => {
+                    // Set game selected
+                    if (GameSelected != null)
+                    {
+                        for (int i = 0; i < lvGames.Items.Count; i++)
+                        {
+                            if (((listGame)lvGames.Items[i]).listGameTitle == GameSelected.Name)
+                            {
+                                lvGames.SelectedIndex = i;
+                            }
+                        }
+                    }
+                    lvGames.ScrollIntoView(lvGames.SelectedItem);
+
+                    PART_DataLoad.Visibility = Visibility.Collapsed;
+                    PART_DataTop.Visibility = Visibility.Visible;
+                    PART_DataBottom.Visibility = Visibility.Visible;
+                }));
+            });
+            #endregion
 
 
             // Set Binding data
@@ -175,7 +208,7 @@ namespace GameActivity
             DateTime endOfMonth = new DateTime(year, month, DateTime.DaysInMonth(year, month), 23, 59, 59);
 
             JObject activityByMonth = new JObject();
-            
+
             // Total hours by source.
             if (isMonthSources)
             {
@@ -213,13 +246,6 @@ namespace GameActivity
                         Common.LogError(ex, "GameActivity", $"Error in getActivityByMonth({year}, {month}) with {listGameActivities[iGame].GameName}");
                     }
                 }
-
-                //gridMonth.Width = 605;
-                Grid.SetColumnSpan(gridMonth, 1);
-                actSeries.Visibility = Visibility.Visible;
-                actLabel.Visibility = Visibility.Visible;
-                acwSeries.Visibility = Visibility.Visible;
-                acwLabel.Visibility = Visibility.Visible;
             }
             // Total hours by genres.
             else
@@ -256,18 +282,11 @@ namespace GameActivity
                             }
                         }
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         Common.LogError(ex, "GameActivity", $"Error in getActivityByMonth({year}, {month}) with {listGameActivities[iGame].GameName}");
                     }
                 }
-
-                //gridMonth.Width = 1223;
-                Grid.SetColumnSpan(gridMonth, 5);
-                actSeries.Visibility = Visibility.Hidden;
-                actLabel.Visibility = Visibility.Hidden;
-                acwSeries.Visibility = Visibility.Hidden;
-                acwLabel.Visibility = Visibility.Hidden;
             }
 
 
@@ -288,14 +307,15 @@ namespace GameActivity
                 compteur = compteur + 1;
             }
 
+
             SeriesCollection ActivityByMonthSeries = new SeriesCollection
-            {
-                new ColumnSeries
                 {
-                    Title = "",
-                    Values = series
-                }
-            };
+                    new ColumnSeries
+                    {
+                        Title = string.Empty,
+                        Values = series
+                    }
+                };
             string[] ActivityByMonthLabels = labels;
 
             //let create a mapper so LiveCharts know how to plot our CustomerViewModel class
@@ -307,15 +327,32 @@ namespace GameActivity
             Charting.For<CustomerForTime>(customerVmMapper);
 
             Func<double, string> activityForGameLogFormatter = value => (string)converter.Convert((long)value, null, null, CultureInfo.CurrentCulture);
-            acmLabelsY.LabelFormatter = activityForGameLogFormatter;
 
+            if (isMonthSources)
+            {
+                Grid.SetColumnSpan(gridMonth, 1);
+                actSeries.Visibility = Visibility.Visible;
+                actLabel.Visibility = Visibility.Visible;
+                acwSeries.Visibility = Visibility.Visible;
+                acwLabel.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                Grid.SetColumnSpan(gridMonth, 5);
+                actSeries.Visibility = Visibility.Hidden;
+                actLabel.Visibility = Visibility.Hidden;
+                acwSeries.Visibility = Visibility.Hidden;
+                acwLabel.Visibility = Visibility.Hidden;
+            }
+
+            acmLabelsY.LabelFormatter = activityForGameLogFormatter;
             acmSeries.Series = ActivityByMonthSeries;
             acmLabelsY.MinValue = 0;
             ((CustomerToolTipForTime)acmSeries.DataTooltip).ShowIcon = settings.showLauncherIcons;
             acmLabelsX.Labels = ActivityByMonthLabels;
         }
 
-        public void getActivityByDate(int year, int month)
+        public void getActivityByDay(int year, int month)
         {
             DateTime StartDate = new DateTime(year, month, 1, 0, 0, 0);
             int NumberDayInMonth = DateTime.DaysInMonth(year, month);
@@ -357,7 +394,7 @@ namespace GameActivity
 #endif
             activityByDaySeries.Add(new ColumnSeries
             {
-                Title = "",
+                Title = string.Empty,
                 Values = series
             });
 
@@ -370,8 +407,9 @@ namespace GameActivity
             Charting.For<CustomerForTime>(customerVmMapper);
 
             Func<double, string> activityForGameLogFormatter = value => (string)converter.Convert((long)value, null, null, CultureInfo.CurrentCulture);
-            actLabelsY.LabelFormatter = activityForGameLogFormatter;
 
+
+            actLabelsY.LabelFormatter = activityForGameLogFormatter;
             actSeries.DataTooltip = new CustomerToolTipForTime();
             actSeries.Series = activityByDaySeries;
             actLabelsY.MinValue = 0;
@@ -458,7 +496,8 @@ namespace GameActivity
 
                 // Check source with data (only view this)
                 JArray listNoDelete = new JArray();
-                for (int i = 0; i < activityByWeek.Count; i++) {
+                for (int i = 0; i < activityByWeek.Count; i++)
+                {
                     foreach (var item in (JObject)activityByWeek[i])
                     {
                         if ((long)item.Value != 0 && listNoDelete.TakeWhile(x => x.ToString() == item.Key).Count() != 1)
@@ -502,7 +541,7 @@ namespace GameActivity
 
 
             // Set data in graphics.
-            string[] activityByWeekLabels = new[] 
+            string[] activityByWeekLabels = new[]
             {
                 resources.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[0].Monday),
                 resources.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[1].Monday),
@@ -530,9 +569,9 @@ namespace GameActivity
             //lets save the mapper globally
             Charting.For<CustomerForTime>(customerVmMapper);
 
-            Func<double, string> activityForGameLogFormatter = value => (string)converter.Convert((long)value, null, null, CultureInfo.CurrentCulture); 
-            acwLabelsY.LabelFormatter = activityForGameLogFormatter;
+            Func<double, string> activityForGameLogFormatter = value => (string)converter.Convert((long)value, null, null, CultureInfo.CurrentCulture);
 
+            acwLabelsY.LabelFormatter = activityForGameLogFormatter;
             acwSeries.Series = activityByWeekSeries;
             acwLabelsY.MinValue = 0;
             ((CustomerToolTipForMultipleTime)acwSeries.DataTooltip).ShowIcon = settings.showLauncherIcons;
@@ -548,7 +587,7 @@ namespace GameActivity
             activityListByGame = new List<listGame>();
 
             List<GameActivityClass> listGameActivities = GameActivityDatabases.GetListGameActivity();
-            string gameID = "";
+            string gameID = string.Empty;
             for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
             {
                 try
@@ -671,7 +710,7 @@ namespace GameActivity
 
             if (dateSelected == "")
             {
-                gameLabel.Content = resources.GetString("LOCGameActivityLogTitle") + " (" 
+                gameLabel.Content = resources.GetString("LOCGameActivityLogTitle") + " ("
                     + Convert.ToDateTime(gameActivity.GetLastSession()).ToString(Constants.DateUiFormat) + ")";
             }
             else
@@ -698,7 +737,7 @@ namespace GameActivity
             {
                 return "Playnite";
             }
-            
+
         }
 
         /// <summary>
@@ -854,7 +893,7 @@ namespace GameActivity
             // get data
             getActivityByMonth(yearCurrent, monthCurrent);
             getActivityByWeek(yearCurrent, monthCurrent);
-            getActivityByDate(yearCurrent, monthCurrent);
+            getActivityByDay(yearCurrent, monthCurrent);
 
             activityLabel.Content = new DateTime(yearCurrent, monthCurrent, 1).ToString("MMMM yyyy");
         }
@@ -868,7 +907,7 @@ namespace GameActivity
             // get data
             getActivityByMonth(yearCurrent, monthCurrent);
             getActivityByWeek(yearCurrent, monthCurrent);
-            getActivityByDate(yearCurrent, monthCurrent);
+            getActivityByDay(yearCurrent, monthCurrent);
 
             activityLabel.Content = new DateTime(yearCurrent, monthCurrent, 1).ToString("MMMM yyyy");
         }
@@ -930,7 +969,7 @@ namespace GameActivity
 
 
         private void ToggleButtonSources_Checked(object sender, RoutedEventArgs e)
-        { 
+        {
             var toggleButton = sender as ToggleButton;
             if (toggleButton.IsChecked == true)
             {
@@ -940,6 +979,7 @@ namespace GameActivity
                     tbMonthGenres.IsChecked = false;
                     getActivityByMonth(yearCurrent, monthCurrent);
                     getActivityByWeek(yearCurrent, monthCurrent);
+                    getActivityByDay(yearCurrent, monthCurrent);
                 }
                 catch
                 {
@@ -967,6 +1007,7 @@ namespace GameActivity
                     tbMonthSources.IsChecked = false;
                     getActivityByMonth(yearCurrent, monthCurrent);
                     getActivityByWeek(yearCurrent, monthCurrent);
+                    getActivityByDay(yearCurrent, monthCurrent);
                 }
                 catch
                 {
