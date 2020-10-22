@@ -15,7 +15,10 @@
             <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
                 <DockPanel Margin="0,20,0,0">
                     <StackPanel DockPanel.Dock="Top">
-                        <CheckBox IsChecked="{Binding showLauncherIcons}">
+                        <CheckBox IsChecked="{Binding MenuInExtensions}" VerticalAlignment="Center">
+                            <Label Content="{DynamicResource LOCGameActivityMenuInExtensions}" />
+                        </CheckBox>
+                        <CheckBox IsChecked="{Binding showLauncherIcons}" Margin="0,15,0,0">
                             <Label Content="{DynamicResource LOCGameActivityActiveIcon}" />
                         </CheckBox>
                     </StackPanel>

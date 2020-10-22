@@ -5,9 +5,12 @@
     <!-- MainView -->
     <sys:String x:Key="LOCGameActivity">GameActivity</sys:String>
     <sys:String x:Key="LOCGameActivityTitle">Activity</sys:String>
+    <sys:String x:Key="LOCGameActivityViewGamesActivities">View the games activities</sys:String>
+    <sys:String x:Key="LOCGameActivityViewGameActivity">View the game activity</sys:String>
 
     <!-- GameActivitySettingsView -->
 
+    <sys:String x:Key="LOCGameActivityMenuInExtensions">Plugin menus in extensions menu *</sys:String>
     <sys:String x:Key="LOCGameActivityActiveIcon">Show icon for launchers</sys:String>
     
     <sys:String x:Key="LOCGameActivityActiveLog">Enable logging</sys:String>

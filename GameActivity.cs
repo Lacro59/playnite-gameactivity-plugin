@@ -5,6 +5,7 @@ using Playnite.SDK.Models;
 using Playnite.SDK.Plugins;
 using System.IO;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Timers;
@@ -40,6 +41,7 @@ namespace GameActivity
         public override Guid Id { get; } = Guid.Parse("afbb1a0d-04a1-4d0c-9afa-c6e42ca855b4");
 
         public static IGameDatabase DatabaseReference;
+        public static string pluginFolder;
         public static Game GameSelected { get; set; }
         public static GameActivityUI gameActivityUI { get; set; }
         public static GameActivityCollection GameActivityDatabases;
@@ -64,7 +66,7 @@ namespace GameActivity
             settings = new GameActivitySettings(this);
 
             // Get plugin's location 
-            string pluginFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            pluginFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
             // Add plugin localization in application ressource.
             PluginCommon.Localization.SetPluginLanguage(pluginFolder, api.ApplicationSettings.Language);
@@ -109,23 +111,72 @@ namespace GameActivity
             });
         }
 
-        public override IEnumerable<ExtensionFunction> GetFunctions()
+        // To add new game menu items override GetGameMenuItems
+        public override List<GameMenuItem> GetGameMenuItems(GetGameMenuItemsArgs args)
         {
-            return new List<ExtensionFunction>
+            List<GameMenuItem> gameMenuItems = new List<GameMenuItem>
             {
-                new ExtensionFunction(
-                    resources.GetString("LOCGameActivity"),
-                    () =>
+                new GameMenuItem {
+                    //MenuSection = "",
+                    Icon = Path.Combine(pluginFolder, "icon.png"),
+                    Description = resources.GetString("LOCGameActivityViewGameActivity"),
+                    Action = (gameMenuItem) =>
                     {
-                        // Add code to be execute when user invokes this menu entry.
+                        DatabaseReference = PlayniteApi.Database;
+                        var ViewExtension = new GameActivityView(settings, PlayniteApi, this.GetPluginUserDataPath(), args.Games.First());
+                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGameActivity"), ViewExtension);
+                        windowExtension.ShowDialog();
+                    }
+                }
+            };
 
-                        // Show GameActivity
+#if DEBUG
+            gameMenuItems.Add(new GameMenuItem
+            {
+                MenuSection = resources.GetString("LOCGameActivity"),
+                Description = "Test",
+                Action = (mainMenuItem) => { }
+            });
+#endif
+
+            return gameMenuItems;
+        }
+
+        // To add new main menu items override GetMainMenuItems
+        public override List<MainMenuItem> GetMainMenuItems(GetMainMenuItemsArgs args)
+        {
+            string MenuInExtensions = string.Empty;
+            if (settings.MenuInExtensions)
+            {
+                MenuInExtensions = "@";
+            }
+
+            List<MainMenuItem> mainMenuItems = new List<MainMenuItem>
+            {
+                new MainMenuItem
+                {
+                    MenuSection = MenuInExtensions + resources.GetString("LOCGameActivity"),
+                    Description = resources.GetString("LOCGameActivityViewGamesActivities"),
+                    Action = (mainMenuItem) =>
+                    {
                         DatabaseReference = PlayniteApi.Database;
                         var ViewExtension = new GameActivityView(settings, PlayniteApi, this.GetPluginUserDataPath());
                         Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGameActivity"), ViewExtension);
                         windowExtension.ShowDialog();
-                    })
+                    }
+                }
             };
+
+#if DEBUG
+            mainMenuItems.Add(new MainMenuItem
+            {
+                MenuSection = MenuInExtensions + resources.GetString("LOCGameActivity"),
+                Description = "Test",
+                Action = (mainMenuItem) => { }
+            });
+#endif
+
+            return mainMenuItems;
         }
 
         public override void OnGameInstalled(Game game)

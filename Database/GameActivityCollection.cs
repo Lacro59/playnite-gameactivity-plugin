@@ -22,6 +22,7 @@ namespace GameActivity.Database.Collections
 
         public new int Count => Items.Count;
 
+
         public GameActivityClass this[Guid id]
         {
             get => Get(id);
@@ -37,6 +38,12 @@ namespace GameActivity.Database.Collections
         /// <param name="pathExtData"></param>
         public void InitializeCollection(string pathExtData)
         {
+#if DEBUG
+            logger.Debug($"GameActivity - InitializeCollection() - Start");
+#endif
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
             pathActivityDB = pathExtData + pathActivityDB;
             pathActivityDetailsDB = pathExtData + pathActivityDetailsDB;
 
@@ -47,12 +54,12 @@ namespace GameActivity.Database.Collections
             {
                 Parallel.ForEach(Directory.EnumerateFiles(pathActivityDB, "*.json"), (objectFile) =>
                 {
-                    string objectFileDetails = "";
+                    string objectFileDetails = string.Empty;
 
                     try
                     {
                         var JsonStringData = File.ReadAllText(objectFile);
-                        if (JsonStringData == "" || JsonStringData == "{}" || JsonStringData == "[]")
+                        if (JsonStringData.IsNullOrEmpty() || JsonStringData == "{}" || JsonStringData == "[]")
                         {
                             File.Delete(objectFile);
                             logger.Info($"GameActivity - Delete empty file {objectFile}");
@@ -74,7 +81,7 @@ namespace GameActivity.Database.Collections
                                 if(File.Exists(objectFileDetails))
                                 {
                                     var JsonStringDataDetails = File.ReadAllText(objectFileDetails);
-                                    if (JsonStringDataDetails == "" || JsonStringDataDetails == "{}" || JsonStringDataDetails == "[]")
+                                    if (JsonStringDataDetails.IsNullOrEmpty() || JsonStringDataDetails == "{}" || JsonStringDataDetails == "[]")
                                     {
                                         File.Delete(objectFile);
                                         logger.Info($"GameActivity - Delete empty file {objectFileDetails}");
@@ -97,6 +104,10 @@ namespace GameActivity.Database.Collections
                     }
                 });
             }
+
+            stopwatch.Stop();
+            TimeSpan ts = stopwatch.Elapsed;
+            logger.Info($"GameActivity - Load database - {String.Format("{0:00}:{1:00}.{2:00}", ts.Minutes, ts.Seconds, ts.Milliseconds / 10)}");
         }
 
         /// <summary>

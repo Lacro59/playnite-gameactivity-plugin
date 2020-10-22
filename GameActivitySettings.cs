@@ -10,6 +10,7 @@ namespace GameActivity
         private readonly GameActivity plugin;
 
         public bool EnableCheckVersion { get; set; } = true;
+        public bool MenuInExtensions { get; set; } = true;
         public bool IgnoreSettings { get; set; } = false;
 
         public bool EnableIntegrationInDescription { get; set; } = false;
@@ -86,6 +87,7 @@ namespace GameActivity
             if (savedSettings != null)
             {
                 EnableCheckVersion = savedSettings.EnableCheckVersion;
+                MenuInExtensions = savedSettings.MenuInExtensions;
 
                 EnableIntegrationInDescription = savedSettings.EnableIntegrationInDescription;
                 EnableIntegrationInDescriptionOnlyIcon = savedSettings.EnableIntegrationInDescriptionOnlyIcon;
