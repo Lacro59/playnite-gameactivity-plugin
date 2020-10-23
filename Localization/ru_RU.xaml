@@ -15,7 +15,7 @@
 	    -->
 	
 
-	    <sys:String x:Key="LOCGameActivityActiveIcon">Показать значок для лаунчера</sys:String>
+	    <sys:String x:Key="LOCCommonIconStore">Показать значок для лаунчера</sys:String>
 	    
 	    <sys:String x:Key="LOCGameActivityActiveLog">Включить ведение журнала</sys:String>
 	    <sys:String x:Key="LOCGameActivityTimeInterval">Временной интервал</sys:String>
@@ -48,22 +48,22 @@
 	    <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Отображает предупреждающее сообщение в конце сеанса игры в кратце.</sys:String>
 	
 
-	    <sys:String x:Key="LOCGameActivityIntegration">Интеграция интерфейса</sys:String>
-	    <sys:String x:Key="LOCGameActivityIntegrationInDescription">Отображать в описании игры</sys:String>
-	    <sys:String x:Key="LOCGameActivityIntegrationInDescriptionWithToggle">С кнопкой переключения</sys:String>
-	    <sys:String x:Key="LOCGameActivityIntegrationShowTitle">Названия</sys:String>
+	    <sys:String x:Key="LOCCommonIntegration">Интеграция интерфейса</sys:String>
+	    <sys:String x:Key="LOCCommonIntegrationInDescription">Отображать в описании игры</sys:String>
+	    <sys:String x:Key="LOCCommonIntegrationButtonIsToggle">С кнопкой переключения</sys:String>
+	    <sys:String x:Key="LOCCommonIntegrationShowTitle">Названия</sys:String>
 	    <sys:String x:Key="LOCGameActivityIntegrationShowGraphicLog">Показать график с последними логами</sys:String>
 	    <sys:String x:Key="LOCGameActivityIntegrationShowGraphic">Показать график</sys:String>
-	    <sys:String x:Key="LOCGameActivityIntegrationTopGameDetails">Выше описания</sys:String>
+	    <sys:String x:Key="LOCCommonIntegrationTopGameDetails">Выше описания</sys:String>
 	    <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">Прогресс на кнопке</sys:String>
-	    <sys:String x:Key="LOCGameActivityIntegrationInCustomTheme">Пользовательская интеграция темы (если интегрирована)</sys:String>
-	    <sys:String x:Key="LOCGameActivityIntegrationButton">Добавить кнопку</sys:String>
-	    <sys:String x:Key="LOCGameActivityIntegrationButtonDetails">Добавить кнопку с деталями</sys:String>
-        <sys:String x:Key="LOCGameActivityIntegrationButtonHeader">Добавить кнопку в окне</sys:String>
+	    <sys:String x:Key="LOCCommonIntegrationInCustomTheme">Пользовательская интеграция темы (если интегрирована)</sys:String>
+	    <sys:String x:Key="LOCCommonIntegrationButton">Добавить кнопку</sys:String>
+	    <sys:String x:Key="LOCCommonIntegrationButtonDetails">Добавить кнопку с деталями</sys:String>
+        <sys:String x:Key="LOCCommonIntegrationButtonHeader">Добавить кнопку в окне</sys:String>
         <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">Number of data in abscissa</sys:String>
 
 
-        <sys:String x:Key="LOCGameActivityIntegrationOptions">Элементы выбора</sys:String>
+        <sys:String x:Key="LOCCommonIntegrationSelectElements">Элементы выбора</sys:String>
 	    <sys:String x:Key="LOCGameActivityIntegrationGraphicOptions">Настройки графика</sys:String>
 	    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabels">Show absciss label</sys:String>
 	    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">Показать метки координат</sys:String>
@@ -75,8 +75,8 @@
 	    <!-- 
 	    GameActivityView 
 	    -->
-	    <sys:String x:Key="LOCGameActivitySources">Источники</sys:String>
-	    <sys:String x:Key="LOCGameActivityGenres">Жанры</sys:String>
+	    <sys:String x:Key="LOCSourcesLabel">Источники</sys:String>
+	    <sys:String x:Key="LOCGenresLabel">Жанры</sys:String>
 	    <sys:String x:Key="LOCGameActivityTotalHours">Всего часов</sys:String>
 	    <sys:String x:Key="LOCGameActivityTotalHoursByWeeks">Всего часов по неделям</sys:String>
 	
@@ -90,8 +90,8 @@
 	    <sys:String x:Key="LOCGameActivityLogTitleDate">Детали сессии для </sys:String>
 	
 
-	    <sys:String x:Key="LOCGameActivityLvGamesIcon">Иконка</sys:String>
-	    <sys:String x:Key="LOCGameActivityLvGamesTitle">Название</sys:String>
+	    <sys:String x:Key="LOCGameIconTitle">Иконка</sys:String>
+	    <sys:String x:Key="LOCGameNameTitle">Название</sys:String>
 	    <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Последняя сессия</sys:String>
 	    <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Проведённое время</sys:String>
 	

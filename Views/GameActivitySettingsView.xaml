@@ -16,10 +16,10 @@
                 <DockPanel Margin="0,20,0,0">
                     <StackPanel DockPanel.Dock="Top">
                         <CheckBox IsChecked="{Binding MenuInExtensions}" VerticalAlignment="Center">
-                            <Label Content="{DynamicResource LOCGameActivityMenuInExtensions}" />
+                            <Label Content="{DynamicResource LOCCommonMenuInExtensions}" />
                         </CheckBox>
                         <CheckBox IsChecked="{Binding showLauncherIcons}" Margin="0,15,0,0">
-                            <Label Content="{DynamicResource LOCGameActivityActiveIcon}" />
+                            <Label Content="{DynamicResource LOCCommonIconStore}" />
                         </CheckBox>
                         <CheckBox IsChecked="{Binding CumulPlaytimeSession}" Margin="0,15,0,0">
                             <Label Content="{DynamicResource LOCGameActivityCumulPlaytimeSession}" />
@@ -193,7 +193,7 @@
             </ScrollViewer>
         </TabItem>
 
-        <TabItem Header="{DynamicResource LOCGameActivityIntegration}">
+        <TabItem Header="{DynamicResource LOCCommonIntegration}">
             <ScrollViewer>
                 <StackPanel Margin="0,10,0,0">
                     <Grid>
@@ -212,25 +212,25 @@
                         <!--Button-->
                         <CheckBox Grid.Column="0" Grid.Row="0" VerticalAlignment="Center"
                                   IsChecked="{Binding EnableIntegrationButtonHeader}">
-                            <Label Content="{DynamicResource LOCGameActivityIntegrationButtonHeader}" />
+                            <Label Content="{DynamicResource LOCCommonIntegrationButtonHeader}" />
                         </CheckBox>
 
                         <CheckBox Grid.Column="0" Grid.Row="2" IsChecked="{Binding EnableIntegrationInCustomTheme}" Margin="0,0,0,0" Name="Ga_IntegrationInCustomTheme" Click="Checkbox_Click" VerticalAlignment="Center">
-                            <Label Content="{DynamicResource LOCGameActivityIntegrationInCustomTheme}" />
+                            <Label Content="{DynamicResource LOCCommonIntegrationInCustomTheme}" />
                         </CheckBox>
 
                         <CheckBox Grid.Column="0" Grid.Row="4" VerticalAlignment="Center"
                                   IsChecked="{Binding EnableIntegrationButton}" Name="Ga_IntegrationInButton" Click="Checkbox_Click">
-                            <Label Content="{DynamicResource LOCGameActivityIntegrationButton}" />
+                            <Label Content="{DynamicResource LOCCommonIntegrationButton}" />
                         </CheckBox>
 
                         <!--Type integration-->
                         <CheckBox Grid.Column="0" Grid.Row="5" IsChecked="{Binding EnableIntegrationInDescription}" Name="Ga_IntegrationInDescription" Margin="0,5,0,0" Click="Checkbox_Click" VerticalAlignment="Center">
-                            <Label Content="{DynamicResource LOCGameActivityIntegrationInDescription}" />
+                            <Label Content="{DynamicResource LOCCommonIntegrationInDescription}" />
                         </CheckBox>
                     </Grid>
 
-                    <GroupBox Header="{DynamicResource LOCGameActivityIntegrationButtonOptions}" Margin="0,10,0,0">
+                    <GroupBox Header="{DynamicResource LOCCommonIntegrationButtonOptions}" Margin="0,10,0,0">
                         <GroupBox.Style>
                             <Style TargetType="GroupBox">
                                 <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -290,17 +290,17 @@
 
                             <CheckBox Grid.Column="0" Grid.Row="0" IsChecked="{Binding EnableIntegrationInDescriptionOnlyIcon}" Name="Ga_IntegrationInDescriptionOnlyIcon" 
                                           Click="Checkbox_Click" VerticalAlignment="Center">
-                                <Label Content="{DynamicResource LOCGameActivityIntegrationInDescriptionOnlyIcon}" />
+                                <Label Content="{DynamicResource LOCCommonIntegrationButtonOnlyIcon}" />
                             </CheckBox>
                             <CheckBox Grid.Column="2" Grid.Row="0" IsChecked="{Binding EnableIntegrationButtonDetails}" Name="Ga_IntegrationInButtonDetails" 
                                           Click="Checkbox_Click" VerticalAlignment="Center">
-                                <Label Content="{DynamicResource LOCGameActivityIntegrationButtonDetails}" />
+                                <Label Content="{DynamicResource LOCCommonIntegrationButtonDetails}" />
                             </CheckBox>
 
                             <CheckBox Grid.Column="0" Grid.Row="1" IsChecked="{Binding EnableIntegrationInDescriptionWithToggle}" Name="Ga_IntegrationInDescriptionWithToggle" 
                                           Click="Checkbox_Click" VerticalAlignment="Center"
                                           IsEnabled="{Binding EnableIntegrationInDescription}">
-                                <Label Content="{DynamicResource LOCGameActivityIntegrationInDescriptionWithToggle}" />
+                                <Label Content="{DynamicResource LOCCommonIntegrationButtonIsToggle}" />
                             </CheckBox>
                         </Grid>
                     </GroupBox>
@@ -357,15 +357,15 @@
                             </Grid.RowDefinitions>
 
                             <CheckBox Grid.Column="0" Grid.Row="0" IsChecked="{Binding IntegrationShowTitle}" IsEnabled="{Binding ElementName=Ga_IntegrationInDescription, Path=IsChecked}" VerticalAlignment="Center">
-                                <Label Content="{DynamicResource LOCGameActivityIntegrationShowTitle}" />
+                                <Label Content="{DynamicResource LOCCommonIntegrationShowTitle}" />
                             </CheckBox>
                             <CheckBox Grid.Column="2" Grid.Row="0" IsChecked="{Binding IntegrationTopGameDetails}" IsEnabled="{Binding ElementName=Ga_IntegrationInDescription, Path=IsChecked}" VerticalAlignment="Center">
-                                <Label Content="{DynamicResource LOCGameActivityIntegrationTopGameDetails}" />
+                                <Label Content="{DynamicResource LOCCommonIntegrationTopGameDetails}" />
                             </CheckBox>
                         </Grid>
                     </GroupBox>
 
-                    <GroupBox Header="{DynamicResource LOCGameActivityIntegrationOptions}" Margin="0,10,0,0">
+                    <GroupBox Header="{DynamicResource LOCCommonIntegrationSelectElements}" Margin="0,10,0,0">
                         <GroupBox.Style>
                             <Style TargetType="GroupBox">
                                 <Setter Property="SnapsToDevicePixels" Value="True" />

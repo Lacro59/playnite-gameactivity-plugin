@@ -12,7 +12,7 @@
     GameActivitySettingsView 
     -->
 
-    <sys:String x:Key="LOCGameActivityActiveIcon">为启动器显示图标</sys:String>
+    <sys:String x:Key="LOCCommonIconStore">为启动器显示图标</sys:String>
     
     <sys:String x:Key="LOCGameActivityActiveLog">启用性能记录</sys:String>
     <sys:String x:Key="LOCGameActivityTimeInterval">时间间隔</sys:String>
@@ -40,21 +40,21 @@
     <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">游戏时记录CPU、GPU、内存和帧数。</sys:String>
     <sys:String x:Key="LOCGameActivityEnableWarningToolTip">游戏结束后显示警告消息</sys:String>
 
-    <sys:String x:Key="LOCGameActivityIntegration">界面集成</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationInDescription">游戏描述中显示</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationInDescriptionWithToggle">用切换按钮显示</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationShowTitle">显示标题</sys:String>
+    <sys:String x:Key="LOCCommonIntegration">界面集成</sys:String>
+    <sys:String x:Key="LOCCommonIntegrationInDescription">游戏描述中显示</sys:String>
+    <sys:String x:Key="LOCCommonIntegrationButtonIsToggle">用切换按钮显示</sys:String>
+    <sys:String x:Key="LOCCommonIntegrationShowTitle">显示标题</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationShowGraphic">显示游戏时长图表</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationShowGraphicLog">显示最后一次性能记录</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationTopGameDetails">在其他描述之上</sys:String>
+    <sys:String x:Key="LOCCommonIntegrationTopGameDetails">在其他描述之上</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">在切换按钮中显示详情</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationInCustomTheme">自定义主题集成（如被集成）</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationButton">添加按钮</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationButtonDetails">在按钮中显示详情</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationButtonHeader">在窗口添加按钮</sys:String>
+    <sys:String x:Key="LOCCommonIntegrationInCustomTheme">自定义主题集成（如被集成）</sys:String>
+    <sys:String x:Key="LOCCommonIntegrationButton">添加按钮</sys:String>
+    <sys:String x:Key="LOCCommonIntegrationButtonDetails">在按钮中显示详情</sys:String>
+    <sys:String x:Key="LOCCommonIntegrationButtonHeader">在窗口添加按钮</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">Number of data in abscissa</sys:String>
 
-    <sys:String x:Key="LOCGameActivityIntegrationOptions">Selection elements</sys:String>
+    <sys:String x:Key="LOCCommonIntegrationSelectElements">Selection elements</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicOptions">Graphic options</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabels">Show absciss label</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">Show ordinates label</sys:String>
@@ -64,8 +64,8 @@
     <!-- 
     GameActivityView 
     -->
-    <sys:String x:Key="LOCGameActivitySources">源</sys:String>
-    <sys:String x:Key="LOCGameActivityGenres">类型</sys:String>
+    <sys:String x:Key="LOCSourcesLabel">源</sys:String>
+    <sys:String x:Key="LOCGenresLabel">类型</sys:String>
     <sys:String x:Key="LOCGameActivityTotalHours">总小时数</sys:String>
     <sys:String x:Key="LOCGameActivityTotalHoursByWeeks">每周小时数</sys:String>
     
@@ -77,8 +77,8 @@
     <sys:String x:Key="LOCGameActivityLogTitle">最后活动详情</sys:String>
     <sys:String x:Key="LOCGameActivityLogTitleDate">活动详情 </sys:String>
 
-    <sys:String x:Key="LOCGameActivityLvGamesIcon">图标</sys:String>
-    <sys:String x:Key="LOCGameActivityLvGamesTitle">名称</sys:String>
+    <sys:String x:Key="LOCGameIconTitle">图标</sys:String>
+    <sys:String x:Key="LOCGameNameTitle">名称</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesLastActivity">最后活动</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">游戏时间</sys:String>
 

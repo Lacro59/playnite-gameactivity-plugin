@@ -12,7 +12,7 @@
     GameActivitySettingsView 
     -->
 
-    <sys:String x:Key="LOCGameActivityActiveIcon">Icon für den Launcher anzeigen</sys:String>
+    <sys:String x:Key="LOCCommonIconStore">Icon für den Launcher anzeigen</sys:String>
 
     <sys:String x:Key="LOCGameActivityActiveLog">Logging aktivieren</sys:String>
     <sys:String x:Key="LOCGameActivityTimeInterval">Zeitintervall</sys:String>
@@ -40,21 +40,21 @@
     <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">CPU-, GPU-, RAM- und FPS-Leistung beim Spielen aufzeichnen</sys:String>
     <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Zeigt eine Warnung beim Beenden des Spiels innerhalb der definierten Grenzen an.</sys:String>
 
-    <sys:String x:Key="LOCGameActivityIntegration">Integration in Oberfläche</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationInDescription">In Spielebeschreibung</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationInDescriptionWithToggle">Mit Schalter</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationShowTitle">Titel anzeigen</sys:String>
+    <sys:String x:Key="LOCCommonIntegration">Integration in Oberfläche</sys:String>
+    <sys:String x:Key="LOCCommonIntegrationInDescription">In Spielebeschreibung</sys:String>
+    <sys:String x:Key="LOCCommonIntegrationButtonIsToggle">Mit Schalter</sys:String>
+    <sys:String x:Key="LOCCommonIntegrationShowTitle">Titel anzeigen</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationShowGraphic">Diagramm anzeigen</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationShowGraphicLog">Diagramm mit aktuellstem Eintrag anzeigen</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationTopGameDetails">Über der Beschreibung</sys:String>
+    <sys:String x:Key="LOCCommonIntegrationTopGameDetails">Über der Beschreibung</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">Details anzeigen</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationInCustomTheme">Integration von angepassten Themes (falls integriert)</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationButton">Button anzeigen</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationButtonDetails">Button mit Details anzeigen</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationButtonHeader">Button in Fensterleiste hinzufügen</sys:String>
+    <sys:String x:Key="LOCCommonIntegrationInCustomTheme">Integration von angepassten Themes (falls integriert)</sys:String>
+    <sys:String x:Key="LOCCommonIntegrationButton">Button anzeigen</sys:String>
+    <sys:String x:Key="LOCCommonIntegrationButtonDetails">Button mit Details anzeigen</sys:String>
+    <sys:String x:Key="LOCCommonIntegrationButtonHeader">Button in Fensterleiste hinzufügen</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">Number of data in abscissa</sys:String>
 
-    <sys:String x:Key="LOCGameActivityIntegrationOptions">Selection elements</sys:String>
+    <sys:String x:Key="LOCCommonIntegrationSelectElements">Selection elements</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicOptions">Graphic options</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabels">Show absciss label</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">Show ordinates label</sys:String>
@@ -64,8 +64,8 @@
     <!-- 
     GameActivityView 
     -->
-    <sys:String x:Key="LOCGameActivitySources">Quellen</sys:String>
-    <sys:String x:Key="LOCGameActivityGenres">Genres</sys:String>
+    <sys:String x:Key="LOCSourcesLabel">Quellen</sys:String>
+    <sys:String x:Key="LOCGenresLabel">Genres</sys:String>
     <sys:String x:Key="LOCGameActivityTotalHours">Gesamtzeit in Stunden</sys:String>
     <sys:String x:Key="LOCGameActivityTotalHoursByWeeks">Gesamtzeit in Stunden pro Woche</sys:String>
     
@@ -77,8 +77,8 @@
     <sys:String x:Key="LOCGameActivityLogTitle">Details zur letzten Spiele-Session</sys:String>
     <sys:String x:Key="LOCGameActivityLogTitleDate">Details zur Spiele-Session für</sys:String>
 
-    <sys:String x:Key="LOCGameActivityLvGamesIcon">Icon</sys:String>
-    <sys:String x:Key="LOCGameActivityLvGamesTitle">Name</sys:String>
+    <sys:String x:Key="LOCGameIconTitle">Icon</sys:String>
+    <sys:String x:Key="LOCGameNameTitle">Name</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Letzte Spiele-Session</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Spieldauer</sys:String>
 

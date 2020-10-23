@@ -51,8 +51,8 @@
                         <ColumnDefinition Width="100" />
                     </Grid.ColumnDefinitions>
 
-                    <ToggleButton Grid.Column="0" x:Name="tbMonthSources" IsChecked='True' Content="{DynamicResource LOCGameActivitySources}" Width="100" Height="40" FontSize="20" Click="ToggleButtonSources_Checked"/>
-                    <ToggleButton Grid.Column="2" x:Name="tbMonthGenres" IsChecked='False' Content="{DynamicResource LOCGameActivityGenres}" Width="100" Height="40" FontSize="20" Click="ToggleButtonGenres_Checked"/>
+                    <ToggleButton Grid.Column="0" x:Name="tbMonthSources" IsChecked='True' Content="{DynamicResource LOCSourcesLabel}" Width="100" Height="40" FontSize="20" Click="ToggleButtonSources_Checked"/>
+                    <ToggleButton Grid.Column="2" x:Name="tbMonthGenres" IsChecked='False' Content="{DynamicResource LOCGenresLabel}" Width="100" Height="40" FontSize="20" Click="ToggleButtonGenres_Checked"/>
 
                     <Button Grid.Column="3" Content="" Height="35" Width="50" FontSize="20" Click="Button_Click_PrevMonth" FontFamily="Wingdings" />
                     <Label Grid.Column="4" x:Name="activityLabel" Content="month data label" HorizontalAlignment="Center" VerticalAlignment="Center" Height="45" FontSize="24" FontWeight="Bold" MinWidth="50"/>
@@ -182,14 +182,14 @@
                     <ListView.View>
                         <GridView>
                             <GridViewColumn  Width="50">
-                                <GridViewColumnHeader Name="lvGameIcon" Content="{DynamicResource LOCGameActivityLvGamesIcon}"></GridViewColumnHeader>
+                                <GridViewColumnHeader Name="lvGameIcon" Content="{DynamicResource LOCGameIconTitle}"></GridViewColumnHeader>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <Image HorizontalAlignment="Center" Height="32" VerticalAlignment="Center" Width="32" Source="{Binding listGameIcon}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn x:Name="hGameTitle" Header="{DynamicResource LOCGameActivityLvGamesTitle}" Width="Auto" DisplayMemberBinding="{Binding listGameTitle}" />
+                            <GridViewColumn x:Name="hGameTitle" Header="{DynamicResource LOCGameNameTitle}" Width="Auto" DisplayMemberBinding="{Binding listGameTitle}" />
                             <GridViewColumn Width="150" DisplayMemberBinding="{Binding listGameLastActivity, Converter={StaticResource LocalDateTimeConverter}}">
                                 <GridViewColumnHeader Name="lvLastActivity" Content="{DynamicResource LOCGameActivityLvGamesLastActivity}"></GridViewColumnHeader>
                             </GridViewColumn>
