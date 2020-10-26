@@ -447,7 +447,10 @@ namespace GameActivity
 
             if (WarningsMessage.Count != 0)
             {
-                new WarningsDialogs(resources.GetString("LOCGameActivityWarningCaption"), WarningsMessage).ShowDialog();
+                var ViewExtension = new WarningsDialogs(WarningsMessage);
+                Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGameActivityWarningCaption"), ViewExtension);
+                windowExtension.ShowDialog();
+
                 WarningsMessage = new List<WarningData>();
             }
 
