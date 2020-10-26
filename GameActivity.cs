@@ -243,7 +243,8 @@ namespace GameActivity
             // Infos
             string gameID = game.Id.ToString();
             string gameName = game.Name;
-            string dateSession = DateTime.Now.ToUniversalTime().ToString("o");
+            //string dateSession = DateTime.Now.ToUniversalTime().ToString("o");
+            string dateSession = DateTime.Now.ToUniversalTime().AddSeconds(-elapsedSeconds).ToString("o");
             string gameSourceID = game.SourceId.ToString();
 
             try

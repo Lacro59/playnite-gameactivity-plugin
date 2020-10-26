@@ -230,7 +230,8 @@ namespace GameActivity
                         for (int iActivity = 0; iActivity < gameActivities.Count; iActivity++)
                         {
                             long elapsedSeconds = gameActivities[iActivity].ElapsedSeconds;
-                            DateTime dateSession = Convert.ToDateTime(gameActivities[iActivity].DateSession).AddSeconds(-elapsedSeconds).ToLocalTime();
+                            //DateTime dateSession = Convert.ToDateTime(gameActivities[iActivity].DateSession).AddSeconds(-elapsedSeconds).ToLocalTime();
+                            DateTime dateSession = Convert.ToDateTime(gameActivities[iActivity].DateSession).ToLocalTime();
                             string sourceName = gameActivities[iActivity].SourceName;
 
                             // Cumul data
@@ -502,7 +503,8 @@ namespace GameActivity
                     for (int iActivity = 0; iActivity < gameActivities.Count; iActivity++)
                     {
                         long elapsedSeconds = gameActivities[iActivity].ElapsedSeconds;
-                        DateTime dateSession = Convert.ToDateTime(gameActivities[iActivity].DateSession).AddSeconds(-elapsedSeconds).ToLocalTime();
+                        //DateTime dateSession = Convert.ToDateTime(gameActivities[iActivity].DateSession).AddSeconds(-elapsedSeconds).ToLocalTime();
+                        DateTime dateSession = Convert.ToDateTime(gameActivities[iActivity].DateSession).ToLocalTime();
                         string sourceName = gameActivities[iActivity].SourceName;
 
                         // Cumul data
@@ -661,7 +663,8 @@ namespace GameActivity
 
                         Activity lastSessionActivity = listGameActivities[iGame].GetLastSessionActivity();
                         long elapsedSeconds = lastSessionActivity.ElapsedSeconds;
-                        DateTime dateSession = Convert.ToDateTime(lastSessionActivity.DateSession).AddSeconds(-elapsedSeconds).ToLocalTime();
+                        //DateTime dateSession = Convert.ToDateTime(lastSessionActivity.DateSession).AddSeconds(-elapsedSeconds).ToLocalTime();
+                        DateTime dateSession = Convert.ToDateTime(lastSessionActivity.DateSession).ToLocalTime();
 
 
                         BitmapImage iconImage = new BitmapImage();
@@ -688,12 +691,12 @@ namespace GameActivity
                             avgGPUT = listGameActivities[iGame].avgGPUT(listGameActivities[iGame].GetLastSession()) + "°",
 
                             enableWarm = _settings.EnableWarning,
-                            maxCPUT = "" + _settings.MaxCpuTemp,
-                            maxGPUT = "" + _settings.MaxGpuTemp,
-                            minFPS = "" + _settings.MinFps,
-                            maxCPU = "" + _settings.MaxCpuUsage,
-                            maxGPU = "" + _settings.MaxGpuUsage,
-                            maxRAM = "" + _settings.MaxRamUsage
+                            maxCPUT = _settings.MaxCpuTemp.ToString(),
+                            maxGPUT = _settings.MaxGpuTemp.ToString(),
+                            minFPS = _settings.MinFps.ToString(),
+                            maxCPU = _settings.MaxCpuUsage.ToString(),
+                            maxGPU = _settings.MaxGpuUsage.ToString(),
+                            maxRAM = _settings.MaxRamUsage.ToString(),
                         });
 
                         iconImage = null;
