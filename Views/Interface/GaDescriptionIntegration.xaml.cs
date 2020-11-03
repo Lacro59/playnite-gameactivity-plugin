@@ -47,21 +47,16 @@ namespace GameActivity.Views.Interface
                     Show = false;
                 }
 
+#if DEBUG
+                logger.Debug($"GameActivity - PART_GameActivity_Graphic - Show: {Show} - gameActivity: {JsonConvert.SerializeObject(gameActivity)}");
+#endif
                 if (Show && gameActivity != null)
                 {
                     gameActivityGameGraphicTime = new GameActivityGameGraphicTime(settings, gameActivity, 0, settings.IntegrationGraphicOptionsCountAbscissa);
                     PART_GameActivity_Graphic.Visibility = Visibility.Visible;
                     PART_GameActivity_Graphic.Height = settings.IntegrationShowGraphicHeight;
                     PART_GameActivity_Graphic.Children.Add(gameActivityGameGraphicTime);
-#if DEBUG
-                    logger.Debug($"GameActivity - PART_GameActivity_Graphic - Show: {Show} - gameActivity: {JsonConvert.SerializeObject(gameActivity)}");
-#endif
-                }
-                else
-                {
-#if DEBUG
-                    logger.Debug($"GameActivity - PART_GameActivity_Graphic - Show: {Show} - gameActivity: {JsonConvert.SerializeObject(gameActivity)}");
-#endif
+
                 }
             }
 
@@ -75,21 +70,16 @@ namespace GameActivity.Views.Interface
                     Show = false;
                 }
 
+#if DEBUG
+                logger.Debug($"GameActivity - PART_GameActivity_GraphicLog - Show: {Show} - gameActivity: {JsonConvert.SerializeObject(gameActivity)}");
+#endif
                 if (Show && gameActivity != null)
                 {
                     gameActivityGameGraphicLog = new GameActivityGameGraphicLog(settings, gameActivity, string.Empty, string.Empty, 0, !settings.EnableIntegrationInCustomTheme, settings.IntegrationGraphicLogOptionsCountAbscissa);
                     PART_GameActivity_GraphicLog.Visibility = Visibility.Visible;
                     PART_GameActivity_GraphicLog.Height = settings.IntegrationShowGraphicLogHeight;
                     PART_GameActivity_GraphicLog.Children.Add(gameActivityGameGraphicLog);
-#if DEBUG
-                    logger.Debug($"GameActivity - PART_GameActivity_GraphicLog - Show: {Show} - gameActivity: {JsonConvert.SerializeObject(gameActivity)}");
-#endif
-                }
-                else
-                {
-#if DEBUG
-                    logger.Debug($"GameActivity - PART_GameActivity_GraphicLog - Show: {Show} - gameActivity: {JsonConvert.SerializeObject(gameActivity)}");
-#endif
+
                 }
             }
         }

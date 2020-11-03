@@ -234,48 +234,51 @@ namespace GameActivity
         {
             // Add code to be executed when game is preparing to be started.
 
-            // Stop timer si HWiNFO log is enable.
-            if (settings.EnableLogging)
+            var TaskGameStopped = Task.Run(() =>
             {
-                dataHWiNFO_stop();
-            }
-
-            // Infos
-            string gameID = game.Id.ToString();
-            string gameName = game.Name;
-            //string dateSession = DateTime.Now.ToUniversalTime().ToString("o");
-            string dateSession = DateTime.Now.ToUniversalTime().AddSeconds(-elapsedSeconds).ToString("o");
-            string gameSourceID = game.SourceId.ToString();
-
-            try
-            {
-                // Write game activity.
-                string newActivityString = "{'sourceID':'" + gameSourceID + "', 'dateSession':'" + dateSession + "', 'elapsedSeconds':'" + elapsedSeconds + "'}";
-                JObject newActivity = (JObject.Parse(newActivityString));
-                activity.Add(newActivity);
-                File.WriteAllText(pathActivityDB + gameID + ".json", JsonConvert.SerializeObject(activity));
-
-                // Write game activity details.
-                if (JsonConvert.SerializeObject(LoggingData) != "[]")
+                // Stop timer si HWiNFO log is enable.
+                if (settings.EnableLogging)
                 {
-                    activityDetails.Add(new JProperty(dateSession, LoggingData));
-                    File.WriteAllText(pathActivityDetailsDB + gameID + ".json", JsonConvert.SerializeObject(activityDetails));
+                    dataHWiNFO_stop();
                 }
-            }
-            catch (Exception ex)
-            {
-                logger.Info("GameActivity - OnGameStopped - " + ex.Message);
-            }
+
+                // Infos
+                string gameID = game.Id.ToString();
+                string gameName = game.Name;
+                //string dateSession = DateTime.Now.ToUniversalTime().ToString("o");
+                string dateSession = DateTime.Now.ToUniversalTime().AddSeconds(-elapsedSeconds).ToString("o");
+                string gameSourceID = game.SourceId.ToString();
+
+                try
+                {
+                    // Write game activity.
+                    string newActivityString = "{'sourceID':'" + gameSourceID + "', 'dateSession':'" + dateSession + "', 'elapsedSeconds':'" + elapsedSeconds + "'}";
+                    JObject newActivity = (JObject.Parse(newActivityString));
+                    activity.Add(newActivity);
+                    File.WriteAllText(pathActivityDB + gameID + ".json", JsonConvert.SerializeObject(activity));
+
+                    // Write game activity details.
+                    if (JsonConvert.SerializeObject(LoggingData) != "[]")
+                    {
+                        activityDetails.Add(new JProperty(dateSession, LoggingData));
+                        File.WriteAllText(pathActivityDetailsDB + gameID + ".json", JsonConvert.SerializeObject(activityDetails));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    logger.Info("GameActivity - OnGameStopped - " + ex.Message);
+                }
 
 
-            // Refresh integration interface
-            var TaskIntegrationUI = Task.Run(() =>
-            {
-                GameActivityDatabases = new GameActivityCollection();
-                GameActivityDatabases.InitializeCollection(this.GetPluginUserDataPath());
+                // Refresh integration interface
+                var TaskIntegrationUI = Task.Run(() =>
+                {
+                    GameActivityDatabases = new GameActivityCollection();
+                    GameActivityDatabases.InitializeCollection(this.GetPluginUserDataPath());
 
-                gameActivityUI.AddElements();
-                gameActivityUI.RefreshElements(GameSelected);
+                    gameActivityUI.AddElements();
+                    gameActivityUI.RefreshElements(GameSelected);
+                });
             });
         }
 
@@ -389,11 +392,16 @@ namespace GameActivity
 #if DEBUG
                     logger.Debug($"GameActivity - Game selected: {GameSelected.Name}");
 #endif
-                    var TaskIntegrationUI = Task.Run(() =>
+                    if (settings.EnableIntegrationInCustomTheme || settings.EnableIntegrationInDescription)
                     {
-                        gameActivityUI.AddElements();
-                        gameActivityUI.RefreshElements(GameSelected);
-                    });
+                        PlayniteUiHelper.ResetToggle();
+                        var TaskIntegrationUI = Task.Run(() =>
+                        {
+                            gameActivityUI.taskHelper.Check();
+                            gameActivityUI.AddElements();
+                            gameActivityUI.RefreshElements(GameSelected);
+                        });
+                    }
                 }
             }
             catch (Exception ex)

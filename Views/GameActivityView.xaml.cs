@@ -145,22 +145,22 @@ namespace GameActivity
             {
                 try
                 {
-                    Application.Current.Dispatcher.Invoke(new Action(() =>
+                    Application.Current.Dispatcher.BeginInvoke((Action)delegate
                     {
                         getActivityByMonth(yearCurrent, monthCurrent);
-                    }));
-                    Application.Current.Dispatcher.Invoke(new Action(() =>
+                    });
+                    Application.Current.Dispatcher.BeginInvoke((Action)delegate
                     {
                         getActivityByWeek(yearCurrent, monthCurrent);
-                    }));
-                    Application.Current.Dispatcher.Invoke(new Action(() =>
+                    });
+                    Application.Current.Dispatcher.BeginInvoke((Action)delegate
                     {
                         getActivityByDay(yearCurrent, monthCurrent);
-                    }));
-                    Application.Current.Dispatcher.Invoke(new Action(() =>
+                    });
+                    Application.Current.Dispatcher.BeginInvoke((Action)delegate
                     {
                         getActivityByListGame();
-                    }));
+                    });
                 }
                 catch (Exception ex)
                 {
@@ -169,7 +169,8 @@ namespace GameActivity
             })
             .ContinueWith(antecedent =>
             {
-                Application.Current.Dispatcher.Invoke(new Action(() => {
+                Application.Current.Dispatcher.BeginInvoke((Action)delegate
+                { 
                     // Set game selected
                     if (GameSelected != null)
                     {
@@ -195,7 +196,7 @@ namespace GameActivity
                     PART_DataLoad.Visibility = Visibility.Collapsed;
                     PART_DataTop.Visibility = Visibility.Visible;
                     PART_DataBottom.Visibility = Visibility.Visible;
-                }));
+                });
             });
             #endregion
 
