@@ -201,5 +201,10 @@ namespace GameActivity.Views.Interface
             _variateurLog = _variateurLogInitial;
             GetActivityForGamesLogGraphics(gameActivity, _withTitle, _dateSelected, _title, _limit);
         }
+
+        public void DisableAnimations(bool IsDisable)
+        {
+            gameSeriesLog.DisableAnimations = IsDisable;
+        }
     }
 }

@@ -40,7 +40,9 @@ namespace GameActivity.Models
                     }
                     catch (Exception ex)
                     {
+#if DEBUG
                         Common.LogError(ex, "GameActivity", $"Error in ActivitySourceName");
+#endif
                         return "Playnite";
                     }
                 }

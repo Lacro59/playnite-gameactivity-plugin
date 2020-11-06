@@ -41,6 +41,7 @@ namespace GameActivity.Services
         {
             _Settings = Settings;
             _PluginUserDataPath = PluginUserDataPath;
+
             BtActionBarName = "PART_GaButton";
             SpDescriptionName = "PART_GaDescriptionIntegration";
         }
@@ -149,7 +150,8 @@ namespace GameActivity.Services
             CancellationTokenSource tokenSource = new CancellationTokenSource();
             CancellationToken ct = tokenSource.Token;
 
-            Task TaskRefresh = Task.Run(() => {
+            Task TaskRefresh = Task.Run(() => 
+            {
                 try
                 {
                     Initial();
@@ -316,7 +318,7 @@ namespace GameActivity.Services
                 }
                 else
                 {
-                    BtActionBar = new GameActivityButton(_Settings);
+                    BtActionBar = new GameActivityButton(_Settings.EnableIntegrationInDescriptionOnlyIcon);
                 }
 
                 ((Button)BtActionBar).Click += OnBtActionBarClick;
@@ -436,7 +438,7 @@ namespace GameActivity.Services
                 ui.AddElementInGameSelectedDescription(SpDescription, _Settings.IntegrationTopGameDetails);
                 PART_SpDescription = IntegrationUI.SearchElementByName(SpDescriptionName);
 
-                if(_Settings.EnableIntegrationInDescriptionWithToggle)
+                if(_Settings.EnableIntegrationInDescriptionWithToggle && PART_SpDescription != null)
                 {
                     ((ToggleButton)PART_BtActionBar).IsChecked = false;
                     PART_SpDescription.Visibility = Visibility.Collapsed;
@@ -504,12 +506,18 @@ namespace GameActivity.Services
                 return;
             }
 
-            //FrameworkElement PART_GaCustomButton = null;
+            FrameworkElement PART_GaButtonWithJustIcon = null;
+            FrameworkElement PART_GaButtonWithTitle = null;
+            FrameworkElement PART_GaButtonWithTitleAndDetails = null;
+
             FrameworkElement PART_GameActivity_Graphic = null;
             FrameworkElement PART_GameActivity_GraphicLog = null;
             try
             {
-                //PART_GaCustomButton = IntegrationUI.SearchElementByName("PART_GaCustomButton", false, true);
+                PART_GaButtonWithJustIcon = IntegrationUI.SearchElementByName("PART_GaButtonWithJustIcon", false, true);
+                PART_GaButtonWithTitle = IntegrationUI.SearchElementByName("PART_GaButtonWithTitle", false, true);
+                PART_GaButtonWithTitleAndDetails = IntegrationUI.SearchElementByName("PART_GaButtonWithTitleAndDetails", false, true);
+
                 PART_GameActivity_Graphic = IntegrationUI.SearchElementByName("PART_GameActivity_Graphic", false, true);
                 PART_GameActivity_GraphicLog = IntegrationUI.SearchElementByName("PART_GameActivity_GraphicLog", false, true);
             }
@@ -518,16 +526,15 @@ namespace GameActivity.Services
                 Common.LogError(ex, "GameActivity", $"Error on find custom element");
             }
 
-            /*
-            if (PART_GaCustomButton != null)
+
+            if (PART_GaButtonWithJustIcon != null)
             {
-                PART_GaCustomButton = new GameActivityButton(_Settings);
-                PART_GaCustomButton.Name = "GaCustomButton";
-                ((Button)PART_GaCustomButton).Click += OnBtActionBarClick;
+                PART_GaButtonWithJustIcon = new GameActivityButton(true);
+                ((Button)PART_GaButtonWithJustIcon).Click += OnBtActionBarClick;
                 try
                 {
-                    ui.AddElementInCustomTheme(PART_GaCustomButton, "PART_GaCustomButton");
-                    ListCustomElements.Add(new CustomElement { ParentElementName = "PART_GaCustomButton", Element = PART_GaCustomButton });
+                    ui.AddElementInCustomTheme(PART_GaButtonWithJustIcon, "PART_GaButtonWithJustIcon");
+                    ListCustomElements.Add(new CustomElement { ParentElementName = "PART_GaButtonWithJustIcon", Element = PART_GaButtonWithJustIcon });
                 }
                 catch (Exception ex)
                 {
@@ -537,10 +544,51 @@ namespace GameActivity.Services
             else
             {
 #if DEBUG
-                logger.Debug($"GameActivity - PART_GaCustomButton not find");
+                logger.Debug($"GameActivity - PART_GaButtonWithJustIcon not find");
 #endif
             }
-            */
+
+            if (PART_GaButtonWithTitle != null)
+            {
+                PART_GaButtonWithTitle = new GameActivityButton(false);
+                ((Button)PART_GaButtonWithTitle).Click += OnBtActionBarClick;
+                try
+                {
+                    ui.AddElementInCustomTheme(PART_GaButtonWithTitle, "PART_GaButtonWithTitle");
+                    ListCustomElements.Add(new CustomElement { ParentElementName = "PART_GaButtonWithTitle", Element = PART_GaButtonWithTitle });
+                }
+                catch (Exception ex)
+                {
+                    Common.LogError(ex, "GameActivity", "Error on AddCustomElements()");
+                }
+            }
+            else
+            {
+#if DEBUG
+                logger.Debug($"GameActivity - PART_GaButtonWithTitle not find");
+#endif
+            }
+
+            if (PART_GaButtonWithTitleAndDetails != null)
+            {
+                PART_GaButtonWithTitleAndDetails = new GameActivityButtonDetails(GameActivity.GameSelected.Playtime);
+                ((Button)PART_GaButtonWithTitleAndDetails).Click += OnBtActionBarClick;
+                try
+                {
+                    ui.AddElementInCustomTheme(PART_GaButtonWithTitleAndDetails, "PART_GaButtonWithTitleAndDetails");
+                    ListCustomElements.Add(new CustomElement { ParentElementName = "PART_GaButtonWithTitleAndDetails", Element = PART_GaButtonWithTitleAndDetails });
+                }
+                catch (Exception ex)
+                {
+                    Common.LogError(ex, "GameActivity", "Error on AddCustomElements()");
+                }
+            }
+            else
+            {
+#if DEBUG
+                logger.Debug($"GameActivity - PART_GaButtonWithTitleAndDetails not find");
+#endif
+            }
 
 
             if (PART_GameActivity_Graphic != null && _Settings.IntegrationShowGraphic)
@@ -597,26 +645,32 @@ namespace GameActivity.Services
                 {
                     bool isFind = false;
 
-                    /*
                     if (customElement.Element is GameActivityButton)
                     {
 #if DEBUG
                         logger.Debug($"GameActivity - customElement.Element is GameActivityButton");
 #endif
-                        customElement.Element.Visibility = Visibility.Visible;
                         isFind = true;
+                        customElement.Element.Visibility = Visibility.Visible;
                     }
+
 
                     if (customElement.Element is GameActivityButtonDetails)
                     {
 #if DEBUG
                         logger.Debug($"GameActivity - customElement.Element is GameActivityButtonDetails");
 #endif
-                        customElement.Element.Visibility = Visibility.Visible;
-                        ((GameActivityButtonDetails)customElement.Element).SetGaData(GameActivity.GameSelected.Playtime);
                         isFind = true;
+                        customElement.Element.Visibility = Visibility.Visible;
+
+                        long ElapsedSeconds = 0;
+                        if (GameActivity.SelectedGameGameActivity != null)
+                        {
+                            ElapsedSeconds = GameActivity.SelectedGameGameActivity.GetLastSessionActivity().ElapsedSeconds;
+                        }
+
+                        ((GameActivityButtonDetails)customElement.Element).SetGaData(ElapsedSeconds);
                     }
-                    */
 
                     if (customElement.Element is GaDescriptionIntegration)
                     {

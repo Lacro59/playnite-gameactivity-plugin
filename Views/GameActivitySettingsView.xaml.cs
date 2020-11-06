@@ -57,6 +57,11 @@ namespace GameActivity
 
             }
 
+            if ((cb.Name == "Ga_IntegrationInButton") && (bool)cb.IsChecked)
+            {
+                Ga_IntegrationInCustomTheme.IsChecked = false;
+            }
+
             if ((cb.Name == "Ga_IntegrationInDescription") && (bool)cb.IsChecked)
             {
                 Ga_IntegrationInCustomTheme.IsChecked = false;
@@ -65,6 +70,7 @@ namespace GameActivity
             if ((cb.Name == "Ga_IntegrationInCustomTheme") && (bool)cb.IsChecked)
             {
                 Ga_IntegrationInDescription.IsChecked = false;
+                Ga_IntegrationInButton.IsChecked = false;
             }
         }
 

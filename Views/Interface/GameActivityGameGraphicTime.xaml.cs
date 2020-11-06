@@ -3,6 +3,7 @@ using LiveCharts;
 using LiveCharts.Configurations;
 using LiveCharts.Events;
 using LiveCharts.Wpf;
+using Newtonsoft.Json;
 using Playnite.SDK;
 using PluginCommon;
 using PluginCommon.LiveChartsCommon;
@@ -95,6 +96,11 @@ namespace GameActivity.Views.Interface
                 series5.Add(customerForTime);
             }
 
+            LocalDateConverter localDateConverter = new LocalDateConverter();
+#if DEBUG
+            logger.Debug($"GameActivity - series1: {JsonConvert.SerializeObject(series1)}");
+#endif
+
             // Search data in periode
             for (int iActivity = 0; iActivity < gameActivities.Count; iActivity++)
             {
@@ -106,7 +112,17 @@ namespace GameActivity.Views.Interface
                 {
                     if (listDate[iDay] == dateSession)
                     {
+#if DEBUG
+                        logger.Debug($"GameActivity - series1[iDay].Name: {series1[iDay].Name}");
+#endif
                         string tempName = series1[iDay].Name;
+                        try
+                        {
+                            tempName = (string)localDateConverter.Convert(DateTime.ParseExact(series1[iDay].Name, "yyyy-MM-dd", null), null, null, null);
+                        }
+                        catch
+                        {
+                        }
 
                         if (_settings.CumulPlaytimeSession)
                         {
@@ -261,6 +277,11 @@ namespace GameActivity.Views.Interface
         {
             _variateurTime = _variateurTimeInitial;
             GetActivityForGamesTimeGraphics(gameActivity, _variateurTime, _limit);
+        }
+
+        public void DisableAnimations(bool IsDisable)
+        {
+            gameSeries.DisableAnimations = IsDisable;
         }
     }
 }

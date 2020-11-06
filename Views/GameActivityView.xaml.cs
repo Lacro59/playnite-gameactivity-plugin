@@ -746,7 +746,7 @@ namespace GameActivity
         /// </summary>
         /// <param name="gameID"></param>
         /// <param name="variateur"></param>
-        public void getActivityForGamesTimeGraphics(string gameID)
+        public void getActivityForGamesTimeGraphics(string gameID, bool isNavigation = false)
         {
             gameSeriesContener.Children.Clear();
             GameActivityClass gameActivity = GameActivityDatabases.Get(Guid.Parse(gameID));
@@ -754,6 +754,7 @@ namespace GameActivity
 
             _settings.IgnoreSettings = true;
             var graph = new GameActivityGameGraphicTime(_settings, gameActivity, variateurTime);
+            graph.DisableAnimations(isNavigation);
             graph.gameSeriesDataClick += new DataClickHandler(GameSeries_DataClick);
             gameSeriesContener.Children.Add(graph);
             gameSeriesContener.UpdateLayout();
@@ -765,12 +766,14 @@ namespace GameActivity
         /// Get data detail for the selected game.
         /// </summary>
         /// <param name="gameID"></param>
-        public void getActivityForGamesLogGraphics(string gameID, string dateSelected = "", string title = "")
+        public void getActivityForGamesLogGraphics(string gameID, string dateSelected = "", string title = "", bool isNavigation = false)
         {
             gameSeriesContener.Children.Clear();
             GameActivityClass gameActivity = GameActivityDatabases.Get(Guid.Parse(gameID));
             List<Activity> gameActivities = gameActivity.Activities;
-            gameSeriesContener.Children.Add(new GameActivityGameGraphicLog(_settings, gameActivity, dateSelected, title, variateurLog, false));
+            var graph = new GameActivityGameGraphicLog(_settings, gameActivity, dateSelected, title, variateurLog, false);
+            graph.DisableAnimations(isNavigation);
+            gameSeriesContener.Children.Add(graph);
             gameSeriesContener.UpdateLayout();
 
             if (dateSelected == "")
@@ -1095,12 +1098,12 @@ namespace GameActivity
             if (isGameTime)
             {
                 variateurTime = variateurTime - 1;
-                getActivityForGamesTimeGraphics(gameIDCurrent);
+                getActivityForGamesTimeGraphics(gameIDCurrent, true);
             }
             else
             {
                 variateurLog = variateurLog - 1;
-                getActivityForGamesLogGraphics(gameIDCurrent);
+                getActivityForGamesLogGraphics(gameIDCurrent, "", "", true);
             }
         }
 
@@ -1109,12 +1112,12 @@ namespace GameActivity
             if (isGameTime)
             {
                 variateurTime = variateurTime + 1;
-                getActivityForGamesTimeGraphics(gameIDCurrent);
+                getActivityForGamesTimeGraphics(gameIDCurrent, true);
             }
             else
             {
                 variateurLog = variateurLog + 1;
-                getActivityForGamesLogGraphics(gameIDCurrent);
+                getActivityForGamesLogGraphics(gameIDCurrent, "", "", true);
             }
         }
         #endregion

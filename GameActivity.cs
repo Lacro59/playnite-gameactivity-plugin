@@ -318,7 +318,7 @@ namespace GameActivity
                 {
                     PlayniteApi.Notifications.Add(new NotificationMessage(
                         $"GameActivity-runHWiNFO",
-                        resources.GetString("LOCGameActivityNotificationHWiNFO"),
+                        "GameActivity" + Environment.NewLine + resources.GetString("LOCGameActivityNotificationHWiNFO"),
                         NotificationType.Error,
                         () => OpenSettingsView()
                     ));
@@ -354,7 +354,7 @@ namespace GameActivity
                 {
                     PlayniteApi.Notifications.Add(new NotificationMessage(
                         $"GameActivity-runMSI",
-                        resources.GetString("LOCGameActivityNotificationMSIAfterBurner"),
+                        "GameActivity" + Environment.NewLine + resources.GetString("LOCGameActivityNotificationMSIAfterBurner"),
                         NotificationType.Error,
                         () => OpenSettingsView()
                     ));

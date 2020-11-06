@@ -8,11 +8,11 @@ namespace GameActivity.Views.Interface
     /// </summary>
     public partial class GameActivityButton : Button
     {
-        public GameActivityButton(GameActivitySettings settings)
+        public GameActivityButton(bool EnableIntegrationInDescriptionOnlyIcon)
         {
             InitializeComponent();
 
-            if (settings.EnableIntegrationInDescriptionOnlyIcon)
+            if (EnableIntegrationInDescriptionOnlyIcon)
             {
                 PART_ButtonIcon.Visibility = Visibility.Visible;
                 PART_ButtonText.Visibility = Visibility.Collapsed;
