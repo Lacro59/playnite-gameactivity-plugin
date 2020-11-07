@@ -457,9 +457,12 @@ namespace GameActivity
             {
                 try
                 {
-                    var ViewExtension = new WarningsDialogs(WarningsMessage);
-                    Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGameActivityWarningCaption"), ViewExtension);
-                    windowExtension.ShowDialog();
+                    Application.Current.Dispatcher.BeginInvoke((Action)delegate
+                    {
+                        var ViewExtension = new WarningsDialogs(WarningsMessage);
+                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGameActivityWarningCaption"), ViewExtension);
+                        windowExtension.ShowDialog();
+                    });
                 }
                 catch(Exception ex)
                 {
