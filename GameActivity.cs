@@ -455,9 +455,16 @@ namespace GameActivity
 
             if (WarningsMessage.Count != 0)
             {
-                var ViewExtension = new WarningsDialogs(WarningsMessage);
-                Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGameActivityWarningCaption"), ViewExtension);
-                windowExtension.ShowDialog();
+                try
+                {
+                    var ViewExtension = new WarningsDialogs(WarningsMessage);
+                    Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGameActivityWarningCaption"), ViewExtension);
+                    windowExtension.ShowDialog();
+                }
+                catch(Exception ex)
+                {
+                    Common.LogError(ex, "GameActivity", $"Error on show WarningsMessage");
+                }
 
                 WarningsMessage = new List<WarningData>();
             }
@@ -483,125 +490,177 @@ namespace GameActivity
 
             if (settings.UseMsiAfterburner && CheckGoodForLogging())
             {
-                var MSIAfterburner = new MSIAfterburnerNET.HM.HardwareMonitor();
+                MSIAfterburnerNET.HM.HardwareMonitor MSIAfterburner = null;
 
                 try
                 {
-                    fpsValue = (int)MSIAfterburner.GetEntry(MONITORING_SOURCE_ID.FRAMERATE).Data;
+                    MSIAfterburner = new MSIAfterburnerNET.HM.HardwareMonitor();
                 }
                 catch (Exception ex)
                 {
+                    logger.Error("GameActivity - Fail initialize MSIAfterburnerNET");
+#if DEBUG
+                    Common.LogError(ex, "GameActivity", "Fail initialize MSIAfterburnerNET");
+#endif
+                }
+
+                if (MSIAfterburner != null)
+                {
+                    try
+                    {
+                        fpsValue = (int)MSIAfterburner.GetEntry(MONITORING_SOURCE_ID.FRAMERATE).Data;
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.Error("GameActivity - Fail get fpsValue");
+#if DEBUG
                     Common.LogError(ex, "GameActivity", "Fail get fpsValue");
-                }
+#endif
+                    }
 
-                try
-                {
-                    gpuValue = (int)MSIAfterburner.GetEntry(MONITORING_SOURCE_ID.GPU_USAGE).Data;
-                }
-                catch (Exception ex)
-                {
+                    try
+                    {
+                        if (gpuValue == 0)
+                        {
+                            gpuValue = (int)MSIAfterburner.GetEntry(MONITORING_SOURCE_ID.GPU_USAGE).Data;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.Error("GameActivity - Fail get gpuValue");
+#if DEBUG
                     Common.LogError(ex, "GameActivity", "Fail get gpuValue");
-                }
+#endif
+                    }
 
-                try
-                {
-                    gpuTValue = (int)MSIAfterburner.GetEntry(MONITORING_SOURCE_ID.GPU_TEMPERATURE).Data;
-                }
-                catch (Exception ex)
-                {
+                    try
+                    {
+                        if (gpuTValue == 0)
+                        {
+                            gpuTValue = (int)MSIAfterburner.GetEntry(MONITORING_SOURCE_ID.GPU_TEMPERATURE).Data;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.Error("GameActivity - Fail get gpuTValue");
+#if DEBUG
                     Common.LogError(ex, "GameActivity", "Fail get gpuTValue");
-                }
+#endif
+                    }
 
-                try
-                {
-                    cpuTValue = (int)MSIAfterburner.GetEntry(MONITORING_SOURCE_ID.CPU_TEMPERATURE).Data;
-                }
-                catch (Exception ex)
-                {
+                    try
+                    {
+                        if (cpuTValue == 0)
+                        {
+                            cpuTValue = (int)MSIAfterburner.GetEntry(MONITORING_SOURCE_ID.CPU_TEMPERATURE).Data;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.Error("GameActivity - Fail get cpuTValue");
+#if DEBUG
                     Common.LogError(ex, "GameActivity", "Fail get cpuTValue");
+#endif
+                    }
                 }
             }
             else if (settings.UseHWiNFO && CheckGoodForLogging())
             {
-                HWiNFODumper HWinFO = new HWiNFODumper();
-                List<HWiNFODumper.JsonObj> dataHWinfo = HWinFO.ReadMem();
+                HWiNFODumper HWinFO = null;
+                List<HWiNFODumper.JsonObj> dataHWinfo = null;
 
                 try
                 {
-                    foreach (var sensorItems in dataHWinfo)
+                    HWinFO = new HWiNFODumper();
+                    dataHWinfo = HWinFO.ReadMem();
+                }
+                catch (Exception ex)
+                {
+                    logger.Error("GameActivity - Fail initialize HWiNFODumper");
+#if DEBUG
+                    Common.LogError(ex, "GameActivity", "Fail initialize HWiNFODumper");
+#endif
+                }
+
+                if (HWinFO != null && dataHWinfo != null)
+                {
+                    try
                     {
-                        JObject sensorItemsOBJ = JObject.Parse(JsonConvert.SerializeObject(sensorItems));
-
-                        string sensorsID = "0x" + ((uint)sensorItemsOBJ["szSensorSensorID"]).ToString("X");
-
-                        // Find sensors fps
-                        if (sensorsID.ToLower() == settings.HWiNFO_fps_sensorsID.ToLower())
+                        foreach (var sensorItems in dataHWinfo)
                         {
-                            // Find data fps
-                            foreach (var items in sensorItemsOBJ["sensors"])
-                            {
-                                JObject itemOBJ = JObject.Parse(JsonConvert.SerializeObject(items));
-                                string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
+                            JObject sensorItemsOBJ = JObject.Parse(JsonConvert.SerializeObject(sensorItems));
 
-                                if (dataID.ToLower() == settings.HWiNFO_fps_elementID.ToLower())
+                            string sensorsID = "0x" + ((uint)sensorItemsOBJ["szSensorSensorID"]).ToString("X");
+
+                            // Find sensors fps
+                            if (sensorsID.ToLower() == settings.HWiNFO_fps_sensorsID.ToLower())
+                            {
+                                // Find data fps
+                                foreach (var items in sensorItemsOBJ["sensors"])
                                 {
-                                    fpsValue = (int)Math.Round((Double)itemOBJ["Value"]);
+                                    JObject itemOBJ = JObject.Parse(JsonConvert.SerializeObject(items));
+                                    string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
+
+                                    if (dataID.ToLower() == settings.HWiNFO_fps_elementID.ToLower())
+                                    {
+                                        fpsValue = (int)Math.Round((Double)itemOBJ["Value"]);
+                                    }
                                 }
                             }
-                        }
 
-                        // Find sensors gpu usage
-                        if (sensorsID.ToLower() == settings.HWiNFO_gpu_sensorsID.ToLower())
-                        {
-                            // Find data gpu
-                            foreach (var items in sensorItemsOBJ["sensors"])
+                            // Find sensors gpu usage
+                            if (sensorsID.ToLower() == settings.HWiNFO_gpu_sensorsID.ToLower())
                             {
-                                JObject itemOBJ = JObject.Parse(JsonConvert.SerializeObject(items));
-                                string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
-
-                                if (dataID.ToLower() == settings.HWiNFO_gpu_elementID.ToLower())
+                                // Find data gpu
+                                foreach (var items in sensorItemsOBJ["sensors"])
                                 {
-                                    gpuValue = (int)Math.Round((Double)itemOBJ["Value"]);
+                                    JObject itemOBJ = JObject.Parse(JsonConvert.SerializeObject(items));
+                                    string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
+
+                                    if (dataID.ToLower() == settings.HWiNFO_gpu_elementID.ToLower())
+                                    {
+                                        gpuValue = (int)Math.Round((Double)itemOBJ["Value"]);
+                                    }
                                 }
                             }
-                        }
 
-                        // Find sensors gpu temp
-                        if (sensorsID.ToLower() == settings.HWiNFO_gpuT_sensorsID.ToLower())
-                        {
-                            // Find data gpu
-                            foreach (var items in sensorItemsOBJ["sensors"])
+                            // Find sensors gpu temp
+                            if (sensorsID.ToLower() == settings.HWiNFO_gpuT_sensorsID.ToLower())
                             {
-                                JObject itemOBJ = JObject.Parse(JsonConvert.SerializeObject(items));
-                                string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
-
-                                if (dataID.ToLower() == settings.HWiNFO_gpuT_elementID.ToLower())
+                                // Find data gpu
+                                foreach (var items in sensorItemsOBJ["sensors"])
                                 {
-                                    gpuTValue = (int)Math.Round((Double)itemOBJ["Value"]);
+                                    JObject itemOBJ = JObject.Parse(JsonConvert.SerializeObject(items));
+                                    string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
+
+                                    if (dataID.ToLower() == settings.HWiNFO_gpuT_elementID.ToLower())
+                                    {
+                                        gpuTValue = (int)Math.Round((Double)itemOBJ["Value"]);
+                                    }
                                 }
                             }
-                        }
 
-                        // Find sensors cpu temp
-                        if (sensorsID.ToLower() == settings.HWiNFO_cpuT_sensorsID.ToLower())
-                        {
-                            // Find data gpu
-                            foreach (var items in sensorItemsOBJ["sensors"])
+                            // Find sensors cpu temp
+                            if (sensorsID.ToLower() == settings.HWiNFO_cpuT_sensorsID.ToLower())
                             {
-                                JObject itemOBJ = JObject.Parse(JsonConvert.SerializeObject(items));
-                                string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
-
-                                if (dataID.ToLower() == settings.HWiNFO_cpuT_elementID.ToLower())
+                                // Find data gpu
+                                foreach (var items in sensorItemsOBJ["sensors"])
                                 {
-                                    cpuTValue = (int)Math.Round((Double)itemOBJ["Value"]);
+                                    JObject itemOBJ = JObject.Parse(JsonConvert.SerializeObject(items));
+                                    string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
+
+                                    if (dataID.ToLower() == settings.HWiNFO_cpuT_elementID.ToLower())
+                                    {
+                                        cpuTValue = (int)Math.Round((Double)itemOBJ["Value"]);
+                                    }
                                 }
                             }
                         }
                     }
-                }
-                catch (Exception ex)
-                {
-                    Common.LogError(ex, "GameActivity", "Fail get HWiNFO");
+                    catch (Exception ex)
+                    {
+                        Common.LogError(ex, "GameActivity", "Fail get HWiNFO");
+                    }
                 }
             }
 

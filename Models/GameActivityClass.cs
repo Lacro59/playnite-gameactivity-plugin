@@ -230,7 +230,9 @@ namespace GameActivity.Models
                 DateTime dateTemp = Convert.ToDateTime(Activities[iActivity].DateSession).ToLocalTime();
                 if (dateSelected == dateTemp.ToString("yyyy-MM-dd"))
                 {
-                    if (indicator == int.Parse(title))
+                    int titleValue = 0;
+                    int.TryParse(title, out titleValue);
+                    if (indicator == titleValue)
                     {
                         return dateTemp.ToUniversalTime().ToString("o");
                     }
