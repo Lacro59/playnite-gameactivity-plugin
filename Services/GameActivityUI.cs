@@ -50,13 +50,16 @@ namespace GameActivity.Services
         #region BtHeader
         public void AddBtHeader()
         {
-            if (_Settings.EnableIntegrationButtonHeader)
+            if (_PlayniteApi.ApplicationInfo.Mode == ApplicationMode.Desktop)
             {
-                logger.Info("GameActivity - Add Header button");
-                Button btHeader = new GameActivityButtonHeader(TransformIcon.Get("GameActivity"));
-                btHeader.SetValue(TextBlock.FontWeightProperty, FontWeights.Bold);
-                btHeader.Click += OnBtHeaderClick;
-                ui.AddButtonInWindowsHeader(btHeader);
+                if (_Settings.EnableIntegrationButtonHeader)
+                {
+                    logger.Info("GameActivity - Add Header button");
+                    Button btHeader = new GameActivityButtonHeader(TransformIcon.Get("GameActivity"));
+                    btHeader.SetValue(TextBlock.FontWeightProperty, FontWeights.Bold);
+                    btHeader.Click += OnBtHeaderClick;
+                    ui.AddButtonInWindowsHeader(btHeader);
+                }
             }
         }
 
@@ -76,70 +79,76 @@ namespace GameActivity.Services
 
         public override void Initial()
         {
-            if (_Settings.EnableIntegrationButton)
+            if (_PlayniteApi.ApplicationInfo.Mode == ApplicationMode.Desktop)
             {
-#if DEBUG
-                logger.Debug($"GameActivity - InitialBtActionBar()");
-#endif
-                InitialBtActionBar();
-            }
-
-            if (_Settings.EnableIntegrationInDescription)
-            {
-#if DEBUG
-                logger.Debug($"GameActivity - InitialSpDescription()");
-#endif
-                InitialSpDescription();
-            }
-
-            if (_Settings.EnableIntegrationInCustomTheme)
-            {
-#if DEBUG
-                logger.Debug($"GameActivity - InitialCustomElements()");
-#endif
-                InitialCustomElements();
-            }
-        }
-
-        public override void AddElements()
-        {
-            if (IsFirstLoad)
-            {
-#if DEBUG
-                logger.Debug($"GameActivity - IsFirstLoad");
-#endif
-                Thread.Sleep(1000);
-                IsFirstLoad = false;
-            }
-
-            Application.Current.Dispatcher.BeginInvoke((Action)delegate
-            {
-                CheckTypeView();
-
                 if (_Settings.EnableIntegrationButton)
                 {
 #if DEBUG
-                    logger.Debug($"GameActivity - AddBtActionBar()");
+                    logger.Debug($"GameActivity - InitialBtActionBar()");
 #endif
-                    AddBtActionBar();
+                    InitialBtActionBar();
                 }
 
                 if (_Settings.EnableIntegrationInDescription)
                 {
 #if DEBUG
-                    logger.Debug($"GameActivity - AddSpDescription()");
+                    logger.Debug($"GameActivity - InitialSpDescription()");
 #endif
-                    AddSpDescription();
+                    InitialSpDescription();
                 }
 
                 if (_Settings.EnableIntegrationInCustomTheme)
                 {
 #if DEBUG
+                    logger.Debug($"GameActivity - InitialCustomElements()");
+#endif
+                    InitialCustomElements();
+                }
+            }
+        }
+
+        public override void AddElements()
+        {
+            if (_PlayniteApi.ApplicationInfo.Mode == ApplicationMode.Desktop)
+            {
+                if (IsFirstLoad)
+                {
+#if DEBUG
+                    logger.Debug($"GameActivity - IsFirstLoad");
+#endif
+                    Thread.Sleep(1000);
+                    IsFirstLoad = false;
+                }
+
+                Application.Current.Dispatcher.BeginInvoke((Action)delegate
+                {
+                    CheckTypeView();
+
+                    if (_Settings.EnableIntegrationButton)
+                    {
+#if DEBUG
+                    logger.Debug($"GameActivity - AddBtActionBar()");
+#endif
+                    AddBtActionBar();
+                    }
+
+                    if (_Settings.EnableIntegrationInDescription)
+                    {
+#if DEBUG
+                    logger.Debug($"GameActivity - AddSpDescription()");
+#endif
+                    AddSpDescription();
+                    }
+
+                    if (_Settings.EnableIntegrationInCustomTheme)
+                    {
+#if DEBUG
                     logger.Debug($"GameActivity - AddCustomElements()");
 #endif
                     AddCustomElements();
-                }
-            });
+                    }
+                });
+            }
         }
 
         public override void RefreshElements(Game GameSelected, bool force = false)
@@ -228,7 +237,7 @@ namespace GameActivity.Services
                     }
 
                     // If not cancel, show
-                    if (!ct.IsCancellationRequested)
+                    if (!ct.IsCancellationRequested && _PlayniteApi.ApplicationInfo.Mode == ApplicationMode.Desktop)
                     {
                         ui.AddResources(resourcesLists);
 
