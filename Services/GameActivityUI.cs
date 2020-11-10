@@ -440,7 +440,15 @@ namespace GameActivity.Services
 
                 if(_Settings.EnableIntegrationInDescriptionWithToggle && PART_SpDescription != null)
                 {
-                    ((ToggleButton)PART_BtActionBar).IsChecked = false;
+                    if (PART_BtActionBar != null && PART_BtActionBar is ToggleButton)
+                    {
+                        ((ToggleButton)PART_BtActionBar).IsChecked = false;
+                    }
+                    else
+                    {
+                        logger.Warn($"GameActivity - PART_BtActionBar is null or not ToggleButton");
+                    }
+
                     PART_SpDescription.Visibility = Visibility.Collapsed;
                 }
             }
@@ -462,9 +470,17 @@ namespace GameActivity.Services
                     {
                         ((GaDescriptionIntegration)PART_SpDescription).SetGaData(_Settings, GameActivity.SelectedGameGameActivity);
 
-                        if (_Settings.EnableIntegrationInDescriptionWithToggle)
+                        if (_Settings.EnableIntegrationInDescriptionWithToggle && PART_SpDescription != null)
                         {
-                            ((ToggleButton)PART_BtActionBar).IsChecked = false;
+                            if (PART_BtActionBar != null && PART_BtActionBar is ToggleButton)
+                            {
+                                ((ToggleButton)PART_BtActionBar).IsChecked = false;
+                            }
+                            else
+                            {
+                                logger.Warn($"GameActivity - PART_BtActionBar is null or not ToggleButton");
+                            }
+                            
                             PART_SpDescription.Visibility = Visibility.Collapsed;
                         }
                     }
