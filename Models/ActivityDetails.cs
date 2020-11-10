@@ -68,9 +68,6 @@ namespace GameActivity.Models
         }
     }
 
-
-
-
     public class ActivityDetailsData
     {
         /// <summary>

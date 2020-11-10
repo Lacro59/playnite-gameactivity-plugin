@@ -58,7 +58,7 @@ namespace GameActivity
 
         // Variables timer function
         public Timer t { get; set; }
-        public List<WarningData> WarningsMessage { get; set; }
+        public List<WarningData> WarningsMessage { get; set; } = new List<WarningData>();
 
 
         public GameActivity(IPlayniteAPI api) : base(api)
@@ -462,14 +462,14 @@ namespace GameActivity
                         var ViewExtension = new WarningsDialogs(WarningsMessage);
                         Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGameActivityWarningCaption"), ViewExtension);
                         windowExtension.ShowDialog();
+
+                        WarningsMessage = new List<WarningData>();
                     });
                 }
                 catch(Exception ex)
                 {
                     Common.LogError(ex, "GameActivity", $"Error on show WarningsMessage");
                 }
-
-                WarningsMessage = new List<WarningData>();
             }
 
             t.AutoReset = false;
@@ -706,12 +706,12 @@ namespace GameActivity
                 WarningData Message = new WarningData
                 {
                     At = resources.GetString("LOCGameActivityWarningAt") + " " + DateTime.Now.ToString("HH:mm"),
-                    FpsData = new Data { Name = resources.GetString("LOCGameActivityFps"), Value = fpsValue, isWarm = WarningMinFps },
-                    CpuTempData = new Data { Name = resources.GetString("LOCGameActivityCpuTemp"), Value = cpuTValue, isWarm = WarningMaxCpuTemp },
-                    GpuTempData = new Data { Name = resources.GetString("LOCGameActivityGpuTemp"), Value = gpuTValue, isWarm = WarningMaxGpuTemp },
-                    CpuUsageData = new Data { Name = resources.GetString("LOCGameActivityCpuUsage"), Value = cpuValue, isWarm = WarningMaxCpuUsage },
-                    GpuUsageData = new Data { Name = resources.GetString("LOCGameActivityGpuUsage"), Value = gpuValue, isWarm = WarningMaxGpuUsage },
-                    RamUsageData = new Data { Name = resources.GetString("LOCGameActivityRamUsage"), Value = ramValue, isWarm = WarningMaxRamUsage },
+                    FpsData = new Data { Name = resources.GetString("LOCGameActivityFps"), Value = fpsValue, IsWarm = WarningMinFps },
+                    CpuTempData = new Data { Name = resources.GetString("LOCGameActivityCpuTemp"), Value = cpuTValue, IsWarm = WarningMaxCpuTemp },
+                    GpuTempData = new Data { Name = resources.GetString("LOCGameActivityGpuTemp"), Value = gpuTValue, IsWarm = WarningMaxGpuTemp },
+                    CpuUsageData = new Data { Name = resources.GetString("LOCGameActivityCpuUsage"), Value = cpuValue, IsWarm = WarningMaxCpuUsage },
+                    GpuUsageData = new Data { Name = resources.GetString("LOCGameActivityGpuUsage"), Value = gpuValue, IsWarm = WarningMaxGpuUsage },
+                    RamUsageData = new Data { Name = resources.GetString("LOCGameActivityRamUsage"), Value = ramValue, IsWarm = WarningMaxRamUsage },
                 };
 
                 if (WarningMinFps || WarningMaxCpuTemp || WarningMaxGpuTemp || WarningMaxCpuUsage || WarningMaxGpuUsage)

@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using GameActivity.Models;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Playnite.SDK;
 using System;
 using System.Collections.Generic;
 using System.Windows;
@@ -13,16 +16,17 @@ namespace GameActivity.Views
     /// </summary>
     public partial class WarningsDialogs : UserControl
     {
+        private static readonly ILogger logger = LogManager.GetLogger();
+
+
         public WarningsDialogs(List<WarningData> Messages)
         {
             InitializeComponent();
 
-            List<WarningData> MessagesData = new List<WarningData>();
-            for (int i = 0; i < Messages.Count; i++)
-            {
-                MessagesData.Add(Messages[i]);
-            }
-            icData.ItemsSource = MessagesData;
+#if DEBUG
+            logger.Debug($"GameActivity - Messages: {JsonConvert.SerializeObject(Messages)}");
+#endif
+            icData.ItemsSource = Messages;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -33,35 +37,21 @@ namespace GameActivity.Views
 
     public class SetTextColor : IValueConverter
     {
+        public static IResourceProvider resources = new ResourceProvider();
+
+
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             if ((bool)value)
             {
                 return Brushes.Orange;
             }
-            return Brushes.White;
+            return resources.GetResource("TextBrush");
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            return null;
+            throw new NotSupportedException();
         }
-    }
-
-    public class WarningData
-    {
-        public string At { get; set; }
-        public Data FpsData { get; set; }
-        public Data CpuTempData { get; set; }
-        public Data GpuTempData { get; set; }
-        public Data CpuUsageData { get; set; }
-        public Data GpuUsageData { get; set; }
-        public Data RamUsageData { get; set; }
-    }
-    public class Data
-    {
-        public string Name { get; set; }
-        public int Value { get; set; }
-        public bool isWarm { get; set; }
     }
 }
