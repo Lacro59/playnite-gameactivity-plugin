@@ -239,7 +239,14 @@ namespace GameActivity.Services
 #if DEBUG
                                 logger.Debug($"GameActivity - RefreshBtActionBar()");
 #endif
-                                RefreshBtActionBar();
+                                try
+                                {
+                                    RefreshBtActionBar();
+                                }
+                                catch (Exception ex)
+                                {
+                                    Common.LogError(ex, "GameActivity", $"Error on RefreshBtActionBar()");
+                                }
                             }
 
                             if (_Settings.EnableIntegrationInDescription)
@@ -247,7 +254,14 @@ namespace GameActivity.Services
 #if DEBUG
                                 logger.Debug($"GameActivity - RefreshSpDescription()");
 #endif
-                                RefreshSpDescription();
+                                try
+                                {
+                                    RefreshSpDescription();
+                                }
+                                catch (Exception ex)
+                                {
+                                    Common.LogError(ex, "GameActivity", $"Error on RefreshSpDescription()");
+                                }
                             }
 
                             if (_Settings.EnableIntegrationInCustomTheme)
@@ -255,7 +269,14 @@ namespace GameActivity.Services
 #if DEBUG
                                 logger.Debug($"GameActivity - RefreshCustomElements()");
 #endif
-                                RefreshCustomElements();
+                                try
+                                {
+                                    RefreshCustomElements();
+                                }
+                                catch (Exception ex)
+                                {
+                                    Common.LogError(ex, "GameActivity", $"Error on RefreshCustomElements()");
+                                }
                             }
                         });
                     }
