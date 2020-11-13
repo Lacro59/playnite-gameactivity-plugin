@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Playnite.SDK;
+using PluginCommon;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -163,6 +164,7 @@ namespace GameActivity
             // This method should save settings made to Option1 and Option2.
             plugin.SavePluginSettings(this);
 
+            PlayniteUiHelper.ResetToggle();
             GameActivity.gameActivityUI.RemoveElements();
             var TaskIntegrationUI = Task.Run(() =>
             {
