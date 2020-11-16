@@ -660,28 +660,23 @@ namespace GameActivity
                     if (!listGameActivities[iGame].GameName.IsNullOrEmpty())
                     {
                         string gameTitle = listGameActivities[iGame].GameName;
-                        string gameIcon;
 
                         Activity lastSessionActivity = listGameActivities[iGame].GetLastSessionActivity();
                         long elapsedSeconds = lastSessionActivity.ElapsedSeconds;
                         //DateTime dateSession = Convert.ToDateTime(lastSessionActivity.DateSession).AddSeconds(-elapsedSeconds).ToLocalTime();
                         DateTime dateSession = Convert.ToDateTime(lastSessionActivity.DateSession).ToLocalTime();
 
-
-                        BitmapImage iconImage = new BitmapImage();
-                        if (String.IsNullOrEmpty(listGameActivities[iGame].GameIcon) == false)
+                        string GameIcon = listGameActivities[iGame].GameIcon;
+                        if (!GameIcon.IsNullOrEmpty())
                         {
-                            iconImage.BeginInit();
-                            gameIcon = dbPlaynite.GetFullFilePath(listGameActivities[iGame].GameIcon);
-                            iconImage.UriSource = new Uri(gameIcon, UriKind.RelativeOrAbsolute);
-                            iconImage.EndInit();
+                            GameIcon = dbPlaynite.GetFullFilePath(GameIcon);
                         }
 
                         activityListByGame.Add(new listGame()
                         {
                             listGameID = gameID,
                             listGameTitle = gameTitle,
-                            listGameIcon = iconImage,
+                            listGameIcon = GameIcon,
                             listGameLastActivity = dateSession,
                             listGameElapsedSeconds = elapsedSeconds,
                             avgCPU = listGameActivities[iGame].avgCPU(listGameActivities[iGame].GetLastSession()) + "%",
@@ -699,8 +694,6 @@ namespace GameActivity
                             maxGPU = _settings.MaxGpuUsage.ToString(),
                             maxRAM = _settings.MaxRamUsage.ToString(),
                         });
-
-                        iconImage = null;
                     }
                     // Game is deleted
                     else
@@ -1151,7 +1144,7 @@ namespace GameActivity
     {
         public string listGameTitle { get; set; }
         public string listGameID { get; set; }
-        public BitmapImage listGameIcon { get; set; }
+        public string listGameIcon { get; set; }
         public DateTime listGameLastActivity { get; set; }
         public long listGameElapsedSeconds { get; set; }
 
