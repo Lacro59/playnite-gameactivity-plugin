@@ -27,6 +27,7 @@
                             <Label Content="{Binding CpuTempData.Name}" />
                             <Label Content=" = " />
                             <Label Content="{Binding CpuTempData.Value}" Foreground="{Binding CpuTempData.IsWarm, Converter={StaticResource SetTextColor}}" />
+                            <Label Content="°" Foreground="{Binding CpuTempData.IsWarm, Converter={StaticResource SetTextColor}}" />
                             <Label Content=", " />
 
                             <Label Content="{Binding CpuUsageData.Name}" />
@@ -36,13 +37,15 @@
                             <Label Content=", " />
 
                             <Label Content="{Binding RamUsageData.Name}" />
-                            <Label Content=" = " />
+                            <Label Content=" = " /> 
                             <Label Content="{Binding RamUsageData.Value}" Foreground="{Binding RamUsageData.IsWarm, Converter={StaticResource SetTextColor}}" />
                             <Label Content="%" Foreground="{Binding RamUsageData.IsWarm, Converter={StaticResource SetTextColor}}" />
+                            <Label Content=", " />
 
                             <Label Content="{Binding GpuTempData.Name}" />
                             <Label Content=" = " />
                             <Label Content="{Binding GpuTempData.Value}" Foreground="{Binding GpuTempData.IsWarm, Converter={StaticResource SetTextColor}}" />
+                            <Label Content="°" Foreground="{Binding GpuTempData.IsWarm, Converter={StaticResource SetTextColor}}" />
                             <Label Content=", " />
 
                             <Label Content="{Binding GpuUsageData.Name}" />

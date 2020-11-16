@@ -663,7 +663,6 @@ namespace GameActivity
 
                         Activity lastSessionActivity = listGameActivities[iGame].GetLastSessionActivity();
                         long elapsedSeconds = lastSessionActivity.ElapsedSeconds;
-                        //DateTime dateSession = Convert.ToDateTime(lastSessionActivity.DateSession).AddSeconds(-elapsedSeconds).ToLocalTime();
                         DateTime dateSession = Convert.ToDateTime(lastSessionActivity.DateSession).ToLocalTime();
 
                         string GameIcon = listGameActivities[iGame].GameIcon;

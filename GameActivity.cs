@@ -420,6 +420,7 @@ namespace GameActivity
                         PlayniteUiHelper.ResetToggle();
                         var TaskIntegrationUI = Task.Run(() =>
                         {
+                            gameActivityUI.Initial();
                             gameActivityUI.taskHelper.Check();
                             var dispatcherOp = gameActivityUI.AddElements();
                             dispatcherOp.Completed += (s, e) => { gameActivityUI.RefreshElements(GameSelected); };
