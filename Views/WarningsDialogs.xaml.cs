@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Playnite.SDK;
+using PluginCommon;
 using System;
 using System.Collections.Generic;
 using System.Windows;
@@ -37,15 +38,28 @@ namespace GameActivity.Views
 
     public class SetTextColor : IValueConverter
     {
+        private static readonly ILogger logger = LogManager.GetLogger();
         public static IResourceProvider resources = new ResourceProvider();
 
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if ((bool)value)
+            try
             {
-                return Brushes.Orange;
+#if DEBUG
+                logger.Debug($"GameActivity - Convert({value.ToString()})");
+#endif
+
+                if ((bool)value)
+                {
+                    return Brushes.Orange;
+                }
             }
+            catch (Exception ex)
+            {
+                Common.LogError(ex, "GameActivity", $"Error on converter SetTextColor()");
+            }
+
             return resources.GetResource("TextBrush");
         }
 

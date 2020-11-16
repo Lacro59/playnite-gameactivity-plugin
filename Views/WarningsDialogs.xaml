@@ -21,32 +21,34 @@
 
                             <Label Content="{Binding FpsData.Name}" />
                             <Label Content=" = " />
-                            <Label Content="{Binding FpsData.Value}" Foreground="{Binding FpsData.isWarm, Converter={StaticResource SetTextColor}}" />
+                            <Label Content="{Binding FpsData.Value}" Foreground="{Binding FpsData.IsWarm, Converter={StaticResource SetTextColor}}" />
                             <Label Content=", " />
 
                             <Label Content="{Binding CpuTempData.Name}" />
                             <Label Content=" = " />
-                            <Label Content="{Binding CpuTempData.Value}" Foreground="{Binding CpuTempData.isWarm, Converter={StaticResource SetTextColor}}" />
+                            <Label Content="{Binding CpuTempData.Value}" Foreground="{Binding CpuTempData.IsWarm, Converter={StaticResource SetTextColor}}" />
                             <Label Content=", " />
 
                             <Label Content="{Binding CpuUsageData.Name}" />
                             <Label Content=" = " />
-                            <Label Content="{Binding CpuUsageData.Value}" Foreground="{Binding CpuUsageData.isWarm, Converter={StaticResource SetTextColor}}" />
+                            <Label Content="{Binding CpuUsageData.Value}" Foreground="{Binding CpuUsageData.IsWarm, Converter={StaticResource SetTextColor}}" />
+                            <Label Content="%" Foreground="{Binding CpuUsageData.IsWarm, Converter={StaticResource SetTextColor}}" />
                             <Label Content=", " />
 
                             <Label Content="{Binding RamUsageData.Name}" />
                             <Label Content=" = " />
-                            <Label Content="{Binding RamUsageData.Value}" Foreground="{Binding RamUsageData.isWarm, Converter={StaticResource SetTextColor}}" />
-                            <Label Content=", " />
+                            <Label Content="{Binding RamUsageData.Value}" Foreground="{Binding RamUsageData.IsWarm, Converter={StaticResource SetTextColor}}" />
+                            <Label Content="%" Foreground="{Binding RamUsageData.IsWarm, Converter={StaticResource SetTextColor}}" />
 
                             <Label Content="{Binding GpuTempData.Name}" />
                             <Label Content=" = " />
-                            <Label Content="{Binding GpuTempData.Value}" Foreground="{Binding GpuTempData.isWarm, Converter={StaticResource SetTextColor}}" />
+                            <Label Content="{Binding GpuTempData.Value}" Foreground="{Binding GpuTempData.IsWarm, Converter={StaticResource SetTextColor}}" />
                             <Label Content=", " />
 
                             <Label Content="{Binding GpuUsageData.Name}" />
                             <Label Content=" = " />
-                            <Label Content="{Binding GpuUsageData.Value}" Foreground="{Binding GpuUsageData.isWarm, Converter={StaticResource SetTextColor}}" />
+                            <Label Content="{Binding GpuUsageData.Value}" Foreground="{Binding GpuUsageData.IsWarm, Converter={StaticResource SetTextColor}}" />
+                            <Label Content="%" Foreground="{Binding GpuUsageData.IsWarm, Converter={StaticResource SetTextColor}}" />
                         </StackPanel>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

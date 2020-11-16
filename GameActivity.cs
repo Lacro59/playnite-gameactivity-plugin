@@ -172,7 +172,29 @@ namespace GameActivity
             {
                 MenuSection = MenuInExtensions + resources.GetString("LOCGameActivity"),
                 Description = "Test",
-                Action = (mainMenuItem) => { }
+                Action = (mainMenuItem) => 
+                {
+                    WarningsMessage = new List<WarningData>();
+
+                    WarningData Message = new WarningData
+                    {
+                        At = resources.GetString("LOCGameActivityWarningAt") + " " + DateTime.Now.ToString("HH:mm"),
+                        FpsData = new Data { Name = resources.GetString("LOCGameActivityFps"), Value = 10, IsWarm = false },
+                        CpuTempData = new Data { Name = resources.GetString("LOCGameActivityCpuTemp"), Value = 20, IsWarm = true },
+                        GpuTempData = new Data { Name = resources.GetString("LOCGameActivityGpuTemp"), Value = 30, IsWarm = false },
+                        CpuUsageData = new Data { Name = resources.GetString("LOCGameActivityCpuUsage"), Value = 40, IsWarm = true },
+                        GpuUsageData = new Data { Name = resources.GetString("LOCGameActivityGpuUsage"), Value = 50, IsWarm = false },
+                        RamUsageData = new Data { Name = resources.GetString("LOCGameActivityRamUsage"), Value = 60, IsWarm = true },
+                    };
+
+                    WarningsMessage.Add(Message);
+
+                    var ViewExtension = new WarningsDialogs(WarningsMessage);
+                    Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGameActivityWarningCaption"), ViewExtension);
+                    windowExtension.ShowDialog();
+
+                    WarningsMessage = new List<WarningData>();
+                }
             });
 #endif
 
