@@ -168,8 +168,8 @@ namespace GameActivity
             GameActivity.gameActivityUI.RemoveElements();
             var TaskIntegrationUI = Task.Run(() =>
             {
-                GameActivity.gameActivityUI.AddElements();
-                GameActivity.gameActivityUI.RefreshElements(GameActivity.GameSelected);
+                var dispatcherOp = GameActivity.gameActivityUI.AddElements();
+                dispatcherOp.Completed += (s, e) => { GameActivity.gameActivityUI.RefreshElements(GameActivity.GameSelected); };
             });
         }
 

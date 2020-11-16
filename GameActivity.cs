@@ -271,13 +271,14 @@ namespace GameActivity
 
 
                 // Refresh integration interface
+                PlayniteUiHelper.ResetToggle();
                 var TaskIntegrationUI = Task.Run(() =>
                 {
                     GameActivityDatabases = new GameActivityCollection();
                     GameActivityDatabases.InitializeCollection(this.GetPluginUserDataPath());
 
-                    gameActivityUI.AddElements();
-                    gameActivityUI.RefreshElements(GameSelected);
+                    var dispatcherOp = gameActivityUI.AddElements();
+                    dispatcherOp.Completed += (s, e) => { gameActivityUI.RefreshElements(GameSelected); };
                 });
             });
         }
@@ -398,8 +399,8 @@ namespace GameActivity
                         var TaskIntegrationUI = Task.Run(() =>
                         {
                             gameActivityUI.taskHelper.Check();
-                            gameActivityUI.AddElements();
-                            gameActivityUI.RefreshElements(GameSelected);
+                            var dispatcherOp = gameActivityUI.AddElements();
+                            dispatcherOp.Completed += (s, e) => { gameActivityUI.RefreshElements(GameSelected); };
                         });
                     }
                 }
