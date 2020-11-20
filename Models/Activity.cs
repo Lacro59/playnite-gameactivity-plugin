@@ -2,20 +2,11 @@
 using Playnite.SDK;
 using PluginCommon;
 using System;
+using System.Collections.Generic;
 
 namespace GameActivity.Models
 {
-    /// <summary>
-    /// Specifies <see cref="Activity"/> fields.
-    /// </summary>
-    public enum ActivityField
-    {
-        sourceID,
-        dateSession,
-        elapsedSeconds
-    }
-
-    public class Activity
+    public class Activity : ObservableObject
     {
         private static readonly ILogger logger = LogManager.GetLogger();
 

@@ -80,6 +80,8 @@ namespace GameActivity.Services
 
         public override void Initial()
         {
+            GameActivity.PluginDatabase.GameSelectedData = new GameActivities();
+
             if (_PlayniteApi.ApplicationInfo.Mode == ApplicationMode.Desktop)
             {
                 if (_Settings.EnableIntegrationButton)
@@ -128,25 +130,25 @@ namespace GameActivity.Services
                     if (_Settings.EnableIntegrationButton)
                     {
 #if DEBUG
-                    logger.Debug($"GameActivity - AddBtActionBar()");
+                        logger.Debug($"GameActivity - AddBtActionBar()");
 #endif
-                    AddBtActionBar();
+                        AddBtActionBar();
                     }
 
                     if (_Settings.EnableIntegrationInDescription)
                     {
 #if DEBUG
-                    logger.Debug($"GameActivity - AddSpDescription()");
+                        logger.Debug($"GameActivity - AddSpDescription()");
 #endif
-                    AddSpDescription();
+                        AddSpDescription();
                     }
 
                     if (_Settings.EnableIntegrationInCustomTheme)
                     {
 #if DEBUG
-                    logger.Debug($"GameActivity - AddCustomElements()");
+                        logger.Debug($"GameActivity - AddCustomElements()");
 #endif
-                    AddCustomElements();
+                        AddCustomElements();
                     }
                 }));
             }
@@ -162,7 +164,7 @@ namespace GameActivity.Services
             CancellationTokenSource tokenSource = new CancellationTokenSource();
             CancellationToken ct = tokenSource.Token;
 
-            Task TaskRefresh = Task.Run(() => 
+            Task TaskRefresh = Task.Run(() =>
             {
                 try
                 {
@@ -182,28 +184,15 @@ namespace GameActivity.Services
 
 
                     // Load data
-                    GameActivity.SelectedGameGameActivity = null;
-                    try
-                    {
-                        GameActivity.DatabaseReference = _PlayniteApi.Database;
-                        GameActivity.SelectedGameGameActivity = GameActivity.GameActivityDatabases.Get(GameSelected.Id);
-#if DEBUG
-                        logger.Debug($"GameActivity - GameActivity.SelectedGameGameActivity: ({JsonConvert.SerializeObject(GameActivity.SelectedGameGameActivity)})");
-#endif
-                    }
-                    catch (Exception ex)
-                    {
-                        Common.LogError(ex, "GameActivity", "Error to load data");
-                        _PlayniteApi.Dialogs.ShowErrorMessage(resources.GetString("LOCDatabaseErroTitle"), "GameActivity");
-                    }
+                    GameActivities gameActivities = GameActivity.PluginDatabase.Get(GameSelected);
 
-                    if (GameActivity.SelectedGameGameActivity != null)
+                    if (gameActivities.Items.Count > 0)
                     {
                         resourcesLists.Add(new ResourcesList { Key = "Ga_HasData", Value = true });
 
                         try
                         {
-                            var data = GameActivity.SelectedGameGameActivity.GetSessionActivityDetails();
+                            var data = gameActivities.GetSessionActivityDetails();
                             resourcesLists.Add(new ResourcesList { Key = "Ga_HasDataLog", Value = (data.Count > 0) });
                         }
                         catch
@@ -212,12 +201,12 @@ namespace GameActivity.Services
 
                         try
                         {
-                            resourcesLists.Add(new ResourcesList { Key = "Ga_LastDateSession", Value = Convert.ToDateTime(GameActivity.SelectedGameGameActivity.GetLastSession()).ToString(Constants.DateUiFormat) });
+                            resourcesLists.Add(new ResourcesList { Key = "Ga_LastDateSession", Value = gameActivities.GetLastSession().ToLocalTime().ToString(Constants.DateUiFormat) });
                             resourcesLists.Add(new ResourcesList
                             {
                                 Key = "Ga_LastDateTimeSession",
-                                Value = Convert.ToDateTime(GameActivity.SelectedGameGameActivity.GetLastSession()).ToString(Constants.DateUiFormat)
-                                    + " " + Convert.ToDateTime(GameActivity.SelectedGameGameActivity.GetLastSession()).ToString(Constants.TimeUiFormat)
+                                Value = gameActivities.GetLastSession().ToLocalTime().ToString(Constants.DateUiFormat)
+                                    + " " + gameActivities.GetLastSession().ToLocalTime().ToString(Constants.TimeUiFormat)
                             });
                         }
                         catch
@@ -227,7 +216,7 @@ namespace GameActivity.Services
                         try
                         {
                             LongToTimePlayedConverter converter = new LongToTimePlayedConverter();
-                            string playtime = (string)converter.Convert((long)GameActivity.SelectedGameGameActivity.GetLastSessionActivity().ElapsedSeconds, null, null, CultureInfo.CurrentCulture);
+                            string playtime = (string)converter.Convert((long)gameActivities.GetLastSessionActivity().ElapsedSeconds, null, null, CultureInfo.CurrentCulture);
                             resourcesLists.Add(new ResourcesList { Key = "Ga_LastPlaytimeSession", Value = playtime });
                         }
                         catch
@@ -236,66 +225,71 @@ namespace GameActivity.Services
                     }
                     else
                     {
-                        logger.Warn("GameActivity - No data for " + GameSelected.Name);
+                        logger.Warn($"GameActivity - No data for {GameSelected.Name}");
                     }
 
                     // If not cancel, show
-                    if (!ct.IsCancellationRequested && _PlayniteApi.ApplicationInfo.Mode == ApplicationMode.Desktop)
+                    if (!ct.IsCancellationRequested && GameSelected.Id == GameActivity.GameSelected.Id)
                     {
                         ui.AddResources(resourcesLists);
 
-                        Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new ThreadStart(delegate
+                        if (_PlayniteApi.ApplicationInfo.Mode == ApplicationMode.Desktop)
                         {
-                            if (_Settings.EnableIntegrationButton)
+                            Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new ThreadStart(delegate
                             {
+                                GameActivity.PluginDatabase.SetCurrent(gameActivities);
+
+                                if (_Settings.EnableIntegrationButton)
+                                {
 #if DEBUG
                                 logger.Debug($"GameActivity - RefreshBtActionBar()");
 #endif
                                 try
-                                {
-                                    RefreshBtActionBar();
+                                    {
+                                        RefreshBtActionBar();
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Common.LogError(ex, "GameActivity", $"Error on RefreshBtActionBar()");
+                                    }
                                 }
-                                catch (Exception ex)
-                                {
-                                    Common.LogError(ex, "GameActivity", $"Error on RefreshBtActionBar()");
-                                }
-                            }
 
-                            if (_Settings.EnableIntegrationInDescription)
-                            {
+                                if (_Settings.EnableIntegrationInDescription)
+                                {
 #if DEBUG
                                 logger.Debug($"GameActivity - RefreshSpDescription()");
 #endif
                                 try
-                                {
-                                    RefreshSpDescription();
+                                    {
+                                        RefreshSpDescription();
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Common.LogError(ex, "GameActivity", $"Error on RefreshSpDescription()");
+                                    }
                                 }
-                                catch (Exception ex)
-                                {
-                                    Common.LogError(ex, "GameActivity", $"Error on RefreshSpDescription()");
-                                }
-                            }
 
-                            if (_Settings.EnableIntegrationInCustomTheme)
-                            {
+                                if (_Settings.EnableIntegrationInCustomTheme)
+                                {
 #if DEBUG
                                 logger.Debug($"GameActivity - RefreshCustomElements()");
 #endif
                                 try
-                                {
-                                    RefreshCustomElements();
+                                    {
+                                        RefreshCustomElements();
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Common.LogError(ex, "GameActivity", $"Error on RefreshCustomElements()");
+                                    }
                                 }
-                                catch (Exception ex)
-                                {
-                                    Common.LogError(ex, "GameActivity", $"Error on RefreshCustomElements()");
-                                }
-                            }
-                        }));
+                            }));
+                        }
                     }
                 }
                 catch (Exception ex)
                 {
-                    Common.LogError(ex, "GameActivity", $"Error on TaskRefreshBtActionBar()");
+                    Common.LogError(ex, "GameActivity");
                 }
             }, ct);
 
@@ -313,7 +307,7 @@ namespace GameActivity.Services
 #if DEBUG
                     logger.Debug($"GameActivity - PART_BtActionBar {PART_BtActionBar.Name}");
 #endif
-                    PART_BtActionBar.Visibility = Visibility.Collapsed;
+                    PART_BtActionBar.Visibility = Visibility.Visible;
                 }
             });
         }
@@ -347,7 +341,7 @@ namespace GameActivity.Services
             {
                 if (_Settings.EnableIntegrationButtonDetails)
                 {
-                    BtActionBar = new GameActivityButtonDetails(GameActivity.GameSelected.Playtime);
+                    BtActionBar = new GameActivityButtonDetails();
                 }
                 else
                 {
@@ -356,7 +350,7 @@ namespace GameActivity.Services
 
                 ((Button)BtActionBar).Click += OnBtActionBarClick;
             }
-            
+
             if (!_Settings.EnableIntegrationInDescriptionOnlyIcon)
             {
                 BtActionBar.Width = 150;
@@ -372,7 +366,7 @@ namespace GameActivity.Services
             }
             catch (Exception ex)
             {
-                Common.LogError(ex, "GameActivity", "Error on AddBtActionBar()");
+                Common.LogError(ex, "GameActivity");
             }
         }
 
@@ -382,19 +376,13 @@ namespace GameActivity.Services
             {
                 PART_BtActionBar.Visibility = Visibility.Visible;
 
-                long ElapsedSeconds = 0;
-                if (GameActivity.SelectedGameGameActivity != null)
-                {
-                    ElapsedSeconds = GameActivity.SelectedGameGameActivity.GetLastSessionActivity().ElapsedSeconds;
-                }
-
                 if (PART_BtActionBar is GameActivityButtonDetails)
                 {
-                    ((GameActivityButtonDetails)PART_BtActionBar).SetGaData(ElapsedSeconds);
+
                 }
                 if (PART_BtActionBar is GameActivityToggleButtonDetails)
                 {
-                    ((GameActivityToggleButtonDetails)PART_BtActionBar).SetGaData(ElapsedSeconds);
+
                 }
             }
             else
@@ -448,7 +436,7 @@ namespace GameActivity.Services
             {
                 if (PART_SpDescription != null)
                 {
-                    PART_SpDescription.Visibility = Visibility.Collapsed;
+                    PART_SpDescription.Visibility = Visibility.Visible;
                 }
             });
         }
@@ -465,13 +453,13 @@ namespace GameActivity.Services
 
             try
             {
-                GaDescriptionIntegration SpDescription = new GaDescriptionIntegration(_Settings, GameActivity.SelectedGameGameActivity);
+                GaDescriptionIntegration SpDescription = new GaDescriptionIntegration(_Settings);
                 SpDescription.Name = SpDescriptionName;
 
                 ui.AddElementInGameSelectedDescription(SpDescription, _Settings.IntegrationTopGameDetails);
                 PART_SpDescription = IntegrationUI.SearchElementByName(SpDescriptionName);
 
-                if(_Settings.EnableIntegrationInDescriptionWithToggle && PART_SpDescription != null)
+                if (_Settings.EnableIntegrationInDescriptionWithToggle && PART_SpDescription != null)
                 {
                     if (PART_BtActionBar != null && PART_BtActionBar is ToggleButton)
                     {
@@ -487,7 +475,7 @@ namespace GameActivity.Services
             }
             catch (Exception ex)
             {
-                Common.LogError(ex, "GameActivity", "Error on AddSpDescription()");
+                Common.LogError(ex, "GameActivity");
             }
         }
 
@@ -495,34 +483,23 @@ namespace GameActivity.Services
         {
             if (PART_SpDescription != null)
             {
-                if (GameActivity.SelectedGameGameActivity != null)
-                {
-                    PART_SpDescription.Visibility = Visibility.Visible;
+                PART_SpDescription.Visibility = Visibility.Visible;
 
-                    if (PART_SpDescription is GaDescriptionIntegration)
+                if (PART_SpDescription is GaDescriptionIntegration)
+                {
+                    if (_Settings.EnableIntegrationInDescriptionWithToggle && PART_SpDescription != null)
                     {
-                        ((GaDescriptionIntegration)PART_SpDescription).SetGaData(_Settings, GameActivity.SelectedGameGameActivity);
-
-                        if (_Settings.EnableIntegrationInDescriptionWithToggle && PART_SpDescription != null)
+                        if (PART_BtActionBar != null && PART_BtActionBar is ToggleButton)
                         {
-                            if (PART_BtActionBar != null && PART_BtActionBar is ToggleButton)
-                            {
-                                ((ToggleButton)PART_BtActionBar).IsChecked = false;
-                            }
-                            else
-                            {
-                                logger.Warn($"GameActivity - PART_BtActionBar is null or not ToggleButton");
-                            }
-                            
-                            PART_SpDescription.Visibility = Visibility.Collapsed;
+                            ((ToggleButton)PART_BtActionBar).IsChecked = false;
                         }
+                        else
+                        {
+                            logger.Warn($"GameActivity - PART_BtActionBar is null or not ToggleButton");
+                        }
+
+                        PART_SpDescription.Visibility = Visibility.Collapsed;
                     }
-                }
-                else
-                {
-#if DEBUG
-                    logger.Debug($"GameActivity - No data for {GameActivity.GameSelected.Name}");
-#endif
                 }
             }
             else
@@ -540,7 +517,7 @@ namespace GameActivity.Services
             {
                 foreach (CustomElement customElement in ListCustomElements)
                 {
-                    customElement.Element.Visibility = Visibility.Collapsed;
+                    customElement.Element.Visibility = Visibility.Visible;
                 }
             });
         }
@@ -587,7 +564,7 @@ namespace GameActivity.Services
                 }
                 catch (Exception ex)
                 {
-                    Common.LogError(ex, "GameActivity", "Error on AddCustomElements()");
+                    Common.LogError(ex, "GameActivity");
                 }
             }
             else
@@ -608,7 +585,7 @@ namespace GameActivity.Services
                 }
                 catch (Exception ex)
                 {
-                    Common.LogError(ex, "GameActivity", "Error on AddCustomElements()");
+                    Common.LogError(ex, "GameActivity");
                 }
             }
             else
@@ -620,7 +597,7 @@ namespace GameActivity.Services
 
             if (PART_GaButtonWithTitleAndDetails != null)
             {
-                PART_GaButtonWithTitleAndDetails = new GameActivityButtonDetails(GameActivity.GameSelected.Playtime);
+                PART_GaButtonWithTitleAndDetails = new GameActivityButtonDetails();
                 ((Button)PART_GaButtonWithTitleAndDetails).Click += OnBtActionBarClick;
                 try
                 {
@@ -629,7 +606,7 @@ namespace GameActivity.Services
                 }
                 catch (Exception ex)
                 {
-                    Common.LogError(ex, "GameActivity", "Error on AddCustomElements()");
+                    Common.LogError(ex, "GameActivity");
                 }
             }
             else
@@ -642,7 +619,7 @@ namespace GameActivity.Services
 
             if (PART_GameActivity_Graphic != null && _Settings.IntegrationShowGraphic)
             {
-                PART_GameActivity_Graphic = new GaDescriptionIntegration(_Settings, GameActivity.SelectedGameGameActivity, true);
+                PART_GameActivity_Graphic = new GaDescriptionIntegration(_Settings, true);
                 PART_GameActivity_Graphic.Name = "GameActivity_Graphic";
                 try
                 {
@@ -651,7 +628,7 @@ namespace GameActivity.Services
                 }
                 catch (Exception ex)
                 {
-                    Common.LogError(ex, "GameActivity", "Error on AddCustomElements()");
+                    Common.LogError(ex, "GameActivity");
                 }
             }
             else
@@ -663,7 +640,7 @@ namespace GameActivity.Services
 
             if (PART_GameActivity_GraphicLog != null && _Settings.IntegrationShowGraphicLog)
             {
-                PART_GameActivity_GraphicLog = new GaDescriptionIntegration(_Settings, GameActivity.SelectedGameGameActivity, true, false);
+                PART_GameActivity_GraphicLog = new GaDescriptionIntegration(_Settings, true, false);
                 PART_GameActivity_GraphicLog.Name = "GameActivity_GraphicLog";
                 try
                 {
@@ -672,7 +649,7 @@ namespace GameActivity.Services
                 }
                 catch (Exception ex)
                 {
-                    Common.LogError(ex, "GameActivity", "Error on AddCustomElements()");
+                    Common.LogError(ex, "GameActivity");
                 }
             }
             else
@@ -711,14 +688,6 @@ namespace GameActivity.Services
 #endif
                         isFind = true;
                         customElement.Element.Visibility = Visibility.Visible;
-
-                        long ElapsedSeconds = 0;
-                        if (GameActivity.SelectedGameGameActivity != null)
-                        {
-                            ElapsedSeconds = GameActivity.SelectedGameGameActivity.GetLastSessionActivity().ElapsedSeconds;
-                        }
-
-                        ((GameActivityButtonDetails)customElement.Element).SetGaData(ElapsedSeconds);
                     }
 
                     if (customElement.Element is GaDescriptionIntegration)
@@ -727,17 +696,6 @@ namespace GameActivity.Services
                         logger.Debug($"GameActivity - customElement.Element is GaDescriptionIntegration");
 #endif
                         isFind = true;
-                        if (GameActivity.SelectedGameGameActivity != null)
-                        {
-                            customElement.Element.Visibility = Visibility.Visible;
-                            ((GaDescriptionIntegration)customElement.Element).SetGaData(_Settings, GameActivity.SelectedGameGameActivity);
-                        }
-                        else
-                        {
-#if DEBUG
-                            logger.Debug($"GameActivity - customElement.Element is GaDescriptionIntegration with no data");
-#endif
-                        }
                     }
 
                     if (!isFind)
@@ -747,7 +705,7 @@ namespace GameActivity.Services
                 }
                 catch (Exception ex)
                 {
-                    Common.LogError(ex, "GameActivity", $"Error on RefreshCustomElements()");
+                    Common.LogError(ex, "GameActivity");
                 }
             }
         }

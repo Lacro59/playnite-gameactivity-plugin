@@ -14,8 +14,10 @@ using PluginCommon.PlayniteResources.Converters;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace GameActivity.Views.Interface
 {
@@ -34,7 +36,7 @@ namespace GameActivity.Views.Interface
         private int _limit;
 
 
-        public GameActivityGameGraphicTime(GameActivitySettings settings, GameActivityClass gameActivity, int variateurTime = 0, int limit = 9)
+        public GameActivityGameGraphicTime(GameActivitySettings settings, int variateurTime = 0, int limit = 9, bool DisablePropertyChanged = false)
         {
             InitializeComponent();
 
@@ -43,17 +45,72 @@ namespace GameActivity.Views.Interface
             _variateurTime = variateurTime;
             _limit = limit;
 
-            GetActivityForGamesTimeGraphics(gameActivity, variateurTime, limit);
-
             if (!settings.IgnoreSettings)
             {
                 gameLabelsX.ShowLabels = settings.EnableIntegrationAxisGraphic;
                 gameLabelsY.ShowLabels = settings.EnableIntegrationOrdinatesGraphic;
             }
+
+            if (!DisablePropertyChanged)
+            {
+                GameActivity.PluginDatabase.PropertyChanged += OnPropertyChanged;
+            }
         }
 
-        public void GetActivityForGamesTimeGraphics(GameActivityClass gameActivity, int variateurTime, int limit)
+
+        protected void OnPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
+            try
+            {
+                this.Dispatcher.BeginInvoke(DispatcherPriority.Background, new ThreadStart(delegate
+                {
+                    if (GameActivity.PluginDatabase.GameIsLoaded)
+                    {
+                        _variateurTime = _variateurTimeInitial;
+
+                        if (GameActivity.PluginDatabase.GameSelectedData.Items.Count == 0)
+                        {
+
+                        }
+                        else
+                        {
+
+                        }
+
+                        GetActivityForGamesTimeGraphics(GameActivity.PluginDatabase.GameSelectedData, _variateurTime, _limit);
+                    }
+                    else
+                    {
+
+                    }
+                }));
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex, "GameActivity");
+            }
+        }
+
+
+
+        public void GetActivityForGamesTimeGraphics(GameActivities gameActivities, int variateurTime = 0, int limit = 9)
+        {
+            if (gameActivities.Items.Count == 0)
+            {
+#if DEBUG
+                logger.Debug($"GameActivity - GetActivityForGamesTimeGraphics() - Hide - {JsonConvert.SerializeObject(gameActivities)}");
+#endif
+                this.Visibility = Visibility.Collapsed;
+                return;
+            }
+            else
+            {
+#if DEBUG
+                logger.Debug($"GameActivity - GetActivityForGamesTimeGraphics() - Show - {JsonConvert.SerializeObject(gameActivities)}");
+#endif
+                this.Visibility = Visibility.Visible;
+            }
+
             string[] listDate = new string[limit + 1];
             ChartValues<CustomerForTime> series1 = new ChartValues<CustomerForTime>();
             ChartValues<CustomerForTime> series2 = new ChartValues<CustomerForTime>();
@@ -66,19 +123,22 @@ namespace GameActivity.Views.Interface
             bool HasData4 = false;
             bool HasData5 = false;
 
-            List<Activity> gameActivities = gameActivity.Activities;
+            List<Activity> Activities = gameActivities.Items;
 
             // Find last activity date
             DateTime dateStart = new DateTime(1982, 12, 15, 0, 0, 0);
-            for (int iActivity = 0; iActivity < gameActivities.Count; iActivity++)
+            for (int iActivity = 0; iActivity < Activities.Count; iActivity++)
             {
-                DateTime dateSession = Convert.ToDateTime(gameActivities[iActivity].DateSession).ToLocalTime();
+                DateTime dateSession = Convert.ToDateTime(Activities[iActivity].DateSession).ToLocalTime();
                 if (dateSession > dateStart)
                 {
                     dateStart = dateSession;
                 }
             }
             dateStart = dateStart.AddDays(variateurTime);
+#if DEBUG
+            logger.Debug($"GameActivity - dateStart: {dateStart.ToString()}");
+#endif
 
             // Periode data showned
             for (int i = limit; i >= 0; i--)
@@ -102,19 +162,16 @@ namespace GameActivity.Views.Interface
 #endif
 
             // Search data in periode
-            for (int iActivity = 0; iActivity < gameActivities.Count; iActivity++)
+            for (int iActivity = 0; iActivity < Activities.Count; iActivity++)
             {
-                long elapsedSeconds = gameActivities[iActivity].ElapsedSeconds;
-                string dateSession = Convert.ToDateTime(gameActivities[iActivity].DateSession).ToLocalTime().ToString("yyyy-MM-dd");
+                long elapsedSeconds = Activities[iActivity].ElapsedSeconds;
+                string dateSession = Convert.ToDateTime(Activities[iActivity].DateSession).ToLocalTime().ToString("yyyy-MM-dd");
 
                 //for (int iDay = 0; iDay < 10; iDay++)
                 for (int iDay = limit; iDay >= 0; iDay--)
                 {
                     if (listDate[iDay] == dateSession)
                     {
-#if DEBUG
-                        logger.Debug($"GameActivity - series1[iDay].Name: {series1[iDay].Name}");
-#endif
                         string tempName = series1[iDay].Name;
                         try
                         {
@@ -271,12 +328,6 @@ namespace GameActivity.Views.Interface
         private void GameSeries_DataClick(object sender, ChartPoint chartPoint)
         {
             this.gameSeriesDataClick?.Invoke(this, chartPoint);
-        }
-
-        public void SetGaData(GameActivityClass gameActivity)
-        {
-            _variateurTime = _variateurTimeInitial;
-            GetActivityForGamesTimeGraphics(gameActivity, _variateurTime, _limit);
         }
 
         public void DisableAnimations(bool IsDisable)

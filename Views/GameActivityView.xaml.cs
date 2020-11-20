@@ -10,7 +10,6 @@ using System.Linq;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.ComponentModel;
-using GameActivity.Database.Collections;
 using GameActivity.Models;
 using LiveCharts;
 using PluginCommon;
@@ -38,9 +37,11 @@ namespace GameActivity
         private static readonly ILogger logger = LogManager.GetLogger();
         private static IResourceProvider resources = new ResourceProvider();
 
-        public JArray listSources { get; set; }
+        private JArray listSources { get; set; }
+        private DateTime LabelDataSelected { get; set; }
 
-        private GameActivityCollection GameActivityDatabases { get; set; }
+        private GameActivityGameGraphicTime gameActivityGameGraphicTime;
+        private GameActivityGameGraphicLog gameActivityGameGraphicLog;
 
         private LongToTimePlayedConverter converter = new LongToTimePlayedConverter();
 
@@ -50,6 +51,7 @@ namespace GameActivity
         public int variateurTime = 0;
         public int variateurLog = 0;
         public int variateurLogTemp = 0;
+        public string titleChart;
 
         public List<listGame> activityListByGame { get; set; }
 
@@ -129,14 +131,11 @@ namespace GameActivity
 
             activityLabel.Content = new DateTime(yearCurrent, monthCurrent, 1).ToString("MMMM yyyy");
 
-            #region Get Datas
+            
+            #region Get & set datas
             listSources = getListSourcesName();
 
-            GameActivityDatabases = new GameActivityCollection();
-            GameActivityDatabases.InitializeCollection(pathExtData);
-            #endregion
 
-            #region Get & set datas
             PART_DataLoad.Visibility = Visibility.Visible;
             PART_DataTop.Visibility = Visibility.Collapsed;
             PART_DataBottom.Visibility = Visibility.Collapsed;
@@ -222,18 +221,17 @@ namespace GameActivity
             // Total hours by source.
             if (isMonthSources)
             {
-                List<GameActivityClass> listGameActivities = GameActivityDatabases.GetListGameActivity();
+                List<GameActivities> listGameActivities = GameActivity.PluginDatabase.GetListGameActivity();
                 for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
                 {
                     try
                     {
-                        List<Activity> gameActivities = listGameActivities[iGame].Activities;
-                        for (int iActivity = 0; iActivity < gameActivities.Count; iActivity++)
+                        List<Activity> Activities = listGameActivities[iGame].Items;
+                        for (int iActivity = 0; iActivity < Activities.Count; iActivity++)
                         {
-                            long elapsedSeconds = gameActivities[iActivity].ElapsedSeconds;
-                            //DateTime dateSession = Convert.ToDateTime(gameActivities[iActivity].DateSession).AddSeconds(-elapsedSeconds).ToLocalTime();
-                            DateTime dateSession = Convert.ToDateTime(gameActivities[iActivity].DateSession).ToLocalTime();
-                            string sourceName = gameActivities[iActivity].SourceName;
+                            long elapsedSeconds = Activities[iActivity].ElapsedSeconds;
+                            DateTime dateSession = Convert.ToDateTime(Activities[iActivity].DateSession).ToLocalTime();
+                            string sourceName = Activities[iActivity].SourceName;
 
                             // Cumul data
                             if (activityByMonth[sourceName] != null)
@@ -254,24 +252,24 @@ namespace GameActivity
                     }
                     catch (Exception ex)
                     {
-                        Common.LogError(ex, "GameActivity", $"Error in getActivityByMonth({year}, {month}) with {listGameActivities[iGame].GameName}");
+                        Common.LogError(ex, "GameActivity", $"Error in getActivityByMonth({year}, {month}) with {listGameActivities[iGame].Name}");
                     }
                 }
             }
             // Total hours by genres.
             else
             {
-                List<GameActivityClass> listGameActivities = GameActivityDatabases.GetListGameActivity();
+                List<GameActivities> listGameActivities = GameActivity.PluginDatabase.GetListGameActivity();
                 for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
                 {
                     try
                     {
                         List<Genre> listGameListGenres = listGameActivities[iGame].Genres;
-                        List<Activity> gameActivities = listGameActivities[iGame].Activities;
-                        for (int iActivity = 0; iActivity < gameActivities.Count; iActivity++)
+                        List<Activity> Activities = listGameActivities[iGame].Items;
+                        for (int iActivity = 0; iActivity < Activities.Count; iActivity++)
                         {
-                            long elapsedSeconds = gameActivities[iActivity].ElapsedSeconds;
-                            DateTime dateSession = Convert.ToDateTime(gameActivities[iActivity].DateSession).AddSeconds(-elapsedSeconds).ToLocalTime();
+                            long elapsedSeconds = Activities[iActivity].ElapsedSeconds;
+                            DateTime dateSession = Convert.ToDateTime(Activities[iActivity].DateSession).AddSeconds(-elapsedSeconds).ToLocalTime();
 
                             for (int iGenre = 0; iGenre < listGameListGenres.Count; iGenre++)
                             {
@@ -295,7 +293,7 @@ namespace GameActivity
                     }
                     catch (Exception ex)
                     {
-                        Common.LogError(ex, "GameActivity", $"Error in getActivityByMonth({year}, {month}) with {listGameActivities[iGame].GameName}");
+                        Common.LogError(ex, "GameActivity", $"Error in getActivityByMonth({year}, {month}) with {listGameActivities[iGame].Name}");
                     }
                 }
             }
@@ -397,14 +395,14 @@ namespace GameActivity
                     Values = 0
                 });
 
-                List<GameActivityClass> listGameActivities = GameActivityDatabases.GetListGameActivity();
+                List<GameActivities> listGameActivities = GameActivity.PluginDatabase.GetListGameActivity();
                 for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
                 {
-                    List<Activity> gameActivities = listGameActivities[iGame].Activities;
-                    for (int iActivity = 0; iActivity < gameActivities.Count; iActivity++)
+                    List<Activity> Activities = listGameActivities[iGame].Items;
+                    for (int iActivity = 0; iActivity < Activities.Count; iActivity++)
                     {
-                        long elapsedSeconds = gameActivities[iActivity].ElapsedSeconds;
-                        string dateSession = Convert.ToDateTime(gameActivities[iActivity].DateSession).ToString(Constants.DateUiFormat);
+                        long elapsedSeconds = Activities[iActivity].ElapsedSeconds;
+                        string dateSession = Convert.ToDateTime(Activities[iActivity].DateSession).ToString(Constants.DateUiFormat);
 
                         if (dateSession == activityByDateLabels[iDay])
                         {
@@ -497,16 +495,15 @@ namespace GameActivity
                 activityByWeek.Add(activityByWeek4);
                 activityByWeek.Add(activityByWeek5);
 
-                List<GameActivityClass> listGameActivities = GameActivityDatabases.GetListGameActivity();
+                List<GameActivities> listGameActivities = GameActivity.PluginDatabase.GetListGameActivity();
                 for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
                 {
-                    List<Activity> gameActivities = listGameActivities[iGame].Activities;
-                    for (int iActivity = 0; iActivity < gameActivities.Count; iActivity++)
+                    List<Activity> Activities = listGameActivities[iGame].Items;
+                    for (int iActivity = 0; iActivity < Activities.Count; iActivity++)
                     {
-                        long elapsedSeconds = gameActivities[iActivity].ElapsedSeconds;
-                        //DateTime dateSession = Convert.ToDateTime(gameActivities[iActivity].DateSession).AddSeconds(-elapsedSeconds).ToLocalTime();
-                        DateTime dateSession = Convert.ToDateTime(gameActivities[iActivity].DateSession).ToLocalTime();
-                        string sourceName = gameActivities[iActivity].SourceName;
+                        long elapsedSeconds = Activities[iActivity].ElapsedSeconds;
+                        DateTime dateSession = Convert.ToDateTime(Activities[iActivity].DateSession).ToLocalTime();
+                        string sourceName = Activities[iActivity].SourceName;
 
                         // Cumul data
                         for (int iWeek = 0; iWeek < datesPeriodes.Count; iWeek++)
@@ -650,22 +647,22 @@ namespace GameActivity
         {
             activityListByGame = new List<listGame>();
 
-            List<GameActivityClass> listGameActivities = GameActivityDatabases.GetListGameActivity();
+            List<GameActivities> listGameActivities = GameActivity.PluginDatabase.GetListGameActivity();
             string gameID = string.Empty;
             for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
             {
                 try
                 {
-                    gameID = listGameActivities[iGame].GameID.ToString();
-                    if (!listGameActivities[iGame].GameName.IsNullOrEmpty())
+                    gameID = listGameActivities[iGame].Id.ToString();
+                    if (!listGameActivities[iGame].Name.IsNullOrEmpty())
                     {
-                        string gameTitle = listGameActivities[iGame].GameName;
+                        string gameTitle = listGameActivities[iGame].Name;
 
                         Activity lastSessionActivity = listGameActivities[iGame].GetLastSessionActivity();
                         long elapsedSeconds = lastSessionActivity.ElapsedSeconds;
                         DateTime dateSession = Convert.ToDateTime(lastSessionActivity.DateSession).ToLocalTime();
 
-                        string GameIcon = listGameActivities[iGame].GameIcon;
+                        string GameIcon = listGameActivities[iGame].Icon;
                         if (!GameIcon.IsNullOrEmpty())
                         {
                             GameIcon = dbPlaynite.GetFullFilePath(GameIcon);
@@ -740,65 +737,84 @@ namespace GameActivity
         /// <param name="variateur"></param>
         public void getActivityForGamesTimeGraphics(string gameID, bool isNavigation = false)
         {
-            gameSeriesContener.Children.Clear();
-            GameActivityClass gameActivity = GameActivityDatabases.Get(Guid.Parse(gameID));
-            List<Activity> gameActivities = gameActivity.Activities;
-
             _settings.IgnoreSettings = true;
-            var graph = new GameActivityGameGraphicTime(_settings, gameActivity, variateurTime);
-            graph.DisableAnimations(isNavigation);
-            graph.gameSeriesDataClick += new DataClickHandler(GameSeries_DataClick);
-            gameSeriesContener.Children.Add(graph);
-            gameSeriesContener.UpdateLayout();
 
-            gameLabel.Content = resources.GetString("LOCGameActivityTimeTitle");
+#if DEBUG
+            logger.Debug($"GameActivity - variateurTime: {variateurTime}");
+#endif
+
+            if (!isNavigation)
+            {
+                gameSeriesContener.Children.Clear();
+                gameActivityGameGraphicTime = new GameActivityGameGraphicTime(_settings, variateurTime, 9, true);
+            }
+
+            gameActivityGameGraphicTime.GetActivityForGamesTimeGraphics(GameActivity.PluginDatabase.Get(Guid.Parse(gameID)), variateurTime);
+            gameActivityGameGraphicTime.DisableAnimations(isNavigation);
+
+            if (!isNavigation)
+            {
+                gameActivityGameGraphicTime.gameSeriesDataClick += new DataClickHandler(GameSeries_DataClick);
+                gameSeriesContener.Children.Add(gameActivityGameGraphicTime);
+                gameSeriesContener.UpdateLayout();
+
+                gameLabel.Content = resources.GetString("LOCGameActivityTimeTitle");
+            }
         }
 
         /// <summary>
         /// Get data detail for the selected game.
         /// </summary>
         /// <param name="gameID"></param>
-        public void getActivityForGamesLogGraphics(string gameID, string dateSelected = "", string title = "", bool isNavigation = false)
+        public void getActivityForGamesLogGraphics(string gameID, DateTime? dateSelected = null, string title = "", bool isNavigation = false)
         {
-            gameSeriesContener.Children.Clear();
-            GameActivityClass gameActivity = GameActivityDatabases.Get(Guid.Parse(gameID));
-            List<Activity> gameActivities = gameActivity.Activities;
-            var graph = new GameActivityGameGraphicLog(_settings, gameActivity, dateSelected, title, variateurLog, false);
-            graph.DisableAnimations(isNavigation);
-            gameSeriesContener.Children.Add(graph);
-            gameSeriesContener.UpdateLayout();
+            GameActivities gameActivities = GameActivity.PluginDatabase.Get(Guid.Parse(gameID));
 
-            if (dateSelected == "")
+            if (!isNavigation)
             {
-                gameLabel.Content = resources.GetString("LOCGameActivityLogTitle") + " ("
-                    + Convert.ToDateTime(gameActivity.GetLastSession()).ToString(Constants.DateUiFormat) + ")";
+                gameSeriesContener.Children.Clear();
+                gameActivityGameGraphicLog = new GameActivityGameGraphicLog(_settings, dateSelected, title, variateurLog, false, 10, true);
             }
             else
             {
-                gameLabel.Content = resources.GetString("LOCGameActivityLogTitleDate") + " "
-                    + Convert.ToDateTime(dateSelected).ToString(Constants.DateUiFormat);
+                List<ActivityDetailsData> ActivitiesDetails = gameActivities.GetSessionActivityDetails(dateSelected, title);
+#if DEBUG
+                logger.Debug($"GameActivity - ActivitiesDetails: {ActivitiesDetails.Count }");
+                logger.Debug($"GameActivity - dateSelected: {dateSelected.ToString()}");
+                logger.Debug($"GameActivity - variateurLog: {variateurLog}");
+#endif
+                if (variateurLog + ActivitiesDetails.Count < 10)
+                {
+                    variateurLog += 1;
+                }
+                if (variateurLog > 0)
+                {
+                    variateurLog = 0;
+                }
+            }
+
+            gameActivityGameGraphicLog.GetActivityForGamesLogGraphics(GameActivity.PluginDatabase.Get(Guid.Parse(gameID)), false,  dateSelected, title, variateurLog);
+            gameActivityGameGraphicLog.DisableAnimations(isNavigation);
+
+            if (!isNavigation)
+            {
+                gameSeriesContener.Children.Add(gameActivityGameGraphicLog);
+                gameSeriesContener.UpdateLayout();
+
+                if (dateSelected == null || dateSelected == default(DateTime))
+                {
+                    gameLabel.Content = resources.GetString("LOCGameActivityLogTitle") + " ("
+                        + Convert.ToDateTime(gameActivities.GetLastSession()).ToString(Constants.DateUiFormat) + ")";
+                }
+                else
+                {
+                    gameLabel.Content = resources.GetString("LOCGameActivityLogTitleDate") + " "
+                        + Convert.ToDateTime(dateSelected).ToString(Constants.DateUiFormat);
+                }
             }
         }
         #endregion
 
-
-        /// <summary>
-        /// Get source name by source id.
-        /// </summary>
-        /// <param name="sourceID"></param>
-        /// <returns></returns>
-        public string getSourceName(string sourceID)
-        {
-            if ("00000000-0000-0000-0000-000000000000" != sourceID)
-            {
-                return dbPlaynite.Sources.Get(Guid.Parse(sourceID)).Name;
-            }
-            else
-            {
-                return "Playnite";
-            }
-
-        }
 
         /// <summary>
         /// Get list sources name in database.
@@ -973,7 +989,6 @@ namespace GameActivity
         }
 
 
-
         private void ToggleButtonTime_Checked(object sender, RoutedEventArgs e)
         {
             var toggleButton = sender as ToggleButton;
@@ -1025,7 +1040,6 @@ namespace GameActivity
             {
             }
         }
-
 
 
         private void ToggleButtonSources_Checked(object sender, RoutedEventArgs e)
@@ -1095,7 +1109,7 @@ namespace GameActivity
             else
             {
                 variateurLog = variateurLog - 1;
-                getActivityForGamesLogGraphics(gameIDCurrent, "", "", true);
+                getActivityForGamesLogGraphics(gameIDCurrent, LabelDataSelected, titleChart, true);
             }
         }
 
@@ -1109,7 +1123,7 @@ namespace GameActivity
             else
             {
                 variateurLog = variateurLog + 1;
-                getActivityForGamesLogGraphics(gameIDCurrent, "", "", true);
+                getActivityForGamesLogGraphics(gameIDCurrent, LabelDataSelected, titleChart, true);
             }
         }
         #endregion
@@ -1122,10 +1136,10 @@ namespace GameActivity
             if (_settings.EnableLogging)
             {
                 int index = (int)chartPoint.X;
-                string title = chartPoint.SeriesView.Title;
+                titleChart = chartPoint.SeriesView.Title;
                 var data = chartPoint.SeriesView.Values;
 
-                string LabelDataSelected = ((CustomerForTime)data[index]).Name;
+                LabelDataSelected = Convert.ToDateTime(((CustomerForTime)data[index]).Name);
 
                 isGameTime = false;
                 ToggleButtonTime.IsChecked = false;
@@ -1133,7 +1147,7 @@ namespace GameActivity
 
                 gameSeries.HideTooltip();
 
-                getActivityForGamesLogGraphics(gameIDCurrent, LabelDataSelected, title);
+                getActivityForGamesLogGraphics(gameIDCurrent, LabelDataSelected, titleChart);
             }
         }
     }

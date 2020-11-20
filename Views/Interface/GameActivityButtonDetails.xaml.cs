@@ -1,7 +1,12 @@
-﻿using PluginCommon.PlayniteResources.Converters;
+﻿using Newtonsoft.Json;
+using Playnite.SDK;
+using PluginCommon;
+using PluginCommon.PlayniteResources.Converters;
 using System;
 using System.Globalization;
+using System.Threading;
 using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace GameActivity.Views.Interface
 {
@@ -10,23 +15,53 @@ namespace GameActivity.Views.Interface
     /// </summary>
     public partial class GameActivityButtonDetails : Button
     {
-        public long PlaytimeCurrent { get; set; }
+        private static readonly ILogger logger = LogManager.GetLogger();
 
 
-        public GameActivityButtonDetails(long Playtime)
+        public GameActivityButtonDetails()
         {
             InitializeComponent();
 
-            PlaytimeCurrent = Playtime;
-
-            DataContext = this;
+            GameActivity.PluginDatabase.PropertyChanged += OnPropertyChanged;
         }
 
-        public void SetGaData(long Playtime)
+
+        protected void OnPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            LongToTimePlayedConverter converter = new LongToTimePlayedConverter();
-            string PlaytimeString = (string)converter.Convert(Playtime, null, null, CultureInfo.CurrentCulture);
-            PART_GaButtonPlaytime.Content = PlaytimeString;
+            try
+            {
+                this.Dispatcher.BeginInvoke(DispatcherPriority.Background, new ThreadStart(delegate
+                {
+                    long ElapsedSeconds = 0;
+#if DEBUG
+                    logger.Debug($"OnPropertyChanged: {JsonConvert.SerializeObject(GameActivity.PluginDatabase.GameSelectedData)}");
+#endif
+
+                    if (GameActivity.PluginDatabase.GameIsLoaded)
+                    {
+                        if (GameActivity.PluginDatabase.GameSelectedData.Items.Count == 0)
+                        {
+
+                        }
+                        else
+                        {
+                            ElapsedSeconds = GameActivity.PluginDatabase.GameSelectedData.GetLastSessionActivity().ElapsedSeconds;
+                        }
+                    }
+                    else
+                    {
+                        
+                    }
+
+                    LongToTimePlayedConverter converter = new LongToTimePlayedConverter();
+                    string PlaytimeString = (string)converter.Convert(ElapsedSeconds, null, null, CultureInfo.CurrentCulture);
+                    PART_GaButtonPlaytime.Content = PlaytimeString;
+                }));
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex, "GameActivity");
+            }
         }
     }
 }

@@ -8,54 +8,25 @@ using System.Windows;
 
 namespace GameActivity.Models
 {
-    public class ActivityDetails
+    public class ActivityDetails : ObservableObject
     {
-        private static readonly ILogger logger = LogManager.GetLogger();
+        public ConcurrentDictionary<DateTime, List<ActivityDetailsData>> Items { get; set; } = new ConcurrentDictionary<DateTime, List<ActivityDetailsData>>();
 
-        public ConcurrentDictionary<string, List<ActivityDetailsData>> Items { get; set; } = new ConcurrentDictionary<string, List<ActivityDetailsData>>();
-
+        [JsonIgnore]
         public int Count => Items.Count;
 
-        public List<ActivityDetailsData> this[string dateSession]
+        public List<ActivityDetailsData> this[DateTime dateSession]
         {
             get => Get(dateSession);
-            set
-            {
-                new NotImplementedException();
-            }
         }
-
-        public ActivityDetails(string readDataJSON)
-        {
-            if (readDataJSON != "")
-            {
-                JObject obj = JObject.Parse(readDataJSON);
-                foreach (var objItem in obj)
-                {
-                    JArray DetailsData = (JArray)objItem.Value;
-                    List<ActivityDetailsData> objActivityDetails = new List<ActivityDetailsData>();
-                    for (int iDetails = 0; iDetails < DetailsData.Count; iDetails++)
-                    {
-                        ActivityDetailsData data = new ActivityDetailsData();
-                        JsonConvert.PopulateObject(JsonConvert.SerializeObject(DetailsData[iDetails]), data);
-                        objActivityDetails.Add(data);
-                    } 
-
-                    Items.TryAdd(objItem.Key, objActivityDetails);
-                }
-            }
-            else
-            {
-
-            }
-        }
+        
 
         /// <summary>
         /// Get GameActivityDetails for a date session.
         /// </summary>
         /// <param name="dateSession"></param>
         /// <returns></returns>
-        public List<ActivityDetailsData> Get(string dateSession)
+        public List<ActivityDetailsData> Get(DateTime dateSession)
         {
             if (Items.TryGetValue(dateSession, out var item))
             {

@@ -73,17 +73,18 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Database\GameActivityCollection.cs" />
     <Compile Include="Common\HWiNFODumper.cs" />
     <Compile Include="GameActivity.cs" />
     <Compile Include="GameActivitySettings.cs" />
+    <Compile Include="Models\GameActivities.cs" />
+    <Compile Include="Models\GameActivitiesCollection.cs" />
     <Compile Include="Models\WarningData.cs" />
+    <Compile Include="Services\ActivityDatabase.cs" />
     <Compile Include="Services\PerfCounter.cs" />
     <Compile Include="Views\GameActivitySettingsView.xaml.cs">
       <DependentUpon>GameActivitySettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\ActivityDetails.cs" />
-    <Compile Include="Models\GameActivityClass.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\GameActivityUI.cs" />

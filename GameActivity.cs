@@ -14,14 +14,9 @@ using System.Runtime.InteropServices;
 using MSIAfterburnerNET.HM.Interop;
 using System.Reflection;
 using PluginCommon;
-using PluginCommon.PlayniteResources;
-using PluginCommon.PlayniteResources.API;
-using PluginCommon.PlayniteResources.Common;
-using PluginCommon.PlayniteResources.Converters;
 using System.Windows;
 using GameActivity.Views.Interface;
 using Playnite.SDK.Events;
-using GameActivity.Database.Collections;
 using GameActivity.Models;
 using System.Windows.Media;
 using System.Windows.Controls.Primitives;
@@ -29,6 +24,7 @@ using GameActivity.Services;
 using System.Globalization;
 using GameActivity.Views;
 using System.Threading.Tasks;
+using System.Collections.Concurrent;
 
 namespace GameActivity
 {
@@ -42,22 +38,14 @@ namespace GameActivity
 
         public static IGameDatabase DatabaseReference;
         public static string pluginFolder;
-        public static Game GameSelected { get; set; }
-        public static GameActivityUI gameActivityUI { get; set; }
-        public static GameActivityCollection GameActivityDatabases;
-        public static GameActivityClass SelectedGameGameActivity = null;
 
-        // TODO Bad integration with structutre application
-        private JArray activity { get; set; }
-        private JObject activityDetails { get; set; }
-        private JArray LoggingData { get; set; }
-
-        // Paths application data.
-        public string pathActivityDB { get; set; }
-        public string pathActivityDetailsDB { get; set; }
+        public static Game GameSelected;
+        public static ActivityDatabase PluginDatabase;
+        public static GameActivityUI gameActivityUI;
 
         // Variables timer function
         public Timer t { get; set; }
+        private GameActivities GameActivitiesLog;
         public List<WarningData> WarningsMessage { get; set; } = new List<WarningData>();
 
 
@@ -65,11 +53,15 @@ namespace GameActivity
         {
             settings = new GameActivitySettings(this);
 
+            // Loading plugin database 
+            PluginDatabase = new ActivityDatabase(PlayniteApi, settings, this.GetPluginUserDataPath());
+            PluginDatabase.InitializeDatabase();
+
             // Get plugin's location 
             pluginFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
             // Add plugin localization in application ressource.
-            PluginCommon.Localization.SetPluginLanguage(pluginFolder, api.ApplicationSettings.Language);
+            PluginCommon.PluginLocalization.SetPluginLanguage(pluginFolder, api.ApplicationSettings.Language);
             // Add common in application ressource.
             PluginCommon.Common.Load(pluginFolder);
 
@@ -89,33 +81,17 @@ namespace GameActivity
 
             // Custom theme button
             EventManager.RegisterClassHandler(typeof(Button), Button.ClickEvent, new RoutedEventHandler(gameActivityUI.OnCustomThemeButtonClick));
-
-            // Load database
-            var TaskLoadDatabase = Task.Run(() =>
-            {
-                pathActivityDB = this.GetPluginUserDataPath() + "\\activity\\";
-                pathActivityDetailsDB = this.GetPluginUserDataPath() + "\\activityDetails\\";
-
-                // Verification & add necessary directory
-                if (!Directory.Exists(pathActivityDB))
-                {
-                    Directory.CreateDirectory(pathActivityDB);
-                }
-                if (!Directory.Exists(pathActivityDetailsDB))
-                {
-                    Directory.CreateDirectory(pathActivityDetailsDB);
-                }
-
-                GameActivityDatabases = new GameActivityCollection();
-                GameActivityDatabases.InitializeCollection(this.GetPluginUserDataPath());
-            });
         }
+
 
         // To add new game menu items override GetGameMenuItems
         public override List<GameMenuItem> GetGameMenuItems(GetGameMenuItemsArgs args)
         {
+            Game GameMenu = args.Games.First();
+
             List<GameMenuItem> gameMenuItems = new List<GameMenuItem>
             {
+                // Show plugin view with all activities for all game in database with data of selected game
                 new GameMenuItem {
                     //MenuSection = "",
                     Icon = Path.Combine(pluginFolder, "icon.png"),
@@ -123,7 +99,7 @@ namespace GameActivity
                     Action = (gameMenuItem) =>
                     {
                         DatabaseReference = PlayniteApi.Database;
-                        var ViewExtension = new GameActivityView(settings, PlayniteApi, this.GetPluginUserDataPath(), args.Games.First());
+                        var ViewExtension = new GameActivityView(settings, PlayniteApi, this.GetPluginUserDataPath(), GameMenu);
                         Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGameActivity"), ViewExtension);
                         windowExtension.ShowDialog();
                     }
@@ -153,6 +129,7 @@ namespace GameActivity
 
             List<MainMenuItem> mainMenuItems = new List<MainMenuItem>
             {
+                // Show plugin view with all activities for all game in database
                 new MainMenuItem
                 {
                     MenuSection = MenuInExtensions + resources.GetString("LOCGameActivity"),
@@ -172,28 +149,9 @@ namespace GameActivity
             {
                 MenuSection = MenuInExtensions + resources.GetString("LOCGameActivity"),
                 Description = "Test",
-                Action = (mainMenuItem) => 
+                Action = (mainMenuItem) =>
                 {
-                    WarningsMessage = new List<WarningData>();
 
-                    WarningData Message = new WarningData
-                    {
-                        At = resources.GetString("LOCGameActivityWarningAt") + " " + DateTime.Now.ToString("HH:mm"),
-                        FpsData = new Data { Name = resources.GetString("LOCGameActivityFps"), Value = 10, IsWarm = false },
-                        CpuTempData = new Data { Name = resources.GetString("LOCGameActivityCpuTemp"), Value = 20, IsWarm = true },
-                        GpuTempData = new Data { Name = resources.GetString("LOCGameActivityGpuTemp"), Value = 30, IsWarm = false },
-                        CpuUsageData = new Data { Name = resources.GetString("LOCGameActivityCpuUsage"), Value = 40, IsWarm = true },
-                        GpuUsageData = new Data { Name = resources.GetString("LOCGameActivityGpuUsage"), Value = 50, IsWarm = false },
-                        RamUsageData = new Data { Name = resources.GetString("LOCGameActivityRamUsage"), Value = 60, IsWarm = true },
-                    };
-
-                    WarningsMessage.Add(Message);
-
-                    var ViewExtension = new WarningsDialogs(WarningsMessage);
-                    Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGameActivityWarningCaption"), ViewExtension);
-                    windowExtension.ShowDialog();
-
-                    WarningsMessage = new List<WarningData>();
                 }
             });
 #endif
@@ -201,61 +159,71 @@ namespace GameActivity
             return mainMenuItems;
         }
 
-        public override void OnGameInstalled(Game game)
+
+        public override void OnGameSelected(GameSelectionEventArgs args)
         {
-            // Add code to be executed when game is finished installing.
+            try
+            {
+                if (args.NewValue != null && args.NewValue.Count == 1)
+                {
+                    GameSelected = args.NewValue[0];
+#if DEBUG
+                    logger.Debug($"GameActivity - OnGameSelected() - {GameSelected.Name} - {GameSelected.Id.ToString()}");
+#endif
+                    if (settings.EnableIntegrationInCustomTheme || settings.EnableIntegrationInDescription)
+                    {
+                        PlayniteUiHelper.ResetToggle();
+                        var TaskIntegrationUI = Task.Run(() =>
+                        {
+                            gameActivityUI.Initial();
+                            gameActivityUI.taskHelper.Check();
+                            var dispatcherOp = gameActivityUI.AddElements();
+                            dispatcherOp.Completed += (s, e) => { gameActivityUI.RefreshElements(args.NewValue[0]); };
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex, "GameActivity", $"Error on OnGameSelected()");
+            }
         }
 
+        // Add code to be executed when game is finished installing.
+        public override void OnGameInstalled(Game game)
+        {
+           
+        }
+
+        // Add code to be executed when game is started running.
         public override void OnGameStarted(Game game)
         {
-            // Add code to be executed when game is started running.
-
-            // start timer si HWiNFO log is enable.
+            // start timer si log is enable.
             if (settings.EnableLogging)
             {
                 dataHWiNFO_start();
             }
 
-            // Create / get data.
-            string gameID = game.Id.ToString();
+            DateTime DateSession = DateTime.Now.ToUniversalTime();
 
-            activity = new JArray();
-            if (File.Exists(pathActivityDB + gameID + ".json"))
+            GameActivitiesLog = PluginDatabase.Get(game);
+            GameActivitiesLog.Items.Add(new Activity
             {
-                activity = JArray.Parse(File.ReadAllText(pathActivityDB + gameID + ".json"));
-            }
-            else
-            {
-                using (StreamWriter sw = File.CreateText(pathActivityDB + gameID + ".json"))
-                {
-                    sw.WriteLine("[]");
-                }
-            }
-
-            activityDetails = new JObject();
-            LoggingData = new JArray();
-            if (File.Exists(pathActivityDetailsDB + gameID + ".json"))
-            {
-                activityDetails = JObject.Parse(File.ReadAllText(pathActivityDetailsDB + gameID + ".json"));
-            }
-            else
-            {
-                using (StreamWriter sw = File.CreateText(pathActivityDetailsDB + gameID + ".json"))
-                {
-                    sw.WriteLine("{}");
-                }
-            }
+                DateSession = DateSession,
+                SourceID = game.SourceId
+            });
+            GameActivitiesLog.ItemsDetails.Items.TryAdd(DateSession, new List<ActivityDetailsData>());
         }
 
+        // Add code to be executed when game is preparing to be started.
         public override void OnGameStarting(Game game)
         {
-            // Add code to be executed when game is preparing to be started.
+            
         }
 
+        // Add code to be executed when game is preparing to be started.
         public override void OnGameStopped(Game game, long elapsedSeconds)
         {
-            // Add code to be executed when game is preparing to be started.
-
             var TaskGameStopped = Task.Run(() =>
             {
                 // Stop timer si HWiNFO log is enable.
@@ -265,58 +233,56 @@ namespace GameActivity
                 }
 
                 // Infos
-                string gameID = game.Id.ToString();
-                string gameName = game.Name;
-                //string dateSession = DateTime.Now.ToUniversalTime().ToString("o");
-                string dateSession = DateTime.Now.ToUniversalTime().AddSeconds(-elapsedSeconds).ToString("o");
-                string gameSourceID = game.SourceId.ToString();
-
-                try
-                {
-                    // Write game activity.
-                    string newActivityString = "{'sourceID':'" + gameSourceID + "', 'dateSession':'" + dateSession + "', 'elapsedSeconds':'" + elapsedSeconds + "'}";
-                    JObject newActivity = (JObject.Parse(newActivityString));
-                    activity.Add(newActivity);
-                    File.WriteAllText(pathActivityDB + gameID + ".json", JsonConvert.SerializeObject(activity));
-
-                    // Write game activity details.
-                    if (JsonConvert.SerializeObject(LoggingData) != "[]")
-                    {
-                        activityDetails.Add(new JProperty(dateSession, LoggingData));
-                        File.WriteAllText(pathActivityDetailsDB + gameID + ".json", JsonConvert.SerializeObject(activityDetails));
-                    }
-                }
-                catch (Exception ex)
-                {
-                    logger.Info("GameActivity - OnGameStopped - " + ex.Message);
-                }
-
+                GameActivitiesLog.GetLastSessionActivity().ElapsedSeconds = elapsedSeconds;
+                PluginDatabase.Update(GameActivitiesLog);
 
                 // Refresh integration interface
                 PlayniteUiHelper.ResetToggle();
                 var TaskIntegrationUI = Task.Run(() =>
                 {
-                    GameActivityDatabases = new GameActivityCollection();
-                    GameActivityDatabases.InitializeCollection(this.GetPluginUserDataPath());
-
                     var dispatcherOp = gameActivityUI.AddElements();
                     dispatcherOp.Completed += (s, e) => { gameActivityUI.RefreshElements(GameSelected); };
                 });
             });
         }
 
+        // Add code to be executed when game is uninstalled.
         public override void OnGameUninstalled(Game game)
         {
-            // Add code to be executed when game is uninstalled.
+            
         }
 
+
+        // Add code to be executed when Playnite is initialized.
         public override void OnApplicationStarted()
         {
-            // Add code to be executed when Playnite is initialized.
-
             gameActivityUI.AddBtHeader();
             CheckGoodForLogging(true);
         }
+
+        // Add code to be executed when Playnite is shutting down.
+        public override void OnApplicationStopped()
+        {
+            
+        }
+
+        // Add code to be executed when library is updated.
+        public override void OnLibraryUpdated()
+        {
+            
+        }
+
+
+        public override ISettings GetSettings(bool firstRunSettings)
+        {
+            return settings;
+        }
+
+        public override UserControl GetSettingsView(bool firstRunSettings)
+        {
+            return new GameActivitySettingsView();
+        }
+
 
         private bool CheckGoodForLogging(bool WithNotification = false)
         {
@@ -404,56 +370,6 @@ namespace GameActivity
 
             return false;
         }
-
-        public override void OnGameSelected(GameSelectionEventArgs args)
-        {
-            try
-            {
-                if (args.NewValue != null && args.NewValue.Count == 1)
-                {
-                    GameSelected = args.NewValue[0];
-#if DEBUG
-                    logger.Debug($"GameActivity - Game selected: {GameSelected.Name}");
-#endif
-                    if (settings.EnableIntegrationInCustomTheme || settings.EnableIntegrationInDescription)
-                    {
-                        PlayniteUiHelper.ResetToggle();
-                        var TaskIntegrationUI = Task.Run(() =>
-                        {
-                            gameActivityUI.Initial();
-                            gameActivityUI.taskHelper.Check();
-                            var dispatcherOp = gameActivityUI.AddElements();
-                            dispatcherOp.Completed += (s, e) => { gameActivityUI.RefreshElements(GameSelected); };
-                        });
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.LogError(ex, "GameActivity", $"Error on OnGameSelected()");
-            }
-        }
-
-        public override void OnApplicationStopped()
-        {
-            // Add code to be executed when Playnite is shutting down.
-        }
-
-        public override void OnLibraryUpdated()
-        {
-            // Add code to be executed when library is updated.
-        }
-
-        public override ISettings GetSettings(bool firstRunSettings)
-        {
-            return settings;
-        }
-
-        public override UserControl GetSettingsView(bool firstRunSettings)
-        {
-            return new GameActivitySettingsView();
-        }
-
 
         #region Timer function
         /// <summary>
@@ -744,16 +660,18 @@ namespace GameActivity
                 }
             }
 
-            JObject Data = new JObject();
-            Data["datelog"] = DateTime.Now.ToUniversalTime().ToString("o");
-            Data["fps"] = fpsValue;
-            Data["cpu"] = cpuValue;
-            Data["gpu"] = gpuValue;
-            Data["ram"] = ramValue;
-            Data["gpuT"] = gpuTValue;
-            Data["cpuT"] = cpuTValue;
 
-            LoggingData.Add(Data);
+            List<ActivityDetailsData> ActivitiesDetailsData = GameActivitiesLog.ItemsDetails.Get(GameActivitiesLog.GetLastSession());
+            ActivitiesDetailsData.Add(new ActivityDetailsData
+            {
+                Datelog = DateTime.Now.ToUniversalTime(),
+                FPS = fpsValue,
+                CPU = cpuValue,
+                CPUT = cpuTValue,
+                GPU = gpuValue,
+                GPUT = gpuTValue,
+                RAM = ramValue
+            });
         }
         #endregion
     }

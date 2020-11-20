@@ -12,6 +12,9 @@ using PluginCommon.PlayniteResources;
 using PluginCommon.PlayniteResources.API;
 using PluginCommon.PlayniteResources.Common;
 using PluginCommon.PlayniteResources.Converters;
+using System.Windows.Threading;
+using System.Threading;
+using Newtonsoft.Json;
 
 namespace GameActivity.Views.Interface
 {
@@ -23,7 +26,7 @@ namespace GameActivity.Views.Interface
         private static readonly ILogger logger = LogManager.GetLogger();
         private static IResourceProvider resources = new ResourceProvider();
 
-        private string _dateSelected;
+        private DateTime? _dateSelected;
         private string _title;
         private int _variateurLogInitial = 0;
         private int _variateurLog = 0;
@@ -31,7 +34,7 @@ namespace GameActivity.Views.Interface
         private bool _withTitle;
         private int _limit;
 
-        public GameActivityGameGraphicLog(GameActivitySettings settings, GameActivityClass gameActivity, string dateSelected = "", string title = "", int variateurLog = 0, bool withTitle = true, int limit = 10)
+        public GameActivityGameGraphicLog(GameActivitySettings settings, DateTime? dateSelected = null, string title = "", int variateurLog = 0, bool withTitle = true, int limit = 10, bool DisablePropertyChanged = false)
         {
             InitializeComponent();
 
@@ -42,36 +45,93 @@ namespace GameActivity.Views.Interface
             _withTitle = withTitle;
             _limit = limit;
 
-            GetActivityForGamesLogGraphics(gameActivity, _withTitle, _dateSelected, _title, _limit);
-
             if (!settings.IgnoreSettings)
             {
                 gameLabelsX.ShowLabels = settings.EnableIntegrationAxisGraphicLog;
                 gameLabelsY.ShowLabels = settings.EnableIntegrationOrdinatesGraphicLog;
             }
+
+            if (!DisablePropertyChanged)
+            {
+                GameActivity.PluginDatabase.PropertyChanged += OnPropertyChanged;
+            }
         }
 
-        public void GetActivityForGamesLogGraphics(GameActivityClass gameActivity, bool withTitle, string dateSelected = "", string title = "", int limit = 10)
+
+        protected void OnPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            List<ActivityDetailsData> gameActivitiesDetails = gameActivity.GetSessionActivityDetails(dateSelected, title);
+            try
+            {
+                this.Dispatcher.BeginInvoke(DispatcherPriority.Background, new ThreadStart(delegate
+                {
+                    if (GameActivity.PluginDatabase.GameIsLoaded)
+                    {
+                        _variateurLog = _variateurLogInitial;
+
+                        if (GameActivity.PluginDatabase.GameSelectedData.Items.Count == 0)
+                        {
+
+                        }
+                        else
+                        {
+                            
+                        }
+
+                        GetActivityForGamesLogGraphics(GameActivity.PluginDatabase.GameSelectedData, _withTitle, _dateSelected, _title, _variateurLog, _limit);
+                    }
+                    else
+                    {
+
+                    }
+                }));
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex, "GameActivity");
+            }
+        }
+        
+
+        public void GetActivityForGamesLogGraphics(GameActivities gameActivities, bool withTitle, DateTime? dateSelected = null, string title = "", int variateurLog = 0, int limit = 10)
+        {
+            List<ActivityDetailsData> ActivitiesDetails = gameActivities.GetSessionActivityDetails(dateSelected, title);
+#if DEBUG
+            logger.Debug($"GameActivity - dateSelected: {dateSelected.ToString()} - ActivitiesDetails: {JsonConvert.SerializeObject(ActivitiesDetails)}");
+#endif
+
+            if (ActivitiesDetails.Count == 0)
+            {
+#if DEBUG
+                logger.Debug($"GameActivity - GetActivityForGamesLogGraphics() - Hide - {JsonConvert.SerializeObject(gameActivities)}");
+#endif
+                this.Visibility = Visibility.Collapsed;
+                return;
+            }
+            else
+            {
+#if DEBUG
+                logger.Debug($"GameActivity - GetActivityForGamesLogGraphics() - Show - {JsonConvert.SerializeObject(gameActivities)}");
+#endif
+                this.Visibility = Visibility.Visible;
+            }
 
             string[] activityForGameLogLabels = new string[0];
             List<ActivityDetailsData> gameLogsDefinitive = new List<ActivityDetailsData>();
-            if (gameActivitiesDetails.Count > 0)
+            if (ActivitiesDetails.Count > 0)
             {
-                if (gameActivitiesDetails.Count > limit)
+                if (ActivitiesDetails.Count > limit)
                 {
                     // Variateur
-                    int conteurEnd = gameActivitiesDetails.Count + _variateurLog;
+                    int conteurEnd = ActivitiesDetails.Count + variateurLog;
                     int conteurStart = conteurEnd - limit;
 
-                    if (conteurEnd > gameActivitiesDetails.Count)
+                    if (conteurEnd > ActivitiesDetails.Count)
                     {
-                        int temp = conteurEnd - gameActivitiesDetails.Count;
-                        conteurEnd = gameActivitiesDetails.Count;
+                        int temp = conteurEnd - ActivitiesDetails.Count;
+                        conteurEnd = ActivitiesDetails.Count;
                         conteurStart = conteurEnd - limit;
 
-                        _variateurLog = _variateurLogTemp;
+                        variateurLog = _variateurLogTemp;
                     }
 
                     if (conteurStart < 0)
@@ -79,29 +139,33 @@ namespace GameActivity.Views.Interface
                         conteurStart = 0;
                         conteurEnd = limit;
 
-                        _variateurLog = _variateurLogTemp;
+                        variateurLog = _variateurLogTemp;
                     }
 
-                    _variateurLogTemp = _variateurLog;
+                    _variateurLogTemp = variateurLog;
+
+#if DEBUG
+                    logger.Debug($"GameActivity - ChartLog - {conteurStart} - {conteurEnd}");
+#endif
 
                     // Create data
                     int sCount = 0;
                     activityForGameLogLabels = new string[limit];
                     for (int iLog = conteurStart; iLog < conteurEnd; iLog++)
                     {
-                        gameLogsDefinitive.Add(gameActivitiesDetails[iLog]);
-                        activityForGameLogLabels[sCount] = Convert.ToDateTime(gameActivitiesDetails[iLog].Datelog).ToLocalTime().ToString(Constants.TimeUiFormat);
+                        gameLogsDefinitive.Add(ActivitiesDetails[iLog]);
+                        activityForGameLogLabels[sCount] = Convert.ToDateTime(ActivitiesDetails[iLog].Datelog).ToLocalTime().ToString(Constants.TimeUiFormat);
                         sCount += 1;
                     }
                 }
                 else
                 {
-                    gameLogsDefinitive = gameActivitiesDetails;
+                    gameLogsDefinitive = ActivitiesDetails;
 
-                    activityForGameLogLabels = new string[gameActivitiesDetails.Count];
-                    for (int iLog = 0; iLog < gameActivitiesDetails.Count; iLog++)
+                    activityForGameLogLabels = new string[ActivitiesDetails.Count];
+                    for (int iLog = 0; iLog < ActivitiesDetails.Count; iLog++)
                     {
-                        activityForGameLogLabels[iLog] = Convert.ToDateTime(gameActivitiesDetails[iLog].Datelog).ToLocalTime().ToString(Constants.TimeUiFormat);
+                        activityForGameLogLabels[iLog] = Convert.ToDateTime(ActivitiesDetails[iLog].Datelog).ToLocalTime().ToString(Constants.TimeUiFormat);
                     }
                 }
             }
@@ -164,7 +228,7 @@ namespace GameActivity.Views.Interface
             {
                 lGameSeriesLog.Visibility = Visibility.Visible;
                 lGameSeriesLog.Content = resources.GetString("LOCGameActivityLogTitleDate") + " "
-                    + ((DateTime)gameActivitiesDetails[0].Datelog).ToString(Constants.DateUiFormat);
+                    + ((DateTime)ActivitiesDetails[0].Datelog).ToString(Constants.DateUiFormat);
             }
         }
 
@@ -194,12 +258,6 @@ namespace GameActivity.Views.Interface
             {
                 gameSeriesLog.Width = parent.ActualWidth;
             }
-        }
-
-        public void SetGaData(GameActivityClass gameActivity)
-        {
-            _variateurLog = _variateurLogInitial;
-            GetActivityForGamesLogGraphics(gameActivity, _withTitle, _dateSelected, _title, _limit);
         }
 
         public void DisableAnimations(bool IsDisable)
