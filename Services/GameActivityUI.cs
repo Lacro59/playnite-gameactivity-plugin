@@ -436,7 +436,14 @@ namespace GameActivity.Services
             {
                 if (PART_SpDescription != null)
                 {
-                    PART_SpDescription.Visibility = Visibility.Visible;
+                    if (_Settings.EnableIntegrationInDescriptionWithToggle)
+                    {
+                        PART_SpDescription.Visibility = Visibility.Collapsed;
+                    }
+                    else
+                    {
+                        PART_SpDescription.Visibility = Visibility.Visible;
+                    }
                 }
             });
         }
