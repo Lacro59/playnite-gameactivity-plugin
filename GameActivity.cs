@@ -57,6 +57,15 @@ namespace GameActivity
             PluginDatabase = new ActivityDatabase(PlayniteApi, settings, this.GetPluginUserDataPath());
             PluginDatabase.InitializeDatabase();
 
+            // Old database
+            DatabaseReference = PlayniteApi.Database;
+
+            OldToNew oldToNew = new OldToNew(this.GetPluginUserDataPath());
+            if (oldToNew.IsOld)
+            {
+                oldToNew.ConvertDB(PlayniteApi);
+            }
+
             // Get plugin's location 
             pluginFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
