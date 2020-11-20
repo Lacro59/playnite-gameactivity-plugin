@@ -648,7 +648,7 @@ namespace GameActivity
             activityListByGame = new List<listGame>();
 
             List<GameActivities> listGameActivities = GameActivity.PluginDatabase.GetListGameActivity();
-            listGameActivities = listGameActivities.Where(x => x.Items.Count > 0).ToList();
+            listGameActivities = listGameActivities.Where(x => x.Items.Count > 0 && !x.IsDeleted).ToList();
 
             string gameID = string.Empty;
             for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
