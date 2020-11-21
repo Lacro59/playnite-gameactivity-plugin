@@ -79,7 +79,7 @@
     <Compile Include="Models\GameActivities.cs" />
     <Compile Include="Models\GameActivitiesCollection.cs" />
     <Compile Include="Models\WarningData.cs" />
-    <Compile Include="OldToNew.cs" />
+    <Compile Include="Services\OldToNew.cs" />
     <Compile Include="Services\ActivityDatabase.cs" />
     <Compile Include="Services\PerfCounter.cs" />
     <Compile Include="Views\GameActivitySettingsView.xaml.cs">

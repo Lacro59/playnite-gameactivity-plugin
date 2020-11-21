@@ -7,24 +7,25 @@ using PluginCommon;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace GameActivity
+namespace GameActivity.Services
 {
     public class OldToNew
     {
         private ILogger logger = LogManager.GetLogger();
 
+        public bool IsOld = false;
+
         private string PathActivityDB = "activity";
         private string PathActivityDetailsDB = "activityDetails";
 
         public ConcurrentDictionary<Guid, GameActivityClassOld> Items { get; set; } = new ConcurrentDictionary<Guid, GameActivityClassOld>();
-        public new int Count => Items.Count;
-
-        public bool IsOld = false;
 
 
         public OldToNew(string PluginUserDataPath)
@@ -109,15 +110,19 @@ namespace GameActivity
 
         public void ConvertDB(IPlayniteAPI PlayniteApi)
         {
-            Task.Run(() =>
+            GlobalProgressOptions globalProgressOptions = new GlobalProgressOptions(
+                "GameActivity - Database migration",
+                false
+            );
+            globalProgressOptions.IsIndeterminate = true;
+
+            PlayniteApi.Dialogs.ActivateGlobalProgress((activateGlobalProgress) =>
             {
+                Stopwatch stopWatch = new Stopwatch();
+                stopWatch.Start();
                 logger.Info($"GameActivity - ConvertDB()");
 
                 int Converted = 0;
-
-                while (!PlayniteApi.Database.IsOpen)
-                {
-                }
 
                 foreach (var item in Items)
                 {
@@ -159,6 +164,7 @@ namespace GameActivity
                                 GameActivitiesLog.ItemsDetails.Items.TryAdd(DateSession, ListActivityDetails);
                             }
 
+                            Thread.Sleep(10);
                             GameActivity.PluginDatabase.Update(GameActivitiesLog);
                             Converted++;
                         }
@@ -174,10 +180,15 @@ namespace GameActivity
                 }
 
                 logger.Info($"GameActivity - Converted {Converted} / {Items.Count}");
-            });
+
+                stopWatch.Stop();
+                TimeSpan ts = stopWatch.Elapsed;
+                logger.Info($"GameActivity - Migration - {String.Format("{0:00}:{1:00}.{2:00}", ts.Minutes, ts.Seconds, ts.Milliseconds / 10)}");
+            }, globalProgressOptions);
+
+            IsOld = false;
         }
     }
-
 
 
     public class ActivityOld

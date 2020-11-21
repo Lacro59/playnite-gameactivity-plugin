@@ -48,23 +48,21 @@ namespace GameActivity
         private GameActivities GameActivitiesLog;
         public List<WarningData> WarningsMessage { get; set; } = new List<WarningData>();
 
+        private OldToNew oldToNew;
+
 
         public GameActivity(IPlayniteAPI api) : base(api)
         {
             settings = new GameActivitySettings(this);
 
+            DatabaseReference = PlayniteApi.Database;
+
+            // Old database            
+            oldToNew = new OldToNew(this.GetPluginUserDataPath());
+
             // Loading plugin database 
             PluginDatabase = new ActivityDatabase(PlayniteApi, settings, this.GetPluginUserDataPath());
             PluginDatabase.InitializeDatabase();
-
-            // Old database
-            DatabaseReference = PlayniteApi.Database;
-
-            OldToNew oldToNew = new OldToNew(this.GetPluginUserDataPath());
-            if (oldToNew.IsOld)
-            {
-                oldToNew.ConvertDB(PlayniteApi);
-            }
 
             // Get plugin's location 
             pluginFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -171,6 +169,12 @@ namespace GameActivity
 
         public override void OnGameSelected(GameSelectionEventArgs args)
         {
+            // Old database
+            if (oldToNew.IsOld)
+            {
+                oldToNew.ConvertDB(PlayniteApi);
+            }
+
             try
             {
                 if (args.NewValue != null && args.NewValue.Count == 1)
