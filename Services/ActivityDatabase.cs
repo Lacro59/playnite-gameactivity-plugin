@@ -11,26 +11,8 @@ using System.Threading.Tasks;
 
 namespace GameActivity.Services
 {
-    public class ActivityDatabase : PluginDatabaseObject
+    public class ActivityDatabase : PluginDatabaseObject<GameActivitySettings, GameActivitiesCollection, GameActivities>
     {
-        private GameActivitiesCollection db;
-
-        private GameActivities _GameSelectedData = new GameActivities();
-        public GameActivities GameSelectedData
-        {
-            get
-            {
-                return _GameSelectedData;
-            }
-
-            set
-            {
-                _GameSelectedData = value;
-                OnPropertyChanged();
-            }
-        }
-
-
         public ActivityDatabase(IPlayniteAPI PlayniteApi, GameActivitySettings PluginSettings, string PluginUserDataPath) : base(PlayniteApi, PluginSettings, PluginUserDataPath)
         {
             PluginName = "GameActivity";
@@ -42,21 +24,24 @@ namespace GameActivity.Services
         protected override bool LoadDatabase()
         {
             IsLoaded = false;
-            db = new GameActivitiesCollection(PluginDatabaseDirectory);
-            db.SetGameInfoDetails<Activity, ActivityDetails>(_PlayniteApi);
+            Database = new GameActivitiesCollection(PluginDatabaseDirectory);
+            Database.SetGameInfoDetails<Activity, ActivityDetails>(_PlayniteApi);
 #if DEBUG
-            logger.Debug($"{PluginName} - db: {JsonConvert.SerializeObject(db)}");
+            logger.Debug($"{PluginName} - db: {JsonConvert.SerializeObject(Database)}");
 #endif
+
+            GameSelectedData = new GameActivities();
+            GetPluginTags();
 
             IsLoaded = true;
             return true;
         }
 
 
-        public GameActivities Get(Guid Id)
+        public override GameActivities Get(Guid Id, bool OnlyCache = false)
         {
             GameIsLoaded = false;
-            GameActivities gameActivities = db.Get(Id);
+            GameActivities gameActivities = GetOnlyCache(Id);
 #if DEBUG
             logger.Debug($"{PluginName} - GetFromDb({Id.ToString()}) - GameActivities: {JsonConvert.SerializeObject(gameActivities)}");
 #endif
@@ -64,17 +49,7 @@ namespace GameActivity.Services
             if (gameActivities == null)
             {
                 Game game = _PlayniteApi.Database.Games.Get(Id);
-
-                gameActivities = new GameActivities
-                {
-                    Id = game.Id,
-                    Name = game.Name,
-                    Hidden = game.Hidden,
-                    Icon = game.Icon,
-                    CoverImage = game.CoverImage,
-                    GenreIds = game.GenreIds,
-                    Genres = game.Genres
-                };
+                gameActivities = GetDefault(game);
                 Add(gameActivities);
             }
 
@@ -82,35 +57,20 @@ namespace GameActivity.Services
             return gameActivities;
         }
 
-        public GameActivities Get(Game game)
-        {
-            return Get(game.Id);
-        }
 
-        public void Add(GameActivities itemToAdd)
+        public override GameActivities GetDefault(Game game)
         {
-            db.Add(itemToAdd);
-        }
-
-        public void Update(GameActivities itemToUpdate)
-        {
-            db.Update(itemToUpdate);
-        }
-
-
-        public void SetCurrent(Guid Id)
-        {
-            GameSelectedData = Get(Id);
-        }
-
-        public void SetCurrent(Game game)
-        {
-            GameSelectedData = Get(game.Id);
-        }
-
-        public void SetCurrent(GameActivities gameActivities)
-        {
-            GameSelectedData = gameActivities;
+            return new GameActivities
+            {
+                Id = game.Id,
+                Name = game.Name,
+                Hidden = game.Hidden,
+                Icon = game.Icon,
+                CoverImage = game.CoverImage,
+                GenreIds = game.GenreIds,
+                Genres = game.Genres,
+                Playtime = game.Playtime
+            };
         }
 
 
@@ -120,7 +80,7 @@ namespace GameActivity.Services
         /// <returns></returns>
         public List<GameActivities> GetListGameActivity()
         {
-            return db.ToList();
+            return Database.ToList();
         }
     }
 }

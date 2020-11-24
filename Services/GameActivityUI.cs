@@ -119,7 +119,10 @@ namespace GameActivity.Services
 #if DEBUG
                     logger.Debug($"GameActivity - IsFirstLoad");
 #endif
-                    Thread.Sleep(2000);
+                    Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new ThreadStart(delegate
+                    {
+                        System.Threading.SpinWait.SpinUntil(() => IntegrationUI.SearchElementByName("PART_HtmlDescription") != null, 5000);
+                    })).Wait();
                     IsFirstLoad = false;
                 }
 
@@ -184,6 +187,10 @@ namespace GameActivity.Services
 
 
                     // Load data
+                    if (!GameActivity.PluginDatabase.IsLoaded)
+                    {
+                        return;
+                    }
                     GameActivities gameActivities = GameActivity.PluginDatabase.Get(GameSelected);
 
                     if (gameActivities.Items.Count > 0)
@@ -703,6 +710,7 @@ namespace GameActivity.Services
                         logger.Debug($"GameActivity - customElement.Element is GaDescriptionIntegration");
 #endif
                         isFind = true;
+                        customElement.Element.Visibility = Visibility.Visible;
                     }
 
                     if (!isFind)
