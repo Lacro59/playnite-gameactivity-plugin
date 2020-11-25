@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using GameActivity.Services;
+using Newtonsoft.Json;
 using Playnite.SDK;
 using PluginCommon;
 using PluginCommon.PlayniteResources.Converters;
@@ -17,12 +18,14 @@ namespace GameActivity.Views.Interface
     {
         private static readonly ILogger logger = LogManager.GetLogger();
 
+        private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
 
-        public GameActivityToggleButtonDetails(long Playtime)
+
+        public GameActivityToggleButtonDetails()
         {
             InitializeComponent();
 
-            GameActivity.PluginDatabase.PropertyChanged += OnPropertyChanged;
+            PluginDatabase.PropertyChanged += OnPropertyChanged;
         }
 
 
@@ -30,33 +33,31 @@ namespace GameActivity.Views.Interface
         {
             try
             {
-                this.Dispatcher.BeginInvoke(DispatcherPriority.Background, new ThreadStart(delegate
-                {
-                    long ElapsedSeconds = 0;
 #if DEBUG
-                    logger.Debug($"OnPropertyChanged: {JsonConvert.SerializeObject(GameActivity.PluginDatabase.GameSelectedData)}");
+                logger.Debug($"GameActivityToggleButtonDetails.OnPropertyChanged({e.PropertyName}): {JsonConvert.SerializeObject(PluginDatabase.GameSelectedData)}");
 #endif
-
-                    if (GameActivity.PluginDatabase.GameIsLoaded)
+                if (e.PropertyName == "GameSelectedData" || e.PropertyName == "PluginSettings")
+                {
+                    this.Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new ThreadStart(delegate
                     {
-                        if (GameActivity.PluginDatabase.GameSelectedData.Items.Count == 0)
-                        {
+                        long ElapsedSeconds = PluginDatabase.GameSelectedData.GetLastSessionActivity().ElapsedSeconds;
 
-                        }
-                        else
-                        {
-                            ElapsedSeconds = GameActivity.PluginDatabase.GameSelectedData.GetLastSessionActivity().ElapsedSeconds;
-                        }
-                    }
-                    else
+                        LongToTimePlayedConverter converter = new LongToTimePlayedConverter();
+                        string PlaytimeString = (string)converter.Convert(ElapsedSeconds, null, null, CultureInfo.CurrentCulture);
+                        PART_GaButtonPlaytime.Content = PlaytimeString;
+                    }));
+                }
+                else
+                {
+                    this.Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new ThreadStart(delegate
                     {
+                        long ElapsedSeconds = 0;
 
-                    }
-
-                    LongToTimePlayedConverter converter = new LongToTimePlayedConverter();
-                    string PlaytimeString = (string)converter.Convert(ElapsedSeconds, null, null, CultureInfo.CurrentCulture);
-                    PART_GaButtonPlaytime.Content = PlaytimeString;
-                }));
+                        LongToTimePlayedConverter converter = new LongToTimePlayedConverter();
+                        string PlaytimeString = (string)converter.Convert(ElapsedSeconds, null, null, CultureInfo.CurrentCulture);
+                        PART_GaButtonPlaytime.Content = PlaytimeString;
+                    }));
+                }
             }
             catch (Exception ex)
             {

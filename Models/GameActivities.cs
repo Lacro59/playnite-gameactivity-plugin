@@ -1,4 +1,5 @@
-﻿using Playnite.SDK;
+﻿using Newtonsoft.Json;
+using Playnite.SDK;
 using PluginCommon.Collections;
 using System;
 using System.Collections.Generic;
@@ -233,5 +234,15 @@ namespace GameActivity.Models
             return ItemsDetails.Get(dateLastSession);
         }
         #endregion
+
+
+
+        public bool HasDataDetails(DateTime? dateSelected = null, string title = "")
+        {
+#if DEBUG
+            logger.Debug($"GameActivity - HasDataDetails({dateSelected}, {title}) - {Name} - {GetSessionActivityDetails(dateSelected, title).Count > 0}");
+#endif
+            return GetSessionActivityDetails(dateSelected, title).Count > 0;
+        }
     }
 }

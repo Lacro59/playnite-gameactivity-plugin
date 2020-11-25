@@ -25,6 +25,8 @@ namespace GameActivity.Services
     {
         private readonly GameActivitySettings _Settings;
 
+        private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
+
         public override string _PluginUserDataPath { get; set; } = string.Empty;
 
         public override bool IsFirstLoad { get; set; } = true;
@@ -80,34 +82,7 @@ namespace GameActivity.Services
 
         public override void Initial()
         {
-            GameActivity.PluginDatabase.GameSelectedData = new GameActivities();
-
-            if (_PlayniteApi.ApplicationInfo.Mode == ApplicationMode.Desktop)
-            {
-                if (_Settings.EnableIntegrationButton)
-                {
-#if DEBUG
-                    logger.Debug($"GameActivity - InitialBtActionBar()");
-#endif
-                    InitialBtActionBar();
-                }
-
-                if (_Settings.EnableIntegrationInDescription)
-                {
-#if DEBUG
-                    logger.Debug($"GameActivity - InitialSpDescription()");
-#endif
-                    InitialSpDescription();
-                }
-
-                if (_Settings.EnableIntegrationInCustomTheme)
-                {
-#if DEBUG
-                    logger.Debug($"GameActivity - InitialCustomElements()");
-#endif
-                    InitialCustomElements();
-                }
-            }
+            
         }
 
         public override DispatcherOperation AddElements()
@@ -119,14 +94,14 @@ namespace GameActivity.Services
 #if DEBUG
                     logger.Debug($"GameActivity - IsFirstLoad");
 #endif
-                    Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new ThreadStart(delegate
+                    Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new ThreadStart(delegate
                     {
                         System.Threading.SpinWait.SpinUntil(() => IntegrationUI.SearchElementByName("PART_HtmlDescription") != null, 5000);
                     })).Wait();
                     IsFirstLoad = false;
                 }
 
-                return Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new ThreadStart(delegate
+                return Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new ThreadStart(delegate
                 {
                     CheckTypeView();
 
@@ -182,7 +157,7 @@ namespace GameActivity.Services
                     resourcesLists.Add(new ResourcesList { Key = "Ga_LastPlaytimeSession", Value = string.Empty });
 
                     resourcesLists.Add(new ResourcesList { Key = "Ga_IntegrationShowGraphic", Value = _Settings.IntegrationShowGraphic });
-                    resourcesLists.Add(new ResourcesList { Key = "true", Value = _Settings.IntegrationShowGraphicLog });
+                    resourcesLists.Add(new ResourcesList { Key = "Ga_IntegrationShowGraphicLog", Value = _Settings.IntegrationShowGraphicLog });
                     ui.AddResources(resourcesLists);
 
 
@@ -193,14 +168,18 @@ namespace GameActivity.Services
                     }
                     GameActivities gameActivities = GameActivity.PluginDatabase.Get(GameSelected);
 
-                    if (gameActivities.Items.Count > 0)
+                    if (gameActivities.HasData)
                     {
-                        resourcesLists.Add(new ResourcesList { Key = "Ga_HasData", Value = true });
+                        resourcesLists = new List<ResourcesList>();
+                        resourcesLists.Add(new ResourcesList { Key = "Ga_IntegrationShowGraphic", Value = _Settings.IntegrationShowGraphic });
+                        resourcesLists.Add(new ResourcesList { Key = "Ga_IntegrationShowGraphicLog", Value = _Settings.IntegrationShowGraphicLog });
+
+                        resourcesLists.Add(new ResourcesList { Key = "Ga_HasData", Value = gameActivities.HasData });
 
                         try
                         {
                             var data = gameActivities.GetSessionActivityDetails();
-                            resourcesLists.Add(new ResourcesList { Key = "Ga_HasDataLog", Value = (data.Count > 0) });
+                            resourcesLists.Add(new ResourcesList { Key = "Ga_HasDataLog", Value = gameActivities.HasDataDetails() });
                         }
                         catch
                         {
@@ -242,55 +221,7 @@ namespace GameActivity.Services
 
                         if (_PlayniteApi.ApplicationInfo.Mode == ApplicationMode.Desktop)
                         {
-                            Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new ThreadStart(delegate
-                            {
-                                GameActivity.PluginDatabase.SetCurrent(gameActivities);
-
-                                if (_Settings.EnableIntegrationButton)
-                                {
-#if DEBUG
-                                logger.Debug($"GameActivity - RefreshBtActionBar()");
-#endif
-                                try
-                                    {
-                                        RefreshBtActionBar();
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        Common.LogError(ex, "GameActivity", $"Error on RefreshBtActionBar()");
-                                    }
-                                }
-
-                                if (_Settings.EnableIntegrationInDescription)
-                                {
-#if DEBUG
-                                logger.Debug($"GameActivity - RefreshSpDescription()");
-#endif
-                                try
-                                    {
-                                        RefreshSpDescription();
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        Common.LogError(ex, "GameActivity", $"Error on RefreshSpDescription()");
-                                    }
-                                }
-
-                                if (_Settings.EnableIntegrationInCustomTheme)
-                                {
-#if DEBUG
-                                logger.Debug($"GameActivity - RefreshCustomElements()");
-#endif
-                                try
-                                    {
-                                        RefreshCustomElements();
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        Common.LogError(ex, "GameActivity", $"Error on RefreshCustomElements()");
-                                    }
-                                }
-                            }));
+                            GameActivity.PluginDatabase.SetCurrent(gameActivities);
                         }
                     }
                 }
@@ -335,11 +266,11 @@ namespace GameActivity.Services
             {
                 if (_Settings.EnableIntegrationButtonDetails)
                 {
-                    BtActionBar = new GameActivityToggleButtonDetails(GameActivity.GameSelected.Playtime);
+                    BtActionBar = new GameActivityToggleButtonDetails();
                 }
                 else
                 {
-                    BtActionBar = new GameActivityToggleButton(_Settings);
+                    BtActionBar = new GameActivityToggleButton();
                 }
 
                 ((ToggleButton)BtActionBar).Click += OnBtActionBarToggleButtonClick;
@@ -352,7 +283,7 @@ namespace GameActivity.Services
                 }
                 else
                 {
-                    BtActionBar = new GameActivityButton(_Settings.EnableIntegrationInDescriptionOnlyIcon);
+                    BtActionBar = new GameActivityButton();
                 }
 
                 ((Button)BtActionBar).Click += OnBtActionBarClick;
@@ -467,7 +398,7 @@ namespace GameActivity.Services
 
             try
             {
-                GaDescriptionIntegration SpDescription = new GaDescriptionIntegration(_Settings);
+                GaDescriptionIntegration SpDescription = new GaDescriptionIntegration();
                 SpDescription.Name = SpDescriptionName;
 
                 ui.AddElementInGameSelectedDescription(SpDescription, _Settings.IntegrationTopGameDetails);
@@ -633,7 +564,9 @@ namespace GameActivity.Services
 
             if (PART_GameActivity_Graphic != null && _Settings.IntegrationShowGraphic)
             {
-                PART_GameActivity_Graphic = new GaDescriptionIntegration(_Settings, true);
+                PART_GameActivity_Graphic = new GameActivityGameGraphicTime(0, PluginDatabase.PluginSettings.IntegrationGraphicOptionsCountAbscissa);
+                ((GameActivityGameGraphicTime)PART_GameActivity_Graphic).DisableAnimations(true);
+
                 PART_GameActivity_Graphic.Name = "GameActivity_Graphic";
                 try
                 {
@@ -654,7 +587,9 @@ namespace GameActivity.Services
 
             if (PART_GameActivity_GraphicLog != null && _Settings.IntegrationShowGraphicLog)
             {
-                PART_GameActivity_GraphicLog = new GaDescriptionIntegration(_Settings, true, false);
+                PART_GameActivity_GraphicLog = new GameActivityGameGraphicLog(null, string.Empty, 0, !PluginDatabase.PluginSettings.EnableIntegrationInCustomTheme, PluginDatabase.PluginSettings.IntegrationGraphicLogOptionsCountAbscissa);
+                ((GameActivityGameGraphicLog)PART_GameActivity_GraphicLog).DisableAnimations(true);
+
                 PART_GameActivity_GraphicLog.Name = "GameActivity_GraphicLog";
                 try
                 {

@@ -1,0 +1,13 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:Sys="clr-namespace:System;assembly=mscorlib">
+
+    <Sys:Boolean x:Key="Ga_HasData">True</Sys:Boolean>
+    <Sys:Boolean x:Key="Ga_HasDataLog">True</Sys:Boolean>
+    <Sys:String x:Key="Ga_LastDateSession">26/09/2020</Sys:String>
+    <Sys:String x:Key="Ga_LastDateTimeSession">26/09/2020 15:11</Sys:String>
+    <Sys:String x:Key="Ga_LastPlaytimeSession">30 minutes</Sys:String>
+
+    <Sys:Boolean x:Key="Ga_IntegrationShowGraphic">True</Sys:Boolean>
+    <Sys:Boolean x:Key="Ga_IntegrationShowGraphicLog">True</Sys:Boolean>
+    
+</ResourceDictionary>

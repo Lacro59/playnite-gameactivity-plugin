@@ -1,5 +1,12 @@
-﻿using System.Windows;
+﻿using GameActivity.Services;
+using Newtonsoft.Json;
+using Playnite.SDK;
+using PluginCommon;
+using System;
+using System.Threading;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace GameActivity.Views.Interface
 {
@@ -8,11 +15,31 @@ namespace GameActivity.Views.Interface
     /// </summary>
     public partial class GameActivityButton : Button
     {
-        public GameActivityButton(bool EnableIntegrationInDescriptionOnlyIcon)
+        private static readonly ILogger logger = LogManager.GetLogger();
+
+        private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
+
+        bool? _JustIcon = null;
+
+
+        public GameActivityButton(bool? JustIcon = null)
         {
+            _JustIcon = JustIcon;
+
             InitializeComponent();
 
-            if (EnableIntegrationInDescriptionOnlyIcon)
+
+            bool EnableIntegrationButtonJustIcon;
+            if (_JustIcon == null)
+            {
+                EnableIntegrationButtonJustIcon = PluginDatabase.PluginSettings.EnableIntegrationInDescriptionOnlyIcon;
+            }
+            else
+            {
+                EnableIntegrationButtonJustIcon = (bool)_JustIcon;
+            }
+
+            if (EnableIntegrationButtonJustIcon)
             {
                 PART_ButtonIcon.Visibility = Visibility.Visible;
                 PART_ButtonText.Visibility = Visibility.Collapsed;
@@ -21,6 +48,64 @@ namespace GameActivity.Views.Interface
             {
                 PART_ButtonIcon.Visibility = Visibility.Collapsed;
                 PART_ButtonText.Visibility = Visibility.Visible;
+            }
+
+            this.DataContext = new
+            {
+                EnableIntegrationButtonJustIcon = EnableIntegrationButtonJustIcon
+            };
+
+
+            PluginDatabase.PropertyChanged += OnPropertyChanged;
+        }
+
+
+        protected void OnPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            try
+            {
+#if DEBUG
+                logger.Debug($"GameActivityButton.OnPropertyChanged({e.PropertyName}): {JsonConvert.SerializeObject(PluginDatabase.GameSelectedData)}");
+#endif
+                if (e.PropertyName == "PluginSettings")
+                {
+                    this.Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new ThreadStart(delegate
+                    {
+                        bool EnableIntegrationButtonJustIcon;
+                        if (_JustIcon == null)
+                        {
+                            EnableIntegrationButtonJustIcon = PluginDatabase.PluginSettings.EnableIntegrationInDescriptionOnlyIcon;
+                        }
+                        else
+                        {
+                            EnableIntegrationButtonJustIcon = (bool)_JustIcon;
+                        }
+
+                        if (EnableIntegrationButtonJustIcon)
+                        {
+                            PART_ButtonIcon.Visibility = Visibility.Visible;
+                            PART_ButtonText.Visibility = Visibility.Collapsed;
+                        }
+                        else
+                        {
+                            PART_ButtonIcon.Visibility = Visibility.Collapsed;
+                            PART_ButtonText.Visibility = Visibility.Visible;
+                        }
+
+
+                        this.DataContext = new
+                        {
+                            EnableIntegrationButtonJustIcon = EnableIntegrationButtonJustIcon
+                        };
+#if DEBUG
+                        logger.Debug($"GameActivity - DataContext: {JsonConvert.SerializeObject(DataContext)}");
+#endif
+                    }));
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex, "GameActivity");
             }
         }
     }

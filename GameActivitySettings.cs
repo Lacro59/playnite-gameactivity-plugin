@@ -171,6 +171,8 @@ namespace GameActivity
                 var dispatcherOp = GameActivity.gameActivityUI.AddElements();
                 dispatcherOp.Completed += (s, e) => { GameActivity.gameActivityUI.RefreshElements(GameActivity.GameSelected); };
             });
+
+            GameActivity.PluginDatabase.PluginSettings = this;
         }
 
         public bool VerifySettings(out List<string> errors)

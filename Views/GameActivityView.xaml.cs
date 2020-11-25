@@ -748,7 +748,7 @@ namespace GameActivity
             if (!isNavigation)
             {
                 gameSeriesContener.Children.Clear();
-                gameActivityGameGraphicTime = new GameActivityGameGraphicTime(_settings, variateurTime, 9, true);
+                gameActivityGameGraphicTime = new GameActivityGameGraphicTime(variateurTime);
             }
 
             gameActivityGameGraphicTime.GetActivityForGamesTimeGraphics(GameActivity.PluginDatabase.Get(Guid.Parse(gameID)), variateurTime);
@@ -775,7 +775,7 @@ namespace GameActivity
             if (!isNavigation)
             {
                 gameSeriesContener.Children.Clear();
-                gameActivityGameGraphicLog = new GameActivityGameGraphicLog(_settings, dateSelected, title, variateurLog, false, 10, true);
+                gameActivityGameGraphicLog = new GameActivityGameGraphicLog(dateSelected, title, variateurLog, false);
             }
             else
             {

@@ -15,6 +15,7 @@ using PluginCommon.PlayniteResources.Converters;
 using System.Windows.Threading;
 using System.Threading;
 using Newtonsoft.Json;
+using GameActivity.Services;
 
 namespace GameActivity.Views.Interface
 {
@@ -26,6 +27,8 @@ namespace GameActivity.Views.Interface
         private static readonly ILogger logger = LogManager.GetLogger();
         private static IResourceProvider resources = new ResourceProvider();
 
+        private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
+
         private DateTime? _dateSelected;
         private string _title;
         private int _variateurLogInitial = 0;
@@ -34,7 +37,7 @@ namespace GameActivity.Views.Interface
         private bool _withTitle;
         private int _limit;
 
-        public GameActivityGameGraphicLog(GameActivitySettings settings, DateTime? dateSelected = null, string title = "", int variateurLog = 0, bool withTitle = true, int limit = 10, bool DisablePropertyChanged = false)
+        public GameActivityGameGraphicLog(DateTime? dateSelected = null, string title = "", int variateurLog = 0, bool withTitle = true, int limit = 10)
         {
             InitializeComponent();
 
@@ -45,16 +48,13 @@ namespace GameActivity.Views.Interface
             _withTitle = withTitle;
             _limit = limit;
 
-            if (!settings.IgnoreSettings)
+            if (!PluginDatabase.PluginSettings.IgnoreSettings)
             {
-                gameLabelsX.ShowLabels = settings.EnableIntegrationAxisGraphicLog;
-                gameLabelsY.ShowLabels = settings.EnableIntegrationOrdinatesGraphicLog;
+                gameLabelsX.ShowLabels = PluginDatabase.PluginSettings.EnableIntegrationAxisGraphicLog;
+                gameLabelsY.ShowLabels = PluginDatabase.PluginSettings.EnableIntegrationOrdinatesGraphicLog;
             }
 
-            if (!DisablePropertyChanged)
-            {
-                GameActivity.PluginDatabase.PropertyChanged += OnPropertyChanged;
-            }
+            PluginDatabase.PropertyChanged += OnPropertyChanged;
         }
 
 
@@ -62,28 +62,16 @@ namespace GameActivity.Views.Interface
         {
             try
             {
-                this.Dispatcher.BeginInvoke(DispatcherPriority.Background, new ThreadStart(delegate
+#if DEBUG
+                logger.Debug($"GameActivityGameGraphicLog.OnPropertyChanged({e.PropertyName}): {JsonConvert.SerializeObject(PluginDatabase.GameSelectedData)}");
+#endif
+                if (e.PropertyName == "GameSelectedData" || e.PropertyName == "PluginSettings")
                 {
-                    if (GameActivity.PluginDatabase.GameIsLoaded)
+                    this.Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new ThreadStart(delegate
                     {
-                        _variateurLog = _variateurLogInitial;
-
-                        if (GameActivity.PluginDatabase.GameSelectedData.Items.Count == 0)
-                        {
-
-                        }
-                        else
-                        {
-                            
-                        }
-
-                        GetActivityForGamesLogGraphics(GameActivity.PluginDatabase.GameSelectedData, _withTitle, _dateSelected, _title, _variateurLog, _limit);
-                    }
-                    else
-                    {
-
-                    }
-                }));
+                        GetActivityForGamesLogGraphics(PluginDatabase.GameSelectedData, _withTitle, _dateSelected, _title, _variateurLog, _limit);
+                    }));
+                }
             }
             catch (Exception ex)
             {
@@ -94,100 +82,89 @@ namespace GameActivity.Views.Interface
 
         public void GetActivityForGamesLogGraphics(GameActivities gameActivities, bool withTitle, DateTime? dateSelected = null, string title = "", int variateurLog = 0, int limit = 10)
         {
-            List<ActivityDetailsData> ActivitiesDetails = gameActivities.GetSessionActivityDetails(dateSelected, title);
-#if DEBUG
-            logger.Debug($"GameActivity - dateSelected: {dateSelected.ToString()} - ActivitiesDetails: {JsonConvert.SerializeObject(ActivitiesDetails)}");
-#endif
-
-            if (ActivitiesDetails.Count == 0)
+            try
             {
-#if DEBUG
-                logger.Debug($"GameActivity - GetActivityForGamesLogGraphics() - Hide - {JsonConvert.SerializeObject(gameActivities)}");
-#endif
-                this.Visibility = Visibility.Collapsed;
-                return;
-            }
-            else
-            {
-#if DEBUG
-                logger.Debug($"GameActivity - GetActivityForGamesLogGraphics() - Show - {JsonConvert.SerializeObject(gameActivities)}");
-#endif
-                this.Visibility = Visibility.Visible;
-            }
-
-            string[] activityForGameLogLabels = new string[0];
-            List<ActivityDetailsData> gameLogsDefinitive = new List<ActivityDetailsData>();
-            if (ActivitiesDetails.Count > 0)
-            {
-                if (ActivitiesDetails.Count > limit)
+                if (!gameActivities.HasDataDetails(dateSelected, title))
                 {
-                    // Variateur
-                    int conteurEnd = ActivitiesDetails.Count + variateurLog;
-                    int conteurStart = conteurEnd - limit;
+                    this.Visibility = Visibility.Collapsed;
+                    return;
+                }
+                else
+                {
+                    this.Visibility = Visibility.Visible;
+                }
 
-                    if (conteurEnd > ActivitiesDetails.Count)
+
+                List<ActivityDetailsData> ActivitiesDetails = gameActivities.GetSessionActivityDetails(dateSelected, title);
+                string[] activityForGameLogLabels = new string[0];
+                List<ActivityDetailsData> gameLogsDefinitive = new List<ActivityDetailsData>();
+                if (ActivitiesDetails.Count > 0)
+                {
+                    if (ActivitiesDetails.Count > limit)
                     {
-                        int temp = conteurEnd - ActivitiesDetails.Count;
-                        conteurEnd = ActivitiesDetails.Count;
-                        conteurStart = conteurEnd - limit;
+                        // Variateur
+                        int conteurEnd = ActivitiesDetails.Count + variateurLog;
+                        int conteurStart = conteurEnd - limit;
 
-                        variateurLog = _variateurLogTemp;
+                        if (conteurEnd > ActivitiesDetails.Count)
+                        {
+                            int temp = conteurEnd - ActivitiesDetails.Count;
+                            conteurEnd = ActivitiesDetails.Count;
+                            conteurStart = conteurEnd - limit;
+
+                            variateurLog = _variateurLogTemp;
+                        }
+
+                        if (conteurStart < 0)
+                        {
+                            conteurStart = 0;
+                            conteurEnd = limit;
+
+                            variateurLog = _variateurLogTemp;
+                        }
+
+                        _variateurLogTemp = variateurLog;
+
+                        // Create data
+                        int sCount = 0;
+                        activityForGameLogLabels = new string[limit];
+                        for (int iLog = conteurStart; iLog < conteurEnd; iLog++)
+                        {
+                            gameLogsDefinitive.Add(ActivitiesDetails[iLog]);
+                            activityForGameLogLabels[sCount] = Convert.ToDateTime(ActivitiesDetails[iLog].Datelog).ToLocalTime().ToString(Constants.TimeUiFormat);
+                            sCount += 1;
+                        }
                     }
-
-                    if (conteurStart < 0)
+                    else
                     {
-                        conteurStart = 0;
-                        conteurEnd = limit;
+                        gameLogsDefinitive = ActivitiesDetails;
 
-                        variateurLog = _variateurLogTemp;
-                    }
-
-                    _variateurLogTemp = variateurLog;
-
-#if DEBUG
-                    logger.Debug($"GameActivity - ChartLog - {conteurStart} - {conteurEnd}");
-#endif
-
-                    // Create data
-                    int sCount = 0;
-                    activityForGameLogLabels = new string[limit];
-                    for (int iLog = conteurStart; iLog < conteurEnd; iLog++)
-                    {
-                        gameLogsDefinitive.Add(ActivitiesDetails[iLog]);
-                        activityForGameLogLabels[sCount] = Convert.ToDateTime(ActivitiesDetails[iLog].Datelog).ToLocalTime().ToString(Constants.TimeUiFormat);
-                        sCount += 1;
+                        activityForGameLogLabels = new string[ActivitiesDetails.Count];
+                        for (int iLog = 0; iLog < ActivitiesDetails.Count; iLog++)
+                        {
+                            activityForGameLogLabels[iLog] = Convert.ToDateTime(ActivitiesDetails[iLog].Datelog).ToLocalTime().ToString(Constants.TimeUiFormat);
+                        }
                     }
                 }
                 else
                 {
-                    gameLogsDefinitive = ActivitiesDetails;
-
-                    activityForGameLogLabels = new string[ActivitiesDetails.Count];
-                    for (int iLog = 0; iLog < ActivitiesDetails.Count; iLog++)
-                    {
-                        activityForGameLogLabels[iLog] = Convert.ToDateTime(ActivitiesDetails[iLog].Datelog).ToLocalTime().ToString(Constants.TimeUiFormat);
-                    }
+                    return;
                 }
-            }
-            else
-            {
-                return;
-            }
 
-            // Set data in graphic.
-            ChartValues<int> CPUseries = new ChartValues<int>();
-            ChartValues<int> GPUseries = new ChartValues<int>();
-            ChartValues<int> RAMseries = new ChartValues<int>();
-            ChartValues<int> FPSseries = new ChartValues<int>();
-            for (int iLog = 0; iLog < gameLogsDefinitive.Count; iLog++)
-            {
-                CPUseries.Add(gameLogsDefinitive[iLog].CPU);
-                GPUseries.Add(gameLogsDefinitive[iLog].GPU);
-                RAMseries.Add(gameLogsDefinitive[iLog].RAM);
-                FPSseries.Add(gameLogsDefinitive[iLog].FPS);
-            }
+                // Set data in graphic.
+                ChartValues<int> CPUseries = new ChartValues<int>();
+                ChartValues<int> GPUseries = new ChartValues<int>();
+                ChartValues<int> RAMseries = new ChartValues<int>();
+                ChartValues<int> FPSseries = new ChartValues<int>();
+                for (int iLog = 0; iLog < gameLogsDefinitive.Count; iLog++)
+                {
+                    CPUseries.Add(gameLogsDefinitive[iLog].CPU);
+                    GPUseries.Add(gameLogsDefinitive[iLog].GPU);
+                    RAMseries.Add(gameLogsDefinitive[iLog].RAM);
+                    FPSseries.Add(gameLogsDefinitive[iLog].FPS);
+                }
 
-            SeriesCollection activityForGameLogSeries = new SeriesCollection
+                SeriesCollection activityForGameLogSeries = new SeriesCollection
             {
                 new ColumnSeries
                 {
@@ -210,25 +187,30 @@ namespace GameActivity.Views.Interface
                     Values = FPSseries
                 }
             };
-            Func<double, string> activityForGameLogFormatter = value => value.ToString("N");
+                Func<double, string> activityForGameLogFormatter = value => value.ToString("N");
 
-            gameSeriesLog.DataTooltip = new LiveCharts.Wpf.DefaultTooltip();
-            gameSeriesLog.DataTooltip.Background = (Brush)resources.GetResource("CommonToolTipBackgroundBrush");
-            gameSeriesLog.DataTooltip.Padding = new Thickness(10);
-            gameSeriesLog.DataTooltip.BorderThickness = (Thickness)resources.GetResource("CommonToolTipBorderThickness");
-            gameSeriesLog.DataTooltip.BorderBrush = (Brush)resources.GetResource("CommonToolTipBorderBrush");
-            gameSeriesLog.DataTooltip.Foreground = (Brush)resources.GetResource("CommonToolTipForeground");
+                gameSeriesLog.DataTooltip = new LiveCharts.Wpf.DefaultTooltip();
+                gameSeriesLog.DataTooltip.Background = (Brush)resources.GetResource("CommonToolTipBackgroundBrush");
+                gameSeriesLog.DataTooltip.Padding = new Thickness(10);
+                gameSeriesLog.DataTooltip.BorderThickness = (Thickness)resources.GetResource("CommonToolTipBorderThickness");
+                gameSeriesLog.DataTooltip.BorderBrush = (Brush)resources.GetResource("CommonToolTipBorderBrush");
+                gameSeriesLog.DataTooltip.Foreground = (Brush)resources.GetResource("CommonToolTipForeground");
 
-            gameSeriesLog.Series = activityForGameLogSeries;
-            gameLabelsY.MinValue = 0;
-            gameLabelsX.Labels = activityForGameLogLabels;
-            gameLabelsY.LabelFormatter = activityForGameLogFormatter;
+                gameSeriesLog.Series = activityForGameLogSeries;
+                gameLabelsY.MinValue = 0;
+                gameLabelsX.Labels = activityForGameLogLabels;
+                gameLabelsY.LabelFormatter = activityForGameLogFormatter;
 
-            if (withTitle)
+                if (withTitle)
+                {
+                    lGameSeriesLog.Visibility = Visibility.Visible;
+                    lGameSeriesLog.Content = resources.GetString("LOCGameActivityLogTitleDate") + " "
+                        + ((DateTime)ActivitiesDetails[0].Datelog).ToString(Constants.DateUiFormat);
+                }
+            }
+            catch (Exception ex)
             {
-                lGameSeriesLog.Visibility = Visibility.Visible;
-                lGameSeriesLog.Content = resources.GetString("LOCGameActivityLogTitleDate") + " "
-                    + ((DateTime)ActivitiesDetails[0].Datelog).ToString(Constants.DateUiFormat);
+                Common.LogError(ex, "GameActivity");
             }
         }
 

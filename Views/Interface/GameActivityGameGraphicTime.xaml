@@ -8,22 +8,23 @@
                     xmlns:localLVC="clr-namespace:PluginCommon.LiveChartsCommon;assembly=PluginCommon"
                     mc:Ignorable="d">
 
-    <lvc:CartesianChart LegendLocation="none" Name="gameSeries" Loaded="GameSeries_Loaded" DataClick="GameSeries_DataClick" Height="150">
-        <lvc:CartesianChart.DataTooltip>
-            <localLVC:CustomerToolTipForTime ShowIcon="{Binding ShowIcon}"/>
-        </lvc:CartesianChart.DataTooltip>
+    <Grid>
+        <lvc:CartesianChart LegendLocation="none" Name="gameSeries" Loaded="GameSeries_Loaded" DataClick="GameSeries_DataClick" Height="150">
+            <lvc:CartesianChart.DataTooltip>
+                <localLVC:CustomerToolTipForTime ShowIcon="{Binding ShowIcon}"/>
+            </lvc:CartesianChart.DataTooltip>
 
-        <lvc:CartesianChart.AxisX>
-            <lvc:Axis Name="gameLabelsX" ShowLabels="True" FontSize="10" MinValue="0">
-                <lvc:Axis.Separator>
-                    <lvc:Separator Step="1"/>
-                </lvc:Axis.Separator>
-            </lvc:Axis>
-        </lvc:CartesianChart.AxisX>
+            <lvc:CartesianChart.AxisX>
+                <lvc:Axis Name="gameLabelsX" ShowLabels="True" FontSize="10" MinValue="0">
+                    <lvc:Axis.Separator>
+                        <lvc:Separator Step="1"/>
+                    </lvc:Axis.Separator>
+                </lvc:Axis>
+            </lvc:CartesianChart.AxisX>
 
-        <lvc:CartesianChart.AxisY>
-            <lvc:Axis Name="gameLabelsY" MinValue="0"></lvc:Axis>
-        </lvc:CartesianChart.AxisY>
-    </lvc:CartesianChart>
-
+            <lvc:CartesianChart.AxisY>
+                <lvc:Axis Name="gameLabelsY" MinValue="0"></lvc:Axis>
+            </lvc:CartesianChart.AxisY>
+        </lvc:CartesianChart>
+    </Grid>
 </UserControl>

@@ -336,6 +336,14 @@
                                         </MultiDataTrigger.Conditions>
                                         <Setter Property="IsEnabled" Value="True" />
                                     </MultiDataTrigger>
+
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding EnableIntegrationButton}" Value="True" />
+                                            <Condition Binding="{Binding EnableIntegrationInDescriptionWithToggle}" Value="True" />
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="IsEnabled" Value="False" />
+                                    </MultiDataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </GroupBox.Style>

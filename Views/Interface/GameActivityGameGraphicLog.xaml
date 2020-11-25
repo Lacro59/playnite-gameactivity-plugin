@@ -14,7 +14,7 @@
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
-        <Label Grid.Row="0" Name="lGameSeriesLog" Visibility="Collapsed"></Label>
+        <Label Grid.Row="0" Name="lGameSeriesLog" Visibility="Collapsed" Margin="0,0,0,5"></Label>
 
         <lvc:CartesianChart Grid.Row="1" LegendLocation="none" Name="gameSeriesLog" Loaded="GameSeriesLog_Loaded" Height="150">
             <lvc:CartesianChart.DataTooltip>

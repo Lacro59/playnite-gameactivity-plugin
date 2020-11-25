@@ -1,5 +1,11 @@
-﻿using System.Windows;
+﻿using GameActivity.Services;
+using Playnite.SDK;
+using PluginCommon;
+using System;
+using System.Threading;
+using System.Windows;
 using System.Windows.Controls.Primitives;
+using System.Windows.Threading;
 
 namespace GameActivity.Views.Interface
 {
@@ -8,19 +14,44 @@ namespace GameActivity.Views.Interface
     /// </summary>
     public partial class GameActivityToggleButton : ToggleButton
     {
-        public GameActivityToggleButton(GameActivitySettings settings)
+        private static readonly ILogger logger = LogManager.GetLogger();
+
+        private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
+
+
+        public GameActivityToggleButton()
         {
             InitializeComponent();
 
-            if (settings.EnableIntegrationInDescriptionOnlyIcon)
+            this.DataContext = new
             {
-                PART_ButtonIcon.Visibility = Visibility.Visible;
-                PART_ButtonText.Visibility = Visibility.Collapsed;
+                EnableIntegrationButtonJustIcon = PluginDatabase.PluginSettings.EnableIntegrationInDescriptionOnlyIcon
+            };
+
+            PluginDatabase.PropertyChanged += OnPropertyChanged;
+        }
+
+        protected void OnPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            try
+            {
+#if DEBUG
+                logger.Debug($"GameActivityToggleButton.OnPropertyChanged({e.PropertyName}): {Newtonsoft.Json.JsonConvert.SerializeObject(PluginDatabase.GameSelectedData)}");
+#endif
+                if (e.PropertyName == "PluginSettings")
+                {
+                    this.Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new ThreadStart(delegate
+                    {
+                        this.DataContext = new
+                        {
+                            EnableIntegrationButtonJustIcon = PluginDatabase.PluginSettings.EnableIntegrationInDescriptionOnlyIcon
+                        };
+                    }));
+                }
             }
-            else
+            catch (Exception ex)
             {
-                PART_ButtonIcon.Visibility = Visibility.Collapsed;
-                PART_ButtonText.Visibility = Visibility.Visible;
+                Common.LogError(ex, "GameActivity");
             }
         }
     }
