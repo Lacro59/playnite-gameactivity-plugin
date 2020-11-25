@@ -24,16 +24,10 @@ namespace GameActivity.Views.Interface
         private GameActivityGameGraphicTime gameActivityGameGraphicTime;
         private GameActivityGameGraphicLog gameActivityGameGraphicLog;
 
-        //private bool _IsCustom;
-        //private bool _OnlyGraphic;
-
 
         //public GaDescriptionIntegration(bool IsCustom = false, bool OnlyGraphic = true)
         public GaDescriptionIntegration()
         {
-            //_IsCustom = IsCustom;
-            //_OnlyGraphic = OnlyGraphic;
-
             InitializeComponent();
 
             gameActivityGameGraphicTime = new GameActivityGameGraphicTime(0, PluginDatabase.PluginSettings.IntegrationGraphicOptionsCountAbscissa);
@@ -44,9 +38,9 @@ namespace GameActivity.Views.Interface
 
 
             PART_GameActivity_Graphic.Height = PluginDatabase.PluginSettings.IntegrationShowGraphicHeight;
-            PART_GameActivity_Graphic.Children.Add(gameActivityGameGraphicTime);
-
             PART_GameActivity_GraphicLog.Height = PluginDatabase.PluginSettings.IntegrationShowGraphicLogHeight;
+
+            PART_GameActivity_Graphic.Children.Add(gameActivityGameGraphicTime);
             PART_GameActivity_GraphicLog.Children.Add(gameActivityGameGraphicLog);
 
 
@@ -115,6 +109,10 @@ namespace GameActivity.Views.Interface
                         {
                             IntegrationShowTitle = true;
                         }
+
+
+                        PART_GameActivity_Graphic.Height = PluginDatabase.PluginSettings.IntegrationShowGraphicHeight;
+                        PART_GameActivity_GraphicLog.Height = PluginDatabase.PluginSettings.IntegrationShowGraphicLogHeight;
 
 
                         this.DataContext = new

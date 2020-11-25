@@ -16,13 +16,13 @@
 
         <Label Grid.Row="0" Name="lGameSeriesLog" Visibility="Collapsed" Margin="0,0,0,5"></Label>
 
-        <lvc:CartesianChart Grid.Row="1" LegendLocation="none" Name="gameSeriesLog" Loaded="GameSeriesLog_Loaded" Height="150">
+        <lvc:CartesianChart Grid.Row="1" LegendLocation="none" Name="PART_ChartLogActivity" Loaded="PART_ChartLogActivity_Loaded" Height="150">
             <lvc:CartesianChart.DataTooltip>
                 <localLVC:CustomerToolTipForMultipleTime ShowIcon="{Binding ShowIcon}"/>
             </lvc:CartesianChart.DataTooltip>
 
             <lvc:CartesianChart.AxisX>
-                <lvc:Axis Name="gameLabelsX" ShowLabels="True" FontSize="10" MinValue="0">
+                <lvc:Axis Name="PART_ChartLogActivityLabelsX" ShowLabels="True" FontSize="10" MinValue="0">
                     <lvc:Axis.Separator>
                         <lvc:Separator Step="1"/>
                     </lvc:Axis.Separator>
@@ -30,7 +30,7 @@
             </lvc:CartesianChart.AxisX>
 
             <lvc:CartesianChart.AxisY>
-                <lvc:Axis Name="gameLabelsY" MinValue="0"></lvc:Axis>
+                <lvc:Axis Name="PART_ChartLogActivityLabelsY" MinValue="0"></lvc:Axis>
             </lvc:CartesianChart.AxisY>
         </lvc:CartesianChart>
     </Grid>

@@ -48,8 +48,8 @@ namespace GameActivity.Views.Interface
 
             if (!PluginDatabase.PluginSettings.IgnoreSettings)
             {
-                gameLabelsX.ShowLabels = PluginDatabase.PluginSettings.EnableIntegrationAxisGraphic;
-                gameLabelsY.ShowLabels = PluginDatabase.PluginSettings.EnableIntegrationOrdinatesGraphic;
+                PART_ChartTimeActivityLabelsX.ShowLabels = PluginDatabase.PluginSettings.EnableIntegrationAxisGraphic;
+                PART_ChartTimeActivityLabelsY.ShowLabels = PluginDatabase.PluginSettings.EnableIntegrationOrdinatesGraphic;
             }
 
             PluginDatabase.PropertyChanged += OnPropertyChanged;
@@ -76,7 +76,6 @@ namespace GameActivity.Views.Interface
                 Common.LogError(ex, "GameActivity");
             }
         }
-
 
 
         public void GetActivityForGamesTimeGraphics(GameActivities gameActivities, int variateurTime = 0, int limit = 9)
@@ -266,12 +265,12 @@ namespace GameActivity.Views.Interface
 
                 LongToTimePlayedConverter converter = new LongToTimePlayedConverter();
                 Func<double, string> activityForGameLogFormatter = value => (string)converter.Convert((long)value, null, null, CultureInfo.CurrentCulture);
-                gameLabelsY.LabelFormatter = activityForGameLogFormatter;
+                PART_ChartTimeActivityLabelsY.LabelFormatter = activityForGameLogFormatter;
 
-                gameSeries.DataTooltip = new CustomerToolTipForTime();
-                gameLabelsY.MinValue = 0;
-                gameSeries.Series = activityForGameSeries;
-                gameLabelsX.Labels = activityForGameLabels;
+                PART_ChartTimeActivity.DataTooltip = new CustomerToolTipForTime();
+                PART_ChartTimeActivityLabelsY.MinValue = 0;
+                PART_ChartTimeActivity.Series = activityForGameSeries;
+                PART_ChartTimeActivityLabelsX.Labels = activityForGameLabels;
             }
             catch (Exception ex)
             {
@@ -279,42 +278,22 @@ namespace GameActivity.Views.Interface
             }
         }
 
-        private void GameSeries_Loaded(object sender, RoutedEventArgs e)
-        {
-            // Define height & width
-            var parent = ((FrameworkElement)((FrameworkElement)((FrameworkElement)gameSeries.Parent).Parent).Parent);
-
-#if DEBUG
-            logger.Debug($"GameActivity - GameActivityGameGraphicTime() - parent.name: {parent.Name} - parent.Height: {parent.Height} - parent.Width: {parent.Width}");
-#endif
-
-            if (!double.IsNaN(parent.Height))
-            {
-                gameSeries.Height = parent.Height;
-            }
-            else
-            {
-                gameSeries.Height = parent.ActualHeight;
-            }
-
-            if (!double.IsNaN(parent.Width))
-            {
-                gameSeries.Width = parent.Width;
-            }
-            else
-            {
-                gameSeries.Width = parent.ActualWidth;
-            }
-        }
-
-        private void GameSeries_DataClick(object sender, ChartPoint chartPoint)
+        private void PART_ChartTimeActivity_DataClick(object sender, ChartPoint chartPoint)
         {
             this.gameSeriesDataClick?.Invoke(this, chartPoint);
         }
 
         public void DisableAnimations(bool IsDisable)
         {
-            gameSeries.DisableAnimations = IsDisable;
+            PART_ChartTimeActivity.DisableAnimations = IsDisable;
         }
+
+
+
+        private void PART_ChartTimeActivity_Loaded(object sender, RoutedEventArgs e)
+        {
+            IntegrationUI.SetControlSize(PART_ChartTimeActivity, PluginDatabase.PluginSettings.IntegrationShowGraphicHeight, 0);
+        }
+
     }
 }

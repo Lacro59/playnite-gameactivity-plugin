@@ -8,10 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using PluginCommon;
-using PluginCommon.PlayniteResources;
-using PluginCommon.PlayniteResources.API;
 using PluginCommon.PlayniteResources.Common;
-using PluginCommon.PlayniteResources.Converters;
 using System.Windows.Threading;
 using System.Threading;
 using Newtonsoft.Json;
@@ -50,8 +47,8 @@ namespace GameActivity.Views.Interface
 
             if (!PluginDatabase.PluginSettings.IgnoreSettings)
             {
-                gameLabelsX.ShowLabels = PluginDatabase.PluginSettings.EnableIntegrationAxisGraphicLog;
-                gameLabelsY.ShowLabels = PluginDatabase.PluginSettings.EnableIntegrationOrdinatesGraphicLog;
+                PART_ChartLogActivityLabelsX.ShowLabels = PluginDatabase.PluginSettings.EnableIntegrationAxisGraphicLog;
+                PART_ChartLogActivityLabelsY.ShowLabels = PluginDatabase.PluginSettings.EnableIntegrationOrdinatesGraphicLog;
             }
 
             PluginDatabase.PropertyChanged += OnPropertyChanged;
@@ -189,17 +186,17 @@ namespace GameActivity.Views.Interface
             };
                 Func<double, string> activityForGameLogFormatter = value => value.ToString("N");
 
-                gameSeriesLog.DataTooltip = new LiveCharts.Wpf.DefaultTooltip();
-                gameSeriesLog.DataTooltip.Background = (Brush)resources.GetResource("CommonToolTipBackgroundBrush");
-                gameSeriesLog.DataTooltip.Padding = new Thickness(10);
-                gameSeriesLog.DataTooltip.BorderThickness = (Thickness)resources.GetResource("CommonToolTipBorderThickness");
-                gameSeriesLog.DataTooltip.BorderBrush = (Brush)resources.GetResource("CommonToolTipBorderBrush");
-                gameSeriesLog.DataTooltip.Foreground = (Brush)resources.GetResource("CommonToolTipForeground");
+                PART_ChartLogActivity.DataTooltip = new LiveCharts.Wpf.DefaultTooltip();
+                PART_ChartLogActivity.DataTooltip.Background = (Brush)resources.GetResource("CommonToolTipBackgroundBrush");
+                PART_ChartLogActivity.DataTooltip.Padding = new Thickness(10);
+                PART_ChartLogActivity.DataTooltip.BorderThickness = (Thickness)resources.GetResource("CommonToolTipBorderThickness");
+                PART_ChartLogActivity.DataTooltip.BorderBrush = (Brush)resources.GetResource("CommonToolTipBorderBrush");
+                PART_ChartLogActivity.DataTooltip.Foreground = (Brush)resources.GetResource("CommonToolTipForeground");
 
-                gameSeriesLog.Series = activityForGameLogSeries;
-                gameLabelsY.MinValue = 0;
-                gameLabelsX.Labels = activityForGameLogLabels;
-                gameLabelsY.LabelFormatter = activityForGameLogFormatter;
+                PART_ChartLogActivity.Series = activityForGameLogSeries;
+                PART_ChartLogActivityLabelsY.MinValue = 0;
+                PART_ChartLogActivityLabelsX.Labels = activityForGameLogLabels;
+                PART_ChartLogActivityLabelsY.LabelFormatter = activityForGameLogFormatter;
 
                 if (withTitle)
                 {
@@ -214,37 +211,17 @@ namespace GameActivity.Views.Interface
             }
         }
 
-        private void GameSeriesLog_Loaded(object sender, RoutedEventArgs e)
-        {
-            // Define height & width
-            var parent = ((FrameworkElement)((FrameworkElement)((FrameworkElement)gameSeriesLog.Parent).Parent).Parent);
-
-#if DEBUG
-            logger.Debug($"GameActivity - GameActivityGameGraphicLog() - parent.name: {parent.Name} - parent.Height: {parent.Height} - parent.Width: {parent.Width} -  - lGameSeriesLog.ActualHeight: {lGameSeriesLog.ActualHeight}");
-#endif
-
-            if (!double.IsNaN(parent.Height))
-            {
-                gameSeriesLog.Height = parent.Height - lGameSeriesLog.ActualHeight;
-            }
-            else
-            {
-                gameSeriesLog.Height = parent.ActualHeight - lGameSeriesLog.ActualHeight;
-            }
-
-            if (!double.IsNaN(parent.Width))
-            {
-                gameSeriesLog.Width = parent.Width;
-            }
-            else
-            {
-                gameSeriesLog.Width = parent.ActualWidth;
-            }
-        }
-
         public void DisableAnimations(bool IsDisable)
         {
-            gameSeriesLog.DisableAnimations = IsDisable;
+            PART_ChartLogActivity.DisableAnimations = IsDisable;
         }
+
+
+
+        private void PART_ChartLogActivity_Loaded(object sender, RoutedEventArgs e)
+        {
+            IntegrationUI.SetControlSize(PART_ChartLogActivity, PluginDatabase.PluginSettings.IntegrationShowGraphicLogHeight, 0);
+        }
+
     }
 }
