@@ -238,16 +238,7 @@ namespace GameActivity.Services
         #region BtActionBar
         public override void InitialBtActionBar()
         {
-            Application.Current.Dispatcher.BeginInvoke((Action)delegate
-            {
-                if (PART_BtActionBar != null)
-                {
-#if DEBUG
-                    logger.Debug($"GameActivity - PART_BtActionBar {PART_BtActionBar.Name}");
-#endif
-                    PART_BtActionBar.Visibility = Visibility.Visible;
-                }
-            });
+
         }
 
         public override void AddBtActionBar()
@@ -310,23 +301,7 @@ namespace GameActivity.Services
 
         public override void RefreshBtActionBar()
         {
-            if (PART_BtActionBar != null)
-            {
-                PART_BtActionBar.Visibility = Visibility.Visible;
 
-                if (PART_BtActionBar is GameActivityButtonDetails)
-                {
-
-                }
-                if (PART_BtActionBar is GameActivityToggleButtonDetails)
-                {
-
-                }
-            }
-            else
-            {
-                logger.Warn($"GameActivity - PART_BtActionBar is not defined");
-            }
         }
 
 
@@ -370,20 +345,7 @@ namespace GameActivity.Services
         #region SpDescription
         public override void InitialSpDescription()
         {
-            Application.Current.Dispatcher.BeginInvoke((Action)delegate
-            {
-                if (PART_SpDescription != null)
-                {
-                    if (_Settings.EnableIntegrationInDescriptionWithToggle)
-                    {
-                        PART_SpDescription.Visibility = Visibility.Collapsed;
-                    }
-                    else
-                    {
-                        PART_SpDescription.Visibility = Visibility.Visible;
-                    }
-                }
-            });
+
         }
 
         public override void AddSpDescription()
@@ -426,31 +388,7 @@ namespace GameActivity.Services
 
         public override void RefreshSpDescription()
         {
-            if (PART_SpDescription != null)
-            {
-                PART_SpDescription.Visibility = Visibility.Visible;
 
-                if (PART_SpDescription is GaDescriptionIntegration)
-                {
-                    if (_Settings.EnableIntegrationInDescriptionWithToggle && PART_SpDescription != null)
-                    {
-                        if (PART_BtActionBar != null && PART_BtActionBar is ToggleButton)
-                        {
-                            ((ToggleButton)PART_BtActionBar).IsChecked = false;
-                        }
-                        else
-                        {
-                            logger.Warn($"GameActivity - PART_BtActionBar is null or not ToggleButton");
-                        }
-
-                        PART_SpDescription.Visibility = Visibility.Collapsed;
-                    }
-                }
-            }
-            else
-            {
-                logger.Warn($"GameActivity - PART_SpDescription is not defined");
-            }
         }
         #endregion
 
@@ -458,13 +396,7 @@ namespace GameActivity.Services
         #region CustomElements
         public override void InitialCustomElements()
         {
-            Application.Current.Dispatcher.BeginInvoke((Action)delegate
-            {
-                foreach (CustomElement customElement in ListCustomElements)
-                {
-                    customElement.Element.Visibility = Visibility.Visible;
-                }
-            });
+
         }
 
         public override void AddCustomElements()
@@ -611,53 +543,7 @@ namespace GameActivity.Services
 
         public override void RefreshCustomElements()
         {
-#if DEBUG
-            logger.Debug($"GameActivity - ListCustomElements - {ListCustomElements.Count}");
-#endif
-            foreach (CustomElement customElement in ListCustomElements)
-            {
-                try
-                {
-                    bool isFind = false;
 
-                    if (customElement.Element is GameActivityButton)
-                    {
-#if DEBUG
-                        logger.Debug($"GameActivity - customElement.Element is GameActivityButton");
-#endif
-                        isFind = true;
-                        customElement.Element.Visibility = Visibility.Visible;
-                    }
-
-
-                    if (customElement.Element is GameActivityButtonDetails)
-                    {
-#if DEBUG
-                        logger.Debug($"GameActivity - customElement.Element is GameActivityButtonDetails");
-#endif
-                        isFind = true;
-                        customElement.Element.Visibility = Visibility.Visible;
-                    }
-
-                    if (customElement.Element is GaDescriptionIntegration)
-                    {
-#if DEBUG
-                        logger.Debug($"GameActivity - customElement.Element is GaDescriptionIntegration");
-#endif
-                        isFind = true;
-                        customElement.Element.Visibility = Visibility.Visible;
-                    }
-
-                    if (!isFind)
-                    {
-                        logger.Warn($"GameActivity - RefreshCustomElements({customElement.ParentElementName})");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Common.LogError(ex, "GameActivity");
-                }
-            }
         }
         #endregion
     }

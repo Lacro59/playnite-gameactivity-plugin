@@ -39,17 +39,6 @@ namespace GameActivity.Views.Interface
                 EnableIntegrationButtonJustIcon = (bool)_JustIcon;
             }
 
-            if (EnableIntegrationButtonJustIcon)
-            {
-                PART_ButtonIcon.Visibility = Visibility.Visible;
-                PART_ButtonText.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                PART_ButtonIcon.Visibility = Visibility.Collapsed;
-                PART_ButtonText.Visibility = Visibility.Visible;
-            }
-
             this.DataContext = new
             {
                 EnableIntegrationButtonJustIcon = EnableIntegrationButtonJustIcon
@@ -80,18 +69,6 @@ namespace GameActivity.Views.Interface
                         {
                             EnableIntegrationButtonJustIcon = (bool)_JustIcon;
                         }
-
-                        if (EnableIntegrationButtonJustIcon)
-                        {
-                            PART_ButtonIcon.Visibility = Visibility.Visible;
-                            PART_ButtonText.Visibility = Visibility.Collapsed;
-                        }
-                        else
-                        {
-                            PART_ButtonIcon.Visibility = Visibility.Collapsed;
-                            PART_ButtonText.Visibility = Visibility.Visible;
-                        }
-
 
                         this.DataContext = new
                         {
