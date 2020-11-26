@@ -23,8 +23,6 @@ namespace GameActivity.Services
 {
     public class GameActivityUI : PlayniteUiHelper
     {
-        private readonly GameActivitySettings _Settings;
-
         private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
 
         public override string _PluginUserDataPath { get; set; } = string.Empty;
@@ -42,7 +40,6 @@ namespace GameActivity.Services
 
         public GameActivityUI(IPlayniteAPI PlayniteApi, GameActivitySettings Settings, string PluginUserDataPath) : base(PlayniteApi, PluginUserDataPath)
         {
-            _Settings = Settings;
             _PluginUserDataPath = PluginUserDataPath;
 
             BtActionBarName = "PART_GaButton";
@@ -55,7 +52,7 @@ namespace GameActivity.Services
         {
             if (_PlayniteApi.ApplicationInfo.Mode == ApplicationMode.Desktop)
             {
-                if (_Settings.EnableIntegrationButtonHeader)
+                if (PluginDatabase.PluginSettings.EnableIntegrationButtonHeader)
                 {
                     logger.Info("GameActivity - Add Header button");
                     Button btHeader = new GameActivityButtonHeader(TransformIcon.Get("GameActivity"));
@@ -73,7 +70,7 @@ namespace GameActivity.Services
 #endif
 
             GameActivity.DatabaseReference = _PlayniteApi.Database;
-            var ViewExtension = new GameActivityView(_Settings, _PlayniteApi, _PluginUserDataPath);
+            var ViewExtension = new GameActivityView(PluginDatabase.PluginSettings, _PlayniteApi, _PluginUserDataPath);
             Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(_PlayniteApi, resources.GetString("LOCGameActivity"), ViewExtension);
             windowExtension.ShowDialog();
         }
@@ -105,7 +102,7 @@ namespace GameActivity.Services
                 {
                     CheckTypeView();
 
-                    if (_Settings.EnableIntegrationButton)
+                    if (PluginDatabase.PluginSettings.EnableIntegrationButton)
                     {
 #if DEBUG
                         logger.Debug($"GameActivity - AddBtActionBar()");
@@ -113,7 +110,7 @@ namespace GameActivity.Services
                         AddBtActionBar();
                     }
 
-                    if (_Settings.EnableIntegrationInDescription)
+                    if (PluginDatabase.PluginSettings.EnableIntegrationInDescription)
                     {
 #if DEBUG
                         logger.Debug($"GameActivity - AddSpDescription()");
@@ -121,7 +118,7 @@ namespace GameActivity.Services
                         AddSpDescription();
                     }
 
-                    if (_Settings.EnableIntegrationInCustomTheme)
+                    if (PluginDatabase.PluginSettings.EnableIntegrationInCustomTheme)
                     {
 #if DEBUG
                         logger.Debug($"GameActivity - AddCustomElements()");
@@ -156,8 +153,8 @@ namespace GameActivity.Services
                     resourcesLists.Add(new ResourcesList { Key = "Ga_LastDateTimeSession", Value = string.Empty });
                     resourcesLists.Add(new ResourcesList { Key = "Ga_LastPlaytimeSession", Value = string.Empty });
 
-                    resourcesLists.Add(new ResourcesList { Key = "Ga_IntegrationShowGraphic", Value = _Settings.IntegrationShowGraphic });
-                    resourcesLists.Add(new ResourcesList { Key = "Ga_IntegrationShowGraphicLog", Value = _Settings.IntegrationShowGraphicLog });
+                    resourcesLists.Add(new ResourcesList { Key = "Ga_IntegrationShowGraphic", Value = PluginDatabase.PluginSettings.IntegrationShowGraphic });
+                    resourcesLists.Add(new ResourcesList { Key = "Ga_IntegrationShowGraphicLog", Value = PluginDatabase.PluginSettings.IntegrationShowGraphicLog });
                     ui.AddResources(resourcesLists);
 
 
@@ -171,8 +168,8 @@ namespace GameActivity.Services
                     if (gameActivities.HasData)
                     {
                         resourcesLists = new List<ResourcesList>();
-                        resourcesLists.Add(new ResourcesList { Key = "Ga_IntegrationShowGraphic", Value = _Settings.IntegrationShowGraphic });
-                        resourcesLists.Add(new ResourcesList { Key = "Ga_IntegrationShowGraphicLog", Value = _Settings.IntegrationShowGraphicLog });
+                        resourcesLists.Add(new ResourcesList { Key = "Ga_IntegrationShowGraphic", Value = PluginDatabase.PluginSettings.IntegrationShowGraphic });
+                        resourcesLists.Add(new ResourcesList { Key = "Ga_IntegrationShowGraphicLog", Value = PluginDatabase.PluginSettings.IntegrationShowGraphicLog });
 
                         resourcesLists.Add(new ResourcesList { Key = "Ga_HasData", Value = gameActivities.HasData });
 
@@ -221,7 +218,7 @@ namespace GameActivity.Services
 
                         if (_PlayniteApi.ApplicationInfo.Mode == ApplicationMode.Desktop)
                         {
-                            GameActivity.PluginDatabase.SetCurrent(gameActivities);
+                            PluginDatabase.SetCurrent(gameActivities);
                         }
                     }
                 }
@@ -253,9 +250,9 @@ namespace GameActivity.Services
 
             FrameworkElement BtActionBar;
 
-            if (_Settings.EnableIntegrationInDescriptionWithToggle)
+            if (PluginDatabase.PluginSettings.EnableIntegrationInDescriptionWithToggle)
             {
-                if (_Settings.EnableIntegrationButtonDetails)
+                if (PluginDatabase.PluginSettings.EnableIntegrationButtonDetails)
                 {
                     BtActionBar = new GameActivityToggleButtonDetails();
                 }
@@ -268,7 +265,7 @@ namespace GameActivity.Services
             }
             else
             {
-                if (_Settings.EnableIntegrationButtonDetails)
+                if (PluginDatabase.PluginSettings.EnableIntegrationButtonDetails)
                 {
                     BtActionBar = new GameActivityButtonDetails();
                 }
@@ -280,9 +277,9 @@ namespace GameActivity.Services
                 ((Button)BtActionBar).Click += OnBtActionBarClick;
             }
 
-            if (!_Settings.EnableIntegrationInDescriptionOnlyIcon)
+            if (!PluginDatabase.PluginSettings.EnableIntegrationInDescriptionOnlyIcon)
             {
-                BtActionBar.Width = 150;
+                BtActionBar.MinWidth = 150;
             }
 
             BtActionBar.Name = BtActionBarName;
@@ -312,14 +309,14 @@ namespace GameActivity.Services
 #endif
 
             GameActivity.DatabaseReference = _PlayniteApi.Database;
-            var ViewExtension = new GameActivityView(_Settings, _PlayniteApi, _PluginUserDataPath, GameActivity.GameSelected);
+            var ViewExtension = new GameActivityView(PluginDatabase.PluginSettings, _PlayniteApi, _PluginUserDataPath, GameActivity.GameSelected);
             Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(_PlayniteApi, resources.GetString("LOCGameActivity"), ViewExtension);
             windowExtension.ShowDialog();
         }
 
         public void OnCustomThemeButtonClick(object sender, RoutedEventArgs e)
         {
-            if (_Settings.EnableIntegrationInCustomTheme)
+            if (PluginDatabase.PluginSettings.EnableIntegrationInCustomTheme)
             {
                 string ButtonName = string.Empty;
                 try
@@ -363,10 +360,10 @@ namespace GameActivity.Services
                 GaDescriptionIntegration SpDescription = new GaDescriptionIntegration();
                 SpDescription.Name = SpDescriptionName;
 
-                ui.AddElementInGameSelectedDescription(SpDescription, _Settings.IntegrationTopGameDetails);
+                ui.AddElementInGameSelectedDescription(SpDescription, PluginDatabase.PluginSettings.IntegrationTopGameDetails);
                 PART_SpDescription = IntegrationUI.SearchElementByName(SpDescriptionName);
 
-                if (_Settings.EnableIntegrationInDescriptionWithToggle && PART_SpDescription != null)
+                if (PluginDatabase.PluginSettings.EnableIntegrationInDescriptionWithToggle && PART_SpDescription != null)
                 {
                     if (PART_BtActionBar != null && PART_BtActionBar is ToggleButton)
                     {
@@ -494,7 +491,7 @@ namespace GameActivity.Services
             }
 
 
-            if (PART_GameActivity_Graphic != null && _Settings.IntegrationShowGraphic)
+            if (PART_GameActivity_Graphic != null && PluginDatabase.PluginSettings.IntegrationShowGraphic)
             {
                 PART_GameActivity_Graphic = new GameActivityGameGraphicTime(0, PluginDatabase.PluginSettings.IntegrationGraphicOptionsCountAbscissa);
                 ((GameActivityGameGraphicTime)PART_GameActivity_Graphic).DisableAnimations(true);
@@ -517,7 +514,7 @@ namespace GameActivity.Services
 #endif
             }
 
-            if (PART_GameActivity_GraphicLog != null && _Settings.IntegrationShowGraphicLog)
+            if (PART_GameActivity_GraphicLog != null && PluginDatabase.PluginSettings.IntegrationShowGraphicLog)
             {
                 PART_GameActivity_GraphicLog = new GameActivityGameGraphicLog(null, string.Empty, 0, !PluginDatabase.PluginSettings.EnableIntegrationInCustomTheme, PluginDatabase.PluginSettings.IntegrationGraphicLogOptionsCountAbscissa);
                 ((GameActivityGameGraphicLog)PART_GameActivity_GraphicLog).DisableAnimations(true);

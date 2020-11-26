@@ -1,4 +1,5 @@
 ﻿using GameActivity.Services;
+using Newtonsoft.Json;
 using Playnite.SDK;
 using PluginCommon;
 using System;
@@ -36,7 +37,7 @@ namespace GameActivity.Views.Interface
             try
             {
 #if DEBUG
-                logger.Debug($"GameActivityToggleButton.OnPropertyChanged({e.PropertyName}): {Newtonsoft.Json.JsonConvert.SerializeObject(PluginDatabase.GameSelectedData)}");
+                logger.Debug($"GameActivityToggleButton.OnPropertyChanged({e.PropertyName}): {JsonConvert.SerializeObject(PluginDatabase.GameSelectedData)}");
 #endif
                 if (e.PropertyName == "PluginSettings")
                 {

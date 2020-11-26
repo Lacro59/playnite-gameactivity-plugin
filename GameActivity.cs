@@ -250,7 +250,6 @@ namespace GameActivity
                 PluginDatabase.Update(GameActivitiesLog);
 
                 // Refresh integration interface
-                PlayniteUiHelper.ResetToggle();
                 var TaskIntegrationUI = Task.Run(() =>
                 {
                     var dispatcherOp = gameActivityUI.AddElements();
@@ -278,6 +277,7 @@ namespace GameActivity
         {
             
         }
+
 
         // Add code to be executed when library is updated.
         public override void OnLibraryUpdated()

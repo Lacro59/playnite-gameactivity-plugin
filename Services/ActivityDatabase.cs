@@ -26,6 +26,7 @@ namespace GameActivity.Services
             IsLoaded = false;
             Database = new GameActivitiesCollection(PluginDatabaseDirectory);
             Database.SetGameInfoDetails<Activity, ActivityDetails>(_PlayniteApi);
+
 #if DEBUG
             logger.Debug($"{PluginName} - db: {JsonConvert.SerializeObject(Database)}");
 #endif
@@ -64,12 +65,14 @@ namespace GameActivity.Services
             {
                 Id = game.Id,
                 Name = game.Name,
+                SourceId = game.SourceId,
                 Hidden = game.Hidden,
                 Icon = game.Icon,
                 CoverImage = game.CoverImage,
                 GenreIds = game.GenreIds,
                 Genres = game.Genres,
-                Playtime = game.Playtime
+                Playtime = game.Playtime,
+                LastActivity = game.LastActivity
             };
         }
 

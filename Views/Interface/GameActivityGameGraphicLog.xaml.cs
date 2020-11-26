@@ -222,6 +222,5 @@ namespace GameActivity.Views.Interface
         {
             IntegrationUI.SetControlSize(PART_ChartLogActivity, PluginDatabase.PluginSettings.IntegrationShowGraphicLogHeight, 0);
         }
-
     }
 }

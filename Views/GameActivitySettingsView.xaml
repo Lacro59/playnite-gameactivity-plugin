@@ -215,7 +215,8 @@
                             <Label Content="{DynamicResource LOCCommonIntegrationButtonHeader}" />
                         </CheckBox>
 
-                        <CheckBox Grid.Column="0" Grid.Row="2" IsChecked="{Binding EnableIntegrationInCustomTheme}" Margin="0,0,0,0" Name="Ga_IntegrationInCustomTheme" Click="Checkbox_Click" VerticalAlignment="Center">
+                        <CheckBox Grid.Column="0" Grid.Row="2" IsChecked="{Binding EnableIntegrationInCustomTheme}" 
+                                  Name="Ga_IntegrationInCustomTheme" Click="Checkbox_Click" VerticalAlignment="Center">
                             <Label Content="{DynamicResource LOCCommonIntegrationInCustomTheme}" />
                         </CheckBox>
 

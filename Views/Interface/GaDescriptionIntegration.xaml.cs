@@ -21,27 +21,28 @@ namespace GameActivity.Views.Interface
 
         private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
 
-        private GameActivityGameGraphicTime gameActivityGameGraphicTime;
-        private GameActivityGameGraphicLog gameActivityGameGraphicLog;
 
-
-        //public GaDescriptionIntegration(bool IsCustom = false, bool OnlyGraphic = true)
         public GaDescriptionIntegration()
         {
             InitializeComponent();
 
-            gameActivityGameGraphicTime = new GameActivityGameGraphicTime(0, PluginDatabase.PluginSettings.IntegrationGraphicOptionsCountAbscissa);
-            gameActivityGameGraphicTime.DisableAnimations(true);
+            if (PluginDatabase.PluginSettings.IntegrationShowGraphic)
+            {
+                GameActivityGameGraphicTime gameActivityGameGraphicTime = new GameActivityGameGraphicTime(0, PluginDatabase.PluginSettings.IntegrationGraphicOptionsCountAbscissa);
+                gameActivityGameGraphicTime.DisableAnimations(true);
+                PART_GameActivity_Graphic.Children.Add(gameActivityGameGraphicTime);
+            }
 
-            gameActivityGameGraphicLog = new GameActivityGameGraphicLog(null, string.Empty, 0, !PluginDatabase.PluginSettings.EnableIntegrationInCustomTheme, PluginDatabase.PluginSettings.IntegrationGraphicLogOptionsCountAbscissa);
-            gameActivityGameGraphicLog.DisableAnimations(true);
+            if (PluginDatabase.PluginSettings.IntegrationShowGraphicLog)
+            {
+                GameActivityGameGraphicLog gameActivityGameGraphicLog = new GameActivityGameGraphicLog(null, string.Empty, 0, !PluginDatabase.PluginSettings.EnableIntegrationInCustomTheme, PluginDatabase.PluginSettings.IntegrationGraphicLogOptionsCountAbscissa);
+                gameActivityGameGraphicLog.DisableAnimations(true);
+                PART_GameActivity_GraphicLog.Children.Add(gameActivityGameGraphicLog);
+            }
 
 
             PART_GameActivity_Graphic.Height = PluginDatabase.PluginSettings.IntegrationShowGraphicHeight;
             PART_GameActivity_GraphicLog.Height = PluginDatabase.PluginSettings.IntegrationShowGraphicLogHeight;
-
-            PART_GameActivity_Graphic.Children.Add(gameActivityGameGraphicTime);
-            PART_GameActivity_GraphicLog.Children.Add(gameActivityGameGraphicLog);
 
 
             PluginDatabase.PropertyChanged += OnPropertyChanged;
@@ -79,26 +80,32 @@ namespace GameActivity.Views.Interface
                         }
 
                         // Margin with title
-                        if (PluginDatabase.PluginSettings.IntegrationShowTitle && !PluginDatabase.PluginSettings.EnableIntegrationInCustomTheme)
+                        if (PluginDatabase.PluginSettings.IntegrationShowTitle)
                         {
                             PART_GameActivity_Graphic.Margin = new Thickness(0, 5, 0, 5);
-                            PART_GameActivity_GraphicLog.Margin = new Thickness(0, 5, 0, 0);
+                            PART_GameActivity_GraphicLog.Margin = new Thickness(0, 5, 0, 5);
                         }
                         // Without title
                         else
                         {
-                            PART_GameActivity_Graphic.Margin = new Thickness(0, 0, 0, 0);
-                            PART_GameActivity_GraphicLog.Margin = new Thickness(0, 0, 0, 0);
-                        
+                            if (PluginDatabase.PluginSettings.IntegrationShowGraphic)
+                            {
+                                PART_GameActivity_Graphic.Margin = new Thickness(0, 5, 0, 5);
+                            }
+                            else if (PluginDatabase.PluginSettings.IntegrationShowGraphicLog)
+                            {
+                                PART_GameActivity_GraphicLog.Margin = new Thickness(0, 5, 0, 5);
+                            }
+
                             if (!PluginDatabase.PluginSettings.IntegrationTopGameDetails)
                             {
                                 if (PluginDatabase.PluginSettings.IntegrationShowGraphic)
                                 {
-                                    PART_GameActivity_Graphic.Margin = new Thickness(0, 15, 0, 0);
+                                    PART_GameActivity_Graphic.Margin = new Thickness(0, 15, 0, 5);
                                 }
                                 else if(PluginDatabase.PluginSettings.IntegrationShowGraphicLog)
                                 {
-                                    PART_GameActivity_GraphicLog.Margin = new Thickness(0, 15, 0, 0);
+                                    PART_GameActivity_GraphicLog.Margin = new Thickness(0, 15, 0, 5);
                                 }
                             }
                         }

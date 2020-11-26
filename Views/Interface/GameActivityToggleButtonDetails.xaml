@@ -1,11 +1,11 @@
 ﻿<ToggleButton x:Class="GameActivity.Views.Interface.GameActivityToggleButtonDetails"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:GameActivity.Views.Interface"
+              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+              xmlns:local="clr-namespace:GameActivity.Views.Interface"
               xmlns:pcon="clr-namespace:PluginCommon.PlayniteResources.Converters;assembly=PluginCommon"
-              mc:Ignorable="d" Width="150" Height="40">
+              mc:Ignorable="d" MinWidth="150" Height="40">
 
     <ToggleButton.Resources>
         <pcon:LongToTimePlayedConverter x:Key="LongToTimePlayedConverter" />
