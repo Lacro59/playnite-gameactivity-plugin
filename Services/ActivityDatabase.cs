@@ -59,24 +59,6 @@ namespace GameActivity.Services
         }
 
 
-        public override GameActivities GetDefault(Game game)
-        {
-            return new GameActivities
-            {
-                Id = game.Id,
-                Name = game.Name,
-                SourceId = game.SourceId,
-                Hidden = game.Hidden,
-                Icon = game.Icon,
-                CoverImage = game.CoverImage,
-                GenreIds = game.GenreIds,
-                Genres = game.Genres,
-                Playtime = game.Playtime,
-                LastActivity = game.LastActivity
-            };
-        }
-
-
         /// <summary>
         /// get list GameActivity in ActivityDatabase.
         /// </summary>

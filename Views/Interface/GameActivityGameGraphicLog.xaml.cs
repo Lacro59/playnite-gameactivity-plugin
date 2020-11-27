@@ -221,6 +221,11 @@ namespace GameActivity.Views.Interface
         private void PART_ChartLogActivity_Loaded(object sender, RoutedEventArgs e)
         {
             IntegrationUI.SetControlSize(PART_ChartLogActivity, PluginDatabase.PluginSettings.IntegrationShowGraphicLogHeight, 0);
+
+            if (lGameSeriesLog.Visibility == Visibility.Visible)
+            {
+                PART_ChartLogActivity.Height = PART_ChartLogActivity.Height - lGameSeriesLog.ActualHeight - 5;
+            }
         }
     }
 }

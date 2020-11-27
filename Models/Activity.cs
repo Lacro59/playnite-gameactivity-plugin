@@ -27,12 +27,20 @@ namespace GameActivity.Models
                 {
                     try
                     {
-                        return GameActivity.DatabaseReference.Sources.Get(SourceID).Name;
+                        var Source = GameActivity.DatabaseReference.Sources.Get(SourceID);
+
+                        if (Source == null)
+                        {
+                            logger.Warn($"GameActivity - SourceName not find for {SourceID}");
+                            return "Playnite";
+                        }
+
+                        return Source.Name;
                     }
                     catch (Exception ex)
                     {
 #if DEBUG
-                        Common.LogError(ex, "GameActivity");
+                        Common.LogError(ex, "GameActivity", $"SourceId : {SourceID}");
 #endif
                         return "Playnite";
                     }

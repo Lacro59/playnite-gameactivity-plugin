@@ -745,6 +745,7 @@ namespace GameActivity
             logger.Debug($"GameActivity - variateurTime: {variateurTime}");
 #endif
 
+            gameSeriesContener.Height = gameSeriesContener.ActualHeight;
             if (!isNavigation)
             {
                 gameSeriesContener.Children.Clear();
@@ -772,6 +773,7 @@ namespace GameActivity
         {
             GameActivities gameActivities = GameActivity.PluginDatabase.Get(Guid.Parse(gameID));
 
+            gameSeriesContener.Height = gameSeriesContener.ActualHeight;
             if (!isNavigation)
             {
                 gameSeriesContener.Children.Clear();
