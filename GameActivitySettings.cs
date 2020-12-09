@@ -67,6 +67,8 @@ namespace GameActivity
         public int MaxGpuUsage { get; set; } = 0;
         public int MaxRamUsage { get; set; } = 0;
 
+        public bool EnableIntegrationFS { get; set; } = false;
+
 
         // Playnite serializes settings object to a JSON object and saves it as text file.
         // If you want to exclude some property from being saved then use `JsonIgnore` ignore attribute.
@@ -144,6 +146,8 @@ namespace GameActivity
                 MaxCpuUsage = savedSettings.MaxCpuUsage;
                 MaxGpuUsage = savedSettings.MaxGpuUsage;
                 MaxRamUsage = savedSettings.MaxRamUsage;
+
+                EnableIntegrationFS = savedSettings.EnableIntegrationFS;
             }
         }
 

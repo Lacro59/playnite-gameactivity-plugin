@@ -88,7 +88,37 @@ namespace GameActivity
 
             // Custom theme button
             EventManager.RegisterClassHandler(typeof(Button), Button.ClickEvent, new RoutedEventHandler(gameActivityUI.OnCustomThemeButtonClick));
+
+            // Add event fullScreen
+            if (api.ApplicationInfo.Mode == ApplicationMode.Fullscreen)
+            {
+                EventManager.RegisterClassHandler(typeof(Button), Button.ClickEvent, new RoutedEventHandler(BtFullScreen_ClickEvent));
+            }
         }
+
+
+        #region Custom event
+        private void BtFullScreen_ClickEvent(object sender, System.EventArgs e)
+        {
+            try
+            {
+                if (((Button)sender).Name == "PART_ButtonDetails")
+                {
+                    var TaskIntegrationUI = Task.Run(() =>
+                    {
+                        gameActivityUI.Initial();
+                        gameActivityUI.taskHelper.Check();
+                        var dispatcherOp = gameActivityUI.AddElementsFS();
+                        dispatcherOp.Completed += (s, ev) => { gameActivityUI.RefreshElements(GameSelected); };
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex, "SuccessStory");
+            }
+        }
+        #endregion
 
 
         // To add new game menu items override GetGameMenuItems
@@ -191,7 +221,10 @@ namespace GameActivity
                             gameActivityUI.Initial();
                             gameActivityUI.taskHelper.Check();
                             var dispatcherOp = gameActivityUI.AddElements();
-                            dispatcherOp.Completed += (s, e) => { gameActivityUI.RefreshElements(args.NewValue[0]); };
+                            if (dispatcherOp != null)
+                            {
+                                dispatcherOp.Completed += (s, e) => { gameActivityUI.RefreshElements(args.NewValue[0]); };
+                            }
                         });
                     }
                 }
@@ -211,6 +244,8 @@ namespace GameActivity
         // Add code to be executed when game is started running.
         public override void OnGameStarted(Game game)
         {
+            PlayniteUiHelper.ResetToggle();
+
             // start timer si log is enable.
             if (settings.EnableLogging)
             {
