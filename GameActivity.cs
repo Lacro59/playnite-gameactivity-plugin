@@ -115,7 +115,7 @@ namespace GameActivity
             }
             catch (Exception ex)
             {
-                Common.LogError(ex, "SuccessStory");
+                Common.LogError(ex, "GameActivity");
             }
         }
         #endregion

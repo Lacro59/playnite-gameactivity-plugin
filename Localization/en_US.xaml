@@ -5,13 +5,13 @@
     
     <sys:String x:Key="LOCGameActivity">GameActivity</sys:String>
     <sys:String x:Key="LOCGameActivityTitle">Activity</sys:String>
-    <sys:String x:Key="LOCGameActivityViewGamesActivities">View the games activities</sys:String>
-    <sys:String x:Key="LOCGameActivityViewGameActivity">View the game activity</sys:String>
+    <sys:String x:Key="LOCGameActivityViewGamesActivities">View games activities</sys:String>
+    <sys:String x:Key="LOCGameActivityViewGameActivity">View game activity</sys:String>
 
     <!-- GameActivitySettingsView -->
 
-    <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">Cumul game session playtime on chart</sys:String>
-    <sys:String x:Key="LOCGameActivityCumulPlaytimeStore">Unify the time of the different stores</sys:String>
+    <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">Combine game sessions playtime on chart</sys:String>
+    <sys:String x:Key="LOCGameActivityCumulPlaytimeStore">Unify the time of different libraries</sys:String>
     
     <sys:String x:Key="LOCGameActivityActiveLog">Enable logging</sys:String>
     <sys:String x:Key="LOCGameActivityTimeInterval">Check time interval</sys:String>
@@ -39,20 +39,20 @@
     <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">Log CPU, GPU, RAM and FPS performance during game session.</sys:String>
     <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Displays a warning message at the end of the game session within the defined limits.</sys:String>
 
-    <sys:String x:Key="LOCGameActivityIntegrationShowGraphic">Show graphic</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationShowGraphicLog">Show graphic with last log</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationShowGraphic">Show chart</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationShowGraphicLog">Show chart with last session log</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">Toggle button with details</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">Number of data in abscissa</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">Number of data in horizontal axis</sys:String>
 
-    <sys:String x:Key="LOCGameActivityIntegrationGraphicOptions">Graphic options</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabels">Show absciss label</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">Show ordinates label</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationGraphicLogOptions">Graphic with log options</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicOptions">Chart options</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabels">Show labels on horizontal axis</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">Show labels on vertical axis</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicLogOptions">Chart options</sys:String>
 
     <!-- GameActivityView -->
     
     <sys:String x:Key="LOCGameActivityTotalHours">Total hours</sys:String>
-    <sys:String x:Key="LOCGameActivityTotalHoursByWeeks">Total hours by weeks</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByWeeks">Total hours by week</sys:String>
     
     <sys:String x:Key="LOCGameActivityWeekLabel">Week</sys:String>
 
@@ -68,12 +68,12 @@
 
     <!-- GameActivity -->
 
-    <sys:String x:Key="LOCGameActivityWarningCaption">Warnings during the game session</sys:String>
+    <sys:String x:Key="LOCGameActivityWarningCaption">Warnings during game session</sys:String>
     <sys:String x:Key="LOCGameActivityWarningAt">At</sys:String>
     <sys:String x:Key="LOCGameActivityCpuUsage">CPU usage</sys:String>
     <sys:String x:Key="LOCGameActivityRamUsage">RAM usage</sys:String>
     
-    <sys:String x:Key="LOCGameActivityNotificationHWiNFO">Logging with HWiNFO is activate without application running.</sys:String>
-    <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">Logging with MSI AfterBurner is activate without application running.</sys:String>
+    <sys:String x:Key="LOCGameActivityNotificationHWiNFO">HWiNFO logging is enabled but application is not running.</sys:String>
+    <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">MSI AfterBurner logging is enabled but application is not running.</sys:String>
 
 </ResourceDictionary>

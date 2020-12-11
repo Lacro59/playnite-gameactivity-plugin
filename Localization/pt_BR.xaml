@@ -14,14 +14,14 @@
     <sys:String x:Key="LOCGameActivityCumulPlaytimeStore">Unificar o tempo das diferentes lojas</sys:String>
     
     <sys:String x:Key="LOCGameActivityActiveLog">Habilitar registro</sys:String>
-    <sys:String x:Key="LOCGameActivityTimeInterval">Tempo de intervalo</sys:String>
+    <sys:String x:Key="LOCGameActivityTimeInterval">Conferir intervalo de tempo</sys:String>
     <sys:String x:Key="LOCGameActivityTimeLabel">minuto(s)</sys:String>
 
     <sys:String x:Key="LOCGameActivityUseMsiAfterburner">Usar MSI Afterburner</sys:String>
     <sys:String x:Key="LOCGameActivityUseHWiNFO">Usar HWiNFO</sys:String>
 
-    <sys:String x:Key="LOCGameActivitySensorsID">sensores id</sys:String>
-    <sys:String x:Key="LOCGameActivityElementID">elemento id</sys:String>
+    <sys:String x:Key="LOCGameActivitySensorsID">Id dos sensores</sys:String>
+    <sys:String x:Key="LOCGameActivityElementID">Id dos elementos</sys:String>
     
     <sys:String x:Key="LOCGameActivityGpuUsage">Uso da GPU</sys:String>
     <sys:String x:Key="LOCGameActivityFps">FPS</sys:String>

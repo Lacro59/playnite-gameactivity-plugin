@@ -5,23 +5,23 @@
     
     <sys:String x:Key="LOCGameActivity">Actividad de juego</sys:String>
     <sys:String x:Key="LOCGameActivityTitle">Actividad</sys:String>
-    <sys:String x:Key="LOCGameActivityViewGamesActivities">View the games activities</sys:String>
-    <sys:String x:Key="LOCGameActivityViewGameActivity">View the game activity</sys:String>
+    <sys:String x:Key="LOCGameActivityViewGamesActivities">Ver las actividades del juego</sys:String>
+    <sys:String x:Key="LOCGameActivityViewGameActivity">Ver la actividad del juego</sys:String>
 
     <!-- GameActivitySettingsView -->
 
-    <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">Cumul game session playtime on chart</sys:String>
-    <sys:String x:Key="LOCGameActivityCumulPlaytimeStore">Unify the time of the different stores</sys:String>
+    <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">Tiempo de juego acumulado en el gráfico</sys:String>
+    <sys:String x:Key="LOCGameActivityCumulPlaytimeStore">Unificar el tiempo de las diferentes tiendas</sys:String>
     
     <sys:String x:Key="LOCGameActivityActiveLog">Habilitar registro</sys:String>
-    <sys:String x:Key="LOCGameActivityTimeInterval">Intervalo de tiempo</sys:String>
+    <sys:String x:Key="LOCGameActivityTimeInterval">Comprobar intervalo de tiempo</sys:String>
     <sys:String x:Key="LOCGameActivityTimeLabel">minuto (s)</sys:String>
 
     <sys:String x:Key="LOCGameActivityUseMsiAfterburner">Usar MSI Afterburner</sys:String>
     <sys:String x:Key="LOCGameActivityUseHWiNFO">Usar HWiNFO</sys:String>
 
-    <sys:String x:Key="LOCGameActivitySensorsID">id de sensor</sys:String>
-    <sys:String x:Key="LOCGameActivityElementID">id del elemento</sys:String>
+    <sys:String x:Key="LOCGameActivitySensorsID">Id de sensor</sys:String>
+    <sys:String x:Key="LOCGameActivityElementID">Id del elemento</sys:String>
     
     <sys:String x:Key="LOCGameActivityGpuUsage">Uso de GPU</sys:String>
     <sys:String x:Key="LOCGameActivityFps">FPS</sys:String>
@@ -30,11 +30,11 @@
 
     <sys:String x:Key="LOCGameActivityActiveWarning">Activar advertencias</sys:String>
     <sys:String x:Key="LOCGameActivityMinFps">FPS mínimo</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxCpuTemp">Max CPU temp</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxGpuTemp">Max GPU temp</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxCpuUsage">Max CPU usage</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxGpuUsage">Max GPU usage</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxRamUsage">Max RAM usage</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxCpuTemp">Máx temp CPU</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxGpuTemp">Máx temp GPU</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxCpuUsage">Máx uso CPU</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxGpuUsage">Máx uso GPU</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxRamUsage">Máx uso RAM</sys:String>
 
     <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">Registrar el rendimiento de CPU, GPU, RAM y FPS durante la sesión de juego.</sys:String>
     <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Muestra un mensaje de advertencia al final de la sesión del juego dentro de los límites definidos.</sys:String>
@@ -42,11 +42,11 @@
     <sys:String x:Key="LOCGameActivityIntegrationShowGraphic">Mostrar gráfico</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationShowGraphicLog">Mostrar gráfico con el último registro</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">Añadir botón con detalles</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">Number of data in abscissa</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">Número de datos en abscisa</sys:String>
 
     <sys:String x:Key="LOCGameActivityIntegrationGraphicOptions">Opciones Gráficas</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabels">Show absciss label</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">Show ordinates label</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabels">Mostrar etiqueta abscisa</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">Mostrar etiqueta de ordenadas</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicLogOptions">Gráfico con opciones de registro</sys:String>
 
     <!-- GameActivityView -->

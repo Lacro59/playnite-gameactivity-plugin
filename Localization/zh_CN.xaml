@@ -14,14 +14,14 @@
     <sys:String x:Key="LOCGameActivityCumulPlaytimeStore">Unify the time of the different stores</sys:String>
     
     <sys:String x:Key="LOCGameActivityActiveLog">启用性能记录</sys:String>
-    <sys:String x:Key="LOCGameActivityTimeInterval">时间间隔</sys:String>
+    <sys:String x:Key="LOCGameActivityTimeInterval">Check time interval</sys:String>
     <sys:String x:Key="LOCGameActivityTimeLabel">分钟</sys:String>
 
     <sys:String x:Key="LOCGameActivityUseMsiAfterburner">使用MSI Afterburner</sys:String>
     <sys:String x:Key="LOCGameActivityUseHWiNFO">使用HWiNFO</sys:String>
 
-    <sys:String x:Key="LOCGameActivitySensorsID">传感器sensors id</sys:String>
-    <sys:String x:Key="LOCGameActivityElementID">元素element id</sys:String>
+    <sys:String x:Key="LOCGameActivitySensorsID">Sensors id</sys:String>
+    <sys:String x:Key="LOCGameActivityElementID">Element id</sys:String>
     
     <sys:String x:Key="LOCGameActivityGpuUsage">GPU负载</sys:String>
     <sys:String x:Key="LOCGameActivityFps">帧数</sys:String>
