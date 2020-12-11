@@ -143,8 +143,7 @@ namespace GameActivity.Services
                                     ElapsedSeconds = Activity.ElapsedSeconds
                                 });
 
-
-                                var ActivitiesDetails = item.Value.GetSessionActivityDetails(DateSession.ToString("o"));
+                                var ActivitiesDetails = item.Value.GetSessionActivityDetails(DateSession);
 
                                 List<ActivityDetailsData> ListActivityDetails = new List<ActivityDetailsData>();
                                 foreach (var ActivityDetails in ActivitiesDetails)
@@ -549,8 +548,9 @@ namespace GameActivity.Services
             return dateLastSession.ToUniversalTime().ToString("o"); ;
         }
 
-        public string GetDateSelectedSession(string dateSelected, string title)
+        public DateTime? GetDateSelectedSession(DateTime dateSelected)
         {
+            /*
             if (!dateSelected.IsNullOrEmpty())
             {
                 dateSelected = Convert.ToDateTime(dateSelected).ToString("yyyy-MM-dd");
@@ -575,6 +575,15 @@ namespace GameActivity.Services
                 }
             }
             return GetLastSession();
+            */
+
+            var a = Activities.Find(x => (DateTime)x.DateSession == dateSelected);
+            if (a != null)
+            {
+                return dateSelected;
+            }
+
+            return null;
         }
 
 
@@ -606,10 +615,15 @@ namespace GameActivity.Services
         /// Get the last session activity details.
         /// </summary>
         /// <returns></returns>
-        public List<ActivityDetailsDataOld> GetSessionActivityDetails(string dateSelected = "", string title = "")
+        public List<ActivityDetailsDataOld> GetSessionActivityDetails(DateTime dateSelected)
         {
-            string dateLastSession = GetDateSelectedSession(dateSelected, title);
-            return ActivitiesDetails.Get(dateLastSession);
+            DateTime? dateLastSession = GetDateSelectedSession(dateSelected);
+            if (dateLastSession == null)
+            {
+                return new List<ActivityDetailsDataOld>();
+            }
+            var a = ActivitiesDetails.Get(((DateTime)dateLastSession).ToString("o"));
+            return a;
         }
     }
 }
