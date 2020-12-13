@@ -293,7 +293,6 @@ namespace GameActivity.Services
             }
 
             BtActionBar.Name = BtActionBarName;
-            BtActionBar.Margin = new Thickness(10, 0, 0, 0);
 
             try
             {
@@ -370,7 +369,7 @@ namespace GameActivity.Services
                 GaDescriptionIntegration SpDescription = new GaDescriptionIntegration();
                 SpDescription.Name = SpDescriptionName;
 
-                ui.AddElementInGameSelectedDescription(SpDescription, PluginDatabase.PluginSettings.IntegrationTopGameDetails);
+                ui.AddElementInGameSelectedDescription(SpDescription, PluginDatabase.PluginSettings.IntegrationTopGameDetails, PluginDatabase.PluginSettings.IntegrationShowTitle);
                 PART_SpDescription = IntegrationUI.SearchElementByName(SpDescriptionName);
 
                 if (PluginDatabase.PluginSettings.EnableIntegrationInDescriptionWithToggle && PART_SpDescription != null)

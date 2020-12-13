@@ -168,7 +168,7 @@ namespace GameActivity
             })
             .ContinueWith(antecedent =>
             {
-                Application.Current.Dispatcher.BeginInvoke((Action)delegate
+                this.Dispatcher.BeginInvoke((Action)delegate
                 { 
                     // Set game selected
                     if (GameSelected != null)
@@ -178,12 +178,13 @@ namespace GameActivity
                             if (((listGame)lvGames.Items[i]).listGameTitle == GameSelected.Name)
                             {
                                 lvGames.SelectedIndex = i;
+                                break;
                             }
                         }
                     }
                     lvGames.ScrollIntoView(lvGames.SelectedItem);
 
-                    if(_settings.CumulPlaytimeStore)
+                    if (_settings.CumulPlaytimeStore)
                     {
                         acmSeries.Visibility = Visibility.Collapsed;
                         acmLabel.Visibility = Visibility.Collapsed;
@@ -745,7 +746,6 @@ namespace GameActivity
             logger.Debug($"GameActivity - variateurTime: {variateurTime}");
 #endif
 
-            gameSeriesContener.Height = gameSeriesContener.ActualHeight;
             if (!isNavigation)
             {
                 gameSeriesContener.Children.Clear();

@@ -53,9 +53,6 @@ namespace GameActivity.Views.Interface
         {
             try
             {
-#if DEBUG
-                logger.Debug($"GaDescriptionIntegration.OnPropertyChanged({e.PropertyName}): {JsonConvert.SerializeObject(PluginDatabase.GameSelectedData)}");
-#endif
                 if (e.PropertyName == "GameSelectedData" || e.PropertyName == "PluginSettings")
                 {
                     this.Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new ThreadStart(delegate
@@ -96,18 +93,6 @@ namespace GameActivity.Views.Interface
                             {
                                 PART_GameActivity_GraphicLog.Margin = new Thickness(0, 5, 0, 5);
                             }
-
-                            if (!PluginDatabase.PluginSettings.IntegrationTopGameDetails)
-                            {
-                                if (PluginDatabase.PluginSettings.IntegrationShowGraphic)
-                                {
-                                    PART_GameActivity_Graphic.Margin = new Thickness(0, 15, 0, 5);
-                                }
-                                else if(PluginDatabase.PluginSettings.IntegrationShowGraphicLog)
-                                {
-                                    PART_GameActivity_GraphicLog.Margin = new Thickness(0, 15, 0, 5);
-                                }
-                            }
                         }
 
 
@@ -130,9 +115,6 @@ namespace GameActivity.Views.Interface
                             HasData = PluginDatabase.GameSelectedData.HasData,
                             HasDataDetails = PluginDatabase.GameSelectedData.HasDataDetails()
                         };
-#if DEBUG
-                        logger.Debug($"GameActivity - DataContext: {JsonConvert.SerializeObject(DataContext)}");
-#endif
                     }));
                 }
             }

@@ -36,9 +36,6 @@ namespace GameActivity.Views.Interface
         {
             try
             {
-#if DEBUG
-                logger.Debug($"GameActivityToggleButton.OnPropertyChanged({e.PropertyName}): {JsonConvert.SerializeObject(PluginDatabase.GameSelectedData)}");
-#endif
                 if (e.PropertyName == "PluginSettings")
                 {
                     this.Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new ThreadStart(delegate

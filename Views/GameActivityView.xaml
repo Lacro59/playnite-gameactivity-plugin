@@ -361,7 +361,7 @@
                 <Button Grid.Column="4" Grid.Row="0" Content="" Height="25" Width="40" Click="Button_Click_nextGame" FontFamily="Wingdings"></Button>
 
 
-                <Grid Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="1" Name="gameSeriesContener">
+                <Grid Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="1" Name="gameSeriesContener" Height="295" VerticalAlignment="Bottom">
                     <lvc:CartesianChart x:Name="gameSeries" LegendLocation="none" DataClick="GameSeries_DataClick">
                         <lvc:CartesianChart.DataTooltip>
                             <localLVC:CustomerToolTipForTime ShowIcon="{Binding ShowIcon}"/>

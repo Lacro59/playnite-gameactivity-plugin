@@ -9,7 +9,7 @@
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </StackPanel.Resources>
     
-    <TextBlock Name="PART_Title" Text="{DynamicResource LOCGameActivityTitle}" Margin="0,15,0,5" Style="{DynamicResource BaseTextBlockStyle}" 
+    <TextBlock Name="PART_Title" Text="{DynamicResource LOCGameActivityTitle}" Style="{DynamicResource BaseTextBlockStyle}" 
                Visibility="{Binding IntegrationShowTitle, Converter={StaticResource BooleanToVisibilityConverter}}" />
     <Separator Name="PART_Separator" Background="{DynamicResource PanelSeparatorBrush}" 
                Visibility="{Binding IntegrationShowTitle, Converter={StaticResource BooleanToVisibilityConverter}}" />
