@@ -7,13 +7,13 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using PluginCommon;
-using PluginCommon.PlayniteResources.Common;
+using CommonPluginsShared;
 using System.Windows.Threading;
 using System.Threading;
 using Newtonsoft.Json;
 using GameActivity.Services;
 using System.Threading.Tasks;
+using CommonPluginsPlaynite.Common;
 
 namespace GameActivity.Views.Interface
 {

@@ -1,8 +1,9 @@
 ﻿using Newtonsoft.Json;
 using Playnite.SDK;
-using PluginCommon;
+using CommonPluginsShared;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GameActivity.Services;
 
 namespace GameActivity
 {
@@ -173,7 +174,7 @@ namespace GameActivity
             var TaskIntegrationUI = Task.Run(() =>
             {
                 var dispatcherOp = GameActivity.gameActivityUI.AddElements();
-                dispatcherOp.Completed += (s, e) => { GameActivity.gameActivityUI.RefreshElements(GameActivity.GameSelected); };
+                dispatcherOp.Completed += (s, e) => { GameActivity.gameActivityUI.RefreshElements(ActivityDatabase.GameSelected); };
             });
 
             GameActivity.PluginDatabase.PluginSettings = this;

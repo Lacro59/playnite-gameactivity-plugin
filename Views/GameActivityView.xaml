@@ -3,18 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:converters="clr-namespace:CommonPluginsPlaynite.Converters;assembly=CommonPluginsPlaynite"
+             xmlns:commonpluginsshared="clr-namespace:CommonPluginsShared"
+             xmlns:livechartscommon="clr-namespace:CommonPluginsControls.LiveChartsCommon;assembly=CommonPluginsControls"
              xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
-             xmlns:localLVC="clr-namespace:PluginCommon.LiveChartsCommon;assembly=PluginCommon"
-             xmlns:localPlugin="clr-namespace:PluginCommon;assembly=PluginCommon"
-             xmlns:pcon="clr-namespace:PluginCommon.PlayniteResources.Converters;assembly=PluginCommon"
              mc:Ignorable="d" Height="740" Width="1280" 
              Background="{DynamicResource WindowBackgourndBrush}">
 
     <UserControl.Resources>
-        <pcon:LongToTimePlayedConverter x:Key="LongToTimePlayedConverter" />
-        <localPlugin:CompareValueConverter x:Key="CompareValueConverter" />
-        <localPlugin:LocalDateTimeConverter x:Key="LocalDateTimeConverter" />
-        <FontFamily x:Key="font">pack://application:,,,/PluginCommon;component/Resources/font.ttf#font</FontFamily>
+        <converters:LongToTimePlayedConverter x:Key="LongToTimePlayedConverter" />
+        <commonpluginsshared:CompareValueConverter x:Key="CompareValueConverter" />
+        <commonpluginsshared:LocalDateTimeConverter x:Key="LocalDateTimeConverter" />
     </UserControl.Resources>
 
     <Grid Margin="10,10,10,0">
@@ -51,29 +50,29 @@
                         <ColumnDefinition Width="100" />
                     </Grid.ColumnDefinitions>
 
-                    <ToggleButton Grid.Column="0" x:Name="tbMonthSources" IsChecked='True' Content="{DynamicResource LOCSourcesLabel}" Width="100" Height="40" FontSize="20" Click="ToggleButtonSources_Checked"/>
-                    <ToggleButton Grid.Column="2" x:Name="tbMonthGenres" IsChecked='False' Content="{DynamicResource LOCGenresLabel}" Width="100" Height="40" FontSize="20" Click="ToggleButtonGenres_Checked"/>
+                    <ToggleButton Grid.Column="0" x:Name="tbMonthSources" IsChecked='True' Content="{DynamicResource LOCSourcesLabel}" Width="100" Height="40" FontSize="20" Click="ToggleButtonSources_Checked" />
+                    <ToggleButton Grid.Column="2" x:Name="tbMonthGenres" IsChecked='False' Content="{DynamicResource LOCGenresLabel}" Width="100" Height="40" FontSize="20" Click="ToggleButtonGenres_Checked" />
 
                     <Button Grid.Column="3" Content="" Height="35" Width="50" FontSize="20" Click="Button_Click_PrevMonth" FontFamily="Wingdings" />
-                    <Label Grid.Column="4" x:Name="activityLabel" Content="month data label" HorizontalAlignment="Center" VerticalAlignment="Center" Height="45" FontSize="24" FontWeight="Bold" MinWidth="50"/>
-                    <Button Grid.Column="5" Content="" Height="35" Width="50" FontSize="20" Click="Button_Click_NextMonth" FontFamily="Wingdings"/>
+                    <Label Grid.Column="4" x:Name="activityLabel" Content="month data label" HorizontalAlignment="Center" VerticalAlignment="Center" Height="45" FontSize="24" FontWeight="Bold" MinWidth="50" />
+                    <Button Grid.Column="5" Content="" Height="35" Width="50" FontSize="20" Click="Button_Click_NextMonth" FontFamily="Wingdings" />
                 </Grid>
 
                 <!-- Graphics week -->
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="10" />
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="10" />
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
                     <Grid x:Name="gridMonth" Grid.Column="0">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0*"/>
+                            <ColumnDefinition Width="0*" />
                             <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="0*"/>
+                            <ColumnDefinition Width="0*" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30" />
@@ -82,13 +81,13 @@
 
                         <Label Name="acmLabel" Content="{DynamicResource LOCGameActivityTotalHours}" HorizontalAlignment="Center" VerticalAlignment="Top" Height="30" FontSize="20" FontWeight="Bold" MinWidth="50" Grid.Column="1" Grid.Row="0" />
 
-                        <lvc:CartesianChart x:Name="acmSeries" LegendLocation="none" Grid.Column="1" Grid.Row="1" FontFamily="{StaticResource font}">
+                        <lvc:CartesianChart x:Name="acmSeries" LegendLocation="none" Grid.Column="1" Grid.Row="1" FontFamily="{DynamicResource CommonFont}">
                             <lvc:CartesianChart.DataTooltip>
-                                <localLVC:CustomerToolTipForTime ShowIcon="{Binding ShowIcon}"/>
+                                <livechartscommon:CustomerToolTipForTime ShowIcon="{Binding ShowIcon}" />
                             </lvc:CartesianChart.DataTooltip>
 
                             <lvc:CartesianChart.AxisX>
-                                <lvc:Axis x:Name="acmLabelsX" ShowLabels="True" FontSize="14" FontFamily="{StaticResource font}">
+                                <lvc:Axis x:Name="acmLabelsX" ShowLabels="True" FontSize="14" FontFamily="{DynamicResource CommonFont}">
                                     <lvc:Axis.Separator>
                                         <lvc:Separator Step="1" />
                                     </lvc:Axis.Separator>
@@ -104,20 +103,20 @@
 
                     <Grid Name="GridDay" Grid.Column="2">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0*"/>
+                            <ColumnDefinition Width="0*" />
                             <ColumnDefinition/>
-                            <ColumnDefinition Width="0*"/>
+                            <ColumnDefinition Width="0*" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
 
-                        <Label Grid.Column="1" Grid.Row="0" x:Name="actLabel" Content="{DynamicResource LOCGameActivityTimeTitle}" Height="30" FontSize="20" FontWeight="Bold" MinWidth="50" HorizontalAlignment="Center"/>
+                        <Label Grid.Column="1" Grid.Row="0" x:Name="actLabel" Content="{DynamicResource LOCGameActivityTimeTitle}" Height="30" FontSize="20" FontWeight="Bold" MinWidth="50" HorizontalAlignment="Center" />
 
-                        <lvc:CartesianChart x:Name="actSeries" LegendLocation="none" Grid.Column="1" Grid.Row="1" FontFamily="{StaticResource font}" >
+                        <lvc:CartesianChart x:Name="actSeries" LegendLocation="none" Grid.Column="1" Grid.Row="1" FontFamily="{DynamicResource CommonFont}" >
                             <lvc:CartesianChart.DataTooltip>
-                                <localLVC:CustomerToolTipForMultipleTime ShowIcon="{Binding ShowIcon}"/>
+                                <livechartscommon:CustomerToolTipForMultipleTime ShowIcon="{Binding ShowIcon}" />
                             </lvc:CartesianChart.DataTooltip>
 
                             <lvc:CartesianChart.AxisX>
@@ -135,20 +134,20 @@
 
                     <Grid Name="GridWeek" Grid.Column="4">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0*"/>
+                            <ColumnDefinition Width="0*" />
                             <ColumnDefinition/>
-                            <ColumnDefinition Width="0*"/>
+                            <ColumnDefinition Width="0*" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
 
-                        <Label Grid.Column="1" Grid.Row="0" x:Name="acwLabel" Content="{DynamicResource LOCGameActivityTotalHoursByWeeks}" Height="30" FontSize="20" FontWeight="Bold" MinWidth="50" HorizontalAlignment="Center"/>
+                        <Label Grid.Column="1" Grid.Row="0" x:Name="acwLabel" Content="{DynamicResource LOCGameActivityTotalHoursByWeeks}" Height="30" FontSize="20" FontWeight="Bold" MinWidth="50" HorizontalAlignment="Center" />
 
-                        <lvc:CartesianChart x:Name="acwSeries" LegendLocation="none" Grid.Column="1" Grid.Row="1" FontFamily="{StaticResource font}" >
+                        <lvc:CartesianChart x:Name="acwSeries" LegendLocation="none" Grid.Column="1" Grid.Row="1" FontFamily="{DynamicResource CommonFont}" >
                             <lvc:CartesianChart.DataTooltip>
-                                <localLVC:CustomerToolTipForMultipleTime ShowIcon="{Binding ShowIcon}"/>
+                                <livechartscommon:CustomerToolTipForMultipleTime ShowIcon="{Binding ShowIcon}" />
                             </lvc:CartesianChart.DataTooltip>
 
                             <lvc:CartesianChart.AxisX>
@@ -185,7 +184,7 @@
                                 <GridViewColumnHeader Name="lvGameIcon" Content="{DynamicResource LOCGameIconTitle}"></GridViewColumnHeader>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Image HorizontalAlignment="Center" Height="32" VerticalAlignment="Center" Width="32" Source="{Binding listGameIcon}"/>
+                                        <Image HorizontalAlignment="Center" Height="32" VerticalAlignment="Center" Width="32" Source="{Binding listGameIcon}" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -216,9 +215,9 @@
                                                     <Setter Property="Foreground">
                                                         <Setter.Value>
                                                             <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
-                                                                <Binding Path="avgCPU"/>
-                                                                <Binding Path="maxCPU"/>
-                                                                <Binding Path="enableWarm"/>
+                                                                <Binding Path="avgCPU" />
+                                                                <Binding Path="maxCPU" />
+                                                                <Binding Path="enableWarm" />
                                                             </MultiBinding>
                                                         </Setter.Value>
                                                     </Setter>
@@ -237,9 +236,9 @@
                                                     <Setter Property="Foreground">
                                                         <Setter.Value>
                                                             <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
-                                                                <Binding Path="avgGPU"/>
-                                                                <Binding Path="maxGPU"/>
-                                                                <Binding Path="enableWarm"/>
+                                                                <Binding Path="avgGPU" />
+                                                                <Binding Path="maxGPU" />
+                                                                <Binding Path="enableWarm" />
                                                             </MultiBinding>
                                                         </Setter.Value>
                                                     </Setter>
@@ -258,9 +257,9 @@
                                                     <Setter Property="Foreground">
                                                         <Setter.Value>
                                                             <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
-                                                                <Binding Path="avgRAM"/>
-                                                                <Binding Path="maxRAM"/>
-                                                                <Binding Path="enableWarm"/>
+                                                                <Binding Path="avgRAM" />
+                                                                <Binding Path="maxRAM" />
+                                                                <Binding Path="enableWarm" />
                                                             </MultiBinding>
                                                         </Setter.Value>
                                                     </Setter>
@@ -279,9 +278,9 @@
                                                     <Setter Property="Foreground">
                                                         <Setter.Value>
                                                             <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="0">
-                                                                <Binding Path="avgFPS"/>
-                                                                <Binding Path="minFPS"/>
-                                                                <Binding Path="enableWarm"/>
+                                                                <Binding Path="avgFPS" />
+                                                                <Binding Path="minFPS" />
+                                                                <Binding Path="enableWarm" />
                                                             </MultiBinding>
                                                         </Setter.Value>
                                                     </Setter>
@@ -300,9 +299,9 @@
                                                     <Setter Property="Foreground">
                                                         <Setter.Value>
                                                             <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
-                                                                <Binding Path="avgCPUT"/>
-                                                                <Binding Path="maxCPUT"/>
-                                                                <Binding Path="enableWarm"/>
+                                                                <Binding Path="avgCPUT" />
+                                                                <Binding Path="maxCPUT" />
+                                                                <Binding Path="enableWarm" />
                                                             </MultiBinding>
                                                         </Setter.Value>
                                                     </Setter>
@@ -321,9 +320,9 @@
                                                     <Setter Property="Foreground">
                                                         <Setter.Value>
                                                             <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
-                                                                <Binding Path="avgGPUT"/>
-                                                                <Binding Path="maxGPUT"/>
-                                                                <Binding Path="enableWarm"/>
+                                                                <Binding Path="avgGPUT" />
+                                                                <Binding Path="maxGPUT" />
+                                                                <Binding Path="enableWarm" />
                                                             </MultiBinding>
                                                         </Setter.Value>
                                                     </Setter>
@@ -340,20 +339,20 @@
 
             <Grid Name="activityForGamesGraphics" Grid.Column="2" Margin="0,0,0,8">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="70"/>
-                    <ColumnDefinition Width="70"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="45"/>
-                    <ColumnDefinition Width="45"/>
+                    <ColumnDefinition Width="70" />
+                    <ColumnDefinition Width="70" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="45" />
+                    <ColumnDefinition Width="45" />
                 </Grid.ColumnDefinitions>
 
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <ToggleButton Grid.Column="0" Grid.Row="0" x:Name="ToggleButtonTime" IsChecked="True" Content="{DynamicResource LOCGameActivityTime}" Height="33" Width="65" Click="ToggleButtonTime_Checked"/>
-                <ToggleButton Grid.Column="1" Grid.Row="0" x:Name="ToggleButtonLog" IsChecked="False" Content="{DynamicResource LOCGameActivityLog}" Height="33" Width="65" Click="ToggleButtonLog_Checked"/>
+                <ToggleButton Grid.Column="0" Grid.Row="0" x:Name="ToggleButtonTime" IsChecked="True" Content="{DynamicResource LOCGameActivityTime}" Height="33" Width="65" Click="ToggleButtonTime_Checked" />
+                <ToggleButton Grid.Column="1" Grid.Row="0" x:Name="ToggleButtonLog" IsChecked="False" Content="{DynamicResource LOCGameActivityLog}" Height="33" Width="65" Click="ToggleButtonLog_Checked" />
 
                 <Label Grid.Column="2" Grid.Row="0" x:Name="gameLabel" Content="graphics title" HorizontalAlignment="Center" VerticalAlignment="Top" Height="40" FontSize="20" FontWeight="Bold" />
 
@@ -364,13 +363,13 @@
                 <Grid Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="1" Name="gameSeriesContener" Height="295" VerticalAlignment="Bottom">
                     <lvc:CartesianChart x:Name="gameSeries" LegendLocation="none" DataClick="GameSeries_DataClick">
                         <lvc:CartesianChart.DataTooltip>
-                            <localLVC:CustomerToolTipForTime ShowIcon="{Binding ShowIcon}"/>
+                            <livechartscommon:CustomerToolTipForTime ShowIcon="{Binding ShowIcon}" />
                         </lvc:CartesianChart.DataTooltip>
 
                         <lvc:CartesianChart.AxisX>
                             <lvc:Axis x:Name="gameLabelsX" ShowLabels="True" FontSize="10">
                                 <lvc:Axis.Separator>
-                                    <lvc:Separator Step="1"/>
+                                    <lvc:Separator Step="1" />
                                 </lvc:Axis.Separator>
                             </lvc:Axis>
                         </lvc:CartesianChart.AxisX>

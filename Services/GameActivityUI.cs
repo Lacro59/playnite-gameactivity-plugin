@@ -3,9 +3,7 @@ using GameActivity.Views.Interface;
 using Newtonsoft.Json;
 using Playnite.SDK;
 using Playnite.SDK.Models;
-using PluginCommon;
-using PluginCommon.PlayniteResources.Common;
-using PluginCommon.PlayniteResources.Converters;
+using CommonPluginsShared;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -18,6 +16,8 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Threading;
+using CommonPluginsPlaynite.Converters;
+using CommonPluginsPlaynite.Common;
 
 namespace GameActivity.Services
 {
@@ -222,7 +222,7 @@ namespace GameActivity.Services
                     }
 
                     // If not cancel, show
-                    if (!ct.IsCancellationRequested && GameSelected.Id == GameActivity.GameSelected.Id)
+                    if (!ct.IsCancellationRequested && GameSelected.Id == ActivityDatabase.GameSelected.Id)
                     {
                         ui.AddResources(resourcesLists);
 
@@ -318,7 +318,7 @@ namespace GameActivity.Services
 #endif
 
             GameActivity.DatabaseReference = _PlayniteApi.Database;
-            var ViewExtension = new GameActivityView(PluginDatabase.PluginSettings, _PlayniteApi, _PluginUserDataPath, GameActivity.GameSelected);
+            var ViewExtension = new GameActivityView(PluginDatabase.PluginSettings, _PlayniteApi, _PluginUserDataPath, ActivityDatabase.GameSelected);
             Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(_PlayniteApi, resources.GetString("LOCGameActivity"), ViewExtension);
             windowExtension.ShowDialog();
         }

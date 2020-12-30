@@ -67,6 +67,7 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -80,6 +81,10 @@
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
     <Reference Include="WindowsFormsIntegration" />
+    <Reference Include="YamlDotNet, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\YamlDotNet.5.4.0\lib\net45\YamlDotNet.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\HWiNFODumper.cs" />
@@ -130,7 +135,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="extension.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -139,10 +143,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
-    <None Include="App.xaml">
+    <Page Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </None>
+    </Page>
     <None Include="Localization\fr_FR.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -296,10 +300,15 @@
     <None Include="Resources\OpenHardwareMonitorLib.dll" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="playnite-plugincommon\PluginCommon.csproj">
-      <Project>{e05ac297-6067-4270-a572-1df926bb3635}</Project>
-      <Name>PluginCommon</Name>
+    <ProjectReference Include="playnite-plugincommon\CommonPluginsControls\CommonPluginsControls.csproj">
+      <Project>{9acfa07b-718c-4546-ac27-a9fce42f61f7}</Project>
+      <Name>CommonPluginsControls</Name>
+    </ProjectReference>
+    <ProjectReference Include="playnite-plugincommon\CommonPluginsPlaynite\CommonPluginsPlaynite.csproj">
+      <Project>{a4c600fb-92f5-4fd6-ad6b-0c0e0cf2ec81}</Project>
+      <Name>CommonPluginsPlaynite</Name>
     </ProjectReference>
   </ItemGroup>
+  <Import Project="playnite-plugincommon\CommonPluginsShared\CommonPluginsShared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Playnite.SDK;
 using Playnite.SDK.Models;
-using PluginCommon;
+using CommonPluginsShared;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;

@@ -1,13 +1,13 @@
 ﻿using GameActivity.Services;
 using Newtonsoft.Json;
 using Playnite.SDK;
-using PluginCommon;
-using PluginCommon.PlayniteResources.Converters;
+using CommonPluginsShared;
 using System;
 using System.Globalization;
 using System.Threading;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using CommonPluginsPlaynite.Converters;
 
 namespace GameActivity.Views.Interface
 {

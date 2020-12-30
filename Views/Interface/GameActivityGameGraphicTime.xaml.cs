@@ -6,12 +6,7 @@ using LiveCharts.Events;
 using LiveCharts.Wpf;
 using Newtonsoft.Json;
 using Playnite.SDK;
-using PluginCommon;
-using PluginCommon.LiveChartsCommon;
-using PluginCommon.PlayniteResources;
-using PluginCommon.PlayniteResources.API;
-using PluginCommon.PlayniteResources.Common;
-using PluginCommon.PlayniteResources.Converters;
+using CommonPluginsShared;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -20,6 +15,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using CommonPluginsControls.LiveChartsCommon;
+using CommonPluginsPlaynite.Common;
+using CommonPluginsPlaynite.Converters;
 
 namespace GameActivity.Views.Interface
 {

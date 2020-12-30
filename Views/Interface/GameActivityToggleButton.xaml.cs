@@ -1,7 +1,7 @@
 ﻿using GameActivity.Services;
 using Newtonsoft.Json;
 using Playnite.SDK;
-using PluginCommon;
+using CommonPluginsShared;
 using System;
 using System.Threading;
 using System.Windows;

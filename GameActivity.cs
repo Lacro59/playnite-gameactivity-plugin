@@ -13,7 +13,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using MSIAfterburnerNET.HM.Interop;
 using System.Reflection;
-using PluginCommon;
+using CommonPluginsShared;
 using System.Windows;
 using GameActivity.Views.Interface;
 using Playnite.SDK.Events;
@@ -38,8 +38,7 @@ namespace GameActivity
 
         public static IGameDatabase DatabaseReference;
         public static string pluginFolder;
-
-        public static Game GameSelected;
+        
         public static ActivityDatabase PluginDatabase;
         public static GameActivityUI gameActivityUI;
 
@@ -68,9 +67,10 @@ namespace GameActivity
             pluginFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
             // Add plugin localization in application ressource.
-            PluginCommon.PluginLocalization.SetPluginLanguage(pluginFolder, api.ApplicationSettings.Language);
+            PluginLocalization.SetPluginLanguage(pluginFolder, api.ApplicationSettings.Language);
             // Add common in application ressource.
-            PluginCommon.Common.Load(pluginFolder);
+            Common.Load(pluginFolder);
+            Common.SetEvent(PlayniteApi);
 
             // Check version
             if (settings.EnableCheckVersion)
@@ -109,7 +109,7 @@ namespace GameActivity
                         gameActivityUI.Initial();
                         gameActivityUI.taskHelper.Check();
                         var dispatcherOp = gameActivityUI.AddElementsFS();
-                        dispatcherOp.Completed += (s, ev) => { gameActivityUI.RefreshElements(GameSelected); };
+                        dispatcherOp.Completed += (s, ev) => { gameActivityUI.RefreshElements(ActivityDatabase.GameSelected); };
                     });
                 }
             }
@@ -209,9 +209,9 @@ namespace GameActivity
             {
                 if (args.NewValue != null && args.NewValue.Count == 1)
                 {
-                    GameSelected = args.NewValue[0];
+                    ActivityDatabase.GameSelected = args.NewValue[0];
 #if DEBUG
-                    logger.Debug($"GameActivity - OnGameSelected() - {GameSelected.Name} - {GameSelected.Id.ToString()}");
+                    logger.Debug($"GameActivity - OnGameSelected() - {ActivityDatabase.GameSelected.Name} - {ActivityDatabase.GameSelected.Id.ToString()}");
 #endif
                     if (settings.EnableIntegrationInCustomTheme || settings.EnableIntegrationInDescription)
                     {
@@ -288,7 +288,7 @@ namespace GameActivity
                 var TaskIntegrationUI = Task.Run(() =>
                 {
                     var dispatcherOp = gameActivityUI.AddElements();
-                    dispatcherOp.Completed += (s, e) => { gameActivityUI.RefreshElements(GameSelected); };
+                    dispatcherOp.Completed += (s, e) => { gameActivityUI.RefreshElements(ActivityDatabase.GameSelected); };
                 });
             });
         }

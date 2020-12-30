@@ -4,11 +4,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         xmlns:local="clr-namespace:GameActivity.Views.Interface"
-        xmlns:pcon="clr-namespace:PluginCommon.PlayniteResources.Converters;assembly=PluginCommon"
+        xmlns:converters="clr-namespace:CommonPluginsPlaynite.Converters;assembly=CommonPluginsPlaynite"
         mc:Ignorable="d" MinWidth="150" Height="40">
 
     <Button.Resources>
-        <pcon:LongToTimePlayedConverter x:Key="LongToTimePlayedConverter" />
+        <converters:LongToTimePlayedConverter x:Key="LongToTimePlayedConverter" />
     </Button.Resources>
     
     <Button.Style>

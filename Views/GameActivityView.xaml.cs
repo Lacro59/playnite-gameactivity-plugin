@@ -12,20 +12,18 @@ using System.Windows.Data;
 using System.ComponentModel;
 using GameActivity.Models;
 using LiveCharts;
-using PluginCommon;
-using PluginCommon.PlayniteResources;
-using PluginCommon.PlayniteResources.API;
-using PluginCommon.PlayniteResources.Common;
-using PluginCommon.PlayniteResources.Converters;
+using CommonPluginsShared;
 using LiveCharts.Wpf;
 using LiveCharts.Configurations;
-using PluginCommon.LiveChartsCommon;
 using System.Globalization;
 using GameActivity.Views.Interface;
 using LiveCharts.Events;
 using System.Windows.Input;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
+using CommonPluginsPlaynite.Converters;
+using CommonPluginsControls.LiveChartsCommon;
+using CommonPluginsPlaynite.Common;
 
 namespace GameActivity
 {
@@ -55,11 +53,6 @@ namespace GameActivity
 
         public List<listGame> activityListByGame { get; set; }
 
-        // Application variables paths.
-        public string pathFileActivityDB { get; set; }
-        public string pathActivityDB { get; set; }
-        public string pathActivityDetailsDB { get; set; }
-
         GameActivitySettings _settings { get; set; }
 
         public bool isMonthSources = true;
@@ -83,9 +76,6 @@ namespace GameActivity
             pathsPlaynite = PlayniteApi.Paths;
             _settings = settings;
             pathExtentionData = pathExtData;
-
-            pathActivityDB = pathExtentionData + "\\activity\\";
-            pathActivityDetailsDB = pathExtentionData + "\\activityDetails\\";
 
             // Set dates variables
             yearCurrent = DateTime.Now.Year;
