@@ -228,9 +228,6 @@ namespace GameActivity.Models
         public List<ActivityDetailsData> GetSessionActivityDetails(DateTime? dateSelected = null, string title = "")
         {
             DateTime dateLastSession = GetDateSelectedSession(dateSelected, title);
-#if DEBUG
-            logger.Debug($"GameActivity - title: {title} - dateLastSession: {dateLastSession.ToString()} with dateSelected: {dateSelected.ToString()}");
-#endif
             return ItemsDetails.Get(dateLastSession);
         }
         #endregion
@@ -239,9 +236,6 @@ namespace GameActivity.Models
 
         public bool HasDataDetails(DateTime? dateSelected = null, string title = "")
         {
-#if DEBUG
-            logger.Debug($"GameActivity - HasDataDetails({dateSelected}, {title}) - {Name} - {GetSessionActivityDetails(dateSelected, title).Count > 0}");
-#endif
             return GetSessionActivityDetails(dateSelected, title).Count > 0;
         }
     }

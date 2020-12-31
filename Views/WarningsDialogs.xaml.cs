@@ -24,9 +24,6 @@ namespace GameActivity.Views
         {
             InitializeComponent();
 
-#if DEBUG
-            logger.Debug($"GameActivity - Messages: {JsonConvert.SerializeObject(Messages)}");
-#endif
             icData.ItemsSource = Messages;
         }
 
@@ -46,10 +43,6 @@ namespace GameActivity.Views
         {
             try
             {
-#if DEBUG
-                logger.Debug($"GameActivity - Convert({value.ToString()})");
-#endif
-
                 if ((bool)value)
                 {
                     return Brushes.Orange;
@@ -57,7 +50,7 @@ namespace GameActivity.Views
             }
             catch (Exception ex)
             {
-                Common.LogError(ex, "GameActivity", $"Error on converter SetTextColor()");
+                Common.LogError(ex, "GameActivity");
             }
 
             return resources.GetResource("TextBrush");

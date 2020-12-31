@@ -40,7 +40,7 @@ namespace GameActivity.Models
                     catch (Exception ex)
                     {
 #if DEBUG
-                        Common.LogError(ex, "GameActivity", $"SourceId : {SourceID}");
+                        Common.LogError(ex, "GameActivity [Ignored]", $"SourceId : {SourceID}");
 #endif
                         return "Playnite";
                     }

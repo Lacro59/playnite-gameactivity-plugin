@@ -403,10 +403,6 @@ namespace GameActivity
                 }
             }
 
-#if DEBUG
-            logger.Debug($"GameActivity - activityByDateLabels - {JsonConvert.SerializeObject(activityByDateLabels)}");
-            logger.Debug($"GameActivity - series - {JsonConvert.SerializeObject(series)}");
-#endif
             activityByDaySeries.Add(new ColumnSeries
             {
                 Title = string.Empty,
@@ -596,9 +592,7 @@ namespace GameActivity
                         }
                     }
                 }
-#if DEBUG
-                logger.Debug($"GameActivity - CumulPlaytimeStore: {JsonConvert.SerializeObject(series)}");
-#endif
+
                 activityByWeekSeries = new SeriesCollection();
                 activityByWeekSeries.Add(new ColumnSeries
                 {
@@ -732,10 +726,6 @@ namespace GameActivity
         {
             _settings.IgnoreSettings = true;
 
-#if DEBUG
-            logger.Debug($"GameActivity - variateurTime: {variateurTime}");
-#endif
-
             if (!isNavigation)
             {
                 gameSeriesContener.Children.Clear();
@@ -772,11 +762,7 @@ namespace GameActivity
             else
             {
                 List<ActivityDetailsData> ActivitiesDetails = gameActivities.GetSessionActivityDetails(dateSelected, title);
-#if DEBUG
-                logger.Debug($"GameActivity - ActivitiesDetails: {ActivitiesDetails.Count }");
-                logger.Debug($"GameActivity - dateSelected: {dateSelected.ToString()}");
-                logger.Debug($"GameActivity - variateurLog: {variateurLog}");
-#endif
+
                 if (variateurLog + ActivitiesDetails.Count < 10)
                 {
                     variateurLog += 1;

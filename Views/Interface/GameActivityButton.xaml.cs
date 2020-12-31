@@ -53,9 +53,6 @@ namespace GameActivity.Views.Interface
         {
             try
             {
-#if DEBUG
-                logger.Debug($"GameActivityButton.OnPropertyChanged({e.PropertyName}): {JsonConvert.SerializeObject(PluginDatabase.GameSelectedData)}");
-#endif
                 if (e.PropertyName == "PluginSettings")
                 {
                     this.Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new ThreadStart(delegate
@@ -74,9 +71,6 @@ namespace GameActivity.Views.Interface
                         {
                             EnableIntegrationButtonJustIcon = EnableIntegrationButtonJustIcon
                         };
-#if DEBUG
-                        logger.Debug($"GameActivity - DataContext: {JsonConvert.SerializeObject(DataContext)}");
-#endif
                     }));
                 }
             }

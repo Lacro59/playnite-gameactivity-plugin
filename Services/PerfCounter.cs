@@ -54,7 +54,10 @@ namespace GameActivity.Services
             }
             catch(Exception ex)
             {
-                Common.LogError(ex, "GameActivity", "error on GetCpuPercentage()");
+                logger.Warn($"GameActivity - No CPU usage find");
+#if DEBUG
+                Common.LogError(ex, "GameActivity [Ignored]");
+#endif
             }
 
             return totalCpuUsage;
@@ -88,10 +91,11 @@ namespace GameActivity.Services
             }
             catch (Exception ex)
             {
-                Common.LogError(ex, "GameActivity", "error on GetCpuTemperature()");
+                logger.Warn($"GameActivity - No CPU temperature find");
+#if DEBUG
+                Common.LogError(ex, "GameActivity [Ignored]");
+#endif
             }
-
-            logger.Warn("GameActivity - No Cpu temperature find");
 
             return 0;
         }
@@ -130,7 +134,10 @@ namespace GameActivity.Services
             }
             catch (Exception ex)
             {
-                Common.LogError(ex, "GameActivity", "error on GetRamPercentage()");
+                logger.Warn($"GameActivity - No RAM usage find");
+#if DEBUG
+                Common.LogError(ex, "GameActivity [Ignored]");
+#endif
             }
 
             return RamUsagePercentage;
@@ -171,10 +178,11 @@ namespace GameActivity.Services
             }
             catch (Exception ex)
             {
-                Common.LogError(ex, "GameActivity", "error on GetGpuPercentage()");
+                logger.Warn($"GameActivity - No GPU usage find");
+#if DEBUG
+                Common.LogError(ex, "GameActivity [Ignored]");
+#endif
             }
-
-            logger.Warn("GameActivity - No GPU load find");
 
             return 0;
         }
@@ -214,10 +222,11 @@ namespace GameActivity.Services
             }
             catch (Exception ex)
             {
-                Common.LogError(ex, "GameActivity", "error on GetGpuTemperature()");
+                logger.Warn($"GameActivity - No GPU temperature find");
+#if DEBUG
+                Common.LogError(ex, "GameActivity [Ignored]");
+#endif
             }
-
-            logger.Warn("GameActivity - No GPU temperature find");
 
             return 0;
         }

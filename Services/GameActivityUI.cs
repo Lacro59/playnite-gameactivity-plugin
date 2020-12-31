@@ -76,7 +76,7 @@ namespace GameActivity.Services
         public void OnBtHeaderClick(object sender, RoutedEventArgs e)
         {
 #if DEBUG
-            logger.Debug($"GameActivity - OnBtHeaderClick()");
+            logger.Debug($"GameActivity [Ignored] - OnBtHeaderClick()");
 #endif
 
             GameActivity.DatabaseReference = _PlayniteApi.Database;
@@ -99,7 +99,7 @@ namespace GameActivity.Services
                 if (IsFirstLoad)
                 {
 #if DEBUG
-                    logger.Debug($"GameActivity - IsFirstLoad");
+                    logger.Debug($"GameActivity [Ignored] - IsFirstLoad");
 #endif
                     Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new ThreadStart(delegate
                     {
@@ -115,7 +115,7 @@ namespace GameActivity.Services
                     if (PluginDatabase.PluginSettings.EnableIntegrationButton)
                     {
 #if DEBUG
-                        logger.Debug($"GameActivity - AddBtActionBar()");
+                        logger.Debug($"GameActivity [Ignored] - AddBtActionBar()");
 #endif
                         AddBtActionBar();
                     }
@@ -123,7 +123,7 @@ namespace GameActivity.Services
                     if (PluginDatabase.PluginSettings.EnableIntegrationInDescription)
                     {
 #if DEBUG
-                        logger.Debug($"GameActivity - AddSpDescription()");
+                        logger.Debug($"GameActivity [Ignored] - AddSpDescription()");
 #endif
                         AddSpDescription();
                     }
@@ -131,7 +131,7 @@ namespace GameActivity.Services
                     if (PluginDatabase.PluginSettings.EnableIntegrationInCustomTheme)
                     {
 #if DEBUG
-                        logger.Debug($"GameActivity - AddCustomElements()");
+                        logger.Debug($"GameActivity [Ignored] - AddCustomElements()");
 #endif
                         AddCustomElements();
                     }
@@ -144,7 +144,7 @@ namespace GameActivity.Services
         public override void RefreshElements(Game GameSelected, bool force = false)
         {
 #if DEBUG
-            logger.Debug($"GameActivity - RefreshElements({GameSelected.Name})");
+            logger.Debug($"GameActivity [Ignored] - RefreshElements({GameSelected.Name})");
 #endif
             CancellationTokenSource tokenSource = new CancellationTokenSource();
             CancellationToken ct = tokenSource.Token;
@@ -253,7 +253,7 @@ namespace GameActivity.Services
             if (PART_BtActionBar != null)
             {
 #if DEBUG
-                logger.Debug($"GameActivity - PART_BtActionBar allready insert");
+                logger.Debug($"GameActivity [Ignored] - PART_BtActionBar allready insert");
 #endif
                 return;
             }
@@ -314,7 +314,7 @@ namespace GameActivity.Services
         public void OnBtActionBarClick(object sender, RoutedEventArgs e)
         {
 #if DEBUG
-            logger.Debug($"GameActivity - OnBtActionBarClick()");
+            logger.Debug($"GameActivity [Ignored] - OnBtActionBarClick()");
 #endif
 
             GameActivity.DatabaseReference = _PlayniteApi.Database;
@@ -334,14 +334,14 @@ namespace GameActivity.Services
                     if (ButtonName == "PART_GaCustomButton")
                     {
 #if DEBUG
-                        logger.Debug($"GameActivity - OnCustomThemeButtonClick()");
+                        logger.Debug($"GameActivity [Ignored] - OnCustomThemeButtonClick()");
 #endif
                         OnBtActionBarClick(sender, e);
                     }
                 }
                 catch (Exception ex)
                 {
-                    Common.LogError(ex, "GameActivity", "OnCustomThemeButtonClick() error");
+                    Common.LogError(ex, "GameActivity");
                 }
             }
         }
@@ -359,7 +359,7 @@ namespace GameActivity.Services
             if (PART_SpDescription != null)
             {
 #if DEBUG
-                logger.Debug($"GameActivity - PART_SpDescription allready insert");
+                logger.Debug($"GameActivity [Ignored] - PART_SpDescription allready insert");
 #endif
                 return;
             }
@@ -410,7 +410,7 @@ namespace GameActivity.Services
             if (ListCustomElements.Count > 0)
             {
 #if DEBUG
-                logger.Debug($"GameActivity - CustomElements allready insert - {ListCustomElements.Count}");
+                logger.Debug($"GameActivity [Ignored] - CustomElements allready insert - {ListCustomElements.Count}");
 #endif
                 return;
             }
@@ -453,7 +453,7 @@ namespace GameActivity.Services
             else
             {
 #if DEBUG
-                logger.Debug($"GameActivity - PART_GaButtonWithJustIcon not find");
+                logger.Debug($"GameActivity [Ignored] - PART_GaButtonWithJustIcon not find");
 #endif
             }
 
@@ -474,7 +474,7 @@ namespace GameActivity.Services
             else
             {
 #if DEBUG
-                logger.Debug($"GameActivity - PART_GaButtonWithTitle not find");
+                logger.Debug($"GameActivity [Ignored] - PART_GaButtonWithTitle not find");
 #endif
             }
 
@@ -495,7 +495,7 @@ namespace GameActivity.Services
             else
             {
 #if DEBUG
-                logger.Debug($"GameActivity - PART_GaButtonWithTitleAndDetails not find");
+                logger.Debug($"GameActivity [Ignored] - PART_GaButtonWithTitleAndDetails not find");
 #endif
             }
 
@@ -519,7 +519,7 @@ namespace GameActivity.Services
             else
             {
 #if DEBUG
-                logger.Debug($"GameActivity - PART_GameActivity_Graphic not find");
+                logger.Debug($"GameActivity [Ignored] - PART_GameActivity_Graphic not find");
 #endif
             }
 
@@ -542,7 +542,7 @@ namespace GameActivity.Services
             else
             {
 #if DEBUG
-                logger.Debug($"GameActivity - PART_GameActivity_GraphicLog not find");
+                logger.Debug($"GameActivity [Ignored] - PART_GameActivity_GraphicLog not find");
 #endif
             }
         }
@@ -563,7 +563,7 @@ namespace GameActivity.Services
                 if (IsFirstLoad)
                 {
 #if DEBUG
-                    logger.Debug($"GameActivity - IsFirstLoad");
+                    logger.Debug($"GameActivity [Ignored] - IsFirstLoad");
 #endif
                     Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new ThreadStart(delegate
                     {
@@ -577,7 +577,7 @@ namespace GameActivity.Services
                     if (PluginDatabase.PluginSettings.EnableIntegrationFS)
                     {
 #if DEBUG
-                        logger.Debug($"GameActivity - AddBtInfoBarFS()");
+                        logger.Debug($"GameActivity [Ignored] - AddBtInfoBarFS()");
 #endif
                         AddSpInfoBarFS();
                         AddSpInfoBarFS();

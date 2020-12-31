@@ -211,7 +211,7 @@ namespace GameActivity
                 {
                     ActivityDatabase.GameSelected = args.NewValue[0];
 #if DEBUG
-                    logger.Debug($"GameActivity - OnGameSelected() - {ActivityDatabase.GameSelected.Name} - {ActivityDatabase.GameSelected.Id.ToString()}");
+                    logger.Debug($"GameActivity [Ignored] - OnGameSelected() - {ActivityDatabase.GameSelected.Name} - {ActivityDatabase.GameSelected.Id.ToString()}");
 #endif
                     if (settings.EnableIntegrationInCustomTheme || settings.EnableIntegrationInDescription)
                     {
@@ -231,7 +231,7 @@ namespace GameActivity
             }
             catch (Exception ex)
             {
-                Common.LogError(ex, "GameActivity", $"Error on OnGameSelected()");
+                Common.LogError(ex, "GameActivity");
             }
         }
 
@@ -489,9 +489,9 @@ namespace GameActivity
                 }
                 catch (Exception ex)
                 {
-                    logger.Error("GameActivity - Fail initialize MSIAfterburnerNET");
+                    logger.Warn("GameActivity - Fail initialize MSIAfterburnerNET");
 #if DEBUG
-                    Common.LogError(ex, "GameActivity", "Fail initialize MSIAfterburnerNET");
+                    Common.LogError(ex, "GameActivity [Ignored]", "Fail initialize MSIAfterburnerNET");
 #endif
                 }
 
@@ -503,9 +503,9 @@ namespace GameActivity
                     }
                     catch (Exception ex)
                     {
-                        logger.Error("GameActivity - Fail get fpsValue");
+                        logger.Warn("GameActivity - Fail get fpsValue");
 #if DEBUG
-                    Common.LogError(ex, "GameActivity", "Fail get fpsValue");
+                    Common.LogError(ex, "GameActivity [Ignored]", "Fail get fpsValue");
 #endif
                     }
 
@@ -518,9 +518,9 @@ namespace GameActivity
                     }
                     catch (Exception ex)
                     {
-                        logger.Error("GameActivity - Fail get gpuValue");
+                        logger.Warn("GameActivity - Fail get gpuValue");
 #if DEBUG
-                    Common.LogError(ex, "GameActivity", "Fail get gpuValue");
+                    Common.LogError(ex, "GameActivity [Ignored]", "Fail get gpuValue");
 #endif
                     }
 
@@ -533,9 +533,9 @@ namespace GameActivity
                     }
                     catch (Exception ex)
                     {
-                        logger.Error("GameActivity - Fail get gpuTValue");
+                        logger.Warn("GameActivity - Fail get gpuTValue");
 #if DEBUG
-                    Common.LogError(ex, "GameActivity", "Fail get gpuTValue");
+                    Common.LogError(ex, "GameActivity [Ignored]", "Fail get gpuTValue");
 #endif
                     }
 
@@ -548,9 +548,9 @@ namespace GameActivity
                     }
                     catch (Exception ex)
                     {
-                        logger.Error("GameActivity - Fail get cpuTValue");
+                        logger.Warn("GameActivity - Fail get cpuTValue");
 #if DEBUG
-                    Common.LogError(ex, "GameActivity", "Fail get cpuTValue");
+                    Common.LogError(ex, "GameActivity [Ignored]", "Fail get cpuTValue");
 #endif
                     }
                 }
@@ -567,9 +567,9 @@ namespace GameActivity
                 }
                 catch (Exception ex)
                 {
-                    logger.Error("GameActivity - Fail initialize HWiNFODumper");
+                    logger.Warn("GameActivity - Fail initialize HWiNFODumper");
 #if DEBUG
-                    Common.LogError(ex, "GameActivity", "Fail initialize HWiNFODumper");
+                    Common.LogError(ex, "GameActivity [Ignored]", "Fail initialize HWiNFODumper");
 #endif
                 }
 
@@ -650,7 +650,10 @@ namespace GameActivity
                     }
                     catch (Exception ex)
                     {
-                        Common.LogError(ex, "GameActivity", "Fail get HWiNFO");
+                        logger.Warn("GameActivity - Fail get HWiNFO");
+#if DEBUG
+                        Common.LogError(ex, "GameActivity [Ignored]", "Fail get HWiNFO");
+#endif
                     }
                 }
             }

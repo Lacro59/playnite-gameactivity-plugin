@@ -27,10 +27,6 @@ namespace GameActivity.Services
             Database = new GameActivitiesCollection(PluginDatabaseDirectory);
             Database.SetGameInfoDetails<Activity, ActivityDetails>(_PlayniteApi);
 
-#if DEBUG
-            logger.Debug($"{PluginName} - db: {JsonConvert.SerializeObject(Database)}");
-#endif
-
             GameSelectedData = new GameActivities();
             GetPluginTags();
 
@@ -43,9 +39,6 @@ namespace GameActivity.Services
         {
             GameIsLoaded = false;
             GameActivities gameActivities = GetOnlyCache(Id);
-#if DEBUG
-            logger.Debug($"{PluginName} - GetFromDb({Id.ToString()}) - GameActivities: {JsonConvert.SerializeObject(gameActivities)}");
-#endif
 
             if (gameActivities == null)
             {
