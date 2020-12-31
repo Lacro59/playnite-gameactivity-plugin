@@ -192,6 +192,7 @@ namespace GameActivity.Views.Interface
                         Func<double, string> activityForGameLogFormatter = value => value.ToString("N");
 
                         PART_ChartLogActivity.DataTooltip = new LiveCharts.Wpf.DefaultTooltip();
+                        PART_ChartLogActivity.DataTooltip.FontSize = 16;
                         PART_ChartLogActivity.DataTooltip.Background = (Brush)resources.GetResource("CommonToolTipBackgroundBrush");
                         PART_ChartLogActivity.DataTooltip.Padding = new Thickness(10);
                         PART_ChartLogActivity.DataTooltip.BorderThickness = (Thickness)resources.GetResource("CommonToolTipBorderThickness");
