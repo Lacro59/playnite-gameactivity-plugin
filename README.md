@@ -1,5 +1,5 @@
 # playnite-gameactivity-plugin
-Generic plugin for [Playnite](https://playnite.link).
+Generic plugin for [Playnite](https://playnite.link).  
 This plugin creates datas for your game activities and shows many statistics. 
 
 More information here: https://playnite.link/forum/thread-264.html
