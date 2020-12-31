@@ -132,9 +132,9 @@
 
                             <DockPanel DockPanel.Dock="Bottom" Margin="0,15,0,0"  IsEnabled="{Binding ElementName=cbUseHWiNFO, Path=IsChecked, TargetNullValue=false}">
                                 <GroupBox Header="HWiNFO">
-                                    <DockPanel Margin="10,5,10,10">
+                                    <DockPanel Margin="10,5,10,5">
                                         <DockPanel DockPanel.Dock="Top" HorizontalAlignment="Center">
-                                            <StackPanel DockPanel.Dock="Left" Margin="0,0,2,0">
+                                            <StackPanel DockPanel.Dock="Left" Margin="0,0,5,0">
                                                 <GroupBox Header="{DynamicResource LOCGameActivityGpuUsage}" Height="100" Width="250">
                                                     <Grid>
                                                         <Label Content="{DynamicResource LOCGameActivitySensorsID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,5,0,0" />
@@ -146,7 +146,7 @@
                                                 </GroupBox>
                                             </StackPanel>
 
-                                            <StackPanel DockPanel.Dock="Right" Margin="2,0,0,0">
+                                            <StackPanel DockPanel.Dock="Right" Margin="5,0,0,0">
                                                 <GroupBox Header="{DynamicResource LOCGameActivityFps}" Height="100" Width="250">
                                                     <Grid>
                                                         <Label Content="{DynamicResource LOCGameActivitySensorsID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,5,0,0" />
@@ -159,8 +159,8 @@
                                             </StackPanel>
                                         </DockPanel>
 
-                                        <DockPanel DockPanel.Dock="Top" HorizontalAlignment="Center" Margin="0,5,0,0">
-                                            <StackPanel DockPanel.Dock="Left" Margin="0,0,2,0">
+                                        <DockPanel DockPanel.Dock="Top" HorizontalAlignment="Center" Margin="0,10,0,0">
+                                            <StackPanel DockPanel.Dock="Left" Margin="0,0,5,0">
                                                 <GroupBox Header="{DynamicResource LOCGameActivityGpuTemp}" Height="100" Width="250">
                                                     <Grid>
                                                         <Label Content="{DynamicResource LOCGameActivitySensorsID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,5,0,0" />
@@ -172,7 +172,7 @@
                                                 </GroupBox>
                                             </StackPanel>
 
-                                            <StackPanel DockPanel.Dock="Right" Margin="2,0,0,0">
+                                            <StackPanel DockPanel.Dock="Right" Margin="5,0,0,0">
                                                 <GroupBox Header="{DynamicResource LOCGameActivityCpuTemp}" Height="100" Width="250">
                                                     <Grid>
                                                         <Label Content="{DynamicResource LOCGameActivitySensorsID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,5,0,0" />
@@ -494,7 +494,7 @@
                                 <RowDefinition Height="30" />
                             </Grid.RowDefinitions>
 
-                            <Grid Grid.Column="0" Grid.Row="0">
+                            <Grid Grid.Column="0" Grid.Row="0" IsEnabled="{Binding EnableIntegrationInCustomTheme, Converter={StaticResource NegateConverter}}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto" />
                                     <ColumnDefinition Width="*" />
@@ -510,7 +510,7 @@
                                 <Label Content="{DynamicResource LOCGameActivityIntegrationGraphicShowLabelsOrdinates}" />
                             </CheckBox>
 
-                            <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" IsEnabled="{Binding EnableIntegrationInCustomTheme, Converter={StaticResource NegateConverter}}">
+                            <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto" />
                                     <ColumnDefinition Width="*" />
@@ -586,7 +586,7 @@
                                 <RowDefinition Height="30" />
                             </Grid.RowDefinitions>
 
-                            <Grid Grid.Column="0" Grid.Row="0">
+                            <Grid Grid.Column="0" Grid.Row="0" IsEnabled="{Binding EnableIntegrationInCustomTheme, Converter={StaticResource NegateConverter}}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto" />
                                     <ColumnDefinition Width="*" />
@@ -602,7 +602,7 @@
                                 <Label Content="{DynamicResource LOCGameActivityIntegrationGraphicShowLabelsOrdinates}" />
                             </CheckBox>
 
-                            <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" IsEnabled="{Binding EnableIntegrationInCustomTheme, Converter={StaticResource NegateConverter}}">
+                            <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto" />
                                     <ColumnDefinition Width="*" />
