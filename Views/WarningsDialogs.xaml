@@ -10,7 +10,7 @@
         <views:SetTextColor x:Key="SetTextColor" />
     </UserControl.Resources>
 
-    <StackPanel Orientation="Vertical">
+    <StackPanel Orientation="Vertical" Name="PART_Contener">
         <StackPanel Margin="10,10" MinHeight="20">
             <ItemsControl Name="icData">
                 <ItemsControl.ItemTemplate>
