@@ -212,6 +212,8 @@ namespace GameActivity
             // Total hours by source.
             if (isMonthSources)
             {
+                acmLabelsX.LabelsRotation = 0;
+
                 List<GameActivities> listGameActivities = GameActivity.PluginDatabase.GetListGameActivity();
                 for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
                 {
@@ -250,6 +252,8 @@ namespace GameActivity
             // Total hours by genres.
             else
             {
+                acmLabelsX.LabelsRotation = 170;
+
                 List<GameActivities> listGameActivities = GameActivity.PluginDatabase.GetListGameActivity();
                 for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
                 {
@@ -1043,7 +1047,9 @@ namespace GameActivity
             try
             {
                 if (tbMonthGenres.IsChecked == false && toggleButton.IsChecked == false)
+                {
                     toggleButton.IsChecked = true;
+                }
             }
             catch
             {
@@ -1071,7 +1077,9 @@ namespace GameActivity
             try
             {
                 if (tbMonthSources.IsChecked == false && toggleButton.IsChecked == false)
+                {
                     toggleButton.IsChecked = true;
+                }
             }
             catch
             {
