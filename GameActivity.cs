@@ -10,21 +10,15 @@ using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Timers;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using MSIAfterburnerNET.HM.Interop;
 using System.Reflection;
 using CommonPluginsShared;
 using System.Windows;
-using GameActivity.Views.Interface;
 using Playnite.SDK.Events;
 using GameActivity.Models;
-using System.Windows.Media;
-using System.Windows.Controls.Primitives;
 using GameActivity.Services;
-using System.Globalization;
 using GameActivity.Views;
 using System.Threading.Tasks;
-using System.Collections.Concurrent;
 
 namespace GameActivity
 {
