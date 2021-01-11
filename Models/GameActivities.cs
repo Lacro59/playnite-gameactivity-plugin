@@ -230,6 +230,39 @@ namespace GameActivity.Models
             DateTime dateLastSession = GetDateSelectedSession(dateSelected, title);
             return ItemsDetails.Get(dateLastSession);
         }
+
+        public bool HasActivity(int Year, int Month)
+        {
+            try
+            {
+                var els = Items.FindAll(x => x.DateSession <= new DateTime(Year, Month, DateTime.DaysInMonth(Year, Month))
+                    && x.DateSession >= new DateTime(Year, Month, 1));
+                return els.Count > 0;
+            }
+            catch
+            {
+
+            }
+
+            return false;
+        }
+
+        public List<string> GetListDateActivity()
+        {
+            List<string> Result = new List<string>();
+
+            foreach(Activity el in Items)
+            {
+                string DateString = ((DateTime)el.DateSession).ToString("yyyy-MM");
+
+                if (!Result.Contains(DateString))
+                {
+                    Result.Add(DateString);
+                }
+            }            
+
+            return Result;
+        }
         #endregion
 
 

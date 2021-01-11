@@ -51,6 +51,8 @@ namespace GameActivity
         public int variateurLogTemp = 0;
         public string titleChart;
 
+        private List<ListSource> FilterSourceItems = new List<ListSource>();
+        private List<string> SearchSources = new List<string>();
         public List<listGame> activityListByGame { get; set; }
 
         GameActivitySettings _settings { get; set; }
@@ -150,6 +152,10 @@ namespace GameActivity
                     {
                         getActivityByListGame();
                     });
+                    Application.Current.Dispatcher.BeginInvoke((Action)delegate
+                    {
+                        SetSourceFilter();
+                    });
                 }
                 catch (Exception ex)
                 {
@@ -195,6 +201,22 @@ namespace GameActivity
             ShowIcon = this._settings.showLauncherIcons;
             DataContext = this;
         }
+
+
+        private void SetSourceFilter()
+        {
+            var ListSourceName = activityListByGame.Select(x => x.listGameSourceName).Distinct();
+
+            foreach (var sourcename in ListSourceName)
+            {
+                string icon = TransformIcon.Get(sourcename) + " ";
+                FilterSourceItems.Add(new ListSource { SourceName = ((icon.Length == 2) ? icon : string.Empty) + sourcename, SourceNameShort = sourcename, IsCheck = false });
+            }
+
+            FilterSourceItems.Sort((x, y) => x.SourceNameShort.CompareTo(y.SourceNameShort));
+            FilterSource.ItemsSource = FilterSourceItems;
+        }
+
 
         #region Generate graphics and list
         /// <summary>
@@ -670,6 +692,16 @@ namespace GameActivity
                     {
                         string gameTitle = listGameActivities[iGame].Name;
 
+                        string sourceName = string.Empty;
+                        try
+                        {
+                            sourceName = listGameActivities[iGame].Items[0].SourceName;
+                        }
+                        catch (Exception ex)
+                        {
+                            Common.LogError(ex, "GameActivity", "Error to get SourceName");
+                        }
+
                         Activity lastSessionActivity = listGameActivities[iGame].GetLastSessionActivity();
                         long elapsedSeconds = lastSessionActivity.ElapsedSeconds;
                         DateTime dateSession = Convert.ToDateTime(lastSessionActivity.DateSession).ToLocalTime();
@@ -687,6 +719,9 @@ namespace GameActivity
                             listGameIcon = GameIcon,
                             listGameLastActivity = dateSession,
                             listGameElapsedSeconds = elapsedSeconds,
+                            listGameSourceName = sourceName,
+                            listGameSourceIcon = TransformIcon.Get(sourceName),
+                            listDateActivity = listGameActivities[iGame].GetListDateActivity(),
                             avgCPU = listGameActivities[iGame].avgCPU(listGameActivities[iGame].GetLastSession()) + "%",
                             avgGPU = listGameActivities[iGame].avgGPU(listGameActivities[iGame].GetLastSession()) + "%",
                             avgRAM = listGameActivities[iGame].avgRAM(listGameActivities[iGame].GetLastSession()) + "%",
@@ -718,26 +753,8 @@ namespace GameActivity
 
             lvGames.ItemsSource = activityListByGame;
 
-            // Sorting
-            try
-            {
-                var columnBinding = _lastHeaderClicked.Column.DisplayMemberBinding as Binding;
-                var sortBy = columnBinding?.Path.Path ?? _lastHeaderClicked.Column.Header as string;
-
-                // Specific sort with another column
-                if (_lastHeaderClicked.Name == "lvElapsedSecondsFormat")
-                {
-                    columnBinding = lvElapsedSeconds.Column.DisplayMemberBinding as Binding;
-                    sortBy = columnBinding?.Path.Path ?? _lastHeaderClicked.Column.Header as string;
-                }
-                Sort(sortBy, _lastDirection);
-            }
-            // If first view
-            catch
-            {
-                CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(lvGames.ItemsSource);
-                view.SortDescriptions.Add(new SortDescription("listGameLastActivity", ListSortDirection.Descending));
-            }
+            Sorting();
+            Filter();
         }
 
 
@@ -888,6 +905,11 @@ namespace GameActivity
                         columnBinding = lvElapsedSeconds.Column.DisplayMemberBinding as Binding;
                         sortBy = columnBinding?.Path.Path ?? headerClicked.Column.Header as string;
                     }
+                    if (headerClicked.Name == "lvSourceIcon")
+                    {
+                        columnBinding = lvSourceName.Column.DisplayMemberBinding as Binding;
+                        sortBy = columnBinding?.Path.Path ?? headerClicked.Column.Header as string;
+                    }
 
 
                     Sort(sortBy, direction);
@@ -929,6 +951,36 @@ namespace GameActivity
             SortDescription sd = new SortDescription(sortBy, direction);
             dataView.SortDescriptions.Add(sd);
             dataView.Refresh();
+        }
+
+        private void Sorting()
+        {
+            // Sorting
+            try
+            {
+                var columnBinding = _lastHeaderClicked.Column.DisplayMemberBinding as Binding;
+                var sortBy = columnBinding?.Path.Path ?? _lastHeaderClicked.Column.Header as string;
+
+                // Specific sort with another column
+                if (_lastHeaderClicked.Name == "lvElapsedSecondsFormat")
+                {
+                    columnBinding = lvElapsedSeconds.Column.DisplayMemberBinding as Binding;
+                    sortBy = columnBinding?.Path.Path ?? _lastHeaderClicked.Column.Header as string;
+                }
+                if (_lastHeaderClicked.Name == "lvSourceIcon")
+                {
+                    columnBinding = lvSourceName.Column.DisplayMemberBinding as Binding;
+                    sortBy = columnBinding?.Path.Path ?? _lastHeaderClicked.Column.Header as string;
+                }
+
+                Sort(sortBy, _lastDirection);
+            }
+            // If first view
+            catch
+            {
+                CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(lvGames.ItemsSource);
+                view.SortDescriptions.Add(new SortDescription("listGameLastActivity", ListSortDirection.Descending));
+            }
         }
         #endregion
 
@@ -977,6 +1029,9 @@ namespace GameActivity
             getActivityByDay(yearCurrent, monthCurrent);
 
             activityLabel.Content = new DateTime(yearCurrent, monthCurrent, 1).ToString("MMMM yyyy");
+
+
+            Filter();
         }
 
         private void Button_Click_NextMonth(object sender, RoutedEventArgs e)
@@ -991,6 +1046,9 @@ namespace GameActivity
             getActivityByDay(yearCurrent, monthCurrent);
 
             activityLabel.Content = new DateTime(yearCurrent, monthCurrent, 1).ToString("MMMM yyyy");
+
+
+            Filter();
         }
 
 
@@ -1159,6 +1217,84 @@ namespace GameActivity
                 getActivityForGamesLogGraphics(gameIDCurrent, LabelDataSelected, titleChart);
             }
         }
+
+
+
+        #region Filter
+        private void Filter()
+        {
+            lvGames.ItemsSource = null;
+
+            if (!TextboxSearch.Text.IsNullOrEmpty() && SearchSources.Count != 0)
+            {
+                lvGames.ItemsSource = activityListByGame.FindAll(
+                    x => x.listGameTitle.ToLower().IndexOf(TextboxSearch.Text) > -1 
+                         && SearchSources.Contains(x.listGameSourceName)
+                         && x.listDateActivity.Contains(yearCurrent + "-" + ((monthCurrent > 9) ? monthCurrent.ToString() : "0" + monthCurrent))
+                );
+                Sorting();
+                return;
+            }
+
+            if (!TextboxSearch.Text.IsNullOrEmpty())
+            {
+                lvGames.ItemsSource = activityListByGame.FindAll(
+                    x => x.listGameTitle.ToLower().IndexOf(TextboxSearch.Text) > -1
+                         && x.listDateActivity.Contains(yearCurrent + "-" + ((monthCurrent > 9) ? monthCurrent.ToString() : "0" + monthCurrent))
+                );
+                Sorting();
+                return;
+            }
+
+            if (SearchSources.Count != 0)
+            {
+                lvGames.ItemsSource = activityListByGame.FindAll(
+                    x => SearchSources.Contains(x.listGameSourceName) 
+                         && x.listDateActivity.Contains(yearCurrent + "-" + ((monthCurrent > 9) ? monthCurrent.ToString() : "0" + monthCurrent))
+                );
+                Sorting();
+                return;
+            }
+
+            lvGames.ItemsSource = activityListByGame.FindAll(x => x.listDateActivity.Contains(yearCurrent + "-" + ((monthCurrent > 9) ? monthCurrent.ToString() : "0" + monthCurrent)));
+            Sorting();
+        }
+
+
+        private void TextboxSearch_KeyUp(object sender, RoutedEventArgs e)
+        {
+            Filter();
+        }
+
+        private void ChkSource_Checked(object sender, RoutedEventArgs e)
+        {
+            FilterCbSource((CheckBox)sender);
+        }
+        private void ChkSource_Unchecked(object sender, RoutedEventArgs e)
+        {
+            FilterCbSource((CheckBox)sender);
+        }
+        private void FilterCbSource(CheckBox sender)
+        {
+            FilterSource.Text = string.Empty;
+
+            if ((bool)sender.IsChecked)
+            {
+                SearchSources.Add((string)sender.Tag);
+            }
+            else
+            {
+                SearchSources.Remove((string)sender.Tag);
+            }
+
+            if (SearchSources.Count != 0)
+            {
+                FilterSource.Text = String.Join(", ", SearchSources);
+            }
+            
+            Filter();
+        }
+        #endregion
     }
 
     // Listview games
@@ -1169,6 +1305,11 @@ namespace GameActivity
         public string listGameIcon { get; set; }
         public DateTime listGameLastActivity { get; set; }
         public long listGameElapsedSeconds { get; set; }
+
+        public List<string> listDateActivity { get; set; }
+
+        public string listGameSourceName { get; set; }
+        public string listGameSourceIcon { get; set; }
 
         public string avgCPU { get; set; }
         public string avgGPU { get; set; }
@@ -1184,6 +1325,13 @@ namespace GameActivity
         public string maxCPU { get; set; }
         public string maxGPU { get; set; }
         public string maxRAM { get; set; }
+    }
+    
+    public class ListSource
+    {
+        public string SourceName { get; set; }
+        public string SourceNameShort { get; set; }
+        public bool IsCheck { get; set; }
     }
 
     public class WeekStartEnd
