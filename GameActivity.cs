@@ -57,6 +57,16 @@ namespace GameActivity
             PluginDatabase = new ActivityDatabase(PlayniteApi, settings, this.GetPluginUserDataPath());
             PluginDatabase.InitializeDatabase();
 
+            // Temp
+            Task.Run(() =>
+            {
+                System.Threading.SpinWait.SpinUntil(() => PluginDatabase.IsLoaded, -1);
+
+
+                settings.tmp = true;
+                this.SavePluginSettings(settings);
+            });
+
             // Get plugin's location 
             pluginFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
@@ -252,7 +262,8 @@ namespace GameActivity
             GameActivitiesLog.Items.Add(new Activity
             {
                 DateSession = DateSession,
-                SourceID = game.SourceId
+                SourceID = game.SourceId,
+                PlatformID = game.PlatformId
             });
             GameActivitiesLog.ItemsDetails.Items.TryAdd(DateSession, new List<ActivityDetailsData>());
         }

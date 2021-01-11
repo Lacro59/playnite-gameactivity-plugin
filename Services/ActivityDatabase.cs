@@ -30,6 +30,26 @@ namespace GameActivity.Services
             GameSelectedData = new GameActivities();
             GetPluginTags();
 
+
+            // Temp
+            if (!PluginSettings.tmp)
+            {
+                foreach (GameActivities el in Database)
+                {
+                    var Game = _PlayniteApi.Database.Games.Get(el.Id);
+
+                    if (Game != null)
+                    {
+                        for (int i = 0; i < el.Items.Count; i++)
+                        {
+                            el.Items[i].PlatformID = Game.PlatformId;
+                        }
+
+                        Database.Update(el);
+                    }
+                }
+            }
+
             IsLoaded = true;
             return true;
         }

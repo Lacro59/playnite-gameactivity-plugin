@@ -10,14 +10,10 @@ namespace GameActivity.Models
     {
         private static readonly ILogger logger = LogManager.GetLogger();
 
-        /// <summary>
-        /// Gets or sets source of the game.
-        /// </summary>
         public Guid SourceID { get; set; }
+        public Guid PlatformID { get; set; }
 
-        /// <summary>
-        /// Get source name.
-        /// </summary>
+
         [JsonIgnore]
         public string SourceName
         {
@@ -31,7 +27,7 @@ namespace GameActivity.Models
 
                         if (Source == null)
                         {
-                            logger.Warn($"GameActivity - SourceName not find for {SourceID}");
+                            logger.Warn($"GameActivity - SourceName not find for {SourceID.ToString()} && {PlatformID.ToString()}");
                             return "Playnite";
                         }
 
@@ -40,9 +36,25 @@ namespace GameActivity.Models
                     catch (Exception ex)
                     {
 #if DEBUG
-                        Common.LogError(ex, "GameActivity [Ignored]", $"SourceId : {SourceID}");
+                        Common.LogError(ex, "GameActivity [Ignored]", $"SourceId : {SourceID.ToString()} && {PlatformID.ToString()}");
 #endif
                         return "Playnite";
+                    }
+                }
+
+                if (PlatformID != Guid.Parse("00000000-0000-0000-0000-000000000000"))
+                {
+                    var platform = GameActivity.DatabaseReference.Platforms.Get(PlatformID);
+
+                    if (platform != null)
+                    {
+                        switch (platform.Name.ToLower())
+                        {
+                            case "pc":
+                                return "Playnite";
+                            default:
+                                return platform.Name;
+                        }
                     }
                 }
 
@@ -50,14 +62,8 @@ namespace GameActivity.Models
             }
         }
 
-        /// <summary>
-        /// Gets or sets date game session.
-        /// </summary>
         public DateTime? DateSession { get; set; }
 
-        /// <summary>
-        /// Gets or sets played time in seconds.
-        /// </summary>
         public long ElapsedSeconds { get; set; } = 0;
     }
 }

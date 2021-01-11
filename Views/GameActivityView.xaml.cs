@@ -501,6 +501,16 @@ namespace GameActivity
                         {
                             if (datesPeriodes[iWeek].Monday <= dateSession && dateSession <= datesPeriodes[iWeek].Sunday)
                             {
+                                // Add source by platform
+                                if (activityByWeek[iWeek][sourceName] == null)
+                                {
+                                    activityByWeek1.Add(sourceName, 0);
+                                    activityByWeek2.Add(sourceName, 0);
+                                    activityByWeek3.Add(sourceName, 0);
+                                    activityByWeek4.Add(sourceName, 0);
+                                    activityByWeek5.Add(sourceName, 0);
+                                }
+
                                 activityByWeek[iWeek][sourceName] = (long)activityByWeek[iWeek][sourceName] + elapsedSeconds;
                             }
                         }

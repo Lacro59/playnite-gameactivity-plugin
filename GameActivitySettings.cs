@@ -11,6 +11,8 @@ namespace GameActivity
     {
         private readonly GameActivity plugin;
 
+        public bool tmp { get; set; } = false;
+
         public bool EnableCheckVersion { get; set; } = true;
         public bool MenuInExtensions { get; set; } = true;
         public bool IgnoreSettings { get; set; } = false;
@@ -92,6 +94,8 @@ namespace GameActivity
             // LoadPluginSettings returns null if not saved data is available.
             if (savedSettings != null)
             {
+                tmp = savedSettings.tmp;
+
                 EnableCheckVersion = savedSettings.EnableCheckVersion;
                 MenuInExtensions = savedSettings.MenuInExtensions;
 
