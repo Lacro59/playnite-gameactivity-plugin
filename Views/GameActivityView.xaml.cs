@@ -212,7 +212,14 @@ namespace GameActivity
             // Total hours by source.
             if (isMonthSources)
             {
-                acmLabelsX.LabelsRotation = 0;
+                if (_settings.showLauncherIcons)
+                {
+                    acmLabelsX.LabelsRotation = 0;
+                }
+                else
+                {
+                    acmLabelsX.LabelsRotation = 160;
+                }
 
                 List<GameActivities> listGameActivities = GameActivity.PluginDatabase.GetListGameActivity();
                 for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
@@ -252,7 +259,7 @@ namespace GameActivity
             // Total hours by genres.
             else
             {
-                acmLabelsX.LabelsRotation = 170;
+                acmLabelsX.LabelsRotation = 160;
 
                 List<GameActivities> listGameActivities = GameActivity.PluginDatabase.GetListGameActivity();
                 for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
@@ -307,7 +314,9 @@ namespace GameActivity
                 });
                 labels[compteur] = item.Key;
                 if (_settings.showLauncherIcons)
+                {
                     labels[compteur] = TransformIcon.Get(labels[compteur]);
+                }
                 compteur = compteur + 1;
             }
 
@@ -539,7 +548,9 @@ namespace GameActivity
                 {
                     labels[iSource] = (string)listNoDelete[iSource];
                     if (_settings.showLauncherIcons)
+                    {
                         labels[iSource] = TransformIcon.Get((string)listNoDelete[iSource]);
+                    }
 
                     Values = new ChartValues<CustomerForTime>() {
                             new CustomerForTime{Name = (string)listNoDelete[iSource], Values = (int)activityByWeek[0][(string)listNoDelete[iSource]]},
