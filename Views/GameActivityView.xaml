@@ -12,6 +12,7 @@
 
     <UserControl.Resources>
         <converters:LongToTimePlayedConverter x:Key="LongToTimePlayedConverter" />
+        <commonpluginsshared:DefaultIconConverter x:Key="DefaultIconConverter" />
         <commonpluginsshared:CompareValueConverter x:Key="CompareValueConverter" />
         <commonpluginsshared:LocalDateTimeConverter x:Key="LocalDateTimeConverter" />
     </UserControl.Resources>
@@ -32,7 +33,8 @@
         <Border Grid.Row="0" Name="PART_DataTop" BorderBrush="{DynamicResource NormalBorderBrush}" BorderThickness="{DynamicResource ControlBorderThickness}" Height="345">
             <Grid Margin="10">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="50" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="8" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
@@ -49,17 +51,20 @@
                         <ColumnDefinition Width="10" />
                         <ColumnDefinition Width="100" />
                     </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
 
-                    <ToggleButton Grid.Column="0" x:Name="tbMonthSources" IsChecked='True' Content="{DynamicResource LOCSourcesLabel}" Width="100" Height="40" FontSize="20" Click="ToggleButtonSources_Checked" />
-                    <ToggleButton Grid.Column="2" x:Name="tbMonthGenres" IsChecked='False' Content="{DynamicResource LOCGenresLabel}" Width="100" Height="40" FontSize="20" Click="ToggleButtonGenres_Checked" />
+                    <ToggleButton Grid.Column="0" x:Name="tbMonthSources" IsChecked='True' Content="{DynamicResource LOCSourcesLabel}" Width="100" FontSize="20" Click="ToggleButtonSources_Checked" />
+                    <ToggleButton Grid.Column="2" x:Name="tbMonthGenres" IsChecked='False' Content="{DynamicResource LOCGenresLabel}" Width="100" FontSize="20" Click="ToggleButtonGenres_Checked" />
 
-                    <Button Grid.Column="3" Content="" Height="35" Width="50" FontSize="20" Click="Button_Click_PrevMonth" FontFamily="Wingdings" />
-                    <Label Grid.Column="4" x:Name="activityLabel" Content="month data label" HorizontalAlignment="Center" VerticalAlignment="Center" Height="45" FontSize="24" FontWeight="Bold" MinWidth="50" />
-                    <Button Grid.Column="5" Content="" Height="35" Width="50" FontSize="20" Click="Button_Click_NextMonth" FontFamily="Wingdings" />
+                    <Button Grid.Column="3" Content="" Width="50" FontSize="20" Click="Button_Click_PrevMonth" FontFamily="Wingdings" />
+                    <Label Grid.Column="4" x:Name="activityLabel" Content="month data label" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" FontWeight="Bold" MinWidth="50" />
+                    <Button Grid.Column="5" Content="" Width="50" FontSize="20" Click="Button_Click_NextMonth" FontFamily="Wingdings" />
                 </Grid>
 
                 <!-- Graphics week -->
-                <Grid Grid.Row="1">
+                <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="10" />
@@ -215,7 +220,8 @@
                                 <GridViewColumnHeader Name="lvGameIcon" Content="{DynamicResource LOCGameIconTitle}"></GridViewColumnHeader>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Image HorizontalAlignment="Center" Height="32" VerticalAlignment="Center" Width="32" Source="{Binding listGameIcon}" />
+                                        <Image HorizontalAlignment="Center" Height="32" VerticalAlignment="Center" Width="32" 
+                                               Source="{Binding listGameIcon, Converter={StaticResource DefaultIconConverter}}" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
