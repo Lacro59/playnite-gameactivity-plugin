@@ -71,6 +71,7 @@ namespace GameActivity
 
             // Add plugin localization in application ressource.
             PluginLocalization.SetPluginLanguage(pluginFolder, api.ApplicationSettings.Language);
+
             // Add common in application ressource.
             Common.Load(pluginFolder);
             Common.SetEvent(PlayniteApi);
