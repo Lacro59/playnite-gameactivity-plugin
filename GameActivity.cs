@@ -62,7 +62,6 @@ namespace GameActivity
             {
                 System.Threading.SpinWait.SpinUntil(() => PluginDatabase.IsLoaded, -1);
 
-
                 settings.tmp = true;
                 this.SavePluginSettings(settings);
             });
@@ -80,11 +79,7 @@ namespace GameActivity
             if (settings.EnableCheckVersion)
             {
                 CheckVersion cv = new CheckVersion();
-
-                if (cv.Check("GameActivity", pluginFolder))
-                {
-                    cv.ShowNotification(api, "GameActivity - " + resources.GetString("LOCUpdaterWindowTitle"));
-                }
+                cv.Check("GameActivity", pluginFolder, api);
             }
 
             // Init ui interagration
