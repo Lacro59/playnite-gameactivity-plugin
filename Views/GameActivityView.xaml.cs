@@ -16,7 +16,6 @@ using CommonPluginsShared;
 using LiveCharts.Wpf;
 using LiveCharts.Configurations;
 using System.Globalization;
-using GameActivity.Views.Interface;
 using LiveCharts.Events;
 using System.Windows.Input;
 using Newtonsoft.Json;
@@ -24,6 +23,8 @@ using System.Threading.Tasks;
 using CommonPluginsPlaynite.Converters;
 using CommonPluginsControls.LiveChartsCommon;
 using CommonPluginsPlaynite.Common;
+using GameActivity.Services;
+using GameActivity.Controls;
 
 namespace GameActivity
 {
@@ -35,11 +36,13 @@ namespace GameActivity
         private static readonly ILogger logger = LogManager.GetLogger();
         private static IResourceProvider resources = new ResourceProvider();
 
+        private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
+
         private JArray listSources { get; set; }
         private DateTime LabelDataSelected { get; set; }
 
-        private GameActivityGameGraphicTime gameActivityGameGraphicTime;
-        private GameActivityGameGraphicLog gameActivityGameGraphicLog;
+        private GameActivityChartTime PART_GameActivityChartTime;
+        private GameActivityChartLog PART_GameActivityChartLog;
 
         private LongToTimePlayedConverter converter = new LongToTimePlayedConverter();
 
@@ -69,15 +72,15 @@ namespace GameActivity
         public readonly string pathExtentionData;
 
 
-        public GameActivityView(GameActivitySettings settings, IPlayniteAPI PlayniteApi, string pathExtData, Game GameSelected = null)
+        public GameActivityView(Game GameSelected = null)
         {
-            settings.IgnoreSettings = false;
+            PluginDatabase.PluginSettings.Settings.IgnoreSettings = false;
 
-            _PlayniteApi = PlayniteApi;
-            dbPlaynite = PlayniteApi.Database;
-            pathsPlaynite = PlayniteApi.Paths;
-            _settings = settings;
-            pathExtentionData = pathExtData;
+            _PlayniteApi = PluginDatabase.PlayniteApi;
+            dbPlaynite = PluginDatabase.PlayniteApi.Database;
+            pathsPlaynite = PluginDatabase.PlayniteApi.Paths;
+            _settings = PluginDatabase.PluginSettings.Settings;
+            pathExtentionData = PluginDatabase.Paths.PluginUserDataPath;
 
             // Set dates variables
             yearCurrent = DateTime.Now.Year;
@@ -86,28 +89,39 @@ namespace GameActivity
             // Initialization components
             InitializeComponent();
 
-            if (!settings.EnableLogging)
+            if (!PluginDatabase.PluginSettings.Settings.EnableLogging)
             {
                 ToggleButtonTime.Visibility = Visibility.Hidden;
                 ToggleButtonLog.Visibility = Visibility.Hidden;
             }
 
 
+            PART_GameActivityChartTime = new GameActivityChartTime();
+            PART_GameActivityChartTime.IgnoreSettings = true;
+            PART_GameActivityChartTime.GameSeriesDataClick += GameSeries_DataClick;
+            PART_GameActivityChartTime_Contener.Children.Add(PART_GameActivityChartTime);
+
+
+            PART_GameActivityChartLog = new GameActivityChartLog();
+            PART_GameActivityChartLog.IgnoreSettings = true;
+            PART_GameActivityChartLog_Contener.Children.Add(PART_GameActivityChartLog);
+
+
+
             // Block hidden column.
             lvElapsedSeconds.IsEnabled = false;
 
             // Add column if log details enable.
-            if (!settings.EnableLogging)
+            if (!PluginDatabase.PluginSettings.Settings.EnableLogging)
             {
                 GridView lvView = (GridView)lvGames.View;
 
+                lvView.Columns.RemoveAt(12);
+                lvView.Columns.RemoveAt(11);
                 lvView.Columns.RemoveAt(10);
                 lvView.Columns.RemoveAt(9);
                 lvView.Columns.RemoveAt(8);
                 lvView.Columns.RemoveAt(7);
-                lvView.Columns.RemoveAt(6);
-                lvView.Columns.RemoveAt(5);
-                lvView.Columns.RemoveAt(4);
 
                 lvGames.View = lvView;
             }
@@ -159,7 +173,7 @@ namespace GameActivity
                 }
                 catch (Exception ex)
                 {
-                    Common.LogError(ex, "GameActivity", "Error on task");
+                    Common.LogError(ex, false, "Error on task");
                 }
             })
             .ContinueWith(antecedent =>
@@ -274,7 +288,7 @@ namespace GameActivity
                     }
                     catch (Exception ex)
                     {
-                        Common.LogError(ex, "GameActivity", $"Error in getActivityByMonth({year}, {month}) with {listGameActivities[iGame].Name}");
+                        Common.LogError(ex, false, $"Error in getActivityByMonth({year}, {month}) with {listGameActivities[iGame].Name}");
                     }
                 }
             }
@@ -317,7 +331,7 @@ namespace GameActivity
                     }
                     catch (Exception ex)
                     {
-                        Common.LogError(ex, "GameActivity", $"Error in getActivityByMonth({year}, {month}) with {listGameActivities[iGame].Name}");
+                        Common.LogError(ex, false, $"Error in getActivityByMonth({year}, {month}) with {listGameActivities[iGame].Name}");
                     }
                 }
             }
@@ -699,7 +713,7 @@ namespace GameActivity
                         }
                         catch (Exception ex)
                         {
-                            Common.LogError(ex, "GameActivity", "Error to get SourceName");
+                            Common.LogError(ex, false, "Error to get SourceName");
                         }
 
                         Activity lastSessionActivity = listGameActivities[iGame].GetLastSessionActivity();
@@ -746,7 +760,7 @@ namespace GameActivity
                 }
                 catch (Exception ex)
                 {
-                    Common.LogError(ex, "GameActivity", $"Failed to load GameActivities from {gameID}");
+                    Common.LogError(ex, false, $"Failed to load GameActivities from {gameID}");
                     _PlayniteApi.Dialogs.ShowErrorMessage(ex.Message, $"GameActivity error on {gameID}");
                 }
             }
@@ -766,23 +780,12 @@ namespace GameActivity
         /// <param name="variateur"></param>
         public void getActivityForGamesTimeGraphics(string gameID, bool isNavigation = false)
         {
-            _settings.IgnoreSettings = true;
+            PART_GameActivityChartTime.GameContext = _PlayniteApi.Database.Games.Get(Guid.Parse(gameID));
+            PART_GameActivityChartTime.DisableAnimations = isNavigation;
+            PART_GameActivityChartTime.AxisVariator = variateurTime;
 
             if (!isNavigation)
             {
-                gameSeriesContener.Children.Clear();
-                gameActivityGameGraphicTime = new GameActivityGameGraphicTime(variateurTime);
-            }
-
-            gameActivityGameGraphicTime.GetActivityForGamesTimeGraphics(GameActivity.PluginDatabase.Get(Guid.Parse(gameID)), variateurTime);
-            gameActivityGameGraphicTime.DisableAnimations(isNavigation);
-
-            if (!isNavigation)
-            {
-                gameActivityGameGraphicTime.gameSeriesDataClick += new DataClickHandler(GameSeries_DataClick);
-                gameSeriesContener.Children.Add(gameActivityGameGraphicTime);
-                gameSeriesContener.UpdateLayout();
-
                 gameLabel.Content = resources.GetString("LOCGameActivityTimeTitle");
             }
         }
@@ -795,34 +798,14 @@ namespace GameActivity
         {
             GameActivities gameActivities = GameActivity.PluginDatabase.Get(Guid.Parse(gameID));
 
-            gameSeriesContener.Height = gameSeriesContener.ActualHeight;
-            if (!isNavigation)
-            {
-                gameSeriesContener.Children.Clear();
-                gameActivityGameGraphicLog = new GameActivityGameGraphicLog(dateSelected, title, variateurLog, false);
-            }
-            else
-            {
-                List<ActivityDetailsData> ActivitiesDetails = gameActivities.GetSessionActivityDetails(dateSelected, title);
-
-                if (variateurLog + ActivitiesDetails.Count < 10)
-                {
-                    variateurLog += 1;
-                }
-                if (variateurLog > 0)
-                {
-                    variateurLog = 0;
-                }
-            }
-
-            gameActivityGameGraphicLog.GetActivityForGamesLogGraphics(GameActivity.PluginDatabase.Get(Guid.Parse(gameID)), false,  dateSelected, title, variateurLog);
-            gameActivityGameGraphicLog.DisableAnimations(isNavigation);
+            PART_GameActivityChartLog.GameContext = _PlayniteApi.Database.Games.Get(Guid.Parse(gameID));
+            PART_GameActivityChartLog.DisableAnimations = isNavigation;
+            PART_GameActivityChartLog.DateSelected = dateSelected;
+            PART_GameActivityChartLog.TitleChart = title;
+            PART_GameActivityChartLog.AxisVariator = variateurLog;
 
             if (!isNavigation)
             {
-                gameSeriesContener.Children.Add(gameActivityGameGraphicLog);
-                gameSeriesContener.UpdateLayout();
-
                 if (dateSelected == null || dateSelected == default(DateTime))
                 {
                     gameLabel.Content = resources.GetString("LOCGameActivityLogTitle") + " ("
@@ -1170,13 +1153,17 @@ namespace GameActivity
         {
             if (isGameTime)
             {
-                variateurTime = variateurTime - 1;
-                getActivityForGamesTimeGraphics(gameIDCurrent, true);
+                PART_GameActivityChartTime.DisableAnimations = true;
+                PART_GameActivityChartTime.Prev();
             }
             else
             {
-                variateurLog = variateurLog - 1;
-                getActivityForGamesLogGraphics(gameIDCurrent, LabelDataSelected, titleChart, true);
+                //variateurLog = variateurLog - 1;
+                //getActivityForGamesLogGraphics(gameIDCurrent, LabelDataSelected, titleChart, true);
+                PART_GameActivityChartLog.DisableAnimations = true;
+                PART_GameActivityChartLog.DateSelected = LabelDataSelected;
+                PART_GameActivityChartLog.TitleChart = titleChart;
+                PART_GameActivityChartLog.Prev();
             }
         }
 
@@ -1184,13 +1171,17 @@ namespace GameActivity
         {
             if (isGameTime)
             {
-                variateurTime = variateurTime + 1;
-                getActivityForGamesTimeGraphics(gameIDCurrent, true);
+                PART_GameActivityChartTime.DisableAnimations = true;
+                PART_GameActivityChartTime.Next();
             }
             else
             {
-                variateurLog = variateurLog + 1;
-                getActivityForGamesLogGraphics(gameIDCurrent, LabelDataSelected, titleChart, true);
+                //variateurLog = variateurLog + 1;
+                //getActivityForGamesLogGraphics(gameIDCurrent, LabelDataSelected, titleChart, true);
+                PART_GameActivityChartLog.DisableAnimations = true;
+                PART_GameActivityChartLog.DateSelected = LabelDataSelected;
+                PART_GameActivityChartLog.TitleChart = titleChart;
+                PART_GameActivityChartLog.Next();
             }
         }
         #endregion
@@ -1212,7 +1203,7 @@ namespace GameActivity
                 ToggleButtonTime.IsChecked = false;
                 ToggleButtonLog.IsChecked = true;
 
-                gameSeries.HideTooltip();
+                //gameSeries.HideTooltip();
 
                 getActivityForGamesLogGraphics(gameIDCurrent, LabelDataSelected, titleChart);
             }

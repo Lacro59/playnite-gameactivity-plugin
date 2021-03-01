@@ -4,44 +4,72 @@ using CommonPluginsShared;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using GameActivity.Services;
+using Playnite.SDK.Data;
 
 namespace GameActivity
 {
-    public class GameActivitySettings : ISettings
+    public class GameActivitySettings : ObservableObject
     {
-        private readonly GameActivity plugin;
-
-        public bool tmp { get; set; } = false;
-
-        public bool EnableCheckVersion { get; set; } = true;
+        #region Settings variables
         public bool MenuInExtensions { get; set; } = true;
         public bool IgnoreSettings { get; set; } = false;
 
-        public bool EnableIntegrationInDescription { get; set; } = false;
-        public bool EnableIntegrationInDescriptionOnlyIcon { get; set; } = true;
-        public bool EnableIntegrationInDescriptionWithToggle { get; set; } = false;
 
         public bool EnableIntegrationButtonHeader { get; set; } = false;
 
-        public bool IntegrationShowTitle { get; set; } = true;
-        public bool IntegrationShowGraphic { get; set; } = true;
-        public bool IntegrationShowGraphicLog { get; set; } = true;
-        public bool IntegrationTopGameDetails { get; set; } = true;
-        public bool IntegrationToggleDetails { get; set; } = true;
+        private bool _EnableIntegrationButton { get; set; } = false;
+        public bool EnableIntegrationButton
+        {
+            get => _EnableIntegrationButton;
+            set
+            {
+                _EnableIntegrationButton = value;
+                OnPropertyChanged();
+            }
+        }
 
-        public bool EnableIntegrationInCustomTheme { get; set; } = false;
-
-        public double IntegrationShowGraphicHeight { get; set; } = 120;
-        public double IntegrationShowGraphicLogHeight { get; set; } = 120;
-        public bool EnableIntegrationAxisGraphic { get; set; } = true;
-        public bool EnableIntegrationOrdinatesGraphic { get; set; } = true;
-        public bool EnableIntegrationAxisGraphicLog { get; set; } = true;
-        public bool EnableIntegrationOrdinatesGraphicLog { get; set; } = true;
-        public int IntegrationGraphicOptionsCountAbscissa { get; set; } = 11;
-        public int IntegrationGraphicLogOptionsCountAbscissa { get; set; } = 11;
-
-        public bool EnableIntegrationButton { get; set; } = false;
         public bool EnableIntegrationButtonDetails { get; set; } = false;
+
+        private bool _EnableIntegrationChartTime { get; set; } = false;
+        public bool EnableIntegrationChartTime
+        {
+            get => _EnableIntegrationChartTime;
+            set
+            {
+                _EnableIntegrationChartTime = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool ChartTimeVisibleEmpty { get; set; } = true;
+        public double ChartTimeHeight { get; set; } = 120;
+        public bool ChartTimeAxis { get; set; } = true;
+        public bool ChartTimeOrdinates { get; set; } = true;
+        public int ChartTimeCountAbscissa { get; set; } = 11;
+
+        private bool _EnableIntegrationChartLog { get; set; } = false;
+        public bool EnableIntegrationChartLog
+        {
+            get => _EnableIntegrationChartLog;
+            set
+            {
+                _EnableIntegrationChartLog = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool ChartLogVisibleEmpty { get; set; } = true;
+        public double ChartLogHeight { get; set; } = 120;
+        public bool ChartLogAxis { get; set; } = true;
+        public bool ChartLogOrdinates { get; set; } = true;
+        public int ChartLogCountAbscissa { get; set; } = 11;
+
+
+
+
+
+
+
 
         public bool showLauncherIcons { get; set; } = false;
         public bool CumulPlaytimeSession { get; set; } = false;
@@ -71,22 +99,95 @@ namespace GameActivity
         public int MaxRamUsage { get; set; } = 0;
 
         public bool EnableIntegrationFS { get; set; } = false;
-
+        #endregion
 
         // Playnite serializes settings object to a JSON object and saves it as text file.
-        // If you want to exclude some property from being saved then use `JsonIgnore` ignore attribute.
-        [JsonIgnore]
-        public bool OptionThatWontBeSaved { get; set; } = false;
-
-        // Parameterless constructor must exist if you want to use LoadPluginSettings method.
-        public GameActivitySettings()
+        // If you want to exclude some property from being saved then use `JsonDontSerialize` ignore attribute.
+        #region Variables exposed
+        [DontSerialize]
+        private bool _HasData { get; set; } = false;
+        public bool HasData
         {
+            get => _HasData;
+            set
+            {
+                _HasData = value;
+                OnPropertyChanged();
+            }
         }
 
-        public GameActivitySettings(GameActivity plugin)
+        [DontSerialize]
+        private bool _HasDataLog { get; set; } = false;
+        public bool HasDataLog
+        {
+            get => _HasDataLog;
+            set
+            {
+                _HasDataLog = value;
+                OnPropertyChanged();
+            }
+        }
+
+        [DontSerialize]
+        private string _LastDateSession { get; set; } = string.Empty;
+        public string LastDateSession
+        {
+            get => _LastDateSession;
+            set
+            {
+                _LastDateSession = value;
+                OnPropertyChanged();
+            }
+        }
+
+        [DontSerialize]
+        private string _LastDateTimeSession { get; set; } = string.Empty;
+        public string LastDateTimeSession
+        {
+            get => _LastDateTimeSession;
+            set
+            {
+                _LastDateTimeSession = value;
+                OnPropertyChanged();
+            }
+        }
+
+        [DontSerialize]
+        private string _LastPlaytimeSession { get; set; } = string.Empty;
+        public string LastPlaytimeSession
+        {
+            get => _LastPlaytimeSession;
+            set
+            {
+                _LastPlaytimeSession = value;
+                OnPropertyChanged();
+            }
+        }
+        #endregion  
+    }
+
+
+    public class GameActivitySettingsViewModel : ObservableObject, ISettings
+    {
+        private readonly GameActivity Plugin;
+        private GameActivitySettings EditingClone { get; set; }
+
+        private GameActivitySettings _Settings;
+        public GameActivitySettings Settings
+        {
+            get => _Settings;
+            set
+            {
+                _Settings = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+        public GameActivitySettingsViewModel(GameActivity plugin)
         {
             // Injecting your plugin instance is required for Save/Load method because Playnite saves data to a location based on what plugin requested the operation.
-            this.plugin = plugin;
+            Plugin = plugin;
 
             // Load saved settings.
             var savedSettings = plugin.LoadPluginSettings<GameActivitySettings>();
@@ -94,101 +195,41 @@ namespace GameActivity
             // LoadPluginSettings returns null if not saved data is available.
             if (savedSettings != null)
             {
-                tmp = savedSettings.tmp;
-
-                EnableCheckVersion = savedSettings.EnableCheckVersion;
-                MenuInExtensions = savedSettings.MenuInExtensions;
-
-                EnableIntegrationInDescription = savedSettings.EnableIntegrationInDescription;
-                EnableIntegrationInDescriptionOnlyIcon = savedSettings.EnableIntegrationInDescriptionOnlyIcon;
-                EnableIntegrationInDescriptionWithToggle = savedSettings.EnableIntegrationInDescriptionWithToggle;
-
-                EnableIntegrationButtonHeader = savedSettings.EnableIntegrationButtonHeader;
-
-                IntegrationShowTitle = savedSettings.IntegrationShowTitle;
-                IntegrationShowGraphic = savedSettings.IntegrationShowGraphic;
-                IntegrationShowGraphicLog = savedSettings.IntegrationShowGraphicLog;
-                IntegrationTopGameDetails = savedSettings.IntegrationTopGameDetails;
-                IntegrationToggleDetails = savedSettings.IntegrationToggleDetails;
-
-                EnableIntegrationInCustomTheme = savedSettings.EnableIntegrationInCustomTheme;
-
-                IntegrationShowGraphicHeight = savedSettings.IntegrationShowGraphicHeight;
-                IntegrationShowGraphicLogHeight = savedSettings.IntegrationShowGraphicLogHeight;
-                EnableIntegrationAxisGraphic = savedSettings.EnableIntegrationAxisGraphic;
-                EnableIntegrationOrdinatesGraphic = savedSettings.EnableIntegrationOrdinatesGraphic;
-                EnableIntegrationAxisGraphicLog = savedSettings.EnableIntegrationAxisGraphicLog;
-                EnableIntegrationOrdinatesGraphicLog = savedSettings.EnableIntegrationOrdinatesGraphicLog;
-                IntegrationGraphicOptionsCountAbscissa = savedSettings.IntegrationGraphicOptionsCountAbscissa;
-                IntegrationGraphicLogOptionsCountAbscissa = savedSettings.IntegrationGraphicLogOptionsCountAbscissa;
-
-                EnableIntegrationButton = savedSettings.EnableIntegrationButton;
-                EnableIntegrationButtonDetails = savedSettings.EnableIntegrationButtonDetails;
-
-                showLauncherIcons = savedSettings.showLauncherIcons;
-                CumulPlaytimeSession = savedSettings.CumulPlaytimeSession;
-                CumulPlaytimeStore = savedSettings.CumulPlaytimeStore;
-
-                EnableLogging = savedSettings.EnableLogging;
-                TimeIntervalLogging = savedSettings.TimeIntervalLogging;
-
-                UseMsiAfterburner = savedSettings.UseMsiAfterburner;
-                UseHWiNFO = savedSettings.UseHWiNFO;
-
-                HWiNFO_gpu_sensorsID = savedSettings.HWiNFO_gpu_sensorsID;
-                HWiNFO_gpu_elementID = savedSettings.HWiNFO_gpu_elementID;
-                HWiNFO_fps_sensorsID = savedSettings.HWiNFO_fps_sensorsID;
-                HWiNFO_fps_elementID = savedSettings.HWiNFO_fps_elementID;
-                HWiNFO_gpuT_sensorsID = savedSettings.HWiNFO_gpuT_sensorsID;
-                HWiNFO_gpuT_elementID = savedSettings.HWiNFO_gpuT_elementID;
-                HWiNFO_cpuT_sensorsID = savedSettings.HWiNFO_cpuT_sensorsID;
-                HWiNFO_cpuT_elementID = savedSettings.HWiNFO_cpuT_elementID;
-
-                EnableWarning = savedSettings.EnableWarning;
-                MinFps = savedSettings.MinFps;
-                MaxCpuTemp = savedSettings.MaxCpuTemp;
-                MaxGpuTemp = savedSettings.MaxGpuTemp;
-                MaxCpuUsage = savedSettings.MaxCpuUsage;
-                MaxGpuUsage = savedSettings.MaxGpuUsage;
-                MaxRamUsage = savedSettings.MaxRamUsage;
-
-                EnableIntegrationFS = savedSettings.EnableIntegrationFS;
+                Settings = savedSettings;
+            }
+            else
+            {
+                Settings = new GameActivitySettings();
             }
         }
 
+        // Code executed when settings view is opened and user starts editing values.
         public void BeginEdit()
         {
-            // Code executed when settings view is opened and user starts editing values.
+            EditingClone = Serialization.GetClone(Settings);
         }
 
+        // Code executed when user decides to cancel any changes made since BeginEdit was called.
+        // This method should revert any changes made to Option1 and Option2.
         public void CancelEdit()
         {
-            // Code executed when user decides to cancel any changes made since BeginEdit was called.
-            // This method should revert any changes made to Option1 and Option2.
+            Settings = EditingClone;
         }
 
+        // Code executed when user decides to confirm changes made since BeginEdit was called.
+        // This method should save settings made to Option1 and Option2.
         public void EndEdit()
         {
-            // Code executed when user decides to confirm changes made since BeginEdit was called.
-            // This method should save settings made to Option1 and Option2.
-            plugin.SavePluginSettings(this);
-
-            PlayniteUiHelper.ResetToggle();
-            GameActivity.gameActivityUI.RemoveElements();
-            var TaskIntegrationUI = Task.Run(() =>
-            {
-                var dispatcherOp = GameActivity.gameActivityUI.AddElements();
-                dispatcherOp.Completed += (s, e) => { GameActivity.gameActivityUI.RefreshElements(ActivityDatabase.GameSelected); };
-            });
-
+            Plugin.SavePluginSettings(Settings);
             GameActivity.PluginDatabase.PluginSettings = this;
+            this.OnPropertyChanged();
         }
 
+        // Code execute when user decides to confirm changes made since BeginEdit was called.
+        // Executed before EndEdit is called and EndEdit is not called if false is returned.
+        // List of errors is presented to user if verification fails.
         public bool VerifySettings(out List<string> errors)
         {
-            // Code execute when user decides to confirm changes made since BeginEdit was called.
-            // Executed before EndEdit is called and EndEdit is not called if false is returned.
-            // List of errors is presented to user if verification fails.
             errors = new List<string>();
             return true;
         }

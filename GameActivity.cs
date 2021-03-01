@@ -15,26 +15,19 @@ using System.Reflection;
 using CommonPluginsShared;
 using System.Windows;
 using Playnite.SDK.Events;
+using GameActivity.Controls;
 using GameActivity.Models;
 using GameActivity.Services;
 using GameActivity.Views;
 using System.Threading.Tasks;
+using CommonPluginsShared.PlayniteExtended;
+using System.Windows.Media;
 
 namespace GameActivity
 {
-    public class GameActivity : Plugin
+    public class GameActivity : PluginExtended<GameActivitySettingsViewModel, ActivityDatabase>
     {
-        private static readonly ILogger logger = LogManager.GetLogger();
-        private static IResourceProvider resources = new ResourceProvider();
-
-        private GameActivitySettings settings { get; set; }
         public override Guid Id { get; } = Guid.Parse("afbb1a0d-04a1-4d0c-9afa-c6e42ca855b4");
-
-        public static IGameDatabase DatabaseReference;
-        public static string pluginFolder;
-        
-        public static ActivityDatabase PluginDatabase;
-        public static GameActivityUI gameActivityUI;
 
         // Variables timer function
         public Timer t { get; set; }
@@ -46,296 +39,47 @@ namespace GameActivity
 
         public GameActivity(IPlayniteAPI api) : base(api)
         {
-            settings = new GameActivitySettings(this);
-
-            DatabaseReference = PlayniteApi.Database;
-
             // Old database            
             oldToNew = new OldToNew(this.GetPluginUserDataPath());
 
-            // Loading plugin database 
-            PluginDatabase = new ActivityDatabase(PlayniteApi, settings, this.GetPluginUserDataPath());
-            PluginDatabase.InitializeDatabase();
-
-            // Temp
-            Task.Run(() =>
-            {
-                System.Threading.SpinWait.SpinUntil(() => PluginDatabase.IsLoaded, -1);
-
-                settings.tmp = true;
-                this.SavePluginSettings(settings);
-            });
-
-            // Get plugin's location 
-            pluginFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-
-            // Add plugin localization in application ressource.
-            PluginLocalization.SetPluginLanguage(pluginFolder, api.ApplicationSettings.Language);
-
-            // Add common in application ressource.
-            Common.Load(pluginFolder);
-            Common.SetEvent(PlayniteApi);
-
-            // Check version
-            if (settings.EnableCheckVersion)
-            {
-                CheckVersion cv = new CheckVersion();
-                cv.Check("GameActivity", pluginFolder, api);
-            }
-
-            // Init ui interagration
-            gameActivityUI = new GameActivityUI(api, settings, this.GetPluginUserDataPath());
-
             // Custom theme button
-            EventManager.RegisterClassHandler(typeof(Button), Button.ClickEvent, new RoutedEventHandler(gameActivityUI.OnCustomThemeButtonClick));
+            EventManager.RegisterClassHandler(typeof(Button), Button.ClickEvent, new RoutedEventHandler(OnCustomThemeButtonClick));
 
-            // Add event fullScreen
-            if (api.ApplicationInfo.Mode == ApplicationMode.Fullscreen)
+            // Custom elements integration
+            AddCustomElementSupport(new AddCustomElementSupportArgs
             {
-                EventManager.RegisterClassHandler(typeof(Button), Button.ClickEvent, new RoutedEventHandler(BtFullScreen_ClickEvent));
-            }
+                ElementList = new List<string> { "GameActivityButton", "GameActivityChartTime", "GameActivityChartLog" },
+                SourceName = "GameActivity",
+                SettingsRoot = $"{nameof(PluginSettings)}.{nameof(PluginSettings.Settings)}"
+            });
         }
 
 
         #region Custom event
-        private void BtFullScreen_ClickEvent(object sender, System.EventArgs e)
+        public void OnCustomThemeButtonClick(object sender, RoutedEventArgs e)
         {
+            string ButtonName = string.Empty;
             try
             {
-                if (((Button)sender).Name == "PART_ButtonDetails")
+                ButtonName = ((Button)sender).Name;
+                if (ButtonName == "PART_GaCustomButton")
                 {
-                    var TaskIntegrationUI = Task.Run(() =>
-                    {
-                        gameActivityUI.Initial();
-                        gameActivityUI.taskHelper.Check();
-                        var dispatcherOp = gameActivityUI.AddElementsFS();
-                        dispatcherOp.Completed += (s, ev) => { gameActivityUI.RefreshElements(ActivityDatabase.GameSelected); };
-                    });
+                    Common.LogDebug(true, $"OnCustomThemeButtonClick()");
+
+                    var ViewExtension = new GameActivityView(PluginDatabase.GameContext);
+                    Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGameActivity"), ViewExtension);
+                    windowExtension.ShowDialog();
                 }
             }
             catch (Exception ex)
             {
-                Common.LogError(ex, "GameActivity");
+                Common.LogError(ex, false);
             }
         }
-        #endregion
-
-
-        // To add new game menu items override GetGameMenuItems
-        public override List<GameMenuItem> GetGameMenuItems(GetGameMenuItemsArgs args)
-        {
-            Game GameMenu = args.Games.First();
-
-            List<GameMenuItem> gameMenuItems = new List<GameMenuItem>
-            {
-                // Show plugin view with all activities for all game in database with data of selected game
-                new GameMenuItem {
-                    //MenuSection = "",
-                    Icon = Path.Combine(pluginFolder, "icon.png"),
-                    Description = resources.GetString("LOCGameActivityViewGameActivity"),
-                    Action = (gameMenuItem) =>
-                    {
-                        DatabaseReference = PlayniteApi.Database;
-                        var ViewExtension = new GameActivityView(settings, PlayniteApi, this.GetPluginUserDataPath(), GameMenu);
-                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGameActivity"), ViewExtension);
-                        windowExtension.ShowDialog();
-                    }
-                }
-            };
-
-#if DEBUG
-            gameMenuItems.Add(new GameMenuItem
-            {
-                MenuSection = resources.GetString("LOCGameActivity"),
-                Description = "Test",
-                Action = (mainMenuItem) => { }
-            });
-#endif
-
-            return gameMenuItems;
-        }
-
-        // To add new main menu items override GetMainMenuItems
-        public override List<MainMenuItem> GetMainMenuItems(GetMainMenuItemsArgs args)
-        {
-            string MenuInExtensions = string.Empty;
-            if (settings.MenuInExtensions)
-            {
-                MenuInExtensions = "@";
-            }
-
-            List<MainMenuItem> mainMenuItems = new List<MainMenuItem>
-            {
-                // Show plugin view with all activities for all game in database
-                new MainMenuItem
-                {
-                    MenuSection = MenuInExtensions + resources.GetString("LOCGameActivity"),
-                    Description = resources.GetString("LOCGameActivityViewGamesActivities"),
-                    Action = (mainMenuItem) =>
-                    {
-                        DatabaseReference = PlayniteApi.Database;
-                        var ViewExtension = new GameActivityView(settings, PlayniteApi, this.GetPluginUserDataPath());
-                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGameActivity"), ViewExtension);
-                        windowExtension.ShowDialog();
-                    }
-                }
-            };
-
-#if DEBUG
-            mainMenuItems.Add(new MainMenuItem
-            {
-                MenuSection = MenuInExtensions + resources.GetString("LOCGameActivity"),
-                Description = "Test",
-                Action = (mainMenuItem) =>
-                {
-
-                }
-            });
-#endif
-
-            return mainMenuItems;
-        }
-
-
-        public override void OnGameSelected(GameSelectionEventArgs args)
-        {
-            // Old database
-            if (oldToNew.IsOld)
-            {
-                oldToNew.ConvertDB(PlayniteApi);
-            }
-
-            try
-            {
-                if (args.NewValue != null && args.NewValue.Count == 1)
-                {
-                    ActivityDatabase.GameSelected = args.NewValue[0];
-#if DEBUG
-                    logger.Debug($"GameActivity [Ignored] - OnGameSelected() - {ActivityDatabase.GameSelected.Name} - {ActivityDatabase.GameSelected.Id.ToString()}");
-#endif
-                    if (settings.EnableIntegrationInCustomTheme || settings.EnableIntegrationInDescription)
-                    {
-                        PlayniteUiHelper.ResetToggle();
-                        var TaskIntegrationUI = Task.Run(() =>
-                        {
-                            gameActivityUI.Initial();
-                            gameActivityUI.taskHelper.Check();
-                            var dispatcherOp = gameActivityUI.AddElements();
-                            if (dispatcherOp != null)
-                            {
-                                dispatcherOp.Completed += (s, e) => { gameActivityUI.RefreshElements(args.NewValue[0]); };
-                            }
-                        });
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.LogError(ex, "GameActivity");
-            }
-        }
-
-        // Add code to be executed when game is finished installing.
-        public override void OnGameInstalled(Game game)
-        {
-           
-        }
-
-        // Add code to be executed when game is started running.
-        public override void OnGameStarted(Game game)
-        {
-            PlayniteUiHelper.ResetToggle();
-
-            // start timer si log is enable.
-            if (settings.EnableLogging)
-            {
-                dataHWiNFO_start();
-            }
-
-            DateTime DateSession = DateTime.Now.ToUniversalTime();
-
-            GameActivitiesLog = PluginDatabase.Get(game);
-            GameActivitiesLog.Items.Add(new Activity
-            {
-                DateSession = DateSession,
-                SourceID = game.SourceId,
-                PlatformID = game.PlatformId
-            });
-            GameActivitiesLog.ItemsDetails.Items.TryAdd(DateSession, new List<ActivityDetailsData>());
-        }
-
-        // Add code to be executed when game is preparing to be started.
-        public override void OnGameStarting(Game game)
-        {
-            
-        }
-
-        // Add code to be executed when game is preparing to be started.
-        public override void OnGameStopped(Game game, long elapsedSeconds)
-        {
-            var TaskGameStopped = Task.Run(() =>
-            {
-                // Stop timer si HWiNFO log is enable.
-                if (settings.EnableLogging)
-                {
-                    dataHWiNFO_stop();
-                }
-
-                // Infos
-                GameActivitiesLog.GetLastSessionActivity().ElapsedSeconds = elapsedSeconds;
-                PluginDatabase.Update(GameActivitiesLog);
-
-                // Refresh integration interface
-                var TaskIntegrationUI = Task.Run(() =>
-                {
-                    var dispatcherOp = gameActivityUI.AddElements();
-                    dispatcherOp.Completed += (s, e) => { gameActivityUI.RefreshElements(ActivityDatabase.GameSelected); };
-                });
-            });
-        }
-
-        // Add code to be executed when game is uninstalled.
-        public override void OnGameUninstalled(Game game)
-        {
-            
-        }
-
-
-        // Add code to be executed when Playnite is initialized.
-        public override void OnApplicationStarted()
-        {
-            gameActivityUI.AddBtHeader();
-            CheckGoodForLogging(true);
-        }
-
-        // Add code to be executed when Playnite is shutting down.
-        public override void OnApplicationStopped()
-        {
-            
-        }
-
-
-        // Add code to be executed when library is updated.
-        public override void OnLibraryUpdated()
-        {
-            
-        }
-
-
-        public override ISettings GetSettings(bool firstRunSettings)
-        {
-            return settings;
-        }
-
-        public override UserControl GetSettingsView(bool firstRunSettings)
-        {
-            return new GameActivitySettingsView();
-        }
-
 
         private bool CheckGoodForLogging(bool WithNotification = false)
         {
-            if (settings.EnableLogging && settings.UseHWiNFO)
+            if (PluginSettings.Settings.EnableLogging && PluginSettings.Settings.UseHWiNFO)
             {
                 bool runHWiNFO = false;
                 Process[] pname = Process.GetProcessesByName("HWiNFO32");
@@ -373,7 +117,7 @@ namespace GameActivity
                 }
             }
 
-            if (settings.EnableLogging && settings.UseMsiAfterburner)
+            if (PluginSettings.Settings.EnableLogging && PluginSettings.Settings.UseMsiAfterburner)
             {
                 bool runMSI = false;
                 bool runRTSS = false;
@@ -424,12 +168,12 @@ namespace GameActivity
         /// <summary>
         /// Start the timer.
         /// </summary>
-        public void dataHWiNFO_start()
+        public void DataHWiNFO_start()
         {
             logger.Info("GameActivity - dataLogging_start");
 
             WarningsMessage = new List<WarningData>();
-            t = new Timer(settings.TimeIntervalLogging * 60000);
+            t = new Timer(PluginSettings.Settings.TimeIntervalLogging * 60000);
             t.AutoReset = true;
             t.Elapsed += new ElapsedEventHandler(OnTimedEvent);
             t.Start();
@@ -438,7 +182,7 @@ namespace GameActivity
         /// <summary>
         /// Stop the timer.
         /// </summary>
-        public void dataHWiNFO_stop()
+        public void DataHWiNFO_stop()
         {
             logger.Info("GameActivity - dataLogging_stop");
 
@@ -455,9 +199,9 @@ namespace GameActivity
                         WarningsMessage = new List<WarningData>();
                     });
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
-                    Common.LogError(ex, "GameActivity", $"Error on show WarningsMessage");
+                    Common.LogError(ex, false, $"Error on show WarningsMessage");
                 }
             }
 
@@ -480,7 +224,7 @@ namespace GameActivity
             int cpuTValue = PerfCounter.GetCpuTemperature();
 
 
-            if (settings.UseMsiAfterburner && CheckGoodForLogging())
+            if (PluginSettings.Settings.UseMsiAfterburner && CheckGoodForLogging())
             {
                 MSIAfterburnerNET.HM.HardwareMonitor MSIAfterburner = null;
 
@@ -490,10 +234,8 @@ namespace GameActivity
                 }
                 catch (Exception ex)
                 {
-                    logger.Warn("GameActivity - Fail initialize MSIAfterburnerNET");
-#if DEBUG
-                    Common.LogError(ex, "GameActivity [Ignored]", "Fail initialize MSIAfterburnerNET");
-#endif
+                    logger.Warn("Fail initialize MSIAfterburnerNET");
+                    Common.LogError(ex, true, "Fail initialize MSIAfterburnerNET");
                 }
 
                 if (MSIAfterburner != null)
@@ -504,10 +246,8 @@ namespace GameActivity
                     }
                     catch (Exception ex)
                     {
-                        logger.Warn("GameActivity - Fail get fpsValue");
-#if DEBUG
-                    Common.LogError(ex, "GameActivity [Ignored]", "Fail get fpsValue");
-#endif
+                        logger.Warn("Fail get fpsValue");
+                        Common.LogError(ex, true, "Fail get fpsValue");
                     }
 
                     try
@@ -519,10 +259,8 @@ namespace GameActivity
                     }
                     catch (Exception ex)
                     {
-                        logger.Warn("GameActivity - Fail get gpuValue");
-#if DEBUG
-                    Common.LogError(ex, "GameActivity [Ignored]", "Fail get gpuValue");
-#endif
+                        logger.Warn("Fail get gpuValue");
+                        Common.LogError(ex, true, "Fail get gpuValue");
                     }
 
                     try
@@ -534,10 +272,8 @@ namespace GameActivity
                     }
                     catch (Exception ex)
                     {
-                        logger.Warn("GameActivity - Fail get gpuTValue");
-#if DEBUG
-                    Common.LogError(ex, "GameActivity [Ignored]", "Fail get gpuTValue");
-#endif
+                        logger.Warn("Fail get gpuTValue");
+                        Common.LogError(ex, true, "Fail get gpuTValue");
                     }
 
                     try
@@ -549,14 +285,12 @@ namespace GameActivity
                     }
                     catch (Exception ex)
                     {
-                        logger.Warn("GameActivity - Fail get cpuTValue");
-#if DEBUG
-                    Common.LogError(ex, "GameActivity [Ignored]", "Fail get cpuTValue");
-#endif
+                        logger.Warn("Fail get cpuTValue");
+                        Common.LogError(ex, true, "Fail get cpuTValue");
                     }
                 }
             }
-            else if (settings.UseHWiNFO && CheckGoodForLogging())
+            else if (PluginSettings.Settings.UseHWiNFO && CheckGoodForLogging())
             {
                 HWiNFODumper HWinFO = null;
                 List<HWiNFODumper.JsonObj> dataHWinfo = null;
@@ -568,10 +302,8 @@ namespace GameActivity
                 }
                 catch (Exception ex)
                 {
-                    logger.Warn("GameActivity - Fail initialize HWiNFODumper");
-#if DEBUG
-                    Common.LogError(ex, "GameActivity [Ignored]", "Fail initialize HWiNFODumper");
-#endif
+                    logger.Error("Fail initialize HWiNFODumper");
+                    Common.LogError(ex, true, "Fail initialize HWiNFODumper");
                 }
 
                 if (HWinFO != null && dataHWinfo != null)
@@ -585,7 +317,7 @@ namespace GameActivity
                             string sensorsID = "0x" + ((uint)sensorItemsOBJ["szSensorSensorID"]).ToString("X");
 
                             // Find sensors fps
-                            if (sensorsID.ToLower() == settings.HWiNFO_fps_sensorsID.ToLower())
+                            if (sensorsID.ToLower() == PluginSettings.Settings.HWiNFO_fps_sensorsID.ToLower())
                             {
                                 // Find data fps
                                 foreach (var items in sensorItemsOBJ["sensors"])
@@ -593,7 +325,7 @@ namespace GameActivity
                                     JObject itemOBJ = JObject.Parse(JsonConvert.SerializeObject(items));
                                     string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
 
-                                    if (dataID.ToLower() == settings.HWiNFO_fps_elementID.ToLower())
+                                    if (dataID.ToLower() == PluginSettings.Settings.HWiNFO_fps_elementID.ToLower())
                                     {
                                         fpsValue = (int)Math.Round((Double)itemOBJ["Value"]);
                                     }
@@ -601,7 +333,7 @@ namespace GameActivity
                             }
 
                             // Find sensors gpu usage
-                            if (sensorsID.ToLower() == settings.HWiNFO_gpu_sensorsID.ToLower())
+                            if (sensorsID.ToLower() == PluginSettings.Settings.HWiNFO_gpu_sensorsID.ToLower())
                             {
                                 // Find data gpu
                                 foreach (var items in sensorItemsOBJ["sensors"])
@@ -609,7 +341,7 @@ namespace GameActivity
                                     JObject itemOBJ = JObject.Parse(JsonConvert.SerializeObject(items));
                                     string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
 
-                                    if (dataID.ToLower() == settings.HWiNFO_gpu_elementID.ToLower())
+                                    if (dataID.ToLower() == PluginSettings.Settings.HWiNFO_gpu_elementID.ToLower())
                                     {
                                         gpuValue = (int)Math.Round((Double)itemOBJ["Value"]);
                                     }
@@ -617,7 +349,7 @@ namespace GameActivity
                             }
 
                             // Find sensors gpu temp
-                            if (sensorsID.ToLower() == settings.HWiNFO_gpuT_sensorsID.ToLower())
+                            if (sensorsID.ToLower() == PluginSettings.Settings.HWiNFO_gpuT_sensorsID.ToLower())
                             {
                                 // Find data gpu
                                 foreach (var items in sensorItemsOBJ["sensors"])
@@ -625,7 +357,7 @@ namespace GameActivity
                                     JObject itemOBJ = JObject.Parse(JsonConvert.SerializeObject(items));
                                     string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
 
-                                    if (dataID.ToLower() == settings.HWiNFO_gpuT_elementID.ToLower())
+                                    if (dataID.ToLower() == PluginSettings.Settings.HWiNFO_gpuT_elementID.ToLower())
                                     {
                                         gpuTValue = (int)Math.Round((Double)itemOBJ["Value"]);
                                     }
@@ -633,7 +365,7 @@ namespace GameActivity
                             }
 
                             // Find sensors cpu temp
-                            if (sensorsID.ToLower() == settings.HWiNFO_cpuT_sensorsID.ToLower())
+                            if (sensorsID.ToLower() == PluginSettings.Settings.HWiNFO_cpuT_sensorsID.ToLower())
                             {
                                 // Find data gpu
                                 foreach (var items in sensorItemsOBJ["sensors"])
@@ -641,7 +373,7 @@ namespace GameActivity
                                     JObject itemOBJ = JObject.Parse(JsonConvert.SerializeObject(items));
                                     string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
 
-                                    if (dataID.ToLower() == settings.HWiNFO_cpuT_elementID.ToLower())
+                                    if (dataID.ToLower() == PluginSettings.Settings.HWiNFO_cpuT_elementID.ToLower())
                                     {
                                         cpuTValue = (int)Math.Round((Double)itemOBJ["Value"]);
                                     }
@@ -651,10 +383,8 @@ namespace GameActivity
                     }
                     catch (Exception ex)
                     {
-                        logger.Warn("GameActivity - Fail get HWiNFO");
-#if DEBUG
-                        Common.LogError(ex, "GameActivity [Ignored]", "Fail get HWiNFO");
-#endif
+                        logger.Warn("Fail get HWiNFO");
+                        Common.LogError(ex, true, "Fail get HWiNFO");
                     }
                 }
             }
@@ -668,29 +398,29 @@ namespace GameActivity
             bool WarningMaxGpuUsage = false;
             bool WarningMaxRamUsage = false;
 
-            if (settings.EnableWarning)
+            if (PluginSettings.Settings.EnableWarning)
             {
-                if (settings.MinFps != 0 && settings.MinFps >= fpsValue)
+                if (PluginSettings.Settings.MinFps != 0 && PluginSettings.Settings.MinFps >= fpsValue)
                 {
                     WarningMinFps = true;
                 }
-                if (settings.MaxCpuTemp != 0 && settings.MaxCpuTemp <= cpuTValue)
+                if (PluginSettings.Settings.MaxCpuTemp != 0 && PluginSettings.Settings.MaxCpuTemp <= cpuTValue)
                 {
                     WarningMaxCpuTemp = true;
                 }
-                if (settings.MaxGpuTemp != 0 && settings.MaxGpuTemp <= gpuTValue)
+                if (PluginSettings.Settings.MaxGpuTemp != 0 && PluginSettings.Settings.MaxGpuTemp <= gpuTValue)
                 {
                     WarningMaxGpuTemp = true;
                 }
-                if (settings.MaxCpuUsage != 0 && settings.MaxCpuUsage <= cpuValue)
+                if (PluginSettings.Settings.MaxCpuUsage != 0 && PluginSettings.Settings.MaxCpuUsage <= cpuValue)
                 {
                     WarningMaxCpuUsage = true;
                 }
-                if (settings.MaxGpuUsage != 0 && settings.MaxGpuUsage <= gpuValue)
+                if (PluginSettings.Settings.MaxGpuUsage != 0 && PluginSettings.Settings.MaxGpuUsage <= gpuValue)
                 {
                     WarningMaxGpuUsage = true;
                 }
-                if (settings.MaxRamUsage != 0 && settings.MaxRamUsage <= ramValue)
+                if (PluginSettings.Settings.MaxRamUsage != 0 && PluginSettings.Settings.MaxRamUsage <= ramValue)
                 {
                     WarningMaxRamUsage = true;
                 }
@@ -724,6 +454,251 @@ namespace GameActivity
                 GPUT = gpuTValue,
                 RAM = ramValue
             });
+        }
+        #endregion
+        #endregion
+
+
+        #region Theme integration
+        public override List<TopPanelItem> GetTopPanelItems()
+        {
+            if (PluginSettings.Settings.EnableIntegrationButtonHeader)
+            {
+                return new List<TopPanelItem>
+                {
+                    new TopPanelItem()
+                    {
+                        Icon = new TextBlock
+                        {
+                            Text = "",
+                            FontSize = 20,
+                            FontFamily = resources.GetResource("CommonFont") as FontFamily
+                        },
+                        ToolTip = resources.GetString("LOCGameActivityViewGamesActivities"),
+                        Action = () =>
+                        {
+                            var ViewExtension = new GameActivityView();
+                            Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGameActivity"), ViewExtension);
+                            windowExtension.ShowDialog();
+                        }
+                    }
+                };
+            }
+
+            return null;
+        }
+
+        // List custom controls
+        public override Control GetGameViewControl(GetGameViewControlArgs args)
+        {
+            if (args.Name == "GameActivityButton")
+            {
+                return new GameActivityButton();
+            }
+
+            if (args.Name == "GameActivityChartTime")
+            {
+                return new GameActivityChartTime { DisableAnimations = true };
+            }
+
+            if (args.Name == "GameActivityChartLog")
+            {
+                return new GameActivityChartLog { DisableAnimations = true };
+            }
+             
+            return null;
+        }
+        #endregion
+
+
+        #region Menus
+        // To add new game menu items override GetGameMenuItems
+        public override List<GameMenuItem> GetGameMenuItems(GetGameMenuItemsArgs args)
+        {
+            Game GameMenu = args.Games.First();
+
+            List<GameMenuItem> gameMenuItems = new List<GameMenuItem>
+            {
+                // Show plugin view with all activities for all game in database with data of selected game
+                new GameMenuItem {
+                    //MenuSection = "",
+                    Icon = Path.Combine(PluginFolder, "icon.png"),
+                    Description = resources.GetString("LOCGameActivityViewGameActivity"),
+                    Action = (gameMenuItem) =>
+                    {
+                        var ViewExtension = new GameActivityView(GameMenu);
+                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGameActivity"), ViewExtension);
+                        windowExtension.ShowDialog();
+                    }
+                }
+            };
+
+#if DEBUG
+            gameMenuItems.Add(new GameMenuItem
+            {
+                MenuSection = resources.GetString("LOCGameActivity"),
+                Description = "Test",
+                Action = (mainMenuItem) => { }
+            });
+#endif
+
+            return gameMenuItems;
+        }
+
+        // To add new main menu items override GetMainMenuItems
+        public override List<MainMenuItem> GetMainMenuItems(GetMainMenuItemsArgs args)
+        {
+            string MenuInExtensions = string.Empty;
+            if (PluginSettings.Settings.MenuInExtensions)
+            {
+                MenuInExtensions = "@";
+            }
+
+            List<MainMenuItem> mainMenuItems = new List<MainMenuItem>
+            {
+                // Show plugin view with all activities for all game in database
+                new MainMenuItem
+                {
+                    MenuSection = MenuInExtensions + resources.GetString("LOCGameActivity"),
+                    Description = resources.GetString("LOCGameActivityViewGamesActivities"),
+                    Action = (mainMenuItem) =>
+                    {
+                        var ViewExtension = new GameActivityView();
+                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGameActivity"), ViewExtension);
+                        windowExtension.ShowDialog();
+                    }
+                }
+            };
+
+#if DEBUG
+            mainMenuItems.Add(new MainMenuItem
+            {
+                MenuSection = MenuInExtensions + resources.GetString("LOCGameActivity"),
+                Description = "Test",
+                Action = (mainMenuItem) =>
+                {
+
+                }
+            });
+#endif
+
+            return mainMenuItems;
+        }
+        #endregion
+
+
+        #region Game event
+        public override void OnGameSelected(GameSelectionEventArgs args)
+        {
+            // Old database
+            if (oldToNew.IsOld)
+            {
+                oldToNew.ConvertDB(PlayniteApi);
+            }
+
+            try
+            {
+                if (args.NewValue != null && args.NewValue.Count == 1)
+                {
+                    PluginDatabase.GameContext = args.NewValue[0];
+                    PluginDatabase.SetThemesResources(PluginDatabase.GameContext);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex, false);
+            }
+        }
+
+        // Add code to be executed when game is finished installing.
+        public override void OnGameInstalled(Game game)
+        {
+           
+        }
+
+        // Add code to be executed when game is started running.
+        public override void OnGameStarted(Game game)
+        {
+            // start timer si log is enable.
+            if (PluginSettings.Settings.EnableLogging)
+            {
+                DataHWiNFO_start();
+            }
+
+            DateTime DateSession = DateTime.Now.ToUniversalTime();
+
+            GameActivitiesLog = PluginDatabase.Get(game);
+            GameActivitiesLog.Items.Add(new Activity
+            {
+                DateSession = DateSession,
+                SourceID = game.SourceId,
+                PlatformID = game.PlatformId
+            });
+            GameActivitiesLog.ItemsDetails.Items.TryAdd(DateSession, new List<ActivityDetailsData>());
+        }
+
+        // Add code to be executed when game is preparing to be started.
+        public override void OnGameStarting(Game game)
+        {
+            
+        }
+
+        // Add code to be executed when game is preparing to be started.
+        public override void OnGameStopped(Game game, long elapsedSeconds)
+        {
+            var TaskGameStopped = Task.Run(() =>
+            {
+                // Stop timer si HWiNFO log is enable.
+                if (PluginSettings.Settings.EnableLogging)
+                {
+                    DataHWiNFO_stop();
+                }
+
+                // Infos
+                GameActivitiesLog.GetLastSessionActivity().ElapsedSeconds = elapsedSeconds;
+                PluginDatabase.Update(GameActivitiesLog);
+            });
+        }
+
+        // Add code to be executed when game is uninstalled.
+        public override void OnGameUninstalled(Game game)
+        {
+            
+        }
+        #endregion
+
+
+        #region Application event
+        // Add code to be executed when Playnite is initialized.
+        public override void OnApplicationStarted()
+        {
+            CheckGoodForLogging(true);
+        }
+
+        // Add code to be executed when Playnite is shutting down.
+        public override void OnApplicationStopped()
+        {
+            
+        }
+        #endregion
+
+
+        // Add code to be executed when library is updated.
+        public override void OnLibraryUpdated()
+        {
+            
+        }
+
+
+        #region Settings
+        public override ISettings GetSettings(bool firstRunSettings)
+        {
+            return PluginSettings;
+        }
+
+        public override UserControl GetSettingsView(bool firstRunSettings)
+        {
+            return new GameActivitySettingsView();
         }
         #endregion
     }

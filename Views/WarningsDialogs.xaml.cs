@@ -50,7 +50,7 @@ namespace GameActivity.Views
             }
             catch (Exception ex)
             {
-                Common.LogError(ex, "GameActivity");
+                Common.LogError(ex, false);
             }
 
             return resources.GetResource("TextBrush");

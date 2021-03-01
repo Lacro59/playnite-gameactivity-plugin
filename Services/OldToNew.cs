@@ -101,11 +101,11 @@ namespace GameActivity.Services
                 }
                 catch (Exception ex)
                 {
-                    Common.LogError(ex, "GameActivity", $"Failed to load item from {objectFile} or {objectFileDetails}");
+                    Common.LogError(ex, false, $"Failed to load item from {objectFile} or {objectFileDetails}");
                 }
             });
 
-            logger.Info($"GameActivity - Find {Items.Count} items");
+            logger.Info($"Find {Items.Count} items");
         }
 
         public void ConvertDB(IPlayniteAPI PlayniteApi)
@@ -120,7 +120,7 @@ namespace GameActivity.Services
             {
                 Stopwatch stopWatch = new Stopwatch();
                 stopWatch.Start();
-                logger.Info($"GameActivity - ConvertDB()");
+                logger.Info($"ConvertDB()");
 
                 int Converted = 0;
 
@@ -169,20 +169,20 @@ namespace GameActivity.Services
                         }
                         else
                         {
-                            logger.Warn($"GameActivity - Game is deleted - {item.Key.ToString()}");
+                            logger.Warn($"Game is deleted - {item.Key.ToString()}");
                         }
                     }
                     catch (Exception ex)
                     {
-                        Common.LogError(ex, "GameActivity", $"Failed to load ConvertDB from {item.Key} - {item.Value.GameName}");
+                        Common.LogError(ex, false, $"Failed to load ConvertDB from {item.Key} - {item.Value.GameName}");
                     }
                 }
 
-                logger.Info($"GameActivity - Converted {Converted} / {Items.Count}");
+                logger.Info($"Converted {Converted} / {Items.Count}");
 
                 stopWatch.Stop();
                 TimeSpan ts = stopWatch.Elapsed;
-                logger.Info($"GameActivity - Migration - {String.Format("{0:00}:{1:00}.{2:00}", ts.Minutes, ts.Seconds, ts.Milliseconds / 10)}");
+                logger.Info($"Migration - {String.Format("{0:00}:{1:00}.{2:00}", ts.Minutes, ts.Seconds, ts.Milliseconds / 10)}");
             }, globalProgressOptions);
 
             IsOld = false;
@@ -193,6 +193,9 @@ namespace GameActivity.Services
     public class ActivityOld
     {
         private static readonly ILogger logger = LogManager.GetLogger();
+
+        private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
+
 
         /// <summary>
         /// Gets or sets source of the game.
@@ -211,12 +214,12 @@ namespace GameActivity.Services
                 {
                     try
                     {
-                        return GameActivity.DatabaseReference.Sources.Get(SourceID).Name;
+                        return PluginDatabase.PlayniteApi.Database.Sources.Get(SourceID).Name;
                     }
                     catch (Exception ex)
                     {
 #if DEBUG
-                        Common.LogError(ex, "GameActivity [Ignored]", $"Error in ActivitySourceName");
+                        Common.LogError(ex, true, $"Error in ActivitySourceName");
 #endif
                         return "Playnite";
                     }
@@ -346,6 +349,8 @@ namespace GameActivity.Services
     {
         private static readonly ILogger logger = LogManager.GetLogger();
 
+        private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
+
         public int CountActivities => Activities.Count;
         public int CountActivitiesDetails => ActivitiesDetails.Count;
 
@@ -378,9 +383,9 @@ namespace GameActivity.Services
         {
             get
             {
-                if (GameActivity.DatabaseReference.Games.Get(GameID) != null)
+                if (PluginDatabase.PlayniteApi.Database.Games.Get(GameID) != null)
                 {
-                    return GameActivity.DatabaseReference.Games.Get(GameID).Name;
+                    return PluginDatabase.PlayniteApi.Database.Games.Get(GameID).Name;
                 }
                 return null;
             }
@@ -392,7 +397,7 @@ namespace GameActivity.Services
         /// </summary>
         public string GameIcon
         {
-            get => GameActivity.DatabaseReference.Games.Get(GameID).Icon;
+            get => PluginDatabase.PlayniteApi.Database.Games.Get(GameID).Icon;
         }
 
         /// <summary>
@@ -400,7 +405,7 @@ namespace GameActivity.Services
         /// </summary>
         public List<Guid> genreIds
         {
-            get => GameActivity.DatabaseReference.Games.Get(GameID).GenreIds;
+            get => PluginDatabase.PlayniteApi.Database.Games.Get(GameID).GenreIds;
         }
 
         /// <summary>
@@ -412,9 +417,9 @@ namespace GameActivity.Services
             {
                 try
                 {
-                    if (genreIds?.Any() == true && GameActivity.DatabaseReference != null)
+                    if (genreIds?.Any() == true && PluginDatabase.PlayniteApi.Database != null)
                     {
-                        return new List<Genre>(GameActivity.DatabaseReference?.Genres.Where(a => genreIds.Contains(a.Id)).OrderBy(a => a.Name));
+                        return new List<Genre>(PluginDatabase.PlayniteApi.Database?.Genres.Where(a => genreIds.Contains(a.Id)).OrderBy(a => a.Name));
                     }
                 }
                 catch

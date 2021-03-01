@@ -7,6 +7,7 @@
              xmlns:commonpluginsshared="clr-namespace:CommonPluginsShared"
              xmlns:livechartscommon="clr-namespace:CommonPluginsControls.LiveChartsCommon"
              xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+             xmlns:controls="clr-namespace:GameActivity.Controls"
              mc:Ignorable="d" Height="740" Width="1280" 
              Background="{DynamicResource WindowBackgourndBrush}">
 
@@ -15,6 +16,7 @@
         <commonpluginsshared:DefaultIconConverter x:Key="DefaultIconConverter" />
         <commonpluginsshared:CompareValueConverter x:Key="CompareValueConverter" />
         <commonpluginsshared:LocalDateTimeConverter x:Key="LocalDateTimeConverter" />
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
 
     <Grid Margin="10,10,10,0">
@@ -410,23 +412,13 @@
                 <Button Grid.Column="4" Grid.Row="0" Content="" Height="25" Width="40" Click="Button_Click_nextGame" FontFamily="Wingdings"></Button>
 
 
-                <Grid Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="1" Name="gameSeriesContener" Height="295" VerticalAlignment="Bottom">
-                    <lvc:CartesianChart x:Name="gameSeries" LegendLocation="none" DataClick="GameSeries_DataClick">
-                        <lvc:CartesianChart.DataTooltip>
-                            <livechartscommon:CustomerToolTipForTime ShowIcon="{Binding ShowIcon}" />
-                        </lvc:CartesianChart.DataTooltip>
-
-                        <lvc:CartesianChart.AxisX>
-                            <lvc:Axis x:Name="gameLabelsX" ShowLabels="True" FontSize="10">
-                                <lvc:Axis.Separator>
-                                    <lvc:Separator Step="1" />
-                                </lvc:Axis.Separator>
-                            </lvc:Axis>
-                        </lvc:CartesianChart.AxisX>
-                        <lvc:CartesianChart.AxisY>
-                            <lvc:Axis x:Name="gameLabelsY"></lvc:Axis>
-                        </lvc:CartesianChart.AxisY>
-                    </lvc:CartesianChart>
+                <Grid Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="1" Name="gameSeriesContener" Height="295" 
+                      VerticalAlignment="Bottom">
+                    <Grid Name="PART_GameActivityChartTime_Contener" 
+                          Visibility="{Binding ElementName=ToggleButtonTime, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    
+                    <Grid Name="PART_GameActivityChartLog_Contener" 
+                          Visibility="{Binding ElementName=ToggleButtonLog, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}" /> 
                 </Grid>
             </Grid>
         </Grid>

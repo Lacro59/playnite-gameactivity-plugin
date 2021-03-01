@@ -3,12 +3,15 @@ using Playnite.SDK;
 using CommonPluginsShared;
 using System;
 using System.Collections.Generic;
+using GameActivity.Services;
 
 namespace GameActivity.Models
 {
     public class Activity : ObservableObject
     {
         private static readonly ILogger logger = LogManager.GetLogger();
+
+        private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
 
         public Guid SourceID { get; set; }
         public Guid PlatformID { get; set; }
@@ -23,11 +26,11 @@ namespace GameActivity.Models
                 {
                     try
                     {
-                        var Source = GameActivity.DatabaseReference.Sources.Get(SourceID);
+                        var Source = PluginDatabase.PlayniteApi.Database.Sources.Get(SourceID);
 
                         if (Source == null)
                         {
-                            logger.Warn($"GameActivity - SourceName not find for {SourceID.ToString()} && {PlatformID.ToString()}");
+                            logger.Warn($"SourceName not find for {SourceID.ToString()} && {PlatformID.ToString()}");
                             return "Playnite";
                         }
 
@@ -36,7 +39,7 @@ namespace GameActivity.Models
                     catch (Exception ex)
                     {
 #if DEBUG
-                        Common.LogError(ex, "GameActivity [Ignored]", $"SourceId : {SourceID.ToString()} && {PlatformID.ToString()}");
+                        Common.LogError(ex, true, $"SourceId: {SourceID.ToString()} && {PlatformID.ToString()}");
 #endif
                         return "Playnite";
                     }
@@ -44,7 +47,7 @@ namespace GameActivity.Models
 
                 if (PlatformID != Guid.Parse("00000000-0000-0000-0000-000000000000"))
                 {
-                    var platform = GameActivity.DatabaseReference.Platforms.Get(PlatformID);
+                    var platform = PluginDatabase.PlayniteApi.Database.Platforms.Get(PlatformID);
 
                     if (platform != null)
                     {

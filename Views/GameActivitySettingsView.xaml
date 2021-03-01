@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:converters="clr-namespace:CommonPluginsPlaynite.Converters"
+             xmlns:playnitecontrols="clr-namespace:CommonPluginsControls.PlayniteControls"
              mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -15,16 +16,16 @@
             <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
                 <DockPanel Margin="0,20,0,0">
                     <StackPanel DockPanel.Dock="Top">
-                        <CheckBox IsChecked="{Binding MenuInExtensions}" VerticalAlignment="Center">
+                        <CheckBox IsChecked="{Binding Settings.MenuInExtensions}" VerticalAlignment="Center">
                             <Label Content="{DynamicResource LOCCommonMenuInExtensions}" />
                         </CheckBox>
-                        <CheckBox IsChecked="{Binding showLauncherIcons}" Margin="0,15,0,0">
+                        <CheckBox IsChecked="{Binding Settings.showLauncherIcons}" Margin="0,15,0,0">
                             <Label Content="{DynamicResource LOCCommonIconStore}" />
                         </CheckBox>
-                        <CheckBox IsChecked="{Binding CumulPlaytimeSession}" Margin="0,15,0,0">
+                        <CheckBox IsChecked="{Binding Settings.CumulPlaytimeSession}" Margin="0,15,0,0">
                             <Label Content="{DynamicResource LOCGameActivityCumulPlaytimeSession}" />
                         </CheckBox>
-                        <CheckBox IsChecked="{Binding CumulPlaytimeStore}" Margin="0,15,0,0">
+                        <CheckBox IsChecked="{Binding Settings.CumulPlaytimeStore}" Margin="0,15,0,0">
                             <Label Content="{DynamicResource LOCGameActivityCumulPlaytimeStore}" />
                         </CheckBox>
                     </StackPanel>
@@ -32,7 +33,7 @@
                     <DockPanel DockPanel.Dock="Bottom" Margin="0,15,0,0">
                         <DockPanel DockPanel.Dock="Top">
                             <StackPanel DockPanel.Dock="Top">
-                                <CheckBox x:Name="cbLogging" IsChecked="{Binding EnableLogging}">
+                                <CheckBox x:Name="cbLogging" IsChecked="{Binding Settings.EnableLogging}">
                                     <CheckBox.ToolTip>
                                         <ToolTip Content="{DynamicResource LOCGameActivityEnableLoggingToolTip}"></ToolTip>
                                     </CheckBox.ToolTip>
@@ -50,14 +51,14 @@
 
                             <StackPanel DockPanel.Dock="Bottom" Margin="0,15,0,0" Orientation="Horizontal" IsEnabled="{Binding ElementName=cbLogging, Path=IsChecked, TargetNullValue=false}">
                                 <Label Content="{DynamicResource LOCGameActivityTimeInterval}" Width="130" />
-                                <Slider x:Name="hwSlider" Width="230" Minimum="1" Value="{Binding TimeIntervalLogging}" ValueChanged="Slider_ValueChanged" />
+                                <Slider x:Name="hwSlider" Width="230" Minimum="1" Value="{Binding Settings.TimeIntervalLogging}" ValueChanged="Slider_ValueChanged" />
                                 <Label x:Name="labelIntervalLabel_text" Content="{DynamicResource LOCGameActivityTimeLabel}" Width="150" Margin="20,0,0,0" />
                             </StackPanel>
                         </DockPanel>
 
                         <DockPanel DockPanel.Dock="Bottom" Margin="0,15,0,0">
                             <StackPanel DockPanel.Dock="Top">
-                                <CheckBox x:Name="cbWarning" IsChecked="{Binding EnableWarning}">
+                                <CheckBox x:Name="cbWarning" IsChecked="{Binding Settings.EnableWarning}">
                                     <CheckBox.ToolTip>
                                         <ToolTip Content="{DynamicResource LOCGameActivityEnableWarningToolTip}"></ToolTip>
                                     </CheckBox.ToolTip>
@@ -71,17 +72,17 @@
 
                                 <StackPanel Orientation="Horizontal" Margin="15,0,0,0">
                                     <Label Content="{DynamicResource LOCGameActivityMaxCpuUsage}" Height="23" Width="135" />
-                                    <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding MaxCpuUsage}" Width="35" PreviewTextInput="NumberValidationTextBox" MaxLength="3" />
+                                    <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.MaxCpuUsage}" Width="35" PreviewTextInput="NumberValidationTextBox" MaxLength="3" />
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Margin="15,0,0,0">
                                     <Label Content="{DynamicResource LOCGameActivityMaxGpuUsage}" Height="23" Width="135" />
-                                    <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding MaxGpuUsage}" Width="35" PreviewTextInput="NumberValidationTextBox" MaxLength="3" />
+                                    <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.MaxGpuUsage}" Width="35" PreviewTextInput="NumberValidationTextBox" MaxLength="3" />
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Margin="15,0,0,0">
                                     <Label Content="{DynamicResource LOCGameActivityMaxRamUsage}" Height="23" Width="135" />
-                                    <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding MaxRamUsage}" Width="35" PreviewTextInput="NumberValidationTextBox" MaxLength="3" />
+                                    <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.MaxRamUsage}" Width="35" PreviewTextInput="NumberValidationTextBox" MaxLength="3" />
                                 </StackPanel>
 
                             </StackPanel>
@@ -91,17 +92,17 @@
 
                                 <StackPanel Orientation="Horizontal" Margin="15,0,0,0">
                                     <Label Content="{DynamicResource LOCGameActivityMaxCpuTemp}" Height="23" Width="135" />
-                                    <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding MaxCpuTemp}" Width="35" PreviewTextInput="NumberValidationTextBox" MaxLength="3" />
+                                    <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.MaxCpuTemp}" Width="35" PreviewTextInput="NumberValidationTextBox" MaxLength="3" />
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Margin="15,0,0,0">
                                     <Label Content="{DynamicResource LOCGameActivityMaxGpuTemp}" Height="23" Width="135" />
-                                    <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding MaxGpuTemp}" Width="35" PreviewTextInput="NumberValidationTextBox" MaxLength="3" />
+                                    <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.MaxGpuTemp}" Width="35" PreviewTextInput="NumberValidationTextBox" MaxLength="3" />
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Margin="15,0,0,0">
                                     <Label Content="{DynamicResource LOCGameActivityMinFps}" Height="23" Width="135" />
-                                    <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding MinFps}" Width="35" PreviewTextInput="NumberValidationTextBox" MaxLength="3" />
+                                    <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.MinFps}" Width="35" PreviewTextInput="NumberValidationTextBox" MaxLength="3" />
                                 </StackPanel>
 
                             </StackPanel>
@@ -110,7 +111,7 @@
                         <DockPanel DockPanel.Dock="Bottom" Margin="0,15,0,0" IsEnabled="{Binding ElementName=cbLogging, Path=IsChecked, TargetNullValue=false}">
                             <DockPanel DockPanel.Dock="Top">
                                 <StackPanel DockPanel.Dock="Left" Width="280">
-                                    <CheckBox Name="cbUseMsiAfterburner" IsChecked="{Binding UseMsiAfterburner}" Click="CbLogging_Click">
+                                    <CheckBox Name="cbUseMsiAfterburner" IsChecked="{Binding Settings.UseMsiAfterburner}" Click="CbLogging_Click">
                                         <TextBlock>
                                                 <Hyperlink Tag="https://fr.msi.com/page/afterburner" Click="Hyperlink_Click">
                                                     <Run Text="{DynamicResource LOCGameActivityUseMsiAfterburner}" />
@@ -120,7 +121,7 @@
                                 </StackPanel>
 
                                 <StackPanel DockPanel.Dock="Right">
-                                    <CheckBox Name="cbUseHWiNFO" IsChecked="{Binding UseHWiNFO}" Click="CbLogging_Click">
+                                    <CheckBox Name="cbUseHWiNFO" IsChecked="{Binding Settings.UseHWiNFO}" Click="CbLogging_Click">
                                         <TextBlock>
                                                 <Hyperlink Tag="https://www.hwinfo.com/" Click="Hyperlink_Click">
                                                     <Run Text="{DynamicResource LOCGameActivityUseHWiNFO}" />
@@ -138,10 +139,10 @@
                                                 <GroupBox Header="{DynamicResource LOCGameActivityGpuUsage}" Height="100" Width="250">
                                                     <Grid>
                                                         <Label Content="{DynamicResource LOCGameActivitySensorsID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,5,0,0" />
-                                                        <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding HWiNFO_gpu_sensorsID}" VerticalAlignment="Top" Width="100" Margin="110,5,0,0" />
+                                                        <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.HWiNFO_gpu_sensorsID}" VerticalAlignment="Top" Width="100" Margin="110,5,0,0" />
 
                                                         <Label Content="{DynamicResource LOCGameActivityElementID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,35,0,0" />
-                                                        <TextBox HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="{Binding HWiNFO_gpu_elementID}" VerticalAlignment="Top" Width="100" Margin="110,35,0,0" />
+                                                        <TextBox HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="{Binding Settings.HWiNFO_gpu_elementID}" VerticalAlignment="Top" Width="100" Margin="110,35,0,0" />
                                                     </Grid>
                                                 </GroupBox>
                                             </StackPanel>
@@ -150,10 +151,10 @@
                                                 <GroupBox Header="{DynamicResource LOCGameActivityFps}" Height="100" Width="250">
                                                     <Grid>
                                                         <Label Content="{DynamicResource LOCGameActivitySensorsID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,5,0,0" />
-                                                        <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding HWiNFO_fps_sensorsID}" VerticalAlignment="Top" Width="100" Margin="110,5,0,0" />
+                                                        <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.HWiNFO_fps_sensorsID}" VerticalAlignment="Top" Width="100" Margin="110,5,0,0" />
 
                                                         <Label Content="{DynamicResource LOCGameActivityElementID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,35,0,0" />
-                                                        <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding HWiNFO_fps_elementID}" VerticalAlignment="Top" Width="100" Margin="110,35,0,0" />
+                                                        <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.HWiNFO_fps_elementID}" VerticalAlignment="Top" Width="100" Margin="110,35,0,0" />
                                                     </Grid>
                                                 </GroupBox>
                                             </StackPanel>
@@ -164,10 +165,10 @@
                                                 <GroupBox Header="{DynamicResource LOCGameActivityGpuTemp}" Height="100" Width="250">
                                                     <Grid>
                                                         <Label Content="{DynamicResource LOCGameActivitySensorsID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,5,0,0" />
-                                                        <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding HWiNFO_gpuT_sensorsID}" VerticalAlignment="Top" Width="100" Margin="110,5,0,0" />
+                                                        <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.HWiNFO_gpuT_sensorsID}" VerticalAlignment="Top" Width="100" Margin="110,5,0,0" />
 
                                                         <Label Content="{DynamicResource LOCGameActivityElementID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,35,0,0" />
-                                                        <TextBox HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="{Binding HWiNFO_gpuT_elementID}" VerticalAlignment="Top" Width="100" Margin="110,35,0,0" />
+                                                        <TextBox HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="{Binding Settings.HWiNFO_gpuT_elementID}" VerticalAlignment="Top" Width="100" Margin="110,35,0,0" />
                                                     </Grid>
                                                 </GroupBox>
                                             </StackPanel>
@@ -176,10 +177,10 @@
                                                 <GroupBox Header="{DynamicResource LOCGameActivityCpuTemp}" Height="100" Width="250">
                                                     <Grid>
                                                         <Label Content="{DynamicResource LOCGameActivitySensorsID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,5,0,0" />
-                                                        <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding HWiNFO_cpuT_sensorsID}" VerticalAlignment="Top" Width="100" Margin="110,5,0,0" />
+                                                        <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.HWiNFO_cpuT_sensorsID}" VerticalAlignment="Top" Width="100" Margin="110,5,0,0" />
 
                                                         <Label Content="{DynamicResource LOCGameActivityElementID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,35,0,0" />
-                                                        <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding HWiNFO_cpuT_elementID}" VerticalAlignment="Top" Width="100" Margin="110,35,0,0" />
+                                                        <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.HWiNFO_cpuT_elementID}" VerticalAlignment="Top" Width="100" Margin="110,35,0,0" />
                                                     </Grid>
                                                 </GroupBox>
                                             </StackPanel>
@@ -196,7 +197,168 @@
         <TabItem Header="{DynamicResource LOCCommonIntegration}">
             <ScrollViewer>
                 <StackPanel Margin="0,10,0,0">
+                    <Label Content="{DynamicResource LOCCommonControlsAvailable}" />
+                    <Separator Margin="0,0,0,10" />
                     <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+
+                        <CheckBox Grid.Row="0" VerticalAlignment="Center" Grid.ColumnSpan="3"
+                                  IsChecked="{Binding Settings.EnableIntegrationButtonHeader}">
+                            <Label Content="{DynamicResource LOCCommonIntegrationButtonHeader}" />
+                        </CheckBox>
+
+                        <CheckBox Grid.Row="2" VerticalAlignment="Center" 
+                                  IsChecked="{Binding Settings.EnableIntegrationButton}" 
+                                  Name="PART_IntegrationButton">
+                            <Label Content="{DynamicResource LOCCommonControlsPluginButtonShow}" />
+                        </CheckBox>
+
+                        <CheckBox Grid.Row="4" VerticalAlignment="Center"
+                                  IsChecked="{Binding Settings.EnableIntegrationChartTime}"
+                                  Name="PART_IntegrationChartTime">
+                            <Label Content="{DynamicResource LOCGameActivityIntegrationChartTime}" />
+                        </CheckBox>
+
+                        <CheckBox Grid.Row="6" VerticalAlignment="Center"
+                                  IsChecked="{Binding Settings.EnableIntegrationChartLog}"
+                                  Name="PART_IntegrationChartLog">
+                            <Label Content="{DynamicResource LOCGameActivityIntegrationChartLog}" />
+                        </CheckBox>
+                    </Grid>
+
+                    <GroupBox IsEnabled="{Binding ElementName=PART_IntegrationButton, Path=IsChecked}" 
+                              Margin="0,30,0,0"
+                              Header="{DynamicResource LOCCommonIntegrationButtonOptions}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="10" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="35" />
+                            </Grid.RowDefinitions>
+
+                            <CheckBox Grid.Column="0" Grid.Row="0" IsChecked="{Binding Settings.EnableIntegrationButtonDetails}" 
+                                  VerticalAlignment="Center">
+                                <Label Content="{DynamicResource LOCCommonIntegrationButtonDetails}" />
+                            </CheckBox>
+                        </Grid>
+                    </GroupBox>
+
+                    <GroupBox IsEnabled="{Binding ElementName=PART_IntegrationChartTime, Path=IsChecked}" 
+                              Margin="0,10,0,0" 
+                              Header="{DynamicResource LOCCommonIntegrationChartOptions}">
+                        <Grid Margin="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="30" />
+                            </Grid.RowDefinitions>
+
+                            <DockPanel Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">
+                                <Label DockPanel.Dock="Left" Content="{DynamicResource LOCHeight}" />
+                                <playnitecontrols:NumericBox DockPanel.Dock="Right" Width="40"
+                                                             LongValue="{Binding Settings.ChartTimeHeight}" />
+                            </DockPanel>
+                            <CheckBox Grid.Column="2" Grid.Row="0" IsChecked="{Binding Settings.ChartTimeVisibleEmpty}" 
+                                  VerticalAlignment="Center">
+                                <Label Content="{DynamicResource LOCCommonControlsVisibleNoData}" />
+                            </CheckBox>
+
+                            <CheckBox Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" 
+                                      IsChecked="{Binding Settings.ChartTimeAxis}">
+                                <Label Content="{DynamicResource LOCGameActivityIntegrationGraphicShowLabels}" />
+                            </CheckBox>
+                            <CheckBox Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" 
+                                      IsChecked="{Binding Settings.ChartTimeOrdinates}">
+                                <Label Content="{DynamicResource LOCGameActivityIntegrationGraphicShowLabelsOrdinates}" />
+                            </CheckBox>
+
+                            <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="15" />
+                                </Grid.ColumnDefinitions>
+                                <Label Content="{DynamicResource LOCGameActivityIntegrationGraphicOptionsCountAbscissa}" 
+                                       Grid.Column="0" />
+                                <Slider Minimum="3" Maximum="30" Value="{Binding Settings.ChartTimeCountAbscissa}" 
+                                        IsSnapToTickEnabled="True" TickFrequency="1" AutoToolTipPlacement="TopLeft"
+                                        ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Value}"
+                                        Grid.Column="1" VerticalAlignment="Center" Margin="20,0,5,0" Name="sCountAbscissa" />
+                                <Label Grid.Column="2" Content="{Binding ElementName=sCountAbscissa, Path=Value}" HorizontalAlignment="Center" />
+                            </Grid>
+                        </Grid>
+                    </GroupBox>
+
+                    <GroupBox IsEnabled="{Binding ElementName=PART_IntegrationChartLog, Path=IsChecked}" 
+                              Margin="0,10,0,0" 
+                              Header="{DynamicResource LOCCommonIntegrationChartOptions}">
+                        <Grid Margin="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="30" />
+                            </Grid.RowDefinitions>
+
+                            <DockPanel Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">
+                                <Label DockPanel.Dock="Left" Content="{DynamicResource LOCHeight}" />
+                                <playnitecontrols:NumericBox DockPanel.Dock="Right" Width="40"
+                                                             LongValue="{Binding Settings.ChartLogHeight}" />
+                            </DockPanel>
+                            <CheckBox Grid.Column="2" Grid.Row="0" IsChecked="{Binding Settings.ChartLogVisibleEmpty}" 
+                                  VerticalAlignment="Center">
+                                <Label Content="{DynamicResource LOCCommonControlsVisibleNoData}" />
+                            </CheckBox>
+
+                            <CheckBox Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" 
+                                      IsChecked="{Binding Settings.ChartLogAxis}">
+                                <Label Content="{DynamicResource LOCGameActivityIntegrationGraphicShowLabels}" />
+                            </CheckBox>
+                            <CheckBox Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" 
+                                      IsChecked="{Binding Settings.ChartLogOrdinates}">
+                                <Label Content="{DynamicResource LOCGameActivityIntegrationGraphicShowLabelsOrdinates}" />
+                            </CheckBox>
+
+                            <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="15" />
+                                </Grid.ColumnDefinitions>
+                                <Label Content="{DynamicResource LOCGameActivityIntegrationGraphicOptionsCountAbscissa}" 
+                                       Grid.Column="0" />
+                                <Slider Minimum="3" Maximum="30" Value="{Binding Settings.ChartLogCountAbscissa}" 
+                                        IsSnapToTickEnabled="True" TickFrequency="1" AutoToolTipPlacement="TopLeft"
+                                        ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Value}"
+                                        Grid.Column="1" VerticalAlignment="Center" Margin="20,0,5,0" Name="sCountAbscissaLog" />
+                                <Label Grid.Column="2" Content="{Binding ElementName=sCountAbscissaLog, Path=Value}" HorizontalAlignment="Center" />
+                            </Grid>
+                        </Grid>
+                    </GroupBox>
+
+
+
+
+
+                    <Grid Margin="0,50,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
@@ -210,23 +372,20 @@
                         </Grid.RowDefinitions>
 
                         <!--Button-->
-                        <CheckBox Grid.Column="0" Grid.Row="0" VerticalAlignment="Center"
-                                  IsChecked="{Binding EnableIntegrationButtonHeader}">
-                            <Label Content="{DynamicResource LOCCommonIntegrationButtonHeader}" />
-                        </CheckBox>
+      
 
-                        <CheckBox Grid.Column="0" Grid.Row="2" IsChecked="{Binding EnableIntegrationInCustomTheme}" 
+                        <CheckBox Grid.Column="0" Grid.Row="2" IsChecked="{Binding Settings.EnableIntegrationInCustomTheme}" 
                                   Name="Ga_IntegrationInCustomTheme" Click="Checkbox_Click" VerticalAlignment="Center">
                             <Label Content="{DynamicResource LOCCommonIntegrationInCustomTheme}" />
                         </CheckBox>
 
                         <CheckBox Grid.Column="0" Grid.Row="4" VerticalAlignment="Center"
-                                  IsChecked="{Binding EnableIntegrationButton}" Name="Ga_IntegrationInButton" Click="Checkbox_Click">
+                                  IsChecked="{Binding Settings.EnableIntegrationButton}" Name="Ga_IntegrationInButton" Click="Checkbox_Click">
                             <Label Content="{DynamicResource LOCCommonIntegrationButton}" />
                         </CheckBox>
 
                         <!--Type integration-->
-                        <CheckBox Grid.Column="0" Grid.Row="5" IsChecked="{Binding EnableIntegrationInDescription}" Name="Ga_IntegrationInDescription" Margin="0,5,0,0" Click="Checkbox_Click" VerticalAlignment="Center">
+                        <CheckBox Grid.Column="0" Grid.Row="5" IsChecked="{Binding Settings.EnableIntegrationInDescription}" Name="Ga_IntegrationInDescription" Margin="0,5,0,0" Click="Checkbox_Click" VerticalAlignment="Center">
                             <Label Content="{DynamicResource LOCCommonIntegrationInDescription}" />
                         </CheckBox>
                     </Grid>
@@ -283,18 +442,18 @@
                                 <RowDefinition Height="30" />
                             </Grid.RowDefinitions>
 
-                            <CheckBox Grid.Column="0" Grid.Row="0" IsChecked="{Binding EnableIntegrationInDescriptionOnlyIcon}" Name="Ga_IntegrationInDescriptionOnlyIcon" 
+                            <CheckBox Grid.Column="0" Grid.Row="0" IsChecked="{Binding Settings.EnableIntegrationInDescriptionOnlyIcon}" Name="Ga_IntegrationInDescriptionOnlyIcon" 
                                           Click="Checkbox_Click" VerticalAlignment="Center">
                                 <Label Content="{DynamicResource LOCCommonIntegrationButtonOnlyIcon}" />
                             </CheckBox>
-                            <CheckBox Grid.Column="2" Grid.Row="0" IsChecked="{Binding EnableIntegrationButtonDetails}" Name="Ga_IntegrationInButtonDetails" 
+                            <CheckBox Grid.Column="2" Grid.Row="0" IsChecked="{Binding Settings.EnableIntegrationButtonDetails}" Name="Ga_IntegrationInButtonDetails" 
                                           Click="Checkbox_Click" VerticalAlignment="Center">
                                 <Label Content="{DynamicResource LOCCommonIntegrationButtonDetails}" />
                             </CheckBox>
 
-                            <CheckBox Grid.Column="0" Grid.Row="1" IsChecked="{Binding EnableIntegrationInDescriptionWithToggle}" Name="Ga_IntegrationInDescriptionWithToggle" 
+                            <CheckBox Grid.Column="0" Grid.Row="1" IsChecked="{Binding Settings.EnableIntegrationInDescriptionWithToggle}" Name="Ga_IntegrationInDescriptionWithToggle" 
                                           Click="Checkbox_Click" VerticalAlignment="Center"
-                                          IsEnabled="{Binding EnableIntegrationInDescription}">
+                                          IsEnabled="{Binding Settings.EnableIntegrationInDescription}">
                                 <Label Content="{DynamicResource LOCCommonIntegrationButtonIsToggle}" />
                             </CheckBox>
                         </Grid>
@@ -340,8 +499,8 @@
 
                                     <MultiDataTrigger>
                                         <MultiDataTrigger.Conditions>
-                                            <Condition Binding="{Binding EnableIntegrationButton}" Value="True" />
-                                            <Condition Binding="{Binding EnableIntegrationInDescriptionWithToggle}" Value="True" />
+                                            <Condition Binding="{Binding Settings.EnableIntegrationButton}" Value="True" />
+                                            <Condition Binding="{Binding Settings.EnableIntegrationInDescriptionWithToggle}" Value="True" />
                                         </MultiDataTrigger.Conditions>
                                         <Setter Property="IsEnabled" Value="False" />
                                     </MultiDataTrigger>
@@ -359,10 +518,10 @@
                                 <RowDefinition Height="30" />
                             </Grid.RowDefinitions>
 
-                            <CheckBox Grid.Column="0" Grid.Row="0" IsChecked="{Binding IntegrationShowTitle}" IsEnabled="{Binding ElementName=Ga_IntegrationInDescription, Path=IsChecked}" VerticalAlignment="Center">
+                            <CheckBox Grid.Column="0" Grid.Row="0" IsChecked="{Binding Settings.IntegrationShowTitle}" IsEnabled="{Binding ElementName=Ga_IntegrationInDescription, Path=IsChecked}" VerticalAlignment="Center">
                                 <Label Content="{DynamicResource LOCCommonIntegrationShowTitle}" />
                             </CheckBox>
-                            <CheckBox Grid.Column="2" Grid.Row="0" IsChecked="{Binding IntegrationTopGameDetails}" IsEnabled="{Binding ElementName=Ga_IntegrationInDescription, Path=IsChecked}" VerticalAlignment="Center">
+                            <CheckBox Grid.Column="2" Grid.Row="0" IsChecked="{Binding Settings.IntegrationTopGameDetails}" IsEnabled="{Binding ElementName=Ga_IntegrationInDescription, Path=IsChecked}" VerticalAlignment="Center">
                                 <Label Content="{DynamicResource LOCCommonIntegrationTopGameDetails}" />
                             </CheckBox>
                         </Grid>
@@ -425,106 +584,15 @@
                                 <RowDefinition Height="30" />
                             </Grid.RowDefinitions>
 
-                            <CheckBox Grid.Column="0" Grid.Row="0" IsChecked="{Binding IntegrationShowGraphic}" VerticalAlignment="Center">
+                            <CheckBox Grid.Column="0" Grid.Row="0" IsChecked="{Binding Settings.IntegrationShowGraphic}" VerticalAlignment="Center">
                                 <Label Content="{DynamicResource LOCGameActivityIntegrationShowGraphic}" />
                             </CheckBox>
-                            <CheckBox Grid.Column="2" Grid.Row="0" IsChecked="{Binding IntegrationShowGraphicLog}" VerticalAlignment="Center">
+                            <CheckBox Grid.Column="2" Grid.Row="0" IsChecked="{Binding Settings.IntegrationShowGraphicLog}" VerticalAlignment="Center">
                                 <Label Content="{DynamicResource LOCGameActivityIntegrationShowGraphicLog}" />
                             </CheckBox>
                         </Grid>
                     </GroupBox>
 
-                    <GroupBox Header="{DynamicResource LOCGameActivityIntegrationGraphicOptions}" Margin="0,10,0,0">
-                        <GroupBox.Style>
-                            <Style TargetType="GroupBox">
-                                <Setter Property="SnapsToDevicePixels" Value="True" />
-                                <Setter Property="BorderBrush" Value="{DynamicResource NormalBorderBrush}" />
-                                <Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}" />
-                                <Setter Property="BorderThickness" Value="{DynamicResource ControlBorderThickness}" />
-                                <Setter Property="Padding" Value="5" />
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="{x:Type GroupBox}">
-                                            <Border DockPanel.Dock="Top"
-                                                    BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}"
-                                                    CornerRadius="{DynamicResource ControlCornerRadius}">
-                                                <DockPanel>
-                                                    <Border DockPanel.Dock="Top" BorderThickness="0,0,0,1" BorderBrush="{DynamicResource NormalBrush}" >
-                                                        <TextBlock Style="{DynamicResource BaseTextBlockStyle}" Margin="{TemplateBinding Padding}">
-                                                                <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" ContentSource="Header"
-                                                                                  RecognizesAccessKey="True" />
-                                                        </TextBlock>
-                                                    </Border>
-                                                    <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" DockPanel.Dock="Top"
-                                                             Margin="{TemplateBinding Padding}" />
-                                                </DockPanel>
-                                            </Border>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-
-                                <Setter Property="IsEnabled" Value="False" />
-                                <Style.Triggers>
-                                    <MultiDataTrigger>
-                                        <MultiDataTrigger.Conditions>
-                                            <Condition Binding="{Binding ElementName=Ga_IntegrationInDescription, Path=IsChecked}" Value="True" />
-                                            <Condition Binding="{Binding IntegrationShowGraphic}" Value="True" />
-                                        </MultiDataTrigger.Conditions>
-                                        <Setter Property="IsEnabled" Value="True" />
-                                    </MultiDataTrigger>
-                                    <MultiDataTrigger>
-                                        <MultiDataTrigger.Conditions>
-                                            <Condition Binding="{Binding ElementName=Ga_IntegrationInCustomTheme, Path=IsChecked}" Value="True" />
-                                            <Condition Binding="{Binding IntegrationShowGraphic}" Value="True" />
-                                        </MultiDataTrigger.Conditions>
-                                        <Setter Property="IsEnabled" Value="True" />
-                                    </MultiDataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </GroupBox.Style>
-
-                        <Grid Margin="5">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="30" />
-                                <RowDefinition Height="30" />
-                                <RowDefinition Height="30" />
-                            </Grid.RowDefinitions>
-
-                            <Grid Grid.Column="0" Grid.Row="0" IsEnabled="{Binding EnableIntegrationInCustomTheme, Converter={StaticResource NegateConverter}}">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <Label Content="{DynamicResource LOCHeight}" Grid.Column="0" />
-                                <TextBox Text="{Binding IntegrationShowGraphicHeight, FallbackValue=200}" Width="40" Grid.Column="1" VerticalAlignment="Center" />
-                            </Grid>
-
-                            <CheckBox Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" IsChecked="{Binding EnableIntegrationAxisGraphic}">
-                                <Label Content="{DynamicResource LOCGameActivityIntegrationGraphicShowLabels}" />
-                            </CheckBox>
-                            <CheckBox Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" IsChecked="{Binding EnableIntegrationOrdinatesGraphic}">
-                                <Label Content="{DynamicResource LOCGameActivityIntegrationGraphicShowLabelsOrdinates}" />
-                            </CheckBox>
-
-                            <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="15" />
-                                </Grid.ColumnDefinitions>
-                                <Label Content="{DynamicResource LOCGameActivityIntegrationGraphicOptionsCountAbscissa}" Grid.Column="0" />
-                                <Slider Minimum="3" Maximum="30" Value="{Binding IntegrationGraphicOptionsCountAbscissa}" 
-                                            IsSnapToTickEnabled="True" TickFrequency="1" AutoToolTipPlacement="TopLeft"
-                                            ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Value}"
-                                            Grid.Column="1" VerticalAlignment="Center" Margin="20,0,5,0" Name="sCountAbscissa" />
-                                <Label Grid.Column="2" Content="{Binding ElementName=sCountAbscissa, Path=Value}" HorizontalAlignment="Center" />
-                            </Grid>
-                        </Grid>
-                    </GroupBox>
 
                     <GroupBox Header="{DynamicResource LOCGameActivityIntegrationGraphicLogOptions}" Margin="0,10,0,0">
                         <GroupBox.Style>
@@ -560,14 +628,14 @@
                                     <MultiDataTrigger>
                                         <MultiDataTrigger.Conditions>
                                             <Condition Binding="{Binding ElementName=Ga_IntegrationInDescription, Path=IsChecked}" Value="True" />
-                                            <Condition Binding="{Binding IntegrationShowGraphicLog}" Value="True" />
+                                            <Condition Binding="{Binding Settings.IntegrationShowGraphicLog}" Value="True" />
                                         </MultiDataTrigger.Conditions>
                                         <Setter Property="IsEnabled" Value="True" />
                                     </MultiDataTrigger>
                                     <MultiDataTrigger>
                                         <MultiDataTrigger.Conditions>
                                             <Condition Binding="{Binding ElementName=Ga_IntegrationInCustomTheme, Path=IsChecked}" Value="True" />
-                                            <Condition Binding="{Binding IntegrationShowGraphicLog}" Value="True" />
+                                            <Condition Binding="{Binding Settings.IntegrationShowGraphicLog}" Value="True" />
                                         </MultiDataTrigger.Conditions>
                                         <Setter Property="IsEnabled" Value="True" />
                                     </MultiDataTrigger>
@@ -586,19 +654,19 @@
                                 <RowDefinition Height="30" />
                             </Grid.RowDefinitions>
 
-                            <Grid Grid.Column="0" Grid.Row="0" IsEnabled="{Binding EnableIntegrationInCustomTheme, Converter={StaticResource NegateConverter}}">
+                            <Grid Grid.Column="0" Grid.Row="0" IsEnabled="{Binding Settings.EnableIntegrationInCustomTheme, Converter={StaticResource NegateConverter}}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <Label Content="{DynamicResource LOCHeight}" Grid.Column="0" />
-                                <TextBox Text="{Binding IntegrationShowGraphicLogHeight, FallbackValue=200}" Width="40" Grid.Column="1" VerticalAlignment="Center" />
+                                <TextBox Text="{Binding Settings.IntegrationShowGraphicLogHeight, FallbackValue=200}" Width="40" Grid.Column="1" VerticalAlignment="Center" />
                             </Grid>
 
-                            <CheckBox Grid.Column="0" Grid.Row="1"  VerticalAlignment="Center" IsChecked="{Binding EnableIntegrationAxisGraphicLog}">
+                            <CheckBox Grid.Column="0" Grid.Row="1"  VerticalAlignment="Center" IsChecked="{Binding Settings.EnableIntegrationAxisGraphicLog}">
                                 <Label Content="{DynamicResource LOCGameActivityIntegrationGraphicShowLabels}" />
                             </CheckBox>
-                            <CheckBox Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" IsChecked="{Binding EnableIntegrationOrdinatesGraphicLog}">
+                            <CheckBox Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" IsChecked="{Binding Settings.EnableIntegrationOrdinatesGraphicLog}">
                                 <Label Content="{DynamicResource LOCGameActivityIntegrationGraphicShowLabelsOrdinates}" />
                             </CheckBox>
 
@@ -609,7 +677,7 @@
                                     <ColumnDefinition Width="15" />
                                 </Grid.ColumnDefinitions>
                                 <Label Content="{DynamicResource LOCGameActivityIntegrationGraphicOptionsCountAbscissa}" Grid.Column="0" />
-                                <Slider Minimum="3" Maximum="30" Value="{Binding IntegrationGraphicLogOptionsCountAbscissa}" 
+                                <Slider Minimum="3" Maximum="30" Value="{Binding Settings.IntegrationGraphicLogOptionsCountAbscissa}" 
                                             IsSnapToTickEnabled="True" TickFrequency="1" AutoToolTipPlacement="TopLeft"
                                             ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Value}"
                                             Grid.Column="1" VerticalAlignment="Center" Margin="20,0,5,0" Name="sCountLogAbscissa" />

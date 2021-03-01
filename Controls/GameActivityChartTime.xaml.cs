@@ -1,95 +1,212 @@
-﻿using GameActivity.Models;
+﻿using CommonPluginsControls.LiveChartsCommon;
+using CommonPluginsPlaynite.Common;
+using CommonPluginsPlaynite.Converters;
+using CommonPluginsShared;
+using CommonPluginsShared.Controls;
+using GameActivity.Models;
 using GameActivity.Services;
 using LiveCharts;
 using LiveCharts.Configurations;
 using LiveCharts.Events;
 using LiveCharts.Wpf;
-using Newtonsoft.Json;
-using Playnite.SDK;
-using CommonPluginsShared;
+using Playnite.SDK.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 using System.Windows.Threading;
-using CommonPluginsControls.LiveChartsCommon;
-using CommonPluginsPlaynite.Common;
-using CommonPluginsPlaynite.Converters;
 
-namespace GameActivity.Views.Interface
+namespace GameActivity.Controls
 {
     /// <summary>
-    /// Logique d'interaction pour GameActivityGameGraphicTime.xaml
+    /// Logique d'interaction pour GameActivityChartTime.xaml
     /// </summary>
-    public partial class GameActivityGameGraphicTime : UserControl
+    public partial class GameActivityChartTime : PluginUserControlExtend
     {
-        private static readonly ILogger logger = LogManager.GetLogger();
-
         private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
 
-        public event DataClickHandler gameSeriesDataClick;
-
-        private int _variateurTimeInitial = 0;
-        private int _variateurTime = 0;
-        private int _limit;
+        public event DataClickHandler GameSeriesDataClick;
 
 
-        public GameActivityGameGraphicTime(int variateurTime = 0, int limit = 9)
+        #region Property
+        public bool IgnoreSettings
+        {
+            get { return (bool)GetValue(IgnoreSettingsProperty); }
+            set { SetValue(IgnoreSettingsProperty, value); }
+        }
+
+        public static readonly DependencyProperty IgnoreSettingsProperty = DependencyProperty.Register(
+            nameof(IgnoreSettings),
+            typeof(bool),
+            typeof(GameActivityChartTime),
+            new FrameworkPropertyMetadata(false, SettingsPropertyChangedCallback));
+
+        public bool DisableAnimations
+        {
+            get { return (bool)GetValue(DisableAnimationsProperty); }
+            set { SetValue(DisableAnimationsProperty, value); }
+        }
+
+        public static readonly DependencyProperty DisableAnimationsProperty = DependencyProperty.Register(
+            nameof(DisableAnimations),
+            typeof(bool),
+            typeof(GameActivityChartTime),
+            new FrameworkPropertyMetadata(false, SettingsPropertyChangedCallback));
+
+        public static readonly DependencyProperty AxisLimitProperty;
+        public int AxisLimit { get; set; }
+
+        public int AxisVariator
+        {
+            get { return (int)GetValue(AxisVariatoryProperty); }
+            set { SetValue(AxisVariatoryProperty, value); }
+        }
+
+        public static readonly DependencyProperty AxisVariatoryProperty = DependencyProperty.Register(
+            nameof(AxisVariator),
+            typeof(int),
+            typeof(GameActivityChartTime),
+            new FrameworkPropertyMetadata(0, AxisVariatoryPropertyChangedCallback));
+        #endregion
+
+
+        public GameActivityChartTime()
         {
             InitializeComponent();
 
-            _variateurTimeInitial = variateurTime;
-            _variateurTime = variateurTime;
-            _limit = limit;
+            PluginDatabase.PluginSettings.PropertyChanged += PluginSettings_PropertyChanged;
+            PluginDatabase.Database.ItemUpdated += Database_ItemUpdated;
+            PluginDatabase.PlayniteApi.Database.Games.ItemUpdated += Games_ItemUpdated;
 
-            if (!PluginDatabase.PluginSettings.IgnoreSettings)
-            {
-                PART_ChartTimeActivityLabelsX.ShowLabels = PluginDatabase.PluginSettings.EnableIntegrationAxisGraphic;
-                PART_ChartTimeActivityLabelsY.ShowLabels = PluginDatabase.PluginSettings.EnableIntegrationOrdinatesGraphic;
-            }
-
-            PluginDatabase.PropertyChanged += OnPropertyChanged;
+            // Apply settings
+            PluginSettings_PropertyChanged(null, null);
         }
 
 
-        protected void OnPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        #region OnPropertyChange
+        private static void SettingsPropertyChangedCallback(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            try
+            GameActivityChartTime obj = sender as GameActivityChartTime;
+            if (obj != null && e.NewValue != e.OldValue)
             {
-                if (e.PropertyName == "GameSelectedData" || e.PropertyName == "PluginSettings")
+                obj.PluginSettings_PropertyChanged(null, null);
+            }
+        }
+
+        private static void AxisVariatoryPropertyChangedCallback(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        {
+            GameActivityChartTime obj = sender as GameActivityChartTime;
+            if (obj != null && e.NewValue != e.OldValue)
+            {
+                obj.GameContextChanged(null, obj.GameContext);
+            }
+        }
+
+        // When settings is updated
+        public override void PluginSettings_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            // Apply settings
+            if (IgnoreSettings)
+            {
+                this.DataContext = new
                 {
-                    GetActivityForGamesTimeGraphics(PluginDatabase.GameSelectedData, _variateurTime, _limit);
+                    DisableAnimations,
+                    ChartTimeHeight = double.NaN,
+                    ChartTimeAxis = true,
+                    ChartTimeOrdinates = true
+                };
+            }
+            else
+            {
+                this.DataContext = new
+                {
+                    DisableAnimations,
+                    PluginDatabase.PluginSettings.Settings.ChartTimeHeight,
+                    PluginDatabase.PluginSettings.Settings.ChartTimeAxis,
+                    PluginDatabase.PluginSettings.Settings.ChartTimeOrdinates
+                };
+            }
+
+            // Publish changes for the currently displayed game
+            GameContextChanged(null, GameContext);
+        }
+
+        // When game is changed
+        public override void GameContextChanged(Game oldContext, Game newContext)
+        {
+            if (IgnoreSettings)
+            {
+                MustDisplay = true;
+            }
+            else
+            {
+                MustDisplay = PluginDatabase.PluginSettings.Settings.EnableIntegrationChartTime;
+
+                // When control is not used
+                if (!PluginDatabase.PluginSettings.Settings.EnableIntegrationChartTime)
+                {
+                    return;
                 }
             }
-            catch (Exception ex)
+
+            if (newContext != null)
             {
-                Common.LogError(ex, "GameActivity");
+                GameActivities gameActivities = PluginDatabase.Get(newContext);
+
+                if (!gameActivities.HasData && !PluginDatabase.PluginSettings.Settings.ChartTimeVisibleEmpty)
+                {
+                    MustDisplay = false;
+                    return;
+                }
+
+                int Limit = PluginDatabase.PluginSettings.Settings.ChartTimeCountAbscissa;
+                if (AxisLimit != 0)
+                {
+                    Limit = AxisLimit;
+                }
+
+                GetActivityForGamesTimeGraphics(gameActivities, AxisVariator, Limit);
+            }
+            else
+            {
+       
             }
         }
+        #endregion
 
 
-        public void GetActivityForGamesTimeGraphics(GameActivities gameActivities, int variateurTime = 0, int limit = 9)
+        #region Public method
+        public void Next()
+        {
+            AxisVariator += 1;
+        }
+
+        public void Prev()
+        {
+            AxisVariator -= 1;
+        }
+        #endregion
+
+
+        private void GetActivityForGamesTimeGraphics(GameActivities gameActivities, int variateurTime = 0, int limit = 9)
         {
             Task.Run(() =>
             {
                 try
                 {
-                    this.Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new ThreadStart(delegate
-                    {
-                        if (!gameActivities.HasData)
-                        {
-                            this.Visibility = Visibility.Collapsed;
-                            return;
-                        }
-                        else
-                        {
-                            this.Visibility = Visibility.Visible;
-                        }
-                    }));
-
 
                     string[] listDate = new string[limit + 1];
                     ChartValues<CustomerForTime> series1 = new ChartValues<CustomerForTime>();
@@ -155,7 +272,7 @@ namespace GameActivity.Views.Interface
                                 {
                                 }
 
-                                if (PluginDatabase.PluginSettings.CumulPlaytimeSession)
+                                if (PluginDatabase.PluginSettings.Settings.CumulPlaytimeSession)
                                 {
                                     series1[iDay] = new CustomerForTime
                                     {
@@ -274,27 +391,15 @@ namespace GameActivity.Views.Interface
                 }
                 catch (Exception ex)
                 {
-                    Common.LogError(ex, "GameActivity");
+                    Common.LogError(ex, false);
                 }
             });
         }
 
+
         private void PART_ChartTimeActivity_DataClick(object sender, ChartPoint chartPoint)
         {
-            this.gameSeriesDataClick?.Invoke(this, chartPoint);
+            this.GameSeriesDataClick?.Invoke(this, chartPoint);
         }
-
-        public void DisableAnimations(bool IsDisable)
-        {
-            PART_ChartTimeActivity.DisableAnimations = IsDisable;
-        }
-
-
-
-        private void PART_ChartTimeActivity_Loaded(object sender, RoutedEventArgs e)
-        {
-            IntegrationUI.SetControlSize(PART_ChartTimeActivity, PluginDatabase.PluginSettings.IntegrationShowGraphicHeight, 0);
-        }
-
     }
 }

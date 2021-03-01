@@ -54,10 +54,8 @@ namespace GameActivity.Services
             }
             catch(Exception ex)
             {
-                logger.Warn($"GameActivity - No CPU usage find");
-#if DEBUG
-                Common.LogError(ex, "GameActivity [Ignored]");
-#endif
+                logger.Warn($"No CPU usage find");
+                Common.LogError(ex, true);
             }
 
             return totalCpuUsage;
@@ -91,10 +89,8 @@ namespace GameActivity.Services
             }
             catch (Exception ex)
             {
-                logger.Warn($"GameActivity - No CPU temperature find");
-#if DEBUG
-                Common.LogError(ex, "GameActivity [Ignored]");
-#endif
+                logger.Warn($"No CPU temperature find");
+                Common.LogError(ex, true);
             }
 
             return 0;
@@ -135,9 +131,7 @@ namespace GameActivity.Services
             catch (Exception ex)
             {
                 logger.Warn($"GameActivity - No RAM usage find");
-#if DEBUG
-                Common.LogError(ex, "GameActivity [Ignored]");
-#endif
+                Common.LogError(ex, true);
             }
 
             return RamUsagePercentage;
@@ -179,9 +173,7 @@ namespace GameActivity.Services
             catch (Exception ex)
             {
                 logger.Warn($"GameActivity - No GPU usage find");
-#if DEBUG
-                Common.LogError(ex, "GameActivity [Ignored]");
-#endif
+                Common.LogError(ex, true);
             }
 
             return 0;
@@ -222,10 +214,8 @@ namespace GameActivity.Services
             }
             catch (Exception ex)
             {
-                logger.Warn($"GameActivity - No GPU temperature find");
-#if DEBUG
-                Common.LogError(ex, "GameActivity [Ignored]");
-#endif
+                logger.Warn($"No GPU temperature find");
+                Common.LogError(ex, true);
             }
 
             return 0;
