@@ -133,7 +133,7 @@ namespace GameActivity
 
 
             // Graphics game details activities.
-            activityForGamesGraphics.Visibility = Visibility.Hidden;
+            activityForGamesGraphics.Visibility = Visibility.Collapsed;
 
             activityLabel.Content = new DateTime(yearCurrent, monthCurrent, 1).ToString("MMMM yyyy");
 
@@ -976,26 +976,29 @@ namespace GameActivity
         /// <param name="e"></param>
         private void lvGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            activityForGamesGraphics.Visibility = Visibility.Hidden;
+            activityForGamesGraphics.Visibility = Visibility.Collapsed;
 
             variateurTime = 0;
             variateurLog = 0;
             variateurLogTemp = 0;
 
             var item = (ListBox)sender;
-            listGame gameItem = (listGame)item.SelectedItem;
-            gameIDCurrent = gameItem.listGameID;
-
-            if (isGameTime)
+            if (item.ItemsSource != null && ((List<listGame>)item.ItemsSource).Count > 0)
             {
-                getActivityForGamesTimeGraphics(gameIDCurrent);
-            }
-            else
-            {
-                getActivityForGamesLogGraphics(gameIDCurrent);
-            }
+                listGame gameItem = (listGame)item.SelectedItem;
+                gameIDCurrent = gameItem.listGameID;
 
-            activityForGamesGraphics.Visibility = Visibility.Visible;
+                if (isGameTime)
+                {
+                    getActivityForGamesTimeGraphics(gameIDCurrent);
+                }
+                else
+                {
+                    getActivityForGamesLogGraphics(gameIDCurrent);
+                }
+
+                activityForGamesGraphics.Visibility = Visibility.Visible;
+            }
         }
 
 

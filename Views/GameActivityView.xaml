@@ -8,8 +8,8 @@
              xmlns:livechartscommon="clr-namespace:CommonPluginsControls.LiveChartsCommon"
              xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
              xmlns:controls="clr-namespace:GameActivity.Controls"
-             mc:Ignorable="d" Height="740" Width="1280" 
-             Background="{DynamicResource WindowBackgourndBrush}">
+             xmlns:controlsShared="clr-namespace:CommonPluginsShared.Controls"
+             mc:Ignorable="d" d:DesignHeight="660" d:DesignWidth="1290">
 
     <UserControl.Resources>
         <converters:LongToTimePlayedConverter x:Key="LongToTimePlayedConverter" />
@@ -19,27 +19,29 @@
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
 
-    <Grid Margin="10,10,10,0">
+    <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
+            <RowDefinition Height="10" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        
-        <Grid Name="PART_DataLoad" Grid.RowSpan="2">
+
+        <Grid Name="PART_DataLoad" Grid.RowSpan="3">
             <ProgressBar IsIndeterminate="True" Width="350" Height="40" />
             <TextBlock Text="{DynamicResource LOCLoadingLabel}"
                        Style="{DynamicResource BaseTextBlockStyle}"
                        HorizontalAlignment="Center" VerticalAlignment="Center" />
         </Grid>
 
-        <Border Grid.Row="0" Name="PART_DataTop" BorderBrush="{DynamicResource NormalBorderBrush}" BorderThickness="{DynamicResource ControlBorderThickness}" Height="345">
+        <Border Grid.Row="0" Name="PART_DataTop" BorderBrush="{DynamicResource NormalBorderBrush}" 
+                BorderThickness="{DynamicResource ControlBorderThickness}">
             <Grid Margin="10">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="8" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-
+                
                 <!-- Navigation -->
                 <Grid Grid.Row="0">
                     <Grid.ColumnDefinitions>
@@ -86,7 +88,9 @@
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
 
-                        <Label Name="acmLabel" Content="{DynamicResource LOCGameActivityTotalHours}" HorizontalAlignment="Center" VerticalAlignment="Top" Height="30" FontSize="20" FontWeight="Bold" MinWidth="50" Grid.Column="1" Grid.Row="0" />
+                        <Label Name="acmLabel" Content="{DynamicResource LOCGameActivityTotalHours}" HorizontalAlignment="Center" 
+                               VerticalAlignment="Top" Height="30" FontSize="20" FontWeight="Bold" MinWidth="50" 
+                               Grid.Column="1" Grid.Row="0" />
 
                         <lvc:CartesianChart x:Name="acmSeries" LegendLocation="none" Grid.Column="1" Grid.Row="1" FontFamily="{DynamicResource CommonFont}">
                             <lvc:CartesianChart.DataTooltip>
@@ -173,14 +177,14 @@
             </Grid>
         </Border>
 
-        <Grid Grid.Row="1" Height="345" Margin="0,10" Name="PART_DataBottom">
+        <Grid Grid.Row="2" Name="PART_DataBottom">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="10" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
+                <RowDefinition Height="45" />
                 <RowDefinition Height="10" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
@@ -215,7 +219,9 @@
             </Border>
 
             <Grid Name="gridLvGames" Grid.Column="0" Grid.Row="2">
-                <ListView x:Name="lvGames" Height="{Binding ActualHeight, ElementName=gridLvGames}" SelectionChanged="lvGames_SelectionChanged" FontSize="24" GridViewColumnHeader.Click="lvGames_onHeaderClick">
+                <controlsShared:ListViewExtend x:Name="lvGames" Style="{StaticResource {x:Type ListView}}"
+                                               SelectionChanged="lvGames_SelectionChanged" FontSize="24" 
+                                               GridViewColumnHeader.Click="lvGames_onHeaderClick">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn  Width="50">
@@ -235,7 +241,7 @@
                             <GridViewColumn Width="0" DisplayMemberBinding="{Binding listGameElapsedSeconds}">
                                 <GridViewColumnHeader Name="lvElapsedSeconds">ElapsedSeconds</GridViewColumnHeader>
                             </GridViewColumn>
-                            <GridViewColumn  Width="130">
+                            <GridViewColumn Width="130">
                                 <GridViewColumnHeader Name="lvElapsedSecondsFormat" Content="{DynamicResource LOCGameActivityLvGamesElapsedSeconds}"></GridViewColumnHeader>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
@@ -386,39 +392,41 @@
                             </GridViewColumn>
                         </GridView>
                     </ListView.View>
-                </ListView>
+                </controlsShared:ListViewExtend>
             </Grid>
 
-            <Grid Name="activityForGamesGraphics" Grid.Column="2" Grid.Row="0" Grid.RowSpan="3" Margin="0,0,0,8">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="70" />
-                    <ColumnDefinition Width="70" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="45" />
-                    <ColumnDefinition Width="45" />
-                </Grid.ColumnDefinitions>
-
+            <Grid Name="activityForGamesGraphics" Grid.Column="2" Grid.Row="0" Grid.RowSpan="3">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="40" />
+                    <RowDefinition Height="45" />
+                    <RowDefinition Height="10" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <ToggleButton Grid.Column="0" Grid.Row="0" x:Name="ToggleButtonTime" IsChecked="True" Content="{DynamicResource LOCGameActivityTime}" Height="33" Width="65" Click="ToggleButtonTime_Checked" />
-                <ToggleButton Grid.Column="1" Grid.Row="0" x:Name="ToggleButtonLog" IsChecked="False" Content="{DynamicResource LOCGameActivityLog}" Height="33" Width="65" Click="ToggleButtonLog_Checked" />
+                <Grid Grid.Row="0" VerticalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="70" />
+                        <ColumnDefinition Width="70" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="45" />
+                        <ColumnDefinition Width="45" />
+                    </Grid.ColumnDefinitions>
 
-                <Label Grid.Column="2" Grid.Row="0" x:Name="gameLabel" Content="graphics title" HorizontalAlignment="Center" VerticalAlignment="Top" Height="40" FontSize="20" FontWeight="Bold" />
+                    <ToggleButton Grid.Column="0" x:Name="ToggleButtonTime" IsChecked="True" Content="{DynamicResource LOCGameActivityTime}" Height="33" Width="65" Click="ToggleButtonTime_Checked" />
 
-                <Button Grid.Column="3" Grid.Row="0" Content="" Height="25" Width="40" Click="Button_Click_prevGame" FontFamily="Wingdings"></Button>
-                <Button Grid.Column="4" Grid.Row="0" Content="" Height="25" Width="40" Click="Button_Click_nextGame" FontFamily="Wingdings"></Button>
+                    <Label Grid.Column="2" x:Name="gameLabel" Content="graphics title" HorizontalAlignment="Center" VerticalAlignment="Top" Height="40" FontSize="20" FontWeight="Bold" />
 
+                    <ToggleButton Grid.Column="1" x:Name="ToggleButtonLog" IsChecked="False" Content="{DynamicResource LOCGameActivityLog}" Height="33" Width="65" Click="ToggleButtonLog_Checked" />
 
-                <Grid Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="1" Name="gameSeriesContener" Height="295" 
-                      VerticalAlignment="Bottom">
-                    <Grid Name="PART_GameActivityChartTime_Contener" 
+                    <Button Grid.Column="3" Content="" Height="25" Width="40" Click="Button_Click_prevGame" FontFamily="Wingdings"></Button>
+                    <Button Grid.Column="4" Content="" Height="25" Width="40" Click="Button_Click_nextGame" FontFamily="Wingdings"></Button>
+                </Grid>
+
+                <Grid Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="2" Name="gameSeriesContener">
+                    <Grid Name="PART_GameActivityChartTime_Contener"
                           Visibility="{Binding ElementName=ToggleButtonTime, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                    
-                    <Grid Name="PART_GameActivityChartLog_Contener" 
-                          Visibility="{Binding ElementName=ToggleButtonLog, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}" /> 
+
+                    <Grid Name="PART_GameActivityChartLog_Contener"
+                          Visibility="{Binding ElementName=ToggleButtonLog, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 </Grid>
             </Grid>
         </Grid>

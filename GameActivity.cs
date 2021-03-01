@@ -22,6 +22,7 @@ using GameActivity.Views;
 using System.Threading.Tasks;
 using CommonPluginsShared.PlayniteExtended;
 using System.Windows.Media;
+using CommonPluginsShared.Controls;
 
 namespace GameActivity
 {
@@ -67,6 +68,8 @@ namespace GameActivity
                     Common.LogDebug(true, $"OnCustomThemeButtonClick()");
 
                     var ViewExtension = new GameActivityView(PluginDatabase.GameContext);
+                    ViewExtension.Height = 660;
+                    ViewExtension.Width = 1290;
                     Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGameActivity"), ViewExtension);
                     windowExtension.ShowDialog();
                 }
@@ -460,6 +463,7 @@ namespace GameActivity
 
 
         #region Theme integration
+        // Button on top panel
         public override List<TopPanelItem> GetTopPanelItems()
         {
             if (PluginSettings.Settings.EnableIntegrationButtonHeader)
@@ -478,7 +482,9 @@ namespace GameActivity
                         Action = () =>
                         {
                             var ViewExtension = new GameActivityView();
-                            Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGameActivity"), ViewExtension);
+                            ViewExtension.Height = 660;
+                            ViewExtension.Width = 1290;
+                            Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGamesActivitiesTitle"), ViewExtension);
                             windowExtension.ShowDialog();
                         }
                     }
@@ -507,6 +513,39 @@ namespace GameActivity
             }
              
             return null;
+        }
+
+        // SidebarItem
+        public class GameActivityViewSidebar : SidebarItem
+        {
+            public GameActivityViewSidebar()
+            {
+                Type = SiderbarItemType.View;
+                Title = resources.GetString("LOCGameActivityViewGamesActivities");
+                Icon = new TextBlock
+                {
+                    Text = "",
+                    FontFamily = resources.GetResource("CommonFont") as FontFamily
+                };
+            }
+
+            public override Control Opened()
+            {
+                SidebarItemControl sidebarItemControl = new SidebarItemControl(PluginDatabase.PlayniteApi);
+                sidebarItemControl.SetTitle(resources.GetString("LOCGamesActivitiesTitle"));
+                sidebarItemControl.AddContent(new GameActivityView());
+
+                return sidebarItemControl;
+            }
+        }
+
+        public override List<SidebarItem> GetSidebarItems()
+        {
+            var items = new List<SidebarItem>
+            {
+                new GameActivityViewSidebar()
+            };
+            return items;
         }
         #endregion
 

@@ -5,6 +5,8 @@
 
     <sys:String x:Key="LOCGameActivity">GameActivity</sys:String>
     <sys:String x:Key="LOCGameActivityTitle">Activity</sys:String>
+    <sys:String x:Key="LOCGamesActivitiesTitle">Games activities</sys:String>
+    <sys:String x:Key="LOCGameActivitiesTitle">Game activities</sys:String>
     <sys:String x:Key="LOCGameActivityViewGamesActivities">View games activities</sys:String>
     <sys:String x:Key="LOCGameActivityViewGameActivity">View game activity</sys:String>
 

@@ -100,6 +100,8 @@ namespace GameActivity.Controls
         private void PART_GameActivityButton_Click(object sender, RoutedEventArgs e)
         {
             var ViewExtension = new GameActivityView(PluginDatabase.GameContext);
+            ViewExtension.Height = 660;
+            ViewExtension.Width = 1290;
             Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PluginDatabase.PlayniteApi, resources.GetString("LOCGameActivity"), ViewExtension);
             windowExtension.ShowDialog();
         }
