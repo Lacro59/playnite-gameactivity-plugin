@@ -696,6 +696,11 @@ namespace GameActivity
                 // Infos
                 GameActivitiesLog.GetLastSessionActivity().ElapsedSeconds = elapsedSeconds;
                 PluginDatabase.Update(GameActivitiesLog);
+
+                if (game.Id == PluginDatabase.GameContext.Id)
+                {
+                    PluginDatabase.SetThemesResources(PluginDatabase.GameContext);
+                }
             });
         }
 

@@ -294,7 +294,8 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
                                 
-                                <GridViewColumn Header="avg GPU">
+                                <GridViewColumn>
+                                    <GridViewColumnHeader Content="avg GPU" IsHitTestVisible="False" />
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <Label Content="{Binding avgGPU}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
@@ -316,7 +317,8 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
                                 
-                                <GridViewColumn Header="avg RAM">
+                                <GridViewColumn>
+                                    <GridViewColumnHeader Content="avg RAM" IsHitTestVisible="False" />
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <Label Content="{Binding avgRAM}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
@@ -338,7 +340,8 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
                                 
-                                <GridViewColumn Header="avg FPS">
+                                <GridViewColumn>
+                                    <GridViewColumnHeader Content="avg FPS" IsHitTestVisible="False" />
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <Label Content="{Binding avgFPS}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
@@ -360,7 +363,8 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
                                 
-                                <GridViewColumn Header="avg CPU T">
+                                <GridViewColumn>
+                                    <GridViewColumnHeader Content="avg CPU T" IsHitTestVisible="False" />
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <Label Content="{Binding avgCPUT}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
@@ -382,7 +386,8 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
                                 
-                                <GridViewColumn Header="avg GPU T">
+                                <GridViewColumn>
+                                    <GridViewColumnHeader Content="avg GPU T" IsHitTestVisible="False" />
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <Label Content="{Binding avgGPUT}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
