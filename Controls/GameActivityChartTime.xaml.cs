@@ -42,18 +42,6 @@ namespace GameActivity.Controls
 
 
         #region Property
-        public bool IgnoreSettings
-        {
-            get { return (bool)GetValue(IgnoreSettingsProperty); }
-            set { SetValue(IgnoreSettingsProperty, value); }
-        }
-
-        public static readonly DependencyProperty IgnoreSettingsProperty = DependencyProperty.Register(
-            nameof(IgnoreSettings),
-            typeof(bool),
-            typeof(GameActivityChartTime),
-            new FrameworkPropertyMetadata(false, SettingsPropertyChangedCallback));
-
         public bool DisableAnimations
         {
             get { return (bool)GetValue(DisableAnimationsProperty); }
