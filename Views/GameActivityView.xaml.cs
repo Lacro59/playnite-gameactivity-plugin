@@ -107,10 +107,6 @@ namespace GameActivity
             PART_GameActivityChartLog_Contener.Children.Add(PART_GameActivityChartLog);
 
 
-
-            // Block hidden column.
-            lvElapsedSeconds.IsEnabled = false;
-
             // Add column if log details enable.
             if (!PluginDatabase.PluginSettings.Settings.EnableLogging)
             {
@@ -126,14 +122,9 @@ namespace GameActivity
                 lvGames.View = lvView;
             }
 
-            // Sorting default.
-            _lastDirection = ListSortDirection.Descending;
-            _lastHeaderClicked = lvLastActivity;
-            _lastHeaderClicked.Content += " ▼";
-
 
             // Graphics game details activities.
-            activityForGamesGraphics.Visibility = Visibility.Collapsed;
+            activityForGamesGraphics.Visibility = Visibility.Hidden;
 
             activityLabel.Content = new DateTime(yearCurrent, monthCurrent, 1).ToString("MMMM yyyy");
 
@@ -143,8 +134,8 @@ namespace GameActivity
 
 
             PART_DataLoad.Visibility = Visibility.Visible;
-            PART_DataTop.Visibility = Visibility.Collapsed;
-            PART_DataBottom.Visibility = Visibility.Collapsed;
+            PART_DataTop.Visibility = Visibility.Hidden;
+            PART_DataBottom.Visibility = Visibility.Hidden;
 
             var task = Task.Run(() =>
             {
@@ -196,14 +187,14 @@ namespace GameActivity
 
                     if (_settings.CumulPlaytimeStore)
                     {
-                        acmSeries.Visibility = Visibility.Collapsed;
-                        acmLabel.Visibility = Visibility.Collapsed;
+                        acmSeries.Visibility = Visibility.Hidden;
+                        acmLabel.Visibility = Visibility.Hidden;
 
                         Grid.SetColumn(GridDay, 0);
                         Grid.SetColumnSpan(GridDay, 3);
                     }
 
-                    PART_DataLoad.Visibility = Visibility.Collapsed;
+                    PART_DataLoad.Visibility = Visibility.Hidden;
                     PART_DataTop.Visibility = Visibility.Visible;
                     PART_DataBottom.Visibility = Visibility.Visible;
                 });
@@ -767,7 +758,7 @@ namespace GameActivity
 
             lvGames.ItemsSource = activityListByGame;
 
-            Sorting();
+            lvGames.Sorting();
             Filter();
         }
 
@@ -841,134 +832,6 @@ namespace GameActivity
         }
 
 
-
-        #region Functions sorting lvGames.
-        private GridViewColumnHeader _lastHeaderClicked = null;
-        private ListSortDirection _lastDirection;
-
-        private void lvGames_onHeaderClick(object sender, RoutedEventArgs e)
-        {
-            lvElapsedSeconds.IsEnabled = true;
-
-            var headerClicked = e.OriginalSource as GridViewColumnHeader;
-            ListSortDirection direction;
-
-            // No sort
-            if (headerClicked.Name == "lvGameIcon")
-            {
-                headerClicked = null;
-            }
-
-            if (headerClicked != null)
-            {
-                if (headerClicked.Role != GridViewColumnHeaderRole.Padding)
-                {
-                    if (headerClicked != _lastHeaderClicked)
-                    {
-                        direction = ListSortDirection.Ascending;
-                    }
-                    else
-                    {
-                        if (_lastDirection == ListSortDirection.Ascending)
-                        {
-                            direction = ListSortDirection.Descending;
-                        }
-                        else
-                        {
-                            direction = ListSortDirection.Ascending;
-                        }
-                    }
-
-                    var columnBinding = headerClicked.Column.DisplayMemberBinding as Binding;
-                    var sortBy = columnBinding?.Path.Path ?? headerClicked.Column.Header as string;
-
-                    // Specific sort with another column
-                    if (headerClicked.Name == "lvElapsedSecondsFormat")
-                    {
-                        columnBinding = lvElapsedSeconds.Column.DisplayMemberBinding as Binding;
-                        sortBy = columnBinding?.Path.Path ?? headerClicked.Column.Header as string;
-                    }
-                    if (headerClicked.Name == "lvSourceIcon")
-                    {
-                        columnBinding = lvSourceName.Column.DisplayMemberBinding as Binding;
-                        sortBy = columnBinding?.Path.Path ?? headerClicked.Column.Header as string;
-                    }
-
-
-                    Sort(sortBy, direction);
-
-                    if (_lastHeaderClicked != null)
-                    {
-                        _lastHeaderClicked.Content = ((string)_lastHeaderClicked.Content).Replace(" ▲", "");
-                        _lastHeaderClicked.Content = ((string)_lastHeaderClicked.Content).Replace(" ▼", "");
-                    }
-
-                    if (direction == ListSortDirection.Ascending)
-                    {
-                        headerClicked.Content += " ▲";
-                    }
-                    else
-                    {
-                        headerClicked.Content += " ▼";
-                    }
-
-                    // Remove arrow from previously sorted header
-                    if (_lastHeaderClicked != null && _lastHeaderClicked != headerClicked)
-                    {
-                        _lastHeaderClicked.Column.HeaderTemplate = null;
-                    }
-
-                    _lastHeaderClicked = headerClicked;
-                    _lastDirection = direction;
-                }
-            }
-
-            lvElapsedSeconds.IsEnabled = false;
-        }
-
-        private void Sort(string sortBy, ListSortDirection direction)
-        {
-            ICollectionView dataView = CollectionViewSource.GetDefaultView(lvGames.ItemsSource);
-
-            dataView.SortDescriptions.Clear();
-            SortDescription sd = new SortDescription(sortBy, direction);
-            dataView.SortDescriptions.Add(sd);
-            dataView.Refresh();
-        }
-
-        private void Sorting()
-        {
-            // Sorting
-            try
-            {
-                var columnBinding = _lastHeaderClicked.Column.DisplayMemberBinding as Binding;
-                var sortBy = columnBinding?.Path.Path ?? _lastHeaderClicked.Column.Header as string;
-
-                // Specific sort with another column
-                if (_lastHeaderClicked.Name == "lvElapsedSecondsFormat")
-                {
-                    columnBinding = lvElapsedSeconds.Column.DisplayMemberBinding as Binding;
-                    sortBy = columnBinding?.Path.Path ?? _lastHeaderClicked.Column.Header as string;
-                }
-                if (_lastHeaderClicked.Name == "lvSourceIcon")
-                {
-                    columnBinding = lvSourceName.Column.DisplayMemberBinding as Binding;
-                    sortBy = columnBinding?.Path.Path ?? _lastHeaderClicked.Column.Header as string;
-                }
-
-                Sort(sortBy, _lastDirection);
-            }
-            // If first view
-            catch
-            {
-                CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(lvGames.ItemsSource);
-                view.SortDescriptions.Add(new SortDescription("listGameLastActivity", ListSortDirection.Descending));
-            }
-        }
-        #endregion
-
-
-
         /// <summary>
         /// Get details game activity on selected.
         /// </summary>
@@ -976,7 +839,7 @@ namespace GameActivity
         /// <param name="e"></param>
         private void lvGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            activityForGamesGraphics.Visibility = Visibility.Collapsed;
+            activityForGamesGraphics.Visibility = Visibility.Hidden;
 
             variateurTime = 0;
             variateurLog = 0;
@@ -1226,7 +1089,7 @@ namespace GameActivity
                          && SearchSources.Contains(x.listGameSourceName)
                          && x.listDateActivity.Contains(yearCurrent + "-" + ((monthCurrent > 9) ? monthCurrent.ToString() : "0" + monthCurrent))
                 );
-                Sorting();
+                lvGames.Sorting();
                 return;
             }
 
@@ -1236,7 +1099,7 @@ namespace GameActivity
                     x => x.listGameTitle.ToLower().IndexOf(TextboxSearch.Text) > -1
                          && x.listDateActivity.Contains(yearCurrent + "-" + ((monthCurrent > 9) ? monthCurrent.ToString() : "0" + monthCurrent))
                 );
-                Sorting();
+                lvGames.Sorting();
                 return;
             }
 
@@ -1246,12 +1109,12 @@ namespace GameActivity
                     x => SearchSources.Contains(x.listGameSourceName) 
                          && x.listDateActivity.Contains(yearCurrent + "-" + ((monthCurrent > 9) ? monthCurrent.ToString() : "0" + monthCurrent))
                 );
-                Sorting();
+                lvGames.Sorting();
                 return;
             }
 
             lvGames.ItemsSource = activityListByGame.FindAll(x => x.listDateActivity.Contains(yearCurrent + "-" + ((monthCurrent > 9) ? monthCurrent.ToString() : "0" + monthCurrent)));
-            Sorting();
+            lvGames.Sorting();
         }
 
 
