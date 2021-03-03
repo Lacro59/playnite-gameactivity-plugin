@@ -317,6 +317,7 @@
                                 <RowDefinition Height="30" />
                                 <RowDefinition Height="30" />
                                 <RowDefinition Height="30" />
+                                <RowDefinition Height="30" />
                             </Grid.RowDefinitions>
 
                             <DockPanel Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">
@@ -357,6 +358,41 @@
                                       IsChecked="{Binding Settings.UseControls}">
                                 <Label Content="{DynamicResource LOCGameActivityUseControls}" />
                             </CheckBox>
+
+                            <Label Content="{DynamicResource LOCGameActivitySelectChartSeriesToDisplay}" 
+                                   Grid.Column="0" Grid.Row="4" />
+                            
+                            <Grid Grid.Row="4" VerticalAlignment="Center" Grid.Column="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="auto" />
+                                </Grid.ColumnDefinitions>
+                
+                                <CheckBox Grid.Column="0" VerticalAlignment="Center" 
+                                          IsChecked="{Binding Settings.DisplayCpu}">
+                                    <Label Content="Cpu" />
+                                </CheckBox>
+
+                                <CheckBox Grid.Column="2" VerticalAlignment="Center" 
+                                          IsChecked="{Binding Settings.DisplayGpu}">
+                                    <Label Content="Gpu" />
+                                </CheckBox>
+
+                                <CheckBox Grid.Column="4" VerticalAlignment="Center" 
+                                          IsChecked="{Binding Settings.DisplayRam}">
+                                    <Label Content="Ram" />
+                                </CheckBox>
+                                
+                                <CheckBox Grid.Column="6" VerticalAlignment="Center" 
+                                          IsChecked="{Binding Settings.DisplayFps}">
+                                    <Label Content="Fps" />
+                                </CheckBox>
+                            </Grid>
                         </Grid>
                     </GroupBox>
 

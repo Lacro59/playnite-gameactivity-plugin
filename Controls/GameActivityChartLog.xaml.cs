@@ -154,19 +154,31 @@ namespace GameActivity.Controls
             {
                 if (e.Property.Name == "DisplayCpu")
                 {
-                    obj.CpuSeries.Visibility = ((bool)e.NewValue) ? Visibility.Visible : Visibility.Collapsed;
+                    if (obj.CpuSeries != null)
+                    {
+                        obj.CpuSeries.Visibility = ((bool)e.NewValue) ? Visibility.Visible : Visibility.Collapsed;
+                    }
                 }
                 else if (e.Property.Name == "DisplayGpu")
                 {
-                    obj.GpuSeries.Visibility = ((bool)e.NewValue) ? Visibility.Visible : Visibility.Collapsed;
+                    if (obj.GpuSeries != null)
+                    {
+                        obj.GpuSeries.Visibility = ((bool)e.NewValue) ? Visibility.Visible : Visibility.Collapsed;
+                    }
                 }
                 else if (e.Property.Name == "DisplayRam")
                 {
-                    obj.RamSeries.Visibility = ((bool)e.NewValue) ? Visibility.Visible : Visibility.Collapsed;
+                    if (obj.RamSeries != null)
+                    {
+                        obj.RamSeries.Visibility = ((bool)e.NewValue) ? Visibility.Visible : Visibility.Collapsed;
+                    }
                 }
                 else if (e.Property.Name == "DisplayFps")
                 {
-                    obj.FpsSeries.Visibility = ((bool)e.NewValue) ? Visibility.Visible : Visibility.Collapsed;
+                    if (obj.FpsSeries != null)
+                    {
+                        obj.FpsSeries.Visibility = ((bool)e.NewValue) ? Visibility.Visible : Visibility.Collapsed;
+                    }
                 }
                 else
                 {
@@ -188,6 +200,11 @@ namespace GameActivity.Controls
         public override void PluginSettings_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             // Apply settings
+            DisplayCpu = PluginDatabase.PluginSettings.Settings.DisplayCpu;
+            DisplayGpu = PluginDatabase.PluginSettings.Settings.DisplayGpu;
+            DisplayRam = PluginDatabase.PluginSettings.Settings.DisplayRam;
+            DisplayFps = PluginDatabase.PluginSettings.Settings.DisplayFps;
+
             if (IgnoreSettings)
             {
                 this.DataContext = new
@@ -198,10 +215,10 @@ namespace GameActivity.Controls
                     ChartLogOrdinates = true,
                     UseControls = true,
 
-                    DisplayCpu,
-                    DisplayGpu,
-                    DisplayRam,
-                    DisplayFps
+                    PluginDatabase.PluginSettings.Settings.DisplayCpu,
+                    PluginDatabase.PluginSettings.Settings.DisplayGpu,
+                    PluginDatabase.PluginSettings.Settings.DisplayRam,
+                    PluginDatabase.PluginSettings.Settings.DisplayFps
                 };
             }
             else
@@ -214,10 +231,10 @@ namespace GameActivity.Controls
                     PluginDatabase.PluginSettings.Settings.ChartLogOrdinates,
                     PluginDatabase.PluginSettings.Settings.UseControls,
 
-                    DisplayCpu,
-                    DisplayGpu,
-                    DisplayRam,
-                    DisplayFps
+                    PluginDatabase.PluginSettings.Settings.DisplayCpu,
+                    PluginDatabase.PluginSettings.Settings.DisplayGpu,
+                    PluginDatabase.PluginSettings.Settings.DisplayRam,
+                    PluginDatabase.PluginSettings.Settings.DisplayFps
                 };
             }
 
@@ -315,15 +332,12 @@ namespace GameActivity.Controls
                             {
                                 conteurStart = 0;
                                 conteurEnd = limit;
-
-                                //variateurLog = _variateurLogTemp;
+                                
                                 this.Dispatcher.BeginInvoke((Action)delegate
                                 {
                                     AxisVariator++;
                                 });
                             }
-
-                            //_variateurLogTemp = variateurLog;
 
                             // Create data
                             int sCount = 0;
@@ -372,24 +386,32 @@ namespace GameActivity.Controls
 
                     this.Dispatcher.BeginInvoke(DispatcherPriority.Background, new ThreadStart(delegate
                     {
+                        //#FF2195F2
                         CpuSeries = new ColumnSeries
                         {
                             Title = "cpu usage (%)",
+                            Fill = new BrushConverter().ConvertFromString("#FF2195F2") as SolidColorBrush,
                             Values = CPUseries
                         };
+                        //#FFF34336
                         GpuSeries = new ColumnSeries
                         {
                             Title = "gpu usage (%)",
+                            Fill = new BrushConverter().ConvertFromString("#FFF34336") as SolidColorBrush,
                             Values = GPUseries
                         };
+                        //#FFFEC007
                         RamSeries = new ColumnSeries
                         {
                             Title = "ram usage (%)",
+                            Fill = new BrushConverter().ConvertFromString("#FFFEC007") as SolidColorBrush,
                             Values = RAMseries
                         };
+                        //#FF607D8A
                         FpsSeries = new LineSeries
                         {
                             Title = "fps",
+                            Stroke = new BrushConverter().ConvertFromString("#FF607D8A") as SolidColorBrush,
                             Values = FPSseries
                         };
 
@@ -442,6 +464,32 @@ namespace GameActivity.Controls
         private void CheckBoxDisplayFps_Click(object sender, RoutedEventArgs e)
         {
             DisplayFps = (bool)((CheckBox)sender).IsChecked;
+        }
+
+
+        private void SetChartVisibility()
+        {
+            if (CpuSeries != null)
+            {
+                CpuSeries.Visibility = (DisplayCpu) ? Visibility.Visible : Visibility.Collapsed;
+            }
+            if (GpuSeries != null)
+            {
+                GpuSeries.Visibility = (DisplayGpu) ? Visibility.Visible : Visibility.Collapsed;
+            }
+            if (RamSeries != null)
+            {
+                RamSeries.Visibility = (DisplayRam) ? Visibility.Visible : Visibility.Collapsed;
+            }
+            if (FpsSeries != null)
+            {
+                FpsSeries.Visibility = (DisplayFps) ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
+        private void PART_ChartLogActivity_LayoutUpdated(object sender, EventArgs e)
+        {
+            SetChartVisibility();
         }
     }
 }
