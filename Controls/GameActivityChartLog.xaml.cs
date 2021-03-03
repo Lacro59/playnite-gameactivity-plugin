@@ -9,6 +9,7 @@ using Playnite.SDK.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -32,6 +33,11 @@ namespace GameActivity.Controls
     public partial class GameActivityChartLog : PluginUserControlExtend
     {
         private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
+
+        private ColumnSeries CpuSeries;
+        private ColumnSeries GpuSeries;
+        private ColumnSeries RamSeries;
+        private LineSeries FpsSeries;
 
 
         #region Property
@@ -60,7 +66,7 @@ namespace GameActivity.Controls
             nameof(DateSelected),
             typeof(DateTime?),
             typeof(GameActivityChartLog),
-            new FrameworkPropertyMetadata(null, AxisVariatoryPropertyChangedCallback));
+            new FrameworkPropertyMetadata(null, ControlsPropertyChangedCallback));
 
         public static readonly DependencyProperty TitleChartProperty;
         public string TitleChart { get; set; } = string.Empty;
@@ -75,7 +81,55 @@ namespace GameActivity.Controls
             nameof(AxisVariator),
             typeof(int),
             typeof(GameActivityChartLog),
-            new FrameworkPropertyMetadata(0, AxisVariatoryPropertyChangedCallback));
+            new FrameworkPropertyMetadata(0, ControlsPropertyChangedCallback));
+
+        public bool DisplayCpu
+        {
+            get { return (bool)GetValue(DisplayCpuProperty); }
+            set { SetValue(DisplayCpuProperty, value); }
+        }
+
+        public static readonly DependencyProperty DisplayCpuProperty = DependencyProperty.Register(
+            nameof(DisplayCpu),
+            typeof(bool),
+            typeof(GameActivityChartLog),
+            new FrameworkPropertyMetadata(true, SettingsPropertyChangedCallback));
+
+        public bool DisplayGpu
+        {
+            get { return (bool)GetValue(DisplayGpuProperty); }
+            set { SetValue(DisplayGpuProperty, value); }
+        }
+
+        public static readonly DependencyProperty DisplayGpuProperty = DependencyProperty.Register(
+            nameof(DisplayGpu),
+            typeof(bool),
+            typeof(GameActivityChartLog),
+            new FrameworkPropertyMetadata(true, SettingsPropertyChangedCallback));
+
+        public bool DisplayRam
+        {
+            get { return (bool)GetValue(DisplayRamProperty); }
+            set { SetValue(DisplayRamProperty, value); }
+        }
+
+        public static readonly DependencyProperty DisplayRamProperty = DependencyProperty.Register(
+            nameof(DisplayRam),
+            typeof(bool),
+            typeof(GameActivityChartLog),
+            new FrameworkPropertyMetadata(true, SettingsPropertyChangedCallback));
+
+        public bool DisplayFps
+        {
+            get { return (bool)GetValue(DisplayFpsProperty); }
+            set { SetValue(DisplayFpsProperty, value); }
+        }
+
+        public static readonly DependencyProperty DisplayFpsProperty = DependencyProperty.Register(
+            nameof(DisplayFps),
+            typeof(bool),
+            typeof(GameActivityChartLog),
+            new FrameworkPropertyMetadata(true, SettingsPropertyChangedCallback));
         #endregion
 
 
@@ -98,11 +152,30 @@ namespace GameActivity.Controls
             GameActivityChartLog obj = sender as GameActivityChartLog;
             if (obj != null && e.NewValue != e.OldValue)
             {
-                obj.PluginSettings_PropertyChanged(null, null);
+                if (e.Property.Name == "DisplayCpu")
+                {
+                    obj.CpuSeries.Visibility = ((bool)e.NewValue) ? Visibility.Visible : Visibility.Collapsed;
+                }
+                else if (e.Property.Name == "DisplayGpu")
+                {
+                    obj.GpuSeries.Visibility = ((bool)e.NewValue) ? Visibility.Visible : Visibility.Collapsed;
+                }
+                else if (e.Property.Name == "DisplayRam")
+                {
+                    obj.RamSeries.Visibility = ((bool)e.NewValue) ? Visibility.Visible : Visibility.Collapsed;
+                }
+                else if (e.Property.Name == "DisplayFps")
+                {
+                    obj.FpsSeries.Visibility = ((bool)e.NewValue) ? Visibility.Visible : Visibility.Collapsed;
+                }
+                else
+                {
+                    obj.PluginSettings_PropertyChanged(null, null);
+                }
             }
         }
 
-        private static void AxisVariatoryPropertyChangedCallback(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        private static void ControlsPropertyChangedCallback(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
             GameActivityChartLog obj = sender as GameActivityChartLog;
             if (obj != null && e.NewValue != e.OldValue)
@@ -122,7 +195,13 @@ namespace GameActivity.Controls
                     DisableAnimations,
                     ChartLogHeight = double.NaN,
                     ChartLogAxis = true,
-                    ChartLogOrdinates = true
+                    ChartLogOrdinates = true,
+                    UseControls = true,
+
+                    DisplayCpu,
+                    DisplayGpu,
+                    DisplayRam,
+                    DisplayFps
                 };
             }
             else
@@ -132,7 +211,13 @@ namespace GameActivity.Controls
                     DisableAnimations,
                     PluginDatabase.PluginSettings.Settings.ChartLogHeight,
                     PluginDatabase.PluginSettings.Settings.ChartLogAxis,
-                    PluginDatabase.PluginSettings.Settings.ChartLogOrdinates
+                    PluginDatabase.PluginSettings.Settings.ChartLogOrdinates,
+                    PluginDatabase.PluginSettings.Settings.UseControls,
+
+                    DisplayCpu,
+                    DisplayGpu,
+                    DisplayRam,
+                    DisplayFps
                 };
             }
 
@@ -287,28 +372,33 @@ namespace GameActivity.Controls
 
                     this.Dispatcher.BeginInvoke(DispatcherPriority.Background, new ThreadStart(delegate
                     {
+                        CpuSeries = new ColumnSeries
+                        {
+                            Title = "cpu usage (%)",
+                            Values = CPUseries
+                        };
+                        GpuSeries = new ColumnSeries
+                        {
+                            Title = "gpu usage (%)",
+                            Values = GPUseries
+                        };
+                        RamSeries = new ColumnSeries
+                        {
+                            Title = "ram usage (%)",
+                            Values = RAMseries
+                        };
+                        FpsSeries = new LineSeries
+                        {
+                            Title = "fps",
+                            Values = FPSseries
+                        };
+
                         SeriesCollection activityForGameLogSeries = new SeriesCollection
                         {
-                            new ColumnSeries
-                            {
-                                Title = "cpu usage (%)",
-                                Values = CPUseries
-                            },
-                            new ColumnSeries
-                            {
-                                Title = "gpu usage (%)",
-                                Values = GPUseries
-                            },
-                            new ColumnSeries
-                            {
-                                Title = "ram usage (%)",
-                                Values = RAMseries
-                            },
-                            new LineSeries
-                            {
-                                Title = "fps",
-                                Values = FPSseries
-                            }
+                            CpuSeries,
+                            GpuSeries,
+                            RamSeries,
+                            FpsSeries
                         };
                         Func<double, string> activityForGameLogFormatter = value => value.ToString("N");
 
@@ -333,5 +423,25 @@ namespace GameActivity.Controls
             });
         }
 
+
+        private void CheckBoxDisplayCpu_Click(object sender, RoutedEventArgs e)
+        {
+            DisplayCpu = (bool)((CheckBox)sender).IsChecked;
+        }
+
+        private void CheckBoxDisplayGpu_Click(object sender, RoutedEventArgs e)
+        {
+            DisplayGpu = (bool)((CheckBox)sender).IsChecked;
+        }
+
+        private void CheckBoxDisplayRam_Click(object sender, RoutedEventArgs e)
+        {
+            DisplayRam = (bool)((CheckBox)sender).IsChecked;
+        }
+
+        private void CheckBoxDisplayFps_Click(object sender, RoutedEventArgs e)
+        {
+            DisplayFps = (bool)((CheckBox)sender).IsChecked;
+        }
     }
 }

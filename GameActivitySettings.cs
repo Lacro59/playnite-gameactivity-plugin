@@ -65,7 +65,11 @@ namespace GameActivity
         public int ChartLogCountAbscissa { get; set; } = 11;
 
 
-
+        public bool UseControls { get; set; } = true;
+        public bool DisplayCpu { get; set; } = true;
+        public bool DisplayGpu { get; set; } = true;
+        public bool DisplayRam { get; set; } = true;
+        public bool DisplayFps { get; set; } = true;
 
 
 

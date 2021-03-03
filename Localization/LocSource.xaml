@@ -50,6 +50,8 @@
     <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">Show labels on vertical axis</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicLogOptions">Chart options</sys:String>
 
+    <sys:String x:Key="LOCGameActivityUseControls">Use chart controls</sys:String>
+
     <!-- GameActivityViewSingle -->
 
     <sys:String x:Key="LOCGameActivityAvgPerDay">Average time per day</sys:String>

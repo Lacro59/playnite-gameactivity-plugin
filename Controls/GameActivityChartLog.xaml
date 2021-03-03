@@ -13,26 +13,63 @@
         Height="{Binding ChartLogHeight}"
         MaxHeight="{Binding RelativeSource={RelativeSource AncestorType=ContentControl}, Path=MaxHeight}">
 
-    <Grid Name="PART_GridContener">
-        <lvc:CartesianChart LegendLocation="none" Name="PART_ChartLogActivity"
-                            DisableAnimations="{Binding DisableAnimations}"
-                            Width="{Binding ElementName=PART_GridContener, Path=ActualWidth}"
-                            Height="{Binding ElementName=PART_GridContener, Path=ActualHeight}">
-            <lvc:CartesianChart.DataTooltip>
-                <livechartscommon:CustomerToolTipForMultipleTime ShowIcon="{Binding ShowIcon}" />
-            </lvc:CartesianChart.DataTooltip>
+    <controls:PluginUserControlExtend.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </controls:PluginUserControlExtend.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-            <lvc:CartesianChart.AxisX>
-                <lvc:Axis Name="PART_ChartLogActivityLabelsX" ShowLabels="{Binding ChartLogAxis}" FontSize="10" MinValue="0">
-                    <lvc:Axis.Separator>
-                        <lvc:Separator Step="1" />
-                    </lvc:Axis.Separator>
-                </lvc:Axis>
-            </lvc:CartesianChart.AxisX>
+        <Grid Grid.Row="0" Margin="0,0,0,10"
+              Visibility="{Binding UseControls, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=True}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-            <lvc:CartesianChart.AxisY>
-                <lvc:Axis Name="PART_ChartLogActivityLabelsY" ShowLabels="{Binding ChartLogOrdinates}" MinValue="0"></lvc:Axis>
-            </lvc:CartesianChart.AxisY>
-        </lvc:CartesianChart>
+            <CheckBox Grid.Column="0" IsChecked="{Binding DisplayCpu, Mode=OneWay}" Click="CheckBoxDisplayCpu_Click">
+                <Label Content="Cpu" />
+            </CheckBox>
+            <CheckBox Grid.Column="2" IsChecked="{Binding DisplayGpu, Mode=OneWay}" Click="CheckBoxDisplayGpu_Click">
+                <Label Content="Gpu" />
+            </CheckBox>
+            <CheckBox Grid.Column="4" IsChecked="{Binding DisplayRam, Mode=OneWay}" Click="CheckBoxDisplayRam_Click">
+                <Label Content="Ram" />
+            </CheckBox>
+            <CheckBox Grid.Column="6" IsChecked="{Binding DisplayFps, Mode=OneWay}" Click="CheckBoxDisplayFps_Click">
+                <Label Content="Fps" />
+            </CheckBox>
+        </Grid>
+
+        <Grid Name="PART_GridContener" Grid.Row="1">
+            <lvc:CartesianChart LegendLocation="none" Name="PART_ChartLogActivity"
+                                DisableAnimations="{Binding DisableAnimations}"
+                                Width="{Binding ElementName=PART_GridContener, Path=ActualWidth}"
+                                Height="{Binding ElementName=PART_GridContener, Path=ActualHeight}">
+                <lvc:CartesianChart.DataTooltip>
+                    <livechartscommon:CustomerToolTipForMultipleTime ShowIcon="{Binding ShowIcon}" />
+                </lvc:CartesianChart.DataTooltip>
+
+                <lvc:CartesianChart.AxisX>
+                    <lvc:Axis Name="PART_ChartLogActivityLabelsX" ShowLabels="{Binding ChartLogAxis}" FontSize="10" MinValue="0">
+                        <lvc:Axis.Separator>
+                            <lvc:Separator Step="1" />
+                        </lvc:Axis.Separator>
+                    </lvc:Axis>
+                </lvc:CartesianChart.AxisX>
+
+                <lvc:CartesianChart.AxisY>
+                    <lvc:Axis Name="PART_ChartLogActivityLabelsY" ShowLabels="{Binding ChartLogOrdinates}" MinValue="0"></lvc:Axis>
+                </lvc:CartesianChart.AxisY>
+            </lvc:CartesianChart>
+        </Grid>
     </Grid>
 </controls:PluginUserControlExtend>

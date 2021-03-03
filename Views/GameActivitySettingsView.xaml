@@ -316,6 +316,7 @@
                                 <RowDefinition Height="30" />
                                 <RowDefinition Height="30" />
                                 <RowDefinition Height="30" />
+                                <RowDefinition Height="30" />
                             </Grid.RowDefinitions>
 
                             <DockPanel Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">
@@ -351,6 +352,11 @@
                                         Grid.Column="1" VerticalAlignment="Center" Margin="20,0,5,0" Name="sCountAbscissaLog" />
                                 <Label Grid.Column="2" Content="{Binding ElementName=sCountAbscissaLog, Path=Value}" HorizontalAlignment="Center" />
                             </Grid>
+
+                            <CheckBox Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" 
+                                      IsChecked="{Binding Settings.UseControls}">
+                                <Label Content="{DynamicResource LOCGameActivityUseControls}" />
+                            </CheckBox>
                         </Grid>
                     </GroupBox>
 
