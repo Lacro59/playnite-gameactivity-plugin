@@ -3,6 +3,7 @@ using CommonPluginsShared;
 using CommonPluginsShared.Controls;
 using GameActivity.Models;
 using GameActivity.Services;
+using GameActivity.Views;
 using Playnite.SDK.Models;
 using System;
 using System.Collections.Generic;
@@ -99,9 +100,7 @@ namespace GameActivity.Controls
 
         private void PART_GameActivityButton_Click(object sender, RoutedEventArgs e)
         {
-            var ViewExtension = new GameActivityView(PluginDatabase.GameContext);
-            ViewExtension.Height = 660;
-            ViewExtension.Width = 1290;
+            var ViewExtension = new GameActivityViewSingle(PluginDatabase.GameContext);
             Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PluginDatabase.PlayniteApi, resources.GetString("LOCGameActivity"), ViewExtension);
             windowExtension.ShowDialog();
         }

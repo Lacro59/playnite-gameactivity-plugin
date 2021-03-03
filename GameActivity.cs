@@ -67,9 +67,7 @@ namespace GameActivity
                 {
                     Common.LogDebug(true, $"OnCustomThemeButtonClick()");
 
-                    var ViewExtension = new GameActivityView(PluginDatabase.GameContext);
-                    ViewExtension.Height = 660;
-                    ViewExtension.Width = 1290;
+                    var ViewExtension = new GameActivityViewSingle(PluginDatabase.GameContext);
                     Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGameActivity"), ViewExtension);
                     windowExtension.ShowDialog();
                 }
@@ -565,7 +563,7 @@ namespace GameActivity
                     Description = resources.GetString("LOCGameActivityViewGameActivity"),
                     Action = (gameMenuItem) =>
                     {
-                        var ViewExtension = new GameActivityView(GameMenu);
+                        var ViewExtension = new GameActivityViewSingle(GameMenu);
                         Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGameActivity"), ViewExtension);
                         windowExtension.ShowDialog();
                     }

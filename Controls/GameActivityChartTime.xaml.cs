@@ -54,6 +54,18 @@ namespace GameActivity.Controls
             typeof(GameActivityChartTime),
             new FrameworkPropertyMetadata(false, SettingsPropertyChangedCallback));
 
+        public bool LabelsRotation
+        {
+            get { return (bool)GetValue(LabelsRotationProperty); }
+            set { SetValue(LabelsRotationProperty, value); }
+        }
+
+        public static readonly DependencyProperty LabelsRotationProperty = DependencyProperty.Register(
+            nameof(LabelsRotation),
+            typeof(bool),
+            typeof(GameActivityChartTime),
+            new FrameworkPropertyMetadata(false, SettingsPropertyChangedCallback));
+
         public static readonly DependencyProperty AxisLimitProperty;
         public int AxisLimit { get; set; }
 
@@ -106,6 +118,12 @@ namespace GameActivity.Controls
         // When settings is updated
         public override void PluginSettings_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            double LabelsRotationValue = 0;
+            if (LabelsRotation)
+            {
+                LabelsRotationValue = 160;
+            }
+
             // Apply settings
             if (IgnoreSettings)
             {
@@ -114,7 +132,8 @@ namespace GameActivity.Controls
                     DisableAnimations,
                     ChartTimeHeight = double.NaN,
                     ChartTimeAxis = true,
-                    ChartTimeOrdinates = true
+                    ChartTimeOrdinates = true,
+                    LabelsRotationValue
                 };
             }
             else
@@ -124,7 +143,8 @@ namespace GameActivity.Controls
                     DisableAnimations,
                     PluginDatabase.PluginSettings.Settings.ChartTimeHeight,
                     PluginDatabase.PluginSettings.Settings.ChartTimeAxis,
-                    PluginDatabase.PluginSettings.Settings.ChartTimeOrdinates
+                    PluginDatabase.PluginSettings.Settings.ChartTimeOrdinates,
+                    LabelsRotationValue
                 };
             }
 

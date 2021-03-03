@@ -1076,7 +1076,6 @@ namespace GameActivity
         }
 
 
-
         #region Filter
         private void Filter()
         {

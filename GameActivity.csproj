@@ -148,6 +148,9 @@
     <Compile Include="Views\GameActivityView.xaml.cs">
       <DependentUpon>GameActivityView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\GameActivityViewSingle.xaml.cs">
+      <DependentUpon>GameActivityViewSingle.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\WarningsDialogs.xaml.cs">
       <DependentUpon>WarningsDialogs.xaml</DependentUpon>
     </Compile>
@@ -301,6 +304,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\GameActivityView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GameActivityViewSingle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

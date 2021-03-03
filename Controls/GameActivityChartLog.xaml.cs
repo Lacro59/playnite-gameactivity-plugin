@@ -50,8 +50,17 @@ namespace GameActivity.Controls
         public static readonly DependencyProperty AxisLimitProperty;
         public int AxisLimit { get; set; }
 
-        public static readonly DependencyProperty DateSelectedProperty;
-        public DateTime? DateSelected { get; set; } = null;
+        public DateTime? DateSelected
+        {
+            get { return (DateTime?)GetValue(DateSelectedProperty); }
+            set { SetValue(DateSelectedProperty, value); }
+        }
+
+        public static readonly DependencyProperty DateSelectedProperty = DependencyProperty.Register(
+            nameof(DateSelected),
+            typeof(DateTime?),
+            typeof(GameActivityChartLog),
+            new FrameworkPropertyMetadata(null, AxisVariatoryPropertyChangedCallback));
 
         public static readonly DependencyProperty TitleChartProperty;
         public string TitleChart { get; set; } = string.Empty;

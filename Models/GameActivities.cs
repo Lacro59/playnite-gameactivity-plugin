@@ -142,9 +142,45 @@ namespace GameActivity.Models
         }
 
 
+        public long avgPlayTime()
+        {
+            long avgPlayTime = 0;
+            int CountWithTime = 0;
+
+            foreach (Activity Item in Items)
+            {
+                avgPlayTime += Item.ElapsedSeconds;
+                CountWithTime++;
+            }
+
+            if (avgPlayTime != 0 && CountWithTime != 0)
+            {
+                avgPlayTime = avgPlayTime / CountWithTime;
+            }
+
+            return avgPlayTime;
+        }
 
 
         #region Activities
+        public DateTime GetFirstSession()
+        {
+            // Easter eggs :)
+            DateTime datePrev = new DateTime(2050, 12, 15, 00, 15, 23);
+            DateTime dateFirstSession = DateTime.Now;
+            for (int iActivity = 0; iActivity < Items.Count; iActivity++)
+            {
+                DateTime dateTemp = Convert.ToDateTime(Items[iActivity].DateSession).ToLocalTime();
+                if (datePrev > dateTemp)
+                {
+                    dateFirstSession = Convert.ToDateTime(Items[iActivity].DateSession).ToLocalTime();
+                    datePrev = dateFirstSession;
+                }
+            }
+
+            return dateFirstSession.ToUniversalTime();
+        }
+
         /// <summary>
         /// Get the date last session.
         /// </summary>

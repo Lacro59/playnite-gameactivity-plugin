@@ -223,6 +223,7 @@
                 <Grid Name="gridLvGames" Grid.Column="0" Grid.Row="2">
                     <controlsShared:ListViewExtend x:Name="lvGames" Style="{StaticResource {x:Type ListView}}"
                                                    SelectionChanged="lvGames_SelectionChanged" FontSize="24" 
+                                                   SortingSortDirection="Descending"
                                                    SortingEnable="True" SortingDefaultDataName="listGameLastActivity">
                         <ListView.View>
                             <GridView>
@@ -436,8 +437,8 @@
 
                     <ToggleButton Grid.Column="1" x:Name="ToggleButtonLog" IsChecked="False" Content="{DynamicResource LOCGameActivityLog}" Height="33" Width="65" Click="ToggleButtonLog_Checked" />
 
-                    <Button Grid.Column="3" Content="" Height="25" Width="40" Click="Button_Click_prevGame" FontFamily="Wingdings"></Button>
-                    <Button Grid.Column="4" Content="" Height="25" Width="40" Click="Button_Click_nextGame" FontFamily="Wingdings"></Button>
+                    <Button Grid.Column="3" Content="" Height="25" Width="40" Click="Button_Click_prevGame" FontFamily="Wingdings" />
+                    <Button Grid.Column="4" Content="" Height="25" Width="40" Click="Button_Click_nextGame" FontFamily="Wingdings" />
                 </Grid>
 
                 <Grid Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="2" Name="gameSeriesContener">
