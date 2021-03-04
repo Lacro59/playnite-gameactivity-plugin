@@ -1076,6 +1076,11 @@ namespace GameActivity
 
 
         #region Filter
+        private void TextboxSearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Filter();
+        }
+
         private void Filter()
         {
             lvGames.ItemsSource = null;
@@ -1113,12 +1118,6 @@ namespace GameActivity
 
             lvGames.ItemsSource = activityListByGame.FindAll(x => x.DateActivity.Contains(yearCurrent + "-" + ((monthCurrent > 9) ? monthCurrent.ToString() : "0" + monthCurrent)));
             lvGames.Sorting();
-        }
-
-
-        private void TextboxSearch_KeyUp(object sender, RoutedEventArgs e)
-        {
-            Filter();
         }
 
         private void ChkSource_Checked(object sender, RoutedEventArgs e)
