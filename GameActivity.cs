@@ -63,7 +63,7 @@ namespace GameActivity
             try
             {
                 ButtonName = ((Button)sender).Name;
-                if (ButtonName == "PART_GaCustomButton")
+                if (ButtonName == "PART_CustomGameActivityButton")
                 {
                     Common.LogDebug(true, $"OnCustomThemeButtonClick()");
 
