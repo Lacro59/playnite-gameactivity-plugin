@@ -48,7 +48,7 @@ namespace GameActivity.Services
 
         public void LoadOldDB()
         {
-            logger.Info($"GameActivity - LoadOldDB()");
+            logger.Info($"LoadOldDB()");
 
             Parallel.ForEach(Directory.EnumerateFiles(PathActivityDB, "*.json"), (objectFile) =>
             {
@@ -60,14 +60,13 @@ namespace GameActivity.Services
                     if (JsonStringData.IsNullOrEmpty() || JsonStringData == "{}" || JsonStringData == "[]")
                     {
                         File.Delete(objectFile);
-                        logger.Info($"GameActivity - Delete empty file {objectFile}");
+                        logger.Info($"Delete empty file {objectFile}");
                     }
                     else
                     {
                         // Get game activities.
-#if DEBUG
-                        logger.Debug(objectFile.Replace(PathActivityDB, "").Replace(".json", "").Replace("\\", ""));
-#endif
+                        Common.LogDebug(true, objectFile.Replace(PathActivityDB, "").Replace(".json", "").Replace("\\", ""));
+
                         Guid gameId = Guid.Parse(objectFile.Replace(PathActivityDB, "").Replace(".json", "").Replace("\\", ""));
                         List<ActivityOld> obj = JsonConvert.DeserializeObject<List<ActivityOld>>(JsonStringData);
 
@@ -85,7 +84,7 @@ namespace GameActivity.Services
                                 if (JsonStringDataDetails.IsNullOrEmpty() || JsonStringDataDetails == "{}" || JsonStringDataDetails == "[]")
                                 {
                                     File.Delete(objectFile);
-                                    logger.Info($"GameActivity - Delete empty file {objectFileDetails}");
+                                    logger.Info($"Delete empty file {objectFileDetails}");
                                 }
                                 else
                                 {
@@ -218,9 +217,7 @@ namespace GameActivity.Services
                     }
                     catch (Exception ex)
                     {
-#if DEBUG
                         Common.LogError(ex, true, $"Error in ActivitySourceName");
-#endif
                         return "Playnite";
                     }
                 }

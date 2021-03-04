@@ -38,9 +38,7 @@ namespace GameActivity.Models
                     }
                     catch (Exception ex)
                     {
-#if DEBUG
                         Common.LogError(ex, true, $"SourceId: {SourceID.ToString()} && {PlatformID.ToString()}");
-#endif
                         return "Playnite";
                     }
                 }

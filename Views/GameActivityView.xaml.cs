@@ -744,7 +744,7 @@ namespace GameActivity
                     // Game is deleted
                     else
                     {
-                        logger.Warn($"GameActivity - Failed to load GameActivities from {gameID} because the game is deleted");
+                        logger.Warn($"Failed to load GameActivities from {gameID} because the game is deleted");
                     }
                 }
                 catch (Exception ex)

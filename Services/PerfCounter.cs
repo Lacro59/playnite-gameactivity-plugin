@@ -130,7 +130,7 @@ namespace GameActivity.Services
             }
             catch (Exception ex)
             {
-                logger.Warn($"GameActivity - No RAM usage find");
+                logger.Warn($"No RAM usage find");
                 Common.LogError(ex, true);
             }
 
@@ -172,7 +172,7 @@ namespace GameActivity.Services
             }
             catch (Exception ex)
             {
-                logger.Warn($"GameActivity - No GPU usage find");
+                logger.Warn($"No GPU usage find");
                 Common.LogError(ex, true);
             }
 

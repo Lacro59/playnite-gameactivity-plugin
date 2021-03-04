@@ -109,7 +109,7 @@ namespace GameActivity
 
                 if (!runHWiNFO)
                 {
-                    logger.Error("GameActivity - No HWiNFO running");
+                    logger.Error("No HWiNFO running");
                 }
 
                 if (!WithNotification)
@@ -145,11 +145,11 @@ namespace GameActivity
 
                 if (!runMSI)
                 {
-                    logger.Warn("GameActivity - No MSI Afterburner running");
+                    logger.Warn("No MSI Afterburner running");
                 }
                 if (!runRTSS)
                 {
-                    logger.Warn("GameActivity - No RivaTunerStatisticsServer running");
+                    logger.Warn("No RivaTunerStatisticsServer running");
                 }
 
                 if (!WithNotification)
@@ -169,9 +169,9 @@ namespace GameActivity
         /// <summary>
         /// Start the timer.
         /// </summary>
-        public void DataHWiNFO_start()
+        public void DataLogging_start()
         {
-            logger.Info("GameActivity - dataLogging_start");
+            logger.Info("DataLogging_start");
 
             WarningsMessage = new List<WarningData>();
             t = new Timer(PluginSettings.Settings.TimeIntervalLogging * 60000);
@@ -183,9 +183,9 @@ namespace GameActivity
         /// <summary>
         /// Stop the timer.
         /// </summary>
-        public void DataHWiNFO_stop()
+        public void DataLogging_stop()
         {
-            logger.Info("GameActivity - dataLogging_stop");
+            logger.Info("DataLogging_stop");
 
             if (WarningsMessage.Count != 0)
             {
@@ -659,7 +659,7 @@ namespace GameActivity
             // start timer si log is enable.
             if (PluginSettings.Settings.EnableLogging)
             {
-                DataHWiNFO_start();
+                DataLogging_start();
             }
 
             DateTime DateSession = DateTime.Now.ToUniversalTime();
@@ -688,7 +688,7 @@ namespace GameActivity
                 // Stop timer si HWiNFO log is enable.
                 if (PluginSettings.Settings.EnableLogging)
                 {
-                    DataHWiNFO_stop();
+                    DataLogging_stop();
                 }
 
                 // Infos
