@@ -74,6 +74,13 @@
 
     <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Last session</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Elapsed time</sys:String>
+    
+    <sys:String x:Key="LOCGameActivityAvgCpu">Avg CPU</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgGpu">Avg GPU</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgRam">Avg RAM</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgFps">Avg FPS</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgCpuT">Avg CPU T</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgGpuT">Avg GPU T</sys:String>
 
 
     <!-- GameActivity -->

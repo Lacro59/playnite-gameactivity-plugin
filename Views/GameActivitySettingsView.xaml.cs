@@ -40,40 +40,6 @@ namespace GameActivity
         }
 
 
-        private void Checkbox_Click(object sender, RoutedEventArgs e)
-        {
-            CheckBox cb = (CheckBox)sender;
-
-            if ((cb.Name == "Ga_IntegrationInButtonDetails") && (bool)cb.IsChecked)
-            {
-                Ga_IntegrationInDescriptionOnlyIcon.IsChecked = false;
-            }
-            if ((cb.Name == "Ga_IntegrationInDescriptionOnlyIcon") && (bool)cb.IsChecked)
-            {
-                Ga_IntegrationInButtonDetails.IsChecked = false;
-            }
-            if ((cb.Name == "Ga_IntegrationInDescriptionWithToggle") && (bool)cb.IsChecked)
-            {
-
-            }
-
-            if ((cb.Name == "Ga_IntegrationInButton") && (bool)cb.IsChecked)
-            {
-                Ga_IntegrationInCustomTheme.IsChecked = false;
-            }
-
-            if ((cb.Name == "Ga_IntegrationInDescription") && (bool)cb.IsChecked)
-            {
-                Ga_IntegrationInCustomTheme.IsChecked = false;
-            }
-
-            if ((cb.Name == "Ga_IntegrationInCustomTheme") && (bool)cb.IsChecked)
-            {
-                Ga_IntegrationInDescription.IsChecked = false;
-                Ga_IntegrationInButton.IsChecked = false;
-            }
-        }
-
         private void CbLogging_Click(object sender, RoutedEventArgs e)
         {
             CheckBox cb = (CheckBox)sender;

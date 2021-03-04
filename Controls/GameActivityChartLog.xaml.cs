@@ -446,6 +446,7 @@ namespace GameActivity.Controls
         }
 
 
+        #region Chart visibility
         private void CheckBoxDisplayCpu_Click(object sender, RoutedEventArgs e)
         {
             DisplayCpu = (bool)((CheckBox)sender).IsChecked;
@@ -491,5 +492,6 @@ namespace GameActivity.Controls
         {
             SetChartVisibility();
         }
+        #endregion
     }
 }

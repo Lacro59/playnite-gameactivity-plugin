@@ -115,6 +115,7 @@
     <Compile Include="GameActivitySettings.cs" />
     <Compile Include="Models\GameActivities.cs" />
     <Compile Include="Models\GameActivitiesCollection.cs" />
+    <Compile Include="Models\ListActivities.cs" />
     <Compile Include="Models\WarningData.cs" />
     <Compile Include="playnite-plugincommon\CommonPluginsControls\LiveChartsCommon\CustomerForSingle.cs" />
     <Compile Include="playnite-plugincommon\CommonPluginsControls\LiveChartsCommon\CustomerForTime.cs" />

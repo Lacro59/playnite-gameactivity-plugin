@@ -36,16 +36,16 @@
             </Grid.ColumnDefinitions>
 
             <CheckBox Grid.Column="0" IsChecked="{Binding DisplayCpu, Mode=OneWay}" Click="CheckBoxDisplayCpu_Click">
-                <Label Content="Cpu" />
+                <Label Content="CPU" />
             </CheckBox>
             <CheckBox Grid.Column="2" IsChecked="{Binding DisplayGpu, Mode=OneWay}" Click="CheckBoxDisplayGpu_Click">
-                <Label Content="Gpu" />
+                <Label Content="GPU" />
             </CheckBox>
             <CheckBox Grid.Column="4" IsChecked="{Binding DisplayRam, Mode=OneWay}" Click="CheckBoxDisplayRam_Click">
-                <Label Content="Ram" />
+                <Label Content="RAM" />
             </CheckBox>
             <CheckBox Grid.Column="6" IsChecked="{Binding DisplayFps, Mode=OneWay}" Click="CheckBoxDisplayFps_Click">
-                <Label Content="Fps" />
+                <Label Content="FPS" />
             </CheckBox>
         </Grid>
 

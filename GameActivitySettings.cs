@@ -12,7 +12,6 @@ namespace GameActivity
     {
         #region Settings variables
         public bool MenuInExtensions { get; set; } = true;
-        public bool IgnoreSettings { get; set; } = false;
 
 
         public bool EnableIntegrationButtonHeader { get; set; } = false;
@@ -64,7 +63,6 @@ namespace GameActivity
         public bool ChartLogOrdinates { get; set; } = true;
         public int ChartLogCountAbscissa { get; set; } = 11;
 
-
         public bool UseControls { get; set; } = true;
         public bool DisplayCpu { get; set; } = true;
         public bool DisplayGpu { get; set; } = true;
@@ -74,8 +72,7 @@ namespace GameActivity
 
 
 
-
-        public bool showLauncherIcons { get; set; } = false;
+        public bool ShowLauncherIcons { get; set; } = true;
         public bool CumulPlaytimeSession { get; set; } = false;
         public bool CumulPlaytimeStore { get; set; } = false;
 

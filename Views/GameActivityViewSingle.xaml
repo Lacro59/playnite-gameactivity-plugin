@@ -7,12 +7,14 @@
              xmlns:controls="clr-namespace:GameActivity.Controls"
              xmlns:controlsShared="clr-namespace:CommonPluginsShared.Controls"
              xmlns:commonpluginsshared="clr-namespace:CommonPluginsShared"
+             xmlns:converters="clr-namespace:CommonPluginsPlaynite.Converters"
              mc:Ignorable="d" 
              Height="550" Width="900">
 
     <UserControl.Resources>
         <commonpluginsshared:CompareValueConverter x:Key="CompareValueConverter" />
         <commonpluginsshared:LocalDateTimeConverter x:Key="LocalDateTimeConverter" />
+        <converters:LongToTimePlayedConverter x:Key="LongToTimePlayedConverter" />
     </UserControl.Resources>
 
     <Grid Margin="10">
@@ -128,15 +130,15 @@
                 <controlsShared:ListViewExtend x:Name="lvSessions" Style="{StaticResource {x:Type ListView}}"
                                                SelectionChanged="LvSessions_SelectionChanged" FontSize="24" 
                                                SortingSortDirection="Descending"
-                                               SortingEnable="True" SortingDefaultDataName="listGameLastActivity">
+                                               SortingEnable="True" SortingDefaultDataName="GameLastActivity">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Width="150" 
-                                            DisplayMemberBinding="{Binding listGameLastActivity, Converter={StaticResource LocalDateTimeConverter}}">
+                                            DisplayMemberBinding="{Binding GameLastActivity, Converter={StaticResource LocalDateTimeConverter}}">
                                 <GridViewColumnHeader Content="{DynamicResource LOCGameActivityLvGamesLastActivity}" />
                             </GridViewColumn>
 
-                            <GridViewColumn Width="0" DisplayMemberBinding="{Binding listGameElapsedSeconds}">
+                            <GridViewColumn Width="0" DisplayMemberBinding="{Binding GameElapsedSeconds}">
                                 <GridViewColumnHeader IsHitTestVisible="False" />
                             </GridViewColumn>
                             <GridViewColumn Width="130">
@@ -144,24 +146,24 @@
                                                       Tag="listGameElapsedSeconds" />
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Label Content="{Binding listGameElapsedSeconds, Mode=OneWay, Converter={StaticResource LongToTimePlayedConverter}}"
+                                        <Label Content="{Binding GameElapsedSeconds, Mode=OneWay, Converter={StaticResource LongToTimePlayedConverter}}"
                                                HorizontalAlignment="Center" VerticalAlignment="Stretch" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
 
-                            <GridViewColumn Header="avg CPU">
+                            <GridViewColumn Header="{DynamicResource LOCGameActivityAvgCpu}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Label Content="{Binding avgCPU}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                                        <Label Content="{Binding AvgCPU}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
                                             <Label.Style>
                                                 <Style TargetType="Label">
                                                     <Setter Property="Foreground">
                                                         <Setter.Value>
                                                             <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
-                                                                <Binding Path="avgCPU" />
-                                                                <Binding Path="maxCPU" />
-                                                                <Binding Path="enableWarm" />
+                                                                <Binding Path="AvgCPU" />
+                                                                <Binding Path="MaxCPU" />
+                                                                <Binding Path="EnableWarm" />
                                                             </MultiBinding>
                                                         </Setter.Value>
                                                     </Setter>
@@ -173,18 +175,18 @@
                             </GridViewColumn>
 
                             <GridViewColumn>
-                                <GridViewColumnHeader Content="avg GPU" IsHitTestVisible="False" />
+                                <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgGpu}" IsHitTestVisible="False" />
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Label Content="{Binding avgGPU}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                                        <Label Content="{Binding AvgGPU}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
                                             <Label.Style>
                                                 <Style TargetType="Label">
                                                     <Setter Property="Foreground">
                                                         <Setter.Value>
                                                             <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
-                                                                <Binding Path="avgGPU" />
-                                                                <Binding Path="maxGPU" />
-                                                                <Binding Path="enableWarm" />
+                                                                <Binding Path="AvgGPU" />
+                                                                <Binding Path="MaxGPU" />
+                                                                <Binding Path="EnableWarm" />
                                                             </MultiBinding>
                                                         </Setter.Value>
                                                     </Setter>
@@ -196,18 +198,18 @@
                             </GridViewColumn>
 
                             <GridViewColumn>
-                                <GridViewColumnHeader Content="avg RAM" IsHitTestVisible="False" />
+                                <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgRam}" IsHitTestVisible="False" />
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Label Content="{Binding avgRAM}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                                        <Label Content="{Binding AvgRAM}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
                                             <Label.Style>
                                                 <Style TargetType="Label">
                                                     <Setter Property="Foreground">
                                                         <Setter.Value>
                                                             <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
-                                                                <Binding Path="avgRAM" />
-                                                                <Binding Path="maxRAM" />
-                                                                <Binding Path="enableWarm" />
+                                                                <Binding Path="AvgRAM" />
+                                                                <Binding Path="MaxRAM" />
+                                                                <Binding Path="EnableWarm" />
                                                             </MultiBinding>
                                                         </Setter.Value>
                                                     </Setter>
@@ -219,18 +221,18 @@
                             </GridViewColumn>
 
                             <GridViewColumn>
-                                <GridViewColumnHeader Content="avg FPS" IsHitTestVisible="False" />
+                                <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgFps}" IsHitTestVisible="False" />
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Label Content="{Binding avgFPS}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                                        <Label Content="{Binding AvgFPS}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
                                             <Label.Style>
                                                 <Style TargetType="Label">
                                                     <Setter Property="Foreground">
                                                         <Setter.Value>
                                                             <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="0">
-                                                                <Binding Path="avgFPS" />
-                                                                <Binding Path="minFPS" />
-                                                                <Binding Path="enableWarm" />
+                                                                <Binding Path="AvgFPS" />
+                                                                <Binding Path="MinFPS" />
+                                                                <Binding Path="EnableWarm" />
                                                             </MultiBinding>
                                                         </Setter.Value>
                                                     </Setter>
@@ -242,18 +244,18 @@
                             </GridViewColumn>
 
                             <GridViewColumn>
-                                <GridViewColumnHeader Content="avg CPU T" IsHitTestVisible="False" />
+                                <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgCpuT}" IsHitTestVisible="False" />
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Label Content="{Binding avgCPUT}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                                        <Label Content="{Binding AvgCPUT}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
                                             <Label.Style>
                                                 <Style TargetType="Label">
                                                     <Setter Property="Foreground">
                                                         <Setter.Value>
                                                             <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
-                                                                <Binding Path="avgCPUT" />
-                                                                <Binding Path="maxCPUT" />
-                                                                <Binding Path="enableWarm" />
+                                                                <Binding Path="AvgCPUT" />
+                                                                <Binding Path="MaxCPUT" />
+                                                                <Binding Path="EnableWarm" />
                                                             </MultiBinding>
                                                         </Setter.Value>
                                                     </Setter>
@@ -265,18 +267,18 @@
                             </GridViewColumn>
 
                             <GridViewColumn>
-                                <GridViewColumnHeader Content="avg GPU T" IsHitTestVisible="False" />
+                                <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgGpuT}" IsHitTestVisible="False" />
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Label Content="{Binding avgGPUT}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                                        <Label Content="{Binding AvgGPUT}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
                                             <Label.Style>
                                                 <Style TargetType="Label">
                                                     <Setter Property="Foreground">
                                                         <Setter.Value>
                                                             <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
-                                                                <Binding Path="avgGPUT" />
-                                                                <Binding Path="maxGPUT" />
-                                                                <Binding Path="enableWarm" />
+                                                                <Binding Path="AvgGPUT" />
+                                                                <Binding Path="MaxGPUT" />
+                                                                <Binding Path="EnableWarm" />
                                                             </MultiBinding>
                                                         </Setter.Value>
                                                     </Setter>

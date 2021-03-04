@@ -56,7 +56,7 @@ namespace GameActivity
 
         private List<ListSource> FilterSourceItems = new List<ListSource>();
         private List<string> SearchSources = new List<string>();
-        public List<listGame> activityListByGame { get; set; }
+        public List<ListActivities> activityListByGame { get; set; }
 
         GameActivitySettings _settings { get; set; }
 
@@ -74,8 +74,6 @@ namespace GameActivity
 
         public GameActivityView(Game GameSelected = null)
         {
-            PluginDatabase.PluginSettings.Settings.IgnoreSettings = false;
-
             _PlayniteApi = PluginDatabase.PlayniteApi;
             dbPlaynite = PluginDatabase.PlayniteApi.Database;
             pathsPlaynite = PluginDatabase.PlayniteApi.Paths;
@@ -130,7 +128,7 @@ namespace GameActivity
 
             
             #region Get & set datas
-            listSources = getListSourcesName();
+            listSources = GetListSourcesName();
 
 
             PART_DataLoad.Visibility = Visibility.Visible;
@@ -176,7 +174,7 @@ namespace GameActivity
                     {
                         for (int i = 0; i < lvGames.Items.Count; i++)
                         {
-                            if (((listGame)lvGames.Items[i]).listGameTitle == GameSelected.Name)
+                            if (((ListActivities)lvGames.Items[i]).GameTitle == GameSelected.Name)
                             {
                                 lvGames.SelectedIndex = i;
                                 break;
@@ -203,14 +201,14 @@ namespace GameActivity
 
 
             // Set Binding data
-            ShowIcon = this._settings.showLauncherIcons;
+            ShowIcon = this._settings.ShowLauncherIcons;
             DataContext = this;
         }
 
 
         private void SetSourceFilter()
         {
-            var ListSourceName = activityListByGame.Select(x => x.listGameSourceName).Distinct();
+            var ListSourceName = activityListByGame.Select(x => x.GameSourceName).Distinct();
 
             foreach (var sourcename in ListSourceName)
             {
@@ -239,7 +237,7 @@ namespace GameActivity
             // Total hours by source.
             if (isMonthSources)
             {
-                if (_settings.showLauncherIcons)
+                if (_settings.ShowLauncherIcons)
                 {
                     acmLabelsX.LabelsRotation = 0;
                 }
@@ -340,7 +338,7 @@ namespace GameActivity
                     Values = (long)item.Value,
                 });
                 labels[compteur] = item.Key;
-                if (_settings.showLauncherIcons)
+                if (_settings.ShowLauncherIcons)
                 {
                     labels[compteur] = TransformIcon.Get(labels[compteur]);
                 }
@@ -403,7 +401,7 @@ namespace GameActivity
             acmLabelsY.LabelFormatter = activityForGameLogFormatter;
             acmSeries.Series = ActivityByMonthSeries;
             acmLabelsY.MinValue = 0;
-            ((CustomerToolTipForTime)acmSeries.DataTooltip).ShowIcon = _settings.showLauncherIcons;
+            ((CustomerToolTipForTime)acmSeries.DataTooltip).ShowIcon = _settings.ShowLauncherIcons;
             acmLabelsX.Labels = ActivityByMonthLabels;
         }
 
@@ -574,7 +572,7 @@ namespace GameActivity
                 for (int iSource = 0; iSource < listNoDelete.Count; iSource++)
                 {
                     labels[iSource] = (string)listNoDelete[iSource];
-                    if (_settings.showLauncherIcons)
+                    if (_settings.ShowLauncherIcons)
                     {
                         labels[iSource] = TransformIcon.Get((string)listNoDelete[iSource]);
                     }
@@ -657,7 +655,7 @@ namespace GameActivity
             else
             {
                 acwSeries.DataTooltip = new CustomerToolTipForMultipleTime();
-                ((CustomerToolTipForMultipleTime)acwSeries.DataTooltip).ShowIcon = _settings.showLauncherIcons;
+                ((CustomerToolTipForMultipleTime)acwSeries.DataTooltip).ShowIcon = _settings.ShowLauncherIcons;
             }
 
             //let create a mapper so LiveCharts know how to plot our CustomerViewModel class
@@ -682,7 +680,7 @@ namespace GameActivity
         /// </summary>
         public void getActivityByListGame()
         {
-            activityListByGame = new List<listGame>();
+            activityListByGame = new List<ListActivities>();
 
             List<GameActivities> listGameActivities = GameActivity.PluginDatabase.GetListGameActivity();
             listGameActivities = listGameActivities.Where(x => x.Items.Count > 0 && !x.IsDeleted).ToList();
@@ -717,30 +715,30 @@ namespace GameActivity
                             GameIcon = dbPlaynite.GetFullFilePath(GameIcon);
                         }
 
-                        activityListByGame.Add(new listGame()
+                        activityListByGame.Add(new ListActivities()
                         {
-                            listGameID = gameID,
-                            listGameTitle = gameTitle,
-                            listGameIcon = GameIcon,
-                            listGameLastActivity = dateSession,
-                            listGameElapsedSeconds = elapsedSeconds,
-                            listGameSourceName = sourceName,
-                            listGameSourceIcon = TransformIcon.Get(sourceName),
-                            listDateActivity = listGameActivities[iGame].GetListDateActivity(),
-                            avgCPU = listGameActivities[iGame].avgCPU(listGameActivities[iGame].GetLastSession()) + "%",
-                            avgGPU = listGameActivities[iGame].avgGPU(listGameActivities[iGame].GetLastSession()) + "%",
-                            avgRAM = listGameActivities[iGame].avgRAM(listGameActivities[iGame].GetLastSession()) + "%",
-                            avgFPS = listGameActivities[iGame].avgFPS(listGameActivities[iGame].GetLastSession()) + "",
-                            avgCPUT = listGameActivities[iGame].avgCPUT(listGameActivities[iGame].GetLastSession()) + "°",
-                            avgGPUT = listGameActivities[iGame].avgGPUT(listGameActivities[iGame].GetLastSession()) + "°",
+                            GameId = gameID,
+                            GameTitle = gameTitle,
+                            GameIcon = GameIcon,
+                            GameLastActivity = dateSession,
+                            GameElapsedSeconds = elapsedSeconds,
+                            GameSourceName = sourceName,
+                            GameSourceIcon = TransformIcon.Get(sourceName),
+                            DateActivity = listGameActivities[iGame].GetListDateActivity(),
+                            AvgCPU = listGameActivities[iGame].avgCPU(listGameActivities[iGame].GetLastSession()) + "%",
+                            AvgGPU = listGameActivities[iGame].avgGPU(listGameActivities[iGame].GetLastSession()) + "%",
+                            AvgRAM = listGameActivities[iGame].avgRAM(listGameActivities[iGame].GetLastSession()) + "%",
+                            AvgFPS = listGameActivities[iGame].avgFPS(listGameActivities[iGame].GetLastSession()) + "",
+                            AvgCPUT = listGameActivities[iGame].avgCPUT(listGameActivities[iGame].GetLastSession()) + "°",
+                            AvgGPUT = listGameActivities[iGame].avgGPUT(listGameActivities[iGame].GetLastSession()) + "°",
 
-                            enableWarm = _settings.EnableWarning,
-                            maxCPUT = _settings.MaxCpuTemp.ToString(),
-                            maxGPUT = _settings.MaxGpuTemp.ToString(),
-                            minFPS = _settings.MinFps.ToString(),
-                            maxCPU = _settings.MaxCpuUsage.ToString(),
-                            maxGPU = _settings.MaxGpuUsage.ToString(),
-                            maxRAM = _settings.MaxRamUsage.ToString(),
+                            EnableWarm = _settings.EnableWarning,
+                            MaxCPUT = _settings.MaxCpuTemp.ToString(),
+                            MaxGPUT = _settings.MaxGpuTemp.ToString(),
+                            MinFPS = _settings.MinFps.ToString(),
+                            MaxCPU = _settings.MaxCpuUsage.ToString(),
+                            MaxGPU = _settings.MaxGpuUsage.ToString(),
+                            MaxRAM = _settings.MaxRamUsage.ToString(),
                         });
                     }
                     // Game is deleted
@@ -816,7 +814,7 @@ namespace GameActivity
         /// Get list sources name in database.
         /// </summary>
         /// <returns></returns>
-        public JArray getListSourcesName()
+        public JArray GetListSourcesName()
         {
             JArray arrayReturn = new JArray();
             foreach (GameSource source in dbPlaynite.Sources)
@@ -837,7 +835,7 @@ namespace GameActivity
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void lvGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void LvGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             activityForGamesGraphics.Visibility = Visibility.Hidden;
 
@@ -845,22 +843,25 @@ namespace GameActivity
             variateurLog = 0;
             variateurLogTemp = 0;
 
-            var item = (ListBox)sender;
-            if (item.ItemsSource != null && ((List<listGame>)item.ItemsSource).Count > 0)
+            if (sender != null)
             {
-                listGame gameItem = (listGame)item.SelectedItem;
-                gameIDCurrent = gameItem.listGameID;
-
-                if (isGameTime)
+                var item = (ListBox)sender;
+                if (item.ItemsSource != null && ((List<ListActivities>)item.ItemsSource).Count > 0)
                 {
-                    getActivityForGamesTimeGraphics(gameIDCurrent);
-                }
-                else
-                {
-                    getActivityForGamesLogGraphics(gameIDCurrent);
-                }
+                    ListActivities gameItem = (ListActivities)item.SelectedItem;
+                    gameIDCurrent = gameItem.GameId;
 
-                activityForGamesGraphics.Visibility = Visibility.Visible;
+                    if (isGameTime)
+                    {
+                        getActivityForGamesTimeGraphics(gameIDCurrent);
+                    }
+                    else
+                    {
+                        getActivityForGamesLogGraphics(gameIDCurrent);
+                    }
+
+                    activityForGamesGraphics.Visibility = Visibility.Visible;
+                }
             }
         }
 
@@ -1069,8 +1070,6 @@ namespace GameActivity
                 ToggleButtonTime.IsChecked = false;
                 ToggleButtonLog.IsChecked = true;
 
-                //gameSeries.HideTooltip();
-
                 getActivityForGamesLogGraphics(gameIDCurrent, LabelDataSelected, titleChart);
             }
         }
@@ -1084,9 +1083,9 @@ namespace GameActivity
             if (!TextboxSearch.Text.IsNullOrEmpty() && SearchSources.Count != 0)
             {
                 lvGames.ItemsSource = activityListByGame.FindAll(
-                    x => x.listGameTitle.ToLower().IndexOf(TextboxSearch.Text) > -1 
-                         && SearchSources.Contains(x.listGameSourceName)
-                         && x.listDateActivity.Contains(yearCurrent + "-" + ((monthCurrent > 9) ? monthCurrent.ToString() : "0" + monthCurrent))
+                    x => x.GameTitle.ToLower().IndexOf(TextboxSearch.Text) > -1 
+                         && SearchSources.Contains(x.GameSourceName)
+                         && x.DateActivity.Contains(yearCurrent + "-" + ((monthCurrent > 9) ? monthCurrent.ToString() : "0" + monthCurrent))
                 );
                 lvGames.Sorting();
                 return;
@@ -1095,8 +1094,8 @@ namespace GameActivity
             if (!TextboxSearch.Text.IsNullOrEmpty())
             {
                 lvGames.ItemsSource = activityListByGame.FindAll(
-                    x => x.listGameTitle.ToLower().IndexOf(TextboxSearch.Text) > -1
-                         && x.listDateActivity.Contains(yearCurrent + "-" + ((monthCurrent > 9) ? monthCurrent.ToString() : "0" + monthCurrent))
+                    x => x.GameTitle.ToLower().IndexOf(TextboxSearch.Text) > -1
+                         && x.DateActivity.Contains(yearCurrent + "-" + ((monthCurrent > 9) ? monthCurrent.ToString() : "0" + monthCurrent))
                 );
                 lvGames.Sorting();
                 return;
@@ -1105,14 +1104,14 @@ namespace GameActivity
             if (SearchSources.Count != 0)
             {
                 lvGames.ItemsSource = activityListByGame.FindAll(
-                    x => SearchSources.Contains(x.listGameSourceName) 
-                         && x.listDateActivity.Contains(yearCurrent + "-" + ((monthCurrent > 9) ? monthCurrent.ToString() : "0" + monthCurrent))
+                    x => SearchSources.Contains(x.GameSourceName) 
+                         && x.DateActivity.Contains(yearCurrent + "-" + ((monthCurrent > 9) ? monthCurrent.ToString() : "0" + monthCurrent))
                 );
                 lvGames.Sorting();
                 return;
             }
 
-            lvGames.ItemsSource = activityListByGame.FindAll(x => x.listDateActivity.Contains(yearCurrent + "-" + ((monthCurrent > 9) ? monthCurrent.ToString() : "0" + monthCurrent)));
+            lvGames.ItemsSource = activityListByGame.FindAll(x => x.DateActivity.Contains(yearCurrent + "-" + ((monthCurrent > 9) ? monthCurrent.ToString() : "0" + monthCurrent)));
             lvGames.Sorting();
         }
 
@@ -1153,36 +1152,6 @@ namespace GameActivity
         #endregion
     }
 
-    // Listview games
-    public class listGame
-    {
-        public string listGameTitle { get; set; }
-        public string listGameID { get; set; }
-        public string listGameIcon { get; set; }
-        public DateTime listGameLastActivity { get; set; }
-        public long listGameElapsedSeconds { get; set; }
-
-        public List<string> listDateActivity { get; set; }
-
-        public string listGameSourceName { get; set; }
-        public string listGameSourceIcon { get; set; }
-
-        public string avgCPU { get; set; }
-        public string avgGPU { get; set; }
-        public string avgRAM { get; set; }
-        public string avgFPS { get; set; }
-        public string avgCPUT { get; set; }
-        public string avgGPUT { get; set; }
-
-        public bool enableWarm { get; set; }
-        public string maxCPUT { get; set; }
-        public string maxGPUT { get; set; }
-        public string minFPS { get; set; }
-        public string maxCPU { get; set; }
-        public string maxGPU { get; set; }
-        public string maxRAM { get; set; }
-    }
-    
     public class ListSource
     {
         public string SourceName { get; set; }
