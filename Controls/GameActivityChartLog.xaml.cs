@@ -139,6 +139,7 @@ namespace GameActivity.Controls
 
             PluginDatabase.PluginSettings.PropertyChanged += PluginSettings_PropertyChanged;
             PluginDatabase.Database.ItemUpdated += Database_ItemUpdated;
+            PluginDatabase.Database.ItemCollectionChanged += Database_ItemCollectionChanged;
             PluginDatabase.PlayniteApi.Database.Games.ItemUpdated += Games_ItemUpdated;
 
             // Apply settings

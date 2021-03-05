@@ -49,7 +49,6 @@ namespace GameActivity.Services
         }
 
 
-
         public override void SetThemesResources(Game game)
         {
             GameActivities gameActivities = Get(game, true);
@@ -64,6 +63,14 @@ namespace GameActivity.Services
             LongToTimePlayedConverter converter = new LongToTimePlayedConverter();
             string playtime = (string)converter.Convert((long)gameActivities.GetLastSessionActivity().ElapsedSeconds, null, null, CultureInfo.CurrentCulture);
             PluginSettings.Settings.LastPlaytimeSession = playtime;
+        }
+
+        public override void Games_ItemUpdated(object sender, ItemUpdatedEventArgs<Game> e)
+        {
+            foreach (var GameUpdated in e.UpdatedItems)
+            {
+                Database.SetGameInfoDetails<Activity, ActivityDetails>(PlayniteApi, GameUpdated.NewData.Id);
+            }
         }
 
 
