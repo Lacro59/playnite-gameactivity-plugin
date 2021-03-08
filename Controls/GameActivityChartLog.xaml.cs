@@ -142,6 +142,13 @@ namespace GameActivity.Controls
             PluginDatabase.Database.ItemCollectionChanged += Database_ItemCollectionChanged;
             PluginDatabase.PlayniteApi.Database.Games.ItemUpdated += Games_ItemUpdated;
 
+
+            DisplayCpu = PluginDatabase.PluginSettings.Settings.DisplayCpu;
+            DisplayGpu = PluginDatabase.PluginSettings.Settings.DisplayGpu;
+            DisplayRam = PluginDatabase.PluginSettings.Settings.DisplayRam;
+            DisplayFps = PluginDatabase.PluginSettings.Settings.DisplayFps;
+
+
             // Apply settings
             PluginSettings_PropertyChanged(null, null);
         }
@@ -201,11 +208,6 @@ namespace GameActivity.Controls
         public override void PluginSettings_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             // Apply settings
-            DisplayCpu = PluginDatabase.PluginSettings.Settings.DisplayCpu;
-            DisplayGpu = PluginDatabase.PluginSettings.Settings.DisplayGpu;
-            DisplayRam = PluginDatabase.PluginSettings.Settings.DisplayRam;
-            DisplayFps = PluginDatabase.PluginSettings.Settings.DisplayFps;
-
             if (IgnoreSettings)
             {
                 this.DataContext = new
@@ -216,10 +218,10 @@ namespace GameActivity.Controls
                     ChartLogOrdinates = true,
                     UseControls = true,
 
-                    PluginDatabase.PluginSettings.Settings.DisplayCpu,
-                    PluginDatabase.PluginSettings.Settings.DisplayGpu,
-                    PluginDatabase.PluginSettings.Settings.DisplayRam,
-                    PluginDatabase.PluginSettings.Settings.DisplayFps
+                    DisplayCpu,
+                    DisplayGpu,
+                    DisplayRam,
+                    DisplayFps
                 };
             }
             else
@@ -232,10 +234,10 @@ namespace GameActivity.Controls
                     PluginDatabase.PluginSettings.Settings.ChartLogOrdinates,
                     PluginDatabase.PluginSettings.Settings.UseControls,
 
-                    PluginDatabase.PluginSettings.Settings.DisplayCpu,
-                    PluginDatabase.PluginSettings.Settings.DisplayGpu,
-                    PluginDatabase.PluginSettings.Settings.DisplayRam,
-                    PluginDatabase.PluginSettings.Settings.DisplayFps
+                    DisplayCpu,
+                    DisplayGpu,
+                    DisplayRam,
+                    DisplayFps
                 };
             }
 
@@ -489,7 +491,7 @@ namespace GameActivity.Controls
             }
         }
 
-        private void PART_ChartLogActivity_LayoutUpdated(object sender, EventArgs e)
+        private void PART_ChartLogActivity_UpdaterTick(object sender)
         {
             SetChartVisibility();
         }

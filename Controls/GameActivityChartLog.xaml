@@ -51,7 +51,7 @@
 
         <Grid Name="PART_GridContener" Grid.Row="1">
             <lvc:CartesianChart LegendLocation="none" Name="PART_ChartLogActivity" 
-                                LayoutUpdated="PART_ChartLogActivity_LayoutUpdated"
+                                UpdaterTick="PART_ChartLogActivity_UpdaterTick"
                                 DisableAnimations="{Binding DisableAnimations}"
                                 Width="{Binding ElementName=PART_GridContener, Path=ActualWidth}"
                                 Height="{Binding ElementName=PART_GridContener, Path=ActualHeight}">
