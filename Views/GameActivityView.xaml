@@ -234,14 +234,27 @@
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <Image HorizontalAlignment="Center" Height="32" VerticalAlignment="Center" Width="32" 
-                                               Source="{Binding GameIcon, Converter={StaticResource DefaultIconConverter}}" />
+                                                   Source="{Binding GameIcon, Converter={StaticResource DefaultIconConverter}}" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                
-                                <GridViewColumn Header="{DynamicResource LOCGameNameTitle}" Width="200" 
-                                                DisplayMemberBinding="{Binding GameTitle}" />
-                                
+
+                                <GridViewColumn Width="0" DisplayMemberBinding="{Binding GameTitle}">
+                                    <GridViewColumnHeader IsHitTestVisible="False" />
+                                </GridViewColumn>
+                                <GridViewColumn Width="200">
+                                    <GridViewColumnHeader Content="{DynamicResource LOCGameNameTitle}" Tag="GameTitle" />
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock>
+                                                <Hyperlink Command="{Binding GoToGame}" CommandParameter="{Binding Id}">
+                                                    <TextBlock Text="{Binding GameTitle}" Style="{DynamicResource ListExtendStyleTextBlock}" />
+                                                </Hyperlink>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+
                                 <GridViewColumn Width="150" 
                                                 DisplayMemberBinding="{Binding GameLastActivity, Converter={StaticResource LocalDateTimeConverter}}">
                                     <GridViewColumnHeader Content="{DynamicResource LOCGameActivityLvGamesLastActivity}" />
@@ -256,7 +269,8 @@
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <Label Content="{Binding GameElapsedSeconds, Mode=OneWay, Converter={StaticResource LongToTimePlayedConverter}}"
-                                               HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+                                                   HorizontalAlignment="Center" VerticalAlignment="Stretch"
+                                                   Style="{DynamicResource ListExtendStyleLabel}" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
@@ -270,7 +284,8 @@
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <Label Content="{Binding GameSourceIcon}" FontFamily="{DynamicResource CommonFont}" 
-                                                   HorizontalAlignment="Center" VerticalAlignment="Stretch" FontSize="24" />
+                                                   HorizontalAlignment="Center" VerticalAlignment="Stretch" FontSize="24"
+                                                   Style="{DynamicResource ListExtendStyleLabel}" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
@@ -290,6 +305,12 @@
                                                                 </MultiBinding>
                                                             </Setter.Value>
                                                         </Setter>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=IsSelected}"
+                                                                     Value="True">
+                                                                <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=Foreground}" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
                                                     </Style>
                                                 </Label.Style>
                                             </Label>
@@ -313,6 +334,12 @@
                                                                 </MultiBinding>
                                                             </Setter.Value>
                                                         </Setter>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=IsSelected}"
+                                                                     Value="True">
+                                                                <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=Foreground}" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
                                                     </Style>
                                                 </Label.Style>
                                             </Label>
@@ -336,6 +363,12 @@
                                                                 </MultiBinding>
                                                             </Setter.Value>
                                                         </Setter>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=IsSelected}"
+                                                                     Value="True">
+                                                                <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=Foreground}" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
                                                     </Style>
                                                 </Label.Style>
                                             </Label>
@@ -359,6 +392,12 @@
                                                                 </MultiBinding>
                                                             </Setter.Value>
                                                         </Setter>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=IsSelected}"
+                                                                     Value="True">
+                                                                <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=Foreground}" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
                                                     </Style>
                                                 </Label.Style>
                                             </Label>
@@ -382,6 +421,12 @@
                                                                 </MultiBinding>
                                                             </Setter.Value>
                                                         </Setter>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=IsSelected}"
+                                                                     Value="True">
+                                                                <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=Foreground}" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
                                                     </Style>
                                                 </Label.Style>
                                             </Label>
@@ -405,6 +450,12 @@
                                                                 </MultiBinding>
                                                             </Setter.Value>
                                                         </Setter>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=IsSelected}"
+                                                                     Value="True">
+                                                                <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=Foreground}" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
                                                     </Style>
                                                 </Label.Style>
                                             </Label>

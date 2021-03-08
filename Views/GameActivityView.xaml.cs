@@ -717,6 +717,7 @@ namespace GameActivity
 
                         activityListByGame.Add(new ListActivities()
                         {
+                            Id = listGameActivities[iGame].Id,
                             GameId = gameID,
                             GameTitle = gameTitle,
                             GameIcon = GameIcon,
@@ -739,6 +740,8 @@ namespace GameActivity
                             MaxCPU = _settings.MaxCpuUsage.ToString(),
                             MaxGPU = _settings.MaxGpuUsage.ToString(),
                             MaxRAM = _settings.MaxRamUsage.ToString(),
+
+                            GoToGame = PluginDatabase.GoToGame
                         });
                     }
                     // Game is deleted

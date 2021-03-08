@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Playnite.SDK;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ namespace GameActivity.Models
     {
         public string GameTitle { get; set; }
         public string GameId { get; set; }
+        public Guid Id { get; set; }
         public string GameIcon { get; set; }
         public DateTime GameLastActivity { get; set; }
         public long GameElapsedSeconds { get; set; }
@@ -33,5 +35,7 @@ namespace GameActivity.Models
         public string MaxCPU { get; set; }
         public string MaxGPU { get; set; }
         public string MaxRAM { get; set; }
+
+        public RelayCommand<Guid> GoToGame { get; set; }
     }
 }
