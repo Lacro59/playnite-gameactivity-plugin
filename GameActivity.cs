@@ -472,9 +472,9 @@ namespace GameActivity
                     {
                         Icon = new TextBlock
                         {
-                            Text = "",
+                            Text = "\ue97f",
                             FontSize = 20,
-                            FontFamily = resources.GetResource("CommonFont") as FontFamily
+                            FontFamily = resources.GetResource("FontIcoFont") as FontFamily
                         },
                         ToolTip = resources.GetString("LOCGameActivityViewGamesActivities"),
                         Action = () =>
@@ -522,8 +522,8 @@ namespace GameActivity
                 Title = resources.GetString("LOCGameActivityViewGamesActivities");
                 Icon = new TextBlock
                 {
-                    Text = "",
-                    FontFamily = resources.GetResource("CommonFont") as FontFamily
+                    Text = "\ue97f",
+                    FontFamily = resources.GetResource("FontIcoFont") as FontFamily
                 };
             }
 

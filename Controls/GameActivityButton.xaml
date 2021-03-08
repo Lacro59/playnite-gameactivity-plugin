@@ -26,7 +26,7 @@
             </Grid.ColumnDefinitions>
 
             <!-- Without details -->
-            <TextBlock Text="" FontFamily="{DynamicResource CommonFont}"
+            <TextBlock Text="&#xe97f;" FontFamily="{DynamicResource FontIcoFont}"
                        Grid.Column="0" VerticalAlignment="Center"
                        FontSize="{Binding RelativeSource={RelativeSource AncestorType=ContentControl}, Path=FontSize}" />
 
