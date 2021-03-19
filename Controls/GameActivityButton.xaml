@@ -37,8 +37,8 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                
-                <Label Grid.Row="0" Content="{Binding LastActivity, FallbackValue='27/02/2021'}" 
+
+                <Label Grid.Row="0" Content="{Binding LastActivity, FallbackValue='27/02/2021'}" Margin="0,-2,0,0"
                        FontSize="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight, Converter={StaticResource HeightToFontSizeConverter}}">
                     <Label.Style>
                         <Style TargetType="Label">
@@ -52,9 +52,9 @@
                         </Style>
                     </Label.Style>
                 </Label>
-                <Label Grid.Column="1" Grid.Row="2" VerticalAlignment="Center"
+                <Label Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Margin="0,-2,0,0"
                        Content="{Binding LastPlaytime, Converter={StaticResource LongToTimePlayedConverter}, FallbackValue='23 minutes'}"
-                                              FontSize="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight, Converter={StaticResource HeightToFontSizeConverter}}">
+                       FontSize="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight, Converter={StaticResource HeightToFontSizeConverter}}">
                     <Label.Style>
                         <Style TargetType="Label">
                             <Setter Property="Padding" Value="5,3,5,5" />
