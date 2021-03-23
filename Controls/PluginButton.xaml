@@ -35,10 +35,11 @@
                   Visibility="{Binding DisplayDetails, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
+                    <RowDefinition Height="3" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <Label Grid.Row="0" Content="{Binding LastActivity, FallbackValue='27/02/2021'}" Margin="0,-2,0,0"
+                <Label Grid.Row="0" Content="{Binding LastActivity, FallbackValue='27/02/2021'}" Margin="0,-3,0,-3"
                        FontSize="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight, Converter={StaticResource HeightToFontSizeConverter}}">
                     <Label.Style>
                         <Style TargetType="Label">
@@ -52,7 +53,7 @@
                         </Style>
                     </Label.Style>
                 </Label>
-                <Label Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Margin="0,-2,0,0"
+                <Label Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Margin="0,-3,0,-3"
                        Content="{Binding LastPlaytime, Converter={StaticResource LongToTimePlayedConverter}, FallbackValue='23 minutes'}"
                        FontSize="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight, Converter={StaticResource HeightToFontSizeConverter}}">
                     <Label.Style>

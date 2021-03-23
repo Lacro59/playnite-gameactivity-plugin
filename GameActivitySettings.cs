@@ -27,7 +27,16 @@ namespace GameActivity
             }
         }
 
-        public bool EnableIntegrationButtonDetails { get; set; } = false;
+        public bool _EnableIntegrationButtonDetails { get; set; } = false;
+        public bool EnableIntegrationButtonDetails
+        {
+            get => _EnableIntegrationButtonDetails;
+            set
+            {
+                _EnableIntegrationButtonDetails = value;
+                OnPropertyChanged();
+            }
+        }
 
         private bool _EnableIntegrationChartTime { get; set; } = false;
         public bool EnableIntegrationChartTime
