@@ -41,8 +41,8 @@ namespace GameActivity
         private JArray listSources { get; set; }
         private DateTime LabelDataSelected { get; set; }
 
-        private GameActivityChartTime PART_GameActivityChartTime;
-        private GameActivityChartLog PART_GameActivityChartLog;
+        private PluginChartTime PART_GameActivityChartTime;
+        private PluginChartLog PART_GameActivityChartLog;
 
         private LongToTimePlayedConverter converter = new LongToTimePlayedConverter();
 
@@ -94,13 +94,13 @@ namespace GameActivity
             }
 
 
-            PART_GameActivityChartTime = new GameActivityChartTime();
+            PART_GameActivityChartTime = new PluginChartTime();
             PART_GameActivityChartTime.IgnoreSettings = true;
             PART_GameActivityChartTime.GameSeriesDataClick += GameSeries_DataClick;
             PART_GameActivityChartTime_Contener.Children.Add(PART_GameActivityChartTime);
 
 
-            PART_GameActivityChartLog = new GameActivityChartLog();
+            PART_GameActivityChartLog = new PluginChartLog();
             PART_GameActivityChartLog.IgnoreSettings = true;
             PART_GameActivityChartLog_Contener.Children.Add(PART_GameActivityChartLog);
 

@@ -32,9 +32,9 @@ using System.Windows.Threading;
 namespace GameActivity.Controls
 {
     /// <summary>
-    /// Logique d'interaction pour GameActivityChartTime.xaml
+    /// Logique d'interaction pour PluginChartTime.xaml
     /// </summary>
-    public partial class GameActivityChartTime : PluginUserControlExtend
+    public partial class PluginChartTime : PluginUserControlExtend
     {
         private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
 
@@ -51,7 +51,7 @@ namespace GameActivity.Controls
         public static readonly DependencyProperty DisableAnimationsProperty = DependencyProperty.Register(
             nameof(DisableAnimations),
             typeof(bool),
-            typeof(GameActivityChartTime),
+            typeof(PluginChartTime),
             new FrameworkPropertyMetadata(false, SettingsPropertyChangedCallback));
 
         public bool LabelsRotation
@@ -63,7 +63,7 @@ namespace GameActivity.Controls
         public static readonly DependencyProperty LabelsRotationProperty = DependencyProperty.Register(
             nameof(LabelsRotation),
             typeof(bool),
-            typeof(GameActivityChartTime),
+            typeof(PluginChartTime),
             new FrameworkPropertyMetadata(false, SettingsPropertyChangedCallback));
 
         public static readonly DependencyProperty AxisLimitProperty;
@@ -78,29 +78,38 @@ namespace GameActivity.Controls
         public static readonly DependencyProperty AxisVariatoryProperty = DependencyProperty.Register(
             nameof(AxisVariator),
             typeof(int),
-            typeof(GameActivityChartTime),
+            typeof(PluginChartTime),
             new FrameworkPropertyMetadata(0, AxisVariatoryPropertyChangedCallback));
         #endregion
 
 
-        public GameActivityChartTime()
+        public PluginChartTime()
         {
             InitializeComponent();
 
-            PluginDatabase.PluginSettings.PropertyChanged += PluginSettings_PropertyChanged;
-            PluginDatabase.Database.ItemUpdated += Database_ItemUpdated;
-            PluginDatabase.Database.ItemCollectionChanged += Database_ItemCollectionChanged;
-            PluginDatabase.PlayniteApi.Database.Games.ItemUpdated += Games_ItemUpdated;
+            Task.Run(() =>
+            {
+                // Wait extension database are loaded
+                System.Threading.SpinWait.SpinUntil(() => PluginDatabase.IsLoaded, -1);
 
-            // Apply settings
-            PluginSettings_PropertyChanged(null, null);
+                this.Dispatcher.BeginInvoke((Action)delegate
+                {
+                    PluginDatabase.PluginSettings.PropertyChanged += PluginSettings_PropertyChanged;
+                    PluginDatabase.Database.ItemUpdated += Database_ItemUpdated;
+                    PluginDatabase.Database.ItemCollectionChanged += Database_ItemCollectionChanged;
+                    PluginDatabase.PlayniteApi.Database.Games.ItemUpdated += Games_ItemUpdated;
+
+                    // Apply settings
+                    PluginSettings_PropertyChanged(null, null);
+                });
+            });
         }
 
 
         #region OnPropertyChange
         private static void SettingsPropertyChangedCallback(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            GameActivityChartTime obj = sender as GameActivityChartTime;
+            PluginChartTime obj = sender as PluginChartTime;
             if (obj != null && e.NewValue != e.OldValue)
             {
                 obj.PluginSettings_PropertyChanged(null, null);
@@ -109,7 +118,7 @@ namespace GameActivity.Controls
 
         private static void AxisVariatoryPropertyChangedCallback(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            GameActivityChartTime obj = sender as GameActivityChartTime;
+            PluginChartTime obj = sender as PluginChartTime;
             if (obj != null && e.NewValue != e.OldValue)
             {
                 obj.GameContextChanged(null, obj.GameContext);
@@ -156,6 +165,11 @@ namespace GameActivity.Controls
         // When game is changed
         public override void GameContextChanged(Game oldContext, Game newContext)
         {
+            if (!PluginDatabase.IsLoaded)
+            {
+                return;
+            }
+
             if (IgnoreSettings)
             {
                 MustDisplay = true;
@@ -406,9 +420,11 @@ namespace GameActivity.Controls
         }
 
 
+        #region Events
         private void PART_ChartTimeActivity_DataClick(object sender, ChartPoint chartPoint)
         {
             this.GameSeriesDataClick?.Invoke(this, chartPoint);
         }
+        #endregion
     }
 }

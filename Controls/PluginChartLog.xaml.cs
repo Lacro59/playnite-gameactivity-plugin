@@ -28,9 +28,9 @@ using System.Windows.Threading;
 namespace GameActivity.Controls
 {
     /// <summary>
-    /// Logique d'interaction pour GameActivityChartLog.xaml
+    /// Logique d'interaction pour PluginChartLog.xaml
     /// </summary>
-    public partial class GameActivityChartLog : PluginUserControlExtend
+    public partial class PluginChartLog : PluginUserControlExtend
     {
         private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
 
@@ -50,7 +50,7 @@ namespace GameActivity.Controls
         public static readonly DependencyProperty DisableAnimationsProperty = DependencyProperty.Register(
             nameof(DisableAnimations),
             typeof(bool),
-            typeof(GameActivityChartLog),
+            typeof(PluginChartLog),
             new FrameworkPropertyMetadata(false, SettingsPropertyChangedCallback));
 
         public static readonly DependencyProperty AxisLimitProperty;
@@ -65,7 +65,7 @@ namespace GameActivity.Controls
         public static readonly DependencyProperty DateSelectedProperty = DependencyProperty.Register(
             nameof(DateSelected),
             typeof(DateTime?),
-            typeof(GameActivityChartLog),
+            typeof(PluginChartLog),
             new FrameworkPropertyMetadata(null, ControlsPropertyChangedCallback));
 
         public static readonly DependencyProperty TitleChartProperty;
@@ -80,7 +80,7 @@ namespace GameActivity.Controls
         public static readonly DependencyProperty AxisVariatoryProperty = DependencyProperty.Register(
             nameof(AxisVariator),
             typeof(int),
-            typeof(GameActivityChartLog),
+            typeof(PluginChartLog),
             new FrameworkPropertyMetadata(0, ControlsPropertyChangedCallback));
 
         public bool DisplayCpu
@@ -92,7 +92,7 @@ namespace GameActivity.Controls
         public static readonly DependencyProperty DisplayCpuProperty = DependencyProperty.Register(
             nameof(DisplayCpu),
             typeof(bool),
-            typeof(GameActivityChartLog),
+            typeof(PluginChartLog),
             new FrameworkPropertyMetadata(true, SettingsPropertyChangedCallback));
 
         public bool DisplayGpu
@@ -104,7 +104,7 @@ namespace GameActivity.Controls
         public static readonly DependencyProperty DisplayGpuProperty = DependencyProperty.Register(
             nameof(DisplayGpu),
             typeof(bool),
-            typeof(GameActivityChartLog),
+            typeof(PluginChartLog),
             new FrameworkPropertyMetadata(true, SettingsPropertyChangedCallback));
 
         public bool DisplayRam
@@ -116,7 +116,7 @@ namespace GameActivity.Controls
         public static readonly DependencyProperty DisplayRamProperty = DependencyProperty.Register(
             nameof(DisplayRam),
             typeof(bool),
-            typeof(GameActivityChartLog),
+            typeof(PluginChartLog),
             new FrameworkPropertyMetadata(true, SettingsPropertyChangedCallback));
 
         public bool DisplayFps
@@ -128,36 +128,43 @@ namespace GameActivity.Controls
         public static readonly DependencyProperty DisplayFpsProperty = DependencyProperty.Register(
             nameof(DisplayFps),
             typeof(bool),
-            typeof(GameActivityChartLog),
+            typeof(PluginChartLog),
             new FrameworkPropertyMetadata(true, SettingsPropertyChangedCallback));
         #endregion
 
 
-        public GameActivityChartLog()
+        public PluginChartLog()
         {
             InitializeComponent();
 
-            PluginDatabase.PluginSettings.PropertyChanged += PluginSettings_PropertyChanged;
-            PluginDatabase.Database.ItemUpdated += Database_ItemUpdated;
-            PluginDatabase.Database.ItemCollectionChanged += Database_ItemCollectionChanged;
-            PluginDatabase.PlayniteApi.Database.Games.ItemUpdated += Games_ItemUpdated;
+            Task.Run(() =>
+            {
+                // Wait extension database are loaded
+                System.Threading.SpinWait.SpinUntil(() => PluginDatabase.IsLoaded, -1);
 
+                this.Dispatcher.BeginInvoke((Action)delegate
+                {
+                    PluginDatabase.PluginSettings.PropertyChanged += PluginSettings_PropertyChanged;
+                    PluginDatabase.Database.ItemUpdated += Database_ItemUpdated;
+                    PluginDatabase.Database.ItemCollectionChanged += Database_ItemCollectionChanged;
+                    PluginDatabase.PlayniteApi.Database.Games.ItemUpdated += Games_ItemUpdated;
 
-            DisplayCpu = PluginDatabase.PluginSettings.Settings.DisplayCpu;
-            DisplayGpu = PluginDatabase.PluginSettings.Settings.DisplayGpu;
-            DisplayRam = PluginDatabase.PluginSettings.Settings.DisplayRam;
-            DisplayFps = PluginDatabase.PluginSettings.Settings.DisplayFps;
+                    DisplayCpu = PluginDatabase.PluginSettings.Settings.DisplayCpu;
+                    DisplayGpu = PluginDatabase.PluginSettings.Settings.DisplayGpu;
+                    DisplayRam = PluginDatabase.PluginSettings.Settings.DisplayRam;
+                    DisplayFps = PluginDatabase.PluginSettings.Settings.DisplayFps;
 
-
-            // Apply settings
-            PluginSettings_PropertyChanged(null, null);
+                    // Apply settings
+                    PluginSettings_PropertyChanged(null, null);
+                });
+            });
         }
 
 
         #region OnPropertyChange
         private static void SettingsPropertyChangedCallback(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            GameActivityChartLog obj = sender as GameActivityChartLog;
+            PluginChartLog obj = sender as PluginChartLog;
             if (obj != null && e.NewValue != e.OldValue)
             {
                 if (e.Property.Name == "DisplayCpu")
@@ -197,7 +204,7 @@ namespace GameActivity.Controls
 
         private static void ControlsPropertyChangedCallback(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            GameActivityChartLog obj = sender as GameActivityChartLog;
+            PluginChartLog obj = sender as PluginChartLog;
             if (obj != null && e.NewValue != e.OldValue)
             {
                 obj.GameContextChanged(null, obj.GameContext);
@@ -248,6 +255,11 @@ namespace GameActivity.Controls
         // When game is changed
         public override void GameContextChanged(Game oldContext, Game newContext)
         {
+            if (!PluginDatabase.IsLoaded)
+            {
+                return;
+            }
+
             if (IgnoreSettings)
             {
                 MustDisplay = true;
@@ -289,7 +301,7 @@ namespace GameActivity.Controls
         #endregion
 
 
-        #region Public method
+        #region Public methods
         public void Next()
         {
             AxisVariator += 1;

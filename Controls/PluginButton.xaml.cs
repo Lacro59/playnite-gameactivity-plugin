@@ -24,24 +24,33 @@ using System.Windows.Shapes;
 namespace GameActivity.Controls
 {
     /// <summary>
-    /// Logique d'interaction pour GameActivityButton.xaml
+    /// Logique d'interaction pour PluginButton.xaml
     /// </summary>
-    public partial class GameActivityButton : PluginUserControlExtend
+    public partial class PluginButton : PluginUserControlExtend
     {
         private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
 
 
-        public GameActivityButton()
+        public PluginButton()
         {
             InitializeComponent();
 
-            PluginDatabase.PluginSettings.PropertyChanged += PluginSettings_PropertyChanged;
-            PluginDatabase.Database.ItemUpdated += Database_ItemUpdated;
-            PluginDatabase.Database.ItemCollectionChanged += Database_ItemCollectionChanged;
-            PluginDatabase.PlayniteApi.Database.Games.ItemUpdated += Games_ItemUpdated;
+            Task.Run(() =>
+            {
+                // Wait extension database are loaded
+                System.Threading.SpinWait.SpinUntil(() => PluginDatabase.IsLoaded, -1);
 
-            // Apply settings
-            PluginSettings_PropertyChanged(null, null);
+                this.Dispatcher.BeginInvoke((Action)delegate
+                {
+                    PluginDatabase.PluginSettings.PropertyChanged += PluginSettings_PropertyChanged;
+                    PluginDatabase.Database.ItemUpdated += Database_ItemUpdated;
+                    PluginDatabase.Database.ItemCollectionChanged += Database_ItemCollectionChanged;
+                    PluginDatabase.PlayniteApi.Database.Games.ItemUpdated += Games_ItemUpdated;
+
+                    // Apply settings
+                    PluginSettings_PropertyChanged(null, null);
+                });
+            });
         }
 
 
@@ -62,6 +71,11 @@ namespace GameActivity.Controls
         // When game is changed
         public override void GameContextChanged(Game oldContext, Game newContext)
         {
+            if (!PluginDatabase.IsLoaded)
+            {
+                return;
+            }
+
             MustDisplay = PluginDatabase.PluginSettings.Settings.EnableIntegrationButton;
 
             // When control is not used
@@ -99,11 +113,13 @@ namespace GameActivity.Controls
         #endregion
 
 
-        private void PART_GameActivityButton_Click(object sender, RoutedEventArgs e)
+        #region Events
+        private void PART_PluginButton_Click(object sender, RoutedEventArgs e)
         {
             var ViewExtension = new GameActivityViewSingle(PluginDatabase.GameContext);
             Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PluginDatabase.PlayniteApi, resources.GetString("LOCGameActivity"), ViewExtension);
             windowExtension.ShowDialog();
         }
+        #endregion
     }
 }

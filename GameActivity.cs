@@ -49,7 +49,7 @@ namespace GameActivity
             // Custom elements integration
             AddCustomElementSupport(new AddCustomElementSupportArgs
             {
-                ElementList = new List<string> { "GameActivityButton", "GameActivityChartTime", "GameActivityChartLog" },
+                ElementList = new List<string> { "PluginButton", "PluginChartTime", "PluginChartLog" },
                 SourceName = "GameActivity",
                 SettingsRoot = $"{nameof(PluginSettings)}.{nameof(PluginSettings.Settings)}"
             });
@@ -495,19 +495,19 @@ namespace GameActivity
         // List custom controls
         public override Control GetGameViewControl(GetGameViewControlArgs args)
         {
-            if (args.Name == "GameActivityButton")
+            if (args.Name == "PluginButton")
             {
-                return new GameActivityButton();
+                return new PluginButton();
             }
 
-            if (args.Name == "GameActivityChartTime")
+            if (args.Name == "PluginChartTime")
             {
-                return new GameActivityChartTime { DisableAnimations = true };
+                return new PluginChartTime { DisableAnimations = true };
             }
 
-            if (args.Name == "GameActivityChartLog")
+            if (args.Name == "PluginChartLog")
             {
-                return new GameActivityChartLog { DisableAnimations = true };
+                return new PluginChartLog { DisableAnimations = true };
             }
              
             return null;

@@ -484,14 +484,21 @@
                         <ColumnDefinition Width="45" />
                     </Grid.ColumnDefinitions>
 
-                    <ToggleButton Grid.Column="0" x:Name="ToggleButtonTime" IsChecked="True" Content="{DynamicResource LOCGameActivityTime}" Height="33" Width="65" Click="ToggleButtonTime_Checked" />
+                    <ToggleButton Grid.Column="0" x:Name="ToggleButtonTime" IsChecked="True" 
+                                  Content="{DynamicResource LOCGameActivityTime}" Height="33" Width="65" 
+                                  Click="ToggleButtonTime_Checked" />
 
-                    <Label Grid.Column="2" x:Name="gameLabel" Content="graphics title" HorizontalAlignment="Center" VerticalAlignment="Top" Height="40" FontSize="20" FontWeight="Bold" />
+                    <Label Grid.Column="2" x:Name="gameLabel" Content="graphics title" HorizontalAlignment="Center" 
+                           VerticalAlignment="Top" Height="40" FontSize="20" FontWeight="Bold" />
 
-                    <ToggleButton Grid.Column="1" x:Name="ToggleButtonLog" IsChecked="False" Content="{DynamicResource LOCGameActivityLog}" Height="33" Width="65" Click="ToggleButtonLog_Checked" />
+                    <ToggleButton Grid.Column="1" x:Name="ToggleButtonLog" IsChecked="False" 
+                                  Content="{DynamicResource LOCGameActivityLog}" Height="33" Width="65" 
+                                  Click="ToggleButtonLog_Checked" />
 
-                    <Button Grid.Column="3" Content="" Height="25" Width="40" Click="Button_Click_prevGame" FontFamily="Wingdings" />
-                    <Button Grid.Column="4" Content="" Height="25" Width="40" Click="Button_Click_nextGame" FontFamily="Wingdings" />
+                    <Button Grid.Column="3" Content="" Height="25" Width="40" 
+                            Click="Button_Click_prevGame" FontFamily="Wingdings" />
+                    <Button Grid.Column="4" Content="" Height="25" Width="40" 
+                            Click="Button_Click_nextGame" FontFamily="Wingdings" />
                 </Grid>
 
                 <Grid Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="2" Name="gameSeriesContener">

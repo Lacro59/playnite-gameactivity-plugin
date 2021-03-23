@@ -70,8 +70,6 @@ namespace GameActivity
         public bool DisplayFps { get; set; } = true;
 
 
-
-
         public bool ShowLauncherIcons { get; set; } = true;
         public bool CumulPlaytimeSession { get; set; } = false;
         public bool CumulPlaytimeStore { get; set; } = false;
@@ -98,8 +96,6 @@ namespace GameActivity
         public int MaxCpuUsage { get; set; } = 0;
         public int MaxGpuUsage { get; set; } = 0;
         public int MaxRamUsage { get; set; } = 0;
-
-        public bool EnableIntegrationFS { get; set; } = false;
         #endregion
 
         // Playnite serializes settings object to a JSON object and saves it as text file.

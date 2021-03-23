@@ -33,8 +33,8 @@ namespace GameActivity.Views
 
         private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
 
-        private GameActivityChartTime PART_ChartTime;
-        private GameActivityChartLog PART_ChartLog;
+        private PluginChartTime PART_ChartTime;
+        private PluginChartLog PART_ChartLog;
 
 
         public GameActivityViewSingle(Game game)
@@ -62,7 +62,7 @@ namespace GameActivity.Views
 
 
             // Game session time line
-            PART_ChartTime = new GameActivityChartTime
+            PART_ChartTime = new PluginChartTime
             {
                 IgnoreSettings = true,
                 LabelsRotation = true,
@@ -92,7 +92,7 @@ namespace GameActivity.Views
 
             getActivityByListGame(gameActivities);
 
-            PART_ChartLog = new GameActivityChartLog
+            PART_ChartLog = new PluginChartLog
             {
                 IgnoreSettings = true,
                 AxisLimit = 15

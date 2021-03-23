@@ -102,14 +102,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\HWiNFODumper.cs" />
-    <Compile Include="Controls\GameActivityButton.xaml.cs">
-      <DependentUpon>GameActivityButton.xaml</DependentUpon>
+    <Compile Include="Controls\PluginButton.xaml.cs">
+      <DependentUpon>PluginButton.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\GameActivityChartLog.xaml.cs">
-      <DependentUpon>GameActivityChartLog.xaml</DependentUpon>
+    <Compile Include="Controls\PluginChartLog.xaml.cs">
+      <DependentUpon>PluginChartLog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\GameActivityChartTime.xaml.cs">
-      <DependentUpon>GameActivityChartTime.xaml</DependentUpon>
+    <Compile Include="Controls\PluginChartTime.xaml.cs">
+      <DependentUpon>PluginChartTime.xaml</DependentUpon>
     </Compile>
     <Compile Include="GameActivity.cs" />
     <Compile Include="GameActivitySettings.cs" />
@@ -270,15 +270,15 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Page Include="Controls\GameActivityButton.xaml">
+    <Page Include="Controls\PluginButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\GameActivityChartLog.xaml">
+    <Page Include="Controls\PluginChartLog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\GameActivityChartTime.xaml">
+    <Page Include="Controls\PluginChartTime.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
