@@ -1,6 +1,8 @@
 ﻿using CommonPluginsPlaynite.Common;
 using CommonPluginsShared;
+using CommonPluginsShared.Collections;
 using CommonPluginsShared.Controls;
+using CommonPluginsShared.Interfaces;
 using GameActivity.Models;
 using GameActivity.Services;
 using GameActivity.Views;
@@ -10,6 +12,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,6 +23,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace GameActivity.Controls
 {
@@ -29,6 +33,30 @@ namespace GameActivity.Controls
     public partial class PluginButton : PluginUserControlExtend
     {
         private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
+        internal override IPluginDatabase _PluginDatabase
+        {
+            get
+            {
+                return PluginDatabase;
+            }
+            set
+            {
+                PluginDatabase = (ActivityDatabase)_PluginDatabase;
+            }
+        }
+
+        private PluginButtonDataContext ControlDataContext;
+        internal override IDataContext _ControlDataContext
+        {
+            get
+            {
+                return ControlDataContext;
+            }
+            set
+            {
+                ControlDataContext = (PluginButtonDataContext)_ControlDataContext;
+            }
+        }
 
 
         public PluginButton()
@@ -54,63 +82,44 @@ namespace GameActivity.Controls
         }
 
 
-        #region OnPropertyChange
-        // When settings is updated
-        public override void PluginSettings_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        public override void SetDefaultDataContext()
         {
-            // Apply settings
-            this.DataContext = new
+            ControlDataContext = new PluginButtonDataContext
             {
+                IsActivated = PluginDatabase.PluginSettings.Settings.EnableIntegrationButton,
+                DisplayDetails = PluginDatabase.PluginSettings.Settings.EnableIntegrationButtonDetails,
 
+                Text = "\ue97f",
+                LastActivity = string.Empty,
+                LastPlaytime = 0
             };
-
-            // Publish changes for the currently displayed game
-            GameContextChanged(null, GameContext);
         }
 
-        // When game is changed
-        public override void GameContextChanged(Game oldContext, Game newContext)
+
+        public override Task<bool> SetData(Game newContext, PluginDataBaseGameBase PluginGameData)
         {
-            if (!PluginDatabase.IsLoaded)
+            return Task.Run(() =>
             {
-                return;
-            }
-
-            MustDisplay = PluginDatabase.PluginSettings.Settings.EnableIntegrationButton;
-
-            // When control is not used
-            if (!PluginDatabase.PluginSettings.Settings.EnableIntegrationButton)
-            {
-                return;
-            }
-
-            string LastActivity = string.Empty;
-            long LastPlaytime = 0;
-            bool DisplayDetails = PluginDatabase.PluginSettings.Settings.EnableIntegrationButtonDetails;
-
-            if (newContext != null)
-            {
-                GameActivities gameActivities = PluginDatabase.Get(newContext);
+                GameActivities gameActivities = (GameActivities)PluginGameData;
 
                 if (gameActivities.HasData)
                 {
-                    LastActivity = gameActivities.GetLastSession().ToLocalTime().ToString(Constants.DateUiFormat);
-                    LastPlaytime = gameActivities.GetLastSessionActivity().ElapsedSeconds;
+                    ControlDataContext.LastActivity = gameActivities.GetLastSession().ToLocalTime().ToString(Constants.DateUiFormat);
+                    ControlDataContext.LastPlaytime = gameActivities.GetLastSessionActivity().ElapsedSeconds;
                 }
                 else
                 {
-                    DisplayDetails = false;
+                    ControlDataContext.DisplayDetails = false;
                 }
-            }
 
-            this.DataContext = new
-            {
-                DisplayDetails,
-                LastActivity,
-                LastPlaytime
-            };
+                this.Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new ThreadStart(delegate
+                {
+                    this.DataContext = ControlDataContext;
+                }));
+
+                return true;
+            });
         }
-        #endregion
 
 
         #region Events
@@ -121,5 +130,16 @@ namespace GameActivity.Controls
             windowExtension.ShowDialog();
         }
         #endregion
+    }
+
+
+    public class PluginButtonDataContext : IDataContext
+    {
+        public bool IsActivated { get; set; }
+        public bool DisplayDetails { get; set; }
+
+        public string Text { get; set; }
+        public string LastActivity { get; set; }
+        public long LastPlaytime { get; set; }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using CommonPluginsPlaynite.Common;
 using CommonPluginsShared;
+using CommonPluginsShared.Collections;
 using CommonPluginsShared.Controls;
+using CommonPluginsShared.Interfaces;
 using GameActivity.Models;
 using GameActivity.Services;
 using LiveCharts;
@@ -33,6 +35,30 @@ namespace GameActivity.Controls
     public partial class PluginChartLog : PluginUserControlExtend
     {
         private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
+        internal override IPluginDatabase _PluginDatabase
+        {
+            get
+            {
+                return PluginDatabase;
+            }
+            set
+            {
+                PluginDatabase = (ActivityDatabase)_PluginDatabase;
+            }
+        }
+
+        private PluginChartLogDataContext ControlDataContext;
+        internal override IDataContext _ControlDataContext
+        {
+            get
+            {
+                return ControlDataContext;
+            }
+            set
+            {
+                ControlDataContext = (PluginChartLogDataContext)_ControlDataContext;
+            }
+        }
 
         private ColumnSeries CpuSeries;
         private ColumnSeries GpuSeries;
@@ -40,7 +66,7 @@ namespace GameActivity.Controls
         private LineSeries FpsSeries;
 
 
-        #region Property
+        #region Properties
         public bool DisableAnimations
         {
             get { return (bool)GetValue(DisableAnimationsProperty); }
@@ -51,7 +77,7 @@ namespace GameActivity.Controls
             nameof(DisableAnimations),
             typeof(bool),
             typeof(PluginChartLog),
-            new FrameworkPropertyMetadata(false, SettingsPropertyChangedCallback));
+            new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback));
 
         public static readonly DependencyProperty AxisLimitProperty;
         public int AxisLimit { get; set; }
@@ -93,7 +119,7 @@ namespace GameActivity.Controls
             nameof(DisplayCpu),
             typeof(bool),
             typeof(PluginChartLog),
-            new FrameworkPropertyMetadata(true, SettingsPropertyChangedCallback));
+            new FrameworkPropertyMetadata(true, ControlsPropertyChangedCallback));
 
         public bool DisplayGpu
         {
@@ -105,7 +131,7 @@ namespace GameActivity.Controls
             nameof(DisplayGpu),
             typeof(bool),
             typeof(PluginChartLog),
-            new FrameworkPropertyMetadata(true, SettingsPropertyChangedCallback));
+            new FrameworkPropertyMetadata(true, ControlsPropertyChangedCallback));
 
         public bool DisplayRam
         {
@@ -117,7 +143,7 @@ namespace GameActivity.Controls
             nameof(DisplayRam),
             typeof(bool),
             typeof(PluginChartLog),
-            new FrameworkPropertyMetadata(true, SettingsPropertyChangedCallback));
+            new FrameworkPropertyMetadata(true, ControlsPropertyChangedCallback));
 
         public bool DisplayFps
         {
@@ -129,12 +155,14 @@ namespace GameActivity.Controls
             nameof(DisplayFps),
             typeof(bool),
             typeof(PluginChartLog),
-            new FrameworkPropertyMetadata(true, SettingsPropertyChangedCallback));
+            new FrameworkPropertyMetadata(true, ControlsPropertyChangedCallback));
         #endregion
 
 
         public PluginChartLog()
         {
+            AlwaysShow = true;
+
             InitializeComponent();
 
             Task.Run(() =>
@@ -161,144 +189,80 @@ namespace GameActivity.Controls
         }
 
 
-        #region OnPropertyChange
-        private static void SettingsPropertyChangedCallback(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        public override void SetDefaultDataContext()
         {
-            PluginChartLog obj = sender as PluginChartLog;
-            if (obj != null && e.NewValue != e.OldValue)
+            double ChartLogHeight = PluginDatabase.PluginSettings.Settings.ChartLogHeight;
+            bool ChartLogAxis = PluginDatabase.PluginSettings.Settings.ChartLogAxis;
+            bool ChartLogOrdinates = PluginDatabase.PluginSettings.Settings.ChartLogOrdinates;
+            bool UseControls = PluginDatabase.PluginSettings.Settings.UseControls;
+            if (IgnoreSettings)
             {
-                if (e.Property.Name == "DisplayCpu")
+                ChartLogHeight = double.NaN;
+                ChartLogAxis = true;
+                ChartLogOrdinates = true;
+                UseControls = true;
+            }
+
+            ControlDataContext = new PluginChartLogDataContext
+            {
+                IsActivated = PluginDatabase.PluginSettings.Settings.EnableIntegrationChartTime,
+                ChartLogHeight = ChartLogHeight,
+                ChartLogAxis = ChartLogAxis,
+                ChartLogOrdinates = ChartLogOrdinates,
+                ChartLogVisibleEmpty = PluginDatabase.PluginSettings.Settings.ChartLogVisibleEmpty,
+                UseControls = UseControls,
+
+                DisableAnimations = DisableAnimations,
+                DisplayCpu = DisplayCpu,
+                DisplayGpu = DisplayGpu,
+                DisplayRam = DisplayRam,
+                DisplayFps = DisplayFps
+            };
+        }
+
+
+        public override Task<bool> SetData(Game newContext, PluginDataBaseGameBase PluginGameData)
+        {
+            bool IgnoreSettings = this.IgnoreSettings;
+            bool MustDisplay = this.MustDisplay;
+
+            int Limit = PluginDatabase.PluginSettings.Settings.ChartLogCountAbscissa;
+            if (AxisLimit != 0)
+            {
+                Limit = AxisLimit;
+            }
+
+            int AxisVariator = this.AxisVariator;
+            DateTime? DateSelected = this.DateSelected;
+            string TitleChart = this.TitleChart;
+
+            return Task.Run(() =>
+            {
+                GameActivities gameActivities = (GameActivities)PluginGameData;
+
+                if (!IgnoreSettings && !ControlDataContext.ChartLogVisibleEmpty)
                 {
-                    if (obj.CpuSeries != null)
-                    {
-                        obj.CpuSeries.Visibility = ((bool)e.NewValue) ? Visibility.Visible : Visibility.Collapsed;
-                    }
-                }
-                else if (e.Property.Name == "DisplayGpu")
-                {
-                    if (obj.GpuSeries != null)
-                    {
-                        obj.GpuSeries.Visibility = ((bool)e.NewValue) ? Visibility.Visible : Visibility.Collapsed;
-                    }
-                }
-                else if (e.Property.Name == "DisplayRam")
-                {
-                    if (obj.RamSeries != null)
-                    {
-                        obj.RamSeries.Visibility = ((bool)e.NewValue) ? Visibility.Visible : Visibility.Collapsed;
-                    }
-                }
-                else if (e.Property.Name == "DisplayFps")
-                {
-                    if (obj.FpsSeries != null)
-                    {
-                        obj.FpsSeries.Visibility = ((bool)e.NewValue) ? Visibility.Visible : Visibility.Collapsed;
-                    }
+                    MustDisplay = gameActivities.HasDataDetails();
                 }
                 else
                 {
-                    obj.PluginSettings_PropertyChanged(null, null);
-                }
-            }
-        }
-
-        private static void ControlsPropertyChangedCallback(DependencyObject sender, DependencyPropertyChangedEventArgs e)
-        {
-            PluginChartLog obj = sender as PluginChartLog;
-            if (obj != null && e.NewValue != e.OldValue)
-            {
-                obj.GameContextChanged(null, obj.GameContext);
-            }
-        }
-
-        // When settings is updated
-        public override void PluginSettings_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            // Apply settings
-            if (IgnoreSettings)
-            {
-                this.DataContext = new
-                {
-                    DisableAnimations,
-                    ChartLogHeight = double.NaN,
-                    ChartLogAxis = true,
-                    ChartLogOrdinates = true,
-                    UseControls = true,
-
-                    DisplayCpu,
-                    DisplayGpu,
-                    DisplayRam,
-                    DisplayFps
-                };
-            }
-            else
-            {
-                this.DataContext = new
-                {
-                    DisableAnimations,
-                    PluginDatabase.PluginSettings.Settings.ChartLogHeight,
-                    PluginDatabase.PluginSettings.Settings.ChartLogAxis,
-                    PluginDatabase.PluginSettings.Settings.ChartLogOrdinates,
-                    PluginDatabase.PluginSettings.Settings.UseControls,
-
-                    DisplayCpu,
-                    DisplayGpu,
-                    DisplayRam,
-                    DisplayFps
-                };
-            }
-
-            // Publish changes for the currently displayed game
-            GameContextChanged(null, GameContext);
-        }
-
-        // When game is changed
-        public override void GameContextChanged(Game oldContext, Game newContext)
-        {
-            if (!PluginDatabase.IsLoaded)
-            {
-                return;
-            }
-
-            if (IgnoreSettings)
-            {
-                MustDisplay = true;
-            }
-            else
-            {
-                MustDisplay = PluginDatabase.PluginSettings.Settings.EnableIntegrationChartLog;
-
-                // When control is not used
-                if (!PluginDatabase.PluginSettings.Settings.EnableIntegrationChartLog)
-                {
-                    return;
-                }
-            }
-
-            if (newContext != null)
-            {
-                GameActivities gameActivities = PluginDatabase.Get(newContext);
-
-                if (!gameActivities.HasDataDetails() && !PluginDatabase.PluginSettings.Settings.ChartLogVisibleEmpty)
-                {
-                    MustDisplay = false;
-                    return;
+                    MustDisplay = true;
                 }
 
-                int Limit = PluginDatabase.PluginSettings.Settings.ChartTimeCountAbscissa;
-                if (AxisLimit != 0)
+                if (MustDisplay)
                 {
-                    Limit = AxisLimit;
+                    GetActivityForGamesLogGraphics(gameActivities, AxisVariator, Limit, DateSelected, TitleChart);
                 }
 
-                GetActivityForGamesLogGraphics(gameActivities, AxisVariator, Limit, DateSelected, TitleChart);
-            }
-            else
-            {
+                this.Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new ThreadStart(delegate
+                {
+                    this.MustDisplay = MustDisplay;
+                    this.DataContext = ControlDataContext;
+                }));
 
-            }
+                return true;
+            });
         }
-        #endregion
 
 
         #region Public methods
@@ -508,5 +472,22 @@ namespace GameActivity.Controls
             SetChartVisibility();
         }
         #endregion
+    }
+
+
+    public class PluginChartLogDataContext : IDataContext
+    {
+        public bool IsActivated { get; set; }
+        public double ChartLogHeight { get; set; }
+        public bool ChartLogAxis { get; set; }
+        public bool ChartLogOrdinates { get; set; }
+        public bool ChartLogVisibleEmpty { get; set; }
+        public bool UseControls { get; set; }
+
+        public bool DisableAnimations { get; set; }
+        public bool DisplayCpu { get; set; }
+        public bool DisplayGpu { get; set; }
+        public bool DisplayRam { get; set; }
+        public bool DisplayFps { get; set; }
     }
 }

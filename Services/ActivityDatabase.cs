@@ -34,7 +34,7 @@ namespace GameActivity.Services
         }
 
 
-        public override GameActivities Get(Guid Id, bool OnlyCache = false)
+        public override GameActivities Get(Guid Id, bool OnlyCache = false, bool Force = false)
         {
             GameActivities gameActivities = GetOnlyCache(Id);
 
