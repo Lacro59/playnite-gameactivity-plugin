@@ -25,6 +25,8 @@ using CommonPluginsControls.LiveChartsCommon;
 using CommonPluginsPlaynite.Common;
 using GameActivity.Services;
 using GameActivity.Controls;
+using System.Threading;
+using System.Windows.Threading;
 
 namespace GameActivity
 {
@@ -135,40 +137,21 @@ namespace GameActivity
             PART_DataTop.Visibility = Visibility.Hidden;
             PART_DataBottom.Visibility = Visibility.Hidden;
 
-            var task = Task.Run(() =>
-            {
-                try
-                {
-                    Application.Current.Dispatcher.BeginInvoke((Action)delegate
-                    {
-                        getActivityByMonth(yearCurrent, monthCurrent);
-                    });
-                    Application.Current.Dispatcher.BeginInvoke((Action)delegate
-                    {
-                        getActivityByWeek(yearCurrent, monthCurrent);
-                    });
-                    Application.Current.Dispatcher.BeginInvoke((Action)delegate
-                    {
-                        getActivityByDay(yearCurrent, monthCurrent);
-                    });
-                    Application.Current.Dispatcher.BeginInvoke((Action)delegate
-                    {
-                        getActivityByListGame();
-                    });
-                    Application.Current.Dispatcher.BeginInvoke((Action)delegate
-                    {
-                        SetSourceFilter();
-                    });
-                }
-                catch (Exception ex)
-                {
-                    Common.LogError(ex, false, "Error on task");
-                }
-            })
-            .ContinueWith(antecedent =>
-            {
+
+            Task.Run(() => {
                 this.Dispatcher.BeginInvoke((Action)delegate
-                { 
+                {
+                    getActivityByMonth(yearCurrent, monthCurrent);
+                    getActivityByWeek(yearCurrent, monthCurrent);
+                }).Wait();
+
+
+                getActivityByDay(yearCurrent, monthCurrent);
+                getActivityByListGame();
+                SetSourceFilter();
+
+                this.Dispatcher.BeginInvoke((Action)delegate
+                {
                     // Set game selected
                     if (GameSelected != null)
                     {
@@ -191,7 +174,12 @@ namespace GameActivity
                         Grid.SetColumn(GridDay, 0);
                         Grid.SetColumnSpan(GridDay, 3);
                     }
+                }).Wait();
 
+            }).ContinueWith(antecedent =>
+            {
+                this.Dispatcher.BeginInvoke((Action)delegate
+                {
                     PART_DataLoad.Visibility = Visibility.Hidden;
                     PART_DataTop.Visibility = Visibility.Visible;
                     PART_DataBottom.Visibility = Visibility.Visible;
@@ -217,7 +205,11 @@ namespace GameActivity
             }
 
             FilterSourceItems.Sort((x, y) => x.SourceNameShort.CompareTo(y.SourceNameShort));
-            FilterSource.ItemsSource = FilterSourceItems;
+
+            this.Dispatcher.BeginInvoke((Action)delegate
+            {
+                FilterSource.ItemsSource = FilterSourceItems;
+            });
         }
 
 
@@ -441,27 +433,30 @@ namespace GameActivity
                 }
             }
 
-            activityByDaySeries.Add(new ColumnSeries
+            this.Dispatcher.BeginInvoke((Action)delegate
+            {
+                activityByDaySeries.Add(new ColumnSeries
             {
                 Title = string.Empty,
                 Values = series
             });
 
-            //let create a mapper so LiveCharts know how to plot our CustomerViewModel class
-            var customerVmMapper = Mappers.Xy<CustomerForTime>()
-                .X((value, index) => index)
-                .Y(value => value.Values);
+                //let create a mapper so LiveCharts know how to plot our CustomerViewModel class
+                var customerVmMapper = Mappers.Xy<CustomerForTime>()
+                    .X((value, index) => index)
+                    .Y(value => value.Values);
 
-            //lets save the mapper globally
-            Charting.For<CustomerForTime>(customerVmMapper);
+                //lets save the mapper globally
+                Charting.For<CustomerForTime>(customerVmMapper);
 
-            Func<double, string> activityForGameLogFormatter = value => (string)converter.Convert((long)value, null, null, CultureInfo.CurrentCulture);
+                Func<double, string> activityForGameLogFormatter = value => (string)converter.Convert((long)value, null, null, CultureInfo.CurrentCulture);
 
-            actLabelsY.LabelFormatter = activityForGameLogFormatter;
-            actSeries.DataTooltip = new CustomerToolTipForTime();
-            actSeries.Series = activityByDaySeries;
-            actLabelsY.MinValue = 0;
-            actLabelsX.Labels = activityByDateLabels;
+                actLabelsY.LabelFormatter = activityForGameLogFormatter;
+                actSeries.DataTooltip = new CustomerToolTipForTime();
+                actSeries.Series = activityByDaySeries;
+                actLabelsY.MinValue = 0;
+                actLabelsX.Labels = activityByDateLabels;
+            });
         }
 
 
@@ -757,10 +752,13 @@ namespace GameActivity
                 }
             }
 
-            lvGames.ItemsSource = activityListByGame;
+            this.Dispatcher.BeginInvoke((Action)delegate
+            {
+                lvGames.ItemsSource = activityListByGame;
 
-            lvGames.Sorting();
-            Filter();
+                lvGames.Sorting();
+                Filter();
+            });
         }
 
 
@@ -773,7 +771,7 @@ namespace GameActivity
         public void getActivityForGamesTimeGraphics(string gameID, bool isNavigation = false)
         {
             PART_GameActivityChartTime.GameContext = _PlayniteApi.Database.Games.Get(Guid.Parse(gameID));
-            PART_GameActivityChartTime.DisableAnimations = isNavigation;
+            PART_GameActivityChartTime.DisableAnimations = true;
             PART_GameActivityChartTime.AxisVariator = variateurTime;
 
             if (!isNavigation)
@@ -791,7 +789,7 @@ namespace GameActivity
             GameActivities gameActivities = GameActivity.PluginDatabase.Get(Guid.Parse(gameID));
 
             PART_GameActivityChartLog.GameContext = _PlayniteApi.Database.Games.Get(Guid.Parse(gameID));
-            PART_GameActivityChartLog.DisableAnimations = isNavigation;
+            PART_GameActivityChartLog.DisableAnimations = true;
             PART_GameActivityChartLog.DateSelected = dateSelected;
             PART_GameActivityChartLog.TitleChart = title;
             PART_GameActivityChartLog.AxisVariator = variateurLog;
@@ -827,8 +825,10 @@ namespace GameActivity
                     arrayReturn.Add(source.Name);
                 }
             }
+            
             // Source for game add manually.
             arrayReturn.Add("Playnite");
+
             return arrayReturn;
         }
 

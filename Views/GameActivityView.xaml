@@ -94,7 +94,8 @@
                                VerticalAlignment="Top" Height="30" FontSize="20" FontWeight="Bold" MinWidth="50" 
                                Grid.Column="1" Grid.Row="0" />
 
-                        <lvc:CartesianChart x:Name="acmSeries" LegendLocation="none" Grid.Column="1" Grid.Row="1" FontFamily="{DynamicResource CommonFont}">
+                        <lvc:CartesianChart x:Name="acmSeries" LegendLocation="none" Grid.Column="1" Grid.Row="1" 
+                                            DisableAnimations="True" FontFamily="{DynamicResource CommonFont}">
                             <lvc:CartesianChart.DataTooltip>
                                 <livechartscommon:CustomerToolTipForTime ShowIcon="{Binding ShowIcon}" />
                             </lvc:CartesianChart.DataTooltip>
@@ -127,7 +128,8 @@
 
                         <Label Grid.Column="1" Grid.Row="0" x:Name="actLabel" Content="{DynamicResource LOCGameActivityTimeTitle}" Height="30" FontSize="20" FontWeight="Bold" MinWidth="50" HorizontalAlignment="Center" />
 
-                        <lvc:CartesianChart x:Name="actSeries" LegendLocation="none" Grid.Column="1" Grid.Row="1" FontFamily="{DynamicResource CommonFont}" >
+                        <lvc:CartesianChart x:Name="actSeries" LegendLocation="none" Grid.Column="1" Grid.Row="1"  
+                                            DisableAnimations="True" FontFamily="{DynamicResource CommonFont}" >
                             <lvc:CartesianChart.DataTooltip>
                                 <livechartscommon:CustomerToolTipForMultipleTime ShowIcon="{Binding ShowIcon}" />
                             </lvc:CartesianChart.DataTooltip>
@@ -158,7 +160,8 @@
 
                         <Label Grid.Column="1" Grid.Row="0" x:Name="acwLabel" Content="{DynamicResource LOCGameActivityTotalHoursByWeeks}" Height="30" FontSize="20" FontWeight="Bold" MinWidth="50" HorizontalAlignment="Center" />
 
-                        <lvc:CartesianChart x:Name="acwSeries" LegendLocation="none" Grid.Column="1" Grid.Row="1" FontFamily="{DynamicResource CommonFont}" >
+                        <lvc:CartesianChart x:Name="acwSeries" LegendLocation="none" Grid.Column="1" Grid.Row="1"  
+                                            DisableAnimations="True" FontFamily="{DynamicResource CommonFont}" >
                             <lvc:CartesianChart.DataTooltip>
                                 <livechartscommon:CustomerToolTipForMultipleTime ShowIcon="{Binding ShowIcon}" />
                             </lvc:CartesianChart.DataTooltip>
@@ -284,7 +287,7 @@
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <Label Content="{Binding GameSourceIcon}" FontFamily="{DynamicResource CommonFont}" 
-                                                   HorizontalAlignment="Center" VerticalAlignment="Stretch" FontSize="24"
+                                                   HorizontalAlignment="Center" VerticalAlignment="Stretch" FontSize="30"
                                                    Style="{DynamicResource ListExtendStyleLabel}" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
