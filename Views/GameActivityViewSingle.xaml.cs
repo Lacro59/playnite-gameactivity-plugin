@@ -62,15 +62,9 @@ namespace GameActivity.Views
 
 
             // Game session time line
-            PART_ChartTime = new PluginChartTime
-            {
-                IgnoreSettings = true,
-                LabelsRotation = true,
-                AxisLimit = 15
-            };
+            PART_ChartTime = (PluginChartTime)PART_ChartTimeContener.Children[0];
             PART_ChartTime.GameContext = game;
 
-            PART_ChartTimeContener.Children.Add(PART_ChartTime);
 
             // Game logs
             // Add column if log details enable.
@@ -92,14 +86,8 @@ namespace GameActivity.Views
 
             getActivityByListGame(gameActivities);
 
-            PART_ChartLog = new PluginChartLog
-            {
-                IgnoreSettings = true,
-                AxisLimit = 15
-            };
+            PART_ChartLog = (PluginChartLog)PART_ChartLogContener.Children[0];
             PART_ChartLog.GameContext = game;
-
-            PART_ChartLogContener.Children.Add(PART_ChartLog);
 
             if (((List<ListActivities>)lvSessions.ItemsSource).Count > 0)
             {
@@ -113,26 +101,13 @@ namespace GameActivity.Views
         }
 
 
-        private void PART_ChartTimeContener_Loaded(object sender, RoutedEventArgs e)
-        { 
-            PART_ChartTime.Height = PART_ChartTimeContener.ActualHeight;
-        }
-
-        private void PART_ChartLogContener_Loaded(object sender, RoutedEventArgs e)
-        {
-            PART_ChartLog.Height = PART_ChartLogContener.ActualHeight;
-        }
-
-
         private void Bt_PrevTime(object sender, RoutedEventArgs e)
         {
-            PART_ChartTime.DisableAnimations = true;
             PART_ChartTime.Prev();
         }
 
         private void Bt_NextTime(object sender, RoutedEventArgs e)
         {
-            PART_ChartTime.DisableAnimations = true;
             PART_ChartTime.Next();
         }
 
@@ -149,13 +124,11 @@ namespace GameActivity.Views
 
         private void Bt_PrevLog(object sender, RoutedEventArgs e)
         {
-            PART_ChartLog.DisableAnimations = true;
             PART_ChartLog.Prev();
         }
 
         private void Bt_NextLog(object sender, RoutedEventArgs e)
         {
-            PART_ChartLog.DisableAnimations = true;
             PART_ChartLog.Next();
         }
 

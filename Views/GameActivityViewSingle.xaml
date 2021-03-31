@@ -112,8 +112,9 @@
                     </StackPanel>
 
                     <!-- Game time line -->
-                    <Grid Name="PART_ChartTimeContener" Grid.Row="2" Grid.ColumnSpan="3"
-                          Loaded="PART_ChartTimeContener_Loaded" />
+                    <Grid Name="PART_ChartTimeContener" Grid.Row="2" Grid.ColumnSpan="3">
+                        <controls:PluginChartTime IgnoreSettings="True" DisableAnimations="True" LabelsRotation="True" AxisLimit="15" />
+                    </Grid>
                 </Grid>
             </Grid>
         </Grid>
@@ -352,8 +353,9 @@
                 </StackPanel>
 
                 <!-- Game logs -->
-                <Grid Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" 
-                      Name="PART_ChartLogContener" Loaded="PART_ChartLogContener_Loaded" />
+                <Grid Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" Name="PART_ChartLogContener">
+                    <controls:PluginChartLog IgnoreSettings="True" AxisLimit="15" DisableAnimations="True" />
+                </Grid>
             </Grid>
         </Grid>
     </Grid>
