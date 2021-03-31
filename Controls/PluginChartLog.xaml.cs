@@ -77,7 +77,7 @@ namespace GameActivity.Controls
             nameof(DisableAnimations),
             typeof(bool),
             typeof(PluginChartLog),
-            new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback));
+            new FrameworkPropertyMetadata(true, ControlsPropertyChangedCallback));
 
         public static readonly DependencyProperty AxisLimitProperty;
         public int AxisLimit { get; set; }

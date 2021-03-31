@@ -26,9 +26,9 @@
             </Grid.ColumnDefinitions>
 
             <!-- Without details -->
-            <TextBlock Text="{Binding Text}" FontFamily="{DynamicResource FontIcoFont}"
+            <TextBlock Text="{Binding Text, Mode=OneWay, FallbackValue='&#xe97f;'}" FontFamily="{DynamicResource FontIcoFont}"
                        Grid.Column="0" VerticalAlignment="Center"
-                       FontSize="{Binding RelativeSource={RelativeSource AncestorType=ContentControl}, Path=FontSize}" />
+                       FontSize="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=FontSize}" />
 
             <!-- With details -->
             <Grid Grid.Column="1" Margin="3,0,0,0"

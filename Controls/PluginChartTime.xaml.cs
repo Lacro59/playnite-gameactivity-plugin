@@ -78,7 +78,7 @@ namespace GameActivity.Controls
             nameof(DisableAnimations),
             typeof(bool),
             typeof(PluginChartTime),
-            new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback));
+            new FrameworkPropertyMetadata(true, ControlsPropertyChangedCallback));
 
         public bool LabelsRotation
         {

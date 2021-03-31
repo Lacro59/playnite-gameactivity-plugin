@@ -14,11 +14,15 @@
         MaxHeight="{Binding RelativeSource={RelativeSource AncestorType=ContentControl}, Path=MaxHeight}">
 
     <Grid Name="PART_GridContener">
-        <lvc:CartesianChart LegendLocation="none" Name="PART_ChartTimeActivity" 
+        <lvc:CartesianChart LegendLocation="Bottom" Name="PART_ChartTimeActivity" 
                             DisableAnimations="{Binding DisableAnimations}"
                             DataClick="PART_ChartTimeActivity_DataClick"
                             Width="{Binding ElementName=PART_GridContener, Path=ActualWidth}"
                             Height="{Binding ElementName=PART_GridContener, Path=ActualHeight}">
+            <lvc:CartesianChart.ChartLegend>
+                <lvc:DefaultLegend Height="2" Visibility="Hidden" />
+            </lvc:CartesianChart.ChartLegend>
+            
             <lvc:CartesianChart.DataTooltip>
                 <livechartscommon:CustomerToolTipForTime ShowIcon="{Binding ShowIcon}" />
             </lvc:CartesianChart.DataTooltip>
