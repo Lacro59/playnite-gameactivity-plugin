@@ -240,7 +240,7 @@
 
                             <Expander.Content>
                                 <Border IsEnabled="{Binding ElementName=PART_IntegrationButton, Path=IsChecked}"
-				                        Margin="5"  Padding="10"
+				                        Margin="5" Padding="10"
 				                        BorderBrush="{DynamicResource PopupBorderBrush}"
 				                        BorderThickness="{DynamicResource PopupBorderThickness}">
                                     <Grid>
@@ -276,7 +276,7 @@
 
                             <Expander.Content>
                                 <Border IsEnabled="{Binding ElementName=PART_IntegrationChartTime, Path=IsChecked}"
-				                        Margin="5"  Padding="10"
+				                        Margin="5" Padding="10"
 				                        BorderBrush="{DynamicResource PopupBorderBrush}"
 				                        BorderThickness="{DynamicResource PopupBorderThickness}">
                                     <Grid>
@@ -342,7 +342,7 @@
 
                             <Expander.Content>
                                 <Border IsEnabled="{Binding ElementName=PART_IntegrationChartLog, Path=IsChecked}"
-				                        Margin="5"  Padding="10"
+				                        Margin="5" Padding="10"
 				                        BorderBrush="{DynamicResource PopupBorderBrush}"
 				                        BorderThickness="{DynamicResource PopupBorderThickness}">
                                     <Grid>
