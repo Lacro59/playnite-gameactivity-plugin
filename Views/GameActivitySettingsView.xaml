@@ -294,8 +294,8 @@
 
                                         <DockPanel Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">
                                             <Label DockPanel.Dock="Left" Content="{DynamicResource LOCHeight}" />
-                                            <playnitecontrols:NumericBox DockPanel.Dock="Right" Width="40"
-                                                             LongValue="{Binding Settings.ChartTimeHeight}" />
+                                            <playnitecontrols:NumericBox DockPanel.Dock="Right" Width="40" TextAlignment="Center"
+                                                                         LongValue="{Binding Settings.ChartTimeHeight}" />
                                         </DockPanel>
                                         <CheckBox Grid.Column="2" Grid.Row="0" IsChecked="{Binding Settings.ChartTimeVisibleEmpty}">
                                             <Label Content="{DynamicResource LOCCommonControlsVisibleNoData}" />
@@ -364,8 +364,8 @@
 
                                         <DockPanel Grid.Column="0" Grid.Row="0">
                                             <Label DockPanel.Dock="Left" Content="{DynamicResource LOCHeight}" />
-                                            <playnitecontrols:NumericBox DockPanel.Dock="Right" Width="40"
-                                                             LongValue="{Binding Settings.ChartLogHeight}" />
+                                            <playnitecontrols:NumericBox DockPanel.Dock="Right" Width="40" TextAlignment="Center"
+                                                                         LongValue="{Binding Settings.ChartLogHeight}" />
                                         </DockPanel>
                                         <CheckBox Grid.Column="2" Grid.Row="0" IsChecked="{Binding Settings.ChartLogVisibleEmpty}">
                                             <Label Content="{DynamicResource LOCCommonControlsVisibleNoData}" />
