@@ -191,12 +191,14 @@ namespace GameActivity.Controls
 
         public override void SetDefaultDataContext()
         {
+            bool IsActivated = PluginDatabase.PluginSettings.Settings.EnableIntegrationChartTime;
             double ChartLogHeight = PluginDatabase.PluginSettings.Settings.ChartLogHeight;
             bool ChartLogAxis = PluginDatabase.PluginSettings.Settings.ChartLogAxis;
             bool ChartLogOrdinates = PluginDatabase.PluginSettings.Settings.ChartLogOrdinates;
             bool UseControls = PluginDatabase.PluginSettings.Settings.UseControls;
             if (IgnoreSettings)
             {
+                IsActivated = true;
                 ChartLogHeight = double.NaN;
                 ChartLogAxis = true;
                 ChartLogOrdinates = true;
@@ -205,7 +207,7 @@ namespace GameActivity.Controls
 
             ControlDataContext = new PluginChartLogDataContext
             {
-                IsActivated = PluginDatabase.PluginSettings.Settings.EnableIntegrationChartTime,
+                IsActivated = IsActivated,
                 ChartLogHeight = ChartLogHeight,
                 ChartLogAxis = ChartLogAxis,
                 ChartLogOrdinates = ChartLogOrdinates,
