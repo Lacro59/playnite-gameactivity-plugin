@@ -350,7 +350,11 @@
       <Name>CommonPluginsResources</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\chart-646.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Import Project="playnite-plugincommon\CommonPluginsShared\CommonPluginsShared.projitems" Label="Shared" />
   <Import Project="playnite-plugincommon\CommonPlayniteShared\CommonPlayniteShared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

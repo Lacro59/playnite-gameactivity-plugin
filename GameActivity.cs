@@ -564,7 +564,7 @@ namespace GameActivity
                 // Show plugin view with all activities for all game in database with data of selected game
                 new GameMenuItem {
                     //MenuSection = "",
-                    Icon = Path.Combine(PluginFolder, "icon.png"),
+                    Icon = Path.Combine(PluginFolder, "Resources", "chart-646.png"),
                     Description = resources.GetString("LOCGameActivityViewGameActivity"),
                     Action = (gameMenuItem) =>
                     {
