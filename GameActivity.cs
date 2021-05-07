@@ -50,6 +50,12 @@ namespace GameActivity
             AddCustomElementSupport(new AddCustomElementSupportArgs
             {
                 ElementList = new List<string> { "PluginButton", "PluginChartTime", "PluginChartLog" },
+                SourceName = "GameActivity"
+            });
+
+            // Settings integration
+            AddSettingsSupport(new AddSettingsSupportArgs
+            {
                 SourceName = "GameActivity",
                 SettingsRoot = $"{nameof(PluginSettings)}.{nameof(PluginSettings.Settings)}"
             });
@@ -476,8 +482,8 @@ namespace GameActivity
                             FontSize = 20,
                             FontFamily = resources.GetResource("FontIcoFont") as FontFamily
                         },
-                        ToolTip = resources.GetString("LOCGameActivityViewGamesActivities"),
-                        Action = () =>
+                        Title = resources.GetString("LOCGameActivityViewGamesActivities"),
+                        Activated = () =>
                         {
                             var ViewExtension = new GameActivityView();
                             ViewExtension.Height = 660;
@@ -525,15 +531,14 @@ namespace GameActivity
                     Text = "\ue97f",
                     FontFamily = resources.GetResource("FontIcoFont") as FontFamily
                 };
-            }
+                Opened = () =>
+                {
+                    SidebarItemControl sidebarItemControl = new SidebarItemControl(PluginDatabase.PlayniteApi);
+                    sidebarItemControl.SetTitle(resources.GetString("LOCGamesActivitiesTitle"));
+                    sidebarItemControl.AddContent(new GameActivityView());
 
-            public override Control Opened()
-            {
-                SidebarItemControl sidebarItemControl = new SidebarItemControl(PluginDatabase.PlayniteApi);
-                sidebarItemControl.SetTitle(resources.GetString("LOCGamesActivitiesTitle"));
-                sidebarItemControl.AddContent(new GameActivityView());
-
-                return sidebarItemControl;
+                    return sidebarItemControl;
+                };
             }
         }
 
@@ -608,6 +613,11 @@ namespace GameActivity
             };
 
 #if DEBUG
+            mainMenuItems.Add(new MainMenuItem
+            {
+                MenuSection = MenuInExtensions + resources.GetString("LOCGameActivity"),
+                Description = "-"
+            });
             mainMenuItems.Add(new MainMenuItem
             {
                 MenuSection = MenuInExtensions + resources.GetString("LOCGameActivity"),
