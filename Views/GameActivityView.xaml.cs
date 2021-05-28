@@ -849,7 +849,7 @@ namespace GameActivity
             if (sender != null)
             {
                 var item = (ListBox)sender;
-                if (item.ItemsSource != null && ((List<ListActivities>)item.ItemsSource).Count > 0)
+                if (((List<ListActivities>)item.ItemsSource)?.Count > 0)
                 {
                     ListActivities gameItem = (ListActivities)item.SelectedItem;
                     gameIDCurrent = gameItem.GameId;
