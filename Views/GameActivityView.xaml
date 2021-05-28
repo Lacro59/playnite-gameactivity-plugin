@@ -249,11 +249,16 @@
                                     <GridViewColumnHeader Content="{DynamicResource LOCGameNameTitle}" Tag="GameTitle" />
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock>
-                                                <Hyperlink Command="{Binding GoToGame}" CommandParameter="{Binding Id}">
+                                            <StackPanel>
+                                                <TextBlock Visibility="{Binding GameExist, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                    <Hyperlink Command="{Binding GoToGame}" CommandParameter="{Binding Id}">
+                                                        <TextBlock Text="{Binding GameTitle}" Style="{DynamicResource ListExtendStyleTextBlock}" />
+                                                    </Hyperlink>
+                                                </TextBlock>
+                                                <TextBlock Visibility="{Binding GameExist, Converter={StaticResource InvertedBooleanToVisibilityConverter}}">
                                                     <TextBlock Text="{Binding GameTitle}" Style="{DynamicResource ListExtendStyleTextBlock}" />
-                                                </Hyperlink>
-                                            </TextBlock>
+                                                </TextBlock>
+                                            </StackPanel>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>

@@ -1,4 +1,6 @@
-﻿using Playnite.SDK;
+﻿using GameActivity.Services;
+using Newtonsoft.Json;
+using Playnite.SDK;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +11,9 @@ namespace GameActivity.Models
 {
     public class ListActivities
     {
+        private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
+
+
         public string GameTitle { get; set; }
         public string GameId { get; set; }
         public Guid Id { get; set; }
@@ -37,5 +42,14 @@ namespace GameActivity.Models
         public string MaxRAM { get; set; }
 
         public RelayCommand<Guid> GoToGame { get; set; }
+
+        [JsonIgnore]
+        public bool GameExist
+        {
+            get
+            {
+                return PluginDatabase.PlayniteApi.Database.Games.Get(Id) != null;
+            }
+        }
     }
 }
