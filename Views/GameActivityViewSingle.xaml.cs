@@ -91,7 +91,7 @@ namespace GameActivity.Views
 
             if (((List<ListActivities>)lvSessions.ItemsSource).Count > 0)
             {
-                lvSessions.SelectedIndex = 0;
+                lvSessions.SelectedItem = ((List<ListActivities>)lvSessions.ItemsSource).OrderByDescending(x => x.DateActivity).LastOrDefault();
             }
 
             this.DataContext = new

@@ -1,4 +1,5 @@
-﻿using CommonPluginsControls.LiveChartsCommon;
+﻿using CommonPluginsControls.Controls;
+using CommonPluginsControls.LiveChartsCommon;
 using CommonPluginsPlaynite.Common;
 using CommonPluginsPlaynite.Converters;
 using CommonPluginsShared;
@@ -406,7 +407,11 @@ namespace GameActivity.Controls
 
                         if (PluginDatabase.PluginSettings.Settings.CumulPlaytimeSession)
                         {
-                            PART_ChartTimeActivity.DataTooltip = new CustomerToolTipForTime();
+                            PART_ChartTimeActivity.DataTooltip = new CustomerToolTipForTime
+                            {
+                                ShowIcon = PluginDatabase.PluginSettings.Settings.ShowLauncherIcons,
+                                Mode = (PluginDatabase.PluginSettings.Settings.ModeStoreIcon == 1) ? TextBlockWithIconMode.IconTextFirstWithText : TextBlockWithIconMode.IconFirstWithText
+                            };
                         }
                         else
                         {

@@ -206,6 +206,7 @@ namespace GameActivity.Views
 
             PART_ChartHoursByWeekSource_ToolTip.ShowIcon = ShowIcon;
             PART_ChartHoursByWeekSource_ToolTip.Mode = ModeComplet;
+            PART_ChartHoursByWeekSource_ToolTip.ShowWeekPeriode = true;
 
 
             DataContext = this;
@@ -483,7 +484,7 @@ namespace GameActivity.Views
                 Func<double, string> activityForGameLogFormatter = value => (string)converter.Convert((long)value, null, null, CultureInfo.CurrentCulture);
 
                 PART_ChartHoursByDaySource_Y.LabelFormatter = activityForGameLogFormatter;
-                PART_ChartHoursByDaySource.DataTooltip = new CustomerToolTipForTime();
+                PART_ChartHoursByDaySource.DataTooltip = new CustomerToolTipForTime { ShowIcon = ShowIcon, Mode = ModeComplet };
                 PART_ChartHoursByDaySource.Series = activityByDaySeries;
                 PART_ChartHoursByDaySource_Y.MinValue = 0;
                 PART_ChartHoursByDaySource_X.Labels = activityByDateLabels;
@@ -507,14 +508,29 @@ namespace GameActivity.Views
                 .SkipWhile(x => StartDate.AddDays(x).DayOfWeek != DayOfWeek.Monday)
                 .Select(x => StartDate.AddDays(x))
                 .First();
+
+            if (firstMonday > StartDate)
+            {
+                firstMonday = Enumerable.Range(-6, 7)
+                    .SkipWhile(x => StartDate.AddDays(x).DayOfWeek != DayOfWeek.Monday)
+                    .Select(x => StartDate.AddDays(x))
+                    .First();
+            }
+
             //get count of days
             TimeSpan ts = (TimeSpan)(SeriesEndDate - firstMonday);
             //create new list of WeekStartEnd class
             List<WeekStartEnd> datesPeriodes = new List<WeekStartEnd>();
             //add dates to list
-            for (int i = 0; i < ts.Days; i += 7)
+            int iDays = 0;
+            for (iDays = 0; iDays < ts.Days; iDays += 7)
             {
-                datesPeriodes.Add(new WeekStartEnd() { Monday = firstMonday.AddDays(i), Sunday = firstMonday.AddDays(i + 6).AddHours(23).AddMinutes(59).AddSeconds(59) });
+                datesPeriodes.Add(new WeekStartEnd() { Monday = firstMonday.AddDays(iDays), Sunday = firstMonday.AddDays(iDays + 6).AddHours(23).AddMinutes(59).AddSeconds(59) });
+            }
+
+            if (datesPeriodes.Last().Sunday < SeriesEndDate)
+            {
+                datesPeriodes.Add(new WeekStartEnd() { Monday = firstMonday.AddDays(iDays), Sunday = firstMonday.AddDays(iDays + 6).AddHours(23).AddMinutes(59).AddSeconds(59) });
             }
 
             // Source activty by month
@@ -523,6 +539,7 @@ namespace GameActivity.Views
             JObject activityByWeek3 = new JObject();
             JObject activityByWeek4 = new JObject();
             JObject activityByWeek5 = new JObject();
+            JObject activityByWeek6 = new JObject();
 
             JArray activityByWeek = new JArray();
             SeriesCollection activityByWeekSeries = new SeriesCollection();
@@ -538,6 +555,7 @@ namespace GameActivity.Views
                     activityByWeek3.Add((string)listSources[iSource], 0);
                     activityByWeek4.Add((string)listSources[iSource], 0);
                     activityByWeek5.Add((string)listSources[iSource], 0);
+                    activityByWeek6.Add((string)listSources[iSource], 0);
                 }
 
                 activityByWeek.Add(activityByWeek1);
@@ -545,6 +563,7 @@ namespace GameActivity.Views
                 activityByWeek.Add(activityByWeek3);
                 activityByWeek.Add(activityByWeek4);
                 activityByWeek.Add(activityByWeek5);
+                activityByWeek.Add(activityByWeek6);
 
                 List<GameActivities> listGameActivities = GameActivity.PluginDatabase.GetListGameActivity();
                 for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
@@ -569,6 +588,7 @@ namespace GameActivity.Views
                                     activityByWeek3.Add(sourceName, 0);
                                     activityByWeek4.Add(sourceName, 0);
                                     activityByWeek5.Add(sourceName, 0);
+                                    activityByWeek6.Add(sourceName, 0);
                                 }
 
                                 activityByWeek[iWeek][sourceName] = (long)activityByWeek[iWeek][sourceName] + elapsedSeconds;
@@ -603,16 +623,10 @@ namespace GameActivity.Views
                         labels[iSource] = TransformIcon.Get((string)listNoDelete[iSource]);
                     }
 
-                    Values = new ChartValues<CustomerForTime>() {
-                            new CustomerForTime{Name = (string)listNoDelete[iSource], Values = (int)activityByWeek[0][(string)listNoDelete[iSource]]},
-                            new CustomerForTime{Name = (string)listNoDelete[iSource], Values = (int)activityByWeek[1][(string)listNoDelete[iSource]]},
-                            new CustomerForTime{Name = (string)listNoDelete[iSource], Values = (int)activityByWeek[2][(string)listNoDelete[iSource]]},
-                            new CustomerForTime{Name = (string)listNoDelete[iSource], Values = (int)activityByWeek[3][(string)listNoDelete[iSource]]}
-                        };
-
-                    if (datesPeriodes.Count == 5)
+                    Values = new ChartValues<CustomerForTime>();
+                    for (int i = 0; i < datesPeriodes.Count; i++)
                     {
-                        Values.Add(new CustomerForTime { Name = (string)listNoDelete[iSource], Values = (int)activityByWeek[4][(string)listNoDelete[iSource]] });
+                        Values.Add(new CustomerForTime { Name = (string)listNoDelete[iSource], Values = (int)activityByWeek[i][(string)listNoDelete[iSource]] });
                     }
 
                     activityByWeekSeries.Add(new StackedColumnSeries
@@ -643,6 +657,18 @@ namespace GameActivity.Views
                     resources.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[2].Monday),
                     resources.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[3].Monday),
                     resources.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[4].Monday)
+                };
+            }
+            if (datesPeriodes.Count == 6)
+            {
+                activityByWeekLabels = new[]
+                {
+                    resources.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[0].Monday),
+                    resources.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[1].Monday),
+                    resources.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[2].Monday),
+                    resources.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[3].Monday),
+                    resources.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[4].Monday),
+                    resources.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[5].Monday)
                 };
             }
 
@@ -676,12 +702,17 @@ namespace GameActivity.Views
                     Values = series
                 });
 
-                PART_ChartHoursByWeekSource.DataTooltip = new CustomerToolTipForTime();
+                PART_ChartHoursByWeekSource.DataTooltip = new CustomerToolTipForTime { ShowIcon = ShowIcon, Mode = ModeComplet };
             }
             else
             {
-                PART_ChartHoursByWeekSource.DataTooltip = new CustomerToolTipForMultipleTime();
-                ((CustomerToolTipForMultipleTime)PART_ChartHoursByWeekSource.DataTooltip).ShowIcon = _settings.ShowLauncherIcons;
+                PART_ChartHoursByWeekSource.DataTooltip = new CustomerToolTipForMultipleTime
+                {
+                    ShowIcon = ShowIcon,
+                    Mode = ModeComplet,
+                    ShowWeekPeriode = true,
+                    DateFirstPeriode = datesPeriodes[0].Monday
+                };
             }
 
             //let create a mapper so LiveCharts know how to plot our CustomerViewModel class
@@ -827,8 +858,16 @@ namespace GameActivity.Views
 
             if (!isNavigation)
             {
-                gameLabel.Content = resources.GetString("LOCGameActivityLogTitleDate") + " "
-                                        + Convert.ToDateTime(dateSelected).ToString(Constants.DateUiFormat);
+                if (dateSelected == null || dateSelected == default(DateTime))
+                {
+                    gameLabel.Content = resources.GetString("LOCGameActivityLogTitleDate") + " ("
+                        + Convert.ToDateTime(gameActivities.GetLastSession()).ToString(Constants.DateUiFormat) + ")";
+                }
+                else
+                {
+                    gameLabel.Content = resources.GetString("LOCGameActivityLogTitleDate") + " "
+                        + Convert.ToDateTime(dateSelected).ToString(Constants.DateUiFormat);
+                }
             }
         }
         #endregion

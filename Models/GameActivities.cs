@@ -214,7 +214,7 @@ namespace GameActivity.Models
             for (int iActivity = 0; iActivity < Items.Count; iActivity++)
             {
                 DateTime dateTemp = Convert.ToDateTime(Items[iActivity].DateSession).ToLocalTime();
-                if (((DateTime)dateSelected).ToString("yyyy-MM-dd") == dateTemp.ToString("yyyy-MM-dd"))
+                if (((DateTime)dateSelected).ToString("yyyy-MM-dd HH:mm:ss") == dateTemp.ToString("yyyy-MM-dd HH:mm:ss"))
                 {
                     int titleValue = 0;
                     int.TryParse(title, out titleValue);
