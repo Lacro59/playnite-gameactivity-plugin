@@ -27,11 +27,12 @@ using GameActivity.Services;
 using GameActivity.Controls;
 using System.Threading;
 using System.Windows.Threading;
+using CommonPluginsControls.Controls;
 
-namespace GameActivity
+namespace GameActivity.Views
 {
     /// <summary>
-    /// Logique d'interaction pour GameActivity.xaml.
+    /// Logique d'interaction pour GameActivityView.xaml.
     /// </summary>
     public partial class GameActivityView : UserControl
     {
@@ -66,6 +67,8 @@ namespace GameActivity
         public bool isGameTime = true;
 
         public bool ShowIcon { get; set; }
+        public TextBlockWithIconMode ModeComplet { get; set; }
+        public TextBlockWithIconMode ModeSimple { get; set; }
 
         // Variables api.
         public readonly IPlayniteAPI _PlayniteApi;
@@ -168,8 +171,8 @@ namespace GameActivity
 
                     if (_settings.CumulPlaytimeStore)
                     {
-                        acmSeries.Visibility = Visibility.Hidden;
-                        acmLabel.Visibility = Visibility.Hidden;
+                        PART_ChartTotalHoursSource.Visibility = Visibility.Hidden;
+                        PART_ChartTotalHoursSource_Label.Visibility = Visibility.Hidden;
 
                         Grid.SetColumn(GridDay, 0);
                         Grid.SetColumnSpan(GridDay, 3);
@@ -190,6 +193,20 @@ namespace GameActivity
 
             // Set Binding data
             ShowIcon = this._settings.ShowLauncherIcons;
+            ModeComplet = (PluginDatabase.PluginSettings.Settings.ModeStoreIcon == 1) ? TextBlockWithIconMode.IconTextFirstWithText : TextBlockWithIconMode.IconFirstWithText;
+            ModeSimple = (PluginDatabase.PluginSettings.Settings.ModeStoreIcon == 1) ? TextBlockWithIconMode.IconTextFirstOnly : TextBlockWithIconMode.IconFirstOnly;
+
+
+            PART_ChartTotalHoursSource_ToolTip.ShowIcon = ShowIcon;
+            PART_ChartTotalHoursSource_ToolTip.Mode = ModeComplet;
+
+            PART_ChartHoursByDaySource_ToolTip.ShowIcon = ShowIcon;
+            PART_ChartHoursByDaySource_ToolTip.Mode = ModeComplet;
+
+            PART_ChartHoursByWeekSource_ToolTip.ShowIcon = ShowIcon;
+            PART_ChartHoursByWeekSource_ToolTip.Mode = ModeComplet;
+
+
             DataContext = this;
         }
 
@@ -200,8 +217,18 @@ namespace GameActivity
 
             foreach (var sourcename in ListSourceName)
             {
-                string icon = TransformIcon.Get(sourcename) + " ";
-                FilterSourceItems.Add(new ListSource { SourceName = ((icon.Length == 2) ? icon : string.Empty) + sourcename, SourceNameShort = sourcename, IsCheck = false });
+                string Icon = PlayniteTools.GetPlatformIcon(_PlayniteApi, sourcename);
+                string IconText = TransformIcon.Get(sourcename);
+
+                FilterSourceItems.Add(new ListSource
+                {
+                    TypeStoreIcon = ModeComplet,
+                    SourceIcon = Icon,
+                    SourceIconText = IconText,
+                    SourceName = sourcename,
+                    SourceNameShort = sourcename,
+                    IsCheck = false
+                });
             }
 
             FilterSourceItems.Sort((x, y) => x.SourceNameShort.CompareTo(y.SourceNameShort));
@@ -231,11 +258,11 @@ namespace GameActivity
             {
                 if (_settings.ShowLauncherIcons)
                 {
-                    acmLabelsX.LabelsRotation = 0;
+                    PART_ChartTotalHoursSource_X.LabelsRotation = 0;
                 }
                 else
                 {
-                    acmLabelsX.LabelsRotation = 160;
+                    PART_ChartTotalHoursSource_X.LabelsRotation = 160;
                 }
 
                 List<GameActivities> listGameActivities = GameActivity.PluginDatabase.GetListGameActivity();
@@ -276,7 +303,7 @@ namespace GameActivity
             // Total hours by genres.
             else
             {
-                acmLabelsX.LabelsRotation = 160;
+                PART_ChartTotalHoursSource_X.LabelsRotation = 160;
 
                 List<GameActivities> listGameActivities = GameActivity.PluginDatabase.GetListGameActivity();
                 for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
@@ -326,6 +353,9 @@ namespace GameActivity
             {
                 series.Add(new CustomerForTime
                 {
+                    Icon = PlayniteTools.GetPlatformIcon(_PlayniteApi, item.Key),
+                    IconText = TransformIcon.Get(item.Key),
+
                     Name = item.Key,
                     Values = (long)item.Value,
                 });
@@ -362,39 +392,39 @@ namespace GameActivity
             {
                 if (_settings.CumulPlaytimeStore)
                 {
-                    acmSeries.Visibility = Visibility.Hidden;
-                    acmLabel.Visibility = Visibility.Hidden;
+                    PART_ChartTotalHoursSource.Visibility = Visibility.Hidden;
+                    PART_ChartTotalHoursSource_Label.Visibility = Visibility.Hidden;
 
                     Grid.SetColumn(GridDay, 0);
                     Grid.SetColumnSpan(GridDay, 3);
                 }
 
                 Grid.SetColumnSpan(gridMonth, 1);
-                actSeries.Visibility = Visibility.Visible;
+                PART_ChartHoursByDaySource.Visibility = Visibility.Visible;
                 actLabel.Visibility = Visibility.Visible;
-                acwSeries.Visibility = Visibility.Visible;
+                PART_ChartHoursByWeekSource.Visibility = Visibility.Visible;
                 acwLabel.Visibility = Visibility.Visible;
             }
             else
             {
                 if (_settings.CumulPlaytimeStore)
                 {
-                    acmSeries.Visibility = Visibility.Visible;
-                    acmLabel.Visibility = Visibility.Visible;
+                    PART_ChartTotalHoursSource.Visibility = Visibility.Visible;
+                    PART_ChartTotalHoursSource_Label.Visibility = Visibility.Visible;
                 }
 
                 Grid.SetColumnSpan(gridMonth, 5);
-                actSeries.Visibility = Visibility.Hidden;
+                PART_ChartHoursByDaySource.Visibility = Visibility.Hidden;
                 actLabel.Visibility = Visibility.Hidden;
-                acwSeries.Visibility = Visibility.Hidden;
+                PART_ChartHoursByWeekSource.Visibility = Visibility.Hidden;
                 acwLabel.Visibility = Visibility.Hidden;
             }
 
-            acmLabelsY.LabelFormatter = activityForGameLogFormatter;
-            acmSeries.Series = ActivityByMonthSeries;
-            acmLabelsY.MinValue = 0;
-            ((CustomerToolTipForTime)acmSeries.DataTooltip).ShowIcon = _settings.ShowLauncherIcons;
-            acmLabelsX.Labels = ActivityByMonthLabels;
+            PART_ChartTotalHoursSource_Y.LabelFormatter = activityForGameLogFormatter;
+            PART_ChartTotalHoursSource.Series = ActivityByMonthSeries;
+            PART_ChartTotalHoursSource_Y.MinValue = 0;
+            ((CustomerToolTipForTime)PART_ChartTotalHoursSource.DataTooltip).ShowIcon = _settings.ShowLauncherIcons;
+            PART_ChartTotalHoursSource_X.Labels = ActivityByMonthLabels;
         }
 
         public void getActivityByDay(int year, int month)
@@ -451,11 +481,11 @@ namespace GameActivity
 
                 Func<double, string> activityForGameLogFormatter = value => (string)converter.Convert((long)value, null, null, CultureInfo.CurrentCulture);
 
-                actLabelsY.LabelFormatter = activityForGameLogFormatter;
-                actSeries.DataTooltip = new CustomerToolTipForTime();
-                actSeries.Series = activityByDaySeries;
-                actLabelsY.MinValue = 0;
-                actLabelsX.Labels = activityByDateLabels;
+                PART_ChartHoursByDaySource_Y.LabelFormatter = activityForGameLogFormatter;
+                PART_ChartHoursByDaySource.DataTooltip = new CustomerToolTipForTime();
+                PART_ChartHoursByDaySource.Series = activityByDaySeries;
+                PART_ChartHoursByDaySource_Y.MinValue = 0;
+                PART_ChartHoursByDaySource_X.Labels = activityByDateLabels;
             });
         }
 
@@ -606,13 +636,13 @@ namespace GameActivity
             if (datesPeriodes.Count == 5)
             {
                 activityByWeekLabels = new[]
-            {
-                resources.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[0].Monday),
-                resources.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[1].Monday),
-                resources.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[2].Monday),
-                resources.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[3].Monday),
-                resources.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[4].Monday)
-            };
+                {
+                    resources.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[0].Monday),
+                    resources.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[1].Monday),
+                    resources.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[2].Monday),
+                    resources.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[3].Monday),
+                    resources.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[4].Monday)
+                };
             }
 
 
@@ -645,12 +675,12 @@ namespace GameActivity
                     Values = series
                 });
 
-                acwSeries.DataTooltip = new CustomerToolTipForTime();
+                PART_ChartHoursByWeekSource.DataTooltip = new CustomerToolTipForTime();
             }
             else
             {
-                acwSeries.DataTooltip = new CustomerToolTipForMultipleTime();
-                ((CustomerToolTipForMultipleTime)acwSeries.DataTooltip).ShowIcon = _settings.ShowLauncherIcons;
+                PART_ChartHoursByWeekSource.DataTooltip = new CustomerToolTipForMultipleTime();
+                ((CustomerToolTipForMultipleTime)PART_ChartHoursByWeekSource.DataTooltip).ShowIcon = _settings.ShowLauncherIcons;
             }
 
             //let create a mapper so LiveCharts know how to plot our CustomerViewModel class
@@ -663,10 +693,10 @@ namespace GameActivity
 
             Func<double, string> activityForGameLogFormatter = value => (string)converter.Convert((long)value, null, null, CultureInfo.CurrentCulture);
 
-            acwLabelsY.LabelFormatter = activityForGameLogFormatter;
-            acwSeries.Series = activityByWeekSeries;
-            acwLabelsY.MinValue = 0;
-            acwLabelsX.Labels = activityByWeekLabels;
+            PART_ChartHoursByWeekSource_Y.LabelFormatter = activityForGameLogFormatter;
+            PART_ChartHoursByWeekSource.Series = activityByWeekSeries;
+            PART_ChartHoursByWeekSource_Y.MinValue = 0;
+            PART_ChartHoursByWeekSource_X.Labels = activityByWeekLabels;
         }
 
 
@@ -1137,11 +1167,11 @@ namespace GameActivity
 
             if ((bool)sender.IsChecked)
             {
-                SearchSources.Add((string)sender.Tag);
+                SearchSources.Add(((ListSource)sender.Tag).SourceNameShort);
             }
             else
             {
-                SearchSources.Remove((string)sender.Tag);
+                SearchSources.Remove(((ListSource)sender.Tag).SourceNameShort);
             }
 
             if (SearchSources.Count != 0)
@@ -1156,6 +1186,10 @@ namespace GameActivity
 
     public class ListSource
     {
+        public TextBlockWithIconMode TypeStoreIcon { get; set; }
+
+        public string SourceIcon { get; set; }
+        public string SourceIconText { get; set; }
         public string SourceName { get; set; }
         public string SourceNameShort { get; set; }
         public bool IsCheck { get; set; }

@@ -80,6 +80,8 @@ namespace GameActivity
 
 
         public bool ShowLauncherIcons { get; set; } = true;
+        public int ModeStoreIcon { get; set; } = 1;
+
         public bool CumulPlaytimeSession { get; set; } = false;
         public bool CumulPlaytimeStore { get; set; } = false;
 

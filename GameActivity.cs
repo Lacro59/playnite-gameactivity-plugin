@@ -580,7 +580,10 @@ namespace GameActivity
             {
                 MenuSection = resources.GetString("LOCGameActivity"),
                 Description = "Test",
-                Action = (mainMenuItem) => { }
+                Action = (mainMenuItem) => 
+                {
+
+                }
             });
 #endif
 

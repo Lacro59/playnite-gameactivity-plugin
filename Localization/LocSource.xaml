@@ -53,6 +53,10 @@
     <sys:String x:Key="LOCGameActivityUseControls">Use chart controls</sys:String>
     <sys:String x:Key="LOCGameActivitySelectChartSeriesToDisplay">Select the series to display on the chart</sys:String>
 
+    <sys:String x:Key="LOCGameActivityIconFrom">Select the icon origin</sys:String>
+    <sys:String x:Key="LOCGameActivityIconFromLibrary">Use the icon defined in the library</sys:String>
+    <sys:String x:Key="LOCGameActivityIconFromFont">Use the icon defined in the plugin's font</sys:String>
+
     <!-- GameActivityViewSingle -->
 
     <sys:String x:Key="LOCGameActivityAvgPerDay">Average time per day</sys:String>

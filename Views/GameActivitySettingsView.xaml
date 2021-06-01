@@ -20,12 +20,23 @@
                         <CheckBox IsChecked="{Binding Settings.MenuInExtensions}" VerticalAlignment="Center">
                             <Label Content="{DynamicResource LOCCommonMenuInExtensions}" />
                         </CheckBox>
-                        <CheckBox IsChecked="{Binding Settings.ShowLauncherIcons}" Margin="0,15,0,0">
+                        
+                        <CheckBox IsChecked="{Binding Settings.ShowLauncherIcons}" Margin="0,15,0,0" Name="PART_ShowIcon">
                             <Label Content="{DynamicResource LOCCommonIconStore}" />
                         </CheckBox>
+                        <StackPanel Orientation="Horizontal" Margin="30,15,0,0"
+                                    IsEnabled="{Binding ElementName=PART_ShowIcon, Path=IsChecked}">
+                            <Label Content="{DynamicResource LOCGameActivityIconFrom}" />
+                            <ComboBox Margin="10,0,0,0" SelectedIndex="{Binding Settings.ModeStoreIcon}">
+                                <ComboBoxItem Content="{DynamicResource LOCGameActivityIconFromLibrary}" />
+                                <ComboBoxItem Content="{DynamicResource LOCGameActivityIconFromFont}" />
+                            </ComboBox>
+                        </StackPanel>
+                        
                         <CheckBox IsChecked="{Binding Settings.CumulPlaytimeSession}" Margin="0,15,0,0">
                             <Label Content="{DynamicResource LOCGameActivityCumulPlaytimeSession}" />
                         </CheckBox>
+                        
                         <CheckBox IsChecked="{Binding Settings.CumulPlaytimeStore}" Margin="0,15,0,0">
                             <Label Content="{DynamicResource LOCGameActivityCumulPlaytimeStore}" />
                         </CheckBox>

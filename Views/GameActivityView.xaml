@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="GameActivity.GameActivityView"
+﻿<UserControl x:Class="GameActivity.Views.GameActivityView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -7,11 +7,12 @@
              xmlns:commonpluginsshared="clr-namespace:CommonPluginsShared"
              xmlns:livechartscommon="clr-namespace:CommonPluginsControls.LiveChartsCommon"
              xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
-             xmlns:controls="clr-namespace:GameActivity.Controls"
+             xmlns:local="clr-namespace:GameActivity.Views"
              xmlns:controlsShared="clr-namespace:CommonPluginsShared.Controls"
+             xmlns:commonpluginscontrols="clr-namespace:CommonPluginsControls.Controls"
              xmlns:playnitecontrols="clr-namespace:CommonPluginsControls.PlayniteControls"
-             xmlns:controls1="clr-namespace:CommonPluginsControls.Controls"
-             mc:Ignorable="d" d:DesignHeight="660" d:DesignWidth="1290">
+             mc:Ignorable="d" d:DesignHeight="660" d:DesignWidth="1290"
+             d:DataContext="{d:DesignInstance Type=local:GameActivityView}">
 
     <UserControl.Resources>
         <converters:LongToTimePlayedConverter x:Key="LongToTimePlayedConverter" />
@@ -90,18 +91,18 @@
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
 
-                        <Label Name="acmLabel" Content="{DynamicResource LOCGameActivityTotalHours}" HorizontalAlignment="Center" 
+                        <Label Name="PART_ChartTotalHoursSource_Label" Content="{DynamicResource LOCGameActivityTotalHours}" HorizontalAlignment="Center" 
                                VerticalAlignment="Top" Height="30" FontSize="20" FontWeight="Bold" MinWidth="50" 
                                Grid.Column="1" Grid.Row="0" />
 
-                        <lvc:CartesianChart x:Name="acmSeries" LegendLocation="none" Grid.Column="1" Grid.Row="1" 
+                        <lvc:CartesianChart x:Name="PART_ChartTotalHoursSource" LegendLocation="none" Grid.Column="1" Grid.Row="1" 
                                             DisableAnimations="True" FontFamily="{DynamicResource CommonFont}">
                             <lvc:CartesianChart.DataTooltip>
-                                <livechartscommon:CustomerToolTipForTime ShowIcon="{Binding ShowIcon}" />
+                                <livechartscommon:CustomerToolTipForTime x:Name="PART_ChartTotalHoursSource_ToolTip" />
                             </lvc:CartesianChart.DataTooltip>
 
                             <lvc:CartesianChart.AxisX>
-                                <lvc:Axis x:Name="acmLabelsX" ShowLabels="True" FontSize="16" FontFamily="{DynamicResource CommonFont}">
+                                <lvc:Axis x:Name="PART_ChartTotalHoursSource_X" ShowLabels="True" FontSize="16" FontFamily="{DynamicResource CommonFont}">
                                     <lvc:Axis.Separator>
                                         <lvc:Separator Step="1" />
                                     </lvc:Axis.Separator>
@@ -109,7 +110,7 @@
                             </lvc:CartesianChart.AxisX>
 
                             <lvc:CartesianChart.AxisY>
-                                <lvc:Axis x:Name="acmLabelsY"></lvc:Axis>
+                                <lvc:Axis x:Name="PART_ChartTotalHoursSource_Y"></lvc:Axis>
                             </lvc:CartesianChart.AxisY>
                         </lvc:CartesianChart>
                     </Grid>
@@ -128,21 +129,21 @@
 
                         <Label Grid.Column="1" Grid.Row="0" x:Name="actLabel" Content="{DynamicResource LOCGameActivityTimeTitle}" Height="30" FontSize="20" FontWeight="Bold" MinWidth="50" HorizontalAlignment="Center" />
 
-                        <lvc:CartesianChart x:Name="actSeries" LegendLocation="none" Grid.Column="1" Grid.Row="1"  
+                        <lvc:CartesianChart x:Name="PART_ChartHoursByDaySource" LegendLocation="none" Grid.Column="1" Grid.Row="1"  
                                             DisableAnimations="True" FontFamily="{DynamicResource CommonFont}" >
                             <lvc:CartesianChart.DataTooltip>
-                                <livechartscommon:CustomerToolTipForMultipleTime ShowIcon="{Binding ShowIcon}" />
+                                <livechartscommon:CustomerToolTipForMultipleTime x:Name="PART_ChartHoursByDaySource_ToolTip" />
                             </lvc:CartesianChart.DataTooltip>
 
                             <lvc:CartesianChart.AxisX>
-                                <lvc:Axis x:Name="actLabelsX" ShowLabels="false">
+                                <lvc:Axis x:Name="PART_ChartHoursByDaySource_X" ShowLabels="false">
                                     <lvc:Axis.Separator>
                                         <lvc:Separator Step="1" />
                                     </lvc:Axis.Separator>
                                 </lvc:Axis>
                             </lvc:CartesianChart.AxisX>
                             <lvc:CartesianChart.AxisY>
-                                <lvc:Axis x:Name="actLabelsY"></lvc:Axis>
+                                <lvc:Axis x:Name="PART_ChartHoursByDaySource_Y"></lvc:Axis>
                             </lvc:CartesianChart.AxisY>
                         </lvc:CartesianChart>
                     </Grid>
@@ -160,21 +161,21 @@
 
                         <Label Grid.Column="1" Grid.Row="0" x:Name="acwLabel" Content="{DynamicResource LOCGameActivityTotalHoursByWeeks}" Height="30" FontSize="20" FontWeight="Bold" MinWidth="50" HorizontalAlignment="Center" />
 
-                        <lvc:CartesianChart x:Name="acwSeries" LegendLocation="none" Grid.Column="1" Grid.Row="1"  
+                        <lvc:CartesianChart x:Name="PART_ChartHoursByWeekSource" LegendLocation="none" Grid.Column="1" Grid.Row="1"  
                                             DisableAnimations="True" FontFamily="{DynamicResource CommonFont}" >
                             <lvc:CartesianChart.DataTooltip>
-                                <livechartscommon:CustomerToolTipForMultipleTime ShowIcon="{Binding ShowIcon}" />
+                                <livechartscommon:CustomerToolTipForMultipleTime x:Name="PART_ChartHoursByWeekSource_ToolTip" />
                             </lvc:CartesianChart.DataTooltip>
 
                             <lvc:CartesianChart.AxisX>
-                                <lvc:Axis x:Name="acwLabelsX" ShowLabels="True" FontSize="14">
+                                <lvc:Axis x:Name="PART_ChartHoursByWeekSource_X" ShowLabels="True" FontSize="14">
                                     <lvc:Axis.Separator>
                                         <lvc:Separator Step="1" />
                                     </lvc:Axis.Separator>
                                 </lvc:Axis>
                             </lvc:CartesianChart.AxisX>
                             <lvc:CartesianChart.AxisY>
-                                <lvc:Axis x:Name="acwLabelsY"></lvc:Axis>
+                                <lvc:Axis x:Name="PART_ChartHoursByWeekSource_Y"></lvc:Axis>
                             </lvc:CartesianChart.AxisY>
                         </lvc:CartesianChart>
                     </Grid>
@@ -216,8 +217,12 @@
                         <ComboBox Grid.Column="6" x:Name="FilterSource" IsEditable="True" IsReadOnly="True">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <CheckBox Checked="ChkSource_Checked" Unchecked="ChkSource_Unchecked" Tag="{Binding SourceNameShort}"
-                                              Content="{Binding SourceName}" IsChecked="{Binding isCheck, Mode=TwoWay}" FontFamily="{DynamicResource CommonFont}">
+                                    <CheckBox Checked="ChkSource_Checked" Unchecked="ChkSource_Unchecked" Tag="{Binding}"
+                                              IsChecked="{Binding isCheck, Mode=TwoWay}" FontFamily="{DynamicResource CommonFont}">
+                                        <commonpluginscontrols:TextBlockWithIcon Mode="{Binding RelativeSource={RelativeSource AncestorType=CheckBox}, Path=Tag.TypeStoreIcon}" 
+                                                                                 Icon="{Binding RelativeSource={RelativeSource AncestorType=CheckBox}, Path=Tag.SourceIcon}"
+                                                                                 IconText="{Binding RelativeSource={RelativeSource AncestorType=CheckBox}, Path=Tag.SourceIconText}"
+                                                                                 Text="{Binding RelativeSource={RelativeSource AncestorType=CheckBox}, Path=Tag.SourceName}" />
                                     </CheckBox>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
