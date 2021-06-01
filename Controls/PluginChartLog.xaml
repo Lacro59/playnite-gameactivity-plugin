@@ -64,7 +64,8 @@
                 </lvc:CartesianChart.DataTooltip>
 
                 <lvc:CartesianChart.AxisX>
-                    <lvc:Axis Name="PART_ChartLogActivityLabelsX" ShowLabels="{Binding ChartLogAxis}" FontSize="10" MinValue="0">
+                    <lvc:Axis Name="PART_ChartLogActivityLabelsX" ShowLabels="{Binding ChartLogAxis}" MinValue="0"
+                              FontSize="{DynamicResource FontSize}" FontFamily="{DynamicResource FontFamily}">
                         <lvc:Axis.Separator>
                             <lvc:Separator Step="1" />
                         </lvc:Axis.Separator>
@@ -72,7 +73,8 @@
                 </lvc:CartesianChart.AxisX>
 
                 <lvc:CartesianChart.AxisY>
-                    <lvc:Axis Name="PART_ChartLogActivityLabelsY" ShowLabels="{Binding ChartLogOrdinates}" MinValue="0"></lvc:Axis>
+                    <lvc:Axis Name="PART_ChartLogActivityLabelsY" ShowLabels="{Binding ChartLogOrdinates}" MinValue="0"
+                              FontSize="{DynamicResource FontSize}" FontFamily="{DynamicResource FontFamily}" />
                 </lvc:CartesianChart.AxisY>
             </lvc:CartesianChart>
         </Grid>

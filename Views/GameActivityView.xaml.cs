@@ -101,6 +101,7 @@ namespace GameActivity.Views
 
             PART_GameActivityChartTime = new PluginChartTime();
             PART_GameActivityChartTime.IgnoreSettings = true;
+            PART_GameActivityChartTime.LabelsRotation = true;
             PART_GameActivityChartTime.GameSeriesDataClick += GameSeries_DataClick;
             PART_GameActivityChartTime_Contener.Children.Add(PART_GameActivityChartTime);
 
@@ -826,16 +827,8 @@ namespace GameActivity.Views
 
             if (!isNavigation)
             {
-                if (dateSelected == null || dateSelected == default(DateTime))
-                {
-                    gameLabel.Content = resources.GetString("LOCGameActivityLogTitle") + " ("
-                        + Convert.ToDateTime(gameActivities.GetLastSession()).ToString(Constants.DateUiFormat) + ")";
-                }
-                else
-                {
-                    gameLabel.Content = resources.GetString("LOCGameActivityLogTitleDate") + " "
-                        + Convert.ToDateTime(dateSelected).ToString(Constants.DateUiFormat);
-                }
+                gameLabel.Content = resources.GetString("LOCGameActivityLogTitleDate") + " "
+                                        + Convert.ToDateTime(dateSelected).ToString(Constants.DateUiFormat);
             }
         }
         #endregion

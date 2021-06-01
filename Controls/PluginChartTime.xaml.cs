@@ -404,7 +404,15 @@ namespace GameActivity.Controls
                         Func<double, string> activityForGameLogFormatter = value => (string)converter.Convert((long)value, null, null, CultureInfo.CurrentCulture);
                         PART_ChartTimeActivityLabelsY.LabelFormatter = activityForGameLogFormatter;
 
-                        PART_ChartTimeActivity.DataTooltip = new CustomerToolTipForTime();
+                        if (PluginDatabase.PluginSettings.Settings.CumulPlaytimeSession)
+                        {
+                            PART_ChartTimeActivity.DataTooltip = new CustomerToolTipForTime();
+                        }
+                        else
+                        {
+                            PART_ChartTimeActivity.DataTooltip = new CustomerToolTipForMultipleTime { ShowTitle = false };
+                        }
+
                         PART_ChartTimeActivityLabelsY.MinValue = 0;
                         PART_ChartTimeActivity.Series = activityForGameSeries;
                         PART_ChartTimeActivityLabelsX.Labels = activityForGameLabels;

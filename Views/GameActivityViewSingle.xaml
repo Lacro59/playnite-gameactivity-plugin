@@ -9,7 +9,7 @@
              xmlns:commonpluginsshared="clr-namespace:CommonPluginsShared"
              xmlns:converters="clr-namespace:CommonPluginsPlaynite.Converters"
              mc:Ignorable="d" 
-             Height="550" Width="900">
+             Height="600" Width="1024">
 
     <UserControl.Resources>
         <commonpluginsshared:CompareValueConverter x:Key="CompareValueConverter" />
