@@ -305,6 +305,8 @@ namespace GameActivity.Views
                         Common.LogError(ex, false, $"Error in getActivityByMonth({year}, {month}) with {listGameActivities[iGame].Name}");
                     }
                 }
+
+                PART_ChartTotalHoursSource.DataTooltip = new CustomerToolTipForTime { ShowIcon = ShowIcon, Mode = ModeComplet };
             }
             // Total hours by genres.
             else
@@ -342,6 +344,8 @@ namespace GameActivity.Views
                                 }
                             }
                         }
+
+                        PART_ChartTotalHoursSource.DataTooltip = new CustomerToolTipForTime { ShowIcon = false, Mode = TextBlockWithIconMode.TextOnly };
                     }
                     catch (Exception ex)
                     {
