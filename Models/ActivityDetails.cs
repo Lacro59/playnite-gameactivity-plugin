@@ -20,7 +20,6 @@ namespace GameActivity.Models
             get => Get(dateSession);
         }
         
-
         /// <summary>
         /// Get GameActivityDetails for a date session.
         /// </summary>

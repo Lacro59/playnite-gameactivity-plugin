@@ -86,6 +86,8 @@
     <sys:String x:Key="LOCGameActivityAvgCpuT">Avg CPU T</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpuT">Avg GPU T</sys:String>
 
+    <sys:String x:Key="LOCGameActivityPCName">PC name</sys:String>
+
 
     <!-- GameActivity -->
 

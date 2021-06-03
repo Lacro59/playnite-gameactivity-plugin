@@ -63,6 +63,27 @@ namespace GameActivity.Models
             }
         }
 
+        public int IdConfiguration { get; set; } = -1;
+
+        [JsonIgnore]
+        public SystemConfiguration Configuration
+        {
+            get
+            {
+                if (IdConfiguration == -1)
+                {
+                    return new SystemConfiguration();
+                }
+
+                if (IdConfiguration >= PluginDatabase.LocalSystem.GetConfigurations().Count)
+                {
+                    return new SystemConfiguration();
+                }
+
+                return PluginDatabase.LocalSystem.GetConfigurations()[IdConfiguration];
+            }
+        }
+
         public DateTime? DateSession { get; set; }
 
         public long ElapsedSeconds { get; set; } = 0;

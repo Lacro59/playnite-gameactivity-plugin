@@ -680,6 +680,7 @@ namespace GameActivity
             GameActivitiesLog = PluginDatabase.Get(game);
             GameActivitiesLog.Items.Add(new Activity
             {
+                IdConfiguration = PluginDatabase.LocalSystem.GetIdConfiguration(),
                 DateSession = DateSession,
                 SourceID = game.SourceId,
                 PlatformID = game.PlatformId

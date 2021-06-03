@@ -41,6 +41,9 @@ namespace GameActivity.Models
         public string MaxGPU { get; set; }
         public string MaxRAM { get; set; }
 
+        public int PCConfigurationId { get; set; }
+        public string PCName { get; set; }
+
         public RelayCommand<Guid> GoToGame { get; set; }
 
         [JsonIgnore]

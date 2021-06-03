@@ -20,6 +20,7 @@
         <commonpluginsshared:CompareValueConverter x:Key="CompareValueConverter" />
         <commonpluginsshared:LocalDateTimeConverter x:Key="LocalDateTimeConverter" />
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converters:InvertedBooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter" />
     </UserControl.Resources>
 
     <Grid Margin="10">
@@ -311,6 +312,15 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
+                                <GridViewColumn Width="130">
+                                    <GridViewColumnHeader Content="{DynamicResource LOCGameActivityPCName}" />
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Label Content="{Binding PCName}" VerticalAlignment="Stretch" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+
                                 <GridViewColumn Header="{DynamicResource LOCGameActivityAvgCpu}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
@@ -494,10 +504,12 @@
                     <RowDefinition Height="45" />
                     <RowDefinition Height="10" />
                     <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
 
                 <Grid Grid.Row="0" VerticalAlignment="Center">
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="70" />
                         <ColumnDefinition Width="70" />
                         <ColumnDefinition Width="70" />
                         <ColumnDefinition Width="*" />
@@ -505,20 +517,23 @@
                         <ColumnDefinition Width="45" />
                     </Grid.ColumnDefinitions>
 
-                    <ToggleButton Grid.Column="0" x:Name="ToggleButtonTime" IsChecked="True" 
+                    <ToggleButton Content="&#xef24;" FontFamily="{StaticResource FontIcoFont}" Name="ButtonShowConfig" 
+                                  Grid.Column="0" IsChecked="True" HorizontalAlignment="Left" VerticalAlignment="Center" />
+
+                    <ToggleButton Grid.Column="1" x:Name="ToggleButtonTime" IsChecked="True" 
                                   Content="{DynamicResource LOCGameActivityTime}" Height="33" Width="65" 
                                   Click="ToggleButtonTime_Checked" />
 
-                    <Label Grid.Column="2" x:Name="gameLabel" Content="graphics title" HorizontalAlignment="Center" 
+                    <Label Grid.Column="3" x:Name="gameLabel" Content="graphics title" HorizontalAlignment="Center" 
                            VerticalAlignment="Top" Height="40" FontSize="20" FontWeight="Bold" />
 
-                    <ToggleButton Grid.Column="1" x:Name="ToggleButtonLog" IsChecked="False" 
+                    <ToggleButton Grid.Column="2" x:Name="ToggleButtonLog" IsChecked="False" 
                                   Content="{DynamicResource LOCGameActivityLog}" Height="33" Width="65" 
                                   Click="ToggleButtonLog_Checked" />
 
-                    <Button Grid.Column="3" Content="" Height="25" Width="40" 
+                    <Button Grid.Column="4" Content="" Height="25" Width="40" 
                             Click="Button_Click_prevGame" FontFamily="Wingdings" />
-                    <Button Grid.Column="4" Content="" Height="25" Width="40" 
+                    <Button Grid.Column="5" Content="" Height="25" Width="40" 
                             Click="Button_Click_nextGame" FontFamily="Wingdings" />
                 </Grid>
 
@@ -528,6 +543,41 @@
 
                     <Grid Name="PART_GameActivityChartLog_Contener"
                           Visibility="{Binding ElementName=ToggleButtonLog, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                </Grid>
+
+                <Grid Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" Margin="0,10,0,0"
+                      Visibility="{Binding ElementName=ButtonShowConfig, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="10" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="10" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Column="0" Grid.Row="0" Content="{DynamicResource LOCGameActivityPCName}" />
+                    <Label Grid.Column="2" Grid.Row="0" Name="PART_PcName" />
+
+                    <Label Grid.Column="4" Grid.Row="0" Content="OS" />
+                    <Label Grid.Column="6" Grid.Row="0" Name="PART_Os" />
+
+                    <Label Grid.Column="0" Grid.Row="2" Content="CPU" />
+                    <Label Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="6" Name="PART_CpuName" />
+
+                    <Label Grid.Column="0" Grid.Row="4" Content="GPU" />
+                    <Label Grid.Column="2" Grid.Row="4" Name="PART_GpuName" />
+
+                    <Label Grid.Column="4" Grid.Row="4" Content="RAM" />
+                    <Label Grid.Column="6" Grid.Row="4" Name="PART_Ram" />
                 </Grid>
             </Grid>
         </Grid>

@@ -1,6 +1,7 @@
 ﻿using GameActivity.Models;
 using Newtonsoft.Json;
 using Playnite.SDK;
+using Playnite.SDK.Data;
 using Playnite.SDK.Models;
 using CommonPluginsShared.Collections;
 using System;
@@ -11,11 +12,16 @@ using System.Threading.Tasks;
 using CommonPluginsPlaynite.Common;
 using CommonPluginsPlaynite.Converters;
 using System.Globalization;
+using CommonPluginsShared;
+using System.IO;
 
 namespace GameActivity.Services
 {
     public class ActivityDatabase : PluginDatabaseObject<GameActivitySettingsViewModel, GameActivitiesCollection, GameActivities>
     {
+        public LocalSystem LocalSystem;
+
+
         public ActivityDatabase(IPlayniteAPI PlayniteApi, GameActivitySettingsViewModel PluginSettings, string PluginUserDataPath) : base(PlayniteApi, PluginSettings, "GameActivity", PluginUserDataPath)
         {
 
@@ -28,6 +34,8 @@ namespace GameActivity.Services
             Database = new GameActivitiesCollection(Paths.PluginDatabasePath);
             Database.SetGameInfoDetails<Activity, ActivityDetails>(PlayniteApi);
             GetPluginTags();
+
+            LocalSystem = new LocalSystem(Path.Combine(Paths.PluginUserDataPath, $"Configurations.json"), false);
 
             IsLoaded = true;
             return true;

@@ -92,6 +92,10 @@ namespace GameActivity.Views
             // Initialization components
             InitializeComponent();
 
+
+            ButtonShowConfig.IsChecked = false;
+
+
             if (!PluginDatabase.PluginSettings.Settings.EnableLogging)
             {
                 ToggleButtonTime.Visibility = Visibility.Hidden;
@@ -116,12 +120,12 @@ namespace GameActivity.Views
             {
                 GridView lvView = (GridView)lvGames.View;
 
+                lvView.Columns.RemoveAt(14);
+                lvView.Columns.RemoveAt(13);
                 lvView.Columns.RemoveAt(12);
                 lvView.Columns.RemoveAt(11);
                 lvView.Columns.RemoveAt(10);
                 lvView.Columns.RemoveAt(9);
-                lvView.Columns.RemoveAt(8);
-                lvView.Columns.RemoveAt(7);
 
                 lvGames.View = lvView;
             }
@@ -798,6 +802,9 @@ namespace GameActivity.Views
                             MaxGPU = _settings.MaxGpuUsage.ToString(),
                             MaxRAM = _settings.MaxRamUsage.ToString(),
 
+                            PCConfigurationId = listGameActivities[iGame].GetLastSessionActivity().IdConfiguration,
+                            PCName = listGameActivities[iGame].GetLastSessionActivity().Configuration.Name,
+
                             GoToGame = PluginDatabase.GoToGame
                         });
                     }
@@ -926,6 +933,27 @@ namespace GameActivity.Views
                     }
 
                     activityForGamesGraphics.Visibility = Visibility.Visible;
+                }
+
+
+                int index = ((ListActivities)lvGames.SelectedItem).PCConfigurationId;
+                if (index != -1 && index < PluginDatabase.LocalSystem.GetConfigurations().Count)
+                {
+                    var Configuration = PluginDatabase.LocalSystem.GetConfigurations()[index];
+
+                    PART_PcName.Content = Configuration.Name;
+                    PART_Os.Content = Configuration.Os;
+                    PART_CpuName.Content = Configuration.Cpu;
+                    PART_GpuName.Content = Configuration.GpuName;
+                    PART_Ram.Content = Configuration.RamUsage;
+                }
+                else
+                {
+                    PART_PcName.Content = string.Empty;
+                    PART_Os.Content = string.Empty;
+                    PART_CpuName.Content = string.Empty;
+                    PART_GpuName.Content = string.Empty;
+                    PART_Ram.Content = string.Empty;
                 }
             }
         }

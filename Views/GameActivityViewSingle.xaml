@@ -9,12 +9,13 @@
              xmlns:commonpluginsshared="clr-namespace:CommonPluginsShared"
              xmlns:converters="clr-namespace:CommonPluginsPlaynite.Converters"
              mc:Ignorable="d" 
-             Height="600" Width="1024">
+             Height="700" Width="1100">
 
     <UserControl.Resources>
         <commonpluginsshared:CompareValueConverter x:Key="CompareValueConverter" />
         <commonpluginsshared:LocalDateTimeConverter x:Key="LocalDateTimeConverter" />
         <converters:LongToTimePlayedConverter x:Key="LongToTimePlayedConverter" />
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
 
     <Grid Margin="10">
@@ -150,6 +151,17 @@
                                         <Label Content="{Binding GameElapsedSeconds, Mode=OneWay, Converter={StaticResource LongToTimePlayedConverter}}"
                                                HorizontalAlignment="Center" VerticalAlignment="Stretch"
                                                Style="{DynamicResource ListExtendStyleLabel}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Width="130">
+                                <GridViewColumnHeader Content="{DynamicResource LOCGameActivityPCName}" />
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Label Content="{Binding PCName}" VerticalAlignment="Stretch" />
+                                        </StackPanel>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -341,9 +353,13 @@
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="10" />
                     <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
 
-                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2"
+                <ToggleButton Content="&#xef24;" FontFamily="{StaticResource FontIcoFont}" Name="ButtonShowConfig" 
+                              IsChecked="True" HorizontalAlignment="Left" />
+
+                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2" Name="PART_BtLogContener"
                                 VerticalAlignment="Bottom" HorizontalAlignment="Right">
                     <Button Content="" Height="25" Width="40" 
                                 Click="Bt_PrevLog" FontFamily="Wingdings" />
@@ -355,6 +371,41 @@
                 <!-- Game logs -->
                 <Grid Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" Name="PART_ChartLogContener">
                     <controls:PluginChartLog IgnoreSettings="True" AxisLimit="15" DisableAnimations="True" />
+                </Grid>
+
+                <Grid Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" Margin="0,10,0,0"
+                      Visibility="{Binding ElementName=ButtonShowConfig, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="10" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="10" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Column="0" Grid.Row="0" Content="{DynamicResource LOCGameActivityPCName}" />
+                    <Label Grid.Column="2" Grid.Row="0" Name="PART_PcName" />
+
+                    <Label Grid.Column="4" Grid.Row="0" Content="OS" />
+                    <Label Grid.Column="6" Grid.Row="0" Name="PART_Os" />
+
+                    <Label Grid.Column="0" Grid.Row="2" Content="CPU" />
+                    <Label Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="6" Name="PART_CpuName" />
+
+                    <Label Grid.Column="0" Grid.Row="4" Content="GPU" />
+                    <Label Grid.Column="2" Grid.Row="4" Name="PART_GpuName" />
+
+                    <Label Grid.Column="4" Grid.Row="4" Content="RAM" />
+                    <Label Grid.Column="6" Grid.Row="4" Name="PART_Ram" />
                 </Grid>
             </Grid>
         </Grid>

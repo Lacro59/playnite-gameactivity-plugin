@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\JosefNemec\Playnite\source\Playnite.DesktopApp\bin\x86\Release\Extensions\playnite-gameactivity-plugin\</OutputPath>
+    <OutputPath>..\..\..\Playnite_dev\Extensions\playnite-gameactivity-plugin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -74,7 +74,7 @@
       <HintPath>Resources\OpenHardwareMonitorLib.dll</HintPath>
     </Reference>
     <Reference Include="Playnite.SDK">
-      <HintPath>..\..\JosefNemec\Playnite\source\Playnite.DesktopApp\bin\x86\Release\Playnite.SDK.dll</HintPath>
+      <HintPath>..\..\..\Playnite_dev\Playnite.SDK.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="PresentationCore" />
