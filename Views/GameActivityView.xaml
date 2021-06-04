@@ -305,9 +305,13 @@
                                                           Tag="listGameSourceName" />
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <Label Content="{Binding GameSourceIcon}" FontFamily="{DynamicResource CommonFont}" 
-                                                   HorizontalAlignment="Center" VerticalAlignment="Stretch" FontSize="30"
-                                                   Style="{DynamicResource ListExtendStyleLabel}" />
+                                            <StackPanel Tag="{Binding}">
+                                                <commonpluginscontrols:TextBlockWithIcon Mode="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=Tag.TypeStoreIcon}" 
+                                                                                         Icon="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=Tag.SourceIcon}"
+                                                                                         IconText="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=Tag.SourceIconText}"
+                                                                                         Style="{DynamicResource ListExtendStyleTextBlock}"
+                                                                                         HorizontalAlignment="Center" VerticalAlignment="Stretch" FontSize="22" />
+                                            </StackPanel>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
@@ -316,7 +320,7 @@
                                     <GridViewColumnHeader Content="{DynamicResource LOCGameActivityPCName}" />
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <Label Content="{Binding PCName}" VerticalAlignment="Stretch" />
+                                            <Label Content="{Binding PCName}" VerticalAlignment="Stretch" Style="{DynamicResource ListExtendStyleLabel}" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>

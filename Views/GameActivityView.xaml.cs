@@ -265,10 +265,12 @@ namespace GameActivity.Views
                 if (_settings.ShowLauncherIcons)
                 {
                     PART_ChartTotalHoursSource_X.LabelsRotation = 0;
+                    PART_ChartTotalHoursSource_X.FontSize = 30;
                 }
                 else
                 {
                     PART_ChartTotalHoursSource_X.LabelsRotation = 160;
+                    PART_ChartTotalHoursSource_X.FontSize = (double)resources.GetResource("FontSize");
                 }
 
                 List<GameActivities> listGameActivities = GameActivity.PluginDatabase.GetListGameActivity();
@@ -312,6 +314,7 @@ namespace GameActivity.Views
             else
             {
                 PART_ChartTotalHoursSource_X.LabelsRotation = 160;
+                PART_ChartTotalHoursSource_X.FontSize = (double)resources.GetResource("FontSize");
 
                 List<GameActivities> listGameActivities = GameActivity.PluginDatabase.GetListGameActivity();
                 for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
@@ -710,13 +713,21 @@ namespace GameActivity.Views
                     Values = series
                 });
 
-                PART_ChartHoursByWeekSource.DataTooltip = new CustomerToolTipForTime { ShowIcon = ShowIcon, Mode = ModeComplet };
+                PART_ChartHoursByWeekSource.DataTooltip = new CustomerToolTipForTime
+                {
+                    ShowIcon = ShowIcon,
+                    ShowTitle = true,
+                    Mode = ModeComplet,
+                    ShowWeekPeriode = true,
+                    DateFirstPeriode = datesPeriodes[0].Monday
+                };
             }
             else
             {
                 PART_ChartHoursByWeekSource.DataTooltip = new CustomerToolTipForMultipleTime
                 {
                     ShowIcon = ShowIcon,
+                    ShowTitle = true,
                     Mode = ModeComplet,
                     ShowWeekPeriode = true,
                     DateFirstPeriode = datesPeriodes[0].Monday
@@ -808,6 +819,10 @@ namespace GameActivity.Views
 
                             PCConfigurationId = listGameActivities[iGame].GetLastSessionActivity().IdConfiguration,
                             PCName = listGameActivities[iGame].GetLastSessionActivity().Configuration.Name,
+
+                            TypeStoreIcon = ModeSimple,
+                            SourceIcon = PlayniteTools.GetPlatformIcon(_PlayniteApi, sourceName),
+                            SourceIconText = TransformIcon.Get(sourceName),
 
                             GoToGame = PluginDatabase.GoToGame
                         });

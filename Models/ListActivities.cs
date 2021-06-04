@@ -1,4 +1,5 @@
-﻿using GameActivity.Services;
+﻿using CommonPluginsControls.Controls;
+using GameActivity.Services;
 using Newtonsoft.Json;
 using Playnite.SDK;
 using System;
@@ -43,6 +44,10 @@ namespace GameActivity.Models
 
         public int PCConfigurationId { get; set; }
         public string PCName { get; set; }
+
+        public TextBlockWithIconMode TypeStoreIcon { get; set; }
+        public string SourceIcon { get; set; }
+        public string SourceIconText { get; set; }
 
         public RelayCommand<Guid> GoToGame { get; set; }
 

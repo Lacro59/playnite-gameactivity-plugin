@@ -160,7 +160,7 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <Label Content="{Binding PCName}" VerticalAlignment="Stretch" />
+                                            <Label Content="{Binding PCName}" VerticalAlignment="Stretch" Style="{DynamicResource ListExtendStyleLabel}" />
                                         </StackPanel>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
