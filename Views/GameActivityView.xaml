@@ -128,6 +128,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30" />
                             <RowDefinition Height="*" />
+                            <RowDefinition Height="auto" />
                         </Grid.RowDefinitions>
 
                         <Label Grid.Column="1" Grid.Row="0" x:Name="actLabel" Content="{DynamicResource LOCGameActivityTimeTitle}" Height="30" FontSize="20" FontWeight="Bold" MinWidth="50" HorizontalAlignment="Center" />
@@ -140,7 +141,7 @@
                             </lvc:CartesianChart.DataTooltip>
 
                             <lvc:CartesianChart.AxisX>
-                                <lvc:Axis x:Name="PART_ChartHoursByDaySource_X" ShowLabels="false">
+                                <lvc:Axis x:Name="PART_ChartHoursByDaySource_X" ShowLabels="False">
                                     <lvc:Axis.Separator>
                                         <lvc:Separator Step="1" />
                                     </lvc:Axis.Separator>
@@ -151,6 +152,8 @@
                                           FontSize="{DynamicResource FontSize}" FontFamily="{DynamicResource FontFamily}" />
                             </lvc:CartesianChart.AxisY>
                         </lvc:CartesianChart>
+
+                        <Label Grid.Row="3" FontSize="28" Content=" " />
                     </Grid>
 
                     <Grid Name="GridWeek" Grid.Column="4">
