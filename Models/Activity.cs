@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using Playnite.SDK;
+﻿using Playnite.SDK;
+using Playnite.SDK.Data;
 using CommonPluginsShared;
 using System;
 using System.Collections.Generic;
@@ -17,7 +17,7 @@ namespace GameActivity.Models
         public Guid PlatformID { get; set; }
 
 
-        [JsonIgnore]
+        [DontSerialize]
         public string SourceName
         {
             get
@@ -65,7 +65,7 @@ namespace GameActivity.Models
 
         public int IdConfiguration { get; set; } = -1;
 
-        [JsonIgnore]
+        [DontSerialize]
         public SystemConfiguration Configuration
         {
             get

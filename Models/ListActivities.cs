@@ -1,6 +1,6 @@
 ﻿using CommonPluginsControls.Controls;
 using GameActivity.Services;
-using Newtonsoft.Json;
+using Playnite.SDK.Data;
 using Playnite.SDK;
 using System;
 using System.Collections.Generic;
@@ -51,7 +51,7 @@ namespace GameActivity.Models
 
         public RelayCommand<Guid> GoToGame { get; set; }
 
-        [JsonIgnore]
+        [DontSerialize]
         public bool GameExist
         {
             get

@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Playnite.SDK;
+﻿using Playnite.SDK.Data;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -12,7 +10,7 @@ namespace GameActivity.Models
     {
         public ConcurrentDictionary<DateTime, List<ActivityDetailsData>> Items { get; set; } = new ConcurrentDictionary<DateTime, List<ActivityDetailsData>>();
 
-        [JsonIgnore]
+        [DontSerialize]
         public int Count => Items.Count;
 
         public List<ActivityDetailsData> this[DateTime dateSession]
@@ -43,43 +41,43 @@ namespace GameActivity.Models
         /// <summary>
         /// Gets or sets date log.
         /// </summary>
-        [JsonProperty("datelog")]
+        [SerializationPropertyName("datelog")]
         public DateTime? Datelog { get; set; }
 
         /// <summary>
         /// Gets or sets fps log.
         /// </summary>
-        [JsonProperty("fps")]
+        [SerializationPropertyName("fps")]
         public int FPS { get; set; }
 
         /// <summary>
         /// Gets or sets cpu log.
         /// </summary>
-        [JsonProperty("cpu")]
+        [SerializationPropertyName("cpu")]
         public int CPU { get; set; }
 
         /// <summary>
         /// Gets or sets gpu log.
         /// </summary>
-        [JsonProperty("gpu")]
+        [SerializationPropertyName("gpu")]
         public int GPU { get; set; }
 
         /// <summary>
         /// Gets or sets ram log.
         /// </summary>
-        [JsonProperty("ram")]
+        [SerializationPropertyName("ram")]
         public int RAM { get; set; }
 
         /// <summary>
         /// Gets or sets ram log.
         /// </summary>
-        [JsonProperty("cpuT")]
+        [SerializationPropertyName("cpuT")]
         public int CPUT { get; set; }
 
         /// <summary>
         /// Gets or sets ram log.
         /// </summary>
-        [JsonProperty("gpuT")]
+        [SerializationPropertyName("gpuT")]
         public int GPUT { get; set; }
     }
 }

@@ -1,6 +1,4 @@
 ﻿using GameActivity.Models;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Playnite.SDK;
 using CommonPluginsShared;
 using System;

@@ -1,6 +1,5 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Playnite.SDK;
+﻿using Playnite.SDK;
+using Playnite.SDK.Data;
 using Playnite.SDK.Models;
 using Playnite.SDK.Plugins;
 using System.IO;
@@ -319,7 +318,7 @@ namespace GameActivity
                     {
                         foreach (var sensorItems in dataHWinfo)
                         {
-                            JObject sensorItemsOBJ = JObject.Parse(JsonConvert.SerializeObject(sensorItems));
+                            dynamic sensorItemsOBJ = Serialization.FromJson<dynamic>(Serialization.ToJson(sensorItems));
 
                             string sensorsID = "0x" + ((uint)sensorItemsOBJ["szSensorSensorID"]).ToString("X");
 
@@ -329,7 +328,7 @@ namespace GameActivity
                                 // Find data fps
                                 foreach (var items in sensorItemsOBJ["sensors"])
                                 {
-                                    JObject itemOBJ = JObject.Parse(JsonConvert.SerializeObject(items));
+                                    dynamic itemOBJ = Serialization.FromJson<dynamic>(Serialization.ToJson(items));
                                     string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
 
                                     if (dataID.ToLower() == PluginSettings.Settings.HWiNFO_fps_elementID.ToLower())
@@ -345,7 +344,7 @@ namespace GameActivity
                                 // Find data gpu
                                 foreach (var items in sensorItemsOBJ["sensors"])
                                 {
-                                    JObject itemOBJ = JObject.Parse(JsonConvert.SerializeObject(items));
+                                    dynamic itemOBJ = Serialization.FromJson<dynamic>(Serialization.ToJson(items));
                                     string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
 
                                     if (dataID.ToLower() == PluginSettings.Settings.HWiNFO_gpu_elementID.ToLower())
@@ -361,7 +360,7 @@ namespace GameActivity
                                 // Find data gpu
                                 foreach (var items in sensorItemsOBJ["sensors"])
                                 {
-                                    JObject itemOBJ = JObject.Parse(JsonConvert.SerializeObject(items));
+                                    dynamic itemOBJ = Serialization.FromJson<dynamic>(Serialization.ToJson(items));
                                     string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
 
                                     if (dataID.ToLower() == PluginSettings.Settings.HWiNFO_gpuT_elementID.ToLower())
@@ -377,7 +376,7 @@ namespace GameActivity
                                 // Find data gpu
                                 foreach (var items in sensorItemsOBJ["sensors"])
                                 {
-                                    JObject itemOBJ = JObject.Parse(JsonConvert.SerializeObject(items));
+                                    dynamic itemOBJ = Serialization.FromJson<dynamic>(Serialization.ToJson(items));
                                     string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
 
                                     if (dataID.ToLower() == PluginSettings.Settings.HWiNFO_cpuT_elementID.ToLower())
