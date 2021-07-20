@@ -5,6 +5,7 @@ using CommonPluginsPlaynite.Converters;
 using CommonPluginsShared;
 using CommonPluginsShared.Collections;
 using CommonPluginsShared.Controls;
+using CommonPluginsShared.Converters;
 using CommonPluginsShared.Interfaces;
 using GameActivity.Models;
 using GameActivity.Services;

@@ -13,6 +13,7 @@ namespace GameActivity.Models
         [DontSerialize]
         public int Count => Items.Count;
 
+        [DontSerialize]
         public List<ActivityDetailsData> this[DateTime dateSession]
         {
             get => Get(dateSession);

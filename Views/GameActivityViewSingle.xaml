@@ -5,9 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GameActivity.Views"
              xmlns:controls="clr-namespace:GameActivity.Controls"
-             xmlns:controlsShared="clr-namespace:CommonPluginsShared.Controls"
-             xmlns:commonpluginsshared="clr-namespace:CommonPluginsShared"
+             xmlns:controlsShared="clr-namespace:CommonPluginsShared.Controls" 
              xmlns:converters="clr-namespace:CommonPluginsPlaynite.Converters"
+             xmlns:commonpluginsshared="clr-namespace:CommonPluginsShared.Converters"
              mc:Ignorable="d" 
              Height="700" Width="1100">
 
