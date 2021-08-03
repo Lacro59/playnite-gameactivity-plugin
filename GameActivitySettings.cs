@@ -111,8 +111,8 @@ namespace GameActivity
         // Playnite serializes settings object to a JSON object and saves it as text file.
         // If you want to exclude some property from being saved then use `JsonDontSerialize` ignore attribute.
         #region Variables exposed
-        [DontSerialize]
         private bool _HasData { get; set; } = false;
+        [DontSerialize]
         public bool HasData
         {
             get => _HasData;
@@ -123,8 +123,8 @@ namespace GameActivity
             }
         }
 
-        [DontSerialize]
         private bool _HasDataLog { get; set; } = false;
+        [DontSerialize]
         public bool HasDataLog
         {
             get => _HasDataLog;
@@ -135,8 +135,8 @@ namespace GameActivity
             }
         }
 
-        [DontSerialize]
         private string _LastDateSession { get; set; } = string.Empty;
+        [DontSerialize]
         public string LastDateSession
         {
             get => _LastDateSession;
@@ -147,8 +147,8 @@ namespace GameActivity
             }
         }
 
-        [DontSerialize]
         private string _LastDateTimeSession { get; set; } = string.Empty;
+        [DontSerialize]
         public string LastDateTimeSession
         {
             get => _LastDateTimeSession;
@@ -159,8 +159,8 @@ namespace GameActivity
             }
         }
 
-        [DontSerialize]
         private string _LastPlaytimeSession { get; set; } = string.Empty;
+        [DontSerialize]
         public string LastPlaytimeSession
         {
             get => _LastPlaytimeSession;
