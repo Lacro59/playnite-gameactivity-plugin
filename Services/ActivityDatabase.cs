@@ -48,8 +48,11 @@ namespace GameActivity.Services
             if (gameActivities == null)
             {
                 Game game = PlayniteApi.Database.Games.Get(Id);
-                gameActivities = GetDefault(game);
-                Add(gameActivities);
+                if (game != null)
+                {
+                    gameActivities = GetDefault(game);
+                    Add(gameActivities);
+                }
             }
 
             return gameActivities;
@@ -59,6 +62,11 @@ namespace GameActivity.Services
         public override void SetThemesResources(Game game)
         {
             GameActivities gameActivities = Get(game, true);
+
+            if (gameActivities == null)
+            {
+                return;
+            }
 
             PluginSettings.Settings.HasData = gameActivities.HasData;
             PluginSettings.Settings.HasDataLog = gameActivities.HasDataDetails();
