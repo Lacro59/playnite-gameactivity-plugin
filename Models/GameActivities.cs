@@ -323,7 +323,6 @@ namespace GameActivity.Models
         #endregion
 
 
-
         public bool HasDataDetails(DateTime? dateSelected = null, string title = "")
         {
             return GetSessionActivityDetails(dateSelected, title).Count > 0;

@@ -328,7 +328,7 @@ namespace GameActivity.Views
                             long elapsedSeconds = Activities[iActivity].ElapsedSeconds;
                             DateTime dateSession = Convert.ToDateTime(Activities[iActivity].DateSession).AddSeconds(-elapsedSeconds).ToLocalTime();
 
-                            for (int iGenre = 0; iGenre < listGameListGenres.Count; iGenre++)
+                            for (int iGenre = 0; iGenre < listGameListGenres?.Count; iGenre++)
                             {
                                 // Cumul data
                                 if (activityByMonth[listGameListGenres[iGenre].Name] != null)
@@ -848,7 +848,6 @@ namespace GameActivity.Views
                 Filter();
             });
         }
-
 
 
         /// <summary>
