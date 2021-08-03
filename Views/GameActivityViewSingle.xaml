@@ -64,9 +64,13 @@
                     <Grid Grid.Column="0" Grid.Row="0">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1.5*" />
+                                <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="10" />
-                                <ColumnDefinition Width="2*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="10" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="10" />
+                                <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="auto" />
@@ -92,6 +96,14 @@
                                        Foreground="{DynamicResource TextBrush}"
                                        VerticalAlignment="center" />
 
+                            <Label Content="{DynamicResource LOCGameActivityLvGamesElapsedSeconds}" 
+                                   Grid.Column="4" Grid.Row="2"
+                                   VerticalAlignment="center" />
+                            <TextBlock Name="PART_FirstSessionElapsedTime" Text="any time" 
+                                       Grid.Column="6" Grid.Row="2"
+                                       Foreground="{DynamicResource TextBrush}"
+                                       VerticalAlignment="center" />
+
                             <Label Content="{DynamicResource LOCGameActivityLastSession}" 
                                    Grid.Column="0" Grid.Row="4"
                                    VerticalAlignment="center" />
@@ -100,14 +112,22 @@
                                    Foreground="{DynamicResource TextBrush}"
                                    VerticalAlignment="center" />
 
+                            <Label Content="{DynamicResource LOCGameActivityLvGamesElapsedSeconds}" 
+                                   Grid.Column="4" Grid.Row="4"
+                                   VerticalAlignment="center" />
+                            <TextBlock Name="PART_LastSessionElapsedTime" Text="any time" 
+                                   Grid.Column="6" Grid.Row="4"
+                                   Foreground="{DynamicResource TextBrush}"
+                                   VerticalAlignment="center" />
+
                         </Grid>
                     </Grid>
 
                     <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2"
                                 VerticalAlignment="Bottom" HorizontalAlignment="Right">
-                        <Button Content="" Height="25" Width="40" 
+                        <Button Content="" Height="33" Width="40" FontSize="18" 
                                 Click="Bt_PrevTime" FontFamily="Wingdings" />
-                        <Button Content="" Height="25" Width="40" 
+                        <Button Content="" Height="33" Width="40" FontSize="18" 
                                 Click="Bt_NextTime" FontFamily="Wingdings"
                                 Margin="10,0,0,0"/>
                     </StackPanel>
@@ -357,15 +377,16 @@
                 </Grid.RowDefinitions>
 
                 <ToggleButton Content="&#xef24;" FontFamily="{StaticResource FontIcoFont}" Name="ButtonShowConfig" 
+                              Height="33" FontSize="20" 
                               IsChecked="True" HorizontalAlignment="Left" />
 
                 <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2" Name="PART_BtLogContener"
-                                VerticalAlignment="Bottom" HorizontalAlignment="Right">
-                    <Button Content="" Height="25" Width="40" 
-                                Click="Bt_PrevLog" FontFamily="Wingdings" />
-                    <Button Content="" Height="25" Width="40" 
-                                Click="Bt_NextLog" FontFamily="Wingdings"
-                                Margin="10,0,0,0"/>
+                            VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                    <Button Content="" Height="33" Width="40" FontSize="18" 
+                            Click="Bt_PrevLog" FontFamily="Wingdings" />
+                    <Button Content="" Height="33" Width="40" FontSize="18"  
+                            Click="Bt_NextLog" FontFamily="Wingdings"
+                            Margin="10,0,0,0"/>
                 </StackPanel>
 
                 <!-- Game logs -->
@@ -392,19 +413,19 @@
                         <RowDefinition Height="auto" />
                     </Grid.RowDefinitions>
 
-                    <Label Grid.Column="0" Grid.Row="0" Content="{DynamicResource LOCGameActivityPCName}" />
+                    <Label Grid.Column="0" Grid.Row="0" Content="{DynamicResource LOCGameActivityPCName}" FontWeight="Bold" />
                     <Label Grid.Column="2" Grid.Row="0" Name="PART_PcName" />
 
-                    <Label Grid.Column="4" Grid.Row="0" Content="OS" />
+                    <Label Grid.Column="4" Grid.Row="0" Content="OS" FontWeight="Bold" />
                     <Label Grid.Column="6" Grid.Row="0" Name="PART_Os" />
 
-                    <Label Grid.Column="0" Grid.Row="2" Content="CPU" />
+                    <Label Grid.Column="0" Grid.Row="2" Content="CPU" FontWeight="Bold" />
                     <Label Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="6" Name="PART_CpuName" />
 
-                    <Label Grid.Column="0" Grid.Row="4" Content="GPU" />
+                    <Label Grid.Column="0" Grid.Row="4" Content="GPU" FontWeight="Bold" />
                     <Label Grid.Column="2" Grid.Row="4" Name="PART_GpuName" />
 
-                    <Label Grid.Column="4" Grid.Row="4" Content="RAM" />
+                    <Label Grid.Column="4" Grid.Row="4" Content="RAM" FontWeight="Bold" />
                     <Label Grid.Column="6" Grid.Row="4" Name="PART_Ram" />
                 </Grid>
             </Grid>

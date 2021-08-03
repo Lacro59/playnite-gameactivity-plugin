@@ -257,6 +257,27 @@ namespace GameActivity.Models
             return lastActivity;
         }
 
+        public Activity GetFirstSessionactivity()
+        {
+            // Easter eggs :)
+            DateTime datePrev = new DateTime(2050, 12, 15, 00, 15, 23);
+            DateTime dateLastSession = DateTime.Now;
+            Activity lastActivity = new Activity();
+            for (int iActivity = 0; iActivity < Items.Count; iActivity++)
+            {
+                DateTime dateTemp = Convert.ToDateTime(Items[iActivity].DateSession).ToLocalTime();
+                if (datePrev > dateTemp)
+                {
+                    lastActivity = Items[iActivity];
+                    dateLastSession = Convert.ToDateTime(Items[iActivity].DateSession).ToLocalTime();
+                    datePrev = dateLastSession;
+                }
+            }
+
+            return lastActivity;
+        }
+
+
         /// <summary>
         /// Get the last session activity details.
         /// </summary>
