@@ -8,6 +8,7 @@
              xmlns:controlsShared="clr-namespace:CommonPluginsShared.Controls" 
              xmlns:converters="clr-namespace:CommonPluginsPlaynite.Converters"
              xmlns:commonpluginsshared="clr-namespace:CommonPluginsShared.Converters"
+             xmlns:commonpluginscontrols="clr-namespace:CommonPluginsControls.Controls"
              mc:Ignorable="d" 
              Height="700" Width="1100">
 
@@ -181,6 +182,22 @@
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
                                             <Label Content="{Binding PCName}" VerticalAlignment="Stretch" Style="{DynamicResource ListExtendStyleLabel}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Width="75">
+                                <GridViewColumnHeader Content="{DynamicResource LOCSourceLabel}" 
+                                                      Tag="listGameSourceName" />
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Tag="{Binding}">
+                                            <commonpluginscontrols:TextBlockWithIcon Mode="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=Tag.TypeStoreIcon}" 
+                                                                                     Icon="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=Tag.SourceIcon}"
+                                                                                     IconText="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=Tag.SourceIconText}"
+                                                                                     Style="{DynamicResource ListExtendStyleTextBlock}"
+                                                                                     HorizontalAlignment="Center" VerticalAlignment="Stretch" FontSize="22" />
                                         </StackPanel>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>

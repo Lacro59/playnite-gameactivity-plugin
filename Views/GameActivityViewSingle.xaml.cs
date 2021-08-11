@@ -1,4 +1,5 @@
-﻿using CommonPluginsPlaynite.Converters;
+﻿using CommonPluginsControls.Controls;
+using CommonPluginsPlaynite.Converters;
 using CommonPluginsShared;
 using CommonPluginsShared.Converters;
 using GameActivity.Controls;
@@ -163,6 +164,8 @@ namespace GameActivity.Views
                 {
                     long elapsedSeconds = gameActivities.Items[iItem].ElapsedSeconds;
                     DateTime dateSession = Convert.ToDateTime(gameActivities.Items[iItem].DateSession).ToLocalTime();
+                    string sourceName = gameActivities.Items[iItem].SourceName;
+                    var ModeSimple = (PluginDatabase.PluginSettings.Settings.ModeStoreIcon == 1) ? TextBlockWithIconMode.IconTextFirstOnly : TextBlockWithIconMode.IconFirstOnly;
 
                     activityListByGame.Add(new ListActivities()
                     {
@@ -174,6 +177,11 @@ namespace GameActivity.Views
                         AvgFPS = gameActivities.avgFPS(dateSession.ToUniversalTime()) + "",
                         AvgCPUT = gameActivities.avgCPUT(dateSession.ToUniversalTime()) + "°",
                         AvgGPUT = gameActivities.avgGPUT(dateSession.ToUniversalTime()) + "°",
+
+                        GameSourceName = sourceName,
+                        TypeStoreIcon = ModeSimple,
+                        SourceIcon = PlayniteTools.GetPlatformIcon(PluginDatabase.PlayniteApi, sourceName),
+                        SourceIconText = TransformIcon.Get(sourceName),
 
                         EnableWarm = PluginDatabase.PluginSettings.Settings.EnableWarning,
                         MaxCPUT = PluginDatabase.PluginSettings.Settings.MaxCpuTemp.ToString(),

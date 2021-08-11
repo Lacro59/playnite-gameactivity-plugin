@@ -774,7 +774,7 @@ namespace GameActivity.Views
                         string sourceName = string.Empty;
                         try
                         {
-                            sourceName = listGameActivities[iGame].Items[0].SourceName;
+                            sourceName = listGameActivities[iGame].GetLastSessionActivity().SourceName;
                         }
                         catch (Exception ex)
                         {
