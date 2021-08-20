@@ -87,6 +87,10 @@ namespace GameActivity
         public bool EnableLogging { get; set; } = false;
         public int TimeIntervalLogging { get; set; } = 5;
 
+        public bool lvGamesIcon { get; set; } = true;
+        public bool lvGamesName { get; set; } = true;
+        public bool lvGamesSource { get; set; } = true;
+
         public bool UseMsiAfterburner { get; set; } = false;
         public bool UseHWiNFO { get; set; } = false;
 

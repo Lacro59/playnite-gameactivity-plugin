@@ -65,23 +65,32 @@ namespace GameActivity.Views
             PART_ChartTime.GameContext = game;
 
 
+            GridView lvView = (GridView)lvSessions.View;
+
             // Game logs
             // Add column if log details enable.
             if (!PluginDatabase.PluginSettings.Settings.EnableLogging)
             {
-                GridView lvView = (GridView)lvSessions.View;
-
+                lvView.Columns.RemoveAt(10);
                 lvView.Columns.RemoveAt(9);
                 lvView.Columns.RemoveAt(8);
                 lvView.Columns.RemoveAt(7);
                 lvView.Columns.RemoveAt(6);
                 lvView.Columns.RemoveAt(5);
-                lvView.Columns.RemoveAt(4);
 
                 lvSessions.View = lvView;
 
                 PART_BtLogContener.Visibility = Visibility.Collapsed;
                 PART_ChartLogContener.Visibility = Visibility.Collapsed;
+            }
+
+            if (!PluginDatabase.PluginSettings.Settings.lvGamesSource)
+            {
+                lvView.Columns.RemoveAt(4);
+            }
+            if (!PluginDatabase.PluginSettings.Settings.lvGamesName)
+            {
+                lvView.Columns.RemoveAt(3);
             }
 
             getActivityByListGame(gameActivities);

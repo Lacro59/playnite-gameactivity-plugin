@@ -115,11 +115,11 @@ namespace GameActivity.Views
             PART_GameActivityChartLog_Contener.Children.Add(PART_GameActivityChartLog);
 
 
+            GridView lvView = (GridView)lvGames.View;
+
             // Add column if log details enable.
             if (!PluginDatabase.PluginSettings.Settings.EnableLogging)
             {
-                GridView lvView = (GridView)lvGames.View;
-
                 lvView.Columns.RemoveAt(14);
                 lvView.Columns.RemoveAt(13);
                 lvView.Columns.RemoveAt(12);
@@ -128,6 +128,19 @@ namespace GameActivity.Views
                 lvView.Columns.RemoveAt(9);
 
                 lvGames.View = lvView;
+            }
+
+            if (!PluginDatabase.PluginSettings.Settings.lvGamesName)
+            {
+                lvView.Columns.RemoveAt(8);
+            }
+            if (!PluginDatabase.PluginSettings.Settings.lvGamesSource)
+            {
+                lvView.Columns.RemoveAt(7);
+            }
+            if (!PluginDatabase.PluginSettings.Settings.lvGamesIcon)
+            {
+                lvView.Columns.RemoveAt(0);
             }
 
 
@@ -954,7 +967,12 @@ namespace GameActivity.Views
                 }
 
 
-                int index = ((ListActivities)lvGames.SelectedItem).PCConfigurationId;
+                int index = -1;
+                if (lvGames.SelectedItem != null)
+                {
+                    index = ((ListActivities)lvGames.SelectedItem).PCConfigurationId;
+                }
+
                 if (index != -1 && index < PluginDatabase.LocalSystem.GetConfigurations().Count)
                 {
                     var Configuration = PluginDatabase.LocalSystem.GetConfigurations()[index];

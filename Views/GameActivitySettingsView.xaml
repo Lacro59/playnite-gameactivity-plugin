@@ -6,7 +6,9 @@
              xmlns:converters="clr-namespace:CommonPluginsPlaynite.Converters"
              xmlns:AttachedProperties="clr-namespace:CommonPluginsShared.Controls"
              xmlns:playnitecontrols="clr-namespace:CommonPluginsControls.PlayniteControls"
-             mc:Ignorable="d">
+             xmlns:GameActivity="clr-namespace:GameActivity"
+             mc:Ignorable="d" d:DesignWidth="650"
+             d:DataContext="{d:DesignInstance GameActivity:GameActivitySettingsViewModel}">
 
     <UserControl.Resources>
         <converters:NegateConverter x:Key="NegateConverter" />
@@ -40,6 +42,28 @@
                         <CheckBox IsChecked="{Binding Settings.CumulPlaytimeStore}" Margin="0,15,0,0">
                             <Label Content="{DynamicResource LOCGameActivityCumulPlaytimeStore}" />
                         </CheckBox>
+
+                        <Label Margin="0,15,0,0" Content="{DynamicResource LOCGameActivityListGamesFields}" />
+                        <Grid Margin="30,0,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30" />
+                            </Grid.RowDefinitions>
+
+                            <CheckBox Grid.Column="0" Grid.Row="0" IsChecked="{Binding Settings.lvGamesIcon}" VerticalAlignment="Center">
+                                <Label Content="{DynamicResource LOCGameIconTitle}" />
+                            </CheckBox>
+                            <CheckBox Grid.Column="1" Grid.Row="0" IsChecked="{Binding Settings.lvGamesName}" VerticalAlignment="Center">
+                                <Label Content="{DynamicResource LOCGameActivityPCName}" />
+                            </CheckBox>
+                            <CheckBox Grid.Column="2" Grid.Row="0" IsChecked="{Binding Settings.lvGamesSource}" VerticalAlignment="Center">
+                                <Label Content="{DynamicResource LOCSourceLabel}" />
+                            </CheckBox>
+                        </Grid>
                     </StackPanel>
 
                     <DockPanel DockPanel.Dock="Bottom" Margin="0,15,0,0">
