@@ -78,6 +78,12 @@ namespace GameActivity.Services
             LongToTimePlayedConverter converter = new LongToTimePlayedConverter();
             string playtime = (string)converter.Convert((long)gameActivities.GetLastSessionActivity().ElapsedSeconds, null, null, CultureInfo.CurrentCulture);
             PluginSettings.Settings.LastPlaytimeSession = playtime;
+
+            PluginSettings.Settings.AvgFpsAllSession = gameActivities.ItemsDetails.AvgFpsAllSession;
+            if (gameActivities.ItemsDetails.MustBeSaved)
+            {
+                AddOrUpdate(gameActivities);
+            }
         }
 
         public override void Games_ItemUpdated(object sender, ItemUpdatedEventArgs<Game> e)

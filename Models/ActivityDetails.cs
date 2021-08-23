@@ -35,6 +35,49 @@ namespace GameActivity.Models
                 return new List<ActivityDetailsData>();
             }
         }
+
+
+        [DontSerialize]
+        public bool MustBeSaved { get; set; } = false;
+
+        private int _AvgFpsAllSession { get; set; } = -1;
+        public int AvgFpsAllSession
+        {
+            get
+            {
+                MustBeSaved = false;
+                if (_AvgFpsAllSession == -1 && !MustBeSaved)
+                {
+                    _AvgFpsAllSession = GetAvgFpsAllSession();
+                    MustBeSaved = true;
+                }
+                return _AvgFpsAllSession;
+            }
+            set
+            {
+                _AvgFpsAllSession = value;
+            }
+        }
+
+        private int GetAvgFpsAllSession()
+        {
+            int AvgFps = 0;
+            int div = 1;
+
+            foreach (var Item in Items)
+            {
+                foreach (var el in Item.Value)
+                {
+                    if (el.FPS != 0)
+                    {
+                        AvgFps += el.FPS;
+                        div++;
+                    }
+                }
+            }
+
+            return AvgFps / div;
+        }
     }
 
     public class ActivityDetailsData

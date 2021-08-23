@@ -181,6 +181,18 @@ namespace GameActivity
                 OnPropertyChanged();
             }
         }
+
+        private int _AvgFpsAllSession { get; set; } = 0;
+        [DontSerialize]
+        public int AvgFpsAllSession
+        {
+            get => _AvgFpsAllSession;
+            set
+            {
+                _AvgFpsAllSession = value;
+                OnPropertyChanged();
+            }
+        }
         #endregion  
     }
 
