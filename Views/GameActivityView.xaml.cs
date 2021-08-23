@@ -126,8 +126,33 @@ namespace GameActivity.Views
                 lvView.Columns.RemoveAt(11);
                 lvView.Columns.RemoveAt(10);
                 lvView.Columns.RemoveAt(9);
-
-                lvGames.View = lvView;
+            }
+            else
+            {
+                if (!PluginDatabase.PluginSettings.Settings.lvAvgGpuT)
+                {
+                    lvView.Columns.RemoveAt(14);
+                }
+                if (!PluginDatabase.PluginSettings.Settings.lvAvgCpuT)
+                {
+                    lvView.Columns.RemoveAt(13);
+                }
+                if (!PluginDatabase.PluginSettings.Settings.lvAvgFps)
+                {
+                    lvView.Columns.RemoveAt(12);
+                }
+                if (!PluginDatabase.PluginSettings.Settings.lvAvgRam)
+                {
+                    lvView.Columns.RemoveAt(11);
+                }
+                if (!PluginDatabase.PluginSettings.Settings.lvAvgGpu)
+                {
+                    lvView.Columns.RemoveAt(10);
+                }
+                if (!PluginDatabase.PluginSettings.Settings.lvAvgCpu)
+                {
+                    lvView.Columns.RemoveAt(9);
+                }
             }
 
             if (!PluginDatabase.PluginSettings.Settings.lvGamesName)

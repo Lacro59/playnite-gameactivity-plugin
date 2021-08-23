@@ -91,6 +91,13 @@ namespace GameActivity
         public bool lvGamesName { get; set; } = true;
         public bool lvGamesSource { get; set; } = true;
 
+        public bool lvAvgCpu { get; set; } = true;
+        public bool lvAvgGpu { get; set; } = true;
+        public bool lvAvgRam { get; set; } = true;
+        public bool lvAvgFps { get; set; } = true;
+        public bool lvAvgCpuT { get; set; } = true;
+        public bool lvAvgGpuT { get; set; } = true;
+
         public bool UseMsiAfterburner { get; set; } = false;
         public bool UseHWiNFO { get; set; } = false;
 

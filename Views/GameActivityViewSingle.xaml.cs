@@ -78,10 +78,35 @@ namespace GameActivity.Views
                 lvView.Columns.RemoveAt(6);
                 lvView.Columns.RemoveAt(5);
 
-                lvSessions.View = lvView;
-
                 PART_BtLogContener.Visibility = Visibility.Collapsed;
                 PART_ChartLogContener.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                if (!PluginDatabase.PluginSettings.Settings.lvAvgGpuT)
+                {
+                    lvView.Columns.RemoveAt(10);
+                }
+                if (!PluginDatabase.PluginSettings.Settings.lvAvgCpuT)
+                {
+                    lvView.Columns.RemoveAt(9);
+                }
+                if (!PluginDatabase.PluginSettings.Settings.lvAvgFps)
+                {
+                    lvView.Columns.RemoveAt(8);
+                }
+                if (!PluginDatabase.PluginSettings.Settings.lvAvgRam)
+                {
+                    lvView.Columns.RemoveAt(7);
+                }
+                if (!PluginDatabase.PluginSettings.Settings.lvAvgGpu)
+                {
+                    lvView.Columns.RemoveAt(6);
+                }
+                if (!PluginDatabase.PluginSettings.Settings.lvAvgCpu)
+                {
+                    lvView.Columns.RemoveAt(5);
+                }
             }
 
             if (!PluginDatabase.PluginSettings.Settings.lvGamesSource)
