@@ -11,6 +11,7 @@
              xmlns:commonpluginscontrols="clr-namespace:CommonPluginsControls.Controls"
              xmlns:playnitecontrols="clr-namespace:CommonPluginsControls.PlayniteControls"
              xmlns:commonpluginsshared="clr-namespace:CommonPluginsShared.Converters"
+             xmlns:Commonpluginsbehaviors="clr-namespace:CommonPluginsShared.Behaviors"
              mc:Ignorable="d" d:DesignHeight="660" d:DesignWidth="1290"
              d:DataContext="{d:DesignInstance Type=local:GameActivityView}">
 
@@ -69,6 +70,32 @@
                     <Button Grid.Column="3" Content="" Width="50" FontSize="20" Click="Button_Click_PrevMonth" FontFamily="Wingdings" />
                     <Label Grid.Column="4" x:Name="activityLabel" Content="month data label" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" FontWeight="Bold" MinWidth="50" />
                     <Button Grid.Column="5" Content="" Width="50" FontSize="20" Click="Button_Click_NextMonth" FontFamily="Wingdings" />
+
+                    
+                    <DatePicker Grid.Column="8" HorizontalAlignment="Right" Width="35" SelectedDateChanged="DatePicker_SelectedDateChanged"
+                                Commonpluginsbehaviors:DatePickerCalendar.IsMonthYear="True">
+                        <DatePicker.CalendarStyle>
+                            <Style TargetType="Calendar" BasedOn="{StaticResource {x:Type Calendar}}">
+                                <Setter Property="SnapsToDevicePixels" Value="True" />
+                                <Setter Property="CalendarDayButtonStyle" Value="{DynamicResource CalendarDayButtonStyle}"/>
+                                <Setter Property="CalendarButtonStyle" Value="{DynamicResource CalendarButtonStyle}"/>
+                                <Setter Property="Background" Value="{DynamicResource PopupBackgroundBrush}" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type Calendar}">
+                                            <StackPanel HorizontalAlignment="Center" Name="PART_Root">
+                                                <CalendarItem Style="{DynamicResource CalendarItemStyle}"
+                                                              Name="PART_CalendarItem" />
+                                                <Button Content="{DynamicResource LOCToday}" 
+                                                        Command="Commonpluginsbehaviors:CalendarCommands.SelectToday" 
+                                                        CommandParameter="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                            </StackPanel>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </DatePicker.CalendarStyle>
+                    </DatePicker>
                 </Grid>
 
                 <!-- Graphics week -->

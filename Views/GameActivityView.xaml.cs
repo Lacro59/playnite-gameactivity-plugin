@@ -1054,6 +1054,25 @@ namespace GameActivity.Views
             Filter();
         }
 
+        private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DatePicker control = sender as DatePicker;
+
+            DateTime dateNew = (DateTime)control.SelectedDate;
+            yearCurrent = dateNew.Year;
+            monthCurrent = dateNew.Month;
+
+            // get data
+            getActivityByMonth(yearCurrent, monthCurrent);
+            getActivityByWeek(yearCurrent, monthCurrent);
+            getActivityByDay(yearCurrent, monthCurrent);
+
+            activityLabel.Content = new DateTime(yearCurrent, monthCurrent, 1).ToString("MMMM yyyy");
+
+
+            Filter();
+        }
+
 
         private void ToggleButtonTime_Checked(object sender, RoutedEventArgs e)
         {
