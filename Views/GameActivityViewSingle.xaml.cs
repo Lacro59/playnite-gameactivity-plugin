@@ -46,12 +46,12 @@ namespace GameActivity.Views
             // Game sessions infos
             GameActivities gameActivities = PluginDatabase.Get(game);
 
-            LongToTimePlayedConverter longToTimePlayedConverter = new LongToTimePlayedConverter();
+            PlayTimeToStringConverter longToTimePlayedConverter = new PlayTimeToStringConverter();
             PART_TimeAvg.Text = (string)longToTimePlayedConverter.Convert(gameActivities.avgPlayTime(), null, null, CultureInfo.CurrentCulture);
 
 
             LocalDateConverter localDateConverter = new LocalDateConverter();
-            LongToTimePlayedConverter converter = new LongToTimePlayedConverter();
+            PlayTimeToStringConverter converter = new PlayTimeToStringConverter();
 
             PART_FirstSession.Text = (string)localDateConverter.Convert(gameActivities.GetFirstSession(), null, null, CultureInfo.CurrentCulture);
             PART_FirstSessionElapsedTime.Text = (string)converter.Convert((long)gameActivities.GetFirstSessionactivity().ElapsedSeconds, null, null, CultureInfo.CurrentCulture);
@@ -196,7 +196,7 @@ namespace GameActivity.Views
             {
                 try
                 {
-                    long elapsedSeconds = gameActivities.Items[iItem].ElapsedSeconds;
+                    ulong elapsedSeconds = gameActivities.Items[iItem].ElapsedSeconds;
                     DateTime dateSession = Convert.ToDateTime(gameActivities.Items[iItem].DateSession).ToLocalTime();
                     string sourceName = gameActivities.Items[iItem].SourceName;
                     var ModeSimple = (PluginDatabase.PluginSettings.Settings.ModeStoreIcon == 1) ? TextBlockWithIconMode.IconTextFirstOnly : TextBlockWithIconMode.IconFirstOnly;

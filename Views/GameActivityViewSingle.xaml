@@ -15,7 +15,7 @@
     <UserControl.Resources>
         <commonpluginsshared:CompareValueConverter x:Key="CompareValueConverter" />
         <commonpluginsshared:LocalDateTimeConverter x:Key="LocalDateTimeConverter" />
-        <converters:LongToTimePlayedConverter x:Key="LongToTimePlayedConverter" />
+        <converters:PlayTimeToStringConverter x:Key="PlayTimeToStringConverter" />
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
 
@@ -169,7 +169,7 @@
                                                       Tag="listGameElapsedSeconds" />
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Label Content="{Binding GameElapsedSeconds, Mode=OneWay, Converter={StaticResource LongToTimePlayedConverter}}"
+                                        <Label Content="{Binding GameElapsedSeconds, Mode=OneWay, Converter={StaticResource PlayTimeToStringConverter}}"
                                                HorizontalAlignment="Center" VerticalAlignment="Stretch"
                                                Style="{DynamicResource ListExtendStyleLabel}" />
                                     </DataTemplate>

@@ -13,7 +13,7 @@
     <controls:PluginUserControlExtend.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converters:InvertedBooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter" />
-        <converters:LongToTimePlayedConverter x:Key="LongToTimePlayedConverter" />
+        <converters:PlayTimeToStringConverter x:Key="PlayTimeToStringConverter" />
         <commonpluginsshared:HeightToFontSizeConverter x:Key="HeightToFontSizeConverter" />
     </controls:PluginUserControlExtend.Resources>
 
@@ -54,7 +54,7 @@
                     </Label.Style>
                 </Label>
                 <Label Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Margin="0,-3,0,-3"
-                       Content="{Binding LastPlaytime, Converter={StaticResource LongToTimePlayedConverter}, FallbackValue='23 minutes'}"
+                       Content="{Binding LastPlaytime, Converter={StaticResource PlayTimeToStringConverter}, FallbackValue='23 minutes'}"
                        FontSize="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight, Converter={StaticResource HeightToFontSizeConverter}}">
                     <Label.Style>
                         <Style TargetType="Label">

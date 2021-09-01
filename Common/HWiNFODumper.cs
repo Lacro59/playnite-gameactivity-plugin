@@ -1,7 +1,7 @@
 ﻿//https://github.com/zipferot3000/HWiNFO-Shared-Memory-Dump
 //https://github.com/Antiserum420/HwInfoReader
 
-using Newtonsoft.Json;
+using Playnite.SDK.Data;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -80,7 +80,7 @@ namespace GameActivity
 
         public List<JsonObj> saveDataToFile()
         {
-            byte[] json = new UTF8Encoding(true).GetBytes(JsonConvert.SerializeObject(data, Formatting.Indented));
+            byte[] json = new UTF8Encoding(true).GetBytes(Serialization.ToJson(data, true));
             return data;
         }
 

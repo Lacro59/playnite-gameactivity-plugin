@@ -467,34 +467,31 @@ namespace GameActivity
 
         #region Theme integration
         // Button on top panel
-        public override List<TopPanelItem> GetTopPanelItems()
+        public override IEnumerable<TopPanelItem> GetTopPanelItems()
         {
             if (PluginSettings.Settings.EnableIntegrationButtonHeader)
             {
-                return new List<TopPanelItem>
+                yield return new TopPanelItem()
                 {
-                    new TopPanelItem()
+                    Icon = new TextBlock
                     {
-                        Icon = new TextBlock
-                        {
-                            Text = "\ue97f",
-                            FontSize = 20,
-                            FontFamily = resources.GetResource("FontIcoFont") as FontFamily
-                        },
-                        Title = resources.GetString("LOCGameActivityViewGamesActivities"),
-                        Activated = () =>
-                        {
-                            var ViewExtension = new GameActivityView();
-                            ViewExtension.Height = 660;
-                            ViewExtension.Width = 1290;
-                            Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGamesActivitiesTitle"), ViewExtension);
-                            windowExtension.ShowDialog();
-                        }
+                        Text = "\ue97f",
+                        FontSize = 20,
+                        FontFamily = resources.GetResource("FontIcoFont") as FontFamily
+                    },
+                    Title = resources.GetString("LOCGameActivityViewGamesActivities"),
+                    Activated = () =>
+                    {
+                        var ViewExtension = new GameActivityView();
+                        ViewExtension.Height = 660;
+                        ViewExtension.Width = 1290;
+                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGamesActivitiesTitle"), ViewExtension);
+                        windowExtension.ShowDialog();
                     }
                 };
             }
 
-            return null;
+            yield break;
         }
 
         // List custom controls
@@ -541,7 +538,7 @@ namespace GameActivity
             }
         }
 
-        public override List<SidebarItem> GetSidebarItems()
+        public override IEnumerable<SidebarItem> GetSidebarItems()
         {
             var items = new List<SidebarItem>
             {
@@ -554,7 +551,7 @@ namespace GameActivity
 
         #region Menus
         // To add new game menu items override GetGameMenuItems
-        public override List<GameMenuItem> GetGameMenuItems(GetGameMenuItemsArgs args)
+        public override IEnumerable<GameMenuItem> GetGameMenuItems(GetGameMenuItemsArgs args)
         {
             Game GameMenu = args.Games.First();
 
@@ -590,7 +587,7 @@ namespace GameActivity
         }
 
         // To add new main menu items override GetMainMenuItems
-        public override List<MainMenuItem> GetMainMenuItems(GetMainMenuItemsArgs args)
+        public override IEnumerable<MainMenuItem> GetMainMenuItems(GetMainMenuItemsArgs args)
         {
             string MenuInExtensions = string.Empty;
             if (PluginSettings.Settings.MenuInExtensions)
@@ -637,12 +634,36 @@ namespace GameActivity
 
 
         #region Game event
-        public override void OnGameSelected(GameSelectionEventArgs args)
+        public override void OnGameSelected(OnGameSelectedEventArgs args)
         {
             // Old database
             if (oldToNew.IsOld)
             {
                 oldToNew.ConvertDB(PlayniteApi);
+            }
+
+            // Old format
+            var oldFormat = PluginDatabase.Database.Select(x => x).Where(x=> x.Items.FirstOrDefault() != null && x.Items.FirstOrDefault().PlatformIDs == null);
+            if (oldFormat.Count() > 0)
+            {
+                GlobalProgressOptions globalProgressOptions = new GlobalProgressOptions(
+                    "GameActivity - Database migration",
+                    false
+                );
+                globalProgressOptions.IsIndeterminate = true;
+
+                PlayniteApi.Dialogs.ActivateGlobalProgress((activateGlobalProgress) =>
+                {
+                    foreach (GameActivities gameActivities in PluginDatabase.Database)
+                    {
+                        foreach(Activity activity in gameActivities.Items)
+                        {
+                            activity.PlatformIDs = new List<Guid> { activity.PlatformID };
+                        }
+
+                        PluginDatabase.AddOrUpdate(gameActivities);
+                    }
+                }, globalProgressOptions);
             }
 
             try
@@ -660,13 +681,25 @@ namespace GameActivity
         }
 
         // Add code to be executed when game is finished installing.
-        public override void OnGameInstalled(Game game)
+        public override void OnGameInstalled(OnGameInstalledEventArgs args)
         {
-           
+
+        }
+
+        // Add code to be executed when game is uninstalled.
+        public override void OnGameUninstalled(OnGameUninstalledEventArgs args)
+        {
+
+        }
+
+        // Add code to be executed when game is preparing to be started.
+        public override void OnGameStarting(OnGameStartingEventArgs args)
+        {
+
         }
 
         // Add code to be executed when game is started running.
-        public override void OnGameStarted(Game game)
+        public override void OnGameStarted(OnGameStartedEventArgs args)
         {
             // start timer si log is enable.
             if (PluginSettings.Settings.EnableLogging)
@@ -676,25 +709,19 @@ namespace GameActivity
 
             DateTime DateSession = DateTime.Now.ToUniversalTime();
 
-            GameActivitiesLog = PluginDatabase.Get(game);
+            GameActivitiesLog = PluginDatabase.Get(args.Game);
             GameActivitiesLog.Items.Add(new Activity
             {
                 IdConfiguration = PluginDatabase.LocalSystem.GetIdConfiguration(),
                 DateSession = DateSession,
-                SourceID = game.SourceId,
-                PlatformID = game.PlatformId
+                SourceID = args.Game.SourceId,
+                PlatformIDs = args.Game.PlatformIds
             });
             GameActivitiesLog.ItemsDetails.Items.TryAdd(DateSession, new List<ActivityDetailsData>());
         }
 
         // Add code to be executed when game is preparing to be started.
-        public override void OnGameStarting(Game game)
-        {
-            
-        }
-
-        // Add code to be executed when game is preparing to be started.
-        public override void OnGameStopped(Game game, long elapsedSeconds)
+        public override void OnGameStopped(OnGameStoppedEventArgs args)
         {
             var TaskGameStopped = Task.Run(() =>
             {
@@ -705,33 +732,27 @@ namespace GameActivity
                 }
 
                 // Infos
-                GameActivitiesLog.GetLastSessionActivity().ElapsedSeconds = elapsedSeconds;
+                GameActivitiesLog.GetLastSessionActivity().ElapsedSeconds = args.ElapsedSeconds;
                 PluginDatabase.Update(GameActivitiesLog);
 
-                if (game.Id == PluginDatabase.GameContext.Id)
+                if (args.Game.Id == PluginDatabase.GameContext.Id)
                 {
                     PluginDatabase.SetThemesResources(PluginDatabase.GameContext);
                 }
             });
-        }
-
-        // Add code to be executed when game is uninstalled.
-        public override void OnGameUninstalled(Game game)
-        {
-            
         }
         #endregion
 
 
         #region Application event
         // Add code to be executed when Playnite is initialized.
-        public override void OnApplicationStarted()
+        public override void OnApplicationStarted(OnApplicationStartedEventArgs args)
         {
             CheckGoodForLogging(true);
         }
 
         // Add code to be executed when Playnite is shutting down.
-        public override void OnApplicationStopped()
+        public override void OnApplicationStopped(OnApplicationStoppedEventArgs args)
         {
             
         }
@@ -739,7 +760,7 @@ namespace GameActivity
 
 
         // Add code to be executed when library is updated.
-        public override void OnLibraryUpdated()
+        public override void OnLibraryUpdated(OnLibraryUpdatedEventArgs args)
         {
             
         }

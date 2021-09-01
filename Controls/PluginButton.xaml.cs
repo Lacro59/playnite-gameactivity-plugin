@@ -140,6 +140,6 @@ namespace GameActivity.Controls
 
         public string Text { get; set; }
         public string LastActivity { get; set; }
-        public long LastPlaytime { get; set; }
+        public ulong LastPlaytime { get; set; }
     }
 }

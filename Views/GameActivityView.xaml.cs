@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
-using Newtonsoft.Json.Linq;
 using Playnite.SDK;
+using Playnite.SDK.Data;
 using Playnite.SDK.Models;
 using System.Windows.Media.Imaging;
 using System.Windows.Controls;
@@ -18,7 +18,6 @@ using LiveCharts.Configurations;
 using System.Globalization;
 using LiveCharts.Events;
 using System.Windows.Input;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
 using CommonPluginsPlaynite.Converters;
 using CommonPluginsControls.LiveChartsCommon;
@@ -41,13 +40,13 @@ namespace GameActivity.Views
 
         private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
 
-        private JArray listSources { get; set; }
+        private List<string> listSources { get; set; }
         private DateTime LabelDataSelected { get; set; }
 
         private PluginChartTime PART_GameActivityChartTime;
         private PluginChartLog PART_GameActivityChartLog;
 
-        private LongToTimePlayedConverter converter = new LongToTimePlayedConverter();
+        private PlayTimeToStringConverter converter = new PlayTimeToStringConverter();
 
         public int yearCurrent;
         public int monthCurrent;
@@ -295,7 +294,7 @@ namespace GameActivity.Views
             DateTime startOfMonth = new DateTime(year, month, 1, 0, 0, 0);
             DateTime endOfMonth = new DateTime(year, month, DateTime.DaysInMonth(year, month), 23, 59, 59);
 
-            JObject activityByMonth = new JObject();
+            Dictionary<string, ulong> activityByMonth = new Dictionary<string, ulong>();
 
             // Total hours by source.
             if (isMonthSources)
@@ -319,23 +318,23 @@ namespace GameActivity.Views
                         List<Activity> Activities = listGameActivities[iGame].Items;
                         for (int iActivity = 0; iActivity < Activities.Count; iActivity++)
                         {
-                            long elapsedSeconds = Activities[iActivity].ElapsedSeconds;
+                            ulong elapsedSeconds = Activities[iActivity].ElapsedSeconds;
                             DateTime dateSession = Convert.ToDateTime(Activities[iActivity].DateSession).ToLocalTime();
                             string sourceName = Activities[iActivity].SourceName;
 
                             // Cumul data
-                            if (activityByMonth[sourceName] != null)
+                            if (activityByMonth.ContainsKey(sourceName))
                             {
                                 if (startOfMonth <= dateSession && dateSession <= endOfMonth)
                                 {
-                                    activityByMonth[sourceName] = (long)activityByMonth[sourceName] + elapsedSeconds;
+                                    activityByMonth[sourceName] = (ulong)activityByMonth[sourceName] + elapsedSeconds;
                                 }
                             }
                             else
                             {
                                 if (startOfMonth <= dateSession && dateSession <= endOfMonth)
                                 {
-                                    activityByMonth.Add(new JProperty(sourceName, elapsedSeconds));
+                                    activityByMonth.Add(sourceName, elapsedSeconds);
                                 }
                             }
                         }
@@ -363,24 +362,24 @@ namespace GameActivity.Views
                         List<Activity> Activities = listGameActivities[iGame].Items;
                         for (int iActivity = 0; iActivity < Activities.Count; iActivity++)
                         {
-                            long elapsedSeconds = Activities[iActivity].ElapsedSeconds;
-                            DateTime dateSession = Convert.ToDateTime(Activities[iActivity].DateSession).AddSeconds(-elapsedSeconds).ToLocalTime();
+                            ulong elapsedSeconds = Activities[iActivity].ElapsedSeconds;
+                            DateTime dateSession = Convert.ToDateTime(Activities[iActivity].DateSession).AddSeconds(-(double)elapsedSeconds).ToLocalTime();
 
                             for (int iGenre = 0; iGenre < listGameListGenres?.Count; iGenre++)
                             {
                                 // Cumul data
-                                if (activityByMonth[listGameListGenres[iGenre].Name] != null)
+                                if (activityByMonth.ContainsKey(listGameListGenres[iGenre].Name))
                                 {
                                     if (startOfMonth <= dateSession && dateSession <= endOfMonth)
                                     {
-                                        activityByMonth[listGameListGenres[iGenre].Name] = (long)activityByMonth[listGameListGenres[iGenre].Name] + elapsedSeconds;
+                                        activityByMonth[listGameListGenres[iGenre].Name] = (ulong)activityByMonth[listGameListGenres[iGenre].Name] + elapsedSeconds;
                                     }
                                 }
                                 else
                                 {
                                     if (startOfMonth <= dateSession && dateSession <= endOfMonth)
                                     {
-                                        activityByMonth.Add(new JProperty(listGameListGenres[iGenre].Name, elapsedSeconds));
+                                        activityByMonth.Add(listGameListGenres[iGenre].Name, elapsedSeconds);
                                     }
                                 }
                             }
@@ -437,7 +436,7 @@ namespace GameActivity.Views
             //lets save the mapper globally
             Charting.For<CustomerForTime>(customerVmMapper);
 
-            Func<double, string> activityForGameLogFormatter = value => (string)converter.Convert((long)value, null, null, CultureInfo.CurrentCulture);
+            Func<double, string> activityForGameLogFormatter = value => (string)converter.Convert((ulong)value, null, null, CultureInfo.CurrentCulture);
 
             if (isMonthSources)
             {
@@ -503,12 +502,12 @@ namespace GameActivity.Views
                     List<Activity> Activities = listGameActivities[iGame].Items;
                     for (int iActivity = 0; iActivity < Activities.Count; iActivity++)
                     {
-                        long elapsedSeconds = Activities[iActivity].ElapsedSeconds;
+                        ulong elapsedSeconds = Activities[iActivity].ElapsedSeconds;
                         string dateSession = Convert.ToDateTime(Activities[iActivity].DateSession).ToString(Constants.DateUiFormat);
 
                         if (dateSession == activityByDateLabels[iDay])
                         {
-                            series[iDay].Values += elapsedSeconds;
+                            series[iDay].Values += (long)elapsedSeconds;
                         }
                     }
                 }
@@ -530,7 +529,7 @@ namespace GameActivity.Views
                 //lets save the mapper globally
                 Charting.For<CustomerForTime>(customerVmMapper);
 
-                Func<double, string> activityForGameLogFormatter = value => (string)converter.Convert((long)value, null, null, CultureInfo.CurrentCulture);
+                Func<double, string> activityForGameLogFormatter = value => (string)converter.Convert((ulong)value, null, null, CultureInfo.CurrentCulture);
 
                 PART_ChartHoursByDaySource_Y.LabelFormatter = activityForGameLogFormatter;
                 PART_ChartHoursByDaySource.DataTooltip = new CustomerToolTipForTime { ShowIcon = ShowIcon, Mode = ModeComplet };
@@ -583,14 +582,14 @@ namespace GameActivity.Views
             }
 
             // Source activty by month
-            JObject activityByWeek1 = new JObject();
-            JObject activityByWeek2 = new JObject();
-            JObject activityByWeek3 = new JObject();
-            JObject activityByWeek4 = new JObject();
-            JObject activityByWeek5 = new JObject();
-            JObject activityByWeek6 = new JObject();
+            Dictionary<string, long> activityByWeek1 = new Dictionary<string, long>();
+            Dictionary<string, long> activityByWeek2 = new Dictionary<string, long>();
+            Dictionary<string, long> activityByWeek3 = new Dictionary<string, long>();
+            Dictionary<string, long> activityByWeek4 = new Dictionary<string, long>();
+            Dictionary<string, long> activityByWeek5 = new Dictionary<string, long>();
+            Dictionary<string, long> activityByWeek6 = new Dictionary<string, long>();
 
-            JArray activityByWeek = new JArray();
+            List<Dictionary<string, long>> activityByWeek = new List<Dictionary<string, long>>();
             SeriesCollection activityByWeekSeries = new SeriesCollection();
             IChartValues Values = new ChartValues<CustomerForTime>();
 
@@ -599,12 +598,12 @@ namespace GameActivity.Views
                 // Insert sources
                 for (int iSource = 0; iSource < listSources.Count; iSource++)
                 {
-                    activityByWeek1.Add((string)listSources[iSource], 0);
-                    activityByWeek2.Add((string)listSources[iSource], 0);
-                    activityByWeek3.Add((string)listSources[iSource], 0);
-                    activityByWeek4.Add((string)listSources[iSource], 0);
-                    activityByWeek5.Add((string)listSources[iSource], 0);
-                    activityByWeek6.Add((string)listSources[iSource], 0);
+                    activityByWeek1.Add(listSources[iSource], 0);
+                    activityByWeek2.Add(listSources[iSource], 0);
+                    activityByWeek3.Add(listSources[iSource], 0);
+                    activityByWeek4.Add(listSources[iSource], 0);
+                    activityByWeek5.Add(listSources[iSource], 0);
+                    activityByWeek6.Add(listSources[iSource], 0);
                 }
 
                 activityByWeek.Add(activityByWeek1);
@@ -620,7 +619,7 @@ namespace GameActivity.Views
                     List<Activity> Activities = listGameActivities[iGame].Items;
                     for (int iActivity = 0; iActivity < Activities.Count; iActivity++)
                     {
-                        long elapsedSeconds = Activities[iActivity].ElapsedSeconds;
+                        ulong elapsedSeconds = Activities[iActivity].ElapsedSeconds;
                         DateTime dateSession = Convert.ToDateTime(Activities[iActivity].DateSession).ToLocalTime();
                         string sourceName = Activities[iActivity].SourceName;
 
@@ -630,7 +629,7 @@ namespace GameActivity.Views
                             if (datesPeriodes[iWeek].Monday <= dateSession && dateSession <= datesPeriodes[iWeek].Sunday)
                             {
                                 // Add source by platform
-                                if (activityByWeek[iWeek][sourceName] == null)
+                                if (!activityByWeek[iWeek].ContainsKey(sourceName))
                                 {
                                     activityByWeek1.Add(sourceName, 0);
                                     activityByWeek2.Add(sourceName, 0);
@@ -640,7 +639,7 @@ namespace GameActivity.Views
                                     activityByWeek6.Add(sourceName, 0);
                                 }
 
-                                activityByWeek[iWeek][sourceName] = (long)activityByWeek[iWeek][sourceName] + elapsedSeconds;
+                                activityByWeek[iWeek][sourceName] = activityByWeek[iWeek][sourceName] + (long)elapsedSeconds;
                             }
                         }
                     }
@@ -648,18 +647,18 @@ namespace GameActivity.Views
 
 
                 // Check source with data (only view this)
-                JArray listNoDelete = new JArray();
+                List<string> listNoDelete = new List<string>();
                 for (int i = 0; i < activityByWeek.Count; i++)
                 {
-                    foreach (var item in (JObject)activityByWeek[i])
+                    foreach (var item in activityByWeek[i])
                     {
-                        if ((long)item.Value != 0 && listNoDelete.TakeWhile(x => x.ToString() == item.Key).Count() != 1)
+                        if (item.Value != 0 && listNoDelete.TakeWhile(x => x.ToString() == item.Key).Count() != 1)
                         {
                             listNoDelete.Add(item.Key);
                         }
                     }
                 }
-                listNoDelete = JArray.FromObject(listNoDelete.Distinct().ToArray());
+                listNoDelete = listNoDelete.Select(x => x).Distinct().ToList();
 
 
                 // Prepare data.
@@ -780,7 +779,7 @@ namespace GameActivity.Views
             //lets save the mapper globally
             Charting.For<CustomerForTime>(customerVmMapper);
 
-            Func<double, string> activityForGameLogFormatter = value => (string)converter.Convert((long)value, null, null, CultureInfo.CurrentCulture);
+            Func<double, string> activityForGameLogFormatter = value => (string)converter.Convert((ulong)value, null, null, CultureInfo.CurrentCulture);
 
             PART_ChartHoursByWeekSource_Y.LabelFormatter = activityForGameLogFormatter;
             PART_ChartHoursByWeekSource.Series = activityByWeekSeries;
@@ -820,7 +819,7 @@ namespace GameActivity.Views
                         }
 
                         Activity lastSessionActivity = listGameActivities[iGame].GetLastSessionActivity();
-                        long elapsedSeconds = lastSessionActivity.ElapsedSeconds;
+                        ulong elapsedSeconds = lastSessionActivity.ElapsedSeconds;
                         DateTime dateSession = Convert.ToDateTime(lastSessionActivity.DateSession).ToLocalTime();
 
                         string GameIcon = listGameActivities[iGame].Icon;
@@ -940,9 +939,9 @@ namespace GameActivity.Views
         /// Get list sources name in database.
         /// </summary>
         /// <returns></returns>
-        public JArray GetListSourcesName()
+        public List<string> GetListSourcesName()
         {
-            JArray arrayReturn = new JArray();
+            List<string> arrayReturn = new List<string>();
             foreach (GameSource source in dbPlaynite.Sources)
             {
                 if (!arrayReturn.Contains(source.Name))

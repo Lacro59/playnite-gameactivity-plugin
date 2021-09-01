@@ -65,16 +65,12 @@
     <Reference Include="MSIAfterburnerNET.HM, Version=1.0.7.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\MSIAfterburnerNET.HM.1.0.7\lib\net462\MSIAfterburnerNET.HM.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="OpenHardwareMonitorLib, Version=0.9.5.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Resources\OpenHardwareMonitorLib.dll</HintPath>
     </Reference>
-    <Reference Include="Playnite.SDK">
-      <HintPath>..\..\..\Playnite_dev\Playnite.SDK.dll</HintPath>
+    <Reference Include="Playnite.SDK, Version=6.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\PlayniteSDK.6.0.0-preview2\lib\net462\Playnite.SDK.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="PresentationCore" />

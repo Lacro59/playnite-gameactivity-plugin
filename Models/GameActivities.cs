@@ -142,9 +142,9 @@ namespace GameActivity.Models
         }
 
 
-        public long avgPlayTime()
+        public ulong avgPlayTime()
         {
-            long avgPlayTime = 0;
+            ulong avgPlayTime = 0;
             int CountWithTime = 0;
 
             foreach (Activity Item in Items)
@@ -155,7 +155,7 @@ namespace GameActivity.Models
 
             if (avgPlayTime != 0 && CountWithTime != 0)
             {
-                avgPlayTime = avgPlayTime / CountWithTime;
+                avgPlayTime = avgPlayTime / (ulong)CountWithTime;
             }
 
             return avgPlayTime;

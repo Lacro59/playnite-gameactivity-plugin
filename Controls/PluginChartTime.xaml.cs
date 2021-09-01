@@ -278,7 +278,7 @@ namespace GameActivity.Controls
                     // Search data in periode
                     for (int iActivity = 0; iActivity < Activities.Count; iActivity++)
                     {
-                        long elapsedSeconds = Activities[iActivity].ElapsedSeconds;
+                        ulong elapsedSeconds = Activities[iActivity].ElapsedSeconds;
                         string dateSession = Convert.ToDateTime(Activities[iActivity].DateSession).ToLocalTime().ToString("yyyy-MM-dd");
 
                         //for (int iDay = 0; iDay < 10; iDay++)
@@ -300,7 +300,7 @@ namespace GameActivity.Controls
                                     series1[iDay] = new CustomerForTime
                                     {
                                         Name = tempName,
-                                        Values = series1[iDay].Values + elapsedSeconds,
+                                        Values = series1[iDay].Values + (long)elapsedSeconds,
                                     };
                                     continue;
                                 }
@@ -311,7 +311,7 @@ namespace GameActivity.Controls
                                         series1[iDay] = new CustomerForTime
                                         {
                                             Name = tempName,
-                                            Values = elapsedSeconds,
+                                            Values = (long)elapsedSeconds,
                                         };
                                         continue;
                                     }
@@ -322,7 +322,7 @@ namespace GameActivity.Controls
                                         series2[iDay] = new CustomerForTime
                                         {
                                             Name = tempName,
-                                            Values = elapsedSeconds,
+                                            Values = (long)elapsedSeconds,
                                         };
                                         continue;
                                     }
@@ -333,7 +333,7 @@ namespace GameActivity.Controls
                                         series3[iDay] = new CustomerForTime
                                         {
                                             Name = tempName,
-                                            Values = elapsedSeconds,
+                                            Values = (long)elapsedSeconds,
                                         };
                                         continue;
                                     }
@@ -344,7 +344,7 @@ namespace GameActivity.Controls
                                         series4[iDay] = new CustomerForTime
                                         {
                                             Name = tempName,
-                                            Values = elapsedSeconds,
+                                            Values = (long)elapsedSeconds,
                                         };
                                         continue;
                                     }
@@ -355,7 +355,7 @@ namespace GameActivity.Controls
                                         series5[iDay] = new CustomerForTime
                                         {
                                             Name = tempName,
-                                            Values = elapsedSeconds,
+                                            Values = (long)elapsedSeconds,
                                         };
                                         continue;
                                     }
@@ -402,8 +402,8 @@ namespace GameActivity.Controls
                         //lets save the mapper globally
                         Charting.For<CustomerForTime>(customerVmMapper);
 
-                        LongToTimePlayedConverter converter = new LongToTimePlayedConverter();
-                        Func<double, string> activityForGameLogFormatter = value => (string)converter.Convert((long)value, null, null, CultureInfo.CurrentCulture);
+                        PlayTimeToStringConverter converter = new PlayTimeToStringConverter();
+                        Func<double, string> activityForGameLogFormatter = value => (string)converter.Convert((ulong)value, null, null, CultureInfo.CurrentCulture);
                         PART_ChartTimeActivityLabelsY.LabelFormatter = activityForGameLogFormatter;
 
                         if (PluginDatabase.PluginSettings.Settings.CumulPlaytimeSession)

@@ -75,7 +75,7 @@ namespace GameActivity.Services
             PluginSettings.Settings.LastDateTimeSession = gameActivities.GetLastSession().ToLocalTime().ToString(Constants.DateUiFormat)
                 + " " + gameActivities.GetLastSession().ToLocalTime().ToString(Constants.TimeUiFormat);
 
-            LongToTimePlayedConverter converter = new LongToTimePlayedConverter();
+            PlayTimeToStringConverter converter = new PlayTimeToStringConverter();
             string playtime = (string)converter.Convert((long)gameActivities.GetLastSessionActivity().ElapsedSeconds, null, null, CultureInfo.CurrentCulture);
             PluginSettings.Settings.LastPlaytimeSession = playtime;
 
