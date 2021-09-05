@@ -1,0 +1,74 @@
+﻿<controls:PluginUserControlExtend
+        xmlns:controls="clr-namespace:CommonPluginsShared.Controls"
+        x:Class="GameActivity.Controls.PluginButton"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:local="clr-namespace:GameActivity.Controls"
+        xmlns:converters="clr-namespace:CommonPluginsPlaynite.Converters"
+        xmlns:commonpluginsshared="clr-namespace:CommonPluginsShared.Converters"
+        mc:Ignorable="d" d:DesignHeight="40">
+
+    <controls:PluginUserControlExtend.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converters:InvertedBooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter" />
+        <converters:PlayTimeToStringConverter x:Key="PlayTimeToStringConverter" />
+        <commonpluginsshared:HeightToFontSizeConverter x:Key="HeightToFontSizeConverter" />
+    </controls:PluginUserControlExtend.Resources>
+
+    <Button Name="PART_PluginButton"
+            Click="PART_PluginButton_Click" Style="{StaticResource {x:Type Button}}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Without details -->
+            <TextBlock Text="{Binding Text, Mode=OneWay, FallbackValue='&#xe97f;'}" FontFamily="{DynamicResource FontIcoFont}"
+                       Grid.Column="0" VerticalAlignment="Center"
+                       FontSize="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=FontSize}" />
+
+            <!-- With details -->
+            <Grid Grid.Column="1" Margin="3,0,0,0"
+                  Visibility="{Binding DisplayDetails, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="3" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Label Grid.Row="0" Content="{Binding LastActivity, FallbackValue='27/02/2021'}" Margin="0,-3,0,-3"
+                       FontSize="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight, Converter={StaticResource HeightToFontSizeConverter}}">
+                    <Label.Style>
+                        <Style TargetType="Label">
+                            <Setter Property="Padding" Value="5,3,5,5" />
+                            <Setter Property="Foreground" Value="{DynamicResource GlyphBrush}" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=IsMouseOver}" Value="True">
+                                    <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Label.Style>
+                </Label>
+                <Label Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Margin="0,-3,0,-3"
+                       Content="{Binding LastPlaytime, Converter={StaticResource PlayTimeToStringConverter}, FallbackValue='23 minutes'}"
+                       FontSize="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight, Converter={StaticResource HeightToFontSizeConverter}}">
+                    <Label.Style>
+                        <Style TargetType="Label">
+                            <Setter Property="Padding" Value="5,3,5,5" />
+                            <Setter Property="Foreground" Value="{DynamicResource GlyphBrush}" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=IsMouseOver}" Value="True">
+                                    <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Label.Style>
+                </Label>
+            </Grid>
+        </Grid>
+    </Button>
+</controls:PluginUserControlExtend>

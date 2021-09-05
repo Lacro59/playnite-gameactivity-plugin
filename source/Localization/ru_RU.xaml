@@ -1,0 +1,79 @@
+﻿<?xml version="1.0"?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!-- MainView -->
+    
+    <sys:String x:Key="LOCGameActivity">Игровая Активность</sys:String>
+    <sys:String x:Key="LOCGameActivityTitle">Активность</sys:String>
+    <sys:String x:Key="LOCGameActivityViewGamesActivities">Посмотреть игровые активности</sys:String>
+    <sys:String x:Key="LOCGameActivityViewGameActivity">Посмотреть игровую активность</sys:String>
+
+    <!-- GameActivitySettingsView -->
+
+    <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">Cumul game session playtime on chart</sys:String>
+    <sys:String x:Key="LOCGameActivityCumulPlaytimeStore">Unify the time of the different stores</sys:String>
+    
+    <sys:String x:Key="LOCGameActivityActiveLog">Включить ведение журнала</sys:String>
+    <sys:String x:Key="LOCGameActivityTimeInterval">Check time interval</sys:String>
+    <sys:String x:Key="LOCGameActivityTimeLabel">минут(ы)</sys:String>
+
+    <sys:String x:Key="LOCGameActivityUseMsiAfterburner">Использовать MSI Afterburner</sys:String>
+    <sys:String x:Key="LOCGameActivityUseHWiNFO">Использовать HWiNFO</sys:String>
+
+    <sys:String x:Key="LOCGameActivitySensorsID">ID сенсоров</sys:String>
+    <sys:String x:Key="LOCGameActivityElementID">Id элемента</sys:String>
+    
+    <sys:String x:Key="LOCGameActivityGpuUsage">использ. GPU</sys:String>
+    <sys:String x:Key="LOCGameActivityFps">Кадр/сек</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuTemp">Температура GPU</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuTemp">Температура CPU</sys:String>
+
+    <sys:String x:Key="LOCGameActivityActiveWarning">Включить предупреждения</sys:String>
+    <sys:String x:Key="LOCGameActivityMinFps">Минимальный FPS</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxCpuTemp">Макс. темпер. CPU</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxGpuTemp">Макс. темпер. GPU</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxCpuUsage">Макс. Использ. CPU</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxGpuUsage">Макс. Использ. GPU</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxRamUsage">Макс. Использ. RAM</sys:String>
+
+    <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">Журнал производительности процессора, графического процессора, оперативной памяти и FPS во время игровой сессии.</sys:String>
+    <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Отображает предупреждающее сообщение в конце сеанса игры в кратце.</sys:String>
+
+    <sys:String x:Key="LOCGameActivityIntegrationShowGraphic">Показать график</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationShowGraphicLog">Показать график с последними логами</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">Прогресс на кнопке</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">Количество данных</sys:String>
+
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicOptions">Настройки графика</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabels">Показать метки</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">Показать метки координат</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicLogOptions">График с настройками логов</sys:String>
+
+    <!-- GameActivityView -->
+    
+    <sys:String x:Key="LOCGameActivityTotalHours">Всего часов</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByWeeks">Всего часов по неделям</sys:String>
+    
+    <sys:String x:Key="LOCGameActivityWeekLabel">Неделя</sys:String>
+
+    <sys:String x:Key="LOCGameActivityTime">Время</sys:String>
+    <sys:String x:Key="LOCGameActivityLog">Логи</sys:String>
+    <sys:String x:Key="LOCGameActivityTimeTitle">Всего часов по дням</sys:String>
+    <sys:String x:Key="LOCGameActivityLogTitle">Детали последней сессии</sys:String>
+    <sys:String x:Key="LOCGameActivityLogTitleDate">Детали сессии для </sys:String>
+
+    <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Последняя сессия</sys:String>
+    <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Проведённое время</sys:String>
+
+
+    <!-- GameActivity -->
+
+    <sys:String x:Key="LOCGameActivityWarningCaption">Предупреждения во время сеанса игры</sys:String>
+    <sys:String x:Key="LOCGameActivityWarningAt">На</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuUsage">Использ. CPU</sys:String>
+    <sys:String x:Key="LOCGameActivityRamUsage">Использ. RAM</sys:String>
+    
+    <sys:String x:Key="LOCGameActivityNotificationHWiNFO">Ведение журнала с помощью HWiNFO активируется без запуска приложения.</sys:String>
+    <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">Ведение журнала с помощью MSI AfterBurner активируется без запуска приложения.</sys:String>
+
+</ResourceDictionary>

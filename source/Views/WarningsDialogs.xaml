@@ -1,0 +1,65 @@
+﻿<UserControl x:Class="GameActivity.Views.WarningsDialogs"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:views="clr-namespace:GameActivity.Views"
+             mc:Ignorable="d" Background="{DynamicResource WindowBackgourndBrush}">
+
+    <UserControl.Resources>
+        <views:SetTextColor x:Key="SetTextColor" />
+    </UserControl.Resources>
+
+    <StackPanel Orientation="Vertical" Name="PART_Contener">
+        <StackPanel Margin="10,10" MinHeight="20">
+            <ItemsControl Name="icData">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="10,10" Orientation="Horizontal">
+                            <Label Content="{Binding At}" />
+                            <Label Content=", " />
+
+                            <Label Content="{Binding FpsData.Name}" />
+                            <Label Content=" = " />
+                            <Label Content="{Binding FpsData.Value}" Foreground="{Binding FpsData.IsWarm, Converter={StaticResource SetTextColor}}" />
+                            <Label Content=", " />
+
+                            <Label Content="{Binding CpuTempData.Name}" />
+                            <Label Content=" = " />
+                            <Label Content="{Binding CpuTempData.Value}" Foreground="{Binding CpuTempData.IsWarm, Converter={StaticResource SetTextColor}}" />
+                            <Label Content="°" Foreground="{Binding CpuTempData.IsWarm, Converter={StaticResource SetTextColor}}" />
+                            <Label Content=", " />
+
+                            <Label Content="{Binding CpuUsageData.Name}" />
+                            <Label Content=" = " />
+                            <Label Content="{Binding CpuUsageData.Value}" Foreground="{Binding CpuUsageData.IsWarm, Converter={StaticResource SetTextColor}}" />
+                            <Label Content="%" Foreground="{Binding CpuUsageData.IsWarm, Converter={StaticResource SetTextColor}}" />
+                            <Label Content=", " />
+
+                            <Label Content="{Binding RamUsageData.Name}" />
+                            <Label Content=" = " /> 
+                            <Label Content="{Binding RamUsageData.Value}" Foreground="{Binding RamUsageData.IsWarm, Converter={StaticResource SetTextColor}}" />
+                            <Label Content="%" Foreground="{Binding RamUsageData.IsWarm, Converter={StaticResource SetTextColor}}" />
+                            <Label Content=", " />
+
+                            <Label Content="{Binding GpuTempData.Name}" />
+                            <Label Content=" = " />
+                            <Label Content="{Binding GpuTempData.Value}" Foreground="{Binding GpuTempData.IsWarm, Converter={StaticResource SetTextColor}}" />
+                            <Label Content="°" Foreground="{Binding GpuTempData.IsWarm, Converter={StaticResource SetTextColor}}" />
+                            <Label Content=", " />
+
+                            <Label Content="{Binding GpuUsageData.Name}" />
+                            <Label Content=" = " />
+                            <Label Content="{Binding GpuUsageData.Value}" Foreground="{Binding GpuUsageData.IsWarm, Converter={StaticResource SetTextColor}}" />
+                            <Label Content="%" Foreground="{Binding GpuUsageData.IsWarm, Converter={StaticResource SetTextColor}}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+
+        <StackPanel DockPanel.Dock="Bottom" Margin="10">
+            <Button Width="150" Click="Button_Click" Content="{DynamicResource LOCOKLabel}" />
+        </StackPanel>
+    </StackPanel>
+</UserControl>
