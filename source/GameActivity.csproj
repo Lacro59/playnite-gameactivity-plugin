@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\Playnite_dev\Extensions\playnite-gameactivity-plugin\</OutputPath>
+    <OutputPath>..\..\..\..\Playnite_dev\Extensions\playnite-gameactivity-plugin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
