@@ -170,11 +170,9 @@
     <None Include="extension.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="LICENSE" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="README.md" />
     <Page Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
