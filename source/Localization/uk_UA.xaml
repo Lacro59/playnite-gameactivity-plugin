@@ -7,25 +7,25 @@
     <sys:String x:Key="LOCGameActivityTitle">Активність</sys:String>
     <sys:String x:Key="LOCGamesActivitiesTitle">Ігрові активності</sys:String>
     <sys:String x:Key="LOCGameActivitiesTitle">Ігрова активність</sys:String>
-    <sys:String x:Key="LOCGameActivityViewGamesActivities">Переглянути активності в іграх</sys:String>
+    <sys:String x:Key="LOCGameActivityViewGamesActivities">Переглянути активності в ігра</sys:String>
     <sys:String x:Key="LOCGameActivityViewGameActivity">Переглянути активності в грі</sys:String>
 
     <!-- GameActivitySettingsView -->
 
-    <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">Поєднати час ігрових сеансів на графіку</sys:String>
+    <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">Поєднати час ігрових сеансів на графік</sys:String>
     <sys:String x:Key="LOCGameActivityCumulPlaytimeStore">Об'єднати час з різних бібліотек</sys:String>
 
     <sys:String x:Key="LOCGameActivityListGamesFields">Game fields to be displayed</sys:String>
 
-    <sys:String x:Key="LOCGameActivityActiveLog">Включити ведення журналу</sys:String>
-    <sys:String x:Key="LOCGameActivityTimeInterval">Перевірити інтервал часу</sys:String>
+    <sys:String x:Key="LOCGameActivityActiveLog">Включити ведення журнал</sys:String>
+    <sys:String x:Key="LOCGameActivityTimeInterval">Перевірити інтервал час</sys:String>
     <sys:String x:Key="LOCGameActivityTimeLabel">хвилин(и)</sys:String>
 
     <sys:String x:Key="LOCGameActivityUseMsiAfterburner">Використовувати MSI Afterburner</sys:String>
     <sys:String x:Key="LOCGameActivityUseHWiNFO">Використовувати HWiNFO</sys:String>
 
     <sys:String x:Key="LOCGameActivitySensorsID">ID датчиків</sys:String>
-    <sys:String x:Key="LOCGameActivityElementID">ID елементу</sys:String>
+    <sys:String x:Key="LOCGameActivityElementID">ID елемент</sys:String>
 
     <sys:String x:Key="LOCGameActivityGpuUsage">Використання GPU</sys:String>
     <sys:String x:Key="LOCGameActivityFps">FPS</sys:String>
@@ -53,7 +53,7 @@
     <sys:String x:Key="LOCGameActivityIntegrationGraphicLogOptions">Параметри графіка</sys:String>
 
     <sys:String x:Key="LOCGameActivityUseControls">Використовувати елементи керування графіком</sys:String>
-    <sys:String x:Key="LOCGameActivitySelectChartSeriesToDisplay">Виберіть серію для відображення на графіку</sys:String>
+    <sys:String x:Key="LOCGameActivitySelectChartSeriesToDisplay">Виберіть серію для відображення на графік</sys:String>
 
     <sys:String x:Key="LOCGameActivityIconFrom">Select the icon origin</sys:String>
     <sys:String x:Key="LOCGameActivityIconFromLibrary">Use the icon defined in the library</sys:String>
@@ -61,25 +61,25 @@
 
     <!-- GameActivityViewSingle -->
 
-    <sys:String x:Key="LOCGameActivityAvgPerDay">Середній час на добу</sys:String>
-    <sys:String x:Key="LOCGameActivityFirstSession">Перший сеанс</sys:String>
-    <sys:String x:Key="LOCGameActivityLastSession">Останній сеанс</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgPerDay">Середній час на доб</sys:String>
+    <sys:String x:Key="LOCGameActivityFirstSession">Перший сеан</sys:String>
+    <sys:String x:Key="LOCGameActivityLastSession">Останній сеан</sys:String>
     
     <!-- GameActivityView -->
 
     <sys:String x:Key="LOCGameActivityTotalHours">Всього годин</sys:String>
-    <sys:String x:Key="LOCGameActivityTotalHoursByWeeks">Всього годин по тижнях</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByWeeks">Всього годин по тижня</sys:String>
 
     <sys:String x:Key="LOCGameActivityWeekLabel">Тиждень</sys:String>
 
-    <sys:String x:Key="LOCGameActivityTime">Час</sys:String>
+    <sys:String x:Key="LOCGameActivityTime">Ча</sys:String>
     <sys:String x:Key="LOCGameActivityLog">Журнал</sys:String>
-    <sys:String x:Key="LOCGameActivityTimeTitle">Всього годин по днях</sys:String>
-    <sys:String x:Key="LOCGameActivityLogTitle">Деталі останнього сеансу</sys:String>
+    <sys:String x:Key="LOCGameActivityTimeTitle">Всього годин по дня</sys:String>
+    <sys:String x:Key="LOCGameActivityLogTitle">Деталі останнього сеанс</sys:String>
     <sys:String x:Key="LOCGameActivityLogTitleDate">Подробиці сеансу для</sys:String>
 
-    <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Останній сеанс</sys:String>
-    <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Минуло часу</sys:String>
+    <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Останній сеан</sys:String>
+    <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Минуло час</sys:String>
     
     <sys:String x:Key="LOCGameActivityAvgCpu">Сер. CPU</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpu">Сер. GPU</sys:String>
@@ -93,7 +93,7 @@
 
     <!-- GameActivity -->
 
-    <sys:String x:Key="LOCGameActivityWarningCaption">Попередження під час ігрового сеансу</sys:String>
+    <sys:String x:Key="LOCGameActivityWarningCaption">Попередження під час ігрового сеанс</sys:String>
     <sys:String x:Key="LOCGameActivityWarningAt">На</sys:String>
     <sys:String x:Key="LOCGameActivityCpuUsage">Використання CPU</sys:String>
     <sys:String x:Key="LOCGameActivityRamUsage">Використання RAM</sys:String>
