@@ -4,7 +4,7 @@
     <!-- MainView -->
 
     <sys:String x:Key="LOCGameActivity">AktywnośćGry</sys:String>
-    <sys:String x:Key="LOCGameActivityTitle">Aktywność</sys:String>
+    <sys:String x:Key="LOCGameActivityTitle">Aktywnoś</sys:String>
     <sys:String x:Key="LOCGamesActivitiesTitle">Aktywności gier</sys:String>
     <sys:String x:Key="LOCGameActivitiesTitle">Aktywności gry</sys:String>
     <sys:String x:Key="LOCGameActivityViewGamesActivities">Zobacz aktywności gier</sys:String>
