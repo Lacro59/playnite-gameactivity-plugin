@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:converters="clr-namespace:CommonPluginsPlaynite.Converters"
              xmlns:AttachedProperties="clr-namespace:CommonPluginsShared.Controls"
+             xmlns:pcmd="clr-namespace:CommonPluginsShared"
              xmlns:playnitecontrols="clr-namespace:CommonPluginsControls.PlayniteControls"
              xmlns:GameActivity="clr-namespace:GameActivity"
              mc:Ignorable="d" d:DesignWidth="650"
@@ -19,7 +20,9 @@
             <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
                 <DockPanel Margin="0,20,0,0">
                     <StackPanel DockPanel.Dock="Top">
-                        <CheckBox IsChecked="{Binding Settings.MenuInExtensions}" VerticalAlignment="Center">
+                        <CheckBox IsChecked="{Binding Settings.MenuInExtensions}" VerticalAlignment="Center"
+                                  Command="{x:Static pcmd:Commands.RestartRequired}" 
+                                  CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
                             <Label Content="{DynamicResource LOCCommonMenuInExtensions}" />
                         </CheckBox>
                         
@@ -282,7 +285,9 @@
                             </Expander.Style>
 
                             <Expander.Header>
-                                <CheckBox VerticalAlignment="Center" IsChecked="{Binding Settings.EnableIntegrationButtonHeader}">
+                                <CheckBox VerticalAlignment="Center" IsChecked="{Binding Settings.EnableIntegrationButtonHeader}"
+                                          Command="{x:Static pcmd:Commands.RestartRequired}" 
+                                          CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
                                     <Label Content="{DynamicResource LOCCommonIntegrationButtonHeader}" />
                                 </CheckBox>
                             </Expander.Header>
