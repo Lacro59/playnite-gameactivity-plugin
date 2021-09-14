@@ -72,8 +72,18 @@ namespace GameActivity
                 {
                     Common.LogDebug(true, $"OnCustomThemeButtonClick()");
 
+                    var windowOptions = new WindowOptions
+                    {
+                        ShowMinimizeButton = false,
+                        ShowMaximizeButton = true,
+                        ShowCloseButton = true,
+                        Width = 1280,
+                        Height = 740
+                    };
+
                     var ViewExtension = new GameActivityViewSingle(PluginDatabase.GameContext);
-                    Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGameActivity"), ViewExtension);
+                    Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGameActivity"), ViewExtension, windowOptions);
+                    windowExtension.ResizeMode = ResizeMode.CanResize;
                     windowExtension.ShowDialog();
                 }
             }
@@ -482,10 +492,18 @@ namespace GameActivity
                     Title = resources.GetString("LOCGameActivityViewGamesActivities"),
                     Activated = () =>
                     {
+                        var windowOptions = new WindowOptions
+                        {
+                            ShowMinimizeButton = false,
+                            ShowMaximizeButton = true,
+                            ShowCloseButton = true,
+                            Width = 1280,
+                            Height = 740
+                        };
+
                         var ViewExtension = new GameActivityView();
-                        ViewExtension.Height = 660;
-                        ViewExtension.Width = 1290;
-                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGamesActivitiesTitle"), ViewExtension);
+                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGamesActivitiesTitle"), ViewExtension, windowOptions);
+                        windowExtension.ResizeMode = ResizeMode.CanResize;
                         windowExtension.ShowDialog();
                     }
                 };
@@ -604,8 +622,18 @@ namespace GameActivity
                     Description = resources.GetString("LOCGameActivityViewGamesActivities"),
                     Action = (mainMenuItem) =>
                     {
+                        var windowOptions = new WindowOptions
+                        {
+                            ShowMinimizeButton = false,
+                            ShowMaximizeButton = true,
+                            ShowCloseButton = true,
+                            Width = 1280,
+                            Height = 740
+                        };
+
                         var ViewExtension = new GameActivityView();
-                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGameActivity"), ViewExtension);
+                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGamesActivitiesTitle"), ViewExtension, windowOptions);
+                        windowExtension.ResizeMode = ResizeMode.CanResize;
                         windowExtension.ShowDialog();
                     }
                 }
