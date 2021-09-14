@@ -46,7 +46,7 @@
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Column="0" Grid.Row="0" 
-                           Text="{Binding GameDisplayName}"
+                           Text="{Binding GameDisplayName, FallbackValue='Game Name'}"
                            FontSize="{DynamicResource FontSizeLargest}" TextWrapping="Wrap"
                            Foreground="{DynamicResource TextBrush}" />
 
