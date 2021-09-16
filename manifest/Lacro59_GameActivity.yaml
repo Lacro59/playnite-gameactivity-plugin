@@ -10,3 +10,11 @@ Packages:
       - Fixed many bugs
       - New chart options
       - Added new options in plugin main view
+  - Version: 2.0.1
+    RequiredApiVersion: 6.0.0
+    ReleaseDate: 2021-09-16
+    PackageUrl: https://github.com/Lacro59/playnite-gameactivity-plugin/releases/download/v2.0.1/playnite-gameactivity-plugin_2_0_1.pext
+    Changelog:
+      - Playnite 9 beta version (not compatible with Playnite 8)
+      - UI tweaks
+      - Fixed many bugs
