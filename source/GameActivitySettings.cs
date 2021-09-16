@@ -15,7 +15,7 @@ namespace GameActivity
 
         public bool EnableIntegrationButtonHeader { get; set; } = false;
 
-        private bool _EnableIntegrationButton { get; set; } = false;
+        private bool _EnableIntegrationButton { get; set; } = true;
         public bool EnableIntegrationButton
         {
             get => _EnableIntegrationButton;
@@ -37,7 +37,7 @@ namespace GameActivity
             }
         }
 
-        private bool _EnableIntegrationChartTime { get; set; } = false;
+        private bool _EnableIntegrationChartTime { get; set; } = true;
         public bool EnableIntegrationChartTime
         {
             get => _EnableIntegrationChartTime;
@@ -54,7 +54,7 @@ namespace GameActivity
         public bool ChartTimeOrdinates { get; set; } = true;
         public int ChartTimeCountAbscissa { get; set; } = 11;
 
-        private bool _EnableIntegrationChartLog { get; set; } = false;
+        private bool _EnableIntegrationChartLog { get; set; } = true;
         public bool EnableIntegrationChartLog
         {
             get => _EnableIntegrationChartLog;
