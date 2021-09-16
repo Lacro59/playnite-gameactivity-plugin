@@ -55,9 +55,9 @@
     <sys:String x:Key="LOCGameActivityUseControls">Utiliser les commandes du graphique</sys:String>
     <sys:String x:Key="LOCGameActivitySelectChartSeriesToDisplay">Sélectionnez les séries à afficher sur le graphique</sys:String>
 
-    <sys:String x:Key="LOCGameActivityIconFrom">Select the icon origin</sys:String>
-    <sys:String x:Key="LOCGameActivityIconFromLibrary">Use the icon defined in the library</sys:String>
-    <sys:String x:Key="LOCGameActivityIconFromFont">Use the icon defined in the plugin's font</sys:String>
+    <sys:String x:Key="LOCGameActivityIconFrom">Sélectionner l'origine de l'icône</sys:String>
+    <sys:String x:Key="LOCGameActivityIconFromLibrary">Utiliser l'icône définie par la bibliothèque</sys:String>
+    <sys:String x:Key="LOCGameActivityIconFromFont">Utiliser l'icône définie par la police d'écriture du plugin</sys:String>
 
     <!-- GameActivityViewSingle -->
 
@@ -88,7 +88,7 @@
     <sys:String x:Key="LOCGameActivityAvgCpuT">CPU moyen T</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpuT">GPU moyen T</sys:String>
 
-    <sys:String x:Key="LOCGameActivityPCName">PC name</sys:String>
+    <sys:String x:Key="LOCGameActivityPCName">Nom du PC</sys:String>
 
 
     <!-- GameActivity -->

@@ -7,7 +7,7 @@
     <sys:String x:Key="LOCGameActivityTitle">Активность</sys:String>
     <sys:String x:Key="LOCGamesActivitiesTitle">Игровая активность</sys:String>
     <sys:String x:Key="LOCGameActivitiesTitle">Действия в игре</sys:String>
-    <sys:String x:Key="LOCGameActivityViewGamesActivities">Просмотреть активность в играх</sys:String>
+    <sys:String x:Key="LOCGameActivityViewGamesActivities">Просмотреть активность в игра</sys:String>
     <sys:String x:Key="LOCGameActivityViewGameActivity">Просмотреть игровую активность</sys:String>
 
     <!-- GameActivitySettingsView -->
@@ -76,7 +76,7 @@
     <sys:String x:Key="LOCGameActivityLog">Логи</sys:String>
     <sys:String x:Key="LOCGameActivityTimeTitle">Всего часов по дням</sys:String>
     <sys:String x:Key="LOCGameActivityLogTitle">Детали последней сессии</sys:String>
-    <sys:String x:Key="LOCGameActivityLogTitleDate">Детали сессии для </sys:String>
+    <sys:String x:Key="LOCGameActivityLogTitleDate">Детали сессии для</sys:String>
 
     <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Последняя сессия</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Проведённое время</sys:String>
