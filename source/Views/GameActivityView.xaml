@@ -12,7 +12,7 @@
              xmlns:playnitecontrols="clr-namespace:CommonPluginsControls.PlayniteControls"
              xmlns:commonpluginsshared="clr-namespace:CommonPluginsShared.Converters"
              xmlns:Commonpluginsbehaviors="clr-namespace:CommonPluginsShared.Behaviors"
-             mc:Ignorable="d" d:DesignHeight="660" d:DesignWidth="1290"
+             mc:Ignorable="d" d:DesignHeight="700" d:DesignWidth="1100"
              d:DataContext="{d:DesignInstance Type=local:GameActivityView}">
 
     <UserControl.Resources>
@@ -109,11 +109,6 @@
                     </Grid.ColumnDefinitions>
 
                     <Grid x:Name="gridMonth" Grid.Column="0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0*" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="0*" />
-                        </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30" />
                             <RowDefinition Height="*" />
@@ -147,11 +142,6 @@
 
 
                     <Grid Name="GridDay" Grid.Column="2">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0*" />
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="0*" />
-                        </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30" />
                             <RowDefinition Height="*" />
@@ -184,11 +174,6 @@
                     </Grid>
 
                     <Grid Name="GridWeek" Grid.Column="4">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0*" />
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="0*" />
-                        </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30" />
                             <RowDefinition Height="*" />
@@ -273,6 +258,7 @@
                     <controlsShared:ListViewExtend x:Name="lvGames" Style="{StaticResource {x:Type ListView}}"
                                                    SelectionChanged="LvGames_SelectionChanged" FontSize="24" 
                                                    SortingSortDirection="Descending"
+                                                   Height="{Binding ElementName=gridLvGames, Path=ActualHeight}"
                                                    SortingEnable="True" SortingDefaultDataName="GameLastActivity">
                         <ListView.View>
                             <GridView>
