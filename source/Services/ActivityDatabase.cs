@@ -65,6 +65,15 @@ namespace GameActivity.Services
 
             if (gameActivities == null)
             {
+                PluginSettings.Settings.HasData = false;
+                PluginSettings.Settings.HasDataLog = false;
+
+                PluginSettings.Settings.LastDateSession = string.Empty;
+                PluginSettings.Settings.LastDateTimeSession = string.Empty;
+
+                PluginSettings.Settings.LastPlaytimeSession = string.Empty;
+                PluginSettings.Settings.AvgFpsAllSession = 0;
+
                 return;
             }
 
