@@ -671,8 +671,8 @@ namespace GameActivity
             }
 
             // Old format
-            var oldFormat = PluginDatabase.Database.Select(x => x).Where(x => x.Items.FirstOrDefault() != null && x.Items.FirstOrDefault().PlatformIDs == null);
-            if (oldFormat.Count() > 0)
+            var oldFormat = PluginDatabase.Database?.Select(x => x).Where(x => x.Items.FirstOrDefault() != null && x.Items.FirstOrDefault().PlatformIDs == null);
+            if (oldFormat?.Count() > 0)
             {
                 GlobalProgressOptions globalProgressOptions = new GlobalProgressOptions(
                     "GameActivity - Database migration",
