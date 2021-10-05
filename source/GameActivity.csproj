@@ -49,6 +49,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="akr.WPF.Controls.ColorPicker">
+      <HintPath>playnite-plugincommon\CommonPluginsResources\Resources\akr.WPF.Controls.ColorPicker.dll</HintPath>
+    </Reference>
     <Reference Include="AngleSharp, Version=0.9.9.0, Culture=neutral, PublicKeyToken=e83494dcdc6d31ea, processorArchitecture=MSIL">
       <HintPath>packages\AngleSharp.0.9.9\lib\net45\AngleSharp.dll</HintPath>
       <Private>False</Private>
@@ -117,9 +120,13 @@
     <Compile Include="Models\GameActivities.cs" />
     <Compile Include="Models\GameActivitiesCollection.cs" />
     <Compile Include="Models\ListActivities.cs" />
+    <Compile Include="Models\StoreColor.cs" />
     <Compile Include="Models\WarningData.cs" />
     <Compile Include="playnite-plugincommon\CommonPluginsControls\Controls\ComboBoxRemovable.xaml.cs">
       <DependentUpon>ComboBoxRemovable.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="playnite-plugincommon\CommonPluginsControls\Controls\ControlPickerGradient.xaml.cs">
+      <DependentUpon>ControlPickerGradient.xaml</DependentUpon>
     </Compile>
     <Compile Include="playnite-plugincommon\CommonPluginsControls\Controls\TextBlockWithIcon.xaml.cs">
       <DependentUpon>TextBlockWithIcon.xaml</DependentUpon>
@@ -285,6 +292,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="playnite-plugincommon\CommonPluginsControls\Controls\ComboBoxRemovable.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="playnite-plugincommon\CommonPluginsControls\Controls\ControlPickerGradient.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

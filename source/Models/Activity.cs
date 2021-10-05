@@ -45,18 +45,24 @@ namespace GameActivity.Models
                     }
                 }
 
-                if (PlatformID != Guid.Parse("00000000-0000-0000-0000-000000000000"))
+                foreach (Guid PlatformID in PlatformIDs)
                 {
-                    var platform = PluginDatabase.PlayniteApi.Database.Platforms.Get(PlatformID);
-
-                    if (platform != null)
+                    if (PlatformID != Guid.Parse("00000000-0000-0000-0000-000000000000"))
                     {
-                        switch (platform.Name.ToLower())
+                        var platform = PluginDatabase.PlayniteApi.Database.Platforms.Get(PlatformID);
+
+                        if (platform != null)
                         {
-                            case "pc":
-                                return "Playnite";
-                            default:
-                                return platform.Name;
+                            switch (platform.Name.ToLower())
+                            {
+                                case "pc":
+                                case "pc (windows)":
+                                case "pc (mac)":
+                                case "pc (linux)":
+                                    return "Playnite";
+                                default:
+                                    return platform.Name;
+                            }
                         }
                     }
                 }

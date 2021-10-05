@@ -6,6 +6,8 @@
              xmlns:converters="clr-namespace:CommonPluginsPlaynite.Converters"
              xmlns:AttachedProperties="clr-namespace:CommonPluginsShared.Controls"
              xmlns:pcmd="clr-namespace:CommonPluginsShared"
+             xmlns:controls="clr-namespace:CommonPluginsControls.Controls"
+             xmlns:convertersshared="clr-namespace:CommonPluginsShared.Converters"
              xmlns:playnitecontrols="clr-namespace:CommonPluginsControls.PlayniteControls"
              xmlns:GameActivity="clr-namespace:GameActivity"
              mc:Ignorable="d" d:DesignWidth="650"
@@ -13,6 +15,9 @@
 
     <UserControl.Resources>
         <converters:NegateConverter x:Key="NegateConverter" />
+        <converters:InvertedBoolenConverter x:Key="InvertedBoolenConverter" />
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <convertersshared:IndexConverter x:Key="IndexConverter" />
     </UserControl.Resources>
 
     <TabControl Margin="20">
@@ -41,8 +46,8 @@
                         <CheckBox IsChecked="{Binding Settings.CumulPlaytimeSession}" Margin="0,15,0,0">
                             <Label Content="{DynamicResource LOCGameActivityCumulPlaytimeSession}" />
                         </CheckBox>
-                        
-                        <CheckBox IsChecked="{Binding Settings.CumulPlaytimeStore}" Margin="0,15,0,0">
+
+                        <CheckBox Name="PART_CumulPlaytimeStore" IsChecked="{Binding Settings.CumulPlaytimeStore}" Margin="0,15,0,0">
                             <Label Content="{DynamicResource LOCGameActivityCumulPlaytimeStore}" />
                         </CheckBox>
 
@@ -499,6 +504,58 @@
                         </Expander>
                     </Grid>
                 </StackPanel>
+            </ScrollViewer>
+        </TabItem>
+
+        <TabItem Header="{DynamicResource LOCMenuConfigurationTitle}" 
+                 IsEnabled="{Binding ElementName=PART_CumulPlaytimeStore, Path=IsChecked, Converter={StaticResource InvertedBoolenConverter}}">
+            <ScrollViewer>
+                <Grid Margin="0,10,0,0">
+                    <Grid Name="PART_SelectorColor" Width="500" Visibility="Collapsed" Grid.ColumnSpan="2" Margin="46,0,47,0">
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <controls:ControlPickerGradient x:Name="PART_SelectorColorPicker" />
+                        </StackPanel>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="90" />
+                                <ColumnDefinition Width="10" />
+                                <ColumnDefinition Width="90" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
+
+                            <Button Name="PART_TM_ColorOK" Grid.Column="1" Grid.Row="1" Content="{DynamicResource LOCOKLabel}" 
+                                    Click="PART_ColorOK_Click" />
+                            <Button Name="PART_TM_ColorCancel" Grid.Column="3" Grid.Row="1" Content="{DynamicResource LOCCancelLabel}" 
+                                    Click="PART_ColorCancel_Click" />
+                        </Grid>
+                    </Grid>
+
+
+                    <ListBox ItemsSource="{Binding Settings.StoreColors}" Height="450" Name="PART_Listbox">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition Width="10" />
+                                        <ColumnDefinition Width="auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Grid.Column="0" Text="{Binding Name}" />
+                                    <StackPanel Grid.Column="1" Height="28" Width="100" Background="{Binding Fill}" VerticalAlignment="Center"
+                                                Tag="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}, Mode=OneWay, Converter={StaticResource IndexConverter}}" />
+                                    <Button Grid.Column="3" Click="BtPickColor_Click" Content="&#x270f;" Width="41" VerticalAlignment="Center" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
             </ScrollViewer>
         </TabItem>
     </TabControl>

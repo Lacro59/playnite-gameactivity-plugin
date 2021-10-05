@@ -2,31 +2,24 @@
 using System.Collections.Generic;
 using System.Windows;
 using Playnite.SDK;
-using Playnite.SDK.Data;
 using Playnite.SDK.Models;
-using System.Windows.Media.Imaging;
 using System.Windows.Controls;
 using System.Linq;
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.ComponentModel;
 using GameActivity.Models;
 using LiveCharts;
 using CommonPluginsShared;
 using LiveCharts.Wpf;
 using LiveCharts.Configurations;
 using System.Globalization;
-using LiveCharts.Events;
-using System.Windows.Input;
 using System.Threading.Tasks;
 using CommonPluginsPlaynite.Converters;
 using CommonPluginsControls.LiveChartsCommon;
 using CommonPluginsPlaynite.Common;
 using GameActivity.Services;
 using GameActivity.Controls;
-using System.Threading;
-using System.Windows.Threading;
 using CommonPluginsControls.Controls;
+using System.Windows.Media;
 
 namespace GameActivity.Views
 {
@@ -671,6 +664,16 @@ namespace GameActivity.Views
                         labels[iSource] = TransformIcon.Get((string)listNoDelete[iSource]);
                     }
 
+
+                    Brush Fill = null;
+                    if (PluginDatabase.PluginSettings.Settings.StoreColors.Count == 0)
+                    {
+                        PluginDatabase.PluginSettings.Settings.StoreColors = GameActivitySettingsViewModel.GetDefaultStoreColors();
+                    }
+                    Fill = PluginDatabase.PluginSettings.Settings.StoreColors
+                                .Where(x => x.Name.Contains((string)listNoDelete[iSource], StringComparison.InvariantCultureIgnoreCase))?.FirstOrDefault()?.Fill;
+
+
                     Values = new ChartValues<CustomerForTime>();
                     for (int i = 0; i < datesPeriodes.Count; i++)
                     {
@@ -682,7 +685,8 @@ namespace GameActivity.Views
                         Title = labels[iSource],
                         Values = Values,
                         StackMode = StackMode.Values,
-                        DataLabels = false
+                        DataLabels = false,
+                        Fill = Fill
                     });
                 }
             }
