@@ -244,11 +244,53 @@ namespace GameActivity
         {
             EditingClone = Serialization.GetClone(Settings);
 
-            // Set missing
+            // Set default
             if (Settings.StoreColors.Count == 0)
             {
                 Settings.StoreColors = GetDefaultStoreColors();
             }
+
+            // Set missing
+            var SourceIds = GameActivity.PluginDatabase.Database.Items
+                                                .Where(x => !Settings.StoreColors.Any(y => x.Value.SourceId == y.Id))
+                                                .Select(x => x.Value.SourceId)
+                                                .Distinct().ToList();
+            var PlatformIds = GameActivity.PluginDatabase.Database.Items
+                                                .Where(x => x.Value != null && x.Value.Platforms != null)
+                                                .Select(x => x.Value.Platforms)
+                                                .SelectMany(x => x)
+                                                .Where(x => !Settings.StoreColors.Any(y => x.Id == y.Id))
+                                                .Distinct().ToList();
+
+            Brush Fill = null;
+            foreach (Guid Id in SourceIds)
+            {
+                string Name = (Id == default(Guid)) ? "Playnite" : GameActivity.PluginDatabase.PlayniteApi.Database.Sources.Get(Id).Name;
+                Name = (Name == "PC (Windows)" || Name == "PC (Mac)" || Name == "PC (Linux)") ? "Playnite" : Name;
+
+                Fill = GetColor(Name);
+
+                Settings.StoreColors.Add(new StoreColor
+                {
+                    Name = Name,
+                    Fill = Fill
+                });
+            }
+
+            foreach (Platform platform in PlatformIds)
+            {
+                string Name = platform.Name;
+                Name = (Name == "PC (Windows)" || Name == "PC (Mac)" || Name == "PC (Linux)") ? "Playnite" : Name;
+
+                Fill = GetColor(Name);
+
+                Settings.StoreColors.Add(new StoreColor
+                {
+                    Name = Name,
+                    Fill = Fill
+                });
+            }
+
 
             Settings.StoreColors = Settings.StoreColors.Select(x => x).Distinct().OrderBy(x => x.Name).ToList();
         }
@@ -299,6 +341,7 @@ namespace GameActivity
                 StoreColors.Add(new StoreColor
                 {
                     Name = Name,
+                    Id = Id,
                     Fill = Fill
                 });
             }
@@ -313,6 +356,7 @@ namespace GameActivity
                 StoreColors.Add(new StoreColor
                 {
                     Name = Name,
+                    Id = platform.Id,
                     Fill = Fill
                 });
             }

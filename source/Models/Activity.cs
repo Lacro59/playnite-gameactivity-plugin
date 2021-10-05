@@ -24,50 +24,7 @@ namespace GameActivity.Models
         {
             get
             {
-                if (SourceID != Guid.Parse("00000000-0000-0000-0000-000000000000"))
-                {
-                    try
-                    {
-                        var Source = PluginDatabase.PlayniteApi.Database.Sources.Get(SourceID);
-
-                        if (Source == null)
-                        {
-                            logger.Warn($"SourceName not find for {SourceID.ToString()} && {PlatformID.ToString()}");
-                            return "Playnite";
-                        }
-
-                        return Source.Name;
-                    }
-                    catch (Exception ex)
-                    {
-                        Common.LogError(ex, true, $"SourceId: {SourceID.ToString()} && {PlatformID.ToString()}");
-                        return "Playnite";
-                    }
-                }
-
-                foreach (Guid PlatformID in PlatformIDs)
-                {
-                    if (PlatformID != Guid.Parse("00000000-0000-0000-0000-000000000000"))
-                    {
-                        var platform = PluginDatabase.PlayniteApi.Database.Platforms.Get(PlatformID);
-
-                        if (platform != null)
-                        {
-                            switch (platform.Name.ToLower())
-                            {
-                                case "pc":
-                                case "pc (windows)":
-                                case "pc (mac)":
-                                case "pc (linux)":
-                                    return "Playnite";
-                                default:
-                                    return platform.Name;
-                            }
-                        }
-                    }
-                }
-
-                return "Playnite";
+                return PlayniteTools.GetSourceBySourceIdOrPlatformId(PluginDatabase.PlayniteApi, SourceID, PlatformIDs);
             }
         }
 
