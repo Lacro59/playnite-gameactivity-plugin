@@ -74,7 +74,17 @@
 
                 <lvc:CartesianChart.AxisY>
                     <lvc:Axis Name="PART_ChartLogActivityLabelsY" ShowLabels="{Binding ChartLogOrdinates}" MinValue="0"
-                              FontSize="{DynamicResource FontSize}" FontFamily="{DynamicResource FontFamily}" />
+                              FontSize="{DynamicResource FontSize}" FontFamily="{DynamicResource FontFamily}">
+                        <lvc:Axis.Separator>
+                            <lvc:Separator></lvc:Separator>
+                        </lvc:Axis.Separator>
+                    </lvc:Axis>
+                    <lvc:Axis Name="PART_ChartLogActivityLabelsY_FPS" ShowLabels="{Binding ChartLogOrdinates}" MinValue="0"
+                              FontSize="{DynamicResource FontSize}" FontFamily="{DynamicResource FontFamily}" Position="RightTop">
+                        <lvc:Axis.Separator>
+                            <lvc:Separator IsEnabled="False"></lvc:Separator>
+                        </lvc:Axis.Separator>
+                    </lvc:Axis>
                 </lvc:CartesianChart.AxisY>
             </lvc:CartesianChart>
         </Grid>

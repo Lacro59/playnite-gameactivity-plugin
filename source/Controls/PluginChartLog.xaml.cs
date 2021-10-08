@@ -372,28 +372,32 @@ namespace GameActivity.Controls
                         {
                             Title = "cpu usage (%)",
                             Fill = new BrushConverter().ConvertFromString("#FF2195F2") as SolidColorBrush,
-                            Values = CPUseries
+                            Values = CPUseries,
+                            ScalesYAt = 0
                         };
                         //#FFF34336
                         GpuSeries = new ColumnSeries
                         {
                             Title = "gpu usage (%)",
                             Fill = new BrushConverter().ConvertFromString("#FFF34336") as SolidColorBrush,
-                            Values = GPUseries
+                            Values = GPUseries,
+                            ScalesYAt = 0
                         };
                         //#FFFEC007
                         RamSeries = new ColumnSeries
                         {
                             Title = "ram usage (%)",
                             Fill = new BrushConverter().ConvertFromString("#FFFEC007") as SolidColorBrush,
-                            Values = RAMseries
+                            Values = RAMseries,
+                            ScalesYAt = 0
                         };
                         //#FF607D8A
                         FpsSeries = new LineSeries
                         {
                             Title = "fps",
                             Stroke = new BrushConverter().ConvertFromString("#FF607D8A") as SolidColorBrush,
-                            Values = FPSseries
+                            Values = FPSseries,
+                            ScalesYAt = 1
                         };
 
                         SeriesCollection activityForGameLogSeries = new SeriesCollection
@@ -463,6 +467,7 @@ namespace GameActivity.Controls
             {
                 RamSeries.Visibility = (DisplayRam) ? Visibility.Visible : Visibility.Collapsed;
             }
+
             if (FpsSeries != null)
             {
                 FpsSeries.Visibility = (DisplayFps) ? Visibility.Visible : Visibility.Collapsed;
