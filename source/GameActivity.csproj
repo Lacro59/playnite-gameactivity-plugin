@@ -117,6 +117,7 @@
     </Compile>
     <Compile Include="GameActivity.cs" />
     <Compile Include="GameActivitySettings.cs" />
+    <Compile Include="Models\ExportedData.cs" />
     <Compile Include="Models\GameActivities.cs" />
     <Compile Include="Models\GameActivitiesCollection.cs" />
     <Compile Include="Models\ListActivities.cs" />
