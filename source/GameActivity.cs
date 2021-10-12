@@ -10,7 +10,6 @@ using System.Windows.Controls;
 using System.Timers;
 using System.Diagnostics;
 using MSIAfterburnerNET.HM.Interop;
-using System.Reflection;
 using CommonPluginsShared;
 using System.Windows;
 using Playnite.SDK.Events;

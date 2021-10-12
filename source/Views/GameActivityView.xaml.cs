@@ -863,9 +863,7 @@ namespace GameActivity.Views
 
                             TypeStoreIcon = ModeSimple,
                             SourceIcon = PlayniteTools.GetPlatformIcon(_PlayniteApi, sourceName),
-                            SourceIconText = TransformIcon.Get(sourceName),
-
-                            GoToGame = PluginDatabase.GoToGame
+                            SourceIconText = TransformIcon.Get(sourceName)
                         });
                     }
                     // Game is deleted

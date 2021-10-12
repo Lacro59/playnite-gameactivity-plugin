@@ -5,8 +5,6 @@ using Playnite.SDK;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameActivity.Models
 {
@@ -49,7 +47,14 @@ namespace GameActivity.Models
         public string SourceIcon { get; set; }
         public string SourceIconText { get; set; }
 
-        public RelayCommand<Guid> GoToGame { get; set; }
+        [DontSerialize]
+        public RelayCommand<Guid> GoToGame
+        {
+            get
+            {
+                return PluginDatabase.GoToGame;
+            }
+        }
 
         [DontSerialize]
         public bool GameExist

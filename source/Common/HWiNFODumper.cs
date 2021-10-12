@@ -1,14 +1,11 @@
-﻿//https://github.com/zipferot3000/HWiNFO-Shared-Memory-Dump
-//https://github.com/Antiserum420/HwInfoReader
-
-using Playnite.SDK.Data;
-using System;
+﻿using Playnite.SDK.Data;
 using System.Collections.Generic;
-using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Runtime.InteropServices;
 using System.Text;
 
+// https://github.com/zipferot3000/HWiNFO-Shared-Memory-Dump
+// https://github.com/Antiserum420/HwInfoReader
 namespace GameActivity
 {
     class HWiNFODumper
