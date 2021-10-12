@@ -267,7 +267,11 @@ namespace GameActivity
             Brush Fill = null;
             foreach (Guid Id in SourceIds)
             {
-                string Name = (Id == default(Guid)) ? "Playnite" : GameActivity.PluginDatabase.PlayniteApi.Database.Sources.Get(Id).Name;
+                string Name = (Id == default(Guid)) ? "Playnite" : GameActivity.PluginDatabase.PlayniteApi.Database.Sources.Get(Id)?.Name;
+                if (Name.IsNullOrEmpty())
+                {
+                    logger.Warn($"No name for SourceId {Id}");
+                }
                 Name = (Name == "PC (Windows)" || Name == "PC (Mac)" || Name == "PC (Linux)") ? "Playnite" : Name;
 
                 Fill = GetColor(Name);
