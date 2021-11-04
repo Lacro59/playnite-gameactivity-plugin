@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:GameActivity.Views"
              xmlns:controls="clr-namespace:GameActivity.Controls"
              xmlns:controlsShared="clr-namespace:CommonPluginsShared.Controls" 
-             xmlns:converters="clr-namespace:CommonPluginsPlaynite.Converters"
+             xmlns:converters="clr-namespace:CommonPlayniteShared.Converters"
              xmlns:commonpluginsshared="clr-namespace:CommonPluginsShared.Converters"
              xmlns:commonpluginscontrols="clr-namespace:CommonPluginsControls.Controls"
              mc:Ignorable="d" 

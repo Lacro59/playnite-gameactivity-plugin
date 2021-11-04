@@ -1,7 +1,7 @@
 ﻿using CommonPluginsControls.Controls;
 using CommonPluginsControls.LiveChartsCommon;
-using CommonPluginsPlaynite.Common;
-using CommonPluginsPlaynite.Converters;
+using CommonPlayniteShared.Common;
+using CommonPlayniteShared.Converters;
 using CommonPluginsShared;
 using CommonPluginsShared.Collections;
 using CommonPluginsShared.Controls;

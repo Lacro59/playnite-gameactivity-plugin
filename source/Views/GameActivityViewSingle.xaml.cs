@@ -1,5 +1,5 @@
 ﻿using CommonPluginsControls.Controls;
-using CommonPluginsPlaynite.Converters;
+using CommonPlayniteShared.Converters;
 using CommonPluginsShared;
 using CommonPluginsShared.Converters;
 using GameActivity.Controls;

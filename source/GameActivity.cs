@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 using CommonPluginsShared.PlayniteExtended;
 using System.Windows.Media;
 using CommonPluginsShared.Controls;
-using CommonPluginsPlaynite.Common;
+using CommonPlayniteShared.Common;
 using CommonPluginsShared.Extensions;
 
 namespace GameActivity
