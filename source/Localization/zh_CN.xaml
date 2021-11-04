@@ -19,7 +19,7 @@
 
     <sys:String x:Key="LOCGameActivityActiveLog">启用性能记录</sys:String>
     <sys:String x:Key="LOCGameActivityTimeInterval">Check time interval</sys:String>
-    <sys:String x:Key="LOCGameActivityTimeLabel">分</sys:String>
+    <sys:String x:Key="LOCGameActivityTimeLabel"></sys:String>
 
     <sys:String x:Key="LOCGameActivityUseMsiAfterburner">使用MSI Afterburner</sys:String>
     <sys:String x:Key="LOCGameActivityUseHWiNFO">使用HWiNFO</sys:String>
@@ -41,7 +41,7 @@
     <sys:String x:Key="LOCGameActivityMaxRamUsage">最大内存使</sys:String>
 
     <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">游戏时记录CPU、GPU、内存和帧数</sys:String>
-    <sys:String x:Key="LOCGameActivityEnableWarningToolTip">游戏结束后显示警告消</sys:String>
+    <sys:String x:Key="LOCGameActivityEnableWarningToolTip">游戏结束后显示警告</sys:String>
 
     <sys:String x:Key="LOCGameActivityIntegrationChartTime">Display the chart with game session times</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationChartLog">Display the chart with game session logs</sys:String>
