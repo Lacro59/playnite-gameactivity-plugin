@@ -15,7 +15,7 @@
     <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">Объединить игровые сессии на графике</sys:String>
     <sys:String x:Key="LOCGameActivityCumulPlaytimeStore">Унифицировать время различных библиотек</sys:String>
 
-    <sys:String x:Key="LOCGameActivityListGamesFields">Game fields to be displayed</sys:String>
+    <sys:String x:Key="LOCGameActivityListGamesFields">Поля для отображения</sys:String>
 
     <sys:String x:Key="LOCGameActivityActiveLog">Включить ведение журнала</sys:String>
     <sys:String x:Key="LOCGameActivityTimeInterval">Период проверки</sys:String>
@@ -43,32 +43,32 @@
     <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">Журнал производительности процессора, графического процессора, оперативной памяти и FPS во время игровой сессии.</sys:String>
     <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Отображает предупреждающее сообщение в конце сеанса игры в кратце.</sys:String>
 
-    <sys:String x:Key="LOCGameActivityIntegrationChartTime">Display the chart with game session times</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationChartLog">Display the chart with game session logs</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationChartTime">Отображение графика с временем игровых сессии</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationChartLog">Отображение графика с журналом игровох сессии</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">Прогресс на кнопке</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">Number of data in horizontal axis</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">Количество данных по горизонтальной оси</sys:String>
 
-    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabels">Show labels on horizontal axis</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">Show labels on vertical axis</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationGraphicLogOptions">Chart options</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabels">Показывать метки по горизонтальной оси</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">Показывать метки по вертикальной оси</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicLogOptions">Настройки диаграммы</sys:String>
 
-    <sys:String x:Key="LOCGameActivityUseControls">Use chart controls</sys:String>
-    <sys:String x:Key="LOCGameActivitySelectChartSeriesToDisplay">Select the series to display on the chart</sys:String>
+    <sys:String x:Key="LOCGameActivityUseControls">Использовать управление графиком</sys:String>
+    <sys:String x:Key="LOCGameActivitySelectChartSeriesToDisplay">Выбрать данные для отображения в графике</sys:String>
 
-    <sys:String x:Key="LOCGameActivityIconFrom">Select the icon origin</sys:String>
-    <sys:String x:Key="LOCGameActivityIconFromLibrary">Use the icon defined in the library</sys:String>
-    <sys:String x:Key="LOCGameActivityIconFromFont">Use the icon defined in the plugin's font</sys:String>
+    <sys:String x:Key="LOCGameActivityIconFrom">Выберите иконку Origin</sys:String>
+    <sys:String x:Key="LOCGameActivityIconFromLibrary">Использовать значок, определенный в библиотеке</sys:String>
+    <sys:String x:Key="LOCGameActivityIconFromFont">Использовать значок, указанный в шрифте плагина</sys:String>
 
     <!-- GameActivityViewSingle -->
 
-    <sys:String x:Key="LOCGameActivityAvgPerDay">Average time per day</sys:String>
-    <sys:String x:Key="LOCGameActivityFirstSession">First session</sys:String>
-    <sys:String x:Key="LOCGameActivityLastSession">Last session</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgPerDay">Среднее время в день</sys:String>
+    <sys:String x:Key="LOCGameActivityFirstSession">Первая сессия</sys:String>
+    <sys:String x:Key="LOCGameActivityLastSession">Последняя сессия</sys:String>
     
     <!-- GameActivityView -->
 
     <sys:String x:Key="LOCGameActivityTotalHours">Всего часов</sys:String>
-    <sys:String x:Key="LOCGameActivityTotalHoursByWeeks">Total hours by week</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByWeeks">Всего часов по неделям</sys:String>
 
     <sys:String x:Key="LOCGameActivityWeekLabel">Неделя</sys:String>
 
@@ -81,24 +81,24 @@
     <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Последняя сессия</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Проведённое время</sys:String>
     
-    <sys:String x:Key="LOCGameActivityAvgCpu">Avg CPU</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgGpu">Avg GPU</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgRam">Avg RAM</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgFps">Avg FPS</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgCpuT">Avg CPU T</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgGpuT">Avg GPU T</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgCpu">Среднее значение ЦП</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgGpu">Среднее значение ГП</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgRam">Среднее значение ОЗУ</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgFps">Средний ФПС</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgCpuT">Средний ЦП T</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgGpuT">Средний GPU T</sys:String>
 
-    <sys:String x:Key="LOCGameActivityPCName">PC name</sys:String>
+    <sys:String x:Key="LOCGameActivityPCName">Имя ПК</sys:String>
 
 
     <!-- GameActivity -->
 
-    <sys:String x:Key="LOCGameActivityWarningCaption">Warnings during game session</sys:String>
+    <sys:String x:Key="LOCGameActivityWarningCaption">Предупреждения во время игровой сессии</sys:String>
     <sys:String x:Key="LOCGameActivityWarningAt">На</sys:String>
     <sys:String x:Key="LOCGameActivityCpuUsage">Использ. CPU</sys:String>
     <sys:String x:Key="LOCGameActivityRamUsage">Использ. RAM</sys:String>
 
-    <sys:String x:Key="LOCGameActivityNotificationHWiNFO">HWiNFO logging is enabled but application is not running.</sys:String>
-    <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">MSI AfterBurner logging is enabled but application is not running.</sys:String>
+    <sys:String x:Key="LOCGameActivityNotificationHWiNFO">Журнал HWiNFO включён, но приложение не запущено.</sys:String>
+    <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">Логи MSI AfterBurner включены, но приложение не запущено.</sys:String>
 
 </ResourceDictionary>
