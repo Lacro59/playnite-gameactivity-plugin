@@ -16,21 +16,12 @@ using LiveCharts.Wpf;
 using Playnite.SDK.Models;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace GameActivity.Controls
@@ -53,7 +44,7 @@ namespace GameActivity.Controls
             }
         }
 
-        private PluginChartTimeDataContext ControlDataContext;
+        private PluginChartTimeDataContext ControlDataContext = new PluginChartTimeDataContext();
         internal override IDataContext _ControlDataContext
         {
             get
@@ -116,6 +107,7 @@ namespace GameActivity.Controls
             AlwaysShow = true;
 
             InitializeComponent();
+            this.DataContext = ControlDataContext;
 
             Task.Run(() =>
             {
@@ -156,25 +148,19 @@ namespace GameActivity.Controls
                 LabelsRotationValue = 160;
             }
 
-            ControlDataContext = new PluginChartTimeDataContext
-            {
-                IsActivated = IsActivated,
-                ChartTimeHeight = ChartTimeHeight,
-                ChartTimeAxis = ChartTimeAxis,
-                ChartTimeOrdinates = ChartTimeOrdinates,
-                ChartTimeVisibleEmpty = PluginDatabase.PluginSettings.Settings.ChartTimeVisibleEmpty,
+            ControlDataContext.IsActivated = IsActivated;
+            ControlDataContext.ChartTimeHeight = ChartTimeHeight;
+            ControlDataContext.ChartTimeAxis = ChartTimeAxis;
+            ControlDataContext.ChartTimeOrdinates = ChartTimeOrdinates;
+            ControlDataContext.ChartTimeVisibleEmpty = PluginDatabase.PluginSettings.Settings.ChartTimeVisibleEmpty;
 
-                DisableAnimations = DisableAnimations,
-                LabelsRotationValue = LabelsRotationValue
-            };
+            ControlDataContext.DisableAnimations = DisableAnimations;
+            ControlDataContext.LabelsRotationValue = LabelsRotationValue;
         }
 
 
-        public override Task<bool> SetData(Game newContext, PluginDataBaseGameBase PluginGameData)
+        public override void SetData(Game newContext, PluginDataBaseGameBase PluginGameData)
         {
-            bool IgnoreSettings = this.IgnoreSettings;
-            bool MustDisplay = this.MustDisplay;
-
             int Limit = PluginDatabase.PluginSettings.Settings.ChartTimeCountAbscissa;
             if (AxisLimit != 0)
             {
@@ -183,32 +169,21 @@ namespace GameActivity.Controls
 
             int AxisVariator = this.AxisVariator;
 
-            return Task.Run(() =>
+            GameActivities gameActivities = (GameActivities)PluginGameData;
+
+            if (!IgnoreSettings && !ControlDataContext.ChartTimeVisibleEmpty)
             {
-                GameActivities gameActivities = (GameActivities)PluginGameData;
+                MustDisplay = gameActivities.HasData;
+            }
+            else
+            {
+                MustDisplay = true;
+            }
 
-                if (!IgnoreSettings && !ControlDataContext.ChartTimeVisibleEmpty)
-                {
-                    MustDisplay = gameActivities.HasData;
-                }
-                else
-                {
-                    MustDisplay = true;
-                }
-
-                if (MustDisplay)
-                {
-                    GetActivityForGamesTimeGraphics(gameActivities, AxisVariator, Limit);
-                }
-
-                this.Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new ThreadStart(delegate
-                {
-                    this.MustDisplay = MustDisplay;
-                    this.DataContext = ControlDataContext;
-                }));
-
-                return true;
-            });
+            if (MustDisplay)
+            {
+                GetActivityForGamesTimeGraphics(gameActivities, AxisVariator, Limit);
+            }
         }
 
 
@@ -441,15 +416,27 @@ namespace GameActivity.Controls
     }
 
 
-    public class PluginChartTimeDataContext : IDataContext
+    public class PluginChartTimeDataContext : ObservableObject, IDataContext
     {
-        public bool IsActivated { get; set; }
-        public double ChartTimeHeight { get; set; }
-        public bool ChartTimeAxis { get; set; }
-        public bool ChartTimeOrdinates { get; set; }
-        public bool ChartTimeVisibleEmpty { get; set; }
+        private bool _IsActivated;
+        public bool IsActivated { get => _IsActivated; set => SetValue(ref _IsActivated, value); }
 
-        public bool DisableAnimations { get; set; }
-        public double LabelsRotationValue { get; set; }
+        public double _ChartTimeHeight;
+        public double ChartTimeHeight { get => _ChartTimeHeight; set => SetValue(ref _ChartTimeHeight, value); }
+
+        public bool _ChartTimeAxis;
+        public bool ChartTimeAxis { get => _ChartTimeAxis; set => SetValue(ref _ChartTimeAxis, value); }
+
+        public bool _ChartTimeOrdinates;
+        public bool ChartTimeOrdinates { get => _ChartTimeOrdinates; set => SetValue(ref _ChartTimeOrdinates, value); }
+
+        public bool _ChartTimeVisibleEmpty;
+        public bool ChartTimeVisibleEmpty { get => _ChartTimeVisibleEmpty; set => SetValue(ref _ChartTimeVisibleEmpty, value); }
+
+        public bool _DisableAnimations;
+        public bool DisableAnimations { get => _DisableAnimations; set => SetValue(ref _DisableAnimations, value); }
+
+        public double _LabelsRotationValue;
+        public double LabelsRotationValue { get => _LabelsRotationValue; set => SetValue(ref _LabelsRotationValue, value); }
     }
 }

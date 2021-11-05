@@ -10,21 +10,13 @@ using LiveCharts.Wpf;
 using Playnite.SDK.Models;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace GameActivity.Controls
@@ -47,7 +39,7 @@ namespace GameActivity.Controls
             }
         }
 
-        private PluginChartLogDataContext ControlDataContext;
+        private PluginChartLogDataContext ControlDataContext = new PluginChartLogDataContext();
         internal override IDataContext _ControlDataContext
         {
             get
@@ -164,6 +156,7 @@ namespace GameActivity.Controls
             AlwaysShow = true;
 
             InitializeComponent();
+            this.DataContext = ControlDataContext;
 
             Task.Run(() =>
             {
@@ -205,29 +198,23 @@ namespace GameActivity.Controls
                 UseControls = true;
             }
 
-            ControlDataContext = new PluginChartLogDataContext
-            {
-                IsActivated = IsActivated,
-                ChartLogHeight = ChartLogHeight,
-                ChartLogAxis = ChartLogAxis,
-                ChartLogOrdinates = ChartLogOrdinates,
-                ChartLogVisibleEmpty = PluginDatabase.PluginSettings.Settings.ChartLogVisibleEmpty,
-                UseControls = UseControls,
+            ControlDataContext.IsActivated = IsActivated;
+            ControlDataContext.ChartLogHeight = ChartLogHeight;
+            ControlDataContext.ChartLogAxis = ChartLogAxis;
+            ControlDataContext.ChartLogOrdinates = ChartLogOrdinates;
+            ControlDataContext.ChartLogVisibleEmpty = PluginDatabase.PluginSettings.Settings.ChartLogVisibleEmpty;
+            ControlDataContext.UseControls = UseControls;
 
-                DisableAnimations = DisableAnimations,
-                DisplayCpu = DisplayCpu,
-                DisplayGpu = DisplayGpu,
-                DisplayRam = DisplayRam,
-                DisplayFps = DisplayFps
-            };
+            ControlDataContext.DisableAnimations = DisableAnimations;
+            ControlDataContext.DisplayCpu = DisplayCpu;
+            ControlDataContext.DisplayGpu = DisplayGpu;
+            ControlDataContext.DisplayRam = DisplayRam;
+            ControlDataContext.DisplayFps = DisplayFps;
         }
 
 
-        public override Task<bool> SetData(Game newContext, PluginDataBaseGameBase PluginGameData)
+        public override void SetData(Game newContext, PluginDataBaseGameBase PluginGameData)
         {
-            bool IgnoreSettings = this.IgnoreSettings;
-            bool MustDisplay = this.MustDisplay;
-
             int Limit = PluginDatabase.PluginSettings.Settings.ChartLogCountAbscissa;
             if (AxisLimit != 0)
             {
@@ -238,32 +225,21 @@ namespace GameActivity.Controls
             DateTime? DateSelected = this.DateSelected;
             string TitleChart = this.TitleChart;
 
-            return Task.Run(() =>
+            GameActivities gameActivities = (GameActivities)PluginGameData;
+
+            if (!IgnoreSettings && !ControlDataContext.ChartLogVisibleEmpty)
             {
-                GameActivities gameActivities = (GameActivities)PluginGameData;
+                MustDisplay = gameActivities.HasDataDetails();
+            }
+            else
+            {
+                MustDisplay = true;
+            }
 
-                if (!IgnoreSettings && !ControlDataContext.ChartLogVisibleEmpty)
-                {
-                    MustDisplay = gameActivities.HasDataDetails();
-                }
-                else
-                {
-                    MustDisplay = true;
-                }
-
-                if (MustDisplay)
-                {
-                    GetActivityForGamesLogGraphics(gameActivities, AxisVariator, Limit, DateSelected, TitleChart);
-                }
-
-                this.Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new ThreadStart(delegate
-                {
-                    this.MustDisplay = MustDisplay;
-                    this.DataContext = ControlDataContext;
-                }));
-
-                return true;
-            });
+            if (MustDisplay)
+            {
+                GetActivityForGamesLogGraphics(gameActivities, AxisVariator, Limit, DateSelected, TitleChart);
+            }
         }
 
 
@@ -482,19 +458,39 @@ namespace GameActivity.Controls
     }
 
 
-    public class PluginChartLogDataContext : IDataContext
+    public class PluginChartLogDataContext : ObservableObject, IDataContext
     {
-        public bool IsActivated { get; set; }
-        public double ChartLogHeight { get; set; }
-        public bool ChartLogAxis { get; set; }
-        public bool ChartLogOrdinates { get; set; }
-        public bool ChartLogVisibleEmpty { get; set; }
-        public bool UseControls { get; set; }
+        private bool _IsActivated;
+        public bool IsActivated { get => _IsActivated; set => SetValue(ref _IsActivated, value); }
 
-        public bool DisableAnimations { get; set; }
-        public bool DisplayCpu { get; set; }
-        public bool DisplayGpu { get; set; }
-        public bool DisplayRam { get; set; }
-        public bool DisplayFps { get; set; }
+        public double _ChartLogHeight;
+        public double ChartLogHeight { get => _ChartLogHeight; set => SetValue(ref _ChartLogHeight, value); }
+
+        public bool _ChartLogAxis;
+        public bool ChartLogAxis { get => _ChartLogAxis; set => SetValue(ref _ChartLogAxis, value); }
+
+        public bool _ChartLogOrdinates;
+        public bool ChartLogOrdinates { get => _ChartLogOrdinates; set => SetValue(ref _ChartLogOrdinates, value); }
+
+        public bool _ChartLogVisibleEmpty;
+        public bool ChartLogVisibleEmpty { get => _ChartLogVisibleEmpty; set => SetValue(ref _ChartLogVisibleEmpty, value); }
+
+        public bool _UseControls;
+        public bool UseControls { get => _UseControls; set => SetValue(ref _UseControls, value); }
+
+        public bool _DisableAnimations;
+        public bool DisableAnimations { get => _DisableAnimations; set => SetValue(ref _DisableAnimations, value); }
+
+        public bool _DisplayCpu;
+        public bool DisplayCpu { get => _DisplayCpu; set => SetValue(ref _DisplayCpu, value); }
+
+        public bool _DisplayGpu;
+        public bool DisplayGpu { get => _DisplayGpu; set => SetValue(ref _DisplayGpu, value); }
+
+        public bool _DisplayRam;
+        public bool DisplayRam { get => _DisplayRam; set => SetValue(ref _DisplayRam, value); }
+
+        public bool _DisplayFps;
+        public bool DisplayFps { get => _DisplayFps; set => SetValue(ref _DisplayFps, value); }
     }
 }

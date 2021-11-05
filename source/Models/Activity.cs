@@ -24,7 +24,7 @@ namespace GameActivity.Models
         {
             get
             {
-                return PlayniteTools.GetSourceBySourceIdOrPlatformId(PluginDatabase.PlayniteApi, SourceID, PlatformIDs);
+                return PlayniteTools.GetSourceBySourceIdOrPlatformId(SourceID, PlatformIDs);
             }
         }
 

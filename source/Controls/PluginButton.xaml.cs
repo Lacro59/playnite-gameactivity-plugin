@@ -9,20 +9,11 @@ using GameActivity.Views;
 using Playnite.SDK.Models;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace GameActivity.Controls
@@ -45,7 +36,7 @@ namespace GameActivity.Controls
             }
         }
 
-        private PluginButtonDataContext ControlDataContext;
+        private PluginButtonDataContext ControlDataContext = new PluginButtonDataContext();
         internal override IDataContext _ControlDataContext
         {
             get
@@ -62,6 +53,7 @@ namespace GameActivity.Controls
         public PluginButton()
         {
             InitializeComponent();
+            this.DataContext = ControlDataContext;
 
             Task.Run(() =>
             {
@@ -84,41 +76,28 @@ namespace GameActivity.Controls
 
         public override void SetDefaultDataContext()
         {
-            ControlDataContext = new PluginButtonDataContext
-            {
-                IsActivated = PluginDatabase.PluginSettings.Settings.EnableIntegrationButton,
-                DisplayDetails = PluginDatabase.PluginSettings.Settings.EnableIntegrationButtonDetails,
+            ControlDataContext.IsActivated = PluginDatabase.PluginSettings.Settings.EnableIntegrationButton;
+            ControlDataContext.DisplayDetails = PluginDatabase.PluginSettings.Settings.EnableIntegrationButtonDetails;
 
-                Text = "\ue97f",
-                LastActivity = string.Empty,
-                LastPlaytime = 0
-            };
+            ControlDataContext.Text = "\ue97f";
+            ControlDataContext.LastActivity = string.Empty;
+            ControlDataContext.LastPlaytime = 0;
         }
 
 
-        public override Task<bool> SetData(Game newContext, PluginDataBaseGameBase PluginGameData)
+        public override void SetData(Game newContext, PluginDataBaseGameBase PluginGameData)
         {
-            return Task.Run(() =>
+            GameActivities gameActivities = (GameActivities)PluginGameData;
+
+            if (gameActivities.HasData)
             {
-                GameActivities gameActivities = (GameActivities)PluginGameData;
-
-                if (gameActivities.HasData)
-                {
-                    ControlDataContext.LastActivity = gameActivities.GetLastSession().ToLocalTime().ToString(Constants.DateUiFormat);
-                    ControlDataContext.LastPlaytime = gameActivities.GetLastSessionActivity().ElapsedSeconds;
-                }
-                else
-                {
-                    ControlDataContext.DisplayDetails = false;
-                }
-
-                this.Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new ThreadStart(delegate
-                {
-                    this.DataContext = ControlDataContext;
-                }));
-
-                return true;
-            });
+                ControlDataContext.LastActivity = gameActivities.GetLastSession().ToLocalTime().ToString(Constants.DateUiFormat);
+                ControlDataContext.LastPlaytime = gameActivities.GetLastSessionActivity().ElapsedSeconds;
+            }
+            else
+            {
+                ControlDataContext.DisplayDetails = false;
+            }
         }
 
 
@@ -133,13 +112,22 @@ namespace GameActivity.Controls
     }
 
 
-    public class PluginButtonDataContext : IDataContext
+    public class PluginButtonDataContext : ObservableObject, IDataContext
     {
-        public bool IsActivated { get; set; }
-        public bool DisplayDetails { get; set; }
+        private bool _IsActivated;
+        public bool IsActivated { get => _IsActivated; set => SetValue(ref _IsActivated, value); }
 
-        public string Text { get; set; }
-        public string LastActivity { get; set; }
-        public ulong LastPlaytime { get; set; }
+        public bool _DisplayDetails;
+        public bool DisplayDetails { get => _DisplayDetails; set => SetValue(ref _DisplayDetails, value); }
+
+        public string _Text;
+        public string Text { get => _Text; set => SetValue(ref _Text, value); }
+
+        public string _LastActivity;
+        public string LastActivity { get => _LastActivity; set => SetValue(ref _LastActivity, value); }
+
+        public ulong _LastPlaytime;
+        public ulong LastPlaytime { get => _LastPlaytime; set => SetValue(ref _LastPlaytime, value); }
+
     }
 }

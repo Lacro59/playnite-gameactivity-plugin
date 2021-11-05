@@ -214,7 +214,7 @@ namespace GameActivity.Views
 
                         GameSourceName = sourceName,
                         TypeStoreIcon = ModeSimple,
-                        SourceIcon = PlayniteTools.GetPlatformIcon(PluginDatabase.PlayniteApi, sourceName),
+                        SourceIcon = PlayniteTools.GetPlatformIcon(sourceName),
                         SourceIconText = TransformIcon.Get(sourceName),
 
                         EnableWarm = PluginDatabase.PluginSettings.Settings.EnableWarning,

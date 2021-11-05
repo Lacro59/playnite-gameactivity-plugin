@@ -253,7 +253,7 @@ namespace GameActivity.Views
 
             foreach (var sourcename in ListSourceName)
             {
-                string Icon = PlayniteTools.GetPlatformIcon(_PlayniteApi, sourcename);
+                string Icon = PlayniteTools.GetPlatformIcon(sourcename);
                 string IconText = TransformIcon.Get(sourcename);
 
                 FilterSourceItems.Add(new ListSource
@@ -396,7 +396,7 @@ namespace GameActivity.Views
             {
                 series.Add(new CustomerForTime
                 {
-                    Icon = PlayniteTools.GetPlatformIcon(_PlayniteApi, item.Key),
+                    Icon = PlayniteTools.GetPlatformIcon(item.Key),
                     IconText = TransformIcon.Get(item.Key),
 
                     Name = item.Key,
@@ -862,7 +862,7 @@ namespace GameActivity.Views
                             PCName = listGameActivities[iGame].GetLastSessionActivity().Configuration.Name,
 
                             TypeStoreIcon = ModeSimple,
-                            SourceIcon = PlayniteTools.GetPlatformIcon(_PlayniteApi, sourceName),
+                            SourceIcon = PlayniteTools.GetPlatformIcon(sourceName),
                             SourceIconText = TransformIcon.Get(sourceName)
                         });
                     }
