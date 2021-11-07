@@ -240,8 +240,10 @@
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" Tag="{Binding}">
-                                        <CheckBox Checked="ChkSource_Checked" Unchecked="ChkSource_Unchecked" Margin="10,0,0,0"
+                                        <CheckBox Name="PART_CbSource" Margin="10,0,0,0"
                                                   VerticalAlignment="Center"
+                                                  Checked="PART_CbSource_Checked"
+                                                  Unchecked="PART_CbSource_Unchecked"
                                                   IsChecked="{Binding isCheck, Mode=TwoWay}" FontFamily="{DynamicResource CommonFont}" />
                                         <commonpluginscontrols:TextBlockWithIcon Mode="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=Tag.TypeStoreIcon}" 
                                                                                  Icon="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=Tag.SourceIcon}"

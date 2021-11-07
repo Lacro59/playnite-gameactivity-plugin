@@ -1294,25 +1294,27 @@ namespace GameActivity.Views
             lvGames.Sorting();
         }
 
-        private void ChkSource_Checked(object sender, RoutedEventArgs e)
+
+        private void PART_CbSource_Checked(object sender, RoutedEventArgs e)
         {
             FilterCbSource((CheckBox)sender);
         }
-        private void ChkSource_Unchecked(object sender, RoutedEventArgs e)
+        private void PART_CbSource_Unchecked(object sender, RoutedEventArgs e)
         {
             FilterCbSource((CheckBox)sender);
         }
         private void FilterCbSource(CheckBox sender)
         {
             FilterSource.Text = string.Empty;
+            StackPanel parent = UI.FindParent<StackPanel>(sender);
 
             if ((bool)sender.IsChecked)
             {
-                SearchSources.Add(((ListSource)sender.Tag).SourceNameShort);
+                SearchSources.Add(((ListSource)parent.Tag).SourceNameShort);
             }
             else
             {
-                SearchSources.Remove(((ListSource)sender.Tag).SourceNameShort);
+                SearchSources.Remove(((ListSource)parent.Tag).SourceNameShort);
             }
 
             if (SearchSources.Count != 0)
