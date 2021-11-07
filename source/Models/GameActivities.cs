@@ -385,6 +385,20 @@ namespace GameActivity.Models
 
             return Result;
         }
+
+
+        public void DeleteActivity(DateTime dateSelected)
+        {
+            var activity = Items.Where(x => x.DateSession == dateSelected.ToUniversalTime()).FirstOrDefault();
+            if (activity != null)
+            {
+                Items.Remove(activity);
+            }
+            else
+            {
+                logger.Warn($"No activity for {Name} with date {dateSelected.ToString("yyyy-MM-dd HH:mm:ss")}");
+            }
+        }
         #endregion
 
 

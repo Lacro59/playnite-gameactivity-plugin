@@ -14,6 +14,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Collections.ObjectModel;
 
 namespace GameActivity.Views
 {
@@ -28,6 +29,8 @@ namespace GameActivity.Views
 
         private PluginChartTime PART_ChartTime;
         private PluginChartLog PART_ChartLog;
+
+        private GameActivities gameActivities;
 
 
         public GameActivityViewSingle(Game game)
@@ -44,7 +47,7 @@ namespace GameActivity.Views
             }
 
             // Game sessions infos
-            GameActivities gameActivities = PluginDatabase.Get(game);
+            gameActivities = PluginDatabase.Get(game);
 
             PlayTimeToStringConverter longToTimePlayedConverter = new PlayTimeToStringConverter();
             PART_TimeAvg.Text = (string)longToTimePlayedConverter.Convert(gameActivities.avgPlayTime(), null, null, CultureInfo.CurrentCulture);
@@ -123,9 +126,9 @@ namespace GameActivity.Views
             PART_ChartLog = (PluginChartLog)PART_ChartLogContener.Children[0];
             PART_ChartLog.GameContext = game;
 
-            if (((List<ListActivities>)lvSessions.ItemsSource).Count > 0)
+            if (((ObservableCollection<ListActivities>)lvSessions.ItemsSource).Count > 0)
             {
-                lvSessions.SelectedItem = ((List<ListActivities>)lvSessions.ItemsSource).OrderByDescending(x => x.DateActivity).LastOrDefault();
+                lvSessions.SelectedItem = ((ObservableCollection<ListActivities>)lvSessions.ItemsSource).OrderByDescending(x => x.DateActivity).LastOrDefault();
             }
 
             this.DataContext = new
@@ -148,6 +151,11 @@ namespace GameActivity.Views
 
         private void LvSessions_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (lvSessions.SelectedItem == null)
+            {
+                return;
+            }
+
             string titleChart = "1";
             DateTime dateSelected = ((ListActivities)lvSessions.SelectedItem).GameLastActivity;
             
@@ -190,7 +198,7 @@ namespace GameActivity.Views
 
         public void getActivityByListGame(GameActivities gameActivities)
         {
-            List<ListActivities> activityListByGame = new List<ListActivities>();
+            ObservableCollection<ListActivities> activityListByGame = new ObservableCollection<ListActivities>();
 
             for (int iItem = 0; iItem < gameActivities.FilterItems.Count; iItem++)
             {
@@ -238,6 +246,19 @@ namespace GameActivity.Views
 
             lvSessions.ItemsSource = activityListByGame;
             lvSessions.Sorting();
+        }
+
+
+        private void PART_Delete_Click(object sender, RoutedEventArgs e)
+        {
+            var GameLastActivity = ((FrameworkElement)sender).Tag;
+            var activity = ((ObservableCollection<ListActivities>)lvSessions.ItemsSource).Where(x => x.GameLastActivity == (DateTime)GameLastActivity).FirstOrDefault();
+
+            gameActivities.DeleteActivity(activity.GameLastActivity);
+            PluginDatabase.Update(gameActivities);
+
+            lvSessions.SelectedIndex = -1;
+            ((ObservableCollection<ListActivities>)lvSessions.ItemsSource).Remove(activity);
         }
     }
 }

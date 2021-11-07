@@ -17,6 +17,7 @@
         <commonpluginsshared:LocalDateTimeConverter x:Key="LocalDateTimeConverter" />
         <converters:PlayTimeToStringConverter x:Key="PlayTimeToStringConverter" />
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <commonpluginsshared:IndexConverter x:Key="IndexConverter" />
     </UserControl.Resources>
 
     <Grid Margin="10">
@@ -372,6 +373,15 @@
                                                 </Style>
                                             </Label.Style>
                                         </Label>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            
+                            <GridViewColumn Width="50">
+                                <GridViewColumnHeader />
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Click="PART_Delete_Click" Content="&#x1f5d9;" Tag="{Binding GameLastActivity}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
