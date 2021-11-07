@@ -218,7 +218,7 @@ namespace GameActivity.Controls
                     bool HasData4 = false;
                     bool HasData5 = false;
 
-                    List<Activity> Activities = gameActivities.Items;
+                    List<Activity> Activities = gameActivities.FilterItems;
 
                     // Find last activity date
                     DateTime dateStart = new DateTime(1982, 12, 15, 0, 0, 0);

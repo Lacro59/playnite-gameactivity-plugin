@@ -3,12 +3,16 @@ using CommonPluginsShared.Collections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Collections.ObjectModel;
+using GameActivity.Services;
 
 namespace GameActivity.Models
 {
     public class GameActivities : PluginDataBaseGameDetails<Activity, ActivityDetails>
     {
         private static readonly ILogger logger = LogManager.GetLogger();
+        private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
+
 
         private List<Activity> _Items = new List<Activity>();
         public override List<Activity> Items
@@ -37,6 +41,20 @@ namespace GameActivity.Models
             {
                 _ItemsDetails = value;
                 OnPropertyChanged();
+            }
+        }
+
+
+        public List<Activity> FilterItems
+        {
+            get
+            {
+                if (PluginDatabase.PluginSettings.Settings.IgnoreSession)
+                {
+                    return Items.Where(x => (int)x.ElapsedSeconds > PluginDatabase.PluginSettings.Settings.IgnoreSessionTime).ToList();
+                }
+
+                return Items;
             }
         }
 
@@ -162,16 +180,24 @@ namespace GameActivity.Models
         #region Activities
         public DateTime GetFirstSession()
         {
-            // Easter eggs :)
+            int TimeIgnore = -1;
+            if (PluginDatabase.PluginSettings.Settings.IgnoreSession)
+            {
+                TimeIgnore = PluginDatabase.PluginSettings.Settings.IgnoreSessionTime;
+            }
+
             DateTime datePrev = new DateTime(2050, 12, 15, 00, 15, 23);
             DateTime dateFirstSession = DateTime.Now;
             for (int iActivity = 0; iActivity < Items.Count; iActivity++)
             {
-                DateTime dateTemp = Convert.ToDateTime(Items[iActivity].DateSession).ToLocalTime();
-                if (datePrev > dateTemp)
+                if ((int)Items[iActivity].ElapsedSeconds > TimeIgnore)
                 {
-                    dateFirstSession = Convert.ToDateTime(Items[iActivity].DateSession).ToLocalTime();
-                    datePrev = dateFirstSession;
+                    DateTime dateTemp = Convert.ToDateTime(Items[iActivity].DateSession).ToLocalTime();
+                    if (datePrev > dateTemp)
+                    {
+                        dateFirstSession = Convert.ToDateTime(Items[iActivity].DateSession).ToLocalTime();
+                        datePrev = dateFirstSession;
+                    }
                 }
             }
 
@@ -184,16 +210,24 @@ namespace GameActivity.Models
         /// <returns></returns>
         public DateTime GetLastSession()
         {
-            // Easter eggs :)
+            int TimeIgnore = -1;
+            if (PluginDatabase.PluginSettings.Settings.IgnoreSession)
+            {
+                TimeIgnore = PluginDatabase.PluginSettings.Settings.IgnoreSessionTime;
+            }
+
             DateTime datePrev = new DateTime(1982, 12, 15, 00, 15, 23);
             DateTime dateLastSession = DateTime.Now;
             for (int iActivity = 0; iActivity < Items.Count; iActivity++)
             {
-                DateTime dateTemp = Convert.ToDateTime(Items[iActivity].DateSession).ToLocalTime();
-                if (datePrev < dateTemp)
+                if ((int)Items[iActivity].ElapsedSeconds > TimeIgnore)
                 {
-                    dateLastSession = Convert.ToDateTime(Items[iActivity].DateSession).ToLocalTime();
-                    datePrev = dateLastSession;
+                    DateTime dateTemp = Convert.ToDateTime(Items[iActivity].DateSession).ToLocalTime();
+                    if (datePrev < dateTemp)
+                    {
+                        dateLastSession = Convert.ToDateTime(Items[iActivity].DateSession).ToLocalTime();
+                        datePrev = dateLastSession;
+                    }
                 }
             }
 
@@ -207,21 +241,30 @@ namespace GameActivity.Models
                 return GetLastSession();
             }
 
+            int TimeIgnore = -1;
+            if (PluginDatabase.PluginSettings.Settings.IgnoreSession)
+            {
+                TimeIgnore = PluginDatabase.PluginSettings.Settings.IgnoreSessionTime;
+            }
+
             int indicator = 1;
             for (int iActivity = 0; iActivity < Items.Count; iActivity++)
             {
-                DateTime dateTemp = Convert.ToDateTime(Items[iActivity].DateSession).ToLocalTime();
-                if (((DateTime)dateSelected).ToString("yyyy-MM-dd HH:mm:ss") == dateTemp.ToString("yyyy-MM-dd HH:mm:ss"))
+                if ((int)Items[iActivity].ElapsedSeconds > TimeIgnore)
                 {
-                    int titleValue = 0;
-                    int.TryParse(title, out titleValue);
-                    if (indicator == titleValue)
+                    DateTime dateTemp = Convert.ToDateTime(Items[iActivity].DateSession).ToLocalTime();
+                    if (((DateTime)dateSelected).ToString("yyyy-MM-dd HH:mm:ss") == dateTemp.ToString("yyyy-MM-dd HH:mm:ss"))
                     {
-                        return dateTemp.ToUniversalTime();
-                    }
-                    else
-                    {
-                        indicator += 1;
+                        int titleValue = 0;
+                        int.TryParse(title, out titleValue);
+                        if (indicator == titleValue)
+                        {
+                            return dateTemp.ToUniversalTime();
+                        }
+                        else
+                        {
+                            indicator += 1;
+                        }
                     }
                 }
             }
@@ -236,18 +279,26 @@ namespace GameActivity.Models
         /// <returns></returns>
         public Activity GetLastSessionActivity()
         {
-            // Easter eggs :)
+            int TimeIgnore = -1;
+            if (PluginDatabase.PluginSettings.Settings.IgnoreSession)
+            {
+                TimeIgnore = PluginDatabase.PluginSettings.Settings.IgnoreSessionTime;
+            }
+
             DateTime datePrev = new DateTime(1982, 12, 15, 00, 15, 23);
             DateTime dateLastSession = DateTime.Now;
             Activity lastActivity = new Activity();
             for (int iActivity = 0; iActivity < Items.Count; iActivity++)
             {
-                DateTime dateTemp = Convert.ToDateTime(Items[iActivity].DateSession).ToLocalTime();
-                if (datePrev < dateTemp)
+                if ((int)Items[iActivity].ElapsedSeconds > TimeIgnore)
                 {
-                    lastActivity = Items[iActivity];
-                    dateLastSession = Convert.ToDateTime(Items[iActivity].DateSession).ToLocalTime();
-                    datePrev = dateLastSession;
+                    DateTime dateTemp = Convert.ToDateTime(Items[iActivity].DateSession).ToLocalTime();
+                    if (datePrev < dateTemp)
+                    {
+                        lastActivity = Items[iActivity];
+                        dateLastSession = Convert.ToDateTime(Items[iActivity].DateSession).ToLocalTime();
+                        datePrev = dateLastSession;
+                    }
                 }
             }
 
@@ -256,18 +307,26 @@ namespace GameActivity.Models
 
         public Activity GetFirstSessionactivity()
         {
-            // Easter eggs :)
+            int TimeIgnore = -1;
+            if (PluginDatabase.PluginSettings.Settings.IgnoreSession)
+            {
+                TimeIgnore = PluginDatabase.PluginSettings.Settings.IgnoreSessionTime;
+            }
+
             DateTime datePrev = new DateTime(2050, 12, 15, 00, 15, 23);
             DateTime dateLastSession = DateTime.Now;
             Activity lastActivity = new Activity();
             for (int iActivity = 0; iActivity < Items.Count; iActivity++)
             {
-                DateTime dateTemp = Convert.ToDateTime(Items[iActivity].DateSession).ToLocalTime();
-                if (datePrev > dateTemp)
+                if ((int)Items[iActivity].ElapsedSeconds > TimeIgnore)
                 {
-                    lastActivity = Items[iActivity];
-                    dateLastSession = Convert.ToDateTime(Items[iActivity].DateSession).ToLocalTime();
-                    datePrev = dateLastSession;
+                    DateTime dateTemp = Convert.ToDateTime(Items[iActivity].DateSession).ToLocalTime();
+                    if (datePrev > dateTemp)
+                    {
+                        lastActivity = Items[iActivity];
+                        dateLastSession = Convert.ToDateTime(Items[iActivity].DateSession).ToLocalTime();
+                        datePrev = dateLastSession;
+                    }
                 }
             }
 
@@ -303,15 +362,24 @@ namespace GameActivity.Models
 
         public List<string> GetListDateActivity()
         {
+            int TimeIgnore = -1;
+            if (PluginDatabase.PluginSettings.Settings.IgnoreSession)
+            {
+                TimeIgnore = PluginDatabase.PluginSettings.Settings.IgnoreSessionTime;
+            }
+
             List<string> Result = new List<string>();
 
             foreach(Activity el in Items)
             {
-                string DateString = ((DateTime)el.DateSession).ToString("yyyy-MM");
-
-                if (!Result.Contains(DateString))
+                if ((int)el.ElapsedSeconds > TimeIgnore)
                 {
-                    Result.Add(DateString);
+                    string DateString = ((DateTime)el.DateSession).ToString("yyyy-MM");
+
+                    if (!Result.Contains(DateString))
+                    {
+                        Result.Add(DateString);
+                    }
                 }
             }            
 

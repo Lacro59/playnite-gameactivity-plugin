@@ -192,13 +192,13 @@ namespace GameActivity.Views
         {
             List<ListActivities> activityListByGame = new List<ListActivities>();
 
-            for (int iItem = 0; iItem < gameActivities.Items.Count; iItem++)
+            for (int iItem = 0; iItem < gameActivities.FilterItems.Count; iItem++)
             {
                 try
                 {
-                    ulong elapsedSeconds = gameActivities.Items[iItem].ElapsedSeconds;
-                    DateTime dateSession = Convert.ToDateTime(gameActivities.Items[iItem].DateSession).ToLocalTime();
-                    string sourceName = gameActivities.Items[iItem].SourceName;
+                    ulong elapsedSeconds = gameActivities.FilterItems[iItem].ElapsedSeconds;
+                    DateTime dateSession = Convert.ToDateTime(gameActivities.FilterItems[iItem].DateSession).ToLocalTime();
+                    string sourceName = gameActivities.FilterItems[iItem].SourceName;
                     var ModeSimple = (PluginDatabase.PluginSettings.Settings.ModeStoreIcon == 1) ? TextBlockWithIconMode.IconTextFirstOnly : TextBlockWithIconMode.IconFirstOnly;
 
                     activityListByGame.Add(new ListActivities()
@@ -225,8 +225,8 @@ namespace GameActivity.Views
                         MaxGPU = PluginDatabase.PluginSettings.Settings.MaxGpuUsage.ToString(),
                         MaxRAM = PluginDatabase.PluginSettings.Settings.MaxRamUsage.ToString(),
 
-                        PCConfigurationId = gameActivities.Items[iItem].IdConfiguration,
-                        PCName = gameActivities.Items[iItem].Configuration.Name,
+                        PCConfigurationId = gameActivities.FilterItems[iItem].IdConfiguration,
+                        PCName = gameActivities.FilterItems[iItem].Configuration.Name,
                     });
                 }
                 catch (Exception ex)

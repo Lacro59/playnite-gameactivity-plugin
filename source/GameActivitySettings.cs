@@ -123,6 +123,10 @@ namespace GameActivity
         public int MaxCpuUsage { get; set; } = 0;
         public int MaxGpuUsage { get; set; } = 0;
         public int MaxRamUsage { get; set; } = 0;
+
+
+        public bool IgnoreSession { get; set; } = false;
+        public int IgnoreSessionTime { get; set; } = 120;
         #endregion
 
         // Playnite serializes settings object to a JSON object and saves it as text file.

@@ -308,7 +308,7 @@ namespace GameActivity.Views
                 {
                     try
                     {
-                        List<Activity> Activities = listGameActivities[iGame].Items;
+                        List<Activity> Activities = listGameActivities[iGame].FilterItems;
                         for (int iActivity = 0; iActivity < Activities.Count; iActivity++)
                         {
                             ulong elapsedSeconds = Activities[iActivity].ElapsedSeconds;
@@ -352,7 +352,7 @@ namespace GameActivity.Views
                     try
                     {
                         List<Genre> listGameListGenres = listGameActivities[iGame].Genres;
-                        List<Activity> Activities = listGameActivities[iGame].Items;
+                        List<Activity> Activities = listGameActivities[iGame].FilterItems;
                         for (int iActivity = 0; iActivity < Activities.Count; iActivity++)
                         {
                             ulong elapsedSeconds = Activities[iActivity].ElapsedSeconds;
@@ -492,7 +492,7 @@ namespace GameActivity.Views
                 List<GameActivities> listGameActivities = GameActivity.PluginDatabase.GetListGameActivity();
                 for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
                 {
-                    List<Activity> Activities = listGameActivities[iGame].Items;
+                    List<Activity> Activities = listGameActivities[iGame].FilterItems;
                     for (int iActivity = 0; iActivity < Activities.Count; iActivity++)
                     {
                         ulong elapsedSeconds = Activities[iActivity].ElapsedSeconds;
@@ -609,7 +609,7 @@ namespace GameActivity.Views
                 List<GameActivities> listGameActivities = GameActivity.PluginDatabase.GetListGameActivity();
                 for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
                 {
-                    List<Activity> Activities = listGameActivities[iGame].Items;
+                    List<Activity> Activities = listGameActivities[iGame].FilterItems;
                     for (int iActivity = 0; iActivity < Activities.Count; iActivity++)
                     {
                         ulong elapsedSeconds = Activities[iActivity].ElapsedSeconds;
@@ -800,7 +800,7 @@ namespace GameActivity.Views
             activityListByGame = new List<ListActivities>();
 
             List<GameActivities> listGameActivities = GameActivity.PluginDatabase.GetListGameActivity();
-            listGameActivities = listGameActivities.Where(x => x.Items.Count > 0 && !x.IsDeleted).ToList();
+            listGameActivities = listGameActivities.Where(x => x.FilterItems.Count > 0 && !x.IsDeleted).ToList();
 
             string gameID = string.Empty;
             for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
