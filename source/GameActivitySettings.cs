@@ -8,6 +8,7 @@ using GameActivity.Models;
 using System;
 using Playnite.SDK.Models;
 using System.Windows.Media;
+using MoreLinq;
 
 namespace GameActivity
 {
@@ -278,13 +279,15 @@ namespace GameActivity
                 }
                 Name = (Name == "PC (Windows)" || Name == "PC (Mac)" || Name == "PC (Linux)") ? "Playnite" : Name;
 
-                Fill = GetColor(Name);
-
-                Settings.StoreColors.Add(new StoreColor
+                if (Settings.StoreColors.FindAll(x => x.Name.Equals(Name)) == null)
                 {
-                    Name = Name,
-                    Fill = Fill
-                });
+                    Fill = GetColor(Name);
+                    Settings.StoreColors.Add(new StoreColor
+                    {
+                        Name = Name,
+                        Fill = Fill
+                    });
+                }
             }
 
             foreach (Platform platform in PlatformIds)
@@ -292,17 +295,18 @@ namespace GameActivity
                 string Name = platform.Name;
                 Name = (Name == "PC (Windows)" || Name == "PC (Mac)" || Name == "PC (Linux)") ? "Playnite" : Name;
 
-                Fill = GetColor(Name);
-
-                Settings.StoreColors.Add(new StoreColor
+                if (Settings.StoreColors.FindAll(x => x.Name.Equals(Name)) == null)
                 {
-                    Name = Name,
-                    Fill = Fill
-                });
+                    Fill = GetColor(Name);
+                    Settings.StoreColors.Add(new StoreColor
+                    {
+                        Name = Name,
+                        Fill = Fill
+                    });
+                }
             }
 
-
-            Settings.StoreColors = Settings.StoreColors.Select(x => x).Distinct().OrderBy(x => x.Name).ToList();
+            Settings.StoreColors = Settings.StoreColors.Select(x => x).DistinctBy(x => x.Name).OrderBy(x => x.Name).ToList();
         }
 
         // Code executed when user decides to cancel any changes made since BeginEdit was called.
@@ -350,14 +354,16 @@ namespace GameActivity
                 }
                 Name = (Name == "PC (Windows)" || Name == "PC (Mac)" || Name == "PC (Linux)") ? "Playnite" : Name;
 
-                Fill = GetColor(Name);
-
-                StoreColors.Add(new StoreColor
+                if (StoreColors.FindAll(x => x.Name.Equals(Name)) == null)
                 {
-                    Name = Name,
-                    Id = Id,
-                    Fill = Fill
-                });
+                    Fill = GetColor(Name);
+                    StoreColors.Add(new StoreColor
+                    {
+                        Name = Name,
+                        Id = Id,
+                        Fill = Fill
+                    });
+                }
             }
 
             foreach (Platform platform in PlatformIds)
@@ -365,14 +371,16 @@ namespace GameActivity
                 string Name = platform.Name;
                 Name = (Name == "PC (Windows)" || Name == "PC (Mac)" || Name == "PC (Linux)") ? "Playnite" : Name;
 
-                Fill = GetColor(Name);
-
-                StoreColors.Add(new StoreColor
+                if (StoreColors.FindAll(x => x.Name.Equals(Name)) == null)
                 {
-                    Name = Name,
-                    Id = platform.Id,
-                    Fill = Fill
-                });
+                    Fill = GetColor(Name);
+                    StoreColors.Add(new StoreColor
+                    {
+                        Name = Name,
+                        Id = platform.Id,
+                        Fill = Fill
+                    });
+                }
             }
 
             return StoreColors;
