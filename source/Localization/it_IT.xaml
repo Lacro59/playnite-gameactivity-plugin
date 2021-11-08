@@ -59,6 +59,8 @@
     <sys:String x:Key="LOCGameActivityIconFromLibrary">Use l'icona definita nella libreria</sys:String>
     <sys:String x:Key="LOCGameActivityIconFromFont">Usa l'icona definita nel font del plugin</sys:String>
 
+    <sys:String x:Key="LOCGameActivityIgnoreSession">Ignora sessioni di riproduzione brevi</sys:String>
+
     <!-- GameActivityViewSingle -->
 
     <sys:String x:Key="LOCGameActivityAvgPerDay">Tempo medio al giorno</sys:String>
