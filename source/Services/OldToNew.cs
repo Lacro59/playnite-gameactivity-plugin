@@ -99,7 +99,7 @@ namespace GameActivity.Services
                 }
                 catch (Exception ex)
                 {
-                    Common.LogError(ex, false, $"Failed to load item from {objectFile} or {objectFileDetails}");
+                    Common.LogError(ex, false, $"Failed to load item from {objectFile} or {objectFileDetails}", true, "GameActivity");
                 }
             });
 
@@ -172,7 +172,7 @@ namespace GameActivity.Services
                     }
                     catch (Exception ex)
                     {
-                        Common.LogError(ex, false, $"Failed to load ConvertDB from {item.Key} - {item.Value.GameName}");
+                        Common.LogError(ex, false, $"Failed to load ConvertDB from {item.Key} - {item.Value.GameName}", true, "GameActivity");
                     }
                 }
 

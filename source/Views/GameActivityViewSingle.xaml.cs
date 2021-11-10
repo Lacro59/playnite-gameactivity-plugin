@@ -239,8 +239,7 @@ namespace GameActivity.Views
                 }
                 catch (Exception ex)
                 {
-                    Common.LogError(ex, false, $"Failed to load GameActivities for {gameActivities.Name}");
-                    PluginDatabase.PlayniteApi.Dialogs.ShowErrorMessage(ex.Message, $"GameActivity error on {gameActivities.Name}");
+                    Common.LogError(ex, false, $"Failed to load GameActivities for {gameActivities.Name}", true, "GameActivity");
                 }
             }
 

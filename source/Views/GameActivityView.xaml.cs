@@ -334,7 +334,7 @@ namespace GameActivity.Views
                     }
                     catch (Exception ex)
                     {
-                        Common.LogError(ex, false, $"Error in getActivityByMonth({year}, {month}) with {listGameActivities[iGame].Name}");
+                        Common.LogError(ex, false, $"Error in getActivityByMonth({year}, {month}) with {listGameActivities[iGame].Name}", true, "GameActivity");
                     }
                 }
 
@@ -382,7 +382,7 @@ namespace GameActivity.Views
                     }
                     catch (Exception ex)
                     {
-                        Common.LogError(ex, false, $"Error in getActivityByMonth({year}, {month}) with {listGameActivities[iGame].Name}");
+                        Common.LogError(ex, false, $"Error in getActivityByMonth({year}, {month}) with {listGameActivities[iGame].Name}", true, "GameActivity");
                     }
                 }
             }
@@ -819,7 +819,7 @@ namespace GameActivity.Views
                         }
                         catch (Exception ex)
                         {
-                            Common.LogError(ex, false, "Error to get SourceName");
+                            Common.LogError(ex, false, "Error to get SourceName", true, "GameActivity");
                         }
 
                         Activity lastSessionActivity = listGameActivities[iGame].GetLastSessionActivity();
@@ -874,8 +874,7 @@ namespace GameActivity.Views
                 }
                 catch (Exception ex)
                 {
-                    Common.LogError(ex, false, $"Failed to load GameActivities from {gameID}");
-                    _PlayniteApi.Dialogs.ShowErrorMessage(ex.Message, $"GameActivity error on {gameID}");
+                    Common.LogError(ex, false, $"Failed to load GameActivities from {gameID}", true, "GameActivity");
                 }
             }
 

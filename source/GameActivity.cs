@@ -90,7 +90,7 @@ namespace GameActivity
             }
             catch (Exception ex)
             {
-                Common.LogError(ex, false);
+                Common.LogError(ex, false, true, "GameActivity");
             }
         }
 
@@ -218,7 +218,7 @@ namespace GameActivity
                 }
                 catch (Exception ex)
                 {
-                    Common.LogError(ex, false, $"Error on show WarningsMessage");
+                    Common.LogError(ex, false, $"Error on show WarningsMessage", true, "GameActivity");
                 }
             }
 
@@ -820,7 +820,7 @@ namespace GameActivity
             }
             catch (Exception ex)
             {
-                Common.LogError(ex, false);
+                Common.LogError(ex, false, true, "GameActivity");
             }
         }
 
