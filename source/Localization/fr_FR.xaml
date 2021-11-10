@@ -59,7 +59,7 @@
     <sys:String x:Key="LOCGameActivityIconFromLibrary">Utiliser l'icône définie par la bibliothèque</sys:String>
     <sys:String x:Key="LOCGameActivityIconFromFont">Utiliser l'icône définie par la police d'écriture du plugin</sys:String>
 
-    <sys:String x:Key="LOCGameActivityIgnoreSession">Ignore short play sessions</sys:String>
+    <sys:String x:Key="LOCGameActivityIgnoreSession">Ignorer les sessions de jeu courtes</sys:String>
 
     <!-- GameActivityViewSingle -->
 
