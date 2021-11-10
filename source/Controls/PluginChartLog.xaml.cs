@@ -244,14 +244,14 @@ namespace GameActivity.Controls
 
 
         #region Public methods
-        public void Next()
+        public void Next(int value = 1)
         {
-            AxisVariator += 1;
+            AxisVariator += value;
         }
 
-        public void Prev()
+        public void Prev(int value = 1)
         {
-            AxisVariator -= 1;
+            AxisVariator -= value;
         }
         #endregion
 

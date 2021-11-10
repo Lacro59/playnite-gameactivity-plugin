@@ -1198,8 +1198,6 @@ namespace GameActivity.Views
             }
             else
             {
-                //variateurLog = variateurLog - 1;
-                //getActivityForGamesLogGraphics(gameIDCurrent, LabelDataSelected, titleChart, true);
                 PART_GameActivityChartLog.DisableAnimations = true;
                 PART_GameActivityChartLog.DateSelected = LabelDataSelected;
                 PART_GameActivityChartLog.TitleChart = titleChart;
@@ -1216,12 +1214,42 @@ namespace GameActivity.Views
             }
             else
             {
-                //variateurLog = variateurLog + 1;
-                //getActivityForGamesLogGraphics(gameIDCurrent, LabelDataSelected, titleChart, true);
                 PART_GameActivityChartLog.DisableAnimations = true;
                 PART_GameActivityChartLog.DateSelected = LabelDataSelected;
                 PART_GameActivityChartLog.TitleChart = titleChart;
                 PART_GameActivityChartLog.Next();
+            }
+        }
+
+        private void Button_Click_prevGamePlus(object sender, RoutedEventArgs e)
+        {
+            if (isGameTime)
+            {
+                PART_GameActivityChartTime.DisableAnimations = true;
+                PART_GameActivityChartTime.Prev(PluginDatabase.PluginSettings.Settings.VariatorTime);
+            }
+            else
+            {
+                PART_GameActivityChartLog.DisableAnimations = true;
+                PART_GameActivityChartLog.DateSelected = LabelDataSelected;
+                PART_GameActivityChartLog.TitleChart = titleChart;
+                PART_GameActivityChartLog.Prev(PluginDatabase.PluginSettings.Settings.VariatorLog);
+            }
+        }
+
+        private void Button_Click_nextGamePlus(object sender, RoutedEventArgs e)
+        {
+            if (isGameTime)
+            {
+                PART_GameActivityChartTime.DisableAnimations = true;
+                PART_GameActivityChartTime.Next(PluginDatabase.PluginSettings.Settings.VariatorTime);
+            }
+            else
+            {
+                PART_GameActivityChartLog.DisableAnimations = true;
+                PART_GameActivityChartLog.DateSelected = LabelDataSelected;
+                PART_GameActivityChartLog.TitleChart = titleChart;
+                PART_GameActivityChartLog.Next(PluginDatabase.PluginSettings.Settings.VariatorLog);
             }
         }
         #endregion

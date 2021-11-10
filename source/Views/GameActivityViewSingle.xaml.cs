@@ -148,6 +148,16 @@ namespace GameActivity.Views
             PART_ChartTime.Next();
         }
 
+        private void Bt_PrevTimePlus(object sender, RoutedEventArgs e)
+        {
+            PART_ChartTime.Prev(PluginDatabase.PluginSettings.Settings.VariatorTime);
+        }
+
+        private void Bt_NextTimePlus(object sender, RoutedEventArgs e)
+        {
+            PART_ChartTime.Next(PluginDatabase.PluginSettings.Settings.VariatorTime);
+        }
+
 
         private void LvSessions_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -193,6 +203,16 @@ namespace GameActivity.Views
         private void Bt_NextLog(object sender, RoutedEventArgs e)
         {
             PART_ChartLog.Next();
+        }
+
+        private void Bt_PrevLogPlus(object sender, RoutedEventArgs e)
+        {
+            PART_ChartLog.Prev(PluginDatabase.PluginSettings.Settings.VariatorLog);
+        }
+
+        private void Bt_NextLogPlus(object sender, RoutedEventArgs e)
+        {
+            PART_ChartLog.Next(PluginDatabase.PluginSettings.Settings.VariatorLog);
         }
 
 

@@ -531,33 +531,43 @@
 
                 <Grid Grid.Row="0" VerticalAlignment="Center">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="70" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="10" />
                         <ColumnDefinition Width="70" />
                         <ColumnDefinition Width="70" />
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="45" />
-                        <ColumnDefinition Width="45" />
+                        <ColumnDefinition Width="auto" />
                     </Grid.ColumnDefinitions>
 
                     <ToggleButton Content="&#xef24;" FontFamily="{StaticResource FontIcoFont}" Name="ButtonShowConfig" 
                                   Height="33" FontSize="20"
                                   Grid.Column="0" IsChecked="True" HorizontalAlignment="Left" VerticalAlignment="Center" />
 
-                    <ToggleButton Grid.Column="1" x:Name="ToggleButtonTime" IsChecked="True" 
+                    <ToggleButton Grid.Column="2" x:Name="ToggleButtonTime" IsChecked="True" 
                                   Content="{DynamicResource LOCGameActivityTime}" Height="33" Width="65" 
                                   Click="ToggleButtonTime_Checked" />
 
-                    <Label Grid.Column="3" x:Name="gameLabel" Content="graphics title" HorizontalAlignment="Center" 
-                           VerticalAlignment="Top" Height="40" FontSize="20" FontWeight="Bold" />
-
-                    <ToggleButton Grid.Column="2" x:Name="ToggleButtonLog" IsChecked="False" 
+                    <ToggleButton Grid.Column="3" x:Name="ToggleButtonLog" IsChecked="False" 
                                   Content="{DynamicResource LOCGameActivityLog}" Height="33" Width="65" 
                                   Click="ToggleButtonLog_Checked" />
 
-                    <Button Grid.Column="4" Content="" Height="33" Width="40" FontSize="18" 
-                            Click="Button_Click_prevGame" FontFamily="Wingdings" />
-                    <Button Grid.Column="5" Content="" Height="33" Width="40" FontSize="18"
-                            Click="Button_Click_nextGame" FontFamily="Wingdings" />
+                    <Label Grid.Column="4" x:Name="gameLabel" Content="graphics title" HorizontalAlignment="Center" 
+                           VerticalAlignment="Top" Height="40" FontSize="20" FontWeight="Bold" />
+
+                    <StackPanel Orientation="Horizontal" Grid.Column="5">
+                        <Button Content="&#xe945;" Height="33" FontSize="18" 
+                                Click="Button_Click_prevGamePlus" FontFamily="{DynamicResource CommonFont}" />
+                        <Button Content="&#xe941;" Height="33" FontSize="18" 
+                                Click="Button_Click_prevGame" FontFamily="{DynamicResource CommonFont}" Margin="5,0,0,0" />
+                        <Button Content="&#xe942;" Height="33" FontSize="18" 
+                                Click="Button_Click_nextGame" FontFamily="{DynamicResource CommonFont}" Margin="5,0,0,0" />
+                        <Button Content="&#xe946;" Height="33" FontSize="18" 
+                                Click="Button_Click_nextGamePlus" FontFamily="{DynamicResource CommonFont}" Margin="5,0,0,0" />
+                    </StackPanel>
+                    <!--Button Grid.Column="5" Content="&#xe941;" Height="33" FontSize="18" 
+                            Click="Button_Click_prevGame" FontFamily="{DynamicResource CommonFont}" />
+                    <Button Grid.Column="6" Content="&#xe942;" Height="33" FontSize="18" 
+                            Click="Button_Click_nextGame" FontFamily="{DynamicResource CommonFont}" /-->
                 </Grid>
 
                 <Grid Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="2" Name="gameSeriesContener">

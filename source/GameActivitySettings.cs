@@ -128,6 +128,9 @@ namespace GameActivity
 
         public bool IgnoreSession { get; set; } = false;
         public int IgnoreSessionTime { get; set; } = 120;
+
+        public int VariatorTime { get; set; } = 7;
+        public int VariatorLog { get; set; } = 4;
         #endregion
 
         // Playnite serializes settings object to a JSON object and saves it as text file.

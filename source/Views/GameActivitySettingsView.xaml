@@ -103,20 +103,50 @@
                     </StackPanel>
 
                     <Grid Margin="0,15,0,0">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
-                            <CheckBox IsChecked="{Binding Settings.IgnoreSession}" Name="PART_IgnoreSession">
-                                <Label Content="{DynamicResource LOCGameActivityIgnoreSession}" />
-                            </CheckBox>
-                            
-                            <Slider Minimum="0" Maximum="240" Value="{Binding Settings.IgnoreSessionTime, FallbackValue=120}" 
-                                    Width="300"
-                                    IsEnabled="{Binding ElementName=PART_IgnoreSession, Path=IsChecked}"
-                                    IsSnapToTickEnabled="True" TickFrequency="1" AutoToolTipPlacement="TopLeft"
-                                    ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Value}"
-                                    Grid.Column="1" VerticalAlignment="Center" Margin="20,0,5,0" Name="PART_SliderIgnore" />
-                            <Label Grid.Column="2" Content="{Binding ElementName=PART_SliderIgnore, Path=Value}" ContentStringFormat=" {0} s"                                    
-                                   IsEnabled="{Binding ElementName=PART_IgnoreSession, Path=IsChecked}" HorizontalAlignment="Center" />
-                        </StackPanel>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="50" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="15" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="15" />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+
+                        <CheckBox IsChecked="{Binding Settings.IgnoreSession}" Name="PART_IgnoreSession"
+                                    Grid.Row="0" Grid.Column="0">
+                            <Label Content="{DynamicResource LOCGameActivityIgnoreSession}" />
+                        </CheckBox>
+                        <Slider Minimum="0" Maximum="240" Value="{Binding Settings.IgnoreSessionTime, FallbackValue=120}" 
+                                Grid.Row="0" Grid.Column="1" Margin="20,0,0,0"
+                                IsEnabled="{Binding ElementName=PART_IgnoreSession, Path=IsChecked}"
+                                IsSnapToTickEnabled="True" TickFrequency="1" AutoToolTipPlacement="TopLeft"
+                                ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Value}"
+                                Name="PART_SliderIgnore" />
+                        <Label Grid.Row="0" Grid.Column="3" Content="{Binding ElementName=PART_SliderIgnore, Path=Value}" ContentStringFormat=" {0} s"                                    
+                              IsEnabled="{Binding ElementName=PART_IgnoreSession, Path=IsChecked}" HorizontalAlignment="Center" />
+
+                        <Label Content="{DynamicResource LOCGameActivitySetVariatorTime}"
+                               Grid.Row="2" Grid.Column="0" />
+                        <Slider Minimum="2" Maximum="20" Value="{Binding Settings.VariatorTime, FallbackValue=7}" 
+                                Grid.Row="2" Grid.Column="1" Margin="20,0,0,0"
+                                IsSnapToTickEnabled="True" TickFrequency="1" AutoToolTipPlacement="TopLeft"
+                                ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Value}"
+                                Name="PART_SliderVariatorTime" />
+                        <Label Grid.Row="2" Grid.Column="3" Content="{Binding ElementName=PART_SliderVariatorTime, Path=Value}" HorizontalAlignment="Center" />
+
+                        <Label Content="{DynamicResource LOCGameActivitySetVariatorLog}"
+                               Grid.Row="4" Grid.Column="0" />
+                        <Slider Minimum="2" Maximum="20" Value="{Binding Settings.VariatorLog, FallbackValue=4}" 
+                                Grid.Row="4" Grid.Column="1" Margin="20,0,0,0"
+                                IsSnapToTickEnabled="True" TickFrequency="1" AutoToolTipPlacement="TopLeft"
+                                ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Value}"
+                                Name="PART_SliderVariatorLog" />
+                        <Label Grid.Row="4" Grid.Column="3" Content="{Binding ElementName=PART_SliderVariatorLog, Path=Value}" HorizontalAlignment="Center" />
                     </Grid>
                 </DockPanel>
             </ScrollViewer>
