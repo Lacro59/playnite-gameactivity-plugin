@@ -60,6 +60,8 @@
     <sys:String x:Key="LOCGameActivityIconFromFont">Використовувати значок, визначений у шрифті плагіну</sys:String>
 
     <sys:String x:Key="LOCGameActivityIgnoreSession">Ігнорувати короткі ігрові сесії</sys:String>
+    <sys:String x:Key="LOCGameActivitySetVariatorTime">Встановити варіатор часу</sys:String>
+    <sys:String x:Key="LOCGameActivitySetVariatorLog">Встановити варіатор журналу</sys:String>
 
     <!-- GameActivityViewSingle -->
 
