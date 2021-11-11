@@ -60,6 +60,8 @@
     <sys:String x:Key="LOCGameActivityIconFromFont">Usa l'icona definita nel font del plugin</sys:String>
 
     <sys:String x:Key="LOCGameActivityIgnoreSession">Ignora sessioni di riproduzione brevi</sys:String>
+    <sys:String x:Key="LOCGameActivitySetVariatorTime">Imposta variatore orario</sys:String>
+    <sys:String x:Key="LOCGameActivitySetVariatorLog">Imposta variatore di registro</sys:String>
 
     <!-- GameActivityViewSingle -->
 
