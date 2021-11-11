@@ -523,12 +523,12 @@ namespace GameActivity
 
             if (args.Name == "PluginChartTime")
             {
-                return new PluginChartTime { DisableAnimations = true };
+                return new PluginChartTime { DisableAnimations = true, LabelsRotation = true };
             }
 
             if (args.Name == "PluginChartLog")
             {
-                return new PluginChartLog { DisableAnimations = true };
+                return new PluginChartLog { DisableAnimations = true, LabelsRotation = true };
             }
              
             return null;

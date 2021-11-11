@@ -65,6 +65,7 @@
 
                 <lvc:CartesianChart.AxisX>
                     <lvc:Axis Name="PART_ChartLogActivityLabelsX" ShowLabels="{Binding ChartLogAxis}" MinValue="0"
+                              LabelsRotation="{Binding LabelsRotationValue}"
                               FontSize="{DynamicResource FontSize}" FontFamily="{DynamicResource FontFamily}">
                         <lvc:Axis.Separator>
                             <lvc:Separator Step="1" />

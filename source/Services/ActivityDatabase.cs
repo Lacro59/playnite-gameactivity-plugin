@@ -86,10 +86,6 @@ namespace GameActivity.Services
             PluginSettings.Settings.LastPlaytimeSession = playtime;
 
             PluginSettings.Settings.AvgFpsAllSession = gameActivities.ItemsDetails.AvgFpsAllSession;
-            if (gameActivities.ItemsDetails.MustBeSaved)
-            {
-                AddOrUpdate(gameActivities);
-            }
         }
 
         public override void Games_ItemUpdated(object sender, ItemUpdatedEventArgs<Game> e)

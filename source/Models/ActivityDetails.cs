@@ -35,26 +35,12 @@ namespace GameActivity.Models
             }
         }
 
-
         [DontSerialize]
-        public bool MustBeSaved { get; set; } = false;
-
-        private int _AvgFpsAllSession { get; set; } = -1;
         public int AvgFpsAllSession
         {
             get
             {
-                MustBeSaved = false;
-                if (_AvgFpsAllSession == -1 && !MustBeSaved)
-                {
-                    _AvgFpsAllSession = GetAvgFpsAllSession();
-                    MustBeSaved = true;
-                }
-                return _AvgFpsAllSession;
-            }
-            set
-            {
-                _AvgFpsAllSession = value;
+                return GetAvgFpsAllSession();
             }
         }
 

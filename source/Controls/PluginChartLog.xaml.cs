@@ -71,6 +71,18 @@ namespace GameActivity.Controls
             typeof(PluginChartLog),
             new FrameworkPropertyMetadata(true, ControlsPropertyChangedCallback));
 
+        public bool LabelsRotation
+        {
+            get { return (bool)GetValue(LabelsRotationProperty); }
+            set { SetValue(LabelsRotationProperty, value); }
+        }
+
+        public static readonly DependencyProperty LabelsRotationProperty = DependencyProperty.Register(
+            nameof(LabelsRotation),
+            typeof(bool),
+            typeof(PluginChartLog),
+            new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback));
+
         public static readonly DependencyProperty AxisLimitProperty;
         public int AxisLimit { get; set; }
 
@@ -198,6 +210,12 @@ namespace GameActivity.Controls
                 UseControls = true;
             }
 
+            double LabelsRotationValue = 0;
+            if (LabelsRotation)
+            {
+                LabelsRotationValue = 160;
+            }
+
             ControlDataContext.IsActivated = IsActivated;
             ControlDataContext.ChartLogHeight = ChartLogHeight;
             ControlDataContext.ChartLogAxis = ChartLogAxis;
@@ -206,6 +224,8 @@ namespace GameActivity.Controls
             ControlDataContext.UseControls = UseControls;
 
             ControlDataContext.DisableAnimations = DisableAnimations;
+            ControlDataContext.LabelsRotationValue = LabelsRotationValue;
+
             ControlDataContext.DisplayCpu = DisplayCpu;
             ControlDataContext.DisplayGpu = DisplayGpu;
             ControlDataContext.DisplayRam = DisplayRam;
@@ -480,6 +500,9 @@ namespace GameActivity.Controls
 
         public bool _DisableAnimations;
         public bool DisableAnimations { get => _DisableAnimations; set => SetValue(ref _DisableAnimations, value); }
+
+        public double _LabelsRotationValue;
+        public double LabelsRotationValue { get => _LabelsRotationValue; set => SetValue(ref _LabelsRotationValue, value); }
 
         public bool _DisplayCpu;
         public bool DisplayCpu { get => _DisplayCpu; set => SetValue(ref _DisplayCpu, value); }
