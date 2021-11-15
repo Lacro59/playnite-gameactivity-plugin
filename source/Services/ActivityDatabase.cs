@@ -4,12 +4,13 @@ using Playnite.SDK.Models;
 using CommonPluginsShared.Collections;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using CommonPlayniteShared.Common;
 using CommonPlayniteShared.Converters;
 using System.Globalization;
 using CommonPluginsShared;
 using System.IO;
+using MoreLinq;
+using System.Linq;
 
 namespace GameActivity.Services
 {
@@ -32,6 +33,22 @@ namespace GameActivity.Services
             GetPluginTags();
 
             LocalSystem = new LocalSystem(Path.Combine(Paths.PluginUserDataPath, $"Configurations.json"), false);
+
+
+            // Remove duplicate
+            foreach(GameActivities gameActivities in Database)
+            {
+                double countBefore = gameActivities.Items.Count();
+                gameActivities.Items = gameActivities.Items.DistinctBy(x => new { x.DateSession, x.ElapsedSeconds }).ToList();
+                double countAfter = gameActivities.Items.Count();
+
+                if (countBefore > countAfter)
+                {
+                    logger.Warn($"Duplicate items ({countBefore - countAfter}) in {gameActivities.Name}");
+                    Update(gameActivities);
+                }
+            }
+
 
             IsLoaded = true;
             return true;

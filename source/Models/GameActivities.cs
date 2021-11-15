@@ -3,8 +3,9 @@ using CommonPluginsShared.Collections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Collections.ObjectModel;
 using GameActivity.Services;
+using Playnite.SDK.Data;
+using MoreLinq.Extensions;
 
 namespace GameActivity.Models
 {
@@ -25,6 +26,7 @@ namespace GameActivity.Models
             set
             {
                 _Items = value;
+                _FilterItems = null;
                 OnPropertyChanged();
             }
         }
@@ -45,16 +47,23 @@ namespace GameActivity.Models
         }
 
 
+        private List<Activity> _FilterItems = null;
+        [DontSerialize]
         public List<Activity> FilterItems
         {
             get
             {
-                if (PluginDatabase.PluginSettings.Settings.IgnoreSession)
+                if (_FilterItems == null)
                 {
-                    return Items.Where(x => (int)x.ElapsedSeconds > PluginDatabase.PluginSettings.Settings.IgnoreSessionTime).ToList();
+                    if (PluginDatabase.PluginSettings.Settings.IgnoreSession)
+                    {
+                        _FilterItems = Items.Where(x => (int)x.ElapsedSeconds > PluginDatabase.PluginSettings.Settings.IgnoreSessionTime).Distinct().ToList();
+                    }
+
+                    _FilterItems = Items;
                 }
 
-                return Items;
+                return _FilterItems;
             }
         }
 
