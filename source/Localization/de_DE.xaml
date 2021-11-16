@@ -59,9 +59,9 @@
     <sys:String x:Key="LOCGameActivityIconFromLibrary">Das in der Bibliothek definierte Symbol verwenden</sys:String>
     <sys:String x:Key="LOCGameActivityIconFromFont">Den im Plugin definierten Zeichensatz verwenden</sys:String>
 
-    <sys:String x:Key="LOCGameActivityIgnoreSession">Ignore short play sessions</sys:String>
-    <sys:String x:Key="LOCGameActivitySetVariatorTime">Set time variator</sys:String>
-    <sys:String x:Key="LOCGameActivitySetVariatorLog">Set log variator</sys:String>
+    <sys:String x:Key="LOCGameActivityIgnoreSession">Kurze Spielsitzungen ignorieren</sys:String>
+    <sys:String x:Key="LOCGameActivitySetVariatorTime">Zeit Variation einstellen</sys:String>
+    <sys:String x:Key="LOCGameActivitySetVariatorLog">Log Variation einstellen</sys:String>
 
     <!-- GameActivityViewSingle -->
 
