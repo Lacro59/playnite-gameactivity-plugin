@@ -23,6 +23,7 @@ using System.Windows.Media;
 using CommonPluginsShared.Controls;
 using CommonPlayniteShared.Common;
 using CommonPluginsShared.Extensions;
+using System.Threading;
 
 namespace GameActivity
 {
@@ -31,7 +32,7 @@ namespace GameActivity
         public override Guid Id { get; } = Guid.Parse("afbb1a0d-04a1-4d0c-9afa-c6e42ca855b4");
 
         // Variables timer function
-        public Timer t { get; set; }
+        public System.Timers.Timer t { get; set; }
         private GameActivities GameActivitiesLog;
         public List<WarningData> WarningsMessage { get; set; } = new List<WarningData>();
 
@@ -190,7 +191,7 @@ namespace GameActivity
             logger.Info("DataLogging_start");
 
             WarningsMessage = new List<WarningData>();
-            t = new Timer(PluginSettings.Settings.TimeIntervalLogging * 60000);
+            t = new System.Timers.Timer(PluginSettings.Settings.TimeIntervalLogging * 60000);
             t.AutoReset = true;
             t.Elapsed += new ElapsedEventHandler(OnTimedEvent);
             t.Start();
@@ -892,7 +893,25 @@ namespace GameActivity
         // Add code to be executed when Playnite is initialized.
         public override void OnApplicationStarted(OnApplicationStartedEventArgs args)
         {
-            CheckGoodForLogging(true);
+            Task.Run(() =>
+            {
+                if (!CheckGoodForLogging(false))
+                {
+                    Thread.Sleep(10000);
+                    if (!CheckGoodForLogging(false))
+                    {
+                        Thread.Sleep(10000);
+                        if (!CheckGoodForLogging(false))
+                        {
+                            Thread.Sleep(10000);
+                            Application.Current.Dispatcher.BeginInvoke((Action)delegate
+                            {
+                                CheckGoodForLogging(true);
+                            });
+                        }
+                    }
+                }
+            });            
         }
 
         // Add code to be executed when Playnite is shutting down.
