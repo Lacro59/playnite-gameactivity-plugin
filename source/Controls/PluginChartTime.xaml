@@ -15,7 +15,7 @@
 
     <Grid Name="PART_GridContener">
         <lvc:CartesianChart LegendLocation="Bottom" Name="PART_ChartTimeActivity" 
-                            DisableAnimations="{Binding DisableAnimations}"
+                            DisableAnimations="{Binding DisableAnimations}" AnimationsSpeed="10"
                             DataClick="PART_ChartTimeActivity_DataClick"
                             Width="{Binding ElementName=PART_GridContener, Path=ActualWidth}"
                             Height="{Binding ElementName=PART_GridContener, Path=ActualHeight}">

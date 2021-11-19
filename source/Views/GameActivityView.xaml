@@ -119,7 +119,7 @@
                                Grid.Column="1" Grid.Row="0" />
 
                         <lvc:CartesianChart x:Name="PART_ChartTotalHoursSource" LegendLocation="none" Grid.Column="1" Grid.Row="1" 
-                                            DisableAnimations="True" FontFamily="{DynamicResource CommonFont}">
+                                            DisableAnimations="True" AnimationsSpeed="10" FontFamily="{DynamicResource CommonFont}">
                             <lvc:CartesianChart.DataTooltip>
                                 <livechartscommon:CustomerToolTipForTime x:Name="PART_ChartTotalHoursSource_ToolTip" />
                             </lvc:CartesianChart.DataTooltip>
@@ -151,7 +151,7 @@
                         <Label Grid.Column="1" Grid.Row="0" x:Name="actLabel" Content="{DynamicResource LOCGameActivityTimeTitle}" Height="30" FontSize="20" FontWeight="Bold" MinWidth="50" HorizontalAlignment="Center" />
 
                         <lvc:CartesianChart x:Name="PART_ChartHoursByDaySource" LegendLocation="none" Grid.Column="1" Grid.Row="1"  
-                                            DisableAnimations="True"
+                                            DisableAnimations="True" AnimationsSpeed="10"
                                             FontSize="{DynamicResource FontSize}" FontFamily="{DynamicResource CommonFont}">
                             <lvc:CartesianChart.DataTooltip>
                                 <livechartscommon:CustomerToolTipForMultipleTime x:Name="PART_ChartHoursByDaySource_ToolTip" />
@@ -182,7 +182,7 @@
                         <Label Grid.Column="1" Grid.Row="0" x:Name="acwLabel" Content="{DynamicResource LOCGameActivityTotalHoursByWeeks}" Height="30" FontSize="20" FontWeight="Bold" MinWidth="50" HorizontalAlignment="Center" />
 
                         <lvc:CartesianChart x:Name="PART_ChartHoursByWeekSource" LegendLocation="none" Grid.Column="1" Grid.Row="1"  
-                                            DisableAnimations="True"  
+                                            DisableAnimations="True" AnimationsSpeed="10"
                                             FontSize="{DynamicResource FontSize}" FontFamily="{DynamicResource CommonFont}">
                             <lvc:CartesianChart.DataTooltip>
                                 <livechartscommon:CustomerToolTipForMultipleTime x:Name="PART_ChartHoursByWeekSource_ToolTip" />
