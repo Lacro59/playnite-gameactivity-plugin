@@ -270,14 +270,19 @@ namespace GameActivity.Views
 
         private void PART_Delete_Click(object sender, RoutedEventArgs e)
         {
-            var GameLastActivity = ((FrameworkElement)sender).Tag;
-            var activity = ((ObservableCollection<ListActivities>)lvSessions.ItemsSource).Where(x => x.GameLastActivity == (DateTime)GameLastActivity).FirstOrDefault();
+            var result = PluginDatabase.PlayniteApi.Dialogs.ShowMessage(ResourceProvider.GetString("LOCConfirumationAskGeneric"), "GameActivity", MessageBoxButton.YesNo);
 
-            gameActivities.DeleteActivity(activity.GameLastActivity);
-            PluginDatabase.Update(gameActivities);
+            if (result == MessageBoxResult.Yes)
+            {
+                var GameLastActivity = ((FrameworkElement)sender).Tag;
+                var activity = ((ObservableCollection<ListActivities>)lvSessions.ItemsSource).Where(x => x.GameLastActivity == (DateTime)GameLastActivity).FirstOrDefault();
 
-            lvSessions.SelectedIndex = -1;
-            ((ObservableCollection<ListActivities>)lvSessions.ItemsSource).Remove(activity);
+                gameActivities.DeleteActivity(activity.GameLastActivity);
+                PluginDatabase.Update(gameActivities);
+
+                lvSessions.SelectedIndex = -1;
+                ((ObservableCollection<ListActivities>)lvSessions.ItemsSource).Remove(activity);
+            }
         }
     }
 }
