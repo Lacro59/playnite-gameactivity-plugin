@@ -105,4 +105,11 @@
     <sys:String x:Key="LOCGameActivityNotificationHWiNFO">HWiNFO logging is enabled but application is not running.</sys:String>
     <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">MSI AfterBurner logging is enabled but application is not running.</sys:String>
 
+    <!-- QuickSearch -->
+
+    <sys:String x:Key="LOCGaQuickSearchDescription">Search games on GameActivity data</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchByFPS">Find by FPS</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchByTime">Find by time session</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchByDate">Find by date session</sys:String>
+
 </ResourceDictionary>

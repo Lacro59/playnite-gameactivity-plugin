@@ -24,6 +24,7 @@ using CommonPluginsShared.Controls;
 using CommonPlayniteShared.Common;
 using CommonPluginsShared.Extensions;
 using System.Threading;
+using QuickSearch.SearchItems;
 
 namespace GameActivity
 {
@@ -37,7 +38,6 @@ namespace GameActivity
         public List<WarningData> WarningsMessage { get; set; } = new List<WarningData>();
 
         private OldToNew oldToNew;
-
 
         public GameActivity(IPlayniteAPI api) : base(api)
         {
@@ -911,8 +911,30 @@ namespace GameActivity
                         }
                     }
                 }
-            });            
+            });
+
+
+            // QuickSearch support
+            try
+            {
+                var GaSubItemsAction = new SubItemsAction() { Action = () => { }, Name = "", CloseAfterExecute = false, SubItemSource = new QuickSearchItemSource() };
+                var GaCommand = new CommandItem("GameActivity", new List<CommandAction>(), ResourceProvider.GetString("LOCGaQuickSearchDescription"));
+                GaCommand.Keys.Add(new CommandItemKey() { Key = "ga", Weight = 1 });
+                GaCommand.Actions.Add(GaSubItemsAction);
+                QuickSearch.QuickSearchSDK.AddCommand(GaCommand);
+            }
+            catch (Exception)
+            {
+
+            }
         }
+
+        private void OtherAction()
+        {
+            
+        }
+
+
 
         // Add code to be executed when Playnite is shutting down.
         public override void OnApplicationStopped(OnApplicationStoppedEventArgs args)

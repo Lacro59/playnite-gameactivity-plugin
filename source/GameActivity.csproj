@@ -81,6 +81,14 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="QuickSearchSDK, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Resources\QuickSearchSDK.dll</HintPath>
+    </Reference>
+    <Reference Include="QuickSearchSDK.Attributes, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Resources\QuickSearchSDK.Attributes.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -129,6 +137,7 @@
     <Compile Include="Models\GameActivities.cs" />
     <Compile Include="Models\GameActivitiesCollection.cs" />
     <Compile Include="Models\ListActivities.cs" />
+    <Compile Include="Models\QuickSearchItemSource.cs" />
     <Compile Include="Models\StoreColor.cs" />
     <Compile Include="Models\WarningData.cs" />
     <Compile Include="playnite-plugincommon\CommonPluginsControls\Controls\ComboBoxRemovable.xaml.cs">
@@ -375,6 +384,10 @@
     <None Include="Resources\chart-646.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\QuickSearchSDK.Attributes.dll" />
+    <None Include="Resources\QuickSearchSDK.dll" />
   </ItemGroup>
   <Import Project="playnite-plugincommon\CommonPluginsShared\CommonPluginsShared.projitems" Label="Shared" />
   <Import Project="playnite-plugincommon\CommonPlayniteShared\CommonPlayniteShared.projitems" Label="Shared" />
