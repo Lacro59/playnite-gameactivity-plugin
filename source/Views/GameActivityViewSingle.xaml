@@ -406,9 +406,20 @@
                     <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
 
-                <ToggleButton Content="&#xef24;" FontFamily="{StaticResource FontIcoFont}" Name="ButtonShowConfig" 
-                              Height="33" FontSize="20" 
-                              IsChecked="True" HorizontalAlignment="Left" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <Button Name="PART_BtAdd" Content="&#xe971;" Height="33" FontSize="20" 
+                            Click="PART_BtAdd_Click" FontFamily="{DynamicResource FontIcoFont}"  />
+
+                    <ToggleButton Content="&#xef24;" FontFamily="{StaticResource FontIcoFont}" Name="ButtonShowConfig" 
+                                  Height="33" FontSize="20" Grid.Column="2"
+                                  IsChecked="True" HorizontalAlignment="Left" />
+                </Grid>
 
                 <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2" Name="PART_BtLogContener"
                             VerticalAlignment="Bottom" HorizontalAlignment="Right">

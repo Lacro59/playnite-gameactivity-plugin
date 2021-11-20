@@ -112,4 +112,10 @@
     <sys:String x:Key="LOCGaQuickSearchByTime">Find by time session</sys:String>
     <sys:String x:Key="LOCGaQuickSearchByDate">Find by date session</sys:String>
 
+    <!-- GameActivityAddTime -->
+
+    <sys:String x:Key="LOCGaAddNewGameSession">Add new game session</sys:String>
+    <sys:String x:Key="LOCGaDateStart">Date start</sys:String>
+    <sys:String x:Key="LOCGaDateEnd">Date end</sys:String>
+
 </ResourceDictionary>

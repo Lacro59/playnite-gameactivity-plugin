@@ -131,6 +131,9 @@
     <Compile Include="Controls\PluginChartTime.xaml.cs">
       <DependentUpon>PluginChartTime.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\TimePicker\TimePicker.xaml.cs">
+      <DependentUpon>TimePicker.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GameActivity.cs" />
     <Compile Include="GameActivitySettings.cs" />
     <Compile Include="Models\ExportedData.cs" />
@@ -175,6 +178,9 @@
     <Compile Include="Services\OldToNew.cs" />
     <Compile Include="Services\ActivityDatabase.cs" />
     <Compile Include="Services\PerfCounter.cs" />
+    <Compile Include="Views\GameActivityAddTime.xaml.cs">
+      <DependentUpon>GameActivityAddTime.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\GameActivitySettingsView.xaml.cs">
       <DependentUpon>GameActivitySettingsView.xaml</DependentUpon>
     </Compile>
@@ -309,6 +315,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\TimePicker\TimePicker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="playnite-plugincommon\CommonPluginsControls\Controls\ComboBoxRemovable.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -348,6 +358,10 @@
     <Page Include="playnite-plugincommon\CommonPluginsControls\Views\OptionsDownloadData.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\GameActivityAddTime.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\GameActivitySettingsView.xaml">
       <SubType>Designer</SubType>

@@ -24,6 +24,7 @@ namespace GameActivity.Views
     public partial class GameActivityViewSingle : UserControl
     {
         private static readonly ILogger logger = LogManager.GetLogger();
+        private static IResourceProvider resources = new ResourceProvider();
 
         private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
 
@@ -31,10 +32,13 @@ namespace GameActivity.Views
         private PluginChartLog PART_ChartLog;
 
         private GameActivities gameActivities;
+        private Game game;
 
 
         public GameActivityViewSingle(Game game)
         {
+            this.game = game;
+
             InitializeComponent();
 
             ButtonShowConfig.IsChecked = false;
@@ -138,6 +142,7 @@ namespace GameActivity.Views
         }
 
 
+        #region Time navigation 
         private void Bt_PrevTime(object sender, RoutedEventArgs e)
         {
             PART_ChartTime.Prev();
@@ -157,8 +162,10 @@ namespace GameActivity.Views
         {
             PART_ChartTime.Next(PluginDatabase.PluginSettings.Settings.VariatorTime);
         }
+        #endregion
 
 
+        #region Log navigation
         private void LvSessions_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (lvSessions.SelectedItem == null)
@@ -214,6 +221,7 @@ namespace GameActivity.Views
         {
             PART_ChartLog.Next(PluginDatabase.PluginSettings.Settings.VariatorLog);
         }
+        #endregion
 
 
         public void getActivityByListGame(GameActivities gameActivities)
@@ -268,6 +276,7 @@ namespace GameActivity.Views
         }
 
 
+        #region Data actions
         private void PART_Delete_Click(object sender, RoutedEventArgs e)
         {
             var result = PluginDatabase.PlayniteApi.Dialogs.ShowMessage(ResourceProvider.GetString("LOCConfirumationAskGeneric"), "GameActivity", MessageBoxButton.YesNo);
@@ -284,5 +293,27 @@ namespace GameActivity.Views
                 ((ObservableCollection<ListActivities>)lvSessions.ItemsSource).Remove(activity);
             }
         }
+
+        private void PART_BtAdd_Click(object sender, RoutedEventArgs e)
+        {
+            var windowOptions = new WindowOptions
+            {
+                ShowMinimizeButton = false,
+                ShowMaximizeButton = false,
+                ShowCloseButton = true
+            };
+
+            var ViewExtension = new GameActivityAddTime(game);
+            Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PluginDatabase.PlayniteApi, resources.GetString("LOCGaAddNewGameSession"), ViewExtension, windowOptions);
+            windowExtension.ShowDialog();
+
+            if (ViewExtension.activity != null)
+            {
+                gameActivities.Items.Add(ViewExtension.activity);
+                PluginDatabase.Update(gameActivities);
+                getActivityByListGame(gameActivities);
+            }
+        }
+        #endregion
     }
 }

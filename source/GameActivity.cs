@@ -929,13 +929,6 @@ namespace GameActivity
             }
         }
 
-        private void OtherAction()
-        {
-            
-        }
-
-
-
         // Add code to be executed when Playnite is shutting down.
         public override void OnApplicationStopped(OnApplicationStoppedEventArgs args)
         {
