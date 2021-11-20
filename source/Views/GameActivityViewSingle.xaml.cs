@@ -15,6 +15,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace GameActivity.Views
 {
@@ -130,11 +131,6 @@ namespace GameActivity.Views
             PART_ChartLog = (PluginChartLog)PART_ChartLogContener.Children[0];
             PART_ChartLog.GameContext = game;
 
-            if (((ObservableCollection<ListActivities>)lvSessions.ItemsSource).Count > 0)
-            {
-                lvSessions.SelectedItem = ((ObservableCollection<ListActivities>)lvSessions.ItemsSource).OrderByDescending(x => x.DateActivity).LastOrDefault();
-            }
-
             this.DataContext = new
             {
                 GameDisplayName = game.Name
@@ -226,53 +222,64 @@ namespace GameActivity.Views
 
         public void getActivityByListGame(GameActivities gameActivities)
         {
-            ObservableCollection<ListActivities> activityListByGame = new ObservableCollection<ListActivities>();
+            Task.Run(() => 
+            { 
+                ObservableCollection<ListActivities> activityListByGame = new ObservableCollection<ListActivities>();
 
-            for (int iItem = 0; iItem < gameActivities.FilterItems.Count; iItem++)
-            {
-                try
+                for (int iItem = 0; iItem < gameActivities.FilterItems.Count; iItem++)
                 {
-                    ulong elapsedSeconds = gameActivities.FilterItems[iItem].ElapsedSeconds;
-                    DateTime dateSession = Convert.ToDateTime(gameActivities.FilterItems[iItem].DateSession).ToLocalTime();
-                    string sourceName = gameActivities.FilterItems[iItem].SourceName;
-                    var ModeSimple = (PluginDatabase.PluginSettings.Settings.ModeStoreIcon == 1) ? TextBlockWithIconMode.IconTextFirstOnly : TextBlockWithIconMode.IconFirstOnly;
-
-                    activityListByGame.Add(new ListActivities()
+                    try
                     {
-                        GameLastActivity = dateSession,
-                        GameElapsedSeconds = elapsedSeconds,
-                        AvgCPU = gameActivities.avgCPU(dateSession.ToUniversalTime()) + "%",
-                        AvgGPU = gameActivities.avgGPU(dateSession.ToUniversalTime()) + "%",
-                        AvgRAM = gameActivities.avgRAM(dateSession.ToUniversalTime()) + "%",
-                        AvgFPS = gameActivities.avgFPS(dateSession.ToUniversalTime()) + "",
-                        AvgCPUT = gameActivities.avgCPUT(dateSession.ToUniversalTime()) + "°",
-                        AvgGPUT = gameActivities.avgGPUT(dateSession.ToUniversalTime()) + "°",
+                        ulong elapsedSeconds = gameActivities.FilterItems[iItem].ElapsedSeconds;
+                        DateTime dateSession = Convert.ToDateTime(gameActivities.FilterItems[iItem].DateSession).ToLocalTime();
+                        string sourceName = gameActivities.FilterItems[iItem].SourceName;
+                        var ModeSimple = (PluginDatabase.PluginSettings.Settings.ModeStoreIcon == 1) ? TextBlockWithIconMode.IconTextFirstOnly : TextBlockWithIconMode.IconFirstOnly;
 
-                        GameSourceName = sourceName,
-                        TypeStoreIcon = ModeSimple,
-                        SourceIcon = PlayniteTools.GetPlatformIcon(sourceName),
-                        SourceIconText = TransformIcon.Get(sourceName),
+                        activityListByGame.Add(new ListActivities()
+                        {
+                            GameLastActivity = dateSession,
+                            GameElapsedSeconds = elapsedSeconds,
+                            AvgCPU = gameActivities.avgCPU(dateSession.ToUniversalTime()) + "%",
+                            AvgGPU = gameActivities.avgGPU(dateSession.ToUniversalTime()) + "%",
+                            AvgRAM = gameActivities.avgRAM(dateSession.ToUniversalTime()) + "%",
+                            AvgFPS = gameActivities.avgFPS(dateSession.ToUniversalTime()) + "",
+                            AvgCPUT = gameActivities.avgCPUT(dateSession.ToUniversalTime()) + "°",
+                            AvgGPUT = gameActivities.avgGPUT(dateSession.ToUniversalTime()) + "°",
 
-                        EnableWarm = PluginDatabase.PluginSettings.Settings.EnableWarning,
-                        MaxCPUT = PluginDatabase.PluginSettings.Settings.MaxCpuTemp.ToString(),
-                        MaxGPUT = PluginDatabase.PluginSettings.Settings.MaxGpuTemp.ToString(),
-                        MinFPS = PluginDatabase.PluginSettings.Settings.MinFps.ToString(),
-                        MaxCPU = PluginDatabase.PluginSettings.Settings.MaxCpuUsage.ToString(),
-                        MaxGPU = PluginDatabase.PluginSettings.Settings.MaxGpuUsage.ToString(),
-                        MaxRAM = PluginDatabase.PluginSettings.Settings.MaxRamUsage.ToString(),
+                            GameSourceName = sourceName,
+                            TypeStoreIcon = ModeSimple,
+                            SourceIcon = PlayniteTools.GetPlatformIcon(sourceName),
+                            SourceIconText = TransformIcon.Get(sourceName),
 
-                        PCConfigurationId = gameActivities.FilterItems[iItem].IdConfiguration,
-                        PCName = gameActivities.FilterItems[iItem].Configuration.Name,
-                    });
+                            EnableWarm = PluginDatabase.PluginSettings.Settings.EnableWarning,
+                            MaxCPUT = PluginDatabase.PluginSettings.Settings.MaxCpuTemp.ToString(),
+                            MaxGPUT = PluginDatabase.PluginSettings.Settings.MaxGpuTemp.ToString(),
+                            MinFPS = PluginDatabase.PluginSettings.Settings.MinFps.ToString(),
+                            MaxCPU = PluginDatabase.PluginSettings.Settings.MaxCpuUsage.ToString(),
+                            MaxGPU = PluginDatabase.PluginSettings.Settings.MaxGpuUsage.ToString(),
+                            MaxRAM = PluginDatabase.PluginSettings.Settings.MaxRamUsage.ToString(),
+
+                            PCConfigurationId = gameActivities.FilterItems[iItem].IdConfiguration,
+                            PCName = gameActivities.FilterItems[iItem].Configuration.Name,
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        Common.LogError(ex, false, $"Failed to load GameActivities for {gameActivities.Name}", true, "GameActivity");
+                    }
                 }
-                catch (Exception ex)
+
+                this.Dispatcher.BeginInvoke((Action)delegate
                 {
-                    Common.LogError(ex, false, $"Failed to load GameActivities for {gameActivities.Name}", true, "GameActivity");
-                }
-            }
-
-            lvSessions.ItemsSource = activityListByGame;
-            lvSessions.Sorting();
+                    lvSessions.ItemsSource = activityListByGame;
+                    lvSessions.Sorting();
+                
+                    if (((ObservableCollection<ListActivities>)lvSessions.ItemsSource).Count > 0)
+                    {
+                        lvSessions.SelectedItem = ((ObservableCollection<ListActivities>)lvSessions.ItemsSource).OrderByDescending(x => x.DateActivity).LastOrDefault();
+                    }
+                });
+            });
         }
 
 
