@@ -53,3 +53,12 @@ Packages:
       - Updated localizations
       - Fixed many bugs
       - Fixed a crash
+  - Version: 2.3
+    RequiredApiVersion: 6.1.0
+    ReleaseDate: 2021-11-20
+    PackageUrl: https://github.com/Lacro59/playnite-gameactivity-plugin/releases/download/v2.3/playnite-gameactivity-plugin_2_3.pext
+    Changelog:
+      - Added an option to add manually a game session
+      - Supported QuickSearch plugin
+      - Fixed many bugs
+      - Fixed a crash with StartPage plugin
