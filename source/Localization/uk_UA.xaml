@@ -105,4 +105,17 @@
     <sys:String x:Key="LOCGameActivityNotificationHWiNFO">Журналювання HWiNFO увімкнено, але додаток не запущений.</sys:String>
     <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">Журналювання MSI AfterBurner увімкнено, але додаток не запущений.</sys:String>
 
+    <!-- QuickSearch -->
+
+    <sys:String x:Key="LOCGaQuickSearchDescription">Пошук ігор за даними GameActivity</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchByFPS">Знайти по FPS</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchByTime">Знайти за часом сеансу</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchByDate">Пошук за датою сеансу</sys:String>
+
+    <!-- GameActivityAddTime -->
+
+    <sys:String x:Key="LOCGaAddNewGameSession">Add new game session</sys:String>
+    <sys:String x:Key="LOCGaDateStart">Date start</sys:String>
+    <sys:String x:Key="LOCGaDateEnd">Date end</sys:String>
+
 </ResourceDictionary>

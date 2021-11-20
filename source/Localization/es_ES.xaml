@@ -105,4 +105,17 @@
     <sys:String x:Key="LOCGameActivityNotificationHWiNFO">El registro de HWiNFO está habilitado pero la aplicación no se está ejecutando.</sys:String>
     <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">El registro de MSI AfterBurner está habilitado, pero la aplicación no se está ejecutando.</sys:String>
 
+    <!-- QuickSearch -->
+
+    <sys:String x:Key="LOCGaQuickSearchDescription">Search games on GameActivity data</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchByFPS">Find by FPS</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchByTime">Find by time session</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchByDate">Find by date session</sys:String>
+
+    <!-- GameActivityAddTime -->
+
+    <sys:String x:Key="LOCGaAddNewGameSession">Add new game session</sys:String>
+    <sys:String x:Key="LOCGaDateStart">Date start</sys:String>
+    <sys:String x:Key="LOCGaDateEnd">Date end</sys:String>
+
 </ResourceDictionary>
