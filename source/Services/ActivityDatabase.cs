@@ -11,6 +11,7 @@ using CommonPluginsShared;
 using System.IO;
 using MoreLinq;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace GameActivity.Services
 {
@@ -36,18 +37,21 @@ namespace GameActivity.Services
 
 
             // Remove duplicate
-            foreach(GameActivities gameActivities in Database)
+            Task.Run(() =>
             {
-                double countBefore = gameActivities.Items.Count();
-                gameActivities.Items = gameActivities.Items.DistinctBy(x => new { x.DateSession, x.ElapsedSeconds }).ToList();
-                double countAfter = gameActivities.Items.Count();
-
-                if (countBefore > countAfter)
+                foreach (GameActivities gameActivities in Database)
                 {
-                    logger.Warn($"Duplicate items ({countBefore - countAfter}) in {gameActivities.Name}");
-                    Update(gameActivities);
+                    double countBefore = gameActivities.Items.Count();
+                    gameActivities.Items = gameActivities.Items.DistinctBy(x => new { x.DateSession, x.ElapsedSeconds }).ToList();
+                    double countAfter = gameActivities.Items.Count();
+
+                    if (countBefore > countAfter)
+                    {
+                        logger.Warn($"Duplicate items ({countBefore - countAfter}) in {gameActivities.Name}");
+                        Update(gameActivities);
+                    }
                 }
-            }
+            });
 
 
             IsLoaded = true;
