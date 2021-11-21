@@ -5,10 +5,10 @@
 
     <sys:String x:Key="LOCGameActivity">游戏活动记录</sys:String>
     <sys:String x:Key="LOCGameActivityTitle">活动记录</sys:String>
-    <sys:String x:Key="LOCGamesActivitiesTitle">Games activities</sys:String>
-    <sys:String x:Key="LOCGameActivitiesTitle">Game activities</sys:String>
-    <sys:String x:Key="LOCGameActivityViewGamesActivities">View games activities</sys:String>
-    <sys:String x:Key="LOCGameActivityViewGameActivity">View game activity</sys:String>
+    <sys:String x:Key="LOCGamesActivitiesTitle">游戏活动</sys:String>
+    <sys:String x:Key="LOCGameActivitiesTitle">游戏活动</sys:String>
+    <sys:String x:Key="LOCGameActivityViewGamesActivities">查看游戏活动</sys:String>
+    <sys:String x:Key="LOCGameActivityViewGameActivity">查看游戏活动</sys:String>
 
     <!-- GameActivitySettingsView -->
 
