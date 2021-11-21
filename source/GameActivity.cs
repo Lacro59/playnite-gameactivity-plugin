@@ -37,12 +37,12 @@ namespace GameActivity
         private GameActivities GameActivitiesLog;
         public List<WarningData> WarningsMessage { get; set; } = new List<WarningData>();
 
-        private OldToNew oldToNew;
+        //private OldToNew oldToNew;
 
         public GameActivity(IPlayniteAPI api) : base(api)
         {
             // Old database            
-            oldToNew = new OldToNew(this.GetPluginUserDataPath());
+            //oldToNew = new OldToNew(this.GetPluginUserDataPath());
 
             // Custom theme button
             EventManager.RegisterClassHandler(typeof(Button), Button.ClickEvent, new RoutedEventHandler(OnCustomThemeButtonClick));
@@ -782,10 +782,10 @@ namespace GameActivity
         public override void OnGameSelected(OnGameSelectedEventArgs args)
         {
             // Old database
-            if (oldToNew.IsOld)
-            {
-                oldToNew.ConvertDB(PlayniteApi);
-            }
+            //if (oldToNew.IsOld)
+            //{
+            //    oldToNew.ConvertDB(PlayniteApi);
+            //}
 
             // Old format
             var oldFormat = PluginDatabase.Database?.Select(x => x).Where(x => x.Items.FirstOrDefault() != null && x.Items.FirstOrDefault().PlatformIDs == null);

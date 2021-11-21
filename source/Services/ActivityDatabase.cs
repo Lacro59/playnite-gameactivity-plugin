@@ -12,6 +12,7 @@ using System.IO;
 using MoreLinq;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace GameActivity.Services
 {
@@ -28,33 +29,52 @@ namespace GameActivity.Services
 
         protected override bool LoadDatabase()
         {
-            IsLoaded = false;
-            Database = new GameActivitiesCollection(Paths.PluginDatabasePath);
-            Database.SetGameInfoDetails<Activity, ActivityDetails>(PlayniteApi);
-            GetPluginTags();
-
-            LocalSystem = new LocalSystem(Path.Combine(Paths.PluginUserDataPath, $"Configurations.json"), false);
-
-
-            // Remove duplicate
-            Task.Run(() =>
+            try
             {
-                foreach (GameActivities gameActivities in Database)
+                Stopwatch stopWatch = new Stopwatch();
+                stopWatch.Start();
+
+                Database = new GameActivitiesCollection(Paths.PluginDatabasePath);
+                Database.SetGameInfoDetails<Activity, ActivityDetails>(PlayniteApi);
+                GetPluginTags();
+
+                LocalSystem = new LocalSystem(Path.Combine(Paths.PluginUserDataPath, $"Configurations.json"), false);
+
+                // Remove duplicate
+                Task.Run(() =>
                 {
-                    double countBefore = gameActivities.Items.Count();
-                    gameActivities.Items = gameActivities.Items.DistinctBy(x => new { x.DateSession, x.ElapsedSeconds }).ToList();
-                    double countAfter = gameActivities.Items.Count();
-
-                    if (countBefore > countAfter)
+                    System.Threading.SpinWait.SpinUntil(() => IsLoaded, -1);
+                    foreach (GameActivities gameActivities in Database)
                     {
-                        logger.Warn($"Duplicate items ({countBefore - countAfter}) in {gameActivities.Name}");
-                        Update(gameActivities);
+                        try
+                        {
+                            double countBefore = gameActivities.Items.Count();
+                            gameActivities.Items = gameActivities.Items.DistinctBy(x => new { x.DateSession, x.ElapsedSeconds }).ToList();
+                            double countAfter = gameActivities.Items.Count();
+
+                            if (countBefore > countAfter)
+                            {
+                                logger.Warn($"Duplicate items ({countBefore - countAfter}) in {gameActivities.Name}");
+                                Update(gameActivities);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Common.LogError(ex, false, true, "GameActivity");
+                        }
                     }
-                }
-            });
+                });
 
+                stopWatch.Stop();
+                TimeSpan ts = stopWatch.Elapsed;
+                logger.Info($"LoadDatabase with {Database.Count} items - {string.Format("{0:00}:{1:00}.{2:00}", ts.Minutes, ts.Seconds, ts.Milliseconds / 10)}");
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex, false, true, "GameActivity");
+                return false;
+            }
 
-            IsLoaded = true;
             return true;
         }
 
