@@ -25,6 +25,7 @@ using CommonPlayniteShared.Common;
 using CommonPluginsShared.Extensions;
 using System.Threading;
 using QuickSearch.SearchItems;
+using MoreLinq;
 
 namespace GameActivity
 {
@@ -787,6 +788,7 @@ namespace GameActivity
             //    oldToNew.ConvertDB(PlayniteApi);
             //}
 
+                       
             // Old format
             var oldFormat = PluginDatabase.Database?.Select(x => x).Where(x => x.Items.FirstOrDefault() != null && x.Items.FirstOrDefault().PlatformIDs == null);
             if (oldFormat?.Count() > 0)
@@ -810,6 +812,57 @@ namespace GameActivity
                     }
                 }, globalProgressOptions);
             }
+
+
+            // Remove duplicate
+            Task.Run(() =>
+            {
+                if (!PluginSettings.Settings.HasRemovingDuplicate)
+                {
+                    System.Threading.SpinWait.SpinUntil(() => PluginDatabase.IsLoaded, -1);
+
+                    GlobalProgressOptions globalProgressOptions = new GlobalProgressOptions(
+                        $"GameActivity - Database updating...",
+                        false
+                    );
+                    globalProgressOptions.IsIndeterminate = false;
+
+                    PlayniteApi.Dialogs.ActivateGlobalProgress((activateGlobalProgress) =>
+                    {
+                        activateGlobalProgress.ProgressMaxValue = PluginDatabase.Database.Count;
+
+                        foreach (GameActivities gameActivities in PluginDatabase.Database)
+                        {
+                            Thread.Sleep(10);
+                            try
+                            {
+                                double countBefore = gameActivities.Items.Count();
+                                gameActivities.Items = gameActivities.Items.DistinctBy(x => new { x.DateSession, x.ElapsedSeconds }).ToList();
+                                double countAfter = gameActivities.Items.Count();
+
+                                if (countBefore > countAfter)
+                                {
+                                    logger.Warn($"Duplicate items ({countBefore - countAfter}) in {gameActivities.Name}");
+                                    PluginDatabase.Update(gameActivities);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Common.LogError(ex, false, true, "GameActivity");
+                            }
+
+                            activateGlobalProgress.CurrentProgressValue++;
+                        }
+
+                        PluginSettings.Settings.HasRemovingDuplicate = true;
+                        Application.Current.Dispatcher.BeginInvoke((Action)delegate
+                        {
+                            this.SavePluginSettings(PluginSettings.Settings);
+                        });
+                    }, globalProgressOptions);
+                }
+            });
+
 
             try
             {
