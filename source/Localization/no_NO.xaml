@@ -3,78 +3,78 @@
 
     <!-- MainView -->
 
-    <sys:String x:Key="LOCGameActivity">GameActivity</sys:String>
-    <sys:String x:Key="LOCGameActivityTitle">Activity</sys:String>
-    <sys:String x:Key="LOCGamesActivitiesTitle">Games activities</sys:String>
-    <sys:String x:Key="LOCGameActivitiesTitle">Game activities</sys:String>
-    <sys:String x:Key="LOCGameActivityViewGamesActivities">View games activities</sys:String>
-    <sys:String x:Key="LOCGameActivityViewGameActivity">View game activity</sys:String>
+    <sys:String x:Key="LOCGameActivity">Spillaktivitet</sys:String>
+    <sys:String x:Key="LOCGameActivityTitle">Aktivitet</sys:String>
+    <sys:String x:Key="LOCGamesActivitiesTitle">Spillaktiviteter</sys:String>
+    <sys:String x:Key="LOCGameActivitiesTitle">Spillaktiviteter</sys:String>
+    <sys:String x:Key="LOCGameActivityViewGamesActivities">Vis spillaktiviteter</sys:String>
+    <sys:String x:Key="LOCGameActivityViewGameActivity">Vis spillaktiviteter</sys:String>
 
     <!-- GameActivitySettingsView -->
 
-    <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">Combine game sessions playtime on chart</sys:String>
-    <sys:String x:Key="LOCGameActivityCumulPlaytimeStore">Unify the time of different libraries</sys:String>
+    <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">Kombiner spilletid fra spilløkter i oversikt</sys:String>
+    <sys:String x:Key="LOCGameActivityCumulPlaytimeStore">Slå sammen tiden fra forskjellige biblioteker</sys:String>
 
-    <sys:String x:Key="LOCGameActivityListGamesFields">Game fields to be displayed</sys:String>
+    <sys:String x:Key="LOCGameActivityListGamesFields">Spillfelt som skal vises</sys:String>
 
-    <sys:String x:Key="LOCGameActivityActiveLog">Enable logging</sys:String>
-    <sys:String x:Key="LOCGameActivityTimeInterval">Check time interval</sys:String>
-    <sys:String x:Key="LOCGameActivityTimeLabel">minute(s)</sys:String>
+    <sys:String x:Key="LOCGameActivityActiveLog">Aktiver logging</sys:String>
+    <sys:String x:Key="LOCGameActivityTimeInterval">Kontroller tidsintervall</sys:String>
+    <sys:String x:Key="LOCGameActivityTimeLabel">minutt(er)</sys:String>
 
-    <sys:String x:Key="LOCGameActivityUseMsiAfterburner">Use MSI Afterburner</sys:String>
-    <sys:String x:Key="LOCGameActivityUseHWiNFO">Use HWiNFO</sys:String>
+    <sys:String x:Key="LOCGameActivityUseMsiAfterburner">Bruk MSI Afterburner</sys:String>
+    <sys:String x:Key="LOCGameActivityUseHWiNFO">Bruk HWiNFO</sys:String>
 
-    <sys:String x:Key="LOCGameActivitySensorsID">Sensors id</sys:String>
-    <sys:String x:Key="LOCGameActivityElementID">Element id</sys:String>
+    <sys:String x:Key="LOCGameActivitySensorsID">Sensor-ID</sys:String>
+    <sys:String x:Key="LOCGameActivityElementID">Element-ID</sys:String>
 
-    <sys:String x:Key="LOCGameActivityGpuUsage">GPU usage</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuUsage">GPU-bruk</sys:String>
     <sys:String x:Key="LOCGameActivityFps">FPS</sys:String>
-    <sys:String x:Key="LOCGameActivityGpuTemp">GPU temperature</sys:String>
-    <sys:String x:Key="LOCGameActivityCpuTemp">CPU temperature</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuTemp">GPU-temperatur</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuTemp">CPU-temperatur</sys:String>
 
-    <sys:String x:Key="LOCGameActivityActiveWarning">Enable warnings</sys:String>
-    <sys:String x:Key="LOCGameActivityMinFps">Min FPS</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxCpuTemp">Max CPU temp</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxGpuTemp">Max GPU temp</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxCpuUsage">Max CPU usage</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxGpuUsage">Max GPU usage</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxRamUsage">Max RAM usage</sys:String>
+    <sys:String x:Key="LOCGameActivityActiveWarning">Aktiver advarsler</sys:String>
+    <sys:String x:Key="LOCGameActivityMinFps">Min. FPS</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxCpuTemp">Maks CPU-temp</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxGpuTemp">Maks GPU-temp</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxCpuUsage">Maks CPU-bruk</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxGpuUsage">Maks GPU-bruk</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxRamUsage">Maks RAM-bruk</sys:String>
 
-    <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">Log CPU, GPU, RAM and FPS performance during game session.</sys:String>
-    <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Displays a warning message at the end of the game session within the defined limits.</sys:String>
+    <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">Logg CPU-, GPU-, RAM- og FPS-ytelse under spilløkten.</sys:String>
+    <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Viser en varselmelding på slutten av spilløkten innenfor de definerte grensene.</sys:String>
 
-    <sys:String x:Key="LOCGameActivityIntegrationChartTime">Display the chart with game session times</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationChartLog">Display the chart with game session logs</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">Toggle button with details</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">Number of data in horizontal axis</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationChartTime">Vis oversikt med tider for spilløktene</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationChartLog">Vis oversikt med logger for spilløkter</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">Vis/Skjul knapp med detaljer</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">Antall data i horisontal akse</sys:String>
 
-    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabels">Show labels on horizontal axis</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">Show labels on vertical axis</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationGraphicLogOptions">Chart options</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabels">Vis etiketter på horisontal akse</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">Vis etiketter på vertikal akse</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicLogOptions">Diagramalternativer</sys:String>
 
-    <sys:String x:Key="LOCGameActivityUseControls">Use chart controls</sys:String>
-    <sys:String x:Key="LOCGameActivitySelectChartSeriesToDisplay">Select the series to display on the chart</sys:String>
+    <sys:String x:Key="LOCGameActivityUseControls">Bruk diagramkontroller</sys:String>
+    <sys:String x:Key="LOCGameActivitySelectChartSeriesToDisplay">Velg serien som skal vises i diagrammet</sys:String>
 
-    <sys:String x:Key="LOCGameActivityIconFrom">Select the icon origin</sys:String>
-    <sys:String x:Key="LOCGameActivityIconFromLibrary">Use the icon defined in the library</sys:String>
-    <sys:String x:Key="LOCGameActivityIconFromFont">Use the icon defined in the plugin's font</sys:String>
+    <sys:String x:Key="LOCGameActivityIconFrom">Velg ikonets opprinnelse</sys:String>
+    <sys:String x:Key="LOCGameActivityIconFromLibrary">Bruk ikonet som er definert i biblioteket</sys:String>
+    <sys:String x:Key="LOCGameActivityIconFromFont">Bruk ikonet som er definert i utvidelsens font</sys:String>
 
-    <sys:String x:Key="LOCGameActivityIgnoreSession">Ignore short play sessions</sys:String>
-    <sys:String x:Key="LOCGameActivitySetVariatorTime">Set time variator</sys:String>
-    <sys:String x:Key="LOCGameActivitySetVariatorLog">Set log variator</sys:String>
+    <sys:String x:Key="LOCGameActivityIgnoreSession">Ignorer korte spilløkter</sys:String>
+    <sys:String x:Key="LOCGameActivitySetVariatorTime">Angi tidsvariant</sys:String>
+    <sys:String x:Key="LOCGameActivitySetVariatorLog">Angi loggvariant</sys:String>
 
     <!-- GameActivityViewSingle -->
 
-    <sys:String x:Key="LOCGameActivityAvgPerDay">Average time per day</sys:String>
-    <sys:String x:Key="LOCGameActivityFirstSession">First session</sys:String>
-    <sys:String x:Key="LOCGameActivityLastSession">Last session</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgPerDay">Gjennomsnittlig tid per dag</sys:String>
+    <sys:String x:Key="LOCGameActivityFirstSession">Første økt</sys:String>
+    <sys:String x:Key="LOCGameActivityLastSession">Siste økt</sys:String>
     
     <!-- GameActivityView -->
 
-    <sys:String x:Key="LOCGameActivityTotalHours">Total hours</sys:String>
-    <sys:String x:Key="LOCGameActivityTotalHoursByWeeks">Total hours by week</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHours">Totalt antall timer</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByWeeks">Totalt antall timer per uke</sys:String>
 
-    <sys:String x:Key="LOCGameActivityWeekLabel">Week</sys:String>
+    <sys:String x:Key="LOCGameActivityWeekLabel">Uke</sys:String>
 
     <sys:String x:Key="LOCGameActivityTime">Time</sys:String>
     <sys:String x:Key="LOCGameActivityLog">Log</sys:String>
