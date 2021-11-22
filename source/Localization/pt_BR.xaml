@@ -114,8 +114,8 @@
 
     <!-- GameActivityAddTime -->
 
-    <sys:String x:Key="LOCGaAddNewGameSession">Add new game session</sys:String>
-    <sys:String x:Key="LOCGaDateStart">Date start</sys:String>
-    <sys:String x:Key="LOCGaDateEnd">Date end</sys:String>
+    <sys:String x:Key="LOCGaAddNewGameSession">Adicionar nova sessão de jogo</sys:String>
+    <sys:String x:Key="LOCGaDateStart">Data de início</sys:String>
+    <sys:String x:Key="LOCGaDateEnd">Data final</sys:String>
 
 </ResourceDictionary>
