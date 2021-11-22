@@ -107,15 +107,15 @@
 
     <!-- QuickSearch -->
 
-    <sys:String x:Key="LOCGaQuickSearchDescription">Search games on GameActivity data</sys:String>
-    <sys:String x:Key="LOCGaQuickSearchByFPS">Find by FPS</sys:String>
-    <sys:String x:Key="LOCGaQuickSearchByTime">Find by time session</sys:String>
-    <sys:String x:Key="LOCGaQuickSearchByDate">Find by date session</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchDescription">Buscar juegos en datos de GameActivity</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchByFPS">Buscar por FPS</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchByTime">Buscar por tiempo de sesión</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchByDate">Buscar por fecha de sesión</sys:String>
 
     <!-- GameActivityAddTime -->
 
-    <sys:String x:Key="LOCGaAddNewGameSession">Add new game session</sys:String>
-    <sys:String x:Key="LOCGaDateStart">Date start</sys:String>
-    <sys:String x:Key="LOCGaDateEnd">Date end</sys:String>
+    <sys:String x:Key="LOCGaAddNewGameSession">Añadir nueva sesión de juego</sys:String>
+    <sys:String x:Key="LOCGaDateStart">Fecha de Inicio</sys:String>
+    <sys:String x:Key="LOCGaDateEnd">Fecha final</sys:String>
 
 </ResourceDictionary>
