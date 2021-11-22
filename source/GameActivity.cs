@@ -970,8 +970,10 @@ namespace GameActivity
             // QuickSearch support
             try
             {
+                string icon = Path.Combine(PluginDatabase.Paths.PluginPath, "icon.png");
+
                 var GaSubItemsAction = new SubItemsAction() { Action = () => { }, Name = "", CloseAfterExecute = false, SubItemSource = new QuickSearchItemSource() };
-                var GaCommand = new CommandItem("GameActivity", new List<CommandAction>(), ResourceProvider.GetString("LOCGaQuickSearchDescription"));
+                var GaCommand = new CommandItem("GameActivity", new List<CommandAction>(), ResourceProvider.GetString("LOCGaQuickSearchDescription"), icon);
                 GaCommand.Keys.Add(new CommandItemKey() { Key = "ga", Weight = 1 });
                 GaCommand.Actions.Add(GaSubItemsAction);
                 QuickSearch.QuickSearchSDK.AddCommand(GaCommand);

@@ -8,6 +8,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,14 @@ namespace GameActivity.Models
 
         public bool DisplayAllIfQueryIsEmpty => true;
 
+        public string Icon
+        {
+            get
+            {
+                return Path.Combine(PluginDatabase.Paths.PluginPath, "Resources", "command-line.png");
+            }
+        }
+
 
         public IEnumerable<ISearchItem<string>> GetItems()
         {
@@ -35,9 +44,9 @@ namespace GameActivity.Models
             {
                 return new List<ISearchItem<string>>
                 {
-                    new CommandItem("<", new List<CommandAction>(), "example: fps < 30"),
-                    new CommandItem("<>", new List<CommandAction>(), "example: fps 30 <> 60"),
-                    new CommandItem(">", new List<CommandAction>(), "example: fps > 60"),
+                    new CommandItem("<", new List<CommandAction>(), "example: fps < 30", Icon),
+                    new CommandItem("<>", new List<CommandAction>(), "example: fps 30 <> 60", Icon),
+                    new CommandItem(">", new List<CommandAction>(), "example: fps > 60", Icon),
                 }.AsEnumerable();
             }
         
@@ -45,9 +54,9 @@ namespace GameActivity.Models
             {
                 return new List<ISearchItem<string>>
                 {
-                    new CommandItem("<", new List<CommandAction>(), "example: time < 30 s"),
-                    new CommandItem("<>", new List<CommandAction>(), "example: time 30 min <> 1 h"),
-                    new CommandItem(">", new List<CommandAction>(), "example: time > 2 h"),
+                    new CommandItem("<", new List<CommandAction>(), "example: time < 30 s", Icon),
+                    new CommandItem("<>", new List<CommandAction>(), "example: time 30 min <> 1 h", Icon),
+                    new CommandItem(">", new List<CommandAction>(), "example: time > 2 h", Icon),
                 }.AsEnumerable();
             }
         
@@ -55,17 +64,17 @@ namespace GameActivity.Models
             {
                 return new List<ISearchItem<string>>
                 {
-                    new CommandItem("<", new List<CommandAction>(), "example: date < 2021-11-19"),
-                    new CommandItem("<>", new List<CommandAction>(), "example: date 2021-11-19 <> 2021-11-25"),
-                    new CommandItem(">", new List<CommandAction>(), "example: date > 2021-11-19"),
+                    new CommandItem("<", new List<CommandAction>(), "example: date < 2021-11-19", Icon),
+                    new CommandItem("<>", new List<CommandAction>(), "example: date 2021-11-19 <> 2021-11-25", Icon),
+                    new CommandItem(">", new List<CommandAction>(), "example: date > 2021-11-19", Icon),
                 }.AsEnumerable();
             }
 
             return new List<ISearchItem<string>>
             {
-                new CommandItem("fps", new List<CommandAction>(), ResourceProvider.GetString("LOCGaQuickSearchByFPS")),
-                new CommandItem("time", new List<CommandAction>(), ResourceProvider.GetString("LOCGaQuickSearchByTime")),
-                new CommandItem("date", new List<CommandAction>(), ResourceProvider.GetString("LOCGaQuickSearchByDate"))
+                new CommandItem("fps", new List<CommandAction>(), ResourceProvider.GetString("LOCGaQuickSearchByFPS"), Icon),
+                new CommandItem("time", new List<CommandAction>(), ResourceProvider.GetString("LOCGaQuickSearchByTime"), Icon),
+                new CommandItem("date", new List<CommandAction>(), ResourceProvider.GetString("LOCGaQuickSearchByDate"), Icon),
             }.AsEnumerable();
         }
 
