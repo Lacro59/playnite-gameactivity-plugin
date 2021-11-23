@@ -37,7 +37,6 @@ namespace GameActivity.Services
 
                 Database = new GameActivitiesCollection(Paths.PluginDatabasePath);
                 Database.SetGameInfoDetails<Activity, ActivityDetails>(PlayniteApi);
-                GetPluginTags();
 
                 LocalSystem = new LocalSystem(Path.Combine(Paths.PluginUserDataPath, $"Configurations.json"), false);
 
