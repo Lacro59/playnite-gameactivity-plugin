@@ -24,12 +24,14 @@
 
         <Label Content="{DynamicResource LOCGaDateStart}" Grid.Column="0" Grid.Row="0" />
         <DatePicker Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Name="PART_DateStart" SelectedDateChanged="PART_SelectedDateChanged" />
-        <temperaturemeasurementtool:TimePicker Grid.Column="3" Grid.Row="0" x:Name="PART_TimeStart" />
+        <temperaturemeasurementtool:TimePicker Grid.Column="3" Grid.Row="0" x:Name="PART_TimeStart" TimeChanged="PART_TimeChanged" />
 
         <Label Content="{DynamicResource LOCGaDateEnd}" Grid.Column="0" Grid.Row="2" />
         <DatePicker Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Name="PART_DateEnd" SelectedDateChanged="PART_SelectedDateChanged" />
-        <temperaturemeasurementtool:TimePicker Grid.Column="3" Grid.Row="2" x:Name="PART_TimeEnd" />
+        <temperaturemeasurementtool:TimePicker Grid.Column="3" Grid.Row="2" x:Name="PART_TimeEnd" TimeChanged="PART_TimeChanged" />
 
+        <Label Content="{DynamicResource LOCGameActivityLvGamesElapsedSeconds}" Grid.Column="0" Grid.Row="3" />
+        <Label Name="PART_ElapseTime" Grid.Column="1" Grid.Row="3" Content="any time"/>
 
         <StackPanel Grid.Row="3" Grid.ColumnSpan="5"
                     VerticalAlignment="Bottom" Orientation="Horizontal" HorizontalAlignment="Right">

@@ -380,11 +380,16 @@
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             
-                            <GridViewColumn Width="50">
+                            <GridViewColumn Width="100">
                                 <GridViewColumnHeader />
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Click="PART_Delete_Click" Content="&#x1f5d9;" Tag="{Binding GameLastActivity}"/>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Click="PART_Delete_Click" Content="&#x1f5d9;" Tag="{Binding GameLastActivity}" />
+
+                                            <Button Content="&#xef10;" Margin="10,0,0,0" Tag="{Binding GameLastActivity}"
+                                                    Click="PART_BtEdit_Click" FontFamily="{DynamicResource FontIcoFont}"  />
+                                        </StackPanel>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -413,7 +418,7 @@
                         <ColumnDefinition Width="auto" />
                     </Grid.ColumnDefinitions>
 
-                    <Button Name="PART_BtAdd" Content="&#xe971;" Height="33" FontSize="20" 
+                    <Button Name="PART_BtAdd" Content="&#xe971;" Height="33" FontSize="22" 
                             Click="PART_BtAdd_Click" FontFamily="{DynamicResource FontIcoFont}"  />
 
                     <ToggleButton Content="&#xef24;" FontFamily="{StaticResource FontIcoFont}" Name="ButtonShowConfig" 

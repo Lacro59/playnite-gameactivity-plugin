@@ -21,6 +21,16 @@ namespace TemperatureMeasurementTool
     /// </summary>
     public partial class TimePicker : UserControl
     {
+        public static readonly RoutedEvent TimeChangedEvent =
+            EventManager.RegisterRoutedEvent("TimeChanged", RoutingStrategy.Direct, typeof(RoutedEventHandler), typeof(TimePicker));
+
+        public event RoutedEventHandler TimeChanged
+        {
+            add { AddHandler(TimeChangedEvent, value); }
+            remove { RemoveHandler(TimeChangedEvent, value); }
+        }
+
+
         public TimePicker()
         {
             InitializeComponent();
@@ -44,6 +54,8 @@ namespace TemperatureMeasurementTool
             {
                 Hour.Text = "01";
             }
+
+            RaiseEvent(new RoutedEventArgs(TimeChangedEvent));
         }
 
         /// <summary>
@@ -62,6 +74,23 @@ namespace TemperatureMeasurementTool
             {
                 Minute.Text = "01";
             }
+
+            RaiseEvent(new RoutedEventArgs(TimeChangedEvent));
+        }
+
+        private void BtnUpSeconde_OnClick(object sender, RoutedEventArgs e)
+        {
+            var value = Convert.ToInt32(Seconde.Text);
+            if (value < 59)
+            {
+                Seconde.Text = (value + 1) <= 9 ? "0" + (++value).ToString() : (++value).ToString();
+            }
+            else if (value == 59)
+            {
+                Seconde.Text = "01";
+            }
+
+            RaiseEvent(new RoutedEventArgs(TimeChangedEvent));
         }
 
         /// <summary>
@@ -80,6 +109,8 @@ namespace TemperatureMeasurementTool
             {
                 Hour.Text = "23";
             }
+
+            RaiseEvent(new RoutedEventArgs(TimeChangedEvent));
         }
 
         /// <summary>
@@ -99,6 +130,22 @@ namespace TemperatureMeasurementTool
                 Minute.Text = "59";
             }
 
+            RaiseEvent(new RoutedEventArgs(TimeChangedEvent));
+        }
+
+        private void BtnDownSeconde_OnClick(object sender, RoutedEventArgs e)
+        {
+            var value = Convert.ToInt32(Seconde.Text);
+            if (value > 0)
+            {
+                Seconde.Text = (value - 1) <= 9 ? "0" + (--value).ToString() : (--value).ToString();
+            }
+            else if (value == 0)
+            {
+                Seconde.Text = "59";
+            }
+
+            RaiseEvent(new RoutedEventArgs(TimeChangedEvent));
         }
 
         /// <summary>
@@ -116,17 +163,20 @@ namespace TemperatureMeasurementTool
         /// <returns></returns>
         public string GetValueAsString()
         {
-            return Hour.Text + ":" + Minute.Text;
+            return Hour.Text + ":" + Minute.Text + ":" + Seconde.Text;
         }
 
         /// <summary>
         /// Setzt die Uhrzeit programmatically
         /// </summary>
-        public void SetValueAsString(string hour, string minute)
+        public void SetValueAsString(string hour, string minute, string seconde)
         {
             //TODO Check if hour and Minute is correct Value (Regex)
             Hour.Text = hour;
             Minute.Text = minute;
+            Seconde.Text = seconde;
+
+            RaiseEvent(new RoutedEventArgs(TimeChangedEvent));
         }
 
         /// <summary>
@@ -149,6 +199,11 @@ namespace TemperatureMeasurementTool
             Minute.SelectAll();
         }
 
+        private void Seconde_OnGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            Seconde.SelectAll();
+        }
+
         /// <summary>
         /// Wenn der User die linke MausTaste in dieses Feld rein klickt
         /// </summary>
@@ -160,6 +215,15 @@ namespace TemperatureMeasurementTool
             {
                 e.Handled = true;
                 Minute.Focus();
+            }
+        }
+
+        private void Seconde_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (!Seconde.IsKeyboardFocusWithin)
+            {
+                e.Handled = true;
+                Seconde.Focus();
             }
         }
 
@@ -189,6 +253,19 @@ namespace TemperatureMeasurementTool
             {
                 Minute.Text = "59";
             }
+
+            RaiseEvent(new RoutedEventArgs(TimeChangedEvent));
+        }
+
+        private void Seconde_OnLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            var resultSeconde = Convert.ToInt32(Seconde.Text);
+            if (resultSeconde > 59)
+            {
+                Seconde.Text = "59";
+            }
+
+            RaiseEvent(new RoutedEventArgs(TimeChangedEvent));
         }
 
         /// <summary>
@@ -199,7 +276,17 @@ namespace TemperatureMeasurementTool
         private void Minute_OnPreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             e.Handled = Regex.IsMatch(e.Text, "[^0-9]+");
+
+            RaiseEvent(new RoutedEventArgs(TimeChangedEvent));
         }
+
+        private void Seconde_OnPreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = Regex.IsMatch(e.Text, "[^0-9]+");
+
+            RaiseEvent(new RoutedEventArgs(TimeChangedEvent));
+        }
+
         /// <summary>
         /// Überprüft die Eingabe in das Stundenfeld
         /// </summary>
@@ -208,6 +295,8 @@ namespace TemperatureMeasurementTool
         private void Hour_OnPreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             e.Handled = Regex.IsMatch(e.Text, "[^0-9]+");
+
+            RaiseEvent(new RoutedEventArgs(TimeChangedEvent));
         }
 
         /// <summary>
@@ -222,6 +311,8 @@ namespace TemperatureMeasurementTool
             {
                 Hour.Text = "23";
             }
+
+            RaiseEvent(new RoutedEventArgs(TimeChangedEvent));
         }
 
         private void UIElement_OnMouseEnter(object sender, MouseEventArgs e)

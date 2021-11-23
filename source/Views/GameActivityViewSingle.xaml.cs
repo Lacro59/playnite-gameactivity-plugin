@@ -310,13 +310,38 @@ namespace GameActivity.Views
                 ShowCloseButton = true
             };
 
-            var ViewExtension = new GameActivityAddTime(game);
+            var ViewExtension = new GameActivityAddTime(game, null);
             Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PluginDatabase.PlayniteApi, resources.GetString("LOCGaAddNewGameSession"), ViewExtension, windowOptions);
             windowExtension.ShowDialog();
 
             if (ViewExtension.activity != null)
             {
                 gameActivities.Items.Add(ViewExtension.activity);
+                PluginDatabase.Update(gameActivities);
+                getActivityByListGame(gameActivities);
+            }
+        }
+
+        private void PART_BtEdit_Click(object sender, RoutedEventArgs e)
+        {
+            var GameLastActivity = ((FrameworkElement)sender).Tag;
+            int index = gameActivities.Items.FindIndex(x => x.DateSession == ((DateTime)GameLastActivity).ToUniversalTime());
+            Activity activity = gameActivities.Items[index];
+
+            var windowOptions = new WindowOptions
+            {
+                ShowMinimizeButton = false,
+                ShowMaximizeButton = false,
+                ShowCloseButton = true
+            };
+
+            var ViewExtension = new GameActivityAddTime(game, activity);
+            Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PluginDatabase.PlayniteApi, resources.GetString("LOCGaAddNewGameSession"), ViewExtension, windowOptions);
+            windowExtension.ShowDialog();
+
+            if (ViewExtension.activity != null)
+            {
+                gameActivities.Items[index] = ViewExtension.activity;
                 PluginDatabase.Update(gameActivities);
                 getActivityByListGame(gameActivities);
             }

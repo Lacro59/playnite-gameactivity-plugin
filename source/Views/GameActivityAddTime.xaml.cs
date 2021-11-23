@@ -1,8 +1,10 @@
-﻿using GameActivity.Models;
+﻿using CommonPlayniteShared.Converters;
+using GameActivity.Models;
 using GameActivity.Services;
 using Playnite.SDK.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,12 +23,31 @@ namespace GameActivity.Views
         public Activity activity;
         private Game game;
 
+        private PlayTimeToStringConverter playTimeToStringConverter = new PlayTimeToStringConverter();
 
-        public GameActivityAddTime(Game game)
+
+        public GameActivityAddTime(Game game, Activity activity)
         {
             this.game = game;
 
             InitializeComponent();
+
+            PART_ElapseTime.Content = "--";
+            if (activity != null)
+            {
+                var DateSessionStart = ((DateTime)activity.DateSession).ToLocalTime();
+                PART_DateStart.SelectedDate = activity.DateSession;
+                PART_TimeStart.SetValueAsString(DateSessionStart.ToString("HH"), DateSessionStart.ToString("mm"), DateSessionStart.ToString("ss"));
+
+                var DateSessionEnd = DateSessionStart.AddSeconds(activity.ElapsedSeconds);
+                PART_DateEnd.SelectedDate = DateSessionEnd;
+                PART_TimeEnd.SetValueAsString(DateSessionEnd.ToString("HH"), DateSessionEnd.ToString("mm"), DateSessionEnd.ToString("ss"));
+
+                PART_DateStart.IsEnabled = false;
+                PART_TimeStart.IsEnabled = false;
+
+                SetElapsedTime();
+            }
         }
 
 
@@ -34,8 +55,8 @@ namespace GameActivity.Views
         {
             try
             {
-                DateTime DateStart = DateTime.Parse(((DateTime)PART_DateStart.SelectedDate).ToString("yyyy-MM-dd") + " " + PART_TimeStart.GetValueAsString() + ":00");
-                DateTime DateEnd = DateTime.Parse(((DateTime)PART_DateEnd.SelectedDate).ToString("yyyy-MM-dd") + " " + PART_TimeEnd.GetValueAsString() + ":00");
+                DateTime DateStart = DateTime.Parse(((DateTime)PART_DateStart.SelectedDate).ToString("yyyy-MM-dd") + " " + PART_TimeStart.GetValueAsString());
+                DateTime DateEnd = DateTime.Parse(((DateTime)PART_DateEnd.SelectedDate).ToString("yyyy-MM-dd") + " " + PART_TimeEnd.GetValueAsString());
 
                 activity = new Activity
                 {
@@ -56,9 +77,33 @@ namespace GameActivity.Views
             ((Window)this.Parent).Close();
         }
 
+
         private void PART_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
-            PART_Add.IsEnabled = !PART_DateStart.Text.IsNullOrEmpty() && !PART_DateEnd.Text.IsNullOrEmpty();
+            SetElapsedTime();
+        }
+
+        private void PART_TimeChanged(object sender, RoutedEventArgs e)
+        {
+            SetElapsedTime();
+        }
+
+
+        private void SetElapsedTime()
+        {
+            try
+            {
+                DateTime DateStart = DateTime.Parse(((DateTime)PART_DateStart.SelectedDate).ToString("yyyy-MM-dd") + " " + PART_TimeStart.GetValueAsString());
+                DateTime DateEnd = DateTime.Parse(((DateTime)PART_DateEnd.SelectedDate).ToString("yyyy-MM-dd") + " " + PART_TimeEnd.GetValueAsString());
+                PART_ElapseTime.Content = (string)playTimeToStringConverter.Convert((ulong)(DateEnd - DateStart).TotalSeconds, null, null, CultureInfo.CurrentCulture);
+
+                PART_Add.IsEnabled = true;
+            }
+            catch
+            {
+                PART_ElapseTime.Content = "--";
+                PART_Add.IsEnabled = false;
+            }
         }
     }
 }

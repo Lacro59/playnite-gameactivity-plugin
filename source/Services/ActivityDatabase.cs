@@ -9,11 +9,8 @@ using CommonPlayniteShared.Converters;
 using System.Globalization;
 using CommonPluginsShared;
 using System.IO;
-using MoreLinq;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Diagnostics;
-using System.Threading;
 
 namespace GameActivity.Services
 {
