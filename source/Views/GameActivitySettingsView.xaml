@@ -155,14 +155,8 @@
         <TabItem Header="{DynamicResource LOCCommonIntegration}">
             <ScrollViewer>
                 <StackPanel Margin="0,10,0,0">
-                    <Label Content="{DynamicResource LOCCommonControlsAvailable}" />
-                    <Separator Margin="0,0,0,10" />
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="auto" />
-                            <RowDefinition Height="10" />
-                            <RowDefinition Height="auto" />
-                            <RowDefinition Height="10" />
                             <RowDefinition Height="auto" />
                             <RowDefinition Height="10" />
                             <RowDefinition Height="auto" />
@@ -176,15 +170,13 @@
                             </Expander.Style>
 
                             <Expander.Header>
-                                <CheckBox VerticalAlignment="Center" IsChecked="{Binding Settings.EnableIntegrationButtonHeader}"
-                                          Command="{x:Static pcmd:Commands.RestartRequired}" 
-                                          CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
+                                <CheckBox IsChecked="{Binding Settings.EnableIntegrationButtonHeader}">
                                     <Label Content="{DynamicResource LOCCommonIntegrationButtonHeader}" />
                                 </CheckBox>
                             </Expander.Header>
                         </Expander>
 
-                        <Expander Grid.Row="2">
+                        <Expander Grid.Row="2" AttachedProperties:ExpanderAttachedProperties.HideExpanderArrow="True">
                             <Expander.Style>
                                 <Style TargetType="{x:Type Expander}" BasedOn="{StaticResource {x:Type Expander}}">
                                     <Setter Property="Background" Value="Transparent" />
@@ -192,203 +184,232 @@
                             </Expander.Style>
 
                             <Expander.Header>
-                                <CheckBox IsChecked="{Binding Settings.EnableIntegrationButton}" Name="PART_IntegrationButton">
-                                    <Label Content="{DynamicResource LOCCommonControlsPluginButtonShow}" />
+                                <CheckBox IsChecked="{Binding Settings.EnableIntegrationButtonSide}">
+                                    <Label Content="{DynamicResource LOCCommonIntegrationButtonSide}" />
                                 </CheckBox>
                             </Expander.Header>
-
-                            <Expander.Content>
-                                <Border IsEnabled="{Binding ElementName=PART_IntegrationButton, Path=IsChecked}"
-				                        Margin="5" Padding="10"
-				                        BorderBrush="{DynamicResource PopupBorderBrush}"
-				                        BorderThickness="{DynamicResource PopupBorderThickness}">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="10" />
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="auto" />
-                                        </Grid.RowDefinitions>
-
-                                        <CheckBox Grid.Column="0" Grid.Row="0" IsChecked="{Binding Settings.EnableIntegrationButtonDetails}">
-                                            <Label Content="{DynamicResource LOCCommonIntegrationButtonDetails}" />
-                                        </CheckBox>
-                                    </Grid>
-                                </Border>
-                            </Expander.Content>
                         </Expander>
+                    </Grid>
 
-                        <Expander Grid.Row="4">
-                            <Expander.Style>
-                                <Style TargetType="{x:Type Expander}" BasedOn="{StaticResource {x:Type Expander}}">
-                                    <Setter Property="Background" Value="Transparent" />
-                                </Style>
-                            </Expander.Style>
+                    <StackPanel Margin="0,30,0,0">
+                        <Label Content="{DynamicResource LOCCommonControlsAvailable}" />
+                        <Separator Margin="0,0,0,10" />
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="10" />
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="10" />
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
+                            <Expander Grid.Row="2">
+                                <Expander.Style>
+                                    <Style TargetType="{x:Type Expander}" BasedOn="{StaticResource {x:Type Expander}}">
+                                        <Setter Property="Background" Value="Transparent" />
+                                    </Style>
+                                </Expander.Style>
 
-                            <Expander.Header>
-                                <CheckBox IsChecked="{Binding Settings.EnableIntegrationChartTime}" Name="PART_IntegrationChartTime">
-                                    <Label Content="{DynamicResource LOCGameActivityIntegrationChartTime}" />
-                                </CheckBox>
-                            </Expander.Header>
+                                <Expander.Header>
+                                    <CheckBox IsChecked="{Binding Settings.EnableIntegrationButton}" Name="PART_IntegrationButton">
+                                        <Label Content="{DynamicResource LOCCommonControlsPluginButtonShow}" />
+                                    </CheckBox>
+                                </Expander.Header>
 
-                            <Expander.Content>
-                                <Border IsEnabled="{Binding ElementName=PART_IntegrationChartTime, Path=IsChecked}"
+                                <Expander.Content>
+                                    <Border IsEnabled="{Binding ElementName=PART_IntegrationButton, Path=IsChecked}"
 				                        Margin="5" Padding="10"
 				                        BorderBrush="{DynamicResource PopupBorderBrush}"
 				                        BorderThickness="{DynamicResource PopupBorderThickness}">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="auto" />
-                                            <RowDefinition Height="10" />
-                                            <RowDefinition Height="auto" />
-                                            <RowDefinition Height="10" />
-                                            <RowDefinition Height="auto" />
-                                        </Grid.RowDefinitions>
-
-                                        <DockPanel Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">
-                                            <Label DockPanel.Dock="Left" Content="{DynamicResource LOCHeight}" />
-                                            <playnitecontrols:NumericBox DockPanel.Dock="Right" Width="40" TextAlignment="Center"
-                                                                         LongValue="{Binding Settings.ChartTimeHeight}" />
-                                        </DockPanel>
-                                        <CheckBox Grid.Column="2" Grid.Row="0" IsChecked="{Binding Settings.ChartTimeVisibleEmpty}">
-                                            <Label Content="{DynamicResource LOCCommonControlsVisibleNoData}" />
-                                        </CheckBox>
-
-                                        <CheckBox Grid.Column="0" Grid.Row="2" IsChecked="{Binding Settings.ChartTimeAxis}">
-                                            <Label Content="{DynamicResource LOCGameActivityIntegrationGraphicShowLabels}" />
-                                        </CheckBox>
-                                        <CheckBox Grid.Column="1" Grid.Row="2" IsChecked="{Binding Settings.ChartTimeOrdinates}">
-                                            <Label Content="{DynamicResource LOCGameActivityIntegrationGraphicShowLabelsOrdinates}" />
-                                        </CheckBox>
-
-                                        <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4">
+                                        <Grid>
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="auto" />
                                                 <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="15" />
+                                                <ColumnDefinition Width="10" />
+                                                <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="auto" />
+                                            </Grid.RowDefinitions>
 
-                                            <Label Content="{DynamicResource LOCGameActivityIntegrationGraphicOptionsCountAbscissa}" Grid.Column="0" />
-                                            <Slider Minimum="3" Maximum="30" Value="{Binding Settings.ChartTimeCountAbscissa}" 
+                                            <CheckBox Grid.Column="0" Grid.Row="0" IsChecked="{Binding Settings.EnableIntegrationButtonDetails}">
+                                                <Label Content="{DynamicResource LOCCommonIntegrationButtonDetails}" />
+                                            </CheckBox>
+                                        </Grid>
+                                    </Border>
+                                </Expander.Content>
+                            </Expander>
+
+                            <Expander Grid.Row="4">
+                                <Expander.Style>
+                                    <Style TargetType="{x:Type Expander}" BasedOn="{StaticResource {x:Type Expander}}">
+                                        <Setter Property="Background" Value="Transparent" />
+                                    </Style>
+                                </Expander.Style>
+
+                                <Expander.Header>
+                                    <CheckBox IsChecked="{Binding Settings.EnableIntegrationChartTime}" Name="PART_IntegrationChartTime">
+                                        <Label Content="{DynamicResource LOCGameActivityIntegrationChartTime}" />
+                                    </CheckBox>
+                                </Expander.Header>
+
+                                <Expander.Content>
+                                    <Border IsEnabled="{Binding ElementName=PART_IntegrationChartTime, Path=IsChecked}"
+				                        Margin="5" Padding="10"
+				                        BorderBrush="{DynamicResource PopupBorderBrush}"
+				                        BorderThickness="{DynamicResource PopupBorderThickness}">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="auto" />
+                                                <RowDefinition Height="10" />
+                                                <RowDefinition Height="auto" />
+                                                <RowDefinition Height="10" />
+                                                <RowDefinition Height="auto" />
+                                            </Grid.RowDefinitions>
+
+                                            <DockPanel Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">
+                                                <Label DockPanel.Dock="Left" Content="{DynamicResource LOCHeight}" />
+                                                <playnitecontrols:NumericBox DockPanel.Dock="Right" Width="40" TextAlignment="Center"
+                                                                         LongValue="{Binding Settings.ChartTimeHeight}" />
+                                            </DockPanel>
+                                            <CheckBox Grid.Column="2" Grid.Row="0" IsChecked="{Binding Settings.ChartTimeVisibleEmpty}">
+                                                <Label Content="{DynamicResource LOCCommonControlsVisibleNoData}" />
+                                            </CheckBox>
+
+                                            <CheckBox Grid.Column="0" Grid.Row="2" IsChecked="{Binding Settings.ChartTimeAxis}">
+                                                <Label Content="{DynamicResource LOCGameActivityIntegrationGraphicShowLabels}" />
+                                            </CheckBox>
+                                            <CheckBox Grid.Column="1" Grid.Row="2" IsChecked="{Binding Settings.ChartTimeOrdinates}">
+                                                <Label Content="{DynamicResource LOCGameActivityIntegrationGraphicShowLabelsOrdinates}" />
+                                            </CheckBox>
+
+                                            <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="15" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <Label Content="{DynamicResource LOCGameActivityIntegrationGraphicOptionsCountAbscissa}" Grid.Column="0" />
+                                                <Slider Minimum="3" Maximum="30" Value="{Binding Settings.ChartTimeCountAbscissa}" 
                                                     IsSnapToTickEnabled="True" TickFrequency="1" AutoToolTipPlacement="TopLeft"
                                                     ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Value}"
                                                     Grid.Column="1" VerticalAlignment="Center" Margin="20,0,5,0" Name="sCountAbscissa" />
-                                            <Label Grid.Column="2" Content="{Binding ElementName=sCountAbscissa, Path=Value}" HorizontalAlignment="Center" />
+                                                <Label Grid.Column="2" Content="{Binding ElementName=sCountAbscissa, Path=Value}" HorizontalAlignment="Center" />
+                                            </Grid>
                                         </Grid>
-                                    </Grid>
-                                </Border>
-                            </Expander.Content>
-                        </Expander>
+                                    </Border>
+                                </Expander.Content>
+                            </Expander>
 
-                        <Expander Grid.Row="6">
-                            <Expander.Style>
-                                <Style TargetType="{x:Type Expander}" BasedOn="{StaticResource {x:Type Expander}}">
-                                    <Setter Property="Background" Value="Transparent" />
-                                </Style>
-                            </Expander.Style>
+                            <Expander Grid.Row="6">
+                                <Expander.Style>
+                                    <Style TargetType="{x:Type Expander}" BasedOn="{StaticResource {x:Type Expander}}">
+                                        <Setter Property="Background" Value="Transparent" />
+                                    </Style>
+                                </Expander.Style>
 
-                            <Expander.Header>
-                                <CheckBox IsChecked="{Binding Settings.EnableIntegrationChartLog}" Name="PART_IntegrationChartLog">
-                                    <Label Content="{DynamicResource LOCGameActivityIntegrationChartLog}" />
-                                </CheckBox>
-                            </Expander.Header>
+                                <Expander.Header>
+                                    <CheckBox IsChecked="{Binding Settings.EnableIntegrationChartLog}" Name="PART_IntegrationChartLog">
+                                        <Label Content="{DynamicResource LOCGameActivityIntegrationChartLog}" />
+                                    </CheckBox>
+                                </Expander.Header>
 
-                            <Expander.Content>
-                                <Border IsEnabled="{Binding ElementName=PART_IntegrationChartLog, Path=IsChecked}"
+                                <Expander.Content>
+                                    <Border IsEnabled="{Binding ElementName=PART_IntegrationChartLog, Path=IsChecked}"
 				                        Margin="5" Padding="10"
 				                        BorderBrush="{DynamicResource PopupBorderBrush}"
 				                        BorderThickness="{DynamicResource PopupBorderThickness}">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="auto" />
-                                            <RowDefinition Height="10" />
-                                            <RowDefinition Height="auto" />
-                                            <RowDefinition Height="10" />
-                                            <RowDefinition Height="auto" />
-                                            <RowDefinition Height="10" />
-                                            <RowDefinition Height="auto" />
-                                            <RowDefinition Height="10" />
-                                            <RowDefinition Height="auto" />
-                                        </Grid.RowDefinitions>
-
-                                        <DockPanel Grid.Column="0" Grid.Row="0">
-                                            <Label DockPanel.Dock="Left" Content="{DynamicResource LOCHeight}" />
-                                            <playnitecontrols:NumericBox DockPanel.Dock="Right" Width="40" TextAlignment="Center"
-                                                                         LongValue="{Binding Settings.ChartLogHeight}" />
-                                        </DockPanel>
-                                        <CheckBox Grid.Column="2" Grid.Row="0" IsChecked="{Binding Settings.ChartLogVisibleEmpty}">
-                                            <Label Content="{DynamicResource LOCCommonControlsVisibleNoData}" />
-                                        </CheckBox>
-
-                                        <CheckBox Grid.Column="0" Grid.Row="2" IsChecked="{Binding Settings.ChartLogAxis}">
-                                            <Label Content="{DynamicResource LOCGameActivityIntegrationGraphicShowLabels}" />
-                                        </CheckBox>
-                                        <CheckBox Grid.Column="1" Grid.Row="2" IsChecked="{Binding Settings.ChartLogOrdinates}">
-                                            <Label Content="{DynamicResource LOCGameActivityIntegrationGraphicShowLabelsOrdinates}" />
-                                        </CheckBox>
-
-                                        <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4">
+                                        <Grid>
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="auto" />
                                                 <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="15" />
+                                                <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
-                                            <Label Content="{DynamicResource LOCGameActivityIntegrationGraphicOptionsCountAbscissa}" Grid.Column="0" />
-                                            <Slider Minimum="3" Maximum="30" Value="{Binding Settings.ChartLogCountAbscissa}" 
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="auto" />
+                                                <RowDefinition Height="10" />
+                                                <RowDefinition Height="auto" />
+                                                <RowDefinition Height="10" />
+                                                <RowDefinition Height="auto" />
+                                                <RowDefinition Height="10" />
+                                                <RowDefinition Height="auto" />
+                                                <RowDefinition Height="10" />
+                                                <RowDefinition Height="auto" />
+                                            </Grid.RowDefinitions>
+
+                                            <DockPanel Grid.Column="0" Grid.Row="0">
+                                                <Label DockPanel.Dock="Left" Content="{DynamicResource LOCHeight}" />
+                                                <playnitecontrols:NumericBox DockPanel.Dock="Right" Width="40" TextAlignment="Center"
+                                                                         LongValue="{Binding Settings.ChartLogHeight}" />
+                                            </DockPanel>
+                                            <CheckBox Grid.Column="2" Grid.Row="0" IsChecked="{Binding Settings.ChartLogVisibleEmpty}">
+                                                <Label Content="{DynamicResource LOCCommonControlsVisibleNoData}" />
+                                            </CheckBox>
+
+                                            <CheckBox Grid.Column="0" Grid.Row="2" IsChecked="{Binding Settings.ChartLogAxis}">
+                                                <Label Content="{DynamicResource LOCGameActivityIntegrationGraphicShowLabels}" />
+                                            </CheckBox>
+                                            <CheckBox Grid.Column="1" Grid.Row="2" IsChecked="{Binding Settings.ChartLogOrdinates}">
+                                                <Label Content="{DynamicResource LOCGameActivityIntegrationGraphicShowLabelsOrdinates}" />
+                                            </CheckBox>
+
+                                            <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="15" />
+                                                </Grid.ColumnDefinitions>
+                                                <Label Content="{DynamicResource LOCGameActivityIntegrationGraphicOptionsCountAbscissa}" Grid.Column="0" />
+                                                <Slider Minimum="3" Maximum="30" Value="{Binding Settings.ChartLogCountAbscissa}" 
                                                     IsSnapToTickEnabled="True" TickFrequency="1" AutoToolTipPlacement="TopLeft"
                                                     ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Value}"
                                                     Grid.Column="1" VerticalAlignment="Center" Margin="20,0,5,0" Name="sCountAbscissaLog" />
-                                            <Label Grid.Column="2" Content="{Binding ElementName=sCountAbscissaLog, Path=Value}" HorizontalAlignment="Center" />
+                                                <Label Grid.Column="2" Content="{Binding ElementName=sCountAbscissaLog, Path=Value}" HorizontalAlignment="Center" />
+                                            </Grid>
+
+                                            <CheckBox Grid.Column="0" Grid.Row="6" IsChecked="{Binding Settings.UseControls}">
+                                                <Label Content="{DynamicResource LOCGameActivityUseControls}" />
+                                            </CheckBox>
+
+                                            <Label Content="{DynamicResource LOCGameActivitySelectChartSeriesToDisplay}" Grid.Column="0" Grid.Row="8" />
+
+                                            <Grid Grid.Row="8" Grid.Column="2">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="auto" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <CheckBox Grid.Column="0" IsChecked="{Binding Settings.DisplayCpu}">
+                                                    <Label Content="CPU" />
+                                                </CheckBox>
+
+                                                <CheckBox Grid.Column="2" IsChecked="{Binding Settings.DisplayGpu}">
+                                                    <Label Content="GPU" />
+                                                </CheckBox>
+
+                                                <CheckBox Grid.Column="4" IsChecked="{Binding Settings.DisplayRam}">
+                                                    <Label Content="RAM" />
+                                                </CheckBox>
+
+                                                <CheckBox Grid.Column="6" IsChecked="{Binding Settings.DisplayFps}">
+                                                    <Label Content="FPS" />
+                                                </CheckBox>
+                                            </Grid>
                                         </Grid>
-
-                                        <CheckBox Grid.Column="0" Grid.Row="6" IsChecked="{Binding Settings.UseControls}">
-                                            <Label Content="{DynamicResource LOCGameActivityUseControls}" />
-                                        </CheckBox>
-
-                                        <Label Content="{DynamicResource LOCGameActivitySelectChartSeriesToDisplay}" Grid.Column="0" Grid.Row="8" />
-
-                                        <Grid Grid.Row="8" Grid.Column="2">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="auto" />
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="auto" />
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="auto" />
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="auto" />
-                                            </Grid.ColumnDefinitions>
-
-                                            <CheckBox Grid.Column="0" IsChecked="{Binding Settings.DisplayCpu}">
-                                                <Label Content="CPU" />
-                                            </CheckBox>
-
-                                            <CheckBox Grid.Column="2" IsChecked="{Binding Settings.DisplayGpu}">
-                                                <Label Content="GPU" />
-                                            </CheckBox>
-
-                                            <CheckBox Grid.Column="4" IsChecked="{Binding Settings.DisplayRam}">
-                                                <Label Content="RAM" />
-                                            </CheckBox>
-
-                                            <CheckBox Grid.Column="6" IsChecked="{Binding Settings.DisplayFps}">
-                                                <Label Content="FPS" />
-                                            </CheckBox>
-                                        </Grid>
-                                    </Grid>
-                                </Border>
-                            </Expander.Content>
-                        </Expander>
-                    </Grid>
+                                    </Border>
+                                </Expander.Content>
+                            </Expander>
+                        </Grid>
+                    </StackPanel>
                 </StackPanel>
             </ScrollViewer>
         </TabItem>

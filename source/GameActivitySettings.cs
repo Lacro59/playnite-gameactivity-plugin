@@ -19,6 +19,7 @@ namespace GameActivity
         public bool HasRemovingDuplicate { get; set; } = false;
 
         public bool EnableIntegrationButtonHeader { get; set; } = false;
+        public bool EnableIntegrationButtonSide { get; set; } = true;
 
         private bool _EnableIntegrationButton { get; set; } = true;
         public bool EnableIntegrationButton
@@ -325,6 +326,10 @@ namespace GameActivity
         {
             Plugin.SavePluginSettings(Settings);
             GameActivity.PluginDatabase.PluginSettings = this;
+
+            Plugin.topPanelItem.Visible = Settings.EnableIntegrationButtonHeader;
+            Plugin.gameActivityViewSidebar.Visible = Settings.EnableIntegrationButtonSide;
+
             this.OnPropertyChanged();
         }
 
