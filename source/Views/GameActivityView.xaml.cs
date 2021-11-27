@@ -500,7 +500,7 @@ namespace GameActivity.Views
                     for (int iActivity = 0; iActivity < Activities.Count; iActivity++)
                     {
                         ulong elapsedSeconds = Activities[iActivity].ElapsedSeconds;
-                        string dateSession = Convert.ToDateTime(Activities[iActivity].DateSession).ToString(Constants.DateUiFormat);
+                        string dateSession = Convert.ToDateTime(((DateTime)Activities[iActivity].DateSession).ToLocalTime()).ToString(Constants.DateUiFormat);
 
                         if (dateSession == activityByDateLabels[iDay])
                         {
