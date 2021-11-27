@@ -509,10 +509,10 @@ namespace GameActivity.Views
             this.Dispatcher.BeginInvoke((Action)delegate
             {
                 activityByDaySeries.Add(new ColumnSeries
-            {
-                Title = string.Empty,
-                Values = series
-            });
+                {
+                    Title = string.Empty,
+                    Values = series
+                });
 
                 //let create a mapper so LiveCharts know how to plot our CustomerViewModel class
                 var customerVmMapper = Mappers.Xy<CustomerForTime>()

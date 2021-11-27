@@ -36,7 +36,7 @@ namespace GameActivity.Views
             if (activity != null)
             {
                 var DateSessionStart = ((DateTime)activity.DateSession).ToLocalTime();
-                PART_DateStart.SelectedDate = activity.DateSession;
+                PART_DateStart.SelectedDate = DateSessionStart;
                 PART_TimeStart.SetValueAsString(DateSessionStart.ToString("HH"), DateSessionStart.ToString("mm"), DateSessionStart.ToString("ss"));
 
                 var DateSessionEnd = DateSessionStart.AddSeconds(activity.ElapsedSeconds);
