@@ -98,6 +98,7 @@ namespace GameActivity
         public bool lvGamesIcon { get; set; } = true;
         public bool lvGamesName { get; set; } = true;
         public bool lvGamesSource { get; set; } = true;
+        public bool lvGamesPlayAction { get; set; } = true;
 
         public bool lvAvgCpu { get; set; } = true;
         public bool lvAvgGpu { get; set; } = true;

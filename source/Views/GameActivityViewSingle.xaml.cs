@@ -79,12 +79,12 @@ namespace GameActivity.Views
             // Add column if log details enable.
             if (!PluginDatabase.PluginSettings.Settings.EnableLogging)
             {
+                lvView.Columns.RemoveAt(11);
                 lvView.Columns.RemoveAt(10);
                 lvView.Columns.RemoveAt(9);
                 lvView.Columns.RemoveAt(8);
                 lvView.Columns.RemoveAt(7);
                 lvView.Columns.RemoveAt(6);
-                lvView.Columns.RemoveAt(5);
 
                 PART_BtLogContener.Visibility = Visibility.Collapsed;
                 PART_ChartLogContener.Visibility = Visibility.Collapsed;
@@ -93,31 +93,35 @@ namespace GameActivity.Views
             {
                 if (!PluginDatabase.PluginSettings.Settings.lvAvgGpuT)
                 {
-                    lvView.Columns.RemoveAt(10);
+                    lvView.Columns.RemoveAt(11);
                 }
                 if (!PluginDatabase.PluginSettings.Settings.lvAvgCpuT)
                 {
-                    lvView.Columns.RemoveAt(9);
+                    lvView.Columns.RemoveAt(10);
                 }
                 if (!PluginDatabase.PluginSettings.Settings.lvAvgFps)
                 {
-                    lvView.Columns.RemoveAt(8);
+                    lvView.Columns.RemoveAt(9);
                 }
                 if (!PluginDatabase.PluginSettings.Settings.lvAvgRam)
                 {
-                    lvView.Columns.RemoveAt(7);
+                    lvView.Columns.RemoveAt(8);
                 }
                 if (!PluginDatabase.PluginSettings.Settings.lvAvgGpu)
                 {
-                    lvView.Columns.RemoveAt(6);
+                    lvView.Columns.RemoveAt(7);
                 }
                 if (!PluginDatabase.PluginSettings.Settings.lvAvgCpu)
                 {
-                    lvView.Columns.RemoveAt(5);
+                    lvView.Columns.RemoveAt(6);
                 }
             }
 
             if (!PluginDatabase.PluginSettings.Settings.lvGamesSource)
+            {
+                lvView.Columns.RemoveAt(5);
+            }
+            if (!PluginDatabase.PluginSettings.Settings.lvGamesPlayAction)
             {
                 lvView.Columns.RemoveAt(4);
             }
@@ -133,7 +137,8 @@ namespace GameActivity.Views
 
             this.DataContext = new
             {
-                GameDisplayName = game.Name
+                GameDisplayName = game.Name,
+                Settings = PluginDatabase.PluginSettings
             };
         }
 
