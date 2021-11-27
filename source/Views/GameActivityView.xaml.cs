@@ -863,7 +863,9 @@ namespace GameActivity.Views
 
                             TypeStoreIcon = ModeSimple,
                             SourceIcon = PlayniteTools.GetPlatformIcon(sourceName),
-                            SourceIconText = TransformIcon.Get(sourceName)
+                            SourceIconText = TransformIcon.Get(sourceName),
+
+                            GameActionName = listGameActivities[iGame].GetLastSessionActivity().GameActionName
                         });
                     }
                     // Game is deleted

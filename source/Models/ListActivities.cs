@@ -42,6 +42,7 @@ namespace GameActivity.Models
 
         public int PCConfigurationId { get; set; }
         public string PCName { get; set; }
+        public string GameActionName { get; set; }
 
         public TextBlockWithIconMode TypeStoreIcon { get; set; }
         public string SourceIcon { get; set; }

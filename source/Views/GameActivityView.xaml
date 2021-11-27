@@ -343,6 +343,17 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
+                                <GridViewColumn Width="130">
+                                    <GridViewColumnHeader Content="{DynamicResource LOCPlayAction}" />
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Label Content="{Binding GameActionName}" VerticalAlignment="Stretch" Style="{DynamicResource ListExtendStyleLabel}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+
                                 <GridViewColumn Header="{DynamicResource LOCGameActivityAvgCpu}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>

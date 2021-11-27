@@ -916,6 +916,7 @@ namespace GameActivity
             GameActivitiesLog.Items.Add(new Activity
             {
                 IdConfiguration = PluginDatabase.LocalSystem.GetIdConfiguration(),
+                GameActionName = args.SourceAction.Name,
                 DateSession = DateSession,
                 SourceID = args.Game.SourceId,
                 PlatformIDs = args.Game.PlatformIds

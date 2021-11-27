@@ -18,6 +18,7 @@ namespace GameActivity.Models
         public Guid PlatformID { get; set; }
         public List<Guid> PlatformIDs { get; set; }
 
+        public string GameActionName { get; set; }
 
         [DontSerialize]
         public string SourceName

@@ -261,6 +261,8 @@ namespace GameActivity.Views
 
                             PCConfigurationId = gameActivities.FilterItems[iItem].IdConfiguration,
                             PCName = gameActivities.FilterItems[iItem].Configuration.Name,
+
+                            GameActionName = gameActivities.FilterItems[iItem].GameActionName
                         });
                     }
                     catch (Exception ex)
