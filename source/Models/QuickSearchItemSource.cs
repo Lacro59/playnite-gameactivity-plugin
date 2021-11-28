@@ -120,7 +120,7 @@ namespace GameActivity.Models
             var AvgFpsAllSession = data.ItemsDetails.AvgFpsAllSession.ToString();
             var icon = defaultIconConverter.Convert(data.Icon, null, null, null).ToString();
             var dateSession = localDateTimeConverter.Convert(data.LastActivity, null, null, CultureInfo.CurrentCulture).ToString();
-            var LastSession = dateSession == null ? string.Empty : ResourceProvider.GetString("LOCGameActivityLastSession") 
+            var LastSession = dateSession == null ? string.Empty : ResourceProvider.GetString("LOCLastPlayedLabel") 
                     + " " + dateSession;
 
             var item = new CommandItem(title, () => PluginDatabase.PlayniteApi.MainView.SelectGame(data.Id), "", null, icon)
@@ -296,14 +296,13 @@ namespace GameActivity.Models
                 return Task.Run(() =>
                 {
                     var search = new List<ISearchItem<string>>();
-                    switch (parameters[4])
+                    switch (parameters[3])
                     {
                         case "<>":
                             try
                             {
-                                double sMin = GetElapsedSeconde(parameters[2], parameters[3]);
-                                double sMax = GetElapsedSeconde(parameters[5], parameters[6]);
-
+                                double sMin = GetElapsedSeconde(parameters[1], parameters[2]);
+                                double sMax = GetElapsedSeconde(parameters[4], parameters[5]);
                                 foreach (var data in db)
                                 {
                                     if (data.Value.Items.Where(x => x.ElapsedSeconds >= sMin && x.ElapsedSeconds <= sMax).Count() > 0)

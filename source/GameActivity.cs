@@ -976,7 +976,7 @@ namespace GameActivity
             // QuickSearch support
             try
             {
-                string icon = Path.Combine(PluginDatabase.Paths.PluginPath, "icon.png");
+                string icon = Path.Combine(PluginDatabase.Paths.PluginPath, "Resources", "chart-646.png");
 
                 var GaSubItemsAction = new SubItemsAction() { Action = () => { }, Name = "", CloseAfterExecute = false, SubItemSource = new QuickSearchItemSource() };
                 var GaCommand = new CommandItem("GameActivity", new List<CommandAction>(), ResourceProvider.GetString("LOCGaQuickSearchDescription"), icon);
