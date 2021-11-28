@@ -120,7 +120,7 @@ namespace GameActivity.Models
             var AvgFpsAllSession = data.ItemsDetails.AvgFpsAllSession.ToString();
             var icon = defaultIconConverter.Convert(data.Icon, null, null, null).ToString();
             var dateSession = localDateTimeConverter.Convert(data.LastActivity, null, null, CultureInfo.CurrentCulture).ToString();
-            var LastSession = dateSession == null ? string.Empty : ResourceProvider.GetString("LOCLastPlayedLabel") 
+            var LastSession = data.LastActivity == null ? string.Empty : ResourceProvider.GetString("LOCLastPlayedLabel") 
                     + " " + dateSession;
 
             var item = new CommandItem(title, () => PluginDatabase.PlayniteApi.MainView.SelectGame(data.Id), "", null, icon)
