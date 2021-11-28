@@ -71,7 +71,7 @@ Packages:
   - Version: 2.4
     RequiredApiVersion: 6.2.0
     ReleaseDate: 2021-11-28
-    PackageUrl: https://github.com/Lacro59/playnite-gameactivity-plugin/releases/download/v2.3.1/playnite-gameactivity-plugin_2_3_1.pext
+    PackageUrl: https://github.com/Lacro59/playnite-gameactivity-plugin/releases/download/v2.4/playnite-gameactivity-plugin_2_4.pext
     Changelog:
       - Updated localizations
       - Fixed issue with QuickSearch
