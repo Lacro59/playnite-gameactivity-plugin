@@ -68,3 +68,13 @@ Packages:
     PackageUrl: https://github.com/Lacro59/playnite-gameactivity-plugin/releases/download/v2.3.1/playnite-gameactivity-plugin_2_3_1.pext
     Changelog:
       - Fixed loading issue
+  - Version: 2.4
+    RequiredApiVersion: 6.2.0
+    ReleaseDate: 2021-11-28
+    PackageUrl: https://github.com/Lacro59/playnite-gameactivity-plugin/releases/download/v2.3.1/playnite-gameactivity-plugin_2_3_1.pext
+    Changelog:
+      - Updated localizations
+      - Fixed issue with QuickSearch
+      - Fixed issue with time zone
+      - Added play action used for the game session
+      - Fixed some crash
