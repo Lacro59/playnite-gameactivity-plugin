@@ -9,6 +9,8 @@
     <sys:String x:Key="LOCGameActivitiesTitle">Ігрова активність</sys:String>
     <sys:String x:Key="LOCGameActivityViewGamesActivities">Переглянути активності в іграх</sys:String>
     <sys:String x:Key="LOCGameActivityViewGameActivity">Переглянути активності в грі</sys:String>
+    
+    <sys:String x:Key="LOCGameActivityDefaultAction">Default action</sys:String>
 
     <!-- GameActivitySettingsView -->
 
@@ -53,7 +55,7 @@
     <sys:String x:Key="LOCGameActivityIntegrationGraphicLogOptions">Параметри графіка</sys:String>
 
     <sys:String x:Key="LOCGameActivityUseControls">Використовувати елементи керування графіком</sys:String>
-    <sys:String x:Key="LOCGameActivitySelectChartSeriesToDisplay">Виберіть серію для відображення на графік</sys:String>
+    <sys:String x:Key="LOCGameActivitySelectChartSeriesToDisplay">Виберіть серію для відображення на графіку</sys:String>
 
     <sys:String x:Key="LOCGameActivityIconFrom">Виберіть джерело значка</sys:String>
     <sys:String x:Key="LOCGameActivityIconFromLibrary">Використовувати значок, визначений у бібліотеці</sys:String>
@@ -78,7 +80,7 @@
 
     <sys:String x:Key="LOCGameActivityTime">Час</sys:String>
     <sys:String x:Key="LOCGameActivityLog">Журнал</sys:String>
-    <sys:String x:Key="LOCGameActivityTimeTitle">Всього годин по дня</sys:String>
+    <sys:String x:Key="LOCGameActivityTimeTitle">Всього годин по днях</sys:String>
     <sys:String x:Key="LOCGameActivityLogTitle">Деталі останнього сеансу</sys:String>
     <sys:String x:Key="LOCGameActivityLogTitleDate">Подробиці сеансу для</sys:String>
 
