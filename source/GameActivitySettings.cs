@@ -32,7 +32,7 @@ namespace GameActivity
             }
         }
 
-        public bool _EnableIntegrationButtonDetails { get; set; } = false;
+        private bool _EnableIntegrationButtonDetails { get; set; } = false;
         public bool EnableIntegrationButtonDetails
         {
             get => _EnableIntegrationButtonDetails;
