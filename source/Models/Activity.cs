@@ -10,6 +10,7 @@ namespace GameActivity.Models
     public class Activity : ObservableObject
     {
         private static readonly ILogger logger = LogManager.GetLogger();
+        private static IResourceProvider resources = new ResourceProvider();
 
         private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
 
@@ -18,7 +19,27 @@ namespace GameActivity.Models
         public Guid PlatformID { get; set; }
         public List<Guid> PlatformIDs { get; set; }
 
-        public string GameActionName { get; set; }
+        [SerializationPropertyName("GameActionName")]
+        public string _GameActionName;
+        [DontSerialize]
+        public string GameActionName
+        {
+            get
+            {
+                if (_GameActionName.IsNullOrEmpty())
+                {
+                    return resources.GetString("LOCDefault");
+                }
+                else
+                {
+                    return _GameActionName;
+                }
+            }
+            set
+            {
+                _GameActionName = value;
+            }
+        }
 
         [DontSerialize]
         public string SourceName
