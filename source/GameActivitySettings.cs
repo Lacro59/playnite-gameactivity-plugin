@@ -1,7 +1,5 @@
 ﻿using Playnite.SDK;
-using CommonPluginsShared;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Linq;
 using Playnite.SDK.Data;
 using GameActivity.Models;
