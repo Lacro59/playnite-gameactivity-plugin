@@ -9,6 +9,8 @@
     <sys:String x:Key="LOCGameActivitiesTitle">Действия в игре</sys:String>
     <sys:String x:Key="LOCGameActivityViewGamesActivities">Просмотреть активность в игра</sys:String>
     <sys:String x:Key="LOCGameActivityViewGameActivity">Просмотреть игровую активность</sys:String>
+    
+    <sys:String x:Key="LOCGameActivityDefaultAction">Default action</sys:String>
 
     <!-- GameActivitySettingsView -->
 
