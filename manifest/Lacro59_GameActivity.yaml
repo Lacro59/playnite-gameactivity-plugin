@@ -78,3 +78,9 @@ Packages:
       - Fixed issue with time zone
       - Added play action used for the game session
       - Fixed some crash
+  - Version: 2.4.1
+    RequiredApiVersion: 6.2.0
+    ReleaseDate: 2021-11-29
+    PackageUrl: https://github.com/Lacro59/playnite-gameactivity-plugin/releases/download/v2.4.1/playnite-gameactivity-plugin_2_4_1.pext
+    Changelog:
+      - Fixed issue with play action integration
