@@ -28,7 +28,7 @@ namespace GameActivity.Models
             {
                 if (_GameActionName.IsNullOrEmpty())
                 {
-                    return resources.GetString("LOCDefault");
+                    return resources.GetString("LOCGameActivityDefaultAction");
                 }
                 else
                 {

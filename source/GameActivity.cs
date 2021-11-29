@@ -145,54 +145,6 @@ namespace GameActivity
                     }, globalProgressOptions);
                 }
             });
-
-            // Fixed empty GameSourceName
-            Task.Run(() =>
-            {
-                if (!PluginSettings.Settings.HasRemovingDuplicate)
-                {
-                    System.Threading.SpinWait.SpinUntil(() => PluginDatabase.IsLoaded, -1);
-
-                    GlobalProgressOptions globalProgressOptions = new GlobalProgressOptions(
-                        $"GameActivity - Database updating...",
-                        false
-                    );
-                    globalProgressOptions.IsIndeterminate = false;
-
-                    PlayniteApi.Dialogs.ActivateGlobalProgress((activateGlobalProgress) =>
-                    {
-                        activateGlobalProgress.ProgressMaxValue = PluginDatabase.Database.Count;
-
-                        foreach (GameActivities gameActivities in PluginDatabase.Database)
-                        {
-                            Thread.Sleep(10);
-                            try
-                            {
-                                bool IsUpdated = false;
-                                for(var idx = 0; idx < gameActivities.Items.Count; idx++)
-                                {
-                                    if (gameActivities.Items[idx].GameActionName == string.Empty)
-                                    {
-                                        gameActivities.Items[idx].GameActionName = default(string);
-                                    }
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                Common.LogError(ex, false, true, "GameActivity");
-                            }
-
-                            activateGlobalProgress.CurrentProgressValue++;
-                        }
-
-                        PluginSettings.Settings.HasRemovingDuplicate = true;
-                        Application.Current.Dispatcher.BeginInvoke((Action)delegate
-                        {
-                            this.SavePluginSettings(PluginSettings.Settings);
-                        });
-                    }, globalProgressOptions);
-                }
-            });
         }
 
 
