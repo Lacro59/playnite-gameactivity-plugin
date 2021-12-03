@@ -93,3 +93,9 @@ Packages:
       - Added missing edit value for the game sessions
       - Fixed minors bugs
       - Fixed some crash
+  - Version: 2.4.3
+    RequiredApiVersion: 6.2.0
+    ReleaseDate: 2021-12-03
+    PackageUrl: https://github.com/Lacro59/playnite-gameactivity-plugin/releases/download/v2.4.3/playnite-gameactivity-plugin_2_4_3.pext
+    Changelog:
+      - Fixed some crash
