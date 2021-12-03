@@ -498,7 +498,7 @@ namespace GameActivity.Controls
         public bool _UseControls;
         public bool UseControls { get => _UseControls; set => SetValue(ref _UseControls, value); }
 
-        public bool _DisableAnimations;
+        public bool _DisableAnimations = true;
         public bool DisableAnimations { get => _DisableAnimations; set => SetValue(ref _DisableAnimations, value); }
 
         public double _LabelsRotationValue;

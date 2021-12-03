@@ -433,7 +433,7 @@ namespace GameActivity.Controls
         public bool _ChartTimeVisibleEmpty;
         public bool ChartTimeVisibleEmpty { get => _ChartTimeVisibleEmpty; set => SetValue(ref _ChartTimeVisibleEmpty, value); }
 
-        public bool _DisableAnimations;
+        public bool _DisableAnimations = true;
         public bool DisableAnimations { get => _DisableAnimations; set => SetValue(ref _DisableAnimations, value); }
 
         public double _LabelsRotationValue;
