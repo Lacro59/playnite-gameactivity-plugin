@@ -84,7 +84,7 @@ Packages:
     PackageUrl: https://github.com/Lacro59/playnite-gameactivity-plugin/releases/download/v2.4.1/playnite-gameactivity-plugin_2_4_1.pext
     Changelog:
       - Fixed issue with play action integration
-  - Version: 2.4.1
+  - Version: 2.4.2
     RequiredApiVersion: 6.2.0
     ReleaseDate: 2021-12-03
     PackageUrl: https://github.com/Lacro59/playnite-gameactivity-plugin/releases/download/v2.4.2/playnite-gameactivity-plugin_2_4_2.pext
