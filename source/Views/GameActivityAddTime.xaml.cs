@@ -1,6 +1,8 @@
 ﻿using CommonPlayniteShared.Converters;
+using CommonPluginsShared.Extensions;
 using GameActivity.Models;
 using GameActivity.Services;
+using Playnite.SDK;
 using Playnite.SDK.Models;
 using System;
 using System.Collections.Generic;
@@ -18,36 +20,48 @@ namespace GameActivity.Views
     /// </summary>
     public partial class GameActivityAddTime : UserControl
     {
+        internal static IResourceProvider resources = new ResourceProvider();
+
         private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
 
         public Activity activity;
+        public Activity activityEdit = new Activity();
         private Game game;
 
         private PlayTimeToStringConverter playTimeToStringConverter = new PlayTimeToStringConverter();
 
 
-        public GameActivityAddTime(Game game, Activity activity)
+        public GameActivityAddTime(Game game, Activity activityEdit)
         {
             this.game = game;
 
             InitializeComponent();
 
             PART_ElapseTime.Content = "--";
-            if (activity != null)
+            PART_CbPlayAction.ItemsSource = game.GameActions?.Select(x => x.Name.IsNullOrEmpty() ? resources.GetString("LOCGameActivityDefaultAction") : x.Name).ToList();
+
+            if (activityEdit != null)
             {
-                var DateSessionStart = ((DateTime)activity.DateSession).ToLocalTime();
+                var DateSessionStart = ((DateTime)activityEdit.DateSession).ToLocalTime();
                 PART_DateStart.SelectedDate = DateSessionStart;
                 PART_TimeStart.SetValueAsString(DateSessionStart.ToString("HH"), DateSessionStart.ToString("mm"), DateSessionStart.ToString("ss"));
 
-                var DateSessionEnd = DateSessionStart.AddSeconds(activity.ElapsedSeconds);
+                var DateSessionEnd = DateSessionStart.AddSeconds(activityEdit.ElapsedSeconds);
                 PART_DateEnd.SelectedDate = DateSessionEnd;
                 PART_TimeEnd.SetValueAsString(DateSessionEnd.ToString("HH"), DateSessionEnd.ToString("mm"), DateSessionEnd.ToString("ss"));
 
                 PART_DateStart.IsEnabled = false;
                 PART_TimeStart.IsEnabled = false;
 
+                PART_CbPlayAction.Text = activityEdit.GameActionName;
+                PART_CbPlayAction.SelectedItem = ((List<string>)PART_CbPlayAction.ItemsSource).Find(x => x.IsEqual(activityEdit.GameActionName));
+
                 SetElapsedTime();
+
+                PART_Add.Content = resources.GetString("LOCSaveLabel");
             }
+
+            this.activityEdit = activityEdit;
         }
 
 
@@ -58,14 +72,20 @@ namespace GameActivity.Views
                 DateTime DateStart = DateTime.Parse(((DateTime)PART_DateStart.SelectedDate).ToString("yyyy-MM-dd") + " " + PART_TimeStart.GetValueAsString());
                 DateTime DateEnd = DateTime.Parse(((DateTime)PART_DateEnd.SelectedDate).ToString("yyyy-MM-dd") + " " + PART_TimeEnd.GetValueAsString());
 
-                activity = new Activity
+                if (PART_DateStart.IsEnabled)
                 {
-                    DateSession = DateStart.ToUniversalTime(),
-                    ElapsedSeconds = (ulong)(DateEnd - DateStart).TotalSeconds,
-                    IdConfiguration = PluginDatabase.LocalSystem.GetIdConfiguration(),
-                    PlatformIDs = game.PlatformIds,
-                    SourceID = game.SourceId
-                };
+                    activity = new Activity();
+                    activity.DateSession = DateStart.ToUniversalTime();
+                }
+                else
+                {
+                    activity = activityEdit;
+                }
+                activity.GameActionName = PART_CbPlayAction.Text;
+                activity.ElapsedSeconds = (ulong)(DateEnd - DateStart).TotalSeconds;
+                activity.IdConfiguration = PluginDatabase.LocalSystem.GetIdConfiguration();
+                activity.PlatformIDs = game.PlatformIds;
+                activity.SourceID = game.SourceId;
             }
             catch { }
 

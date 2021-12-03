@@ -19,6 +19,10 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="20" />
             <RowDefinition Height="auto" />
+            <RowDefinition Height="20" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
@@ -30,10 +34,19 @@
         <DatePicker Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Name="PART_DateEnd" SelectedDateChanged="PART_SelectedDateChanged" />
         <temperaturemeasurementtool:TimePicker Grid.Column="3" Grid.Row="2" x:Name="PART_TimeEnd" TimeChanged="PART_TimeChanged" />
 
-        <Label Content="{DynamicResource LOCGameActivityLvGamesElapsedSeconds}" Grid.Column="0" Grid.Row="3" />
-        <Label Name="PART_ElapseTime" Grid.Column="1" Grid.Row="3" Content="any time"/>
+        <Label Content="{DynamicResource LOCPlayAction}" Grid.Column="0" Grid.Row="4" />
+        <ComboBox Name="PART_CbPlayAction" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="3">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}" />
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
 
-        <StackPanel Grid.Row="3" Grid.ColumnSpan="5"
+        <Label Content="{DynamicResource LOCGameActivityLvGamesElapsedSeconds}" Grid.Column="0" Grid.Row="6" />
+        <Label Name="PART_ElapseTime" Grid.Column="1" Grid.Row="6" Content="any time"/>
+
+        <StackPanel Grid.Row="7" Grid.ColumnSpan="5"
                     VerticalAlignment="Bottom" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="{DynamicResource LOCAddTitle}" Name="PART_Add" Click="PART_Add_Click" IsEnabled="False" />
             <Button Content="{DynamicResource LOCCancelLabel}" Margin="10,0,0,0" Name="PART_Cancel" Click="PART_Cancel_Click" />
