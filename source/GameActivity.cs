@@ -115,35 +115,38 @@ namespace GameActivity
             });
 
             // Initialize top & side bar
-            topPanelItem = new TopPanelItem()
+            if (API.Instance.ApplicationInfo.Mode == ApplicationMode.Desktop)
             {
-                Icon = new TextBlock
+                topPanelItem = new TopPanelItem()
                 {
-                    Text = "\ue97f",
-                    FontSize = 20,
-                    FontFamily = resources.GetResource("FontIcoFont") as FontFamily
-                },
-                Title = resources.GetString("LOCGameActivityViewGamesActivities"),
-                Activated = () =>
-                {
-                    var windowOptions = new WindowOptions
+                    Icon = new TextBlock
                     {
-                        ShowMinimizeButton = false,
-                        ShowMaximizeButton = true,
-                        ShowCloseButton = true,
-                        Width = 1280,
-                        Height = 740
-                    };
+                        Text = "\ue97f",
+                        FontSize = 20,
+                        FontFamily = resources.GetResource("FontIcoFont") as FontFamily
+                    },
+                    Title = resources.GetString("LOCGameActivityViewGamesActivities"),
+                    Activated = () =>
+                    {
+                        var windowOptions = new WindowOptions
+                        {
+                            ShowMinimizeButton = false,
+                            ShowMaximizeButton = true,
+                            ShowCloseButton = true,
+                            Width = 1280,
+                            Height = 740
+                        };
 
-                    var ViewExtension = new GameActivityView();
-                    Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGamesActivitiesTitle"), ViewExtension, windowOptions);
-                    windowExtension.ResizeMode = ResizeMode.CanResize;
-                    windowExtension.ShowDialog();
-                },
-                Visible = PluginSettings.Settings.EnableIntegrationButtonHeader
-            };
+                        var ViewExtension = new GameActivityView();
+                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGamesActivitiesTitle"), ViewExtension, windowOptions);
+                        windowExtension.ResizeMode = ResizeMode.CanResize;
+                        windowExtension.ShowDialog();
+                    },
+                    Visible = PluginSettings.Settings.EnableIntegrationButtonHeader
+                };
 
-            gameActivityViewSidebar = new GameActivityViewSidebar(this);
+                gameActivityViewSidebar = new GameActivityViewSidebar(this);
+            }
         }
 
 

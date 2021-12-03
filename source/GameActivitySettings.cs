@@ -326,8 +326,11 @@ namespace GameActivity
             Plugin.SavePluginSettings(Settings);
             GameActivity.PluginDatabase.PluginSettings = this;
 
-            Plugin.topPanelItem.Visible = Settings.EnableIntegrationButtonHeader;
-            Plugin.gameActivityViewSidebar.Visible = Settings.EnableIntegrationButtonSide;
+            if (API.Instance.ApplicationInfo.Mode == ApplicationMode.Desktop)
+            {
+                Plugin.topPanelItem.Visible = Settings.EnableIntegrationButtonHeader;
+                Plugin.gameActivityViewSidebar.Visible = Settings.EnableIntegrationButtonSide;
+            }
 
             this.OnPropertyChanged();
         }
