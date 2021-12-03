@@ -87,14 +87,14 @@
     <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Последняя сессия</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Проведённое время</sys:String>
     
-    <sys:String x:Key="LOCGameActivityAvgCpu">Среднее значение ЦП</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgGpu">Среднее значение ГП</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgCpu">Среднее значение Ц</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgGpu">Среднее значение Г</sys:String>
     <sys:String x:Key="LOCGameActivityAvgRam">Среднее значение ОЗУ</sys:String>
     <sys:String x:Key="LOCGameActivityAvgFps">Средний ФПС</sys:String>
     <sys:String x:Key="LOCGameActivityAvgCpuT">Средний ЦП T</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpuT">Средний GPU T</sys:String>
 
-    <sys:String x:Key="LOCGameActivityPCName">Имя ПК</sys:String>
+    <sys:String x:Key="LOCGameActivityPCName">Имя П</sys:String>
 
 
     <!-- GameActivity -->

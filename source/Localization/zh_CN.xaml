@@ -5,10 +5,10 @@
 
     <sys:String x:Key="LOCGameActivity">游戏活动记录</sys:String>
     <sys:String x:Key="LOCGameActivityTitle">活动记录</sys:String>
-    <sys:String x:Key="LOCGamesActivitiesTitle">游戏活动</sys:String>
-    <sys:String x:Key="LOCGameActivitiesTitle">游戏活动</sys:String>
-    <sys:String x:Key="LOCGameActivityViewGamesActivities">查看游戏活动</sys:String>
-    <sys:String x:Key="LOCGameActivityViewGameActivity">查看游戏活动</sys:String>
+    <sys:String x:Key="LOCGamesActivitiesTitle">游戏活</sys:String>
+    <sys:String x:Key="LOCGameActivitiesTitle">游戏活</sys:String>
+    <sys:String x:Key="LOCGameActivityViewGamesActivities">查看游戏活</sys:String>
+    <sys:String x:Key="LOCGameActivityViewGameActivity">查看游戏活</sys:String>
     
     <sys:String x:Key="LOCGameActivityDefaultAction">Default action</sys:String>
 
@@ -43,7 +43,7 @@
     <sys:String x:Key="LOCGameActivityMaxRamUsage">最大内存使</sys:String>
 
     <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">游戏时记录CPU、GPU、内存和帧数</sys:String>
-    <sys:String x:Key="LOCGameActivityEnableWarningToolTip">游戏结束后显示警告</sys:String>
+    <sys:String x:Key="LOCGameActivityEnableWarningToolTip">游戏结束后显示警</sys:String>
 
     <sys:String x:Key="LOCGameActivityIntegrationChartTime">Display the chart with game session times</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationChartLog">Display the chart with game session logs</sys:String>
