@@ -51,37 +51,6 @@ namespace GameActivity
             // Custom theme button
             EventManager.RegisterClassHandler(typeof(Button), Button.ClickEvent, new RoutedEventHandler(OnCustomThemeButtonClick));
 
-            // Initialize top & side bar
-            topPanelItem = new TopPanelItem()
-            {
-                Icon = new TextBlock
-                {
-                    Text = "\ue97f",
-                    FontSize = 20,
-                    FontFamily = resources.GetResource("FontIcoFont") as FontFamily
-                },
-                Title = resources.GetString("LOCGameActivityViewGamesActivities"),
-                Activated = () =>
-                {
-                    var windowOptions = new WindowOptions
-                    {
-                        ShowMinimizeButton = false,
-                        ShowMaximizeButton = true,
-                        ShowCloseButton = true,
-                        Width = 1280,
-                        Height = 740
-                    };
-
-                    var ViewExtension = new GameActivityView();
-                    Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGamesActivitiesTitle"), ViewExtension, windowOptions);
-                    windowExtension.ResizeMode = ResizeMode.CanResize;
-                    windowExtension.ShowDialog();
-                },
-                Visible = PluginSettings.Settings.EnableIntegrationButtonHeader
-            };
-
-            gameActivityViewSidebar = new GameActivityViewSidebar(this);
-
             // Custom elements integration
             AddCustomElementSupport(new AddCustomElementSupportArgs
             {
@@ -95,7 +64,6 @@ namespace GameActivity
                 SourceName = "GameActivity",
                 SettingsRoot = $"{nameof(PluginSettings)}.{nameof(PluginSettings.Settings)}"
             });
-
 
             // Remove duplicate
             Task.Run(() =>
@@ -145,6 +113,37 @@ namespace GameActivity
                     }, globalProgressOptions);
                 }
             });
+
+            // Initialize top & side bar
+            topPanelItem = new TopPanelItem()
+            {
+                Icon = new TextBlock
+                {
+                    Text = "\ue97f",
+                    FontSize = 20,
+                    FontFamily = resources.GetResource("FontIcoFont") as FontFamily
+                },
+                Title = resources.GetString("LOCGameActivityViewGamesActivities"),
+                Activated = () =>
+                {
+                    var windowOptions = new WindowOptions
+                    {
+                        ShowMinimizeButton = false,
+                        ShowMaximizeButton = true,
+                        ShowCloseButton = true,
+                        Width = 1280,
+                        Height = 740
+                    };
+
+                    var ViewExtension = new GameActivityView();
+                    Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGamesActivitiesTitle"), ViewExtension, windowOptions);
+                    windowExtension.ResizeMode = ResizeMode.CanResize;
+                    windowExtension.ShowDialog();
+                },
+                Visible = PluginSettings.Settings.EnableIntegrationButtonHeader
+            };
+
+            gameActivityViewSidebar = new GameActivityViewSidebar(this);
         }
 
 
@@ -870,7 +869,7 @@ namespace GameActivity
 
             try
             {
-                if (args.NewValue?.Count == 1)
+                if (args.NewValue?.Count == 1 && PluginDatabase.IsLoaded)
                 {
                     PluginDatabase.GameContext = args.NewValue[0];
                     PluginDatabase.SetThemesResources(PluginDatabase.GameContext);
