@@ -877,6 +877,19 @@ namespace GameActivity
                     PluginDatabase.GameContext = args.NewValue[0];
                     PluginDatabase.SetThemesResources(PluginDatabase.GameContext);
                 }
+                else
+                {
+                    Task.Run(() =>
+                    {
+                        System.Threading.SpinWait.SpinUntil(() => PluginDatabase.IsLoaded, -1);
+
+                        Application.Current.Dispatcher.BeginInvoke((Action)delegate
+                        {
+                            PluginDatabase.GameContext = args.NewValue[0];
+                            PluginDatabase.SetThemesResources(PluginDatabase.GameContext);
+                        });
+                    });
+                }
             }
             catch (Exception ex)
             {
