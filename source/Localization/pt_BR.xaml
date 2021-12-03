@@ -10,7 +10,7 @@
     <sys:String x:Key="LOCGameActivityViewGamesActivities">Visualizar atividades de jogos</sys:String>
     <sys:String x:Key="LOCGameActivityViewGameActivity">Visualizar atividade do jogo</sys:String>
     
-    <sys:String x:Key="LOCGameActivityDefaultAction">Default action</sys:String>
+    <sys:String x:Key="LOCGameActivityDefaultAction">Ação padrão</sys:String>
 
     <!-- GameActivitySettingsView -->
 
