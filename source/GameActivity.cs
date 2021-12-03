@@ -885,8 +885,11 @@ namespace GameActivity
 
                         Application.Current.Dispatcher.BeginInvoke((Action)delegate
                         {
-                            PluginDatabase.GameContext = args.NewValue[0];
-                            PluginDatabase.SetThemesResources(PluginDatabase.GameContext);
+                            if (args.NewValue?.Count == 1)
+                            {
+                                PluginDatabase.GameContext = args.NewValue[0];
+                                PluginDatabase.SetThemesResources(PluginDatabase.GameContext);
+                            }
                         });
                     });
                 }
