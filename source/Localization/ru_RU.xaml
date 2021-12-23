@@ -30,7 +30,7 @@
     <sys:String x:Key="LOCGameActivityElementID">Id элемента</sys:String>
 
     <sys:String x:Key="LOCGameActivityGpuUsage">использ. GPU</sys:String>
-    <sys:String x:Key="LOCGameActivityFps">Кадр/сек</sys:String>
+    <sys:String x:Key="LOCGameActivityFps">FPS</sys:String>
     <sys:String x:Key="LOCGameActivityGpuTemp">Температура GPU</sys:String>
     <sys:String x:Key="LOCGameActivityCpuTemp">Температура CPU</sys:String>
 
