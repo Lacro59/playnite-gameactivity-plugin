@@ -10,7 +10,7 @@
     <sys:String x:Key="LOCGameActivityViewGamesActivities">Просмотреть активность в игра</sys:String>
     <sys:String x:Key="LOCGameActivityViewGameActivity">Просмотреть игровую активность</sys:String>
     
-    <sys:String x:Key="LOCGameActivityDefaultAction">Default action</sys:String>
+    <sys:String x:Key="LOCGameActivityDefaultAction">Действие по умолчанию</sys:String>
 
     <!-- GameActivitySettingsView -->
 
@@ -30,7 +30,7 @@
     <sys:String x:Key="LOCGameActivityElementID">Id элемента</sys:String>
 
     <sys:String x:Key="LOCGameActivityGpuUsage">использ. GPU</sys:String>
-    <sys:String x:Key="LOCGameActivityFps">Кадр/сек</sys:String>
+    <sys:String x:Key="LOCGameActivityFps">FPS</sys:String>
     <sys:String x:Key="LOCGameActivityGpuTemp">Температура GPU</sys:String>
     <sys:String x:Key="LOCGameActivityCpuTemp">Температура CPU</sys:String>
 
@@ -61,7 +61,7 @@
     <sys:String x:Key="LOCGameActivityIconFromLibrary">Использовать значок, определенный в библиотеке</sys:String>
     <sys:String x:Key="LOCGameActivityIconFromFont">Использовать значок, указанный в шрифте плагина</sys:String>
 
-    <sys:String x:Key="LOCGameActivityIgnoreSession">Ignore short play sessions</sys:String>
+    <sys:String x:Key="LOCGameActivityIgnoreSession">Игнорировать короткие сессии</sys:String>
     <sys:String x:Key="LOCGameActivitySetVariatorTime">Set time variator</sys:String>
     <sys:String x:Key="LOCGameActivitySetVariatorLog">Set log variator</sys:String>
 
@@ -109,10 +109,10 @@
 
     <!-- QuickSearch -->
 
-    <sys:String x:Key="LOCGaQuickSearchDescription">Search games on GameActivity data</sys:String>
-    <sys:String x:Key="LOCGaQuickSearchByFPS">Find by FPS</sys:String>
-    <sys:String x:Key="LOCGaQuickSearchByTime">Find by time session</sys:String>
-    <sys:String x:Key="LOCGaQuickSearchByDate">Find by date session</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchDescription">Поиск игр по данным GameActivity</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchByFPS">Найти по FPS</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchByTime">Найти по времени сессии</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchByDate">Найти по дате сессии</sys:String>
 
     <!-- GameActivityAddTime -->
 

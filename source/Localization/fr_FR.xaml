@@ -15,7 +15,7 @@
     <!-- GameActivitySettingsView -->
 
     <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">Combiner le temps de jeu des sessions sur le graphique</sys:String>
-    <sys:String x:Key="LOCGameActivityCumulPlaytimeStore">Unifié le temps des différents magasins</sys:String>
+    <sys:String x:Key="LOCGameActivityCumulPlaytimeStore">Unifier le temps des différentes bibliothèques</sys:String>
 
     <sys:String x:Key="LOCGameActivityListGamesFields">Sélectionner les éléments à afficher</sys:String>
 
