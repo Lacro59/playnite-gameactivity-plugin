@@ -111,8 +111,8 @@
 
     <sys:String x:Key="LOCGaQuickSearchDescription">Пошук ігор за даними GameActivity</sys:String>
     <sys:String x:Key="LOCGaQuickSearchByFPS">Знайти по FPS</sys:String>
-    <sys:String x:Key="LOCGaQuickSearchByTime">Знайти за часом сеанс</sys:String>
-    <sys:String x:Key="LOCGaQuickSearchByDate">Пошук за датою сеанс</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchByTime">Знайти за часом сеан</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchByDate">Пошук за датою сеан</sys:String>
 
     <!-- GameActivityAddTime -->
 
