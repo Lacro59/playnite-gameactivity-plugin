@@ -499,11 +499,19 @@
                             </CheckBox>
                         </StackPanel>
 
-                        <StackPanel DockPanel.Dock="Bottom" Margin="0,15,0,0" Orientation="Horizontal" IsEnabled="{Binding ElementName=cbLogging, Path=IsChecked, TargetNullValue=false}">
-                            <Label Content="{DynamicResource LOCGameActivityTimeInterval}" Width="130" />
-                            <Slider x:Name="hwSlider" Width="230" Minimum="1" Value="{Binding Settings.TimeIntervalLogging}" ValueChanged="Slider_ValueChanged" />
-                            <Label x:Name="labelIntervalLabel_text" Content="{DynamicResource LOCGameActivityTimeLabel}" Width="150" Margin="20,0,0,0" />
-                        </StackPanel>
+                        <Grid DockPanel.Dock="Bottom" Margin="0,15,0,0" IsEnabled="{Binding ElementName=cbLogging, Path=IsChecked, TargetNullValue=false}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="10" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="10" />
+                                <ColumnDefinition Width="100" />
+                            </Grid.ColumnDefinitions>
+                            
+                            <Label Content="{DynamicResource LOCGameActivityTimeInterval}" Grid.Column="0" />
+                            <Slider x:Name="hwSlider" Minimum="1" Value="{Binding Settings.TimeIntervalLogging}" ValueChanged="Slider_ValueChanged" Grid.Column="2" />
+                            <Label x:Name="labelIntervalLabel_text" Content="{DynamicResource LOCGameActivityTimeLabel}" Grid.Column="4" />
+                        </Grid>
                     </DockPanel>
 
                     <DockPanel DockPanel.Dock="Bottom" Margin="0,15,0,0">
