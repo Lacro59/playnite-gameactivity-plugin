@@ -14,7 +14,7 @@ using System.Diagnostics;
 
 namespace GameActivity.Services
 {
-    public class ActivityDatabase : PluginDatabaseObject<GameActivitySettingsViewModel, GameActivitiesCollection, GameActivities>
+    public class ActivityDatabase : PluginDatabaseObject<GameActivitySettingsViewModel, GameActivitiesCollection, GameActivities, Activity>
     {
         public LocalSystem LocalSystem;
 
@@ -103,9 +103,13 @@ namespace GameActivity.Services
 
         public override void Games_ItemUpdated(object sender, ItemUpdatedEventArgs<Game> e)
         {
-            foreach (var GameUpdated in e.UpdatedItems)
+            if (e?.UpdatedItems != null)
             {
-                Database.SetGameInfoDetails<Activity, ActivityDetails>(PlayniteApi, GameUpdated.NewData.Id);
+                foreach (var GameUpdated in e.UpdatedItems)
+                {
+                    Database.SetGameInfoDetails<Activity, ActivityDetails>(PlayniteApi, GameUpdated.NewData.Id);
+                    var data = Get(GameUpdated.NewData.Id);
+                }
             }
         }
 
