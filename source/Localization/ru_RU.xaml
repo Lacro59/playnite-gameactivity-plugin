@@ -31,18 +31,18 @@
 
     <sys:String x:Key="LOCGameActivityGpuUsage">использ. GPU</sys:String>
     <sys:String x:Key="LOCGameActivityFps">FPS</sys:String>
-    <sys:String x:Key="LOCGameActivityGpuTemp">Температура GPU</sys:String>
-    <sys:String x:Key="LOCGameActivityCpuTemp">Температура CPU</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuTemp">Температура видеокарты</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuTemp">Температура процессора</sys:String>
 
     <sys:String x:Key="LOCGameActivityActiveWarning">Включить предупреждения</sys:String>
     <sys:String x:Key="LOCGameActivityMinFps">Минимальный FPS</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxCpuTemp">Макс. темпер. CPU</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxGpuTemp">Макс. темпер. GPU</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxCpuUsage">Макс. Использ. CPU</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxGpuUsage">Макс. Использ. GPU</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxRamUsage">Макс. Использ. RAM</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxCpuTemp">Макс. темпер. процессора</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxGpuTemp">Макс. темпер. видеокарты</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxCpuUsage">Макс. Использ. процессора</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxGpuUsage">Макс. Использ. видеокарты</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxRamUsage">Макс. Использ. оперативной памяти</sys:String>
 
-    <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">Журнал производительности процессора, графического процессора, оперативной памяти и FPS во время игровой сессии.</sys:String>
+    <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">Журнал производительности процессора, видеокарты, оперативной памяти и фреймрейт во время игровой сессии.</sys:String>
     <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Отображает предупреждающее сообщение в конце сеанса игры в кратце.</sys:String>
 
     <sys:String x:Key="LOCGameActivityIntegrationChartTime">Отображение графика с временем игровых сессии</sys:String>
