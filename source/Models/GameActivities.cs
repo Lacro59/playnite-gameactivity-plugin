@@ -59,6 +59,10 @@ namespace GameActivity.Models
                     {
                         _FilterItems = Items.Where(x => (int)x.ElapsedSeconds > PluginDatabase.PluginSettings.Settings.IgnoreSessionTime).Distinct().ToList();
                     }
+                    else
+                    {
+                       _FilterItems = Items.Where(x => (int)x.ElapsedSeconds > 0).Distinct().ToList();
+                    }
 
                     _FilterItems = Items;
                 }

@@ -23,6 +23,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+using LiveCharts.Helpers;
 
 namespace GameActivity.Controls
 {
@@ -239,7 +240,8 @@ namespace GameActivity.Controls
                         CustomerForTime customerForTime = new CustomerForTime
                         {
                             Name = dateStart.AddDays(-i).ToString("yyyy-MM-dd"),
-                            Values = 0
+                            Values = 0,
+                            HideIsZero = true
                         };
                         series1.Add(customerForTime);
                         series2.Add(customerForTime);
