@@ -26,6 +26,7 @@ using CommonPluginsShared.Extensions;
 using System.Threading;
 using QuickSearch.SearchItems;
 using MoreLinq;
+using CommonPluginsControls.Views;
 
 namespace GameActivity
 {
@@ -810,6 +811,34 @@ namespace GameActivity
                             }
 
                         }, globalProgressOptions);
+                    }
+                },
+
+
+                // Database management
+                new MainMenuItem
+                {
+                    MenuSection = MenuInExtensions + resources.GetString("LOCGameActivity"),
+                    Description = "-"
+                },
+
+                new MainMenuItem
+                {
+                    MenuSection = MenuInExtensions + resources.GetString("LOCGameActivity"),
+                    Description = resources.GetString("LOCCommonTransferPluginData"),
+                    Action = (mainMenuItem) =>
+                    {
+                        var windowOptions = new WindowOptions
+                        {
+                            ShowMinimizeButton = false,
+                            ShowMaximizeButton = false,
+                            ShowCloseButton = true,
+                        };
+
+                        var ViewExtension = new TransfertData(PluginDatabase.GetDataGames(), PluginDatabase);
+                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCCommonSelectTransferData"), ViewExtension, windowOptions);
+                        windowExtension.ResizeMode = ResizeMode.CanResize;
+                        windowExtension.ShowDialog();
                     }
                 }
             };
