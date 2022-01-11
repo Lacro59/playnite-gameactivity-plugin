@@ -837,7 +837,25 @@ namespace GameActivity
 
                         var ViewExtension = new TransfertData(PluginDatabase.GetDataGames(), PluginDatabase);
                         Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCCommonSelectTransferData"), ViewExtension, windowOptions);
-                        windowExtension.ResizeMode = ResizeMode.CanResize;
+                        windowExtension.ShowDialog();
+                    }
+                },
+
+                new MainMenuItem
+                {
+                    MenuSection = MenuInExtensions + resources.GetString("LOCGameActivity"),
+                    Description = resources.GetString("LOCCommonIsolatedPluginData"),
+                    Action = (mainMenuItem) =>
+                    {
+                        var windowOptions = new WindowOptions
+                        {
+                            ShowMinimizeButton = false,
+                            ShowMaximizeButton = false,
+                            ShowCloseButton = true,
+                        };
+
+                        var ViewExtension = new ListDataWithoutGame(PluginDatabase.GetIsolatedDataGames(), PluginDatabase);
+                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCCommonIsolatedPluginData"), ViewExtension, windowOptions);
                         windowExtension.ShowDialog();
                     }
                 }
