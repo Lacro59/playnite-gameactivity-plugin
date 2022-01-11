@@ -291,7 +291,7 @@ namespace GameActivity
         {
             logger.Info("DataLogging_stop");
 
-            if (WarningsMessage.Count != 0)
+            if (WarningsMessage.Count != 0 && PlayniteApi.ApplicationInfo.Mode == ApplicationMode.Desktop)
             {
                 try
                 {
