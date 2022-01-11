@@ -764,7 +764,7 @@ namespace GameActivity.Views
                     ShowTitle = true,
                     Mode = ModeComplet,
                     ShowWeekPeriode = true,
-                    DateFirstPeriode = datesPeriodes[0].Monday
+                    DatesPeriodes = datesPeriodes
                 };
             }
             else
@@ -775,7 +775,7 @@ namespace GameActivity.Views
                     ShowTitle = true,
                     Mode = ModeComplet,
                     ShowWeekPeriode = true,
-                    DateFirstPeriode = datesPeriodes[0].Monday
+                    DatesPeriodes = datesPeriodes
                 };
             }
 
@@ -1369,11 +1369,5 @@ namespace GameActivity.Views
         public string SourceName { get; set; }
         public string SourceNameShort { get; set; }
         public bool IsCheck { get; set; }
-    }
-
-    public class WeekStartEnd
-    {
-        public DateTime Monday;
-        public DateTime Sunday;
     }
 }
