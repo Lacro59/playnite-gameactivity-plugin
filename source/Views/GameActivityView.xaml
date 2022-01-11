@@ -239,17 +239,17 @@
                         <ComboBox Grid.Column="6" x:Name="FilterSource" IsEditable="True" IsReadOnly="True">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" Tag="{Binding}">
-                                        <CheckBox Name="PART_CbSource" Margin="10,0,0,0"
-                                                  VerticalAlignment="Center"
-                                                  Checked="PART_CbSource_Checked"
-                                                  Unchecked="PART_CbSource_Unchecked"
-                                                  IsChecked="{Binding isCheck, Mode=TwoWay}" FontFamily="{DynamicResource CommonFont}" />
-                                        <commonpluginscontrols:TextBlockWithIcon Mode="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=Tag.TypeStoreIcon}" 
-                                                                                 Icon="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=Tag.SourceIcon}"
-                                                                                 IconText="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=Tag.SourceIconText}"
-                                                                                 Text="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=Tag.SourceName}" />
-                                    </StackPanel>
+                                    <CheckBox Name="PART_CbSource" Tag="{Binding}"
+                                              VerticalAlignment="Center"
+                                              Checked="PART_CbSource_Checked"
+                                              Unchecked="PART_CbSource_Unchecked"
+                                              IsChecked="{Binding isCheck, Mode=TwoWay}" FontFamily="{DynamicResource CommonFont}">
+
+                                        <commonpluginscontrols:TextBlockWithIcon Mode="{Binding ElementName=PART_CbSource, Path=Tag.TypeStoreIcon}" 
+                                                                                 Icon="{Binding ElementName=PART_CbSource, Path=Tag.SourceIcon}"
+                                                                                 IconText="{Binding ElementName=PART_CbSource, Path=Tag.SourceIconText}"
+                                                                                 Text="{Binding ElementName=PART_CbSource, Path=Tag.SourceName}" />
+                                    </CheckBox>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>

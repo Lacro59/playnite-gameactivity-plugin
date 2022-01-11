@@ -1339,20 +1339,19 @@ namespace GameActivity.Views
         private void FilterCbSource(CheckBox sender)
         {
             FilterSource.Text = string.Empty;
-            StackPanel parent = UI.FindParent<StackPanel>(sender);
 
             if ((bool)sender.IsChecked)
             {
-                SearchSources.Add(((ListSource)parent.Tag).SourceNameShort);
+                SearchSources.Add(((ListSource)sender.Tag).SourceNameShort);
             }
             else
             {
-                SearchSources.Remove(((ListSource)parent.Tag).SourceNameShort);
+                SearchSources.Remove(((ListSource)sender.Tag).SourceNameShort);
             }
 
             if (SearchSources.Count != 0)
             {
-                FilterSource.Text = String.Join(", ", SearchSources);
+                FilterSource.Text = string.Join(", ", SearchSources);
             }
             
             Filter();
