@@ -980,10 +980,10 @@ namespace GameActivity
             GameActivitiesLog.Items.Add(new Activity
             {
                 IdConfiguration = PluginDatabase.LocalSystem.GetIdConfiguration(),
-                GameActionName = args.SourceAction?.Name ?? resources.GetString("LOCDefault"), 
+                GameActionName = args.SourceAction?.Name ?? resources.GetString("LOCGameActivityDefaultAction"), 
                 DateSession = DateSession,
-                SourceID = args.Game.SourceId,
-                PlatformIDs = args.Game.PlatformIds
+                SourceID = args.Game.SourceId == null ? default(Guid) : args.Game.SourceId,
+                PlatformIDs = args.Game.PlatformIds ?? new List<Guid>()
             });
             GameActivitiesLog.ItemsDetails.Items.TryAdd(DateSession, new List<ActivityDetailsData>());
         }
