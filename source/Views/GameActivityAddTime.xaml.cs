@@ -38,7 +38,7 @@ namespace GameActivity.Views
             InitializeComponent();
 
             PART_ElapseTime.Content = "--";
-            PART_CbPlayAction.ItemsSource = game.GameActions?.Select(x => x.Name.IsNullOrEmpty() ? resources.GetString("LOCGameActivityDefaultAction") : x.Name).ToList();
+            PART_CbPlayAction.ItemsSource = game.GameActions?.Select(x => x.Name.IsNullOrEmpty() ? resources.GetString("LOCGameActivityDefaultAction") : x.Name)?.ToList() ?? new List<string> { ResourceProvider.GetString("LOCGameActivityDefaultAction") };
 
             if (activityEdit != null)
             {
@@ -54,7 +54,18 @@ namespace GameActivity.Views
                 PART_TimeStart.IsEnabled = false;
 
                 PART_CbPlayAction.Text = activityEdit.GameActionName;
-                PART_CbPlayAction.SelectedItem = ((List<string>)PART_CbPlayAction.ItemsSource).Find(x => x.IsEqual(activityEdit.GameActionName));
+
+                var playAction = ((List<string>)PART_CbPlayAction.ItemsSource)?.Find(x => x.IsEqual(activityEdit.GameActionName)) ?? null;
+                if (playAction != null)
+                {
+                    PART_CbPlayAction.SelectedItem = playAction;
+                }
+                else
+                {
+                    ((List<string>)PART_CbPlayAction.ItemsSource).Add(activityEdit.GameActionName);
+                    playAction = ((List<string>)PART_CbPlayAction.ItemsSource)?.Find(x => x.IsEqual(activityEdit.GameActionName)) ?? null;
+                    PART_CbPlayAction.SelectedItem = playAction;
+                }
 
                 SetElapsedTime();
 

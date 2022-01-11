@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:GameActivity.Views"
              xmlns:temperaturemeasurementtool="clr-namespace:TemperatureMeasurementTool"
              mc:Ignorable="d" 
-             Height="300" Width="500">
+             Height="320" Width="500">
 
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
