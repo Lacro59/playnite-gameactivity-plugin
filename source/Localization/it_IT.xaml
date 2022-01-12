@@ -12,6 +12,17 @@
     
     <sys:String x:Key="LOCGameActivityDefaultAction">Azione predefinita</sys:String>
 
+    
+    <!-- Backup -->
+
+    <sys:String x:Key="LOCGaBackupExist" xml:space="preserve">Ci sono dati di backup per {0}.
+Probabilmente dopo un crash playnite.
+Clicca per ulteriori informazioni.</sys:String>
+    <sys:String x:Key="LOCGaDateSession">Data sessione</sys:String>
+    <sys:String x:Key="LOCGaPlayTimeSession">Sessione tempo di gioco</sys:String>
+    <sys:String x:Key="LOCGaBackupDataInfo">Informazioni dati di backup</sys:String>
+    
+
     <!-- GameActivitySettingsView -->
 
     <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">Combina le sessioni di gioco sul grafico</sys:String>
