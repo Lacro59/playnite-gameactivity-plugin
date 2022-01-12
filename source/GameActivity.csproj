@@ -136,6 +136,7 @@
     </Compile>
     <Compile Include="GameActivity.cs" />
     <Compile Include="GameActivitySettings.cs" />
+    <Compile Include="Models\ActivityBackup.cs" />
     <Compile Include="Models\ExportedData.cs" />
     <Compile Include="Models\GameActivities.cs" />
     <Compile Include="Models\GameActivitiesCollection.cs" />
@@ -186,6 +187,9 @@
     <Compile Include="Services\PerfCounter.cs" />
     <Compile Include="Views\GameActivityAddTime.xaml.cs">
       <DependentUpon>GameActivityAddTime.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GameActivityBackup.xaml.cs">
+      <DependentUpon>GameActivityBackup.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\GameActivitySettingsView.xaml.cs">
       <DependentUpon>GameActivitySettingsView.xaml</DependentUpon>
@@ -374,6 +378,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\GameActivityAddTime.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GameActivityBackup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

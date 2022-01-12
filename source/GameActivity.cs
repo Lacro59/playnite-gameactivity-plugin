@@ -37,10 +37,13 @@ namespace GameActivity
         internal TopPanelItem topPanelItem;
         internal GameActivityViewSidebar gameActivityViewSidebar;
 
-        // Variables timer function
+        // Variables timer functions
         public System.Timers.Timer t { get; set; }
         private GameActivities GameActivitiesLog;
         public List<WarningData> WarningsMessage { get; set; } = new List<WarningData>();
+
+        public System.Timers.Timer tBackup { get; set; }
+        private ActivityBackup activityBackup { get; set; }
 
         //private OldToNew oldToNew;
 
@@ -270,7 +273,8 @@ namespace GameActivity
             return false;
         }
 
-        #region Timer function
+
+        #region Timer functions
         /// <summary>
         /// Start the timer.
         /// </summary>
@@ -562,7 +566,37 @@ namespace GameActivity
             });
         }
         #endregion
+
+
+        #region Backup functions
+        public void DataBackup_start()
+        {
+            tBackup = new System.Timers.Timer(60000);
+            tBackup.AutoReset = true;
+            tBackup.Elapsed += new ElapsedEventHandler(OnTimedBackupEvent);
+            tBackup.Start();            
+        }
+
+        public void DataBackup_stop()
+        {
+            tBackup.AutoReset = false;
+            tBackup.Stop();
+        }
+
+        private async void OnTimedBackupEvent(object source, ElapsedEventArgs e)
+        {
+            ulong ElapsedSeconds = (ulong)(DateTime.Now.ToUniversalTime() - (DateTime)activityBackup.DateSession).TotalSeconds; 
+            activityBackup.ElapsedSeconds = ElapsedSeconds;
+            activityBackup.ItemsDetailsDatas = GameActivitiesLog.ItemsDetails.Get((DateTime)activityBackup.DateSession);
+
+            string PathFileBackup = Path.Combine(PluginDatabase.Paths.PluginUserDataPath, "SaveSession.json");
+            FileSystem.DeleteFile(PathFileBackup);
+            File.WriteAllText(PathFileBackup, Serialization.ToJson(activityBackup));
+        }
         #endregion
+
+        #endregion
+
 
 
         #region Theme integration
@@ -968,6 +1002,8 @@ namespace GameActivity
         // Add code to be executed when game is started running.
         public override void OnGameStarted(OnGameStartedEventArgs args)
         {
+            DataBackup_start();
+
             // start timer si log is enable.
             if (PluginSettings.Settings.EnableLogging)
             {
@@ -986,6 +1022,18 @@ namespace GameActivity
                 PlatformIDs = args.Game.PlatformIds ?? new List<Guid>()
             });
             GameActivitiesLog.ItemsDetails.Items.TryAdd(DateSession, new List<ActivityDetailsData>());
+
+
+            activityBackup = new ActivityBackup();
+            activityBackup.Id = GameActivitiesLog.Id;
+            activityBackup.Name = GameActivitiesLog.Name;
+            activityBackup.ElapsedSeconds = 0;
+            activityBackup.GameActionName = args.SourceAction?.Name ?? resources.GetString("LOCGameActivityDefaultAction");
+            activityBackup.IdConfiguration = PluginDatabase.LocalSystem.GetIdConfiguration();
+            activityBackup.DateSession = DateSession;
+            activityBackup.SourceID = args.Game.SourceId == null ? default(Guid) : args.Game.SourceId;
+            activityBackup.PlatformIDs = args.Game.PlatformIds ?? new List<Guid>();
+            activityBackup.ItemsDetailsDatas = new List<ActivityDetailsData>();
         }
 
         // Add code to be executed when game is preparing to be started.
@@ -993,6 +1041,8 @@ namespace GameActivity
         {
             var TaskGameStopped = Task.Run(() =>
             {
+                DataBackup_stop();
+
                 // Stop timer si HWiNFO log is enable.
                 if (PluginSettings.Settings.EnableLogging)
                 {
@@ -1008,6 +1058,10 @@ namespace GameActivity
                     PluginDatabase.SetThemesResources(PluginDatabase.GameContext);
                 }
             });
+
+            // Delete backup
+            string PathFileBackup = Path.Combine(PluginDatabase.Paths.PluginUserDataPath, "SaveSession.json");
+            FileSystem.DeleteFile(PathFileBackup);
         }
         #endregion
 
@@ -1048,9 +1102,33 @@ namespace GameActivity
                 GaCommand.Actions.Add(GaSubItemsAction);
                 QuickSearch.QuickSearchSDK.AddCommand(GaCommand);
             }
-            catch (Exception)
-            {
+            catch { }
 
+
+            // Check backup
+            string PathFileBackup = Path.Combine(PluginDatabase.Paths.PluginUserDataPath, "SaveSession.json");
+            if (File.Exists(PathFileBackup))
+            {
+                ActivityBackup backupData = Serialization.FromJsonFile<ActivityBackup>(PathFileBackup);
+
+                PlayniteApi.Notifications.Add(new NotificationMessage(
+                    $"gameactivity-backup",
+                    $"GameActivity" + System.Environment.NewLine + string.Format(resources.GetString("LOCGaBackupExist"), backupData.Name),
+                    NotificationType.Info,
+                    () => 
+                    {
+                        var windowOptions = new WindowOptions
+                        {
+                            ShowMinimizeButton = false,
+                            ShowMaximizeButton = false,
+                            ShowCloseButton = true,
+                        };
+
+                        var ViewExtension = new GameActivityBackup(backupData);
+                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGaBackupDataInfo"), ViewExtension, windowOptions);
+                        windowExtension.ShowDialog();
+                    }
+                ));
             }
         }
 
