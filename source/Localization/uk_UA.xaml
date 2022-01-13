@@ -12,6 +12,17 @@
     
     <sys:String x:Key="LOCGameActivityDefaultAction">Типова дія</sys:String>
 
+    
+    <!-- Backup -->
+
+    <sys:String x:Key="LOCGaBackupExist" xml:space="preserve">Наявні резервні дані для {0}.
+Ймовірно після аварії Playnie.
+Натисніть щоб отримати додаткову інформацію.</sys:String>
+    <sys:String x:Key="LOCGaDateSession">Дата сеансу</sys:String>
+    <sys:String x:Key="LOCGaPlayTimeSession">Ігровий час сеансу</sys:String>
+    <sys:String x:Key="LOCGaBackupDataInfo">Інформація про резервні дані</sys:String>
+    
+
     <!-- GameActivitySettingsView -->
 
     <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">Поєднати час ігрових сеансів на графіку</sys:String>
