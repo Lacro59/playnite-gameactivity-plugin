@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:GameActivity.Views"
              xmlns:temperaturemeasurementtool="clr-namespace:TemperatureMeasurementTool"
              mc:Ignorable="d" 
-             Height="320" Width="500">
+             Height="350" Width="500">
 
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
@@ -23,7 +23,7 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
         <Label Content="{DynamicResource LOCGaDateStart}" Grid.Column="0" Grid.Row="0" />
@@ -46,10 +46,14 @@
         <Label Content="{DynamicResource LOCGameActivityLvGamesElapsedSeconds}" Grid.Column="0" Grid.Row="6" />
         <Label Name="PART_ElapseTime" Grid.Column="1" Grid.Row="6" Content="any time"/>
 
-        <StackPanel Grid.Row="7" Grid.ColumnSpan="5"
-                    VerticalAlignment="Bottom" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="{DynamicResource LOCAddTitle}" Name="PART_Add" Click="PART_Add_Click" IsEnabled="False" />
-            <Button Content="{DynamicResource LOCCancelLabel}" Margin="10,0,0,0" Name="PART_Cancel" Click="PART_Cancel_Click" />
-        </StackPanel>
+        <Border BorderThickness="0,1,0,0" BorderBrush="{StaticResource NormalBorderBrush}"
+                Margin="0,10,0,0" Grid.Row="7" Grid.ColumnSpan="5">
+            <DockPanel KeyboardNavigation.TabNavigation="Local" LastChildFill="False" Margin="0,5">
+                <Button Content="{DynamicResource LOCCancelLabel}" DockPanel.Dock="Right" Name="PART_Cancel" 
+                        Style="{StaticResource BottomButton}" Click="PART_Cancel_Click" TabIndex="1" />
+                <Button Content="{DynamicResource LOCAddTitle}" DockPanel.Dock="Right" Name="PART_Add" Click="PART_Add_Click"
+                        Style="{StaticResource BottomButton}" IsEnabled="False" TabIndex="0" />
+            </DockPanel>
+        </Border>
     </Grid>
 </UserControl>
