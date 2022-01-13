@@ -191,6 +191,9 @@
     <Compile Include="Views\GameActivityBackup.xaml.cs">
       <DependentUpon>GameActivityBackup.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\GameActivityMergeTime.xaml.cs">
+      <DependentUpon>GameActivityMergeTime.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\GameActivitySettingsView.xaml.cs">
       <DependentUpon>GameActivitySettingsView.xaml</DependentUpon>
     </Compile>
@@ -382,6 +385,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\GameActivityBackup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GameActivityMergeTime.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,4 +1,5 @@
 ﻿using CommonPlayniteShared.Converters;
+using CommonPluginsShared;
 using CommonPluginsShared.Extensions;
 using GameActivity.Models;
 using GameActivity.Services;
@@ -98,7 +99,10 @@ namespace GameActivity.Views
                 activity.PlatformIDs = game.PlatformIds;
                 activity.SourceID = game.SourceId;
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Common.LogError(ex, false, true, PluginDatabase.PluginName);
+            }
 
             ((Window)this.Parent).Close();
         }

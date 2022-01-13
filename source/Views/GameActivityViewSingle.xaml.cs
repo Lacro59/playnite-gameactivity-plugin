@@ -141,7 +141,7 @@ namespace GameActivity.Views
                 Settings = PluginDatabase.PluginSettings
             };
         }
-
+        
 
         #region Time navigation 
         private void Bt_PrevTime(object sender, RoutedEventArgs e)
@@ -352,6 +352,23 @@ namespace GameActivity.Views
                 PluginDatabase.Update(gameActivities);
                 getActivityByListGame(gameActivities);
             }
+        }
+
+        private void PART_BtMerged_Click(object sender, RoutedEventArgs e)
+        {
+            var windowOptions = new WindowOptions
+            {
+                ShowMinimizeButton = false,
+                ShowMaximizeButton = false,
+                ShowCloseButton = true
+            };
+
+            var ViewExtension = new GameActivityMergeTime(game);
+            Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PluginDatabase.PlayniteApi, resources.GetString("LOCGaMergeSession"), ViewExtension, windowOptions);
+            windowExtension.ShowDialog();
+
+            gameActivities = PluginDatabase.Get(game);
+            getActivityByListGame(gameActivities);
         }
         #endregion
     }
