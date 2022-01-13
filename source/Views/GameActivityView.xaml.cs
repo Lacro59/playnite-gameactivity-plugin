@@ -20,6 +20,7 @@ using GameActivity.Services;
 using GameActivity.Controls;
 using CommonPluginsControls.Controls;
 using System.Windows.Media;
+using System.IO;
 
 namespace GameActivity.Views
 {
@@ -106,6 +107,9 @@ namespace GameActivity.Views
             PART_GameActivityChartLog.IgnoreSettings = true;
             PART_GameActivityChartLog_Contener.Children.Add(PART_GameActivityChartLog);
 
+
+            lvGames.SaveColumn = PluginDatabase.PluginSettings.Settings.SaveColumnOrder;
+            lvGames.SaveColumnFilePath = Path.Combine(PluginDatabase.Paths.PluginUserDataPath, "lvGames.json");
 
             GridView lvView = (GridView)lvGames.View;
 

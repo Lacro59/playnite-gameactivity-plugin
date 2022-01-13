@@ -43,7 +43,11 @@
                             <Label Content="{DynamicResource LOCGameActivityCumulPlaytimeSession}" />
                         </CheckBox>
 
-                        <CheckBox Name="PART_CumulPlaytimeStore" IsChecked="{Binding Settings.CumulPlaytimeStore}" Margin="0,15,0,0">
+                        <CheckBox Name="PART_CumulPlaytimeStore" IsChecked="{Binding Settings.SaveColumnOrder}" Margin="0,15,0,0">
+                            <Label Content="{DynamicResource LOCCommonSaveColumOrder}" />
+                        </CheckBox>
+
+                        <CheckBox IsChecked="{Binding Settings.CumulPlaytimeStore}" Margin="0,15,0,0">
                             <Label Content="{DynamicResource LOCGameActivityCumulPlaytimeStore}" />
                         </CheckBox>
 

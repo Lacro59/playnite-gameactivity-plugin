@@ -170,7 +170,7 @@
                             </GridViewColumn>
                             <GridViewColumn Width="130">
                                 <GridViewColumnHeader Content="{DynamicResource LOCGameActivityLvGamesElapsedSeconds}" 
-                                                      Tag="listGameElapsedSeconds" />
+                                                      Tag="GameElapsedSeconds" />
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <Label Content="{Binding GameElapsedSeconds, Mode=OneWay, Converter={StaticResource PlayTimeToStringConverter}}"

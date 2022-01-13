@@ -16,6 +16,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace GameActivity.Views
 {
@@ -72,6 +73,9 @@ namespace GameActivity.Views
             PART_ChartTime = (PluginChartTime)PART_ChartTimeContener.Children[0];
             PART_ChartTime.GameContext = game;
 
+
+            lvSessions.SaveColumn = PluginDatabase.PluginSettings.Settings.SaveColumnOrder;
+            lvSessions.SaveColumnFilePath = Path.Combine(PluginDatabase.Paths.PluginUserDataPath, "lvSessions.json");
 
             GridView lvView = (GridView)lvSessions.View;
 
