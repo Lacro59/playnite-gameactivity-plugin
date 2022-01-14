@@ -99,3 +99,16 @@ Packages:
     PackageUrl: https://github.com/Lacro59/playnite-gameactivity-plugin/releases/download/v2.4.3/playnite-gameactivity-plugin_2_4_3.pext
     Changelog:
       - Fixed some crash
+  - Version: 2.5
+    RequiredApiVersion: 6.2.0
+    ReleaseDate: 2022-01-14
+    PackageUrl: https://github.com/Lacro59/playnite-gameactivity-plugin/releases/download/v2.5/playnite-gameactivity-plugin_2_5.pext
+    Changelog:
+      - UI tweaks
+      - Added an option to transfert data in other game
+      - Added an option to delete/transfert data without Playnite game
+      - Added a backup system when Playnite crash
+      - Added a option to save column order
+      - Updated localizations
+      - Fixed minors bugs
+      - Fixed crash
