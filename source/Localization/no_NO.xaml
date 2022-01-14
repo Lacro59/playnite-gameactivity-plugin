@@ -23,6 +23,12 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGaBackupDataInfo">Backup data info</sys:String>
     
 
+    <!-- Merge -->
+
+    <sys:String x:Key="LOCGaMerge">Merge</sys:String>
+    <sys:String x:Key="LOCGaMergeSession">Merge game session</sys:String>
+    
+
     <!-- GameActivitySettingsView -->
 
     <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">Kombiner spilletid fra spilløkter i oversikt</sys:String>

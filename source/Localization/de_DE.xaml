@@ -15,12 +15,18 @@
     
     <!-- Backup -->
 
-    <sys:String x:Key="LOCGaBackupExist" xml:space="preserve">There is backup data for {0}.
-Probably after a playnite crash.
-Click for more information.</sys:String>
-    <sys:String x:Key="LOCGaDateSession">Date session</sys:String>
-    <sys:String x:Key="LOCGaPlayTimeSession">Play time session</sys:String>
-    <sys:String x:Key="LOCGaBackupDataInfo">Backup data info</sys:String>
+    <sys:String x:Key="LOCGaBackupExist" xml:space="preserve">Es gibt Sicherungsdaten für {0}.
+Wahrscheinlich nach einem Absturz von Playnite.
+Klicken Sie für weitere Informationen.</sys:String>
+    <sys:String x:Key="LOCGaDateSession">Datum der Sitzung</sys:String>
+    <sys:String x:Key="LOCGaPlayTimeSession">Spielzeit Sitzung</sys:String>
+    <sys:String x:Key="LOCGaBackupDataInfo">Dateninformationen sichern</sys:String>
+    
+
+    <!-- Merge -->
+
+    <sys:String x:Key="LOCGaMerge">Merge</sys:String>
+    <sys:String x:Key="LOCGaMergeSession">Merge game session</sys:String>
     
 
     <!-- GameActivitySettingsView -->

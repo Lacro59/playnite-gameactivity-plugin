@@ -23,6 +23,12 @@
     <sys:String x:Key="LOCGaBackupDataInfo">Інформація про резервні дані</sys:String>
     
 
+    <!-- Merge -->
+
+    <sys:String x:Key="LOCGaMerge">Об'єднати</sys:String>
+    <sys:String x:Key="LOCGaMergeSession">Об'єднати ігрові сеанси</sys:String>
+    
+
     <!-- GameActivitySettingsView -->
 
     <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">Поєднати час ігрових сеансів на графіку</sys:String>
