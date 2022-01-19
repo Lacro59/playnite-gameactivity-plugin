@@ -128,13 +128,13 @@
 
     <sys:String x:Key="LOCGaQuickSearchDescription">Пошук ігор за даними GameActivity</sys:String>
     <sys:String x:Key="LOCGaQuickSearchByFPS">Знайти по FPS</sys:String>
-    <sys:String x:Key="LOCGaQuickSearchByTime">Знайти за часом сеан</sys:String>
-    <sys:String x:Key="LOCGaQuickSearchByDate">Пошук за датою сеан</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchByTime">Знайти за часом сеансу</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchByDate">Пошук за датою сеансу</sys:String>
 
     <!-- GameActivityAddTime -->
 
     <sys:String x:Key="LOCGaAddNewGameSession">Додати новий сеанс гри</sys:String>
-    <sys:String x:Key="LOCGaDateStart">Дата початк</sys:String>
+    <sys:String x:Key="LOCGaDateStart">Дата початку</sys:String>
     <sys:String x:Key="LOCGaDateEnd">Дата завершення</sys:String>
 
 </ResourceDictionary>
