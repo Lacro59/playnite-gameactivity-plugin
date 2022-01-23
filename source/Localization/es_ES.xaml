@@ -25,8 +25,8 @@ Haz clic para más información.</sys:String>
 
     <!-- Merge -->
 
-    <sys:String x:Key="LOCGaMerge">Merge</sys:String>
-    <sys:String x:Key="LOCGaMergeSession">Merge game session</sys:String>
+    <sys:String x:Key="LOCGaMerge">Combinar</sys:String>
+    <sys:String x:Key="LOCGaMergeSession">Combinar sesión de juego</sys:String>
     
 
     <!-- GameActivitySettingsView -->
