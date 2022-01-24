@@ -105,6 +105,7 @@ namespace GameActivity.Views
 
             PART_GameActivityChartLog = new PluginChartLog();
             PART_GameActivityChartLog.IgnoreSettings = true;
+            PART_GameActivityChartLog.AxisLimit = 10;
             PART_GameActivityChartLog_Contener.Children.Add(PART_GameActivityChartLog);
 
 

@@ -456,7 +456,7 @@
 
                 <!-- Game logs -->
                 <Grid Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" Name="PART_ChartLogContener">
-                    <controls:PluginChartLog IgnoreSettings="True" AxisLimit="15" DisableAnimations="True" />
+                    <controls:PluginChartLog IgnoreSettings="True" AxisLimit="10" DisableAnimations="True" />
                 </Grid>
 
                 <Grid Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" Margin="0,10,0,0"
