@@ -112,3 +112,12 @@ Packages:
       - Updated localizations
       - Fixed minors bugs
       - Fixed crash
+  - Version: 2.5.1
+    RequiredApiVersion: 6.2.2
+    ReleaseDate: 2022-01-24
+    PackageUrl: https://github.com/Lacro59/playnite-gameactivity-plugin/releases/download/v2.5.1/playnite-gameactivity-plugin_2_5_1.pext
+    Changelog:
+      - UI tweaks
+      - Fixed a random issue on game stopped event
+      - Fixed an issue with dates that is not in local time
+      - Updated localizations
