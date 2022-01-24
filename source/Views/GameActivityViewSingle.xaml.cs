@@ -301,14 +301,35 @@ namespace GameActivity.Views
 
             if (result == MessageBoxResult.Yes)
             {
-                var GameLastActivity = ((FrameworkElement)sender).Tag;
-                var activity = ((ObservableCollection<ListActivities>)lvSessions.ItemsSource).Where(x => x.GameLastActivity == (DateTime)GameLastActivity).FirstOrDefault();
+                try
+                {
+                    var GameLastActivity = ((FrameworkElement)sender).Tag;
+                    var activity = ((ObservableCollection<ListActivities>)lvSessions.ItemsSource).Where(x => x.GameLastActivity == (DateTime)GameLastActivity).FirstOrDefault();
 
-                gameActivities.DeleteActivity(activity.GameLastActivity);
-                PluginDatabase.Update(gameActivities);
+                    if (activity.GameElapsedSeconds != 0)
+                    {
+                        if ((long)(game.Playtime - activity.GameElapsedSeconds) >= 0)
+                        {
+                            game.Playtime -= activity.GameElapsedSeconds;
+                        }
+                        else
+                        {
+                            logger.Warn($"Impossible to remove GameElapsedSeconds ({activity.GameElapsedSeconds}) in Playtime ({game.Playtime}) of {game.Name}");
+                        }
+                    }
 
-                lvSessions.SelectedIndex = -1;
-                ((ObservableCollection<ListActivities>)lvSessions.ItemsSource).Remove(activity);
+                    gameActivities.DeleteActivity(activity.GameLastActivity);
+
+                    PluginDatabase.PlayniteApi.Database.Games.Update(game);
+                    PluginDatabase.Update(gameActivities);
+
+                    lvSessions.SelectedIndex = -1;
+                    ((ObservableCollection<ListActivities>)lvSessions.ItemsSource).Remove(activity);
+                }
+                catch (Exception ex)
+                {
+                    Common.LogError(ex, false, true, PluginDatabase.PluginName);
+                }
             }
         }
 
@@ -321,58 +342,94 @@ namespace GameActivity.Views
                 ShowCloseButton = true
             };
 
-            var ViewExtension = new GameActivityAddTime(game, null);
-            Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PluginDatabase.PlayniteApi, resources.GetString("LOCGaAddNewGameSession"), ViewExtension, windowOptions);
-            windowExtension.ShowDialog();
-
-            if (ViewExtension.activity != null)
+            try
             {
-                gameActivities.Items.Add(ViewExtension.activity);
-                PluginDatabase.Update(gameActivities);
-                getActivityByListGame(gameActivities);
+                var ViewExtension = new GameActivityAddTime(game, null);
+                Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PluginDatabase.PlayniteApi, resources.GetString("LOCGaAddNewGameSession"), ViewExtension, windowOptions);
+                windowExtension.ShowDialog();
+
+                if (ViewExtension.activity != null)
+                {
+                    gameActivities.Items.Add(ViewExtension.activity);
+                    getActivityByListGame(gameActivities);
+
+                    if (ViewExtension.activity.ElapsedSeconds >= 0)
+                    {
+                        game.Playtime += ViewExtension.activity.ElapsedSeconds;
+                    }
+
+                    PluginDatabase.PlayniteApi.Database.Games.Update(game);
+                    PluginDatabase.Update(gameActivities);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex, false, true, PluginDatabase.PluginName);
             }
         }
 
         private void PART_BtEdit_Click(object sender, RoutedEventArgs e)
         {
-            var GameLastActivity = ((FrameworkElement)sender).Tag;
-            int index = gameActivities.Items.FindIndex(x => x.DateSession == ((DateTime)GameLastActivity).ToUniversalTime());
-            Activity activity = gameActivities.Items[index];
-
-            var windowOptions = new WindowOptions
+            try
             {
-                ShowMinimizeButton = false,
-                ShowMaximizeButton = false,
-                ShowCloseButton = true
-            };
+                var GameLastActivity = ((FrameworkElement)sender).Tag;
+                int index = gameActivities.Items.FindIndex(x => x.DateSession == ((DateTime)GameLastActivity).ToUniversalTime());
+                Activity activity = gameActivities.Items[index];
+                ulong ElapsedSeconds = activity.ElapsedSeconds;
 
-            var ViewExtension = new GameActivityAddTime(game, activity);
-            Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PluginDatabase.PlayniteApi, resources.GetString("LOCGaAddNewGameSession"), ViewExtension, windowOptions);
-            windowExtension.ShowDialog();
+                var windowOptions = new WindowOptions
+                {
+                    ShowMinimizeButton = false,
+                    ShowMaximizeButton = false,
+                    ShowCloseButton = true
+                };
 
-            if (ViewExtension.activity != null)
+                var ViewExtension = new GameActivityAddTime(game, activity);
+                Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PluginDatabase.PlayniteApi, resources.GetString("LOCGaAddNewGameSession"), ViewExtension, windowOptions);
+                windowExtension.ShowDialog();
+
+                if (ViewExtension.activity != null)
+                {
+                    gameActivities.Items[index] = ViewExtension.activity;
+                    getActivityByListGame(gameActivities);
+
+                    if (ViewExtension.activity.ElapsedSeconds >= 0)
+                    {
+                        game.Playtime += ViewExtension.activity.ElapsedSeconds - ElapsedSeconds;
+                    }
+
+                    PluginDatabase.PlayniteApi.Database.Games.Update(game);
+                    PluginDatabase.Update(gameActivities);
+                }
+            }
+            catch (Exception ex)
             {
-                gameActivities.Items[index] = ViewExtension.activity;
-                PluginDatabase.Update(gameActivities);
-                getActivityByListGame(gameActivities);
+                Common.LogError(ex, false, true, PluginDatabase.PluginName);
             }
         }
 
         private void PART_BtMerged_Click(object sender, RoutedEventArgs e)
         {
-            var windowOptions = new WindowOptions
+            try
             {
-                ShowMinimizeButton = false,
-                ShowMaximizeButton = false,
-                ShowCloseButton = true
-            };
+                var windowOptions = new WindowOptions
+                {
+                    ShowMinimizeButton = false,
+                    ShowMaximizeButton = false,
+                    ShowCloseButton = true
+                };
 
-            var ViewExtension = new GameActivityMergeTime(game);
-            Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PluginDatabase.PlayniteApi, resources.GetString("LOCGaMergeSession"), ViewExtension, windowOptions);
-            windowExtension.ShowDialog();
+                var ViewExtension = new GameActivityMergeTime(game);
+                Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PluginDatabase.PlayniteApi, resources.GetString("LOCGaMergeSession"), ViewExtension, windowOptions);
+                windowExtension.ShowDialog();
 
-            gameActivities = PluginDatabase.Get(game);
-            getActivityByListGame(gameActivities);
+                gameActivities = PluginDatabase.Get(game);
+                getActivityByListGame(gameActivities);
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex, false, true, PluginDatabase.PluginName);
+            }
         }
         #endregion
     }
