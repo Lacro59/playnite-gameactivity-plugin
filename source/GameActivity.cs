@@ -45,7 +45,10 @@ namespace GameActivity
         public System.Timers.Timer tBackup { get; set; }
         private ActivityBackup activityBackup { get; set; }
 
+        private ulong PlaytimeOnStarted { get; set; }
+
         //private OldToNew oldToNew;
+
 
         public GameActivity(IPlayniteAPI api) : base(api)
         {
@@ -1002,6 +1005,8 @@ namespace GameActivity
         // Add code to be executed when game is started running.
         public override void OnGameStarted(OnGameStartedEventArgs args)
         {
+            PlaytimeOnStarted = args.Game.Playtime;
+
             DataBackup_start();
 
             // start timer si log is enable.
@@ -1041,21 +1046,41 @@ namespace GameActivity
         {
             var TaskGameStopped = Task.Run(() =>
             {
-                DataBackup_stop();
-
-                // Stop timer si HWiNFO log is enable.
-                if (PluginSettings.Settings.EnableLogging)
+                try
                 {
-                    DataLogging_stop();
+                    DataBackup_stop();
+
+                    // Stop timer si HWiNFO log is enable.
+                    if (PluginSettings.Settings.EnableLogging)
+                    {
+                        DataLogging_stop();
+                    }
+
+                    ulong ElapsedSeconds = args.ElapsedSeconds;
+                    if (ElapsedSeconds == 0)
+                    {
+                        Thread.Sleep(5000);
+                        ElapsedSeconds = args.Game.Playtime - PlaytimeOnStarted;
+
+                        PlayniteApi.Notifications.Add(new NotificationMessage(
+                            $"gameactivity-noElapsedSeconds",
+                            $"GameActivity" + System.Environment.NewLine + string.Format(resources.GetString("LOCGameActivityNoPlaytime"), args.Game.Name, ElapsedSeconds),
+                            NotificationType.Info
+                        ));
+                    }
+
+                    // Infos
+                    GameActivitiesLog.GetLastSessionActivity().ElapsedSeconds = ElapsedSeconds;
+                    PluginDatabase.Update(GameActivitiesLog);
+
+                    if (args.Game.Id == PluginDatabase.GameContext.Id)
+                    {
+                        PluginDatabase.SetThemesResources(PluginDatabase.GameContext);
+                    }
                 }
-
-                // Infos
-                GameActivitiesLog.GetLastSessionActivity().ElapsedSeconds = args.ElapsedSeconds;
-                PluginDatabase.Update(GameActivitiesLog);
-
-                if (args.Game.Id == PluginDatabase.GameContext.Id)
+                catch (Exception ex)
                 {
-                    PluginDatabase.SetThemesResources(PluginDatabase.GameContext);
+                    Common.LogError(ex, false, true, PluginDatabase.PluginName);
                 }
             });
 
