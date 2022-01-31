@@ -455,7 +455,8 @@ namespace GameActivity.Controls
                 //lets save the mapper globally
                 Charting.For<CustomerForTime>(customerVmMapper);
 
-                PlayTimeToStringConverter converter = new PlayTimeToStringConverter();
+                //PlayTimeToStringConverter converter = new PlayTimeToStringConverter();
+                PlayTimeToStringConverterWithZero converter = new PlayTimeToStringConverterWithZero();
                 Func<double, string> activityForGameLogFormatter = value => (string)converter.Convert((ulong)value, null, null, CultureInfo.CurrentCulture);
                 PART_ChartTimeActivityLabelsY.LabelFormatter = activityForGameLogFormatter;
 
