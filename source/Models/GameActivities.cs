@@ -26,7 +26,6 @@ namespace GameActivity.Models
             set
             {
                 _Items = value;
-                _FilterItems = null;
                 OnPropertyChanged();
             }
         }
@@ -47,27 +46,19 @@ namespace GameActivity.Models
         }
 
 
-        private List<Activity> _FilterItems = null;
         [DontSerialize]
         public List<Activity> FilterItems
         {
             get
             {
-                if (_FilterItems == null)
+                if (PluginDatabase.PluginSettings.Settings.IgnoreSession)
                 {
-                    if (PluginDatabase.PluginSettings.Settings.IgnoreSession)
-                    {
-                        _FilterItems = Items.Where(x => (int)x.ElapsedSeconds > PluginDatabase.PluginSettings.Settings.IgnoreSessionTime).Distinct().ToList();
-                    }
-                    else
-                    {
-                       _FilterItems = Items.Where(x => (int)x.ElapsedSeconds > 0).Distinct().ToList();
-                    }
-
-                    _FilterItems = Items;
+                    return Items.Where(x => (int)x.ElapsedSeconds > PluginDatabase.PluginSettings.Settings.IgnoreSessionTime).Distinct().ToList();
                 }
-
-                return _FilterItems;
+                else
+                {
+                    return Items.Where(x => (int)x.ElapsedSeconds > 0).Distinct().ToList();
+                }
             }
         }
 
@@ -290,10 +281,10 @@ namespace GameActivity.Models
         /// Get the last session activity.
         /// </summary>
         /// <returns></returns>
-        public Activity GetLastSessionActivity()
+        public Activity GetLastSessionActivity(bool UsedTimeIgnore = true)
         {
             int TimeIgnore = -1;
-            if (PluginDatabase.PluginSettings.Settings.IgnoreSession)
+            if (PluginDatabase.PluginSettings.Settings.IgnoreSession && UsedTimeIgnore)
             {
                 TimeIgnore = PluginDatabase.PluginSettings.Settings.IgnoreSessionTime;
             }

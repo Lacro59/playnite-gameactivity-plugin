@@ -1070,7 +1070,7 @@ namespace GameActivity
                     }
 
                     // Infos
-                    GameActivitiesLog.GetLastSessionActivity().ElapsedSeconds = ElapsedSeconds;
+                    GameActivitiesLog.GetLastSessionActivity(false).ElapsedSeconds = ElapsedSeconds;
                     PluginDatabase.Update(GameActivitiesLog);
 
                     if (args.Game.Id == PluginDatabase.GameContext.Id)
