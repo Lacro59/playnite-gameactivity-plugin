@@ -931,7 +931,8 @@ namespace GameActivity
 
                        
             // Old format
-            var oldFormat = PluginDatabase.Database?.Select(x => x).Where(x => x.Items.FirstOrDefault() != null && x.Items.FirstOrDefault().PlatformIDs == null);
+            //var oldFormat = PluginDatabase.Database?.Select(x => x).Where(x => x.Items.FirstOrDefault() != null && x.Items.FirstOrDefault().PlatformIDs == null);
+            var oldFormat = PluginDatabase.Database?.Select(x => x).Where(x => x.Items.Where(y => y.PlatformID != default(Guid)).Count() > 0);
             if (oldFormat?.Count() > 0)
             {
                 GlobalProgressOptions globalProgressOptions = new GlobalProgressOptions(
@@ -947,6 +948,7 @@ namespace GameActivity
                         foreach(Activity activity in gameActivities.Items)
                         {
                             activity.PlatformIDs = new List<Guid> { activity.PlatformID };
+                            activity.PlatformID = default(Guid);
                         }
 
                         PluginDatabase.AddOrUpdate(gameActivities);
