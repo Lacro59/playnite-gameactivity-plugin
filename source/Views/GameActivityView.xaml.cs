@@ -86,6 +86,7 @@ namespace GameActivity.Views
             InitializeComponent();
 
 
+            PART_Truncate.IsChecked = PluginDatabase.PluginSettings.Settings.ChartTimeTruncate;
             ButtonShowConfig.IsChecked = false;
 
 
@@ -97,6 +98,7 @@ namespace GameActivity.Views
 
 
             PART_GameActivityChartTime = new PluginChartTime();
+            PART_GameActivityChartTime.Truncate = PluginDatabase.PluginSettings.Settings.ChartTimeTruncate;
             PART_GameActivityChartTime.IgnoreSettings = true;
             PART_GameActivityChartTime.LabelsRotation = true;
             PART_GameActivityChartTime.GameSeriesDataClick += GameSeries_DataClick;
@@ -1093,6 +1095,7 @@ namespace GameActivity.Views
             {
                 try
                 {
+                    PART_Truncate.Visibility = Visibility.Visible;
                     isGameTime = true;
                     ToggleButtonLog.IsChecked = false;
                     getActivityForGamesTimeGraphics(gameIDCurrent);
@@ -1119,6 +1122,7 @@ namespace GameActivity.Views
             {
                 try
                 {
+                    PART_Truncate.Visibility = Visibility.Collapsed;
                     isGameTime = false;
                     ToggleButtonTime.IsChecked = false;
                     getActivityForGamesLogGraphics(gameIDCurrent);
@@ -1199,6 +1203,15 @@ namespace GameActivity.Views
             }
         }
 
+
+        private void Bt_Truncate(object sender, RoutedEventArgs e)
+        {
+            if (isGameTime)
+            {
+                PART_GameActivityChartTime.Truncate = (bool)((ToggleButton)sender).IsChecked;
+                PART_GameActivityChartTime.AxisVariator = 0;
+            }
+        }
 
         private void Button_Click_prevGame(object sender, RoutedEventArgs e)
         {

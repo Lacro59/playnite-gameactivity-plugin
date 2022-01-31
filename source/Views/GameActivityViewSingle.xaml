@@ -131,6 +131,10 @@
                                 Click="Bt_PrevTimePlus" FontFamily="{DynamicResource CommonFont}" />
                         <Button Content="&#xe941;" Height="33" FontSize="18" 
                                 Click="Bt_PrevTime" FontFamily="{DynamicResource CommonFont}" Margin="5,0,0,0" />
+
+                        <ToggleButton Content="&#xe9b0;" Height="33" FontSize="18" Name="PART_Truncate"
+                                      Click="Bt_Truncate" FontFamily="{DynamicResource CommonFont}" Margin="5,0,0,0" />
+                        
                         <Button Content="&#xe942;" Height="33" FontSize="18" 
                                 Click="Bt_NextTime" FontFamily="{DynamicResource CommonFont}" Margin="5,0,0,0" />
                         <Button Content="&#xe946;" Height="33" FontSize="18" 

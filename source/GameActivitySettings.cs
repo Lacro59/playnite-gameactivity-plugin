@@ -54,6 +54,7 @@ namespace GameActivity
             }
         }
 
+        public bool ChartTimeTruncate { get; set; } = true;
         public bool ChartTimeVisibleEmpty { get; set; } = true;
         public double ChartTimeHeight { get; set; } = 120;
         public bool ChartTimeAxis { get; set; } = true;

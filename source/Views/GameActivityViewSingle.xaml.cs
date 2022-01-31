@@ -17,6 +17,7 @@ using System.Windows.Controls;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.IO;
+using System.Windows.Controls.Primitives;
 
 namespace GameActivity.Views
 {
@@ -45,6 +46,7 @@ namespace GameActivity.Views
 
             ButtonShowConfig.IsChecked = false;
 
+
             // Cover
             if (!game.CoverImage.IsNullOrEmpty())
             {
@@ -72,6 +74,8 @@ namespace GameActivity.Views
             // Game session time line
             PART_ChartTime = (PluginChartTime)PART_ChartTimeContener.Children[0];
             PART_ChartTime.GameContext = game;
+            PART_ChartTime.Truncate = PluginDatabase.PluginSettings.Settings.ChartTimeTruncate;
+            PART_Truncate.IsChecked = PluginDatabase.PluginSettings.Settings.ChartTimeTruncate;
 
 
             lvSessions.SaveColumn = PluginDatabase.PluginSettings.Settings.SaveColumnOrder;
@@ -166,6 +170,12 @@ namespace GameActivity.Views
         private void Bt_NextTimePlus(object sender, RoutedEventArgs e)
         {
             PART_ChartTime.Next(PluginDatabase.PluginSettings.Settings.VariatorTime);
+        }
+
+        private void Bt_Truncate(object sender, RoutedEventArgs e)
+        {
+            PART_ChartTime.Truncate = (bool)((ToggleButton)sender).IsChecked;
+            PART_ChartTime.AxisVariator = 0;
         }
         #endregion
 
