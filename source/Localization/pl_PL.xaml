@@ -70,6 +70,7 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationChartLog">Wyświetl wykres z logami sesji gry</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">Przełącz przycisk ze szczegółami</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">Liczba danych na osi poziomej</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationChartTimeTruncate">Truncate time data by default</sys:String>
 
     <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabels">Show labels on horizontal axis</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">Show labels on vertical axis</sys:String>
