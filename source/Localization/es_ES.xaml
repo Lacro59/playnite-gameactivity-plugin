@@ -70,6 +70,7 @@ Haz clic para más información.</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationChartLog">Mostrar el gráfico con registros de sesiones de juego</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">Añadir botón con detalles</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">Número de datos en el eje horizontal</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationChartTimeTruncate">Truncate time data by default</sys:String>
 
     <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabels">Mostrar etiquetas en el eje horizontal</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">Mostrar etiquetas en el eje vertical</sys:String>
