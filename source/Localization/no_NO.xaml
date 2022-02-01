@@ -70,6 +70,7 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationChartLog">Vis oversikt med logger for spilløkter</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">Vis/Skjul knapp med detaljer</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">Antall data i horisontal akse</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationChartTimeTruncate">Avkort tidsdata som standard</sys:String>
 
     <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabels">Vis etiketter på horisontal akse</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">Vis etiketter på vertikal akse</sys:String>
