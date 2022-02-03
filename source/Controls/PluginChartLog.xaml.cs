@@ -403,7 +403,7 @@ namespace GameActivity.Controls
                             RamSeries,
                             FpsSeries
                         };
-                        Func<double, string> activityForGameLogFormatter = value => value.ToString("N0");
+                        Func<double, string> activityForGameLogFormatter = value => value.ToString("N0") + "%";
 
                         PART_ChartLogActivity.DataTooltip = new LiveCharts.Wpf.DefaultTooltip();
                         PART_ChartLogActivity.DataTooltip.FontSize = 16;

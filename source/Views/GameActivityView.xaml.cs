@@ -86,6 +86,11 @@ namespace GameActivity.Views
             InitializeComponent();
 
 
+            PART_DataLoad.Visibility = Visibility.Visible;
+            PART_DataTop.Visibility = Visibility.Hidden;
+            PART_DataBottom.Visibility = Visibility.Hidden;
+
+
             PART_Truncate.IsChecked = PluginDatabase.PluginSettings.Settings.ChartTimeTruncate;
             ButtonShowConfig.IsChecked = false;
 
@@ -180,12 +185,6 @@ namespace GameActivity.Views
             
             #region Get & set datas
             listSources = GetListSourcesName();
-
-
-            PART_DataLoad.Visibility = Visibility.Visible;
-            PART_DataTop.Visibility = Visibility.Hidden;
-            PART_DataBottom.Visibility = Visibility.Hidden;
-
 
             Task.Run(() => {
                 this.Dispatcher.BeginInvoke((Action)delegate
