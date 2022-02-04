@@ -19,11 +19,11 @@
 
     <!-- GameActivityGanttView -->
 
-    <sys:String x:Key="LOCGameActivityGanttView">Gantt view</sys:String>
+    <sys:String x:Key="LOCGameActivityGanttView">甘特图</sys:String>
     
-    <sys:String x:Key="LOCGameActivitySetNumberDay">Set number of days</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriod">Period</sys:String>
-    <sys:String x:Key="LOCGameActivitySetLastDate">Set the last date</sys:String>
+    <sys:String x:Key="LOCGameActivitySetNumberDay">设定天数</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriod">时期</sys:String>
+    <sys:String x:Key="LOCGameActivitySetLastDate">设置最近日期</sys:String>
     
     
     <!-- Backup -->

@@ -19,11 +19,11 @@ Utilizado la diferencia de tiempo de juego: {1}s.</sys:String>
 
     <!-- GameActivityGanttView -->
 
-    <sys:String x:Key="LOCGameActivityGanttView">Gantt view</sys:String>
+    <sys:String x:Key="LOCGameActivityGanttView">Vista de Gantt</sys:String>
     
-    <sys:String x:Key="LOCGameActivitySetNumberDay">Set number of days</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriod">Period</sys:String>
-    <sys:String x:Key="LOCGameActivitySetLastDate">Set the last date</sys:String>
+    <sys:String x:Key="LOCGameActivitySetNumberDay">Establecer el número de días</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriod">Período</sys:String>
+    <sys:String x:Key="LOCGameActivitySetLastDate">Establecer la última fecha</sys:String>
     
     
     <!-- Backup -->
