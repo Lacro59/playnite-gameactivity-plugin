@@ -353,7 +353,7 @@ namespace GameActivity.Controls
                             string tempName = series1[iDay].Name;
                             try
                             {
-                                tempName = (string)localDateConverter.Convert(DateTime.ParseExact(series1[iDay].Name, "yyyy-MM-dd", null), null, null, CultureInfo.CurrentCulture);
+                                tempName = (string)localDateConverter.Convert(DateTime.ParseExact(series1[iDay].Name, "yyyy-MM-dd", null).ToLocalTime(), null, null, CultureInfo.CurrentCulture);
                             }
                             catch
                             {
