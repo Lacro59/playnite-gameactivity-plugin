@@ -277,15 +277,24 @@ namespace GameActivity.Controls
                     }
 
                     // Periode data showned
-                    int NewLimit = (Activities.Count - limit - 1) >= 0 ? Activities.Count - limit - 1 : 0;
-                    listDate = new string[Activities.Count - NewLimit];
+                    int countActivities = Activities.Where(x => x.DateSession != null)?.Select(x => ((DateTime)x.DateSession).ToLocalTime().ToString("yyyy-MM-dd"))?.Distinct()?.Count() ?? 0;
+                    int NewLimit = (countActivities - limit - 1) >= 0 ? countActivities - limit - 1 : 0;
+                    listDate = new string[countActivities - NewLimit];
 
-                    for (int i = NewLimit; i < Activities.Count; i++)
+                    for (int i = NewLimit; i < countActivities; i++)
                     {
-                        listDate[i - NewLimit] = ((DateTime)Activities[i].DateSession).ToString("yyyy-MM-dd");
+                        string dt = ((DateTime)Activities[i].DateSession).ToLocalTime().ToString("yyyy-MM-dd");
+                        int iNew = i;
+                        while (listDate.Contains(dt))
+                        {
+                            iNew++;
+                            dt = ((DateTime)Activities[iNew].DateSession).ToLocalTime().ToString("yyyy-MM-dd");
+                        }
+                        listDate[i - NewLimit] = dt;
+
                         CustomerForTime customerForTime = new CustomerForTime
                         {
-                            Name = ((DateTime)Activities[i].DateSession).ToString("yyyy-MM-dd"),
+                            Name = ((DateTime)Activities[i].DateSession).ToLocalTime().ToString("yyyy-MM-dd"),
                             Values = 0,
                             HideIsZero = true
                         };
