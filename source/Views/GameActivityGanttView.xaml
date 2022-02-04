@@ -1,0 +1,170 @@
+﻿<UserControl x:Class="GameActivity.Views.GameActivityGanttView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:GameActivity.Views"
+             xmlns:converters="clr-namespace:CommonPlayniteShared.Converters"
+             xmlns:controlsShared="clr-namespace:CommonPluginsShared.Controls"
+             xmlns:commonpluginsshared="clr-namespace:CommonPluginsShared.Converters"
+             xmlns:controls="clr-namespace:GameActivity.Controls"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" d:DesignHeight="700" d:DesignWidth="1280"
+             d:DataContext="{d:DesignInstance Type=local:DataContextGanttView,IsDesignTimeCreatable=True}">
+
+    <UserControl.Resources>
+        <converters:PlayTimeToStringConverter x:Key="PlayTimeToStringConverter" />
+        <commonpluginsshared:DefaultIconConverter x:Key="DefaultIconConverter" />
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <commonpluginsshared:LocalDateTimeConverter x:Key="LocalDateTimeConverter" />
+        <converters:InvertedBooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter" />
+        <commonpluginsshared:ValueOperationConverter x:Key="ValueOperationConverter" />
+    </UserControl.Resources>
+
+    <Grid Loaded="Grid_Loaded">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Filter options -->
+        <Border Grid.Column="0" Grid.ColumnSpan="8" Grid.Row="0" 
+                BorderThickness="{DynamicResource PopupBorderThickness}" BorderBrush="{DynamicResource NormalBorderBrush}">
+            <Grid Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="30" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <Label Content="{DynamicResource LOCGameActivityPeriod}" />
+                    <Label Grid.Column="2" Name="PART_Period" Content="xx/xx/xxxx - xx/xx/xxxx" />
+
+                    <Label Grid.Column="4" Content="{DynamicResource LOCGameActivitySetLastDate}" />
+                    <DatePicker Grid.Column="6" Width="120" SelectedDateChanged="DatePicker_SelectedDateChanged" SelectedDate="{x:Static sys:DateTime.Now}" />
+                </Grid>
+
+                <Grid Grid.Column="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <Label Content="{DynamicResource LOCGameActivitySetNumberDay}" Grid.Column="0" />
+                    <Slider Minimum="7" Maximum="120" VerticalAlignment="Center"
+                            Value="{Binding ColumnCount, FallbackValue=10}" 
+                            Grid.Column="1" Margin="10,0,0,0" ValueChanged="PART_ColumnCount_ValueChanged"
+                            IsSnapToTickEnabled="True" TickFrequency="1" AutoToolTipPlacement="TopLeft"
+                            ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Value}"
+                            Name="PART_ColumnCount" />
+                    <Label Grid.Column="3" Content="{Binding ElementName=PART_ColumnCount, Path=Value}" 
+                           Margin="10,0,0,0" HorizontalAlignment="Center" />
+                </Grid>
+            </Grid>
+        </Border>
+
+        <Grid Name="PART_GridContener" Grid.Row="4" Tag="{Binding HeaderWidth}">
+            <controlsShared:ListViewExtend Style="{StaticResource {x:Type ListView}}" FontSize="24" x:Name="PART_Lv"
+                                           SortingSortDirection="Descending"
+                                           ItemsSource="{Binding GanttDatas}"
+                                           Height="{Binding ElementName=PART_GridContener, Path=ActualHeight}"
+                                           SortingEnable="True" SortingDefaultDataName="LastActivity">
+
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Width="50">
+                            <GridViewColumnHeader Content="{DynamicResource LOCGameIconTitle}" Tag="NoSort" />
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image HorizontalAlignment="Center" Height="32" VerticalAlignment="Center" Width="32" 
+                                                   Source="{Binding Icon, Converter={StaticResource DefaultIconConverter}}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Width="0" DisplayMemberBinding="{Binding Name}">
+                            <GridViewColumnHeader IsHitTestVisible="False" />
+                        </GridViewColumn>
+                        <GridViewColumn Width="250">
+                            <GridViewColumnHeader Content="{DynamicResource LOCGameNameTitle}" Tag="GameTitle" />
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <TextBlock Visibility="{Binding GameExist, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                            <Hyperlink Command="{Binding GoToGame}" CommandParameter="{Binding Id}">
+                                                <TextBlock Text="{Binding Name}" Style="{DynamicResource ListExtendStyleTextBlock}" />
+                                            </Hyperlink>
+                                        </TextBlock>
+                                        <TextBlock Visibility="{Binding GameExist, Converter={StaticResource InvertedBooleanToVisibilityConverter}}">
+                                            <TextBlock Text="{Binding Name}" Style="{DynamicResource ListExtendStyleTextBlock}" />
+                                        </TextBlock>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Width="150" DisplayMemberBinding="{Binding LastActivity, Converter={StaticResource LocalDateTimeConverter}}">
+                            <GridViewColumnHeader Content="{DynamicResource LOCGameActivityLvGamesLastActivity}" />
+                        </GridViewColumn>
+
+                        <GridViewColumn Width="{Binding HeaderWidth, Mode=TwoWay}">
+                            <GridViewColumnHeader Tag="NoSort" Name="PART_GanttHeader" SizeChanged="PART_GanttHeader_SizeChanged">
+                                <!--controls:GanttControl ColumnCount="{Binding ElementName=PART_ColumnCount, Path=Value}"
+                                                       LastDate="{Binding DataContext.LastDate, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                       OnlyDate="True" Height="80" HorizontalAlignment="Center">
+                                    <controls:GanttControl.Width>
+                                        <MultiBinding Converter="{StaticResource ValueOperationConverter}" ConverterParameter="-">
+                                            <Binding ElementName="PART_GridContener" Path="Tag" />
+                                            <Binding>
+                                                <Binding.Source>
+                                                    <sys:Double>10</sys:Double>
+                                                </Binding.Source>
+                                            </Binding>
+                                        </MultiBinding>
+                                    </controls:GanttControl.Width>
+                                </controls:GanttControl-->
+                            </GridViewColumnHeader>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid Tag="{Binding}" Name="PART_Grid">
+                                        <controls:GanttControl Values="{Binding ElementName=PART_Grid, Path=Tag.DateTimes}" 
+                                                               ColumnCount="{Binding ElementName=PART_ColumnCount, Path=Value}"
+                                                               LastDate="{Binding DataContext.LastDate, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                               DataName="{Binding ElementName=PART_Grid, Path=Tag.Name}"
+                                                               HorizontalAlignment="Center" Height="30">
+                                            <controls:GanttControl.Width>
+                                                <MultiBinding Converter="{StaticResource ValueOperationConverter}" ConverterParameter="-">
+                                                    <Binding ElementName="PART_GridContener" Path="Tag" />
+                                                    <Binding>
+                                                        <Binding.Source>
+                                                            <sys:Double>20</sys:Double>
+                                                        </Binding.Source>
+                                                    </Binding>
+                                                </MultiBinding>
+                                            </controls:GanttControl.Width>
+                                        </controls:GanttControl>
+                                    </Grid>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </controlsShared:ListViewExtend>
+        </Grid>
+    </Grid>
+</UserControl>

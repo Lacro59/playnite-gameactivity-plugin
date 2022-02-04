@@ -122,6 +122,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\HWiNFODumper.cs" />
+    <Compile Include="Controls\GanttControl.xaml.cs">
+      <DependentUpon>GanttControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\PluginButton.xaml.cs">
       <DependentUpon>PluginButton.xaml</DependentUpon>
     </Compile>
@@ -190,6 +193,9 @@
     </Compile>
     <Compile Include="Views\GameActivityBackup.xaml.cs">
       <DependentUpon>GameActivityBackup.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GameActivityGanttView.xaml.cs">
+      <DependentUpon>GameActivityGanttView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\GameActivityMergeTime.xaml.cs">
       <DependentUpon>GameActivityMergeTime.xaml</DependentUpon>
@@ -316,6 +322,10 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Page Include="Controls\GanttControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\PluginButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -385,6 +395,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\GameActivityBackup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GameActivityGanttView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
