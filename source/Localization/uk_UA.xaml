@@ -70,6 +70,7 @@
     <sys:String x:Key="LOCGameActivityIntegrationChartLog">Відобразити графік з журналами ігрових сеансів</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">Кнопка-перемикач з подробицями</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">Кількість даних в горизонтальній осі</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationChartTimeTruncate">Типово обрізати дані часу</sys:String>
 
     <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabels">Показувати мітки на горизонтальній осі</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">Показувати мітки на вертикальній осі</sys:String>

@@ -70,6 +70,7 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationChartLog">Отображение графика с журналом игровох сессии</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">Прогресс на кнопке</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">Количество данных по горизонтальной оси</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationChartTimeTruncate">Truncate time data by default</sys:String>
 
     <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabels">Показывать метки по горизонтальной оси</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">Показывать метки по вертикальной оси</sys:String>

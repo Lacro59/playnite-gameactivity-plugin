@@ -70,6 +70,7 @@ Klicken Sie für weitere Informationen.</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationChartLog">Graphische Darstellung der Spielzeiten</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">Details anzeigen</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">Anzahl der Daten in der horizontalen Achse</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationChartTimeTruncate">Truncate time data by default</sys:String>
 
     <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabels">Zeige Beschriftung der horizontalen Achse</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">Zeige Beschriftung der vertikalen Achse</sys:String>
