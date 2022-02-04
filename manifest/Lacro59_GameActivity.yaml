@@ -121,3 +121,14 @@ Packages:
       - Fixed a random issue on game stopped event
       - Fixed an issue with dates that is not in local time
       - Updated localizations
+  - Version: 2.6
+    RequiredApiVersion: 6.2.2
+    ReleaseDate: 2022-02-04
+    PackageUrl: https://github.com/Lacro59/playnite-gameactivity-plugin/releases/download/v2.6/playnite-gameactivity-plugin_2_6.pext
+    Changelog:
+      - UI tweaks
+      - Updated localizations
+      - Added an option to truncate empty date session
+      - Added a Gantt view style
+      - Fixed minors bugs
+      - Fixed crash
