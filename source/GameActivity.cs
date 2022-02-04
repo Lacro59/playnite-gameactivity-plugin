@@ -588,13 +588,19 @@ namespace GameActivity
 
         private async void OnTimedBackupEvent(object source, ElapsedEventArgs e)
         {
-            ulong ElapsedSeconds = (ulong)(DateTime.Now.ToUniversalTime() - (DateTime)activityBackup.DateSession).TotalSeconds; 
-            activityBackup.ElapsedSeconds = ElapsedSeconds;
-            activityBackup.ItemsDetailsDatas = GameActivitiesLog.ItemsDetails.Get((DateTime)activityBackup.DateSession);
+            try
+            {
+                ulong ElapsedSeconds = (ulong)(DateTime.Now.ToUniversalTime() - (DateTime)activityBackup.DateSession).TotalSeconds;
+                activityBackup.ElapsedSeconds = ElapsedSeconds;
+                activityBackup.ItemsDetailsDatas = GameActivitiesLog.ItemsDetails.Get((DateTime)activityBackup.DateSession);
 
-            string PathFileBackup = Path.Combine(PluginDatabase.Paths.PluginUserDataPath, "SaveSession.json");
-            FileSystem.DeleteFile(PathFileBackup);
-            File.WriteAllText(PathFileBackup, Serialization.ToJson(activityBackup));
+                string PathFileBackup = Path.Combine(PluginDatabase.Paths.PluginUserDataPath, "SaveSession.json");
+                FileSystem.WriteStringToFileSafe(PathFileBackup, Serialization.ToJson(activityBackup));
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex, false, true, PluginDatabase.PluginName);
+            }
         }
         #endregion
 
