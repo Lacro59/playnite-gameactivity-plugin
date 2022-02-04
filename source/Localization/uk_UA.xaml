@@ -16,6 +16,15 @@
     
     <sys:String x:Key="LOCGameActivityDefaultAction">Типова дія</sys:String>
 
+
+    <!-- GameActivityGanttView -->
+
+    <sys:String x:Key="LOCGameActivityGanttView">Gantt view</sys:String>
+    
+    <sys:String x:Key="LOCGameActivitySetNumberDay">Set number of days</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriod">Period</sys:String>
+    <sys:String x:Key="LOCGameActivitySetLastDate">Set the last date</sys:String>
+    
     
     <!-- Backup -->
 
