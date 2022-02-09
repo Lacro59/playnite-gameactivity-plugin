@@ -142,8 +142,8 @@ Click for more information.</sys:String>
 
     <sys:String x:Key="LOCGaQuickSearchDescription">Search games on GameActivity data</sys:String>
     <sys:String x:Key="LOCGaQuickSearchByFPS">Find by FPS</sys:String>
-    <sys:String x:Key="LOCGaQuickSearchByTime">Find by time session</sys:String>
-    <sys:String x:Key="LOCGaQuickSearchByDate">Find by date session</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchByTime">Find by session duration</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchByDate">Find by session date</sys:String>
 
     <!-- GameActivityAddTime -->
 
