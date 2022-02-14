@@ -39,35 +39,12 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <Label Grid.Row="0" Content="{Binding LastActivity, FallbackValue='27/02/2021'}" Margin="0,-3,0,-3"
-                       FontSize="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight, Converter={StaticResource HeightToFontSizeConverter}}">
-                    <Label.Style>
-                        <Style TargetType="Label">
-                            <Setter Property="Padding" Value="5,3,5,5" />
-                            <Setter Property="Foreground" Value="{DynamicResource GlyphBrush}" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=IsMouseOver}" Value="True">
-                                    <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Label.Style>
-                </Label>
-                <Label Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Margin="0,-3,0,-3"
-                       Content="{Binding LastPlaytime, Converter={StaticResource PlayTimeToStringConverter}, FallbackValue='23 minutes'}"
-                       FontSize="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight, Converter={StaticResource HeightToFontSizeConverter}}">
-                    <Label.Style>
-                        <Style TargetType="Label">
-                            <Setter Property="Padding" Value="5,3,5,5" />
-                            <Setter Property="Foreground" Value="{DynamicResource GlyphBrush}" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=IsMouseOver}" Value="True">
-                                    <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Label.Style>
-                </Label>
+                <TextBlock Grid.Row="0" Text="{Binding LastActivity, FallbackValue='27/02/2021'}" Margin="0,-3,0,-3" Padding="5,3,5,5"
+                           FontSize="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight, Converter={StaticResource HeightToFontSizeConverter}}" />
+
+                <TextBlock Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Margin="0,-3,0,-3" Padding="5,3,5,5"
+                           Text="{Binding LastPlaytime, Converter={StaticResource PlayTimeToStringConverter}, FallbackValue='23 minutes'}"
+                           FontSize="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight, Converter={StaticResource HeightToFontSizeConverter}}" />
             </Grid>
         </Grid>
     </Button>
