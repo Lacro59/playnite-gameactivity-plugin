@@ -19,11 +19,11 @@ Die Differenz Spielzeit wurde verwendet: {1}s.</sys:String>
 
     <!-- GameActivityGanttView -->
 
-    <sys:String x:Key="LOCGameActivityGanttView">Gantt view</sys:String>
+    <sys:String x:Key="LOCGameActivityGanttView">Gantt Ansicht</sys:String>
     
-    <sys:String x:Key="LOCGameActivitySetNumberDay">Set number of days</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriod">Period</sys:String>
-    <sys:String x:Key="LOCGameActivitySetLastDate">Set the last date</sys:String>
+    <sys:String x:Key="LOCGameActivitySetNumberDay">Anzahl der Tage festlegen</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriod">Zeitraum</sys:String>
+    <sys:String x:Key="LOCGameActivitySetLastDate">Das letzte Datum festlegen</sys:String>
     
     
     <!-- Backup -->
@@ -79,7 +79,7 @@ Klicken Sie für weitere Informationen.</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationChartLog">Graphische Darstellung der Spielzeiten</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">Details anzeigen</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">Anzahl der Daten in der horizontalen Achse</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationChartTimeTruncate">Truncate time data by default</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationChartTimeTruncate">Zeitdaten standardmäßig reduzieren</sys:String>
 
     <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabels">Zeige Beschriftung der horizontalen Achse</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">Zeige Beschriftung der vertikalen Achse</sys:String>
