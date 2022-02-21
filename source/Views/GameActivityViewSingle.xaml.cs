@@ -286,7 +286,7 @@ namespace GameActivity.Views
                     }
                     catch (Exception ex)
                     {
-                        Common.LogError(ex, false, $"Failed to load GameActivities for {gameActivities.Name}", true, "GameActivity");
+                        Common.LogError(ex, false, $"Failed to load GameActivities for {gameActivities.Name}", true, PluginDatabase.PluginName);
                     }
                 }
 
@@ -307,7 +307,7 @@ namespace GameActivity.Views
         #region Data actions
         private void PART_Delete_Click(object sender, RoutedEventArgs e)
         {
-            var result = PluginDatabase.PlayniteApi.Dialogs.ShowMessage(ResourceProvider.GetString("LOCConfirumationAskGeneric"), "GameActivity", MessageBoxButton.YesNo);
+            var result = PluginDatabase.PlayniteApi.Dialogs.ShowMessage(ResourceProvider.GetString("LOCConfirumationAskGeneric"), PluginDatabase.PluginName, MessageBoxButton.YesNo);
 
             if (result == MessageBoxResult.Yes)
             {

@@ -421,7 +421,7 @@ namespace GameActivity.Controls
                 }
                 catch (Exception ex)
                 {
-                    Common.LogError(ex, false, true, "GameActivity");
+                    Common.LogError(ex, false, true, PluginDatabase.PluginName);
                 }
             });
         }

@@ -20,7 +20,7 @@ namespace GameActivity.Models
         private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
 
 
-        public string Prefix => "GameActivity";
+        public string Prefix => PluginDatabase.PluginName;
 
         public bool DisplayAllIfQueryIsEmpty => true;
 

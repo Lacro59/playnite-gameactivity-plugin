@@ -344,7 +344,7 @@ namespace GameActivity.Views
                     }
                     catch (Exception ex)
                     {
-                        Common.LogError(ex, false, $"Error in getActivityByMonth({year}, {month}) with {listGameActivities[iGame].Name}", true, "GameActivity");
+                        Common.LogError(ex, false, $"Error in getActivityByMonth({year}, {month}) with {listGameActivities[iGame].Name}", true, PluginDatabase.PluginName);
                     }
                 }
 
@@ -392,7 +392,7 @@ namespace GameActivity.Views
                     }
                     catch (Exception ex)
                     {
-                        Common.LogError(ex, false, $"Error in getActivityByMonth({year}, {month}) with {listGameActivities[iGame].Name}", true, "GameActivity");
+                        Common.LogError(ex, false, $"Error in getActivityByMonth({year}, {month}) with {listGameActivities[iGame].Name}", true, PluginDatabase.PluginName);
                     }
                 }
             }
@@ -829,7 +829,7 @@ namespace GameActivity.Views
                         }
                         catch (Exception ex)
                         {
-                            Common.LogError(ex, false, "Error to get SourceName", true, "GameActivity");
+                            Common.LogError(ex, false, "Error to get SourceName", true, PluginDatabase.PluginName);
                         }
 
                         Activity lastSessionActivity = listGameActivities[iGame].GetLastSessionActivity();
@@ -886,7 +886,7 @@ namespace GameActivity.Views
                 }
                 catch (Exception ex)
                 {
-                    Common.LogError(ex, false, $"Failed to load GameActivities from {gameID}", true, "GameActivity");
+                    Common.LogError(ex, false, $"Failed to load GameActivities from {gameID}", true, PluginDatabase.PluginName);
                 }
             }
 

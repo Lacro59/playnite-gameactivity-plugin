@@ -106,7 +106,7 @@ namespace GameActivity
                             }
                             catch (Exception ex)
                             {
-                                Common.LogError(ex, false, true, "GameActivity");
+                                Common.LogError(ex, false, true, PluginDatabase.PluginName);
                             }
 
                             activateGlobalProgress.CurrentProgressValue++;
@@ -185,7 +185,7 @@ namespace GameActivity
             }
             catch (Exception ex)
             {
-                Common.LogError(ex, false, true, "GameActivity");
+                Common.LogError(ex, false, true, PluginDatabase.PluginName);
             }
         }
 
@@ -211,8 +211,8 @@ namespace GameActivity
                 if (!runHWiNFO && WithNotification)
                 {
                     PlayniteApi.Notifications.Add(new NotificationMessage(
-                        $"GameActivity-runHWiNFO",
-                        "GameActivity" + Environment.NewLine + resources.GetString("LOCGameActivityNotificationHWiNFO"),
+                        $"{PluginDatabase.PluginName}-runHWiNFO",
+                        PluginDatabase.PluginName + Environment.NewLine + resources.GetString("LOCGameActivityNotificationHWiNFO"),
                         NotificationType.Error,
                         () => OpenSettingsView()
                     ));
@@ -247,8 +247,8 @@ namespace GameActivity
                 if ((!runMSI || !runRTSS) && WithNotification)
                 {
                     PlayniteApi.Notifications.Add(new NotificationMessage(
-                        $"GameActivity-runMSI",
-                        "GameActivity" + Environment.NewLine + resources.GetString("LOCGameActivityNotificationMSIAfterBurner"),
+                        $"{PluginDatabase.PluginName }- runMSI",
+                        PluginDatabase.PluginName + Environment.NewLine + resources.GetString("LOCGameActivityNotificationMSIAfterBurner"),
                         NotificationType.Error,
                         () => OpenSettingsView()
                     ));
@@ -314,7 +314,7 @@ namespace GameActivity
                 }
                 catch (Exception ex)
                 {
-                    Common.LogError(ex, false, $"Error on show WarningsMessage", true, "GameActivity");
+                    Common.LogError(ex, false, $"Error on show WarningsMessage", true, PluginDatabase.PluginName);
                 }
             }
 
@@ -557,7 +557,7 @@ namespace GameActivity
 
 
             List<ActivityDetailsData> ActivitiesDetailsData = GameActivitiesLog.ItemsDetails.Get(GameActivitiesLog.GetLastSession());
-            ActivitiesDetailsData.Add(new ActivityDetailsData
+            ActivityDetailsData activityDetailsData = new ActivityDetailsData
             {
                 Datelog = DateTime.Now.ToUniversalTime(),
                 FPS = fpsValue,
@@ -566,7 +566,9 @@ namespace GameActivity
                 GPU = gpuValue,
                 GPUT = gpuTValue,
                 RAM = ramValue
-            });
+            };
+            Common.LogDebug(true, Serialization.ToJson(activityDetailsData));
+            ActivitiesDetailsData.Add(activityDetailsData);
         }
         #endregion
 
@@ -832,7 +834,7 @@ namespace GameActivity
                                         FileSystem.WriteStringToFileSafe(SavPath, ExportedDatasCsv);
 
                                         string Message = string.Format(resources.GetString("LOCCommonExportDataResult"), ExportedDatasCsv.Count());
-                                        var result = PlayniteApi.Dialogs.ShowMessage(Message, "GameActivity", MessageBoxButton.YesNo);
+                                        var result = PlayniteApi.Dialogs.ShowMessage(Message, PluginDatabase.PluginName, MessageBoxButton.YesNo);
                                         if (result == MessageBoxResult.Yes)
                                         {
                                             Process.Start(Path.GetDirectoryName(SavPath));
@@ -840,11 +842,7 @@ namespace GameActivity
                                     }
                                     catch (Exception ex)
                                     {
-                                        PlayniteApi.Notifications.Add(new NotificationMessage(
-                                            $"gameactivity-export-error",
-                                            "GameActivity" + Environment.NewLine + ex.Message,
-                                            NotificationType.Error
-                                        ));
+                                        Common.LogError(ex, false, true, PluginDatabase.PluginName, PluginDatabase.PluginName + Environment.NewLine + ex.Message);
                                     }
                                 }
                             }
@@ -988,7 +986,7 @@ namespace GameActivity
             }
             catch (Exception ex)
             {
-                Common.LogError(ex, false, true, "GameActivity");
+                Common.LogError(ex, false, true, PluginDatabase.PluginName);
             }
         }
 
@@ -1071,14 +1069,15 @@ namespace GameActivity
                         ElapsedSeconds = args.Game.Playtime - PlaytimeOnStarted;
 
                         PlayniteApi.Notifications.Add(new NotificationMessage(
-                            $"gameactivity-noElapsedSeconds",
-                            $"GameActivity" + System.Environment.NewLine + string.Format(resources.GetString("LOCGameActivityNoPlaytime"), args.Game.Name, ElapsedSeconds),
+                            $"{PluginDatabase.PluginName}- noElapsedSeconds",
+                            PluginDatabase.PluginName + System.Environment.NewLine + string.Format(resources.GetString("LOCGameActivityNoPlaytime"), args.Game.Name, ElapsedSeconds),
                             NotificationType.Info
                         ));
                     }
 
                     // Infos
                     GameActivitiesLog.GetLastSessionActivity(false).ElapsedSeconds = ElapsedSeconds;
+                    Common.LogDebug(true, Serialization.ToJson(GameActivitiesLog));
                     PluginDatabase.Update(GameActivitiesLog);
 
                     if (args.Game.Id == PluginDatabase.GameContext.Id)
@@ -1103,17 +1102,22 @@ namespace GameActivity
         // Add code to be executed when Playnite is initialized.
         public override void OnApplicationStarted(OnApplicationStartedEventArgs args)
         {
+            // CheckGoodForLogging 
             Task.Run(() =>
             {
+                Common.LogDebug(true, "CheckGoodForLogging_1");
                 if (!CheckGoodForLogging(false))
                 {
                     Thread.Sleep(10000);
+                    Common.LogDebug(true, "CheckGoodForLogging_2");
                     if (!CheckGoodForLogging(false))
                     {
                         Thread.Sleep(10000);
+                        Common.LogDebug(true, "CheckGoodForLogging_3");
                         if (!CheckGoodForLogging(false))
                         {
                             Thread.Sleep(10000);
+                            Common.LogDebug(true, "CheckGoodForLogging_4");
                             Application.Current.Dispatcher.BeginInvoke((Action)delegate
                             {
                                 CheckGoodForLogging(true);
@@ -1130,7 +1134,7 @@ namespace GameActivity
                 string icon = Path.Combine(PluginDatabase.Paths.PluginPath, "Resources", "chart-646.png");
 
                 var GaSubItemsAction = new SubItemsAction() { Action = () => { }, Name = "", CloseAfterExecute = false, SubItemSource = new QuickSearchItemSource() };
-                var GaCommand = new CommandItem("GameActivity", new List<CommandAction>(), ResourceProvider.GetString("LOCGaQuickSearchDescription"), icon);
+                var GaCommand = new CommandItem(PluginDatabase.PluginName, new List<CommandAction>(), ResourceProvider.GetString("LOCGaQuickSearchDescription"), icon);
                 GaCommand.Keys.Add(new CommandItemKey() { Key = "ga", Weight = 1 });
                 GaCommand.Actions.Add(GaSubItemsAction);
                 QuickSearch.QuickSearchSDK.AddCommand(GaCommand);
@@ -1145,8 +1149,8 @@ namespace GameActivity
                 ActivityBackup backupData = Serialization.FromJsonFile<ActivityBackup>(PathFileBackup);
 
                 PlayniteApi.Notifications.Add(new NotificationMessage(
-                    $"gameactivity-backup",
-                    $"GameActivity" + System.Environment.NewLine + string.Format(resources.GetString("LOCGaBackupExist"), backupData.Name),
+                    $"{PluginDatabase.PluginName}-backup",
+                    PluginDatabase.PluginName + System.Environment.NewLine + string.Format(resources.GetString("LOCGaBackupExist"), backupData.Name),
                     NotificationType.Info,
                     () => 
                     {
