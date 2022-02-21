@@ -349,6 +349,7 @@ namespace GameActivity
                 {
                     logger.Warn("Fail initialize MSIAfterburnerNET");
                     Common.LogError(ex, true, "Fail initialize MSIAfterburnerNET");
+                    MSIAfterburner = null;
                 }
 
                 if (MSIAfterburner != null)
