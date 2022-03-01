@@ -1113,7 +1113,7 @@ namespace GameActivity
         {
             // PlayState will write the Id and pausedTime to PlayState.txt file placed inside ExtensionsData Roaming Playnite folder
             // Check first if this file exists and if not return false to avoid executing unnecessary code.
-            string PlayStateFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Playnite", "ExtensionsData", "PlayState.txt");
+            string PlayStateFile = Path.Combine(PlayniteApi.Paths.ExtensionsDataPath, "PlayState.txt");
             if (File.Exists(PlayStateFile))
             {
                 return true;
@@ -1129,7 +1129,7 @@ namespace GameActivity
             // PlayState will write the Id and pausedTime to PlayState.txt file placed inside ExtensionsData Roaming Playnite folder
             // Check first if this file exists and if not return 0 as pausedTime.
             // This check is redundant with ExistsPlayStateInfoFile, but it's because the PlayState file will be modified after the first check, so added as a fallback to avoid exceptions.
-            string PlayStateFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Playnite", "ExtensionsData", "PlayState.txt");
+            string PlayStateFile = Path.Combine(PlayniteApi.Paths.ExtensionsDataPath, "PlayState.txt");
             if (!File.Exists(PlayStateFile))
             {
                 return 0;
@@ -1143,7 +1143,7 @@ namespace GameActivity
             // After retrieving the info restart the file in order to avoid reusing the same txt if PlayState crash / gets uninstalled.
             string[] info = { " ", " " };
 
-            File.WriteAllLines(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Playnite", "ExtensionsData", "PlayState.txt"), info);
+            File.WriteAllLines(PlayStateFile, info);
 
             // Check that the GameId is the same as the paused game. If so, return the paused time. If not, return 0.
             if (game.Id.ToString() == Id)
