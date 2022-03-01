@@ -1109,7 +1109,7 @@ namespace GameActivity
             FileSystem.DeleteFile(PathFileBackup);
         }
 
-        private bool ExistsPlayStateInfoFile()
+        private bool ExistsPlayStateInfoFile() // Temporary workaround for PlayState paused time until Playnite allows to share data among extensions
         {
             // PlayState will write the Id and pausedTime to PlayState.txt file placed inside ExtensionsData Roaming Playnite folder
             // Check first if this file exists and if not return false to avoid executing unnecessary code.
@@ -1141,9 +1141,9 @@ namespace GameActivity
             ulong PausedSeconds = Convert.ToUInt64(PlayStateInfo[1]);
 
             // After retrieving the info restart the file in order to avoid reusing the same txt if PlayState crash / gets uninstalled.
-            string[] info = { " ", " " };
+            string[] Info = { " ", " " };
 
-            File.WriteAllLines(PlayStateFile, info);
+            File.WriteAllLines(PlayStateFile, Info);
 
             // Check that the GameId is the same as the paused game. If so, return the paused time. If not, return 0.
             if (game.Id.ToString() == Id)
