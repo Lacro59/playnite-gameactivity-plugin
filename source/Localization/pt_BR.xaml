@@ -19,11 +19,11 @@ Usado a diferença de tempo de jogo:{1}s.</sys:String>
 
     <!-- GameActivityGanttView -->
 
-    <sys:String x:Key="LOCGameActivityGanttView">Gantt view</sys:String>
+    <sys:String x:Key="LOCGameActivityGanttView">Visualização Gantt</sys:String>
     
-    <sys:String x:Key="LOCGameActivitySetNumberDay">Set number of days</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriod">Period</sys:String>
-    <sys:String x:Key="LOCGameActivitySetLastDate">Set the last date</sys:String>
+    <sys:String x:Key="LOCGameActivitySetNumberDay">Definir número de dias</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriod">Período</sys:String>
+    <sys:String x:Key="LOCGameActivitySetLastDate">Definir a última data</sys:String>
     
     
     <!-- Backup -->
@@ -79,7 +79,7 @@ Clique para mais informações.</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationChartLog">Exibir o gráfico com registros das sessões de jogos</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">Botão de alternância com detalhes</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">Número de dados no eixo horizontal</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationChartTimeTruncate">Truncate time data by default</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationChartTimeTruncate">Truncar dados de tempo por padrão</sys:String>
 
     <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabels">Exibir etiquetas no eixo horizontal</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">Exibir etiquetas no eixo vertical</sys:String>
