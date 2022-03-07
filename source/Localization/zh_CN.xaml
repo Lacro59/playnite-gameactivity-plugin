@@ -2,13 +2,13 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <sys:String x:Key="LOCGameActivityNoPlaytime" xml:space="preserve">{0} 没有游玩时间。
-使用了不同的游玩时间：{1} 秒。</sys:String>
+使用了不同的游玩时间：{1} 秒</sys:String>
     
     
     <!-- MainView -->
 
     <sys:String x:Key="LOCGameActivity">游戏活动-GameActivity</sys:String>
-    <sys:String x:Key="LOCGameActivityTitle">活动</sys:String>
+    <sys:String x:Key="LOCGameActivityTitle">活</sys:String>
     <sys:String x:Key="LOCGamesActivitiesTitle">游戏活动</sys:String>
     <sys:String x:Key="LOCGameActivitiesTitle">游戏活动</sys:String>
     <sys:String x:Key="LOCGameActivityViewGamesActivities">查看游戏活动</sys:String>
@@ -22,18 +22,18 @@
     <sys:String x:Key="LOCGameActivityGanttView">甘特图</sys:String>
     
     <sys:String x:Key="LOCGameActivitySetNumberDay">设定天数</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriod">时期</sys:String>
-    <sys:String x:Key="LOCGameActivitySetLastDate">设置最近日期</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriod">时</sys:String>
+    <sys:String x:Key="LOCGameActivitySetLastDate">设置最近日</sys:String>
     
     
     <!-- Backup -->
 
     <sys:String x:Key="LOCGaBackupExist" xml:space="preserve">存在 {0} 的备份数据。
 可能是在 Playnite 崩溃后出现的。
-点击获取更多信息。</sys:String>
-    <sys:String x:Key="LOCGaDateSession">会话日期</sys:String>
+点击获取更多信</sys:String>
+    <sys:String x:Key="LOCGaDateSession">会话日</sys:String>
     <sys:String x:Key="LOCGaPlayTimeSession">游玩时间会话</sys:String>
-    <sys:String x:Key="LOCGaBackupDataInfo">备份数据信息</sys:String>
+    <sys:String x:Key="LOCGaBackupDataInfo">备份数据信</sys:String>
     
 
     <!-- Merge -->
@@ -59,25 +59,25 @@
     <sys:String x:Key="LOCGameActivitySensorsID">传感器 ID</sys:String>
     <sys:String x:Key="LOCGameActivityElementID">单元 ID</sys:String>
 
-    <sys:String x:Key="LOCGameActivityGpuUsage">GPU 利用率</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuUsage">GPU 利用</sys:String>
     <sys:String x:Key="LOCGameActivityFps">帧数</sys:String>
     <sys:String x:Key="LOCGameActivityGpuTemp">GPU 温度</sys:String>
     <sys:String x:Key="LOCGameActivityCpuTemp">CPU 温度</sys:String>
 
-    <sys:String x:Key="LOCGameActivityActiveWarning">启用警告</sys:String>
+    <sys:String x:Key="LOCGameActivityActiveWarning">启用警</sys:String>
     <sys:String x:Key="LOCGameActivityMinFps">最小帧数</sys:String>
     <sys:String x:Key="LOCGameActivityMaxCpuTemp">最高 CPU 温度</sys:String>
     <sys:String x:Key="LOCGameActivityMaxGpuTemp">最高 GPU 温度</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxCpuUsage">最大 CPU 利用率</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxGpuUsage">最大 GPU 利用率</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxRamUsage">最大内存利用率</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxCpuUsage">最大 CPU 利用</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxGpuUsage">最大 GPU 利用</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxRamUsage">最大内存利用</sys:String>
 
-    <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">游戏时记录 CPU、GPU、内存和帧数。</sys:String>
-    <sys:String x:Key="LOCGameActivityEnableWarningToolTip">游戏结束后结合定义的限制显示警告消息。</sys:String>
+    <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">游戏时记录 CPU、GPU、内存和帧数</sys:String>
+    <sys:String x:Key="LOCGameActivityEnableWarningToolTip">游戏结束后结合定义的限制显示警告消</sys:String>
 
     <sys:String x:Key="LOCGameActivityIntegrationChartTime">图表中显示游戏会话时间</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationChartLog">图表中显示游戏会话记录</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">在切换按钮中显示详情</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">在切换按钮中显示详</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">横坐标轴上的数据数量</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationChartTimeTruncate">默认地截断时间数据</sys:String>
 
@@ -89,8 +89,8 @@
     <sys:String x:Key="LOCGameActivitySelectChartSeriesToDisplay">选择要在图表中显示的系列</sys:String>
 
     <sys:String x:Key="LOCGameActivityIconFrom">选择图标来源</sys:String>
-    <sys:String x:Key="LOCGameActivityIconFromLibrary">使用库定义的图标</sys:String>
-    <sys:String x:Key="LOCGameActivityIconFromFont">使用插件字体定义的图标</sys:String>
+    <sys:String x:Key="LOCGameActivityIconFromLibrary">使用库定义的图</sys:String>
+    <sys:String x:Key="LOCGameActivityIconFromFont">使用插件字体定义的图</sys:String>
 
     <sys:String x:Key="LOCGameActivityIgnoreSession">忽略短的游戏会话</sys:String>
     <sys:String x:Key="LOCGameActivitySetVariatorTime">设置时间变量</sys:String>
@@ -107,12 +107,12 @@
     <sys:String x:Key="LOCGameActivityTotalHours">总小时数</sys:String>
     <sys:String x:Key="LOCGameActivityTotalHoursByWeeks">周小时数</sys:String>
 
-    <sys:String x:Key="LOCGameActivityWeekLabel">周</sys:String>
+    <sys:String x:Key="LOCGameActivityWeekLabel"></sys:String>
 
     <sys:String x:Key="LOCGameActivityTime">时长</sys:String>
     <sys:String x:Key="LOCGameActivityLog">性能记录</sys:String>
     <sys:String x:Key="LOCGameActivityTimeTitle">日小时数</sys:String>
-    <sys:String x:Key="LOCGameActivityLogTitle">上次会话详情</sys:String>
+    <sys:String x:Key="LOCGameActivityLogTitle">上次会话详</sys:String>
     <sys:String x:Key="LOCGameActivityLogTitleDate">会话详情来自</sys:String>
 
     <sys:String x:Key="LOCGameActivityLvGamesLastActivity">上次会话</sys:String>
@@ -121,7 +121,7 @@
     <sys:String x:Key="LOCGameActivityAvgCpu">平均 CPU</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpu">平均 GPU</sys:String>
     <sys:String x:Key="LOCGameActivityAvgRam">平均内存</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgFps">平均帧率</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgFps">平均帧</sys:String>
     <sys:String x:Key="LOCGameActivityAvgCpuT">平均 CPU T</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpuT">平均 GPU T</sys:String>
 
@@ -130,13 +130,13 @@
 
     <!-- GameActivity -->
 
-    <sys:String x:Key="LOCGameActivityWarningCaption">游戏会话时的警告</sys:String>
+    <sys:String x:Key="LOCGameActivityWarningCaption">游戏会话时的警</sys:String>
     <sys:String x:Key="LOCGameActivityWarningAt">于</sys:String>
-    <sys:String x:Key="LOCGameActivityCpuUsage">CPU 利用率</sys:String>
-    <sys:String x:Key="LOCGameActivityRamUsage">内存利用率</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuUsage">CPU 利用</sys:String>
+    <sys:String x:Key="LOCGameActivityRamUsage">内存利用</sys:String>
 
-    <sys:String x:Key="LOCGameActivityNotificationHWiNFO">HWiNFO 记录已启用，但应用程序未运行。</sys:String>
-    <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">MSI AfterBurner 记录已启用，但应用程序未运行。</sys:String>
+    <sys:String x:Key="LOCGameActivityNotificationHWiNFO">HWiNFO 记录已启用，但应用程序未运行</sys:String>
+    <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">MSI AfterBurner 记录已启用，但应用程序未运行</sys:String>
 
     <!-- QuickSearch -->
 
@@ -148,7 +148,7 @@
     <!-- GameActivityAddTime -->
 
     <sys:String x:Key="LOCGaAddNewGameSession">添加新的游戏会话</sys:String>
-    <sys:String x:Key="LOCGaDateStart">开始日期</sys:String>
-    <sys:String x:Key="LOCGaDateEnd">结束日期</sys:String>
+    <sys:String x:Key="LOCGaDateStart">开始日</sys:String>
+    <sys:String x:Key="LOCGaDateEnd">结束日</sys:String>
 
 </ResourceDictionary>
