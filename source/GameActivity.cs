@@ -1067,13 +1067,25 @@ namespace GameActivity
                     if (ElapsedSeconds == 0)
                     {
                         Thread.Sleep(5000);
-                        ElapsedSeconds = args.Game.Playtime - PlaytimeOnStarted;
+                        if (ExistsPlayStateInfoFile()) // Temporary workaround for PlayState paused time until Playnite allows to share data among extensions
+                        {
+                            ElapsedSeconds = args.Game.Playtime - PlaytimeOnStarted - GetPlayStatePausedTimeInfo(args.Game);
+                        }
+                        else
+                        {
+                            ElapsedSeconds = args.Game.Playtime - PlaytimeOnStarted;
+                        }
 
                         PlayniteApi.Notifications.Add(new NotificationMessage(
                             $"{PluginDatabase.PluginName}- noElapsedSeconds",
                             PluginDatabase.PluginName + System.Environment.NewLine + string.Format(resources.GetString("LOCGameActivityNoPlaytime"), args.Game.Name, ElapsedSeconds),
                             NotificationType.Info
                         ));
+                    }
+                    else if (ExistsPlayStateInfoFile()) // Temporary workaround for PlayState paused time until Playnite allows to share data among extensions
+                    {
+                        Thread.Sleep(5000); // Necessary since PlayState is executed after GameActivity.
+                        ElapsedSeconds -= GetPlayStatePausedTimeInfo(args.Game);
                     }
 
                     // Infos
@@ -1095,6 +1107,53 @@ namespace GameActivity
             // Delete backup
             string PathFileBackup = Path.Combine(PluginDatabase.Paths.PluginUserDataPath, "SaveSession.json");
             FileSystem.DeleteFile(PathFileBackup);
+        }
+
+        private bool ExistsPlayStateInfoFile() // Temporary workaround for PlayState paused time until Playnite allows to share data among extensions
+        {
+            // PlayState will write the Id and pausedTime to PlayState.txt file placed inside ExtensionsData Roaming Playnite folder
+            // Check first if this file exists and if not return false to avoid executing unnecessary code.
+            string PlayStateFile = Path.Combine(PlayniteApi.Paths.ExtensionsDataPath, "PlayState.txt");
+            if (File.Exists(PlayStateFile))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private ulong GetPlayStatePausedTimeInfo(Game game) // Temporary workaround for PlayState paused time until Playnite allows to share data among extensions
+        {
+            // PlayState will write the Id and pausedTime to PlayState.txt file placed inside ExtensionsData Roaming Playnite folder
+            // Check first if this file exists and if not return 0 as pausedTime.
+            // This check is redundant with ExistsPlayStateInfoFile, but it's because the PlayState file will be modified after the first check, so added as a fallback to avoid exceptions.
+            string PlayStateFile = Path.Combine(PlayniteApi.Paths.ExtensionsDataPath, "PlayState.txt");
+            if (!File.Exists(PlayStateFile))
+            {
+                return 0;
+            }
+
+            // The file is a simple txt, first line is GameId and second line the paused time.
+            string[] PlayStateInfo = File.ReadAllLines(PlayStateFile);
+            string Id = PlayStateInfo[0];
+            ulong PausedSeconds = Convert.ToUInt64(PlayStateInfo[1]);
+
+            // After retrieving the info restart the file in order to avoid reusing the same txt if PlayState crash / gets uninstalled.
+            string[] Info = { " ", " " };
+
+            File.WriteAllLines(PlayStateFile, Info);
+
+            // Check that the GameId is the same as the paused game. If so, return the paused time. If not, return 0.
+            if (game.Id.ToString() == Id)
+            {
+                return PausedSeconds;
+            }
+            else
+            {
+                return 0;
+            }
         }
         #endregion
 
