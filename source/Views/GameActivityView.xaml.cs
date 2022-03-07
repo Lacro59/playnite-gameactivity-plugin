@@ -21,6 +21,8 @@ using GameActivity.Controls;
 using CommonPluginsControls.Controls;
 using System.Windows.Media;
 using System.IO;
+using CommonPluginsShared.Extensions;
+using Playnite.SDK.Data;
 
 namespace GameActivity.Views
 {
@@ -957,7 +959,7 @@ namespace GameActivity.Views
             List<string> arrayReturn = new List<string>();
             foreach (GameSource source in dbPlaynite.Sources)
             {
-                if (!arrayReturn.Contains(source.Name))
+                if (arrayReturn.Find(x => x.IsEqual(source.Name)) == null)
                 {
                     arrayReturn.Add(source.Name);
                 }
@@ -966,6 +968,7 @@ namespace GameActivity.Views
             // Source for game add manually.
             arrayReturn.Add("Playnite");
 
+            Common.LogDebug(true, Serialization.ToJson(arrayReturn));
             return arrayReturn;
         }
 
