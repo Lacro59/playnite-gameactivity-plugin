@@ -41,7 +41,10 @@ namespace GameActivity
 
             try
             {
-                labelIntervalLabel_text.Content = "(" + slider.Value + " " + resources.GetString("LOCGameActivityTimeLabel") + ")";
+                if (labelIntervalLabel_text != null)
+                {
+                    labelIntervalLabel_text.Content = "(" + slider.Value + " " + resources.GetString("LOCGameActivityTimeLabel") + ")";
+                }
             }
             catch
             {

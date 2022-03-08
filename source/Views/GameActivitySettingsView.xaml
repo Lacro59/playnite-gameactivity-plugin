@@ -76,7 +76,7 @@
                             </CheckBox>
 
                             <CheckBox Grid.Column="0" Grid.Row="1" IsChecked="{Binding Settings.lvGamesPlayAction}" VerticalAlignment="Center">
-                                <Label Content="{DynamicResource LOCPlayAction}" />
+                                <Label Content="{DynamicResource LOCIsPlayAction}" />
                             </CheckBox>
 
                             <CheckBox Grid.Column="0" Grid.Row="2" IsChecked="{Binding Settings.lvAvgCpu}" VerticalAlignment="Center"
