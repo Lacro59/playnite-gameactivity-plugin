@@ -282,7 +282,7 @@ namespace GameActivity.Controls
 
                         CustomerForTime customerForTime = new CustomerForTime
                         {
-                            Name = ((DateTime)Activities[i].DateSession).ToLocalTime().ToString("yyyy-MM-dd"),
+                            Name = dt,
                             Values = 0,
                             HideIsZero = true
                         };
