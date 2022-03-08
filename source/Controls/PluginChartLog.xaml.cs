@@ -61,8 +61,8 @@ namespace GameActivity.Controls
         #region Properties
         public bool DisableAnimations
         {
-            get { return (bool)GetValue(DisableAnimationsProperty); }
-            set { SetValue(DisableAnimationsProperty, value); }
+            get => (bool)GetValue(DisableAnimationsProperty);
+            set => SetValue(DisableAnimationsProperty, value);
         }
 
         public static readonly DependencyProperty DisableAnimationsProperty = DependencyProperty.Register(
@@ -73,8 +73,8 @@ namespace GameActivity.Controls
 
         public bool LabelsRotation
         {
-            get { return (bool)GetValue(LabelsRotationProperty); }
-            set { SetValue(LabelsRotationProperty, value); }
+            get => (bool)GetValue(LabelsRotationProperty);
+            set => SetValue(LabelsRotationProperty, value);
         }
 
         public static readonly DependencyProperty LabelsRotationProperty = DependencyProperty.Register(
@@ -88,8 +88,8 @@ namespace GameActivity.Controls
 
         public DateTime? DateSelected
         {
-            get { return (DateTime?)GetValue(DateSelectedProperty); }
-            set { SetValue(DateSelectedProperty, value); }
+            get => (DateTime?)GetValue(DateSelectedProperty);
+            set => SetValue(DateSelectedProperty, value);
         }
 
         public static readonly DependencyProperty DateSelectedProperty = DependencyProperty.Register(
@@ -103,8 +103,8 @@ namespace GameActivity.Controls
 
         public int AxisVariator
         {
-            get { return (int)GetValue(AxisVariatoryProperty); }
-            set { SetValue(AxisVariatoryProperty, value); }
+            get => (int)GetValue(AxisVariatoryProperty);
+            set => SetValue(AxisVariatoryProperty, value);
         }
 
         public static readonly DependencyProperty AxisVariatoryProperty = DependencyProperty.Register(
@@ -115,8 +115,8 @@ namespace GameActivity.Controls
 
         public bool DisplayCpu
         {
-            get { return (bool)GetValue(DisplayCpuProperty); }
-            set { SetValue(DisplayCpuProperty, value); }
+            get => (bool)GetValue(DisplayCpuProperty);
+            set => SetValue(DisplayCpuProperty, value);
         }
 
         public static readonly DependencyProperty DisplayCpuProperty = DependencyProperty.Register(
@@ -127,8 +127,8 @@ namespace GameActivity.Controls
 
         public bool DisplayGpu
         {
-            get { return (bool)GetValue(DisplayGpuProperty); }
-            set { SetValue(DisplayGpuProperty, value); }
+            get => (bool)GetValue(DisplayGpuProperty);
+            set => SetValue(DisplayGpuProperty, value);
         }
 
         public static readonly DependencyProperty DisplayGpuProperty = DependencyProperty.Register(
@@ -139,8 +139,8 @@ namespace GameActivity.Controls
 
         public bool DisplayRam
         {
-            get { return (bool)GetValue(DisplayRamProperty); }
-            set { SetValue(DisplayRamProperty, value); }
+            get => (bool)GetValue(DisplayRamProperty);
+            set => SetValue(DisplayRamProperty, value);
         }
 
         public static readonly DependencyProperty DisplayRamProperty = DependencyProperty.Register(
@@ -151,8 +151,8 @@ namespace GameActivity.Controls
 
         public bool DisplayFps
         {
-            get { return (bool)GetValue(DisplayFpsProperty); }
-            set { SetValue(DisplayFpsProperty, value); }
+            get => (bool)GetValue(DisplayFpsProperty);
+            set => SetValue(DisplayFpsProperty, value);
         }
 
         public static readonly DependencyProperty DisplayFpsProperty = DependencyProperty.Register(

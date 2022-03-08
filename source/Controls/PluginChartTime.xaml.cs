@@ -37,27 +37,15 @@ namespace GameActivity.Controls
         private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
         internal override IPluginDatabase _PluginDatabase
         {
-            get
-            {
-                return PluginDatabase;
-            }
-            set
-            {
-                PluginDatabase = (ActivityDatabase)_PluginDatabase;
-            }
+            get => PluginDatabase;
+            set => PluginDatabase = (ActivityDatabase)_PluginDatabase;
         }
 
         private PluginChartTimeDataContext ControlDataContext = new PluginChartTimeDataContext();
         internal override IDataContext _ControlDataContext
         {
-            get
-            {
-                return ControlDataContext;
-            }
-            set
-            {
-                ControlDataContext = (PluginChartTimeDataContext)_ControlDataContext;
-            }
+            get => ControlDataContext;
+            set => ControlDataContext = (PluginChartTimeDataContext)_ControlDataContext;
         }
 
         public event DataClickHandler GameSeriesDataClick;
@@ -66,8 +54,8 @@ namespace GameActivity.Controls
         #region Properties
         public bool DisableAnimations
         {
-            get { return (bool)GetValue(DisableAnimationsProperty); }
-            set { SetValue(DisableAnimationsProperty, value); }
+            get => (bool)GetValue(DisableAnimationsProperty);
+            set => SetValue(DisableAnimationsProperty, value);
         }
 
         public static readonly DependencyProperty DisableAnimationsProperty = DependencyProperty.Register(
@@ -78,8 +66,8 @@ namespace GameActivity.Controls
 
         public bool Truncate
         {
-            get { return (bool)GetValue(TruncateProperty); }
-            set { SetValue(TruncateProperty, value); }
+            get => (bool)GetValue(TruncateProperty);
+            set => SetValue(TruncateProperty, value);
         }
 
         public static readonly DependencyProperty TruncateProperty = DependencyProperty.Register(
@@ -90,8 +78,8 @@ namespace GameActivity.Controls
 
         public bool LabelsRotation
         {
-            get { return (bool)GetValue(LabelsRotationProperty); }
-            set { SetValue(LabelsRotationProperty, value); }
+            get => (bool)GetValue(LabelsRotationProperty);
+            set => SetValue(LabelsRotationProperty, value);
         }
 
         public static readonly DependencyProperty LabelsRotationProperty = DependencyProperty.Register(
@@ -105,8 +93,8 @@ namespace GameActivity.Controls
 
         public int AxisVariator
         {
-            get { return (int)GetValue(AxisVariatoryProperty); }
-            set { SetValue(AxisVariatoryProperty, value); }
+            get => (int)GetValue(AxisVariatoryProperty);
+            set => SetValue(AxisVariatoryProperty, value);
         }
 
         public static readonly DependencyProperty AxisVariatoryProperty = DependencyProperty.Register(

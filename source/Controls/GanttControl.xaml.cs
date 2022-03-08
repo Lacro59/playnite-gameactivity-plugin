@@ -33,8 +33,8 @@ namespace GameActivity.Controls
 
         public string DataName
         {
-            get { return (string)GetValue(DataNameProperty); }
-            set { SetValue(DataNameProperty, value); }
+            get => (string)GetValue(DataNameProperty);
+            set => SetValue(DataNameProperty, value);
         }
 
         public static readonly DependencyProperty DataNameProperty = DependencyProperty.Register(
@@ -46,8 +46,8 @@ namespace GameActivity.Controls
 
         public int ColumnCount
         {
-            get { return (int)GetValue(ColumnCountProperty); }
-            set { SetValue(ColumnCountProperty, value); }
+            get => (int)GetValue(ColumnCountProperty);
+            set => SetValue(ColumnCountProperty, value);
         }
 
         public static readonly DependencyProperty ColumnCountProperty = DependencyProperty.Register(
@@ -59,8 +59,8 @@ namespace GameActivity.Controls
 
         public DateTime LastDate
         {
-            get { return (DateTime)GetValue(LastDateProperty); }
-            set { SetValue(LastDateProperty, value); }
+            get => (DateTime)GetValue(LastDateProperty);
+            set => SetValue(LastDateProperty, value);
         }
 
         public static readonly DependencyProperty LastDateProperty = DependencyProperty.Register(
@@ -72,8 +72,8 @@ namespace GameActivity.Controls
 
         public List<GanttValue> Values
         {
-            get { return (List<GanttValue>)GetValue(ValuesProperty); }
-            set { SetValue(ValuesProperty, value); }
+            get => (List<GanttValue>)GetValue(ValuesProperty);
+            set => SetValue(ValuesProperty, value);
         }
 
         public static readonly DependencyProperty ValuesProperty = DependencyProperty.Register(
@@ -84,8 +84,8 @@ namespace GameActivity.Controls
 
         public bool OnlyDate
         {
-            get { return (bool)GetValue(OnlyDateProperty); }
-            set { SetValue(OnlyDateProperty, value); }
+            get => (bool)GetValue(OnlyDateProperty);
+            set => SetValue(OnlyDateProperty, value);
         }
 
         public static readonly DependencyProperty OnlyDateProperty = DependencyProperty.Register(
