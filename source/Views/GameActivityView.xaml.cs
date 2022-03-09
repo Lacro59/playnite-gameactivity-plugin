@@ -126,6 +126,8 @@ namespace GameActivity.Views
             // Add column if log details enable.
             if (!PluginDatabase.PluginSettings.Settings.EnableLogging)
             {
+                lvView.Columns.RemoveAt(17);
+                lvView.Columns.RemoveAt(16);
                 lvView.Columns.RemoveAt(15);
                 lvView.Columns.RemoveAt(14);
                 lvView.Columns.RemoveAt(13);
@@ -135,6 +137,14 @@ namespace GameActivity.Views
             }
             else
             {
+                if (!PluginDatabase.PluginSettings.Settings.lvAvgGpuP)
+                {
+                    lvView.Columns.RemoveAt(17);
+                }
+                if (!PluginDatabase.PluginSettings.Settings.lvAvgCpuP)
+                {
+                    lvView.Columns.RemoveAt(16);
+                }
                 if (!PluginDatabase.PluginSettings.Settings.lvAvgGpuT)
                 {
                     lvView.Columns.RemoveAt(15);
@@ -861,6 +871,8 @@ namespace GameActivity.Views
                             AvgFPS = listGameActivities[iGame].avgFPS(listGameActivities[iGame].GetLastSession()) + "",
                             AvgCPUT = listGameActivities[iGame].avgCPUT(listGameActivities[iGame].GetLastSession()) + "°",
                             AvgGPUT = listGameActivities[iGame].avgGPUT(listGameActivities[iGame].GetLastSession()) + "°",
+                            AvgCPUP = listGameActivities[iGame].avgCPUP(listGameActivities[iGame].GetLastSession()) + "W",
+                            AvgGPUP = listGameActivities[iGame].avgGPUP(listGameActivities[iGame].GetLastSession()) + "W",
 
                             EnableWarm = _settings.EnableWarning,
                             MaxCPUT = _settings.MaxCpuTemp.ToString(),

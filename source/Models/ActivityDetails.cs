@@ -108,5 +108,12 @@ namespace GameActivity.Models
         /// </summary>
         [SerializationPropertyName("gpuT")]
         public int GPUT { get; set; }
+
+
+        [SerializationPropertyName("cpuP")]
+        public int CPUP { get; set; }
+
+        [SerializationPropertyName("gpuP")]
+        public int GPUP { get; set; }
     }
 }

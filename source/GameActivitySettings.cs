@@ -107,6 +107,8 @@ namespace GameActivity
         public bool lvAvgFps { get; set; } = true;
         public bool lvAvgCpuT { get; set; } = true;
         public bool lvAvgGpuT { get; set; } = true;
+        public bool lvAvgCpuP { get; set; } = true;
+        public bool lvAvgGpuP { get; set; } = true;
 
         public bool UseMsiAfterburner { get; set; } = false;
         public bool UseHWiNFO { get; set; } = false;

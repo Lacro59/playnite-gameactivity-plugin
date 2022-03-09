@@ -411,6 +411,64 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
+
+                            <GridViewColumn>
+                                <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgCpuP}" IsHitTestVisible="False" />
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Label Content="{Binding AvgCPUP}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                                            <Label.Style>
+                                                <Style TargetType="Label">
+                                                    <Setter Property="Foreground">
+                                                        <Setter.Value>
+                                                            <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
+                                                                <Binding Path="AvgGPUT" />
+                                                                <Binding Path="MaxGPUT" />
+                                                                <Binding Path="EnableWarm" />
+                                                            </MultiBinding>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=IsSelected}"
+                                                                     Value="True">
+                                                            <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=Foreground}" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Label.Style>
+                                        </Label>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn>
+                                <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgGpuP}" IsHitTestVisible="False" />
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Label Content="{Binding AvgGPUP}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                                            <Label.Style>
+                                                <Style TargetType="Label">
+                                                    <Setter Property="Foreground">
+                                                        <Setter.Value>
+                                                            <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
+                                                                <Binding Path="AvgGPUT" />
+                                                                <Binding Path="MaxGPUT" />
+                                                                <Binding Path="EnableWarm" />
+                                                            </MultiBinding>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=IsSelected}"
+                                                                     Value="True">
+                                                            <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=Foreground}" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Label.Style>
+                                        </Label>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
                             
                             <GridViewColumn Width="100">
                                 <GridViewColumnHeader />

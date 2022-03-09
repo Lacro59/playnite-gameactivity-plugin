@@ -87,6 +87,8 @@ namespace GameActivity.Views
             // Add column if log details enable.
             if (!PluginDatabase.PluginSettings.Settings.EnableLogging)
             {
+                lvView.Columns.RemoveAt(13);
+                lvView.Columns.RemoveAt(12);
                 lvView.Columns.RemoveAt(11);
                 lvView.Columns.RemoveAt(10);
                 lvView.Columns.RemoveAt(9);
@@ -99,6 +101,14 @@ namespace GameActivity.Views
             }
             else
             {
+                if (!PluginDatabase.PluginSettings.Settings.lvAvgGpuP)
+                {
+                    lvView.Columns.RemoveAt(13);
+                }
+                if (!PluginDatabase.PluginSettings.Settings.lvAvgCpuP)
+                {
+                    lvView.Columns.RemoveAt(12);
+                }
                 if (!PluginDatabase.PluginSettings.Settings.lvAvgGpuT)
                 {
                     lvView.Columns.RemoveAt(11);
@@ -277,6 +287,8 @@ namespace GameActivity.Views
                             AvgFPS = gameActivities.avgFPS(dateSession.ToUniversalTime()) + "",
                             AvgCPUT = gameActivities.avgCPUT(dateSession.ToUniversalTime()) + "°",
                             AvgGPUT = gameActivities.avgGPUT(dateSession.ToUniversalTime()) + "°",
+                            AvgCPUP = gameActivities.avgCPUP(dateSession.ToUniversalTime()) + "W",
+                            AvgGPUP = gameActivities.avgGPUP(dateSession.ToUniversalTime()) + "W",
 
                             GameSourceName = sourceName,
                             TypeStoreIcon = ModeSimple,
@@ -455,6 +467,5 @@ namespace GameActivity.Views
             }
         }
         #endregion
-
     }
 }

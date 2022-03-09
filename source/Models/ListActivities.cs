@@ -31,6 +31,8 @@ namespace GameActivity.Models
         public string AvgFPS { get; set; }
         public string AvgCPUT { get; set; }
         public string AvgGPUT { get; set; }
+        public string AvgCPUP { get; set; }
+        public string AvgGPUP { get; set; }
 
         public bool EnableWarm { get; set; }
         public string MaxCPUT { get; set; }

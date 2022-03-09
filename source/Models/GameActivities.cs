@@ -74,9 +74,13 @@ namespace GameActivity.Models
             }
 
             if (acDetailsData.Count != 0)
+            {
                 return (int)Math.Round(avg / acDetailsData.Count);
+            }
             else
+            {
                 return 0;
+            }
         }
 
         public int avgGPU(DateTime dateSession)
@@ -90,9 +94,13 @@ namespace GameActivity.Models
             }
 
             if (acDetailsData.Count != 0)
+            {
                 return (int)Math.Round(avg / acDetailsData.Count);
+            }
             else
+            {
                 return 0;
+            }
         }
 
         public int avgRAM(DateTime dateSession)
@@ -106,9 +114,13 @@ namespace GameActivity.Models
             }
 
             if (acDetailsData.Count != 0)
+            {
                 return (int)Math.Round(avg / acDetailsData.Count);
+            }
             else
+            {
                 return 0;
+            }
         }
 
 
@@ -123,9 +135,13 @@ namespace GameActivity.Models
             }
 
             if (acDetailsData.Count != 0)
+            {
                 return (int)Math.Round(avg / acDetailsData.Count);
+            }
             else
+            {
                 return 0;
+            }
         }
 
         public int avgCPUT(DateTime dateSession)
@@ -139,9 +155,13 @@ namespace GameActivity.Models
             }
 
             if (acDetailsData.Count != 0)
+            {
                 return (int)Math.Round(avg / acDetailsData.Count);
+            }
             else
+            {
                 return 0;
+            }
         }
 
         public int avgGPUT(DateTime dateSession)
@@ -155,9 +175,53 @@ namespace GameActivity.Models
             }
 
             if (acDetailsData.Count != 0)
+            {
                 return (int)Math.Round(avg / acDetailsData.Count);
+            }
             else
+            {
                 return 0;
+            }
+        }
+
+        public int avgCPUP(DateTime dateSession)
+        {
+            decimal avg = 0;
+
+            List<ActivityDetailsData> acDetailsData = ItemsDetails.Get(dateSession);
+            for (int iData = 0; iData < acDetailsData.Count; iData++)
+            {
+                avg += acDetailsData[iData].CPUP;
+            }
+
+            if (acDetailsData.Count != 0)
+            {
+                return (int)Math.Round(avg / acDetailsData.Count);
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        public int avgGPUP(DateTime dateSession)
+        {
+            decimal avg = 0;
+
+            List<ActivityDetailsData> acDetailsData = ItemsDetails.Get(dateSession);
+            for (int iData = 0; iData < acDetailsData.Count; iData++)
+            {
+                avg += acDetailsData[iData].GPUP;
+            }
+
+            if (acDetailsData.Count != 0)
+            {
+                return (int)Math.Round(avg / acDetailsData.Count);
+            }
+            else
+            {
+                return 0;
+            }
         }
 
 

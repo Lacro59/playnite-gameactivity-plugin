@@ -63,6 +63,7 @@
                                 <RowDefinition Height="30" />
                                 <RowDefinition Height="30" />
                                 <RowDefinition Height="30" />
+                                <RowDefinition Height="30" />
                             </Grid.RowDefinitions>
 
                             <CheckBox Grid.Column="0" Grid.Row="0" IsChecked="{Binding Settings.lvGamesIcon}" VerticalAlignment="Center">
@@ -103,6 +104,15 @@
                             <CheckBox Grid.Column="2" Grid.Row="3" IsChecked="{Binding Settings.lvAvgGpuT}" VerticalAlignment="Center"
                                       IsEnabled="{Binding ElementName=cbLogging, Path=IsChecked}">
                                 <Label Content="{DynamicResource LOCGameActivityAvgGpuT}" />
+                            </CheckBox>
+
+                            <CheckBox Grid.Column="0" Grid.Row="4" IsChecked="{Binding Settings.lvAvgCpuP}" VerticalAlignment="Center"
+                                      IsEnabled="{Binding ElementName=cbLogging, Path=IsChecked}">
+                                <Label Content="{DynamicResource LOCGameActivityAvgCpuP}" />
+                            </CheckBox>
+                            <CheckBox Grid.Column="1" Grid.Row="4" IsChecked="{Binding Settings.lvAvgGpuP}" VerticalAlignment="Center"
+                                      IsEnabled="{Binding ElementName=cbLogging, Path=IsChecked}">
+                                <Label Content="{DynamicResource LOCGameActivityAvgGpuP}" />
                             </CheckBox>
                         </Grid>
                     </StackPanel>

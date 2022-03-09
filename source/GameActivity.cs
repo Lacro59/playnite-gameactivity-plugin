@@ -335,6 +335,8 @@ namespace GameActivity
             int ramValue = PerfCounter.GetRamPercentage();
             int gpuTValue = PerfCounter.GetGpuTemperature();
             int cpuTValue = PerfCounter.GetCpuTemperature();
+            int cpuPValue = 0;
+            int gpuPValue = 0;
 
 
             if (PluginSettings.Settings.UseMsiAfterburner && CheckGoodForLogging())
@@ -354,6 +356,26 @@ namespace GameActivity
 
                 if (MSIAfterburner != null)
                 {
+                    try
+                    {
+                        cpuPValue = (int)MSIAfterburner.GetEntry(MONITORING_SOURCE_ID.CPU_POWER).Data;
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.Warn("Fail get cpuPower");
+                        Common.LogError(ex, true, "Fail get cpuPower");
+                    }
+
+                    try
+                    {
+                        gpuPValue = (int)MSIAfterburner.GetEntry(MONITORING_SOURCE_ID.GPU_POWER).Data;
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.Warn("Fail get gpuPower");
+                        Common.LogError(ex, true, "Fail get gpuPower");
+                    }
+
                     try
                     {
                         fpsValue = (int)MSIAfterburner.GetEntry(MONITORING_SOURCE_ID.FRAMERATE).Data;
@@ -564,8 +586,10 @@ namespace GameActivity
                 FPS = fpsValue,
                 CPU = cpuValue,
                 CPUT = cpuTValue,
+                CPUP = cpuPValue,
                 GPU = gpuValue,
                 GPUT = gpuTValue,
+                GPUP = gpuPValue,
                 RAM = ramValue
             };
             Common.LogDebug(true, Serialization.ToJson(activityDetailsData));
