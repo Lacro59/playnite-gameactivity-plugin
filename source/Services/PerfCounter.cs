@@ -99,14 +99,6 @@ namespace GameActivity.Services
         {
             try
             {
-                var tt = new Computer
-                {
-                    CPUEnabled = true,
-                    GPUEnabled = true
-                };
-                myComputer.Open();
-
-
                 foreach (var hardwareItem in myComputer.Hardware)
                 {
                     if (hardwareItem.HardwareType == HardwareType.CPU)
