@@ -8,6 +8,22 @@ using System.Runtime.InteropServices;
 
 namespace GameActivity.Services
 {
+    public class UpdateVisitor : IVisitor
+    {
+        public void VisitComputer(IComputer computer)
+        {
+            computer.Traverse(this);
+        }
+        public void VisitHardware(IHardware hardware)
+        {
+            hardware.Update();
+            foreach (IHardware subHardware in hardware.SubHardware) subHardware.Accept(this);
+        }
+        public void VisitSensor(ISensor sensor) { }
+        public void VisitParameter(IParameter parameter) { }
+    }
+
+
     public class PerfCounter
     {
         private static readonly ILogger logger = LogManager.GetLogger();
@@ -29,6 +45,27 @@ namespace GameActivity.Services
         [return: MarshalAs(UnmanagedType.Bool)]
         [DllImport("Kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         internal static extern bool GlobalMemoryStatusEx(ref MEMORYSTATUSEX lpBuffer);
+
+        private static Computer _myComputer;
+        private static Computer myComputer
+        {
+            get
+            {
+                if (_myComputer == null)
+                {
+                    _myComputer = new Computer
+                    {
+                        CPUEnabled = true,
+                        GPUEnabled = true
+                    };
+                    myComputer.Open();
+                    UpdateVisitor updateVisitor = new UpdateVisitor();
+                    myComputer.Accept(updateVisitor);
+                }
+                return _myComputer;
+            }
+        }
+
 
 
         public static int GetCpuPercentage()
@@ -62,23 +99,23 @@ namespace GameActivity.Services
         {
             try
             {
-                Computer myComputer = new Computer();
-                myComputer.CPUEnabled = true;
+                var tt = new Computer
+                {
+                    CPUEnabled = true,
+                    GPUEnabled = true
+                };
                 myComputer.Open();
+
 
                 foreach (var hardwareItem in myComputer.Hardware)
                 {
                     if (hardwareItem.HardwareType == HardwareType.CPU)
                     {
-                        foreach (var hardware in myComputer.Hardware)
+                        foreach (var sensor in hardwareItem.Sensors)
                         {
-                            hardware.Update();
-                            foreach (var sensor in hardware.Sensors)
+                            if (sensor.SensorType == SensorType.Temperature && sensor.Value.HasValue)
                             {
-                                if (sensor.SensorType == SensorType.Temperature && sensor.Value.HasValue)
-                                {
-                                    return (int)Math.Round((float)sensor.Value);
-                                }
+                                return (int)Math.Round((float)sensor.Value);
                             }
                         }
                     }
@@ -138,10 +175,6 @@ namespace GameActivity.Services
         {
             try
             {
-                Computer myComputer = new Computer();
-                myComputer.GPUEnabled = true;
-                myComputer.Open();
-
                 foreach (var hardwareItem in myComputer.Hardware)
                 {
                     if (hardwareItem.HardwareType == HardwareType.GpuNvidia)
@@ -180,10 +213,6 @@ namespace GameActivity.Services
         {
             try
             {
-                Computer myComputer = new Computer();
-                myComputer.GPUEnabled = true;
-                myComputer.Open();
-
                 foreach (var hardwareItem in myComputer.Hardware)
                 {
                     if (hardwareItem.HardwareType == HardwareType.GpuNvidia)
