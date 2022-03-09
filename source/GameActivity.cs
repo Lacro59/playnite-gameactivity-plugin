@@ -1192,9 +1192,8 @@ namespace GameActivity
             try
             {
                 string icon = Path.Combine(PluginDatabase.Paths.PluginPath, "Resources", "chart-646.png");
-
-                var GaSubItemsAction = new SubItemsAction() { Action = () => { }, Name = "", CloseAfterExecute = false, SubItemSource = new QuickSearchItemSource() };
-                var GaCommand = new CommandItem(PluginDatabase.PluginName, new List<CommandAction>(), ResourceProvider.GetString("LOCGaQuickSearchDescription"), icon);
+                SubItemsAction GaSubItemsAction = new SubItemsAction() { Action = () => { }, Name = "", CloseAfterExecute = false, SubItemSource = new QuickSearchItemSource() };
+                CommandItem GaCommand = new CommandItem(PluginDatabase.PluginName, new List<CommandAction>(), ResourceProvider.GetString("LOCGaQuickSearchDescription"), icon);
                 GaCommand.Keys.Add(new CommandItemKey() { Key = "ga", Weight = 1 });
                 GaCommand.Actions.Add(GaSubItemsAction);
                 QuickSearch.QuickSearchSDK.AddCommand(GaCommand);
@@ -1203,29 +1202,38 @@ namespace GameActivity
 
 
             // Check backup
-            string PathFileBackup = Path.Combine(PluginDatabase.Paths.PluginUserDataPath, "SaveSession.json");
-            if (File.Exists(PathFileBackup))
+            try
             {
-                ActivityBackup backupData = Serialization.FromJsonFile<ActivityBackup>(PathFileBackup);
-
-                PlayniteApi.Notifications.Add(new NotificationMessage(
-                    $"{PluginDatabase.PluginName}-backup",
-                    PluginDatabase.PluginName + System.Environment.NewLine + string.Format(resources.GetString("LOCGaBackupExist"), backupData.Name),
-                    NotificationType.Info,
-                    () => 
+                string PathFileBackup = Path.Combine(PluginDatabase.Paths.PluginUserDataPath, "SaveSession.json");
+                if (File.Exists(PathFileBackup))
+                {
+                    Serialization.TryFromJsonFile<ActivityBackup>(PathFileBackup, out ActivityBackup backupData);
+                    if (backupData != null)
                     {
-                        var windowOptions = new WindowOptions
-                        {
-                            ShowMinimizeButton = false,
-                            ShowMaximizeButton = false,
-                            ShowCloseButton = true,
-                        };
+                        PlayniteApi.Notifications.Add(new NotificationMessage(
+                            $"{PluginDatabase.PluginName}-backup",
+                            PluginDatabase.PluginName + System.Environment.NewLine + string.Format(resources.GetString("LOCGaBackupExist"), backupData.Name),
+                            NotificationType.Info,
+                            () =>
+                            {
+                                WindowOptions windowOptions = new WindowOptions
+                                {
+                                    ShowMinimizeButton = false,
+                                    ShowMaximizeButton = false,
+                                    ShowCloseButton = true,
+                                };
 
-                        var ViewExtension = new GameActivityBackup(backupData);
-                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGaBackupDataInfo"), ViewExtension, windowOptions);
-                        windowExtension.ShowDialog();
+                                GameActivityBackup ViewExtension = new GameActivityBackup(backupData);
+                                Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGaBackupDataInfo"), ViewExtension, windowOptions);
+                                windowExtension.ShowDialog();
+                            }
+                        ));
                     }
-                ));
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex, false, true, PluginDatabase.PluginName);
             }
         }
 
