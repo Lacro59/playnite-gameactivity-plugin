@@ -177,6 +177,19 @@ namespace GameActivity.Views
             PART_ChartTime.Truncate = (bool)((ToggleButton)sender).IsChecked;
             PART_ChartTime.AxisVariator = 0;
         }
+        private void ToggleButton_Click(object sender, RoutedEventArgs e)
+        {
+            ToggleButton tb = sender as ToggleButton;
+            if ((bool)tb.IsChecked)
+            {
+                PART_ChartTime.ShowByWeeks = true;
+            }
+            else
+            {
+                PART_ChartTime.ShowByWeeks = false;
+            }
+            PART_ChartTime.AxisVariator = 0;
+        }
         #endregion
 
 
@@ -442,5 +455,6 @@ namespace GameActivity.Views
             }
         }
         #endregion
+
     }
 }

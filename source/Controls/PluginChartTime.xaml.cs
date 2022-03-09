@@ -1,7 +1,7 @@
 ﻿using CommonPluginsControls.Controls;
 using CommonPluginsControls.LiveChartsCommon;
 using CommonPlayniteShared.Common;
-using CommonPlayniteShared.Converters;
+using CommonPluginsShared.Extensions;
 using CommonPluginsShared;
 using CommonPluginsShared.Collections;
 using CommonPluginsShared.Controls;
@@ -18,12 +18,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Threading;
-using LiveCharts.Helpers;
 using Playnite.SDK.Data;
 using System.ComponentModel;
 
@@ -63,6 +59,18 @@ namespace GameActivity.Controls
             typeof(bool),
             typeof(PluginChartTime),
             new FrameworkPropertyMetadata(true, ControlsPropertyChangedCallback));
+
+        public bool ShowByWeeks
+        {
+            get => (bool)GetValue(ShowByWeeksProperty);
+            set => SetValue(ShowByWeeksProperty, value);
+        }
+
+        public static readonly DependencyProperty ShowByWeeksProperty = DependencyProperty.Register(
+            nameof(ShowByWeeks),
+            typeof(bool),
+            typeof(PluginChartTime),
+            new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback));
 
         public bool Truncate
         {
@@ -194,7 +202,14 @@ namespace GameActivity.Controls
 
             if (MustDisplay)
             {
-                GetActivityForGamesTimeGraphics(gameActivities, AxisVariator, Limit);
+                if (ShowByWeeks)
+                {
+                    GetActivityForGamesChartByWeek(gameActivities, AxisVariator, Limit);
+                }
+                else
+                {
+                    GetActivityForGamesTimeGraphics(gameActivities, AxisVariator, Limit);
+                }
             }
         }
 
@@ -445,8 +460,8 @@ namespace GameActivity.Controls
 
                 //let create a mapper so LiveCharts know how to plot our CustomerViewModel class
                 var customerVmMapper = Mappers.Xy<CustomerForTime>()
-                .X((value, index) => index)
-                .Y(value => value.Values);
+                        .X((value, index) => index)
+                        .Y(value => value.Values);
 
 
                 //lets save the mapper globally
@@ -473,6 +488,93 @@ namespace GameActivity.Controls
                 PART_ChartTimeActivityLabelsY.MinValue = 0;
                 PART_ChartTimeActivity.Series = activityForGameSeries;
                 PART_ChartTimeActivityLabelsX.Labels = activityForGameLabels;
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex, false, true, PluginDatabase.PluginName);
+            }
+        }
+
+        private void GetActivityForGamesChartByWeek(GameActivities gameActivities, int variateurTime = 0, int limit = 9)
+        {
+            try
+            {
+                List<Activity> Activities = Serialization.GetClone(gameActivities.FilterItems);
+                DateTime dtLastActivity = Activities.Select(x => (DateTime)x.DateSession).Max();
+                dtLastActivity = dtLastActivity.AddDays(7 * variateurTime);
+
+                List<string> labels = new List<string>();
+                ChartValues<CustomerForTime> seriesData = new ChartValues<CustomerForTime>();
+                List<WeekStartEnd> datesPeriodes = new List<WeekStartEnd>();
+                for (int i = limit; i >= 0; i--)
+                {
+                    DateTime dt = dtLastActivity.AddDays(-7 * i).ToLocalTime();
+
+                    int Year = dt.Year;
+                    int WeekNumber = Tools.WeekOfYearISO8601(dt);
+
+                    DateTime First = dt.StartOfWeek(DayOfWeek.Monday);
+                    DateTime Last = First.AddDays(6);
+                    string DataTitleInfo = $"{resources.GetString("LOCGameActivityWeekLabel")} {WeekNumber}";
+                    labels.Add(DataTitleInfo);
+
+                    datesPeriodes.Add(new WeekStartEnd
+                    {
+                        Monday = First,
+                        Sunday = Last
+                    });
+
+                    CustomerForTime customerForTime = new CustomerForTime
+                    {
+                        Name = DataTitleInfo,
+                        Values = 0,
+                        HideIsZero = true
+                    };
+                    seriesData.Add(customerForTime);
+                }
+
+                Activities.ForEach(x =>
+                {
+                    int idx = datesPeriodes.FindIndex(y => y.Monday <= (DateTime)x.DateSession && y.Sunday >= (DateTime)x.DateSession);
+                    if (idx > -1)
+                    {
+                        seriesData[idx].Values += (long)x.ElapsedSeconds;
+                    }
+                });
+
+
+
+                // Set data in graphic.
+                SeriesCollection activityForGameSeries = new SeriesCollection();
+                activityForGameSeries.Add(new ColumnSeries { Title = "1", Values = seriesData });
+
+                //let create a mapper so LiveCharts know how to plot our CustomerViewModel class
+                var customerVmMapper = Mappers.Xy<CustomerForTime>()
+                        .X((value, index) => index)
+                        .Y(value => value.Values);
+
+
+                //lets save the mapper globally
+                Charting.For<CustomerForTime>(customerVmMapper);
+
+                //PlayTimeToStringConverter converter = new PlayTimeToStringConverter();
+                PlayTimeToStringConverterWithZero converter = new PlayTimeToStringConverterWithZero();
+                Func<double, string> activityForGameLogFormatter = value => (string)converter.Convert((ulong)value, null, null, CultureInfo.CurrentCulture);
+                PART_ChartTimeActivityLabelsY.LabelFormatter = activityForGameLogFormatter;
+
+                PART_ChartTimeActivity.DataTooltip = new CustomerToolTipForTime
+                {
+                    ShowIcon = PluginDatabase.PluginSettings.Settings.ShowLauncherIcons,
+                    Mode = (PluginDatabase.PluginSettings.Settings.ModeStoreIcon == 1) ? TextBlockWithIconMode.IconTextFirstWithText : TextBlockWithIconMode.IconFirstWithText,
+                    DatesPeriodes = datesPeriodes,
+                    ShowWeekPeriode = true,
+                    ShowTitle = true
+                };
+
+
+                PART_ChartTimeActivityLabelsY.MinValue = 0;
+                PART_ChartTimeActivity.Series = activityForGameSeries;
+                PART_ChartTimeActivityLabelsX.Labels = labels;
             }
             catch (Exception ex)
             {
