@@ -124,6 +124,8 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivityAvgFps">متوسط FPS</sys:String>
     <sys:String x:Key="LOCGameActivityAvgCpuT">Avg CPU T</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpuT">Avg GPU T</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgCpuP">Avg CPU P</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgGpuP">Avg GPU P</sys:String>
 
     <sys:String x:Key="LOCGameActivityPCName">اسم الكمبيوتر</sys:String>
 
