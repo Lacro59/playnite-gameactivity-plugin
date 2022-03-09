@@ -124,6 +124,8 @@
     <sys:String x:Key="LOCGameActivityAvgFps">平均帧</sys:String>
     <sys:String x:Key="LOCGameActivityAvgCpuT">平均 CPU T</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpuT">平均 GPU T</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgCpuP">Avg CPU P</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgGpuP">Avg GPU P</sys:String>
 
     <sys:String x:Key="LOCGameActivityPCName">PC 名称</sys:String>
 
