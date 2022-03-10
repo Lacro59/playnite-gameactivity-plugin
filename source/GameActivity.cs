@@ -1051,10 +1051,10 @@ namespace GameActivity
             GameActivitiesLog = PluginDatabase.Get(args.Game);
             GameActivitiesLog.Items.Add(new Activity
             {
-                IdConfiguration = PluginDatabase.LocalSystem.GetIdConfiguration(),
+                IdConfiguration = PluginDatabase?.LocalSystem?.GetIdConfiguration() ?? -1,
                 GameActionName = args.SourceAction?.Name ?? resources.GetString("LOCGameActivityDefaultAction"), 
                 DateSession = DateSession,
-                SourceID = args.Game.SourceId == null ? default(Guid) : args.Game.SourceId,
+                SourceID = args.Game.SourceId == null ? default : args.Game.SourceId,
                 PlatformIDs = args.Game.PlatformIds ?? new List<Guid>()
             });
             GameActivitiesLog.ItemsDetails.Items.TryAdd(DateSession, new List<ActivityDetailsData>());

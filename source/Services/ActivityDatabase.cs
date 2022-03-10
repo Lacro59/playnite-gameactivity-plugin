@@ -16,7 +16,18 @@ namespace GameActivity.Services
 {
     public class ActivityDatabase : PluginDatabaseObject<GameActivitySettingsViewModel, GameActivitiesCollection, GameActivities, Activity>
     {
-        public LocalSystem LocalSystem;
+        private LocalSystem _LocalSystem;
+        public LocalSystem LocalSystem
+        {
+            get
+            {
+                if (_LocalSystem == null)
+                {
+                    _LocalSystem = new LocalSystem(Path.Combine(Paths.PluginUserDataPath, $"Configurations.json"), false);
+                }
+                return _LocalSystem;
+            }
+        }
 
 
         public ActivityDatabase(IPlayniteAPI PlayniteApi, GameActivitySettingsViewModel PluginSettings, string PluginUserDataPath) : base(PlayniteApi, PluginSettings, "GameActivity", PluginUserDataPath)
@@ -34,8 +45,6 @@ namespace GameActivity.Services
 
                 Database = new GameActivitiesCollection(Paths.PluginDatabasePath);
                 Database.SetGameInfoDetails<Activity, ActivityDetails>(PlayniteApi);
-
-                LocalSystem = new LocalSystem(Path.Combine(Paths.PluginUserDataPath, $"Configurations.json"), false);
 
                 stopWatch.Stop();
                 TimeSpan ts = stopWatch.Elapsed;
