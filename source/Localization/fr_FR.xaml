@@ -124,8 +124,8 @@ Cliquez pour plus d'informations.</sys:String>
     <sys:String x:Key="LOCGameActivityAvgFps">FPS moyen</sys:String>
     <sys:String x:Key="LOCGameActivityAvgCpuT">CPU moyen T</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpuT">GPU moyen T</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgCpuP">Avg CPU P</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgGpuP">Avg GPU P</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgCpuP">CPU moyen P</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgGpuP">CPU moyen P</sys:String>
 
     <sys:String x:Key="LOCGameActivityPCName">Nom du PC</sys:String>
 
