@@ -1036,40 +1036,53 @@ namespace GameActivity
         // Add code to be executed when game is started running.
         public override void OnGameStarted(OnGameStartedEventArgs args)
         {
-            PlaytimeOnStarted = args.Game.Playtime;
-
-            DataBackup_start();
-
-            // start timer si log is enable.
-            if (PluginSettings.Settings.EnableLogging)
+            try
             {
-                DataLogging_start();
+                PlaytimeOnStarted = args.Game.Playtime;
+
+                DataBackup_start();
+
+                // start timer si log is enable.
+                if (PluginSettings.Settings.EnableLogging)
+                {
+                    DataLogging_start();
+                }
+
+                DateTime DateSession = DateTime.Now.ToUniversalTime();
+
+                GameActivitiesLog = PluginDatabase.Get(args.Game);
+                GameActivitiesLog.Items.Add(new Activity
+                {
+                    IdConfiguration = PluginDatabase?.LocalSystem?.GetIdConfiguration() ?? -1,
+                    GameActionName = args.SourceAction?.Name ?? resources.GetString("LOCGameActivityDefaultAction"),
+                    DateSession = DateSession,
+                    SourceID = args.Game.SourceId == null ? default : args.Game.SourceId,
+                    PlatformIDs = args.Game.PlatformIds ?? new List<Guid>()
+                });
+                GameActivitiesLog.ItemsDetails.Items.TryAdd(DateSession, new List<ActivityDetailsData>());
+
+
+                activityBackup = new ActivityBackup();
+                activityBackup.Id = GameActivitiesLog.Id;
+                activityBackup.Name = GameActivitiesLog.Name;
+                activityBackup.ElapsedSeconds = 0;
+                activityBackup.GameActionName = args.SourceAction?.Name ?? resources.GetString("LOCGameActivityDefaultAction");
+                activityBackup.IdConfiguration = PluginDatabase?.LocalSystem?.GetIdConfiguration() ?? -1;
+                activityBackup.DateSession = DateSession;
+                activityBackup.SourceID = args.Game.SourceId == null ? default : args.Game.SourceId;
+                activityBackup.PlatformIDs = args.Game.PlatformIds ?? new List<Guid>();
+                activityBackup.ItemsDetailsDatas = new List<ActivityDetailsData>();
             }
-
-            DateTime DateSession = DateTime.Now.ToUniversalTime();
-
-            GameActivitiesLog = PluginDatabase.Get(args.Game);
-            GameActivitiesLog.Items.Add(new Activity
+            catch (Exception ex)
             {
-                IdConfiguration = PluginDatabase?.LocalSystem?.GetIdConfiguration() ?? -1,
-                GameActionName = args.SourceAction?.Name ?? resources.GetString("LOCGameActivityDefaultAction"), 
-                DateSession = DateSession,
-                SourceID = args.Game.SourceId == null ? default : args.Game.SourceId,
-                PlatformIDs = args.Game.PlatformIds ?? new List<Guid>()
-            });
-            GameActivitiesLog.ItemsDetails.Items.TryAdd(DateSession, new List<ActivityDetailsData>());
+                Common.LogError(ex, false, true, PluginDatabase.PluginName);
 
-
-            activityBackup = new ActivityBackup();
-            activityBackup.Id = GameActivitiesLog.Id;
-            activityBackup.Name = GameActivitiesLog.Name;
-            activityBackup.ElapsedSeconds = 0;
-            activityBackup.GameActionName = args.SourceAction?.Name ?? resources.GetString("LOCGameActivityDefaultAction");
-            activityBackup.IdConfiguration = PluginDatabase.LocalSystem.GetIdConfiguration();
-            activityBackup.DateSession = DateSession;
-            activityBackup.SourceID = args.Game.SourceId == null ? default(Guid) : args.Game.SourceId;
-            activityBackup.PlatformIDs = args.Game.PlatformIds ?? new List<Guid>();
-            activityBackup.ItemsDetailsDatas = new List<ActivityDetailsData>();
+                DataBackup_stop();
+                if (PluginSettings.Settings.EnableLogging)
+                {
+                    DataLogging_stop();
+                }
+            }
         }
 
         // Add code to be executed when game is preparing to be started.
