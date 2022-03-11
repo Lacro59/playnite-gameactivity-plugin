@@ -21,11 +21,13 @@ namespace GameActivity.Views
         private ViewDataContext ViewDataContext = new ViewDataContext();
         private ActivityBackup activityBackup;
 
+        private Guid Id { get; set; }
 
         public GameActivityBackup(ActivityBackup activityBackup)
         {
             this.activityBackup = activityBackup;
             Game game = PluginDatabase.PlayniteApi.Database.Games.Get(activityBackup.Id);
+            this.Id = game.Id;
 
             InitializeComponent();
             this.DataContext = ViewDataContext;
@@ -71,7 +73,7 @@ namespace GameActivity.Views
                 PluginDatabase.Update(pluginData);
 
 
-                string PathFileBackup = Path.Combine(PluginDatabase.Paths.PluginUserDataPath, "SaveSession.json");
+                string PathFileBackup = Path.Combine(PluginDatabase.Paths.PluginUserDataPath, $"SaveSession_{this.Id}.json");
                 FileSystem.DeleteFile(PathFileBackup);
             }
             catch (Exception ex)
@@ -86,7 +88,7 @@ namespace GameActivity.Views
         {
             try
             {
-                string PathFileBackup = Path.Combine(PluginDatabase.Paths.PluginUserDataPath, "SaveSession.json");
+                string PathFileBackup = Path.Combine(PluginDatabase.Paths.PluginUserDataPath, $"SaveSession_{this.Id}.json");
                 FileSystem.DeleteFile(PathFileBackup);
             }
             catch (Exception ex)

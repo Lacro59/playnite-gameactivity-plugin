@@ -625,7 +625,7 @@ namespace GameActivity
                 runningActivity.activityBackup.ElapsedSeconds = ElapsedSeconds;
                 runningActivity.activityBackup.ItemsDetailsDatas = runningActivity.GameActivitiesLog.ItemsDetails.Get(runningActivity.activityBackup.DateSession);
 
-                string PathFileBackup = Path.Combine(PluginDatabase.Paths.PluginUserDataPath, "SaveSession.json");
+                string PathFileBackup = Path.Combine(PluginDatabase.Paths.PluginUserDataPath, $"SaveSession_{Id}.json");
                 FileSystem.WriteStringToFileSafe(PathFileBackup, Serialization.ToJson(runningActivity.activityBackup));
             }
             catch (Exception ex)
@@ -1153,7 +1153,7 @@ namespace GameActivity
             });
 
             // Delete backup
-            string PathFileBackup = Path.Combine(PluginDatabase.Paths.PluginUserDataPath, "SaveSession.json");
+            string PathFileBackup = Path.Combine(PluginDatabase.Paths.PluginUserDataPath, $"SaveSession_{args.Game.Id}.json");
             FileSystem.DeleteFile(PathFileBackup);
         }
 
@@ -1253,32 +1253,34 @@ namespace GameActivity
             // Check backup
             try
             {
-                string PathFileBackup = Path.Combine(PluginDatabase.Paths.PluginUserDataPath, "SaveSession.json");
-                if (File.Exists(PathFileBackup))
+                Parallel.ForEach(Directory.EnumerateFiles(PluginDatabase.Paths.PluginUserDataPath, "SaveSession_*.json"), (objectFile) =>
                 {
-                    Serialization.TryFromJsonFile<ActivityBackup>(PathFileBackup, out ActivityBackup backupData);
+                    Serialization.TryFromJsonFile<ActivityBackup>(objectFile, out ActivityBackup backupData);
                     if (backupData != null)
                     {
-                        PlayniteApi.Notifications.Add(new NotificationMessage(
-                            $"{PluginDatabase.PluginName}-backup",
-                            PluginDatabase.PluginName + System.Environment.NewLine + string.Format(resources.GetString("LOCGaBackupExist"), backupData.Name),
-                            NotificationType.Info,
-                            () =>
-                            {
-                                WindowOptions windowOptions = new WindowOptions
+                        Application.Current.Dispatcher.BeginInvoke((Action)delegate
+                        {
+                            PlayniteApi.Notifications.Add(new NotificationMessage(
+                                $"{PluginDatabase.PluginName}-backup-{Path.GetFileNameWithoutExtension(objectFile)}",
+                                PluginDatabase.PluginName + System.Environment.NewLine + string.Format(resources.GetString("LOCGaBackupExist"), backupData.Name),
+                                NotificationType.Info,
+                                () =>
                                 {
-                                    ShowMinimizeButton = false,
-                                    ShowMaximizeButton = false,
-                                    ShowCloseButton = true,
-                                };
+                                    WindowOptions windowOptions = new WindowOptions
+                                    {
+                                        ShowMinimizeButton = false,
+                                        ShowMaximizeButton = false,
+                                        ShowCloseButton = true,
+                                    };
 
-                                GameActivityBackup ViewExtension = new GameActivityBackup(backupData);
-                                Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGaBackupDataInfo"), ViewExtension, windowOptions);
-                                windowExtension.ShowDialog();
-                            }
-                        ));
+                                    GameActivityBackup ViewExtension = new GameActivityBackup(backupData);
+                                    Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGaBackupDataInfo"), ViewExtension, windowOptions);
+                                    windowExtension.ShowDialog();
+                                }
+                            ));
+                        });
                     }
-                }
+                });
             }
             catch (Exception ex)
             {
