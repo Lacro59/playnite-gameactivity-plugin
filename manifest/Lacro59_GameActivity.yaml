@@ -132,3 +132,17 @@ Packages:
       - Added a Gantt view style
       - Fixed minors bugs
       - Fixed crash
+  - Version: 2.7
+    RequiredApiVersion: 6.2.2
+    ReleaseDate: 2022-03-11
+    PackageUrl: https://github.com/Lacro59/playnite-gameactivity-plugin/releases/download/v2.7/playnite-gameactivity-plugin_2_7.pext
+    Changelog:
+      - Improved performances
+      - Added support for multiple game running
+      - Added PSU data for CPU & GPU from MIS Afterburner
+      - Added new options for the chart in game data view
+      - Added temporary workaround for Playstate time (thanks to BanCrash)
+      - UI tweaks
+      - Updated localizations
+      - Fixed minors bugs
+      - Fixed crash
