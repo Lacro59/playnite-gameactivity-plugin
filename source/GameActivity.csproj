@@ -145,6 +145,7 @@
     <Compile Include="Models\GameActivitiesCollection.cs" />
     <Compile Include="Models\ListActivities.cs" />
     <Compile Include="Models\QuickSearchItemSource.cs" />
+    <Compile Include="Models\RunningActivity.cs" />
     <Compile Include="Models\StoreColor.cs" />
     <Compile Include="Models\WarningData.cs" />
     <Compile Include="playnite-plugincommon\CommonPluginsControls\Controls\ComboBoxRemovable.xaml.cs">

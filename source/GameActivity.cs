@@ -37,15 +37,16 @@ namespace GameActivity
         internal TopPanelItem topPanelItem;
         internal GameActivityViewSidebar gameActivityViewSidebar;
 
-        // Variables timer functions
-        public System.Timers.Timer t { get; set; }
-        private GameActivities GameActivitiesLog;
-        public List<WarningData> WarningsMessage { get; set; } = new List<WarningData>();
-
-        public System.Timers.Timer tBackup { get; set; }
-        private ActivityBackup activityBackup { get; set; }
-
-        private ulong PlaytimeOnStarted { get; set; }
+        //// Variables timer functions
+        //public System.Timers.Timer t { get; set; }
+        //private GameActivities GameActivitiesLog;
+        //public List<WarningData> WarningsMessage { get; set; } = new List<WarningData>();
+        //
+        //public System.Timers.Timer tBackup { get; set; }
+        //private ActivityBackup activityBackup { get; set; }
+        //
+        //private ulong PlaytimeOnStarted { get; set; }
+        private List<RunningActivity> runningActivities = new List<RunningActivity>();
 
         //private OldToNew oldToNew;
 
@@ -281,45 +282,45 @@ namespace GameActivity
         /// <summary>
         /// Start the timer.
         /// </summary>
-        public void DataLogging_start()
+        public void DataLogging_start(Guid Id)
         {
-            logger.Info("DataLogging_start");
+            logger.Info($"DataLogging_start - {Id}");
+            
+            RunningActivity runningActivity = runningActivities.Find(x => x.Id == Id);
 
-            WarningsMessage = new List<WarningData>();
-            t = new System.Timers.Timer(PluginSettings.Settings.TimeIntervalLogging * 60000);
-            t.AutoReset = true;
-            t.Elapsed += new ElapsedEventHandler(OnTimedEvent);
-            t.Start();
+            runningActivity.timer = new System.Timers.Timer(PluginSettings.Settings.TimeIntervalLogging * 60000);
+            runningActivity.timer.AutoReset = true;
+            runningActivity.timer.Elapsed += (sender, e) => OnTimedEvent(sender, e, Id);
+            runningActivity.timer.Start();
         }
 
         /// <summary>
         /// Stop the timer.
         /// </summary>
-        public void DataLogging_stop()
+        public void DataLogging_stop(Guid Id)
         {
-            logger.Info("DataLogging_stop");
+            logger.Info($"DataLogging_stop - {Id}");
 
-            if (WarningsMessage.Count != 0 && PlayniteApi.ApplicationInfo.Mode == ApplicationMode.Desktop)
+            RunningActivity runningActivity = runningActivities.Find(x => x.Id == Id);
+            if (runningActivity.WarningsMessage.Count != 0 && PlayniteApi.ApplicationInfo.Mode == ApplicationMode.Desktop)
             {
                 try
                 {
                     Application.Current.Dispatcher.BeginInvoke((Action)delegate
                     {
-                        var ViewExtension = new WarningsDialogs(WarningsMessage);
+                        var ViewExtension = new WarningsDialogs(runningActivity.WarningsMessage);
                         Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGameActivityWarningCaption"), ViewExtension);
                         windowExtension.ShowDialog();
-
-                        WarningsMessage = new List<WarningData>();
                     });
                 }
                 catch (Exception ex)
                 {
-                    Common.LogError(ex, false, $"Error on show WarningsMessage", true, PluginDatabase.PluginName);
+                    Common.LogError(ex, false, $"Error on show WarningsMessage - {Id}", true, PluginDatabase.PluginName);
                 }
             }
 
-            t.AutoReset = false;
-            t.Stop();
+            runningActivity.timer.AutoReset = false;
+            runningActivity.timer.Stop();
         }
 
         /// <summary>
@@ -327,7 +328,7 @@ namespace GameActivity
         /// </summary>
         /// <param name="source"></param>
         /// <param name="e"></param>
-        private async void OnTimedEvent(Object source, ElapsedEventArgs e)
+        private async void OnTimedEvent(Object source, ElapsedEventArgs e, Guid Id)
         {
             int fpsValue = 0;
             int cpuValue = PerfCounter.GetCpuPercentage();
@@ -526,6 +527,12 @@ namespace GameActivity
             }
 
 
+            RunningActivity runningActivity = runningActivities.Find(x => x.Id == Id);
+            if (runningActivity == null)
+            {
+                return;
+            }
+
             // Listing warnings
             bool WarningMinFps = false;
             bool WarningMaxCpuTemp = false;
@@ -574,12 +581,12 @@ namespace GameActivity
 
                 if (WarningMinFps || WarningMaxCpuTemp || WarningMaxGpuTemp || WarningMaxCpuUsage || WarningMaxGpuUsage)
                 {
-                    WarningsMessage.Add(Message);
+                    runningActivity.WarningsMessage.Add(Message);
                 }
             }
 
 
-            List<ActivityDetailsData> ActivitiesDetailsData = GameActivitiesLog.ItemsDetails.Get(GameActivitiesLog.GetLastSession());
+            List<ActivityDetailsData> ActivitiesDetailsData = runningActivity.GameActivitiesLog.ItemsDetails.Get(runningActivity.GameActivitiesLog.GetLastSession());
             ActivityDetailsData activityDetailsData = new ActivityDetailsData
             {
                 Datelog = DateTime.Now.ToUniversalTime(),
@@ -599,30 +606,36 @@ namespace GameActivity
 
 
         #region Backup functions
-        public void DataBackup_start()
+        public void DataBackup_start(Guid Id)
         {
-            tBackup = new System.Timers.Timer(60000);
-            tBackup.AutoReset = true;
-            tBackup.Elapsed += new ElapsedEventHandler(OnTimedBackupEvent);
-            tBackup.Start();            
+            RunningActivity runningActivity = runningActivities.Find(x => x.Id == Id);
+
+            runningActivity.timerBackup = new System.Timers.Timer(60000);
+            runningActivity.timerBackup.AutoReset = true;
+            runningActivity.timerBackup.Elapsed += (sender, e) => OnTimedBackupEvent(sender, e, Id);
+            runningActivity.timerBackup.Start();            
         }
 
-        public void DataBackup_stop()
+        public void DataBackup_stop(Guid Id)
         {
-            tBackup.AutoReset = false;
-            tBackup.Stop();
+            RunningActivity runningActivity = runningActivities.Find(x => x.Id == Id);
+
+            runningActivity.timerBackup.AutoReset = false;
+            runningActivity.timerBackup.Stop();
         }
 
-        private async void OnTimedBackupEvent(object source, ElapsedEventArgs e)
+        private async void OnTimedBackupEvent(object source, ElapsedEventArgs e, Guid Id)
         {
             try
             {
-                ulong ElapsedSeconds = (ulong)(DateTime.Now.ToUniversalTime() - (DateTime)activityBackup.DateSession).TotalSeconds;
-                activityBackup.ElapsedSeconds = ElapsedSeconds;
-                activityBackup.ItemsDetailsDatas = GameActivitiesLog.ItemsDetails.Get((DateTime)activityBackup.DateSession);
+                RunningActivity runningActivity = runningActivities.Find(x => x.Id == Id);
+
+                ulong ElapsedSeconds = (ulong)(DateTime.Now.ToUniversalTime() - runningActivity.activityBackup.DateSession).TotalSeconds;
+                runningActivity.activityBackup.ElapsedSeconds = ElapsedSeconds;
+                runningActivity.activityBackup.ItemsDetailsDatas = runningActivity.GameActivitiesLog.ItemsDetails.Get(runningActivity.activityBackup.DateSession);
 
                 string PathFileBackup = Path.Combine(PluginDatabase.Paths.PluginUserDataPath, "SaveSession.json");
-                FileSystem.WriteStringToFileSafe(PathFileBackup, Serialization.ToJson(activityBackup));
+                FileSystem.WriteStringToFileSafe(PathFileBackup, Serialization.ToJson(runningActivity.activityBackup));
             }
             catch (Exception ex)
             {
@@ -1038,20 +1051,24 @@ namespace GameActivity
         {
             try
             {
-                PlaytimeOnStarted = args.Game.Playtime;
+                RunningActivity runningActivity = new RunningActivity();
+                runningActivity.Id = args.Game.Id;
+                runningActivity.PlaytimeOnStarted = args.Game.Playtime;
 
-                DataBackup_start();
+                runningActivities.Add(runningActivity);
+
+                DataBackup_start(args.Game.Id);
 
                 // start timer si log is enable.
                 if (PluginSettings.Settings.EnableLogging)
                 {
-                    DataLogging_start();
+                    DataLogging_start(args.Game.Id);
                 }
 
                 DateTime DateSession = DateTime.Now.ToUniversalTime();
 
-                GameActivitiesLog = PluginDatabase.Get(args.Game);
-                GameActivitiesLog.Items.Add(new Activity
+                runningActivity.GameActivitiesLog = PluginDatabase.Get(args.Game);
+                runningActivity.GameActivitiesLog.Items.Add(new Activity
                 {
                     IdConfiguration = PluginDatabase?.LocalSystem?.GetIdConfiguration() ?? -1,
                     GameActionName = args.SourceAction?.Name ?? resources.GetString("LOCGameActivityDefaultAction"),
@@ -1059,28 +1076,28 @@ namespace GameActivity
                     SourceID = args.Game.SourceId == null ? default : args.Game.SourceId,
                     PlatformIDs = args.Game.PlatformIds ?? new List<Guid>()
                 });
-                GameActivitiesLog.ItemsDetails.Items.TryAdd(DateSession, new List<ActivityDetailsData>());
+                runningActivity.GameActivitiesLog.ItemsDetails.Items.TryAdd(DateSession, new List<ActivityDetailsData>());
 
 
-                activityBackup = new ActivityBackup();
-                activityBackup.Id = GameActivitiesLog.Id;
-                activityBackup.Name = GameActivitiesLog.Name;
-                activityBackup.ElapsedSeconds = 0;
-                activityBackup.GameActionName = args.SourceAction?.Name ?? resources.GetString("LOCGameActivityDefaultAction");
-                activityBackup.IdConfiguration = PluginDatabase?.LocalSystem?.GetIdConfiguration() ?? -1;
-                activityBackup.DateSession = DateSession;
-                activityBackup.SourceID = args.Game.SourceId == null ? default : args.Game.SourceId;
-                activityBackup.PlatformIDs = args.Game.PlatformIds ?? new List<Guid>();
-                activityBackup.ItemsDetailsDatas = new List<ActivityDetailsData>();
+                runningActivity.activityBackup = new ActivityBackup();
+                runningActivity.activityBackup.Id = runningActivity.GameActivitiesLog.Id;
+                runningActivity.activityBackup.Name = runningActivity.GameActivitiesLog.Name;
+                runningActivity.activityBackup.ElapsedSeconds = 0;
+                runningActivity.activityBackup.GameActionName = args.SourceAction?.Name ?? resources.GetString("LOCGameActivityDefaultAction");
+                runningActivity.activityBackup.IdConfiguration = PluginDatabase?.LocalSystem?.GetIdConfiguration() ?? -1;
+                runningActivity.activityBackup.DateSession = DateSession;
+                runningActivity.activityBackup.SourceID = args.Game.SourceId == null ? default : args.Game.SourceId;
+                runningActivity.activityBackup.PlatformIDs = args.Game.PlatformIds ?? new List<Guid>();
+                runningActivity.activityBackup.ItemsDetailsDatas = new List<ActivityDetailsData>();
             }
             catch (Exception ex)
             {
                 Common.LogError(ex, false, true, PluginDatabase.PluginName);
 
-                DataBackup_stop();
+                DataBackup_stop(args.Game.Id);
                 if (PluginSettings.Settings.EnableLogging)
                 {
-                    DataLogging_stop();
+                    DataLogging_stop(args.Game.Id);
                 }
             }
         }
@@ -1092,12 +1109,13 @@ namespace GameActivity
             {
                 try
                 {
-                    DataBackup_stop();
+                    RunningActivity runningActivity = runningActivities.Find(x => x.Id == args.Game.Id);
+                    DataBackup_stop(args.Game.Id);
 
                     // Stop timer si HWiNFO log is enable.
                     if (PluginSettings.Settings.EnableLogging)
                     {
-                        DataLogging_stop();
+                        DataLogging_stop(args.Game.Id);
                     }
 
                     ulong ElapsedSeconds = args.ElapsedSeconds;
@@ -1106,11 +1124,11 @@ namespace GameActivity
                         Thread.Sleep(5000);
                         if (ExistsPlayStateInfoFile()) // Temporary workaround for PlayState paused time until Playnite allows to share data among extensions
                         {
-                            ElapsedSeconds = args.Game.Playtime - PlaytimeOnStarted - GetPlayStatePausedTimeInfo(args.Game);
+                            ElapsedSeconds = args.Game.Playtime - runningActivity.PlaytimeOnStarted - GetPlayStatePausedTimeInfo(args.Game);
                         }
                         else
                         {
-                            ElapsedSeconds = args.Game.Playtime - PlaytimeOnStarted;
+                            ElapsedSeconds = args.Game.Playtime - runningActivity.PlaytimeOnStarted;
                         }
 
                         PlayniteApi.Notifications.Add(new NotificationMessage(
@@ -1126,14 +1144,17 @@ namespace GameActivity
                     }
 
                     // Infos
-                    GameActivitiesLog.GetLastSessionActivity(false).ElapsedSeconds = ElapsedSeconds;
-                    Common.LogDebug(true, Serialization.ToJson(GameActivitiesLog));
-                    PluginDatabase.Update(GameActivitiesLog);
+                    runningActivity.GameActivitiesLog.GetLastSessionActivity(false).ElapsedSeconds = ElapsedSeconds;
+                    Common.LogDebug(true, Serialization.ToJson(runningActivity.GameActivitiesLog));
+                    PluginDatabase.Update(runningActivity.GameActivitiesLog);
 
                     if (args.Game.Id == PluginDatabase.GameContext.Id)
                     {
                         PluginDatabase.SetThemesResources(PluginDatabase.GameContext);
                     }
+
+                    // Delete running data
+                    runningActivities.Remove(runningActivity);
                 }
                 catch (Exception ex)
                 {
@@ -1145,6 +1166,7 @@ namespace GameActivity
             string PathFileBackup = Path.Combine(PluginDatabase.Paths.PluginUserDataPath, "SaveSession.json");
             FileSystem.DeleteFile(PathFileBackup);
         }
+
 
         private bool ExistsPlayStateInfoFile() // Temporary workaround for PlayState paused time until Playnite allows to share data among extensions
         {
