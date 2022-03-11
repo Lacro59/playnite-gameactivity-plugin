@@ -37,15 +37,6 @@ namespace GameActivity
         internal TopPanelItem topPanelItem;
         internal GameActivityViewSidebar gameActivityViewSidebar;
 
-        //// Variables timer functions
-        //public System.Timers.Timer t { get; set; }
-        //private GameActivities GameActivitiesLog;
-        //public List<WarningData> WarningsMessage { get; set; } = new List<WarningData>();
-        //
-        //public System.Timers.Timer tBackup { get; set; }
-        //private ActivityBackup activityBackup { get; set; }
-        //
-        //private ulong PlaytimeOnStarted { get; set; }
         private List<RunningActivity> runningActivities = new List<RunningActivity>();
 
         //private OldToNew oldToNew;
@@ -645,7 +636,6 @@ namespace GameActivity
         #endregion
 
         #endregion
-
 
 
         #region Theme integration
@@ -1303,13 +1293,11 @@ namespace GameActivity
         }
         #endregion
 
-
         // Add code to be executed when library is updated.
         public override void OnLibraryUpdated(OnLibraryUpdatedEventArgs args)
         {
             
         }
-
 
         #region Settings
         public override ISettings GetSettings(bool firstRunSettings)
