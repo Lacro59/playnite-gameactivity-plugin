@@ -1129,7 +1129,7 @@ namespace GameActivity
                     }
                     else if (ExistsPlayStateInfoFile()) // Temporary workaround for PlayState paused time until Playnite allows to share data among extensions
                     {
-                        Thread.Sleep(5000); // Necessary since PlayState is executed after GameActivity.
+                        Thread.Sleep(10000); // Necessary since PlayState is executed after GameActivity.
                         ElapsedSeconds -= GetPlayStatePausedTimeInfo(args.Game);
                     }
 
@@ -1187,7 +1187,7 @@ namespace GameActivity
             // The file is a simple txt, first line is GameId and second line the paused time.
             string[] PlayStateInfo = File.ReadAllLines(PlayStateFile);
             string Id = PlayStateInfo[0];
-            ulong PausedSeconds = Convert.ToUInt64(PlayStateInfo[1]);
+            ulong PausedSeconds = ulong.TryParse(PlayStateInfo[1], out ulong number) ? number : 0;
 
             // After retrieving the info restart the file in order to avoid reusing the same txt if PlayState crash / gets uninstalled.
             string[] Info = { " ", " " };
