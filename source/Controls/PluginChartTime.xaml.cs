@@ -521,7 +521,7 @@ namespace GameActivity.Controls
                     datesPeriodes.Add(new WeekStartEnd
                     {
                         Monday = First,
-                        Sunday = Last
+                        Sunday = Last.AddHours(23).AddMinutes(59).AddSeconds(59)
                     });
 
                     CustomerForTime customerForTime = new CustomerForTime
@@ -535,7 +535,7 @@ namespace GameActivity.Controls
 
                 Activities.ForEach(x =>
                 {
-                    int idx = datesPeriodes.FindIndex(y => y.Monday <= (DateTime)x.DateSession && y.Sunday >= (DateTime)x.DateSession);
+                    int idx = datesPeriodes.FindIndex(y => y.Monday <= ((DateTime)x.DateSession).ToLocalTime() && y.Sunday >= ((DateTime)x.DateSession).ToLocalTime());
                     if (idx > -1)
                     {
                         seriesData[idx].Values += (long)x.ElapsedSeconds;
