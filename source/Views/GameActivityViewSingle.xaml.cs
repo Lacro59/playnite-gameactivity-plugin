@@ -332,20 +332,23 @@ namespace GameActivity.Views
         #region Data actions
         private void PART_Delete_Click(object sender, RoutedEventArgs e)
         {
-            var result = PluginDatabase.PlayniteApi.Dialogs.ShowMessage(ResourceProvider.GetString("LOCConfirumationAskGeneric"), PluginDatabase.PluginName, MessageBoxButton.YesNo);
-
+            MessageBoxResult result = PluginDatabase.PlayniteApi.Dialogs.ShowMessage(ResourceProvider.GetString("LOCConfirumationAskGeneric"), PluginDatabase.PluginName, MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
                 try
                 {
-                    var GameLastActivity = ((FrameworkElement)sender).Tag;
-                    var activity = ((ObservableCollection<ListActivities>)lvSessions.ItemsSource).Where(x => x.GameLastActivity == (DateTime)GameLastActivity).FirstOrDefault();
+                    object GameLastActivity = ((FrameworkElement)sender).Tag;
+                    ListActivities activity = ((ObservableCollection<ListActivities>)lvSessions.ItemsSource).Where(x => x.GameLastActivity == (DateTime)GameLastActivity).FirstOrDefault();
 
                     if (activity.GameElapsedSeconds != 0)
                     {
                         if ((long)(game.Playtime - activity.GameElapsedSeconds) >= 0)
                         {
                             game.Playtime -= activity.GameElapsedSeconds;
+                            if (game.PlayCount > 1)
+                            {
+                                game.PlayCount--;
+                            }
                         }
                         else
                         {
@@ -370,7 +373,7 @@ namespace GameActivity.Views
 
         private void PART_BtAdd_Click(object sender, RoutedEventArgs e)
         {
-            var windowOptions = new WindowOptions
+            WindowOptions windowOptions = new WindowOptions
             {
                 ShowMinimizeButton = false,
                 ShowMaximizeButton = false,
@@ -379,7 +382,7 @@ namespace GameActivity.Views
 
             try
             {
-                var ViewExtension = new GameActivityAddTime(game, null);
+                GameActivityAddTime ViewExtension = new GameActivityAddTime(game, null);
                 Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PluginDatabase.PlayniteApi, resources.GetString("LOCGaAddNewGameSession"), ViewExtension, windowOptions);
                 windowExtension.ShowDialog();
 
@@ -391,6 +394,7 @@ namespace GameActivity.Views
                     if (ViewExtension.activity.ElapsedSeconds >= 0)
                     {
                         game.Playtime += ViewExtension.activity.ElapsedSeconds;
+                        game.PlayCount++;
                     }
 
                     PluginDatabase.PlayniteApi.Database.Games.Update(game);
@@ -407,19 +411,19 @@ namespace GameActivity.Views
         {
             try
             {
-                var GameLastActivity = ((FrameworkElement)sender).Tag;
+                object GameLastActivity = ((FrameworkElement)sender).Tag;
                 int index = gameActivities.Items.FindIndex(x => x.DateSession == ((DateTime)GameLastActivity).ToUniversalTime());
                 Activity activity = gameActivities.Items[index];
                 ulong ElapsedSeconds = activity.ElapsedSeconds;
 
-                var windowOptions = new WindowOptions
+                WindowOptions windowOptions = new WindowOptions
                 {
                     ShowMinimizeButton = false,
                     ShowMaximizeButton = false,
                     ShowCloseButton = true
                 };
 
-                var ViewExtension = new GameActivityAddTime(game, activity);
+                GameActivityAddTime ViewExtension = new GameActivityAddTime(game, activity);
                 Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PluginDatabase.PlayniteApi, resources.GetString("LOCGaAddNewGameSession"), ViewExtension, windowOptions);
                 windowExtension.ShowDialog();
 
@@ -447,19 +451,22 @@ namespace GameActivity.Views
         {
             try
             {
-                var windowOptions = new WindowOptions
+                WindowOptions windowOptions = new WindowOptions
                 {
                     ShowMinimizeButton = false,
                     ShowMaximizeButton = false,
                     ShowCloseButton = true
                 };
 
-                var ViewExtension = new GameActivityMergeTime(game);
+                GameActivityMergeTime ViewExtension = new GameActivityMergeTime(game);
                 Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PluginDatabase.PlayniteApi, resources.GetString("LOCGaMergeSession"), ViewExtension, windowOptions);
                 windowExtension.ShowDialog();
 
                 gameActivities = PluginDatabase.Get(game);
                 getActivityByListGame(gameActivities);
+
+                game.PlayCount--;
+                PluginDatabase.PlayniteApi.Database.Games.Update(game);
             }
             catch (Exception ex)
             {
