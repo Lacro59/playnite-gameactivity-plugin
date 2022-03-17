@@ -1112,7 +1112,7 @@ namespace GameActivity
                     if (ElapsedSeconds == 0)
                     {
                         Thread.Sleep(5000);
-                        if (ExistsPlayStateInfoFile()) // Temporary workaround for PlayState paused time until Playnite allows to share data among extensions
+                        if (ExistsPlayStateInfoFile() && PluginSettings.Settings.SubstPlayStateTime) // Temporary workaround for PlayState paused time until Playnite allows to share data among extensions
                         {
                             ElapsedSeconds = args.Game.Playtime - runningActivity.PlaytimeOnStarted - GetPlayStatePausedTimeInfo(args.Game);
                         }
@@ -1127,7 +1127,7 @@ namespace GameActivity
                             NotificationType.Info
                         ));
                     }
-                    else if (ExistsPlayStateInfoFile()) // Temporary workaround for PlayState paused time until Playnite allows to share data among extensions
+                    else if (ExistsPlayStateInfoFile() && PluginSettings.Settings.SubstPlayStateTime) // Temporary workaround for PlayState paused time until Playnite allows to share data among extensions
                     {
                         Thread.Sleep(10000); // Necessary since PlayState is executed after GameActivity.
                         ElapsedSeconds -= GetPlayStatePausedTimeInfo(args.Game);
