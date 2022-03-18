@@ -91,6 +91,8 @@ namespace GameActivity
         public bool CumulPlaytimeSession { get; set; } = false;
         public bool CumulPlaytimeStore { get; set; } = false;
 
+        public bool SubstPlayStateTime { get; set; } = false; // Temporary workaround for PlayState paused time until Playnite allows to share data among extensions
+
         public List<StoreColor> StoreColors { get; set; } = new List<StoreColor>();
 
         public bool EnableLogging { get; set; } = false;

@@ -345,7 +345,7 @@ namespace GameActivity.Views
                         if ((long)(game.Playtime - activity.GameElapsedSeconds) >= 0)
                         {
                             game.Playtime -= activity.GameElapsedSeconds;
-                            if (game.PlayCount > 1)
+                            if (game.PlayCount > 0)
                             {
                                 game.PlayCount--;
                             }

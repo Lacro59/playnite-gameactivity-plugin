@@ -51,6 +51,11 @@
                             <Label Content="{DynamicResource LOCGameActivityCumulPlaytimeStore}" />
                         </CheckBox>
 
+                        <!-- Temporary workaround for PlayState paused time until Playnite allows to share data among extensions -->
+                        <CheckBox IsChecked="{Binding Settings.SubstPlayStateTime}" Margin="0,15,0,0">
+                            <Label Content="{DynamicResource LOCGameActivitySubstPlayStateTime}" />
+                        </CheckBox>
+
                         <Label Margin="0,15,0,0" Content="{DynamicResource LOCGameActivityListGamesFields}" />
                         <Grid Margin="30,0,0,0">
                             <Grid.ColumnDefinitions>
