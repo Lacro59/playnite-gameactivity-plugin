@@ -124,8 +124,8 @@
     <sys:String x:Key="LOCGameActivityAvgFps">Сер. FPS</sys:String>
     <sys:String x:Key="LOCGameActivityAvgCpuT">Сер. т. CPU</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpuT">Сер. т. GPU</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgCpuP">Avg CPU P</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgGpuP">Avg GPU P</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgCpuP">Сер. п. CPU</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgGpuP">Сер. п. GPU</sys:String>
 
     <sys:String x:Key="LOCGameActivityPCName">Ім'я ПК</sys:String>
 
