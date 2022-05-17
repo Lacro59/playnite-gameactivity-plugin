@@ -11,19 +11,19 @@
     <sys:String x:Key="LOCGameActivityTitle">النشاط</sys:String>
     <sys:String x:Key="LOCGamesActivitiesTitle">نشاطات الألعا</sys:String>
     <sys:String x:Key="LOCGameActivitiesTitle">نشاطات اللعب</sys:String>
-    <sys:String x:Key="LOCGameActivityViewGamesActivities">View games activities</sys:String>
-    <sys:String x:Key="LOCGameActivityViewGameActivity">View game activity</sys:String>
+    <sys:String x:Key="LOCGameActivityViewGamesActivities">عرض أنشطة الألعاب</sys:String>
+    <sys:String x:Key="LOCGameActivityViewGameActivity">عرض أنشطة اللعبة</sys:String>
     
-    <sys:String x:Key="LOCGameActivityDefaultAction">Default action</sys:String>
+    <sys:String x:Key="LOCGameActivityDefaultAction">الاجراء الافتراضي</sys:String>
 
 
     <!-- GameActivityGanttView -->
 
-    <sys:String x:Key="LOCGameActivityGanttView">Gantt view</sys:String>
+    <sys:String x:Key="LOCGameActivityGanttView">عرض Gantt</sys:String>
     
-    <sys:String x:Key="LOCGameActivitySetNumberDay">Set number of days</sys:String>
+    <sys:String x:Key="LOCGameActivitySetNumberDay">تعيين عدد الأيام</sys:String>
     <sys:String x:Key="LOCGameActivityPeriod">الفتر</sys:String>
-    <sys:String x:Key="LOCGameActivitySetLastDate">Set the last date</sys:String>
+    <sys:String x:Key="LOCGameActivitySetLastDate">تعيين آخر تاريخ</sys:String>
     
     
     <!-- Backup -->
@@ -31,8 +31,8 @@
     <sys:String x:Key="LOCGaBackupExist" xml:space="preserve">There is backup data for {0}.
 Probably after a playnite crash.
 Click for more information.</sys:String>
-    <sys:String x:Key="LOCGaDateSession">Date session</sys:String>
-    <sys:String x:Key="LOCGaPlayTimeSession">Play time session</sys:String>
+    <sys:String x:Key="LOCGaDateSession">تاريخ الجلسة</sys:String>
+    <sys:String x:Key="LOCGaPlayTimeSession">مدة جلسة اللعب</sys:String>
     <sys:String x:Key="LOCGaBackupDataInfo">Backup data info</sys:String>
     
 
@@ -64,7 +64,7 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivityGpuTemp">GPU temperature</sys:String>
     <sys:String x:Key="LOCGameActivityCpuTemp">CPU temperature</sys:String>
 
-    <sys:String x:Key="LOCGameActivityActiveWarning">Enable warnings</sys:String>
+    <sys:String x:Key="LOCGameActivityActiveWarning">تمكين التحذيرات</sys:String>
     <sys:String x:Key="LOCGameActivityMinFps">Min FPS</sys:String>
     <sys:String x:Key="LOCGameActivityMaxCpuTemp">Max CPU temp</sys:String>
     <sys:String x:Key="LOCGameActivityMaxGpuTemp">Max GPU temp</sys:String>
@@ -88,7 +88,7 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivityUseControls">Use chart controls</sys:String>
     <sys:String x:Key="LOCGameActivitySelectChartSeriesToDisplay">Select the series to display on the chart</sys:String>
 
-    <sys:String x:Key="LOCGameActivityIconFrom">Select the icon origin</sys:String>
+    <sys:String x:Key="LOCGameActivityIconFrom">حدد أصل الأيقونة</sys:String>
     <sys:String x:Key="LOCGameActivityIconFromLibrary">استخدام الأيقونة المحددة في المكتب</sys:String>
     <sys:String x:Key="LOCGameActivityIconFromFont">Use the icon defined in the plugin's font</sys:String>
 
@@ -104,16 +104,16 @@ Click for more information.</sys:String>
     
     <!-- GameActivityView -->
 
-    <sys:String x:Key="LOCGameActivityTotalHours">Total hours</sys:String>
-    <sys:String x:Key="LOCGameActivityTotalHoursByWeeks">Total hours by week</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHours">مجموع الساعات</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByWeeks">إجمالي الساعات حسب الأسبوع</sys:String>
 
-    <sys:String x:Key="LOCGameActivityWeekLabel">Week</sys:String>
+    <sys:String x:Key="LOCGameActivityWeekLabel">اسبوع</sys:String>
 
-    <sys:String x:Key="LOCGameActivityTime">Time</sys:String>
-    <sys:String x:Key="LOCGameActivityLog">Log</sys:String>
+    <sys:String x:Key="LOCGameActivityTime">الوقت</sys:String>
+    <sys:String x:Key="LOCGameActivityLog">السجل</sys:String>
     <sys:String x:Key="LOCGameActivityTimeTitle">Total hours by day</sys:String>
-    <sys:String x:Key="LOCGameActivityLogTitle">Last session details</sys:String>
-    <sys:String x:Key="LOCGameActivityLogTitleDate">Session details for</sys:String>
+    <sys:String x:Key="LOCGameActivityLogTitle">تفاصيل الجلسة الأخيرة</sys:String>
+    <sys:String x:Key="LOCGameActivityLogTitleDate">تفاصيل الجلسة لـ</sys:String>
 
     <sys:String x:Key="LOCGameActivityLvGamesLastActivity">آخر جلسة تشغي</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">الوقت المنقض</sys:String>
@@ -144,12 +144,12 @@ Click for more information.</sys:String>
 
     <sys:String x:Key="LOCGaQuickSearchDescription">Search games on GameActivity data</sys:String>
     <sys:String x:Key="LOCGaQuickSearchByFPS">البحث بواسطة FPS</sys:String>
-    <sys:String x:Key="LOCGaQuickSearchByTime">Find by time session</sys:String>
-    <sys:String x:Key="LOCGaQuickSearchByDate">Find by date session</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchByTime">ابحث عن جلسة حسب الوقت</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchByDate">البحث حسب التاريخ الجلسة</sys:String>
 
     <!-- GameActivityAddTime -->
 
-    <sys:String x:Key="LOCGaAddNewGameSession">Add new game session</sys:String>
+    <sys:String x:Key="LOCGaAddNewGameSession">إضافة جلسة جديدة</sys:String>
     <sys:String x:Key="LOCGaDateStart">تاريخ البدء</sys:String>
     <sys:String x:Key="LOCGaDateEnd">تاريخ الانتهاء</sys:String>
 
