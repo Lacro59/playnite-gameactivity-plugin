@@ -1287,6 +1287,7 @@ namespace GameActivity
                                             ShowMinimizeButton = false,
                                             ShowMaximizeButton = false,
                                             ShowCloseButton = true,
+                                            CanBeResizable = true
                                         };
 
                                         GameActivityBackup ViewExtension = new GameActivityBackup(backupData);
