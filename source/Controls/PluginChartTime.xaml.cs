@@ -248,51 +248,45 @@ namespace GameActivity.Controls
                 if (Truncate)
                 {
                     Activities = Activities.OrderBy(x => x.DateSession).ToList();
+                    List<string> dtList = Activities.Where(x => x.DateSession != null)?.Select(x => ((DateTime)x.DateSession).ToLocalTime().ToString("yyyy-MM-dd"))?.Distinct().ToList();
 
-                    if (Activities.Count > limit && variateurTime != 0)
+                    if (dtList.Count > limit && variateurTime != 0)
                     {
                         if (variateurTime > 0)
                         {
                             AxisVariator = 0;
                         }
-                        else if (Activities.Count + variateurTime - limit <= 0)
+                        else if (dtList.Count + variateurTime - limit <= 0)
                         {
                             AxisVariator++;
-                            for (int idx = (Activities.Count - 1); idx > limit; idx--)
+                            for (int idx = (dtList.Count - 1); idx > limit; idx--)
                             {
-                                if (Activities.Count > limit)
+                                if (dtList.Count > limit)
                                 {
-                                    Activities.RemoveAt(idx);
+                                    dtList.RemoveAt(idx);
                                 }
                             }
                         }
                         else
                         {
-                            int min = Activities.Count + variateurTime - 1;
-                            for (int idx = (Activities.Count - 1); idx > min; idx--)
+                            int min = dtList.Count + variateurTime - 1;
+                            for (int idx = (dtList.Count - 1); idx > min; idx--)
                             {
-                                if (Activities.Count > limit)
+                                if (dtList.Count > limit)
                                 {
-                                    Activities.RemoveAt(idx);
+                                    dtList.RemoveAt(idx);
                                 }
                             }
                         }
                     }
 
                     // Periode data showned
-                    int countActivities = Activities.Where(x => x.DateSession != null)?.Select(x => ((DateTime)x.DateSession).ToLocalTime().ToString("yyyy-MM-dd"))?.Distinct()?.Count() ?? 0;
+                    int countActivities = dtList.Count;
                     int NewLimit = (countActivities - limit - 1) >= 0 ? countActivities - limit - 1 : 0;
                     listDate = new string[countActivities - NewLimit];
 
                     for (int i = NewLimit; i < countActivities; i++)
                     {
-                        string dt = ((DateTime)Activities[i].DateSession).ToLocalTime().ToString("yyyy-MM-dd");
-                        int iNew = i;
-                        while (listDate.Contains(dt))
-                        {
-                            iNew++;
-                            dt = ((DateTime)Activities[iNew].DateSession).ToLocalTime().ToString("yyyy-MM-dd");
-                        }
                         listDate[i - NewLimit] = dt;
 
                         CustomerForTime customerForTime = new CustomerForTime
