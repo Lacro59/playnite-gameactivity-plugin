@@ -287,6 +287,7 @@ namespace GameActivity.Controls
 
                     for (int i = NewLimit; i < countActivities; i++)
                     {
+                        string dt = dtList[i];
                         listDate[i - NewLimit] = dt;
 
                         CustomerForTime customerForTime = new CustomerForTime

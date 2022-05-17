@@ -1258,27 +1258,44 @@ namespace GameActivity
                     Serialization.TryFromJsonFile<ActivityBackup>(objectFile, out ActivityBackup backupData);
                     if (backupData != null)
                     {
-                        Application.Current.Dispatcher.BeginInvoke((Action)delegate
+                        // If game is deleted...
+                        Game game = PluginDatabase.PlayniteApi.Database.Games.Get(backupData.Id);
+                        if (game == null)
                         {
-                            PlayniteApi.Notifications.Add(new NotificationMessage(
-                                $"{PluginDatabase.PluginName}-backup-{Path.GetFileNameWithoutExtension(objectFile)}",
-                                PluginDatabase.PluginName + System.Environment.NewLine + string.Format(resources.GetString("LOCGaBackupExist"), backupData.Name),
-                                NotificationType.Info,
-                                () =>
-                                {
-                                    WindowOptions windowOptions = new WindowOptions
+                            try
+                            {
+                                FileSystem.DeleteFileSafe(objectFile);
+                            }
+                            catch (Exception ex)
+                            {
+                                Common.LogError(ex, false, true, PluginDatabase.PluginName);
+                            }
+                        }
+                        // Otherwise...
+                        else
+                        {
+                            Application.Current.Dispatcher.BeginInvoke((Action)delegate
+                            {
+                                PlayniteApi.Notifications.Add(new NotificationMessage(
+                                    $"{PluginDatabase.PluginName}-backup-{Path.GetFileNameWithoutExtension(objectFile)}",
+                                    PluginDatabase.PluginName + System.Environment.NewLine + string.Format(resources.GetString("LOCGaBackupExist"), backupData.Name),
+                                    NotificationType.Info,
+                                    () =>
                                     {
-                                        ShowMinimizeButton = false,
-                                        ShowMaximizeButton = false,
-                                        ShowCloseButton = true,
-                                    };
+                                        WindowOptions windowOptions = new WindowOptions
+                                        {
+                                            ShowMinimizeButton = false,
+                                            ShowMaximizeButton = false,
+                                            ShowCloseButton = true,
+                                        };
 
-                                    GameActivityBackup ViewExtension = new GameActivityBackup(backupData);
-                                    Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGaBackupDataInfo"), ViewExtension, windowOptions);
-                                    windowExtension.ShowDialog();
-                                }
-                            ));
-                        });
+                                        GameActivityBackup ViewExtension = new GameActivityBackup(backupData);
+                                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGaBackupDataInfo"), ViewExtension, windowOptions);
+                                        windowExtension.ShowDialog();
+                                    }
+                                ));
+                            });
+                        }
                     }
                 });
             }
