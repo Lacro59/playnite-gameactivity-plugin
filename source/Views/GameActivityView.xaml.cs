@@ -973,12 +973,12 @@ namespace GameActivity.Views
             {
                 if (arrayReturn.Find(x => x.IsEqual(source.Name)) == null)
                 {
-                    arrayReturn.Add(source.Name);
+                    arrayReturn.AddMissing(source.Name);
                 }
             }
             
             // Source for game add manually.
-            arrayReturn.Add("Playnite");
+            arrayReturn.AddMissing("Playnite");
 
             Common.LogDebug(true, Serialization.ToJson(arrayReturn));
             return arrayReturn;
