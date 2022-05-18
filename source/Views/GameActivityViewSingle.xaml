@@ -67,11 +67,11 @@
                     <Grid Grid.Column="0" Grid.Row="0">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="1.3*" />
                                 <ColumnDefinition Width="10" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="10" />
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="1.3*" />
                                 <ColumnDefinition Width="10" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
