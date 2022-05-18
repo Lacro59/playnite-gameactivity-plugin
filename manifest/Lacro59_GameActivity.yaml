@@ -154,3 +154,15 @@ Packages:
       - Updated localizations
       - Fixed minors bugs
       - Fixed crash (thanks to BanCrash)
+  - Version: 2.8
+    RequiredApiVersion: 6.2.2
+    ReleaseDate: 2022-05-18
+    PackageUrl: https://github.com/Lacro59/playnite-gameactivity-plugin/releases/download/v2.8/playnite-gameactivity-plugin_2_8.pext
+    Changelog:
+      - Updated localizations
+      - Fixed minors bugs
+      - Fixed not saved columns order
+      - Fixed an issue on log data
+      - Added a button to display game data in general plugin view
+      - UI tweaks
+      - Fixed crash
