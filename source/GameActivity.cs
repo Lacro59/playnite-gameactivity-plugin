@@ -160,7 +160,7 @@ namespace GameActivity
                 {
                     Common.LogDebug(true, $"OnCustomThemeButtonClick()");
 
-                    var windowOptions = new WindowOptions
+                    WindowOptions windowOptions = new WindowOptions
                     {
                         ShowMinimizeButton = false,
                         ShowMaximizeButton = true,
@@ -169,7 +169,7 @@ namespace GameActivity
                         Height = 740
                     };
 
-                    var ViewExtension = new GameActivityViewSingle(PluginDatabase.GameContext);
+                    GameActivityViewSingle ViewExtension = new GameActivityViewSingle(PluginDatabase.GameContext);
                     Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGameActivity"), ViewExtension, windowOptions);
                     windowExtension.ResizeMode = ResizeMode.CanResize;
                     windowExtension.ShowDialog();
@@ -257,11 +257,7 @@ namespace GameActivity
 
                 if (!WithNotification)
                 {
-                    if ((!runMSI || !runRTSS))
-                    {
-                        return false;
-                    }
-                    return true;
+                    return runMSI && runRTSS;
                 }
             }
 

@@ -271,9 +271,8 @@ namespace GameActivity.Views
 
         private void SetSourceFilter()
         {
-            var ListSourceName = activityListByGame.Select(x => x.GameSourceName).Distinct();
-
-            foreach (var sourcename in ListSourceName)
+            IEnumerable<string> ListSourceName = activityListByGame.Select(x => x.GameSourceName).Distinct();
+            foreach (string sourcename in ListSourceName)
             {
                 string Icon = PlayniteTools.GetPlatformIcon(sourcename);
                 string IconText = TransformIcon.Get(sourcename);
@@ -1000,7 +999,7 @@ namespace GameActivity.Views
 
             if (sender != null)
             {
-                var item = (ListBox)sender;
+                ListBox item = (ListBox)sender;
                 if (((List<ListActivities>)item.ItemsSource)?.Count > 0)
                 {
                     ListActivities gameItem = (ListActivities)item.SelectedItem;
@@ -1027,7 +1026,7 @@ namespace GameActivity.Views
 
                 if (index != -1 && index < PluginDatabase.LocalSystem.GetConfigurations().Count)
                 {
-                    var Configuration = PluginDatabase.LocalSystem.GetConfigurations()[index];
+                    SystemConfiguration Configuration = PluginDatabase.LocalSystem.GetConfigurations()[index];
 
                     PART_PcName.Content = Configuration.Name;
                     PART_Os.Content = Configuration.Os;
@@ -1301,7 +1300,7 @@ namespace GameActivity.Views
             {
                 int index = (int)chartPoint.X;
                 titleChart = chartPoint.SeriesView.Title;
-                var data = chartPoint.SeriesView.Values;
+                IChartValues data = chartPoint.SeriesView.Values;
 
                 LabelDataSelected = Convert.ToDateTime(((CustomerForTime)data[index]).Name);
 
@@ -1389,6 +1388,16 @@ namespace GameActivity.Views
             Filter();
         }
         #endregion
+
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Button bt = sender as Button;
+            Game game = API.Instance.Database.Games.Get((Guid)bt.Tag);
+            GameActivityViewSingle ViewExtension = new GameActivityViewSingle(game);
+            Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(API.Instance, resources.GetString("LOCGameActivity"), ViewExtension);
+            windowExtension.ShowDialog();
+        }
     }
 
     public class ListSource

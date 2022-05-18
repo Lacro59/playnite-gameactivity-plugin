@@ -266,12 +266,22 @@
                                                    SortingEnable="True" SortingDefaultDataName="GameLastActivity">
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn  Width="50">
+                                        <GridViewColumn Width="50">
+                                            <GridViewColumnHeader Content="" Tag="NoSort" />
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <Button FontFamily="{DynamicResource CommonFont}" Content="&#xe90f;"
+                                                            Tag="{Binding Id}"  Click="Button_Click" HorizontalAlignment="Center" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        
+                                        <GridViewColumn Width="50">
                                             <GridViewColumnHeader Content="{DynamicResource LOCGameIconTitle}" Tag="NoSort" />
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <Image HorizontalAlignment="Center" Height="32" VerticalAlignment="Center" Width="32" 
-                                                   Source="{Binding GameIcon, Converter={StaticResource DefaultIconConverter}}" />
+                                                           Source="{Binding GameIcon, Converter={StaticResource DefaultIconConverter}}" />
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
@@ -285,13 +295,13 @@
                                                 <DataTemplate>
                                                     <StackPanel>
                                                         <TextBlock Visibility="{Binding GameExist, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                                    <Hyperlink Command="{Binding GoToGame}" CommandParameter="{Binding Id}">
-                                                        <TextBlock Text="{Binding GameTitle}" Style="{DynamicResource ListExtendStyleTextBlock}" />
-                                                    </Hyperlink>
-                                                </TextBlock>
+                                                            <Hyperlink Command="{Binding GoToGame}" CommandParameter="{Binding Id}">
+                                                                <commonpluginscontrols:TextBlockTrimmed Text="{Binding GameTitle}" Style="{DynamicResource ListExtendStyleTextBlock}" />
+                                                            </Hyperlink>
+                                                        </TextBlock>
                                                         <TextBlock Visibility="{Binding GameExist, Converter={StaticResource InvertedBooleanToVisibilityConverter}}">
-                                                    <TextBlock Text="{Binding GameTitle}" Style="{DynamicResource ListExtendStyleTextBlock}" />
-                                                </TextBlock>
+                                                            <commonpluginscontrols:TextBlockTrimmed Text="{Binding GameTitle}" Style="{DynamicResource ListExtendStyleTextBlock}" />
+                                                        </TextBlock>
                                                     </StackPanel>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
