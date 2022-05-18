@@ -13,11 +13,8 @@ namespace GameActivity.Models
         public int Count => Items.Count;
 
         [DontSerialize]
-        public List<ActivityDetailsData> this[DateTime dateSession]
-        {
-            get => Get(dateSession);
-        }
-        
+        public List<ActivityDetailsData> this[DateTime dateSession] => Get(dateSession);
+
         /// <summary>
         /// Get GameActivityDetails for a date session.
         /// </summary>
@@ -25,33 +22,20 @@ namespace GameActivity.Models
         /// <returns></returns>
         public List<ActivityDetailsData> Get(DateTime dateSession)
         {
-            if (Items.TryGetValue(dateSession, out var item))
-            {
-                return item;
-            }
-            else
-            {
-                return new List<ActivityDetailsData>();
-            }
+            return Items.TryGetValue(dateSession, out List<ActivityDetailsData> item) ? item : new List<ActivityDetailsData>();
         }
 
         [DontSerialize]
-        public int AvgFpsAllSession
-        {
-            get
-            {
-                return GetAvgFpsAllSession();
-            }
-        }
+        public int AvgFpsAllSession => GetAvgFpsAllSession();
 
         private int GetAvgFpsAllSession()
         {
             int AvgFps = 0;
             int div = 1;
 
-            foreach (var Item in Items)
+            foreach (KeyValuePair<DateTime, List<ActivityDetailsData>> Item in Items)
             {
-                foreach (var el in Item.Value)
+                foreach (ActivityDetailsData el in Item.Value)
                 {
                     if (el.FPS != 0)
                     {

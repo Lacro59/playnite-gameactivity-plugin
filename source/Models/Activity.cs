@@ -24,31 +24,12 @@ namespace GameActivity.Models
         [DontSerialize]
         public string GameActionName
         {
-            get
-            {
-                if (_GameActionName.IsNullOrEmpty())
-                {
-                    return resources.GetString("LOCGameActivityDefaultAction");
-                }
-                else
-                {
-                    return _GameActionName;
-                }
-            }
-            set
-            {
-                _GameActionName = value;
-            }
+            get => _GameActionName.IsNullOrEmpty() ? resources.GetString("LOCGameActivityDefaultAction") : _GameActionName;
+            set => _GameActionName = value;
         }
 
         [DontSerialize]
-        public string SourceName
-        {
-            get
-            {
-                return PlayniteTools.GetSourceBySourceIdOrPlatformId(SourceID, PlatformIDs);
-            }
-        }
+        public string SourceName => PlayniteTools.GetSourceBySourceIdOrPlatformId(SourceID, PlatformIDs);
 
         public int IdConfiguration { get; set; } = -1;
 

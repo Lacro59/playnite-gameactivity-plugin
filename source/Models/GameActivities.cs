@@ -16,34 +16,10 @@ namespace GameActivity.Models
 
 
         private List<Activity> _Items = new List<Activity>();
-        public override List<Activity> Items
-        {
-            get
-            {
-                return _Items;
-            }
-
-            set
-            {
-                _Items = value;
-                OnPropertyChanged();
-            }
-        }
+        public override List<Activity> Items { get => _Items; set => SetValue(ref _Items, value); }
 
         private ActivityDetails _ItemsDetails = new ActivityDetails();
-        public override ActivityDetails ItemsDetails
-        {
-            get
-            {
-                return _ItemsDetails;
-            }
-
-            set
-            {
-                _ItemsDetails = value;
-                OnPropertyChanged();
-            }
-        }
+        public override ActivityDetails ItemsDetails { get => _ItemsDetails; set => SetValue(ref _ItemsDetails, value); }
 
 
         [DontSerialize]

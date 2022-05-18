@@ -688,7 +688,7 @@ namespace GameActivity
 
         public override IEnumerable<SidebarItem> GetSidebarItems()
         {
-            var items = new List<SidebarItem>
+            List<SidebarItem> items = new List<SidebarItem>
             {
                 gameActivityViewSidebar
             };
@@ -712,7 +712,7 @@ namespace GameActivity
                     Description = resources.GetString("LOCGameActivityViewGameActivity"),
                     Action = (gameMenuItem) =>
                     {
-                        var ViewExtension = new GameActivityViewSingle(GameMenu);
+                        GameActivityViewSingle ViewExtension = new GameActivityViewSingle(GameMenu);
                         Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGameActivity"), ViewExtension);
                         windowExtension.ShowDialog();
                     }
@@ -752,7 +752,7 @@ namespace GameActivity
                     Description = resources.GetString("LOCGameActivityViewGamesActivities"),
                     Action = (mainMenuItem) =>
                     {
-                        var windowOptions = new WindowOptions
+                        WindowOptions windowOptions = new WindowOptions
                         {
                             ShowMinimizeButton = false,
                             ShowMaximizeButton = true,
@@ -761,7 +761,7 @@ namespace GameActivity
                             Height = 740
                         };
 
-                        var ViewExtension = new GameActivityView();
+                        GameActivityView ViewExtension = new GameActivityView();
                         Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGamesActivitiesTitle"), ViewExtension, windowOptions);
                         windowExtension.ResizeMode = ResizeMode.CanResize;
                         windowExtension.ShowDialog();
@@ -858,7 +858,7 @@ namespace GameActivity
                                         FileSystem.WriteStringToFileSafe(SavPath, ExportedDatasCsv);
 
                                         string Message = string.Format(resources.GetString("LOCCommonExportDataResult"), ExportedDatasCsv.Count());
-                                        var result = PlayniteApi.Dialogs.ShowMessage(Message, PluginDatabase.PluginName, MessageBoxButton.YesNo);
+                                        MessageBoxResult result = PlayniteApi.Dialogs.ShowMessage(Message, PluginDatabase.PluginName, MessageBoxButton.YesNo);
                                         if (result == MessageBoxResult.Yes)
                                         {
                                             Process.Start(Path.GetDirectoryName(SavPath));
@@ -893,14 +893,14 @@ namespace GameActivity
                     Description = resources.GetString("LOCCommonTransferPluginData"),
                     Action = (mainMenuItem) =>
                     {
-                        var windowOptions = new WindowOptions
+                        WindowOptions windowOptions = new WindowOptions
                         {
                             ShowMinimizeButton = false,
                             ShowMaximizeButton = false,
                             ShowCloseButton = true,
                         };
 
-                        var ViewExtension = new TransfertData(PluginDatabase.GetDataGames(), PluginDatabase);
+                        TransfertData ViewExtension = new TransfertData(PluginDatabase.GetDataGames(), PluginDatabase);
                         Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCCommonSelectTransferData"), ViewExtension, windowOptions);
                         windowExtension.ShowDialog();
                     }
@@ -912,14 +912,14 @@ namespace GameActivity
                     Description = resources.GetString("LOCCommonIsolatedPluginData"),
                     Action = (mainMenuItem) =>
                     {
-                        var windowOptions = new WindowOptions
+                        WindowOptions windowOptions = new WindowOptions
                         {
                             ShowMinimizeButton = false,
                             ShowMaximizeButton = false,
                             ShowCloseButton = true,
                         };
 
-                        var ViewExtension = new ListDataWithoutGame(PluginDatabase.GetIsolatedDataGames(), PluginDatabase);
+                        ListDataWithoutGame ViewExtension = new ListDataWithoutGame(PluginDatabase.GetIsolatedDataGames(), PluginDatabase);
                         Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCCommonIsolatedPluginData"), ViewExtension, windowOptions);
                         windowExtension.ShowDialog();
                     }

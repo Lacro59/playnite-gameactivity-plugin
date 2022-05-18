@@ -103,6 +103,7 @@ namespace GameActivity.Services
                 {
                     if (hardwareItem.HardwareType == HardwareType.CPU)
                     {
+                        hardwareItem.Update();
                         foreach (var sensor in hardwareItem.Sensors)
                         {
                             if (sensor.SensorType == SensorType.Temperature && sensor.Value.HasValue)
@@ -171,6 +172,7 @@ namespace GameActivity.Services
                 {
                     if (hardwareItem.HardwareType == HardwareType.GpuNvidia)
                     {
+                        hardwareItem.Update();
                         foreach (var sensor in hardwareItem.Sensors)
                         {
                             if (sensor.Identifier.ToString().Contains("load/0"))
@@ -182,6 +184,7 @@ namespace GameActivity.Services
 
                     if (hardwareItem.HardwareType == HardwareType.GpuAti)
                     {
+                        hardwareItem.Update();
                         foreach (var sensor in hardwareItem.Sensors)
                         {
                             if (sensor.Identifier.ToString().Contains("load/0"))
@@ -209,6 +212,7 @@ namespace GameActivity.Services
                 {
                     if (hardwareItem.HardwareType == HardwareType.GpuNvidia)
                     {
+                        hardwareItem.Update();
                         foreach (var sensor in hardwareItem.Sensors)
                         {
                             if (sensor.Identifier.ToString().Contains("temperature/0"))
@@ -220,6 +224,7 @@ namespace GameActivity.Services
 
                     if (hardwareItem.HardwareType == HardwareType.GpuAti)
                     {
+                        hardwareItem.Update();
                         foreach (var sensor in hardwareItem.Sensors)
                         {
                             if (sensor.Identifier.ToString().Contains("temperature/0"))
