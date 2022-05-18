@@ -127,7 +127,7 @@ namespace GameActivity
                     Title = resources.GetString("LOCGameActivityViewGamesActivities"),
                     Activated = () =>
                     {
-                        var windowOptions = new WindowOptions
+                        WindowOptions windowOptions = new WindowOptions
                         {
                             ShowMinimizeButton = false,
                             ShowMaximizeButton = true,
@@ -136,7 +136,7 @@ namespace GameActivity
                             Height = 740
                         };
 
-                        var ViewExtension = new GameActivityView();
+                        GameActivityView ViewExtension = new GameActivityView();
                         Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGamesActivitiesTitle"), ViewExtension, windowOptions);
                         windowExtension.ResizeMode = ResizeMode.CanResize;
                         windowExtension.ShowDialog();
@@ -271,8 +271,7 @@ namespace GameActivity
         /// </summary>
         public void DataLogging_start(Guid Id)
         {
-            logger.Info($"DataLogging_start - {Id}");
-            
+            logger.Info($"DataLogging_start - {Id}");            
             RunningActivity runningActivity = runningActivities.Find(x => x.Id == Id);
 
             runningActivity.timer = new System.Timers.Timer(PluginSettings.Settings.TimeIntervalLogging * 60000);
@@ -287,7 +286,6 @@ namespace GameActivity
         public void DataLogging_stop(Guid Id)
         {
             logger.Info($"DataLogging_stop - {Id}");
-
             RunningActivity runningActivity = runningActivities.Find(x => x.Id == Id);
             if (runningActivity.WarningsMessage.Count != 0 && PlayniteApi.ApplicationInfo.Mode == ApplicationMode.Desktop)
             {
@@ -295,7 +293,7 @@ namespace GameActivity
                 {
                     Application.Current.Dispatcher.BeginInvoke((Action)delegate
                     {
-                        var ViewExtension = new WarningsDialogs(runningActivity.WarningsMessage);
+                        WarningsDialogs ViewExtension = new WarningsDialogs(runningActivity.WarningsMessage);
                         Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGameActivityWarningCaption"), ViewExtension);
                         windowExtension.ShowDialog();
                     });
@@ -434,7 +432,7 @@ namespace GameActivity
                 {
                     try
                     {
-                        foreach (var sensorItems in dataHWinfo)
+                        foreach (HWiNFODumper.JsonObj sensorItems in dataHWinfo)
                         {
                             dynamic sensorItemsOBJ = Serialization.FromJson<dynamic>(Serialization.ToJson(sensorItems));
 
@@ -444,7 +442,7 @@ namespace GameActivity
                             if (sensorsID.ToLower() == PluginSettings.Settings.HWiNFO_fps_sensorsID.ToLower())
                             {
                                 // Find data fps
-                                foreach (var items in sensorItemsOBJ["sensors"])
+                                foreach (dynamic items in sensorItemsOBJ["sensors"])
                                 {
                                     dynamic itemOBJ = Serialization.FromJson<dynamic>(Serialization.ToJson(items));
                                     string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
@@ -460,7 +458,7 @@ namespace GameActivity
                             if (sensorsID.ToLower() == PluginSettings.Settings.HWiNFO_gpu_sensorsID.ToLower())
                             {
                                 // Find data gpu
-                                foreach (var items in sensorItemsOBJ["sensors"])
+                                foreach (dynamic items in sensorItemsOBJ["sensors"])
                                 {
                                     dynamic itemOBJ = Serialization.FromJson<dynamic>(Serialization.ToJson(items));
                                     string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
@@ -476,7 +474,7 @@ namespace GameActivity
                             if (sensorsID.ToLower() == PluginSettings.Settings.HWiNFO_gpuT_sensorsID.ToLower())
                             {
                                 // Find data gpu
-                                foreach (var items in sensorItemsOBJ["sensors"])
+                                foreach (dynamic items in sensorItemsOBJ["sensors"])
                                 {
                                     dynamic itemOBJ = Serialization.FromJson<dynamic>(Serialization.ToJson(items));
                                     string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
@@ -492,7 +490,7 @@ namespace GameActivity
                             if (sensorsID.ToLower() == PluginSettings.Settings.HWiNFO_cpuT_sensorsID.ToLower())
                             {
                                 // Find data gpu
-                                foreach (var items in sensorItemsOBJ["sensors"])
+                                foreach (dynamic items in sensorItemsOBJ["sensors"])
                                 {
                                     dynamic itemOBJ = Serialization.FromJson<dynamic>(Serialization.ToJson(items));
                                     string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
@@ -596,8 +594,13 @@ namespace GameActivity
         public void DataBackup_start(Guid Id)
         {
             RunningActivity runningActivity = runningActivities.Find(x => x.Id == Id);
+            if (runningActivity == null)
+            {
+                logger.Warn($"No runningActivity find for {Id}");
+                return;
+            }
 
-            runningActivity.timerBackup = new System.Timers.Timer(60000);
+            runningActivity.timerBackup = new System.Timers.Timer(PluginSettings.Settings.TimeIntervalLogging * 60000);
             runningActivity.timerBackup.AutoReset = true;
             runningActivity.timerBackup.Elapsed += (sender, e) => OnTimedBackupEvent(sender, e, Id);
             runningActivity.timerBackup.Start();            
@@ -606,6 +609,11 @@ namespace GameActivity
         public void DataBackup_stop(Guid Id)
         {
             RunningActivity runningActivity = runningActivities.Find(x => x.Id == Id);
+            if (runningActivity == null)
+            {
+                logger.Warn($"No runningActivity find for {Id}");
+                return;
+            }
 
             runningActivity.timerBackup.AutoReset = false;
             runningActivity.timerBackup.Stop();
@@ -1091,7 +1099,7 @@ namespace GameActivity
         // Add code to be executed when game is preparing to be started.
         public override void OnGameStopped(OnGameStoppedEventArgs args)
         {
-            var TaskGameStopped = Task.Run(() =>
+            Task.Run(() =>
             {
                 try
                 {
