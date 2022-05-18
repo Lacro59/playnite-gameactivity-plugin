@@ -266,8 +266,8 @@
                                                    SortingEnable="True" SortingDefaultDataName="GameLastActivity">
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn Width="50">
-                                            <GridViewColumnHeader Content="" Tag="NoSort" />
+                                        <GridViewColumn Width="70">
+                                            <GridViewColumnHeader Content="{DynamicResource LOCGameDetails}" Tag="NoSort" />
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <Button FontFamily="{DynamicResource CommonFont}" Content="&#xe90f;"
@@ -275,9 +275,9 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
-                                        
-                                        <GridViewColumn Width="50">
-                                            <GridViewColumnHeader Content="{DynamicResource LOCGameIconTitle}" Tag="NoSort" />
+
+                                        <GridViewColumn Width="50" x:Name="lvGamesIcon">
+                                            <GridViewColumnHeader Name="lvGamesIconHeader" Content="{DynamicResource LOCGameIconTitle}" Tag="NoSort" />
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <Image HorizontalAlignment="Center" Height="32" VerticalAlignment="Center" Width="32" 
@@ -289,8 +289,8 @@
                                         <GridViewColumn Width="0" DisplayMemberBinding="{Binding GameTitle}">
                                             <GridViewColumnHeader IsHitTestVisible="False" />
                                         </GridViewColumn>
-                                        <GridViewColumn Width="200">
-                                            <GridViewColumnHeader Content="{DynamicResource LOCGameNameTitle}" Tag="GameTitle" />
+                                        <GridViewColumn Width="200" x:Name="lvGamesName">
+                                            <GridViewColumnHeader Content="{DynamicResource LOCGameNameTitle}" Tag="GameTitle" Name="lvGamesNameHeader" />
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <StackPanel>
@@ -330,9 +330,8 @@
                                         <GridViewColumn Width="0" DisplayMemberBinding="{Binding GameSourceName}">
                                             <GridViewColumnHeader IsHitTestVisible="False" />
                                         </GridViewColumn>
-                                        <GridViewColumn Width="75">
-                                            <GridViewColumnHeader Content="{DynamicResource LOCSourceLabel}" 
-                                                          Tag="listGameSourceName" />
+                                        <GridViewColumn Width="75" x:Name="lvGamesSource">
+                                            <GridViewColumnHeader Content="{DynamicResource LOCSourceLabel}" Name="lvGamesSourceHeader" Tag="listGameSourceName" />
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <StackPanel Tag="{Binding}">
@@ -355,8 +354,8 @@
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
 
-                                        <GridViewColumn Width="130">
-                                            <GridViewColumnHeader Content="{DynamicResource LOCPlayAction}" />
+                                        <GridViewColumn Width="130" x:Name="lvGamesPlayAction">
+                                            <GridViewColumnHeader Content="{DynamicResource LOCIsPlayAction}" Name="lvGamesPlayActionHeader" />
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <StackPanel Orientation="Horizontal">
@@ -366,7 +365,8 @@
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
 
-                                        <GridViewColumn Header="{DynamicResource LOCGameActivityAvgCpu}">
+                                        <GridViewColumn x:Name="lvAvgCpu">
+                                            <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgCpu}" Name="lvAvgCpuHeader" />
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <Label Content="{Binding AvgCPU}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
@@ -394,8 +394,8 @@
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
 
-                                        <GridViewColumn>
-                                            <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgGpu}" IsHitTestVisible="False" />
+                                        <GridViewColumn x:Name="lvAvgGpu">
+                                            <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgGpu}" Name="lvAvgGpuHeader" />
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <Label Content="{Binding AvgGPU}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
@@ -423,8 +423,8 @@
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
 
-                                        <GridViewColumn>
-                                            <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgRam}" IsHitTestVisible="False" />
+                                        <GridViewColumn x:Name="lvAvgRam">
+                                            <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgRam}" Name="lvAvgRamHeader" />
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <Label Content="{Binding AvgRAM}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
@@ -452,8 +452,8 @@
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
 
-                                        <GridViewColumn>
-                                            <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgFps}" IsHitTestVisible="False" />
+                                        <GridViewColumn x:Name="lvAvgFps">
+                                            <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgFps}" Name="lvAvgFpsHeader" />
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <Label Content="{Binding AvgFPS}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
@@ -481,8 +481,8 @@
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
 
-                                        <GridViewColumn>
-                                            <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgCpuT}" IsHitTestVisible="False" />
+                                        <GridViewColumn x:Name="lvAvgCpuT">
+                                            <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgCpuT}" Name="lvAvgCpuTHeader" />
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <Label Content="{Binding AvgCPUT}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
@@ -510,8 +510,8 @@
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
 
-                                        <GridViewColumn>
-                                            <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgGpuT}" IsHitTestVisible="False" />
+                                        <GridViewColumn x:Name="lvAvgGpuT">
+                                            <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgGpuT}" Name="lvAvgGpuTHeader" />
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <Label Content="{Binding AvgGPUT}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
@@ -539,8 +539,8 @@
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
 
-                                        <GridViewColumn>
-                                            <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgCpuP}" IsHitTestVisible="False" />
+                                        <GridViewColumn x:Name="lvAvgCpuP">
+                                            <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgCpuP}" Name="lvAvgCpuPHeader" />
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <Label Content="{Binding AvgCPUP}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
@@ -568,8 +568,8 @@
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
 
-                                        <GridViewColumn>
-                                            <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgGpuP}" IsHitTestVisible="False" />
+                                        <GridViewColumn x:Name="lvAvgGpuP">
+                                            <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgGpuP}" Name="lvAvgGpuPHeader" />
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <Label Content="{Binding AvgGPUP}" HorizontalAlignment="Center" VerticalAlignment="Stretch">

@@ -87,14 +87,22 @@ namespace GameActivity.Views
             // Add column if log details enable.
             if (!PluginDatabase.PluginSettings.Settings.EnableLogging)
             {
-                lvView.Columns.RemoveAt(13);
-                lvView.Columns.RemoveAt(12);
-                lvView.Columns.RemoveAt(11);
-                lvView.Columns.RemoveAt(10);
-                lvView.Columns.RemoveAt(9);
-                lvView.Columns.RemoveAt(8);
-                lvView.Columns.RemoveAt(7);
-                lvView.Columns.RemoveAt(6);
+                lvAvgGpuP.Width = 0;
+                lvAvgGpuPHeader.IsHitTestVisible = false;
+                lvAvgCpuP.Width = 0;
+                lvAvgCpuPHeader.IsHitTestVisible = false;
+                lvAvgGpuT.Width = 0;
+                lvAvgGpuTHeader.IsHitTestVisible = false;
+                lvAvgCpuT.Width = 0;
+                lvAvgCpuTHeader.IsHitTestVisible = false;
+                lvAvgFps.Width = 0;
+                lvAvgFpsHeader.IsHitTestVisible = false;
+                lvAvgRam.Width = 0;
+                lvAvgRamHeader.IsHitTestVisible = false;
+                lvAvgGpu.Width = 0;
+                lvAvgGpuHeader.IsHitTestVisible = false;
+                lvAvgCpu.Width = 0;
+                lvAvgCpuHeader.IsHitTestVisible = false;
 
                 PART_BtLogContener.Visibility = Visibility.Collapsed;
                 PART_ChartLogContener.Visibility = Visibility.Collapsed;
@@ -103,49 +111,55 @@ namespace GameActivity.Views
             {
                 if (!PluginDatabase.PluginSettings.Settings.lvAvgGpuP)
                 {
-                    lvView.Columns.RemoveAt(13);
+                    lvAvgGpuP.Width = 0;
+                    lvAvgGpuPHeader.IsHitTestVisible = false;
                 }
                 if (!PluginDatabase.PluginSettings.Settings.lvAvgCpuP)
                 {
-                    lvView.Columns.RemoveAt(12);
+                    lvAvgCpuP.Width = 0;
+                    lvAvgCpuPHeader.IsHitTestVisible = false;
                 }
                 if (!PluginDatabase.PluginSettings.Settings.lvAvgGpuT)
                 {
-                    lvView.Columns.RemoveAt(11);
+                    lvAvgGpuT.Width = 0;
+                    lvAvgGpuTHeader.IsHitTestVisible = false;
                 }
                 if (!PluginDatabase.PluginSettings.Settings.lvAvgCpuT)
                 {
-                    lvView.Columns.RemoveAt(10);
+                    lvAvgCpuT.Width = 0;
+                    lvAvgCpuTHeader.IsHitTestVisible = false;
                 }
                 if (!PluginDatabase.PluginSettings.Settings.lvAvgFps)
                 {
-                    lvView.Columns.RemoveAt(9);
+                    lvAvgFps.Width = 0;
+                    lvAvgFpsHeader.IsHitTestVisible = false;
                 }
                 if (!PluginDatabase.PluginSettings.Settings.lvAvgRam)
                 {
-                    lvView.Columns.RemoveAt(8);
+                    lvAvgRam.Width = 0;
+                    lvAvgRamHeader.IsHitTestVisible = false;
                 }
                 if (!PluginDatabase.PluginSettings.Settings.lvAvgGpu)
                 {
-                    lvView.Columns.RemoveAt(7);
+                    lvAvgGpu.Width = 0;
+                    lvAvgGpuHeader.IsHitTestVisible = false;
                 }
                 if (!PluginDatabase.PluginSettings.Settings.lvAvgCpu)
                 {
-                    lvView.Columns.RemoveAt(6);
+                    lvAvgCpu.Width = 0;
+                    lvAvgCpuHeader.IsHitTestVisible = false;
                 }
             }
 
             if (!PluginDatabase.PluginSettings.Settings.lvGamesSource)
             {
-                lvView.Columns.RemoveAt(5);
+                lvGamesSource.Width = 0;
+                lvGamesSourceHeader.IsHitTestVisible = false;
             }
             if (!PluginDatabase.PluginSettings.Settings.lvGamesPlayAction)
             {
-                lvView.Columns.RemoveAt(4);
-            }
-            if (!PluginDatabase.PluginSettings.Settings.lvGamesName)
-            {
-                lvView.Columns.RemoveAt(3);
+                lvGamesPlayAction.Width = 0;
+                lvGamesPlayActionHeader.IsHitTestVisible = false;
             }
 
             getActivityByListGame(gameActivities);
