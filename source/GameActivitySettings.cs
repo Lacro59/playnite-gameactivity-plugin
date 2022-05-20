@@ -94,6 +94,7 @@ namespace GameActivity
         public bool SubstPlayStateTime { get; set; } = false; // Temporary workaround for PlayState paused time until Playnite allows to share data among extensions
 
         public List<StoreColor> StoreColors { get; set; } = new List<StoreColor>();
+        public SolidColorBrush ChartColors { get; set; } = (SolidColorBrush)(new BrushConverter().ConvertFrom("#2195f2"));
 
         public bool EnableLogging { get; set; } = false;
         public int TimeIntervalLogging { get; set; } = 5;
@@ -268,11 +269,11 @@ namespace GameActivity
             }
 
             // Set missing
-            var SourceIds = GameActivity.PluginDatabase.Database.Items
+            List<Guid> SourceIds = GameActivity.PluginDatabase.Database.Items
                                                 .Where(x => !Settings.StoreColors.Any(y => x.Value.SourceId == y.Id))
                                                 .Select(x => x.Value.SourceId)
                                                 .Distinct().ToList();
-            var PlatformIds = GameActivity.PluginDatabase.Database.Items
+            List<Platform> PlatformIds = GameActivity.PluginDatabase.Database.Items
                                                 .Where(x => x.Value != null && x.Value.Platforms != null)
                                                 .Select(x => x.Value.Platforms)
                                                 .SelectMany(x => x)
@@ -356,10 +357,11 @@ namespace GameActivity
         {
             List<StoreColor> StoreColors = new List<StoreColor>();
 
-            var SourceIds = GameActivity.PluginDatabase.Database.Items.Select(x => x.Value.SourceId).Distinct().ToList();
-            var PlatformIds = GameActivity.PluginDatabase.Database.Items.Where(x => x.Value != null && x.Value.Platforms != null)
-                                                                        .Select(x => x.Value.Platforms)
-                                                                        .SelectMany(x => x).Distinct().ToList();
+            List<Guid> SourceIds = GameActivity.PluginDatabase.Database.Items.Select(x => x.Value.SourceId).Distinct().ToList();
+            List<Platform> PlatformIds = GameActivity.PluginDatabase.Database.Items
+                .Where(x => x.Value != null && x.Value.Platforms != null)
+                .Select(x => x.Value.Platforms)
+                .SelectMany(x => x).Distinct().ToList();
 
             Brush Fill = null;
             foreach (Guid Id in SourceIds)

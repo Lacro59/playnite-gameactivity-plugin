@@ -93,7 +93,8 @@ namespace GameActivity
                 }
 
                 PART_SelectorColor.Visibility = Visibility.Visible;
-                PART_Listbox.Visibility = Visibility.Collapsed;
+                PART_ColorListContener.Visibility = Visibility.Collapsed;
+                PART_ChartColor.Visibility = Visibility.Collapsed;
             }
             catch (Exception ex)
             {
@@ -112,10 +113,17 @@ namespace GameActivity
                     color = PART_SelectorColorPicker.SimpleColor;
                     spControl.Background = new SolidColorBrush(color);
 
-                    int index;
-                    int.TryParse((string)spControl.Tag, out index);
+                    if (spControl.Tag != null)
+                    {
+                        int index;
+                        int.TryParse((string)spControl.Tag, out index);
 
-                    PluginDatabase.PluginSettings.Settings.StoreColors[index].Fill = new SolidColorBrush(color);
+                        PluginDatabase.PluginSettings.Settings.StoreColors[index].Fill = new SolidColorBrush(color);
+                    }
+                    else
+                    {
+                        PluginDatabase.PluginSettings.Settings.ChartColors = new SolidColorBrush(color);
+                    }
                 }
             }
             else
@@ -124,13 +132,45 @@ namespace GameActivity
             }
 
             PART_SelectorColor.Visibility = Visibility.Collapsed;
-            PART_Listbox.Visibility = Visibility.Visible;
+            PART_ColorListContener.Visibility = Visibility.Visible;
+            PART_ChartColor.Visibility = Visibility.Visible;
         }
 
         private void PART_ColorCancel_Click(object sender, RoutedEventArgs e)
         {
             PART_SelectorColor.Visibility = Visibility.Collapsed;
-            PART_Listbox.Visibility = Visibility.Visible;
+            PART_ColorListContener.Visibility = Visibility.Visible;
+            PART_ChartColor.Visibility = Visibility.Visible;
+        }
+
+
+
+        private void BtPickChartColor_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                spControl = ((Grid)((FrameworkElement)sender).Parent).Children.OfType<StackPanel>().FirstOrDefault();
+
+                if (spControl.Background is SolidColorBrush)
+                {
+                    Color color = ((SolidColorBrush)spControl.Background).Color;
+                    PART_SelectorColorPicker.SetColors(color);
+                }
+
+                PART_SelectorColor.Visibility = Visibility.Visible;
+                PART_ColorListContener.Visibility = Visibility.Collapsed;
+                PART_ChartColor.Visibility = Visibility.Collapsed;
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex, false, true, PluginDatabase.PluginName);
+            }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            PART_Color.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#2195f2"));
+            PluginDatabase.PluginSettings.Settings.ChartColors = (SolidColorBrush)(new BrushConverter().ConvertFrom("#2195f2"));
         }
         #endregion
     }

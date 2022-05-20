@@ -462,13 +462,14 @@ namespace GameActivity.Views
                     new ColumnSeries
                     {
                         Title = string.Empty,
-                        Values = series
+                        Values = series,
+                        Fill = PluginDatabase.PluginSettings.Settings.ChartColors
                     }
                 };
             string[] ActivityByMonthLabels = labels;
 
             //let create a mapper so LiveCharts know how to plot our CustomerViewModel class
-            var customerVmMapper = Mappers.Xy<CustomerForTime>()
+            CartesianMapper<CustomerForTime> customerVmMapper = Mappers.Xy<CustomerForTime>()
                 .X((value, index) => index)
                 .Y(value => value.Values);
 
@@ -557,7 +558,8 @@ namespace GameActivity.Views
                 activityByDaySeries.Add(new ColumnSeries
                 {
                     Title = string.Empty,
-                    Values = series
+                    Values = series,
+                    Fill = PluginDatabase.PluginSettings.Settings.ChartColors
                 });
 
                 //let create a mapper so LiveCharts know how to plot our CustomerViewModel class
@@ -797,7 +799,8 @@ namespace GameActivity.Views
                 activityByWeekSeries.Add(new ColumnSeries
                 {
                     Title = string.Empty,
-                    Values = series
+                    Values = series,
+                    Fill = PluginDatabase.PluginSettings.Settings.ChartColors
                 });
 
                 PART_ChartHoursByWeekSource.DataTooltip = new CustomerToolTipForTime

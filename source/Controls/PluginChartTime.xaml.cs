@@ -429,7 +429,15 @@ namespace GameActivity.Controls
 
                 // Set data in graphic.
                 SeriesCollection activityForGameSeries = new SeriesCollection();
-                activityForGameSeries.Add(new ColumnSeries { Title = "1", Values = series1 });
+                if (PluginDatabase.PluginSettings.Settings.CumulPlaytimeSession)
+                {
+                    activityForGameSeries.Add(new ColumnSeries { Title = "1", Values = series1, Fill = PluginDatabase.PluginSettings.Settings.ChartColors });
+                }
+                else
+                {
+                    activityForGameSeries.Add(new ColumnSeries { Title = "1", Values = series1 });
+                }
+
                 if (HasData2)
                 {
                     activityForGameSeries.Add(new ColumnSeries { Title = "2", Values = series2 });
