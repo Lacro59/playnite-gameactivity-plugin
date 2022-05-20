@@ -208,7 +208,7 @@ namespace GameActivity.Views
                 lvGamesIconHeader.IsHitTestVisible = false;
             }
             
-            if (!PluginDatabase.PluginSettings.Settings.)
+            if (!PluginDatabase.PluginSettings.Settings.lvGamesIcon)
             {
                 lvGamesIcon.Width = 0;
                 lvGamesIconHeader.IsHitTestVisible = false;
