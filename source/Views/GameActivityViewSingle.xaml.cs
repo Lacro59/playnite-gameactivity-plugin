@@ -354,7 +354,7 @@ namespace GameActivity.Views
                     object GameLastActivity = ((FrameworkElement)sender).Tag;
                     ListActivities activity = ((ObservableCollection<ListActivities>)lvSessions.ItemsSource).Where(x => x.GameLastActivity == (DateTime)GameLastActivity).FirstOrDefault();
 
-                    // Delte playtime
+                    // Delete playtime
                     if (activity.GameElapsedSeconds != 0)
                     {
                         if ((long)(game.Playtime - activity.GameElapsedSeconds) >= 0)
@@ -371,17 +371,10 @@ namespace GameActivity.Views
                         }
                     }
 
-                    // Check if is the las played date
-                    ObservableCollection<ListActivities> listActivities = ((ObservableCollection<ListActivities>)lvSessions.ItemsSource).OrderByDescending(x => x.GameLastActivity).ToObservable();
-                    bool IsLastActivity = listActivities[0].GameLastActivity == activity.GameLastActivity;
-                    bool IsOnlyDate = listActivities.Where(x => x.GameLastActivity.ToString("yyyy-MM-dd") == activity.GameLastActivity.ToString("yyyy-MM-dd")).Count() == 1;
-
-                    if (IsLastActivity && IsOnlyDate)
-                    {
-                        game.LastActivity = listActivities[1].GameLastActivity;
-                    }
-
                     gameActivities.DeleteActivity(activity.GameLastActivity);
+
+                    // Set last played date
+                    game.LastActivity = (DateTime)gameActivities.Items.Max(x => x.DateSession);
 
                     PluginDatabase.PlayniteApi.Database.Games.Update(game);
                     PluginDatabase.Update(gameActivities);
