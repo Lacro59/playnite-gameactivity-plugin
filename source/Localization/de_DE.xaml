@@ -153,4 +153,9 @@ Klicken Sie für weitere Informationen.</sys:String>
     <sys:String x:Key="LOCGaDateStart">Startdatum</sys:String>
     <sys:String x:Key="LOCGaDateEnd">Enddatum</sys:String>
 
+
+
+    <!-- Temporary workaround for PlayState paused time until Playnite allows to share data among extensions -->
+    <sys:String x:Key="LOCGameActivitySubstPlayStateTime">Substract PlayState pause time from the session duration</sys:String>
+
 </ResourceDictionary>
