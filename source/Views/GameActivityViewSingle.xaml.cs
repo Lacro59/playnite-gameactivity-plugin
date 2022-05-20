@@ -151,6 +151,11 @@ namespace GameActivity.Views
                 }
             }
 
+            if (!PluginDatabase.PluginSettings.Settings.lvGamesPcName)
+            {
+                lvGamesPcName.Width = 0;
+                lvGamesPcNameHeader.IsHitTestVisible = false;
+            }
             if (!PluginDatabase.PluginSettings.Settings.lvGamesSource)
             {
                 lvGamesSource.Width = 0;

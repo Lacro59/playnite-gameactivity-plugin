@@ -99,7 +99,7 @@ namespace GameActivity
         public int TimeIntervalLogging { get; set; } = 5;
 
         public bool lvGamesIcon { get; set; } = true;
-        public bool lvGamesName { get; set; } = true;
+        public bool lvGamesPcName { get; set; } = true;
         public bool lvGamesSource { get; set; } = true;
         public bool lvGamesPlayAction { get; set; } = true;
 

@@ -289,8 +289,8 @@
                                         <GridViewColumn Width="0" DisplayMemberBinding="{Binding GameTitle}">
                                             <GridViewColumnHeader IsHitTestVisible="False" />
                                         </GridViewColumn>
-                                        <GridViewColumn Width="200" x:Name="lvGamesName">
-                                            <GridViewColumnHeader Content="{DynamicResource LOCGameNameTitle}" Tag="GameTitle" Name="lvGamesNameHeader" />
+                                        <GridViewColumn Width="200">
+                                            <GridViewColumnHeader Content="{DynamicResource LOCGameNameTitle}" Tag="GameTitle" />
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <StackPanel>
@@ -345,8 +345,8 @@
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
 
-                                        <GridViewColumn Width="130">
-                                            <GridViewColumnHeader Content="{DynamicResource LOCGameActivityPCName}" />
+                                        <GridViewColumn Width="130" x:Name="lvGamesPcName">
+                                            <GridViewColumnHeader Content="{DynamicResource LOCGameActivityPCName}" Name="lvGamesPcNameHeader" />
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <Label Content="{Binding PCName}" VerticalAlignment="Stretch" Style="{DynamicResource ListExtendStyleLabel}" />

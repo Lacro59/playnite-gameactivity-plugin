@@ -192,10 +192,10 @@ namespace GameActivity.Views
                 lvGamesPlayAction.Width = 0;
                 lvGamesPlayActionHeader.IsHitTestVisible = false;
             }
-            if (!PluginDatabase.PluginSettings.Settings.lvGamesName)
+            if (!PluginDatabase.PluginSettings.Settings.lvGamesPcName)
             {
-                lvGamesName.Width = 0;
-                lvGamesNameHeader.IsHitTestVisible = false;
+                lvGamesPcName.Width = 0;
+                lvGamesPcNameHeader.IsHitTestVisible = false;
             }
             if (!PluginDatabase.PluginSettings.Settings.lvGamesSource)
             {
@@ -203,6 +203,12 @@ namespace GameActivity.Views
                 lvGamesSourceHeader.IsHitTestVisible = false;
             }
             if (!PluginDatabase.PluginSettings.Settings.lvGamesIcon)
+            {
+                lvGamesIcon.Width = 0;
+                lvGamesIconHeader.IsHitTestVisible = false;
+            }
+            
+            if (!PluginDatabase.PluginSettings.Settings.)
             {
                 lvGamesIcon.Width = 0;
                 lvGamesIconHeader.IsHitTestVisible = false;

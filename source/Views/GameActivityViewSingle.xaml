@@ -201,8 +201,8 @@
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
 
-                            <GridViewColumn Width="130">
-                                <GridViewColumnHeader Content="{DynamicResource LOCGameActivityPCName}" />
+                            <GridViewColumn Width="130" x:Name="lvGamesPcName">
+                                <GridViewColumnHeader Content="{DynamicResource LOCGameActivityPCName}" Name="lvGamesPcNameHeader" />
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
