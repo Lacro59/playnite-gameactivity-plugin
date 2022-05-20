@@ -166,3 +166,12 @@ Packages:
       - Added a button to display game data in general plugin view
       - UI tweaks
       - Fixed crash
+  - Version: 2.8.1
+    RequiredApiVersion: 6.2.2
+    ReleaseDate: 2022-05-20
+    PackageUrl: https://github.com/Lacro59/playnite-gameactivity-plugin/releases/download/v2.8.1/playnite-gameactivity-plugin_2_8_1.pext
+    Changelog:
+      - Updated localizations
+      - Fixed issue with column visibility
+      - Updated the last game activity when a game session is deleted
+      - Fixed issue with chart colors configuration
