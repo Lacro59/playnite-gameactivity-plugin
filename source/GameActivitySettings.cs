@@ -373,7 +373,7 @@ namespace GameActivity
                 }
                 Name = (Name == "PC (Windows)" || Name == "PC (Mac)" || Name == "PC (Linux)") ? "Playnite" : Name;
 
-                if (StoreColors.FindAll(x => x.Name.Equals(Name)) == null)
+                if (StoreColors.FindAll(x => x.Name.Equals(Name)).Count() == 0)
                 {
                     Fill = GetColor(Name);
                     StoreColors.Add(new StoreColor
@@ -390,7 +390,7 @@ namespace GameActivity
                 string Name = platform.Name;
                 Name = (Name == "PC (Windows)" || Name == "PC (Mac)" || Name == "PC (Linux)") ? "Playnite" : Name;
 
-                if (StoreColors.FindAll(x => x.Name.Equals(Name)) == null)
+                if (StoreColors.FindAll(x => x.Name.Equals(Name)).Count() == 0)
                 {
                     Fill = GetColor(Name);
                     StoreColors.Add(new StoreColor
