@@ -28,33 +28,33 @@
     
     <!-- Backup -->
 
-    <sys:String x:Key="LOCGaBackupExist" xml:space="preserve">There is backup data for {0}.
-Probably after a playnite crash.
-Click for more information.</sys:String>
+    <sys:String x:Key="LOCGaBackupExist" xml:space="preserve">هناك بيانات النسخ الاحتياطي لـ {0}.
+ربما بعد تعطل التشغيل.
+انقر للمزيد من المعلومات.</sys:String>
     <sys:String x:Key="LOCGaDateSession">تاريخ الجلسة</sys:String>
     <sys:String x:Key="LOCGaPlayTimeSession">مدة جلسة اللعب</sys:String>
-    <sys:String x:Key="LOCGaBackupDataInfo">Backup data info</sys:String>
+    <sys:String x:Key="LOCGaBackupDataInfo">معلومات النسخ الاحتياطي</sys:String>
     
 
     <!-- Merge -->
 
     <sys:String x:Key="LOCGaMerge">دمج</sys:String>
-    <sys:String x:Key="LOCGaMergeSession">Merge game session</sys:String>
+    <sys:String x:Key="LOCGaMergeSession">دمج جَلسة اللعب</sys:String>
     
 
     <!-- GameActivitySettingsView -->
 
-    <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">Combine game sessions playtime on chart</sys:String>
-    <sys:String x:Key="LOCGameActivityCumulPlaytimeStore">Unify the time of different libraries</sys:String>
+    <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">جمع وقت جلسات اللعب على الرسم البياني</sys:String>
+    <sys:String x:Key="LOCGameActivityCumulPlaytimeStore">توحيد وقت مكتبات مختلفة</sys:String>
 
-    <sys:String x:Key="LOCGameActivityListGamesFields">Game fields to be displayed</sys:String>
+    <sys:String x:Key="LOCGameActivityListGamesFields">حقول اللعبة ليتم عرضها</sys:String>
 
     <sys:String x:Key="LOCGameActivityActiveLog">تفعيل التسجي</sys:String>
     <sys:String x:Key="LOCGameActivityTimeInterval">التحقق من الفاصل الزمن</sys:String>
     <sys:String x:Key="LOCGameActivityTimeLabel">دقائ</sys:String>
 
     <sys:String x:Key="LOCGameActivityUseMsiAfterburner">استخدام MSI Afterburner</sys:String>
-    <sys:String x:Key="LOCGameActivityUseHWiNFO">Use HWiNFO</sys:String>
+    <sys:String x:Key="LOCGameActivityUseHWiNFO">استخدام HWiNFO</sys:String>
 
     <sys:String x:Key="LOCGameActivitySensorsID">Sensors id</sys:String>
     <sys:String x:Key="LOCGameActivityElementID">Element id</sys:String>
@@ -100,7 +100,7 @@ Click for more information.</sys:String>
 
     <sys:String x:Key="LOCGameActivityAvgPerDay">متوسط الوقت في اليو</sys:String>
     <sys:String x:Key="LOCGameActivityFirstSession">أول جلسة تشغي</sys:String>
-    <sys:String x:Key="LOCGameActivityLastSession">آخر جلسة تشغي</sys:String>
+    <sys:String x:Key="LOCGameActivityLastSession">آخر جلسة تشغيل</sys:String>
     
     <!-- GameActivityView -->
 
@@ -111,12 +111,12 @@ Click for more information.</sys:String>
 
     <sys:String x:Key="LOCGameActivityTime">الوقت</sys:String>
     <sys:String x:Key="LOCGameActivityLog">السجل</sys:String>
-    <sys:String x:Key="LOCGameActivityTimeTitle">Total hours by day</sys:String>
+    <sys:String x:Key="LOCGameActivityTimeTitle">مجموع الساعات يوميا</sys:String>
     <sys:String x:Key="LOCGameActivityLogTitle">تفاصيل الجلسة الأخيرة</sys:String>
     <sys:String x:Key="LOCGameActivityLogTitleDate">تفاصيل الجلسة لـ</sys:String>
 
-    <sys:String x:Key="LOCGameActivityLvGamesLastActivity">آخر جلسة تشغي</sys:String>
-    <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">الوقت المنقض</sys:String>
+    <sys:String x:Key="LOCGameActivityLvGamesLastActivity">آخر جلسة تشغيل</sys:String>
+    <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">الوقت المنقضي</sys:String>
     
     <sys:String x:Key="LOCGameActivityAvgCpu">متوسط CPU</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpu">متوسط GPU</sys:String>
