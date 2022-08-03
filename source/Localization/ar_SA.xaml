@@ -56,20 +56,20 @@
     <sys:String x:Key="LOCGameActivityUseMsiAfterburner">استخدام MSI Afterburner</sys:String>
     <sys:String x:Key="LOCGameActivityUseHWiNFO">استخدام HWiNFO</sys:String>
 
-    <sys:String x:Key="LOCGameActivitySensorsID">Sensors id</sys:String>
-    <sys:String x:Key="LOCGameActivityElementID">Element id</sys:String>
+    <sys:String x:Key="LOCGameActivitySensorsID">معرف أجهزة الاستشعار</sys:String>
+    <sys:String x:Key="LOCGameActivityElementID">رقم تعريف العنصر</sys:String>
 
-    <sys:String x:Key="LOCGameActivityGpuUsage">GPU usage</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuUsage">استخدام GPU</sys:String>
     <sys:String x:Key="LOCGameActivityFps">FPS</sys:String>
-    <sys:String x:Key="LOCGameActivityGpuTemp">GPU temperature</sys:String>
-    <sys:String x:Key="LOCGameActivityCpuTemp">CPU temperature</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuTemp">درجة حرارة GPU</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuTemp">درجة حرارة المعالج</sys:String>
 
     <sys:String x:Key="LOCGameActivityActiveWarning">تمكين التحذيرات</sys:String>
-    <sys:String x:Key="LOCGameActivityMinFps">Min FPS</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxCpuTemp">Max CPU temp</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxGpuTemp">Max GPU temp</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxCpuUsage">Max CPU usage</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxGpuUsage">Max GPU usage</sys:String>
+    <sys:String x:Key="LOCGameActivityMinFps">الحد الأدنى للإطار</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxCpuTemp">الحد الأقصى للمعالج</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxGpuTemp">الحد الأقصى لحرارة GPU</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxCpuUsage">الاستخدام الأقصى للمعالج</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxGpuUsage">الحد الأقصى لاستخدام GPU</sys:String>
     <sys:String x:Key="LOCGameActivityMaxRamUsage">Max RAM usage</sys:String>
 
     <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">Log CPU, GPU, RAM and FPS performance during game session.</sys:String>
