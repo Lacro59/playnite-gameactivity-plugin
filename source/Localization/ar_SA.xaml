@@ -70,31 +70,31 @@
     <sys:String x:Key="LOCGameActivityMaxGpuTemp">الحد الأقصى لحرارة GPU</sys:String>
     <sys:String x:Key="LOCGameActivityMaxCpuUsage">الاستخدام الأقصى للمعالج</sys:String>
     <sys:String x:Key="LOCGameActivityMaxGpuUsage">الحد الأقصى لاستخدام GPU</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxRamUsage">Max RAM usage</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxRamUsage">الحد الأقصى لاستخدام RAM</sys:String>
 
-    <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">Log CPU, GPU, RAM and FPS performance during game session.</sys:String>
-    <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Displays a warning message at the end of the game session within the defined limits.</sys:String>
+    <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">سجل المعالج، GPU، ذاكرة الوصول العشوائي وأداء FPS أثناء دورة اللعبة.</sys:String>
+    <sys:String x:Key="LOCGameActivityEnableWarningToolTip">يعرض رسالة تحذير في نهاية جِلسة اللعبة ضمن الحدود المحددة.</sys:String>
 
-    <sys:String x:Key="LOCGameActivityIntegrationChartTime">Display the chart with game session times</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationChartLog">Display the chart with game session logs</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">Toggle button with details</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationChartTime">عرض الرسم البياني مع أوقات جلسات اللعبة</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationChartLog">عرض المخطط مع سجلات جلسات اللعبة</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">زر التبديل مع التفاصيل</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">عدد البيانات في المحور الأفق</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationChartTimeTruncate">Truncate time data by default</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationChartTimeTruncate">اقتطاع بيانات الوقت بشكل افتراضي</sys:String>
 
-    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabels">Show labels on horizontal axis</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">Show labels on vertical axis</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationGraphicLogOptions">Chart options</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabels">إظهار التسميات على المحور الأفقي</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">إظهار التسميات على المحور الأفقي</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicLogOptions">خصائص الرسم البياني</sys:String>
 
-    <sys:String x:Key="LOCGameActivityUseControls">Use chart controls</sys:String>
-    <sys:String x:Key="LOCGameActivitySelectChartSeriesToDisplay">Select the series to display on the chart</sys:String>
+    <sys:String x:Key="LOCGameActivityUseControls">استخدام ضوابط المخططات</sys:String>
+    <sys:String x:Key="LOCGameActivitySelectChartSeriesToDisplay">حدد السلسلة لعرضها على الرسم البياني</sys:String>
 
     <sys:String x:Key="LOCGameActivityIconFrom">حدد أصل الأيقونة</sys:String>
     <sys:String x:Key="LOCGameActivityIconFromLibrary">استخدام الأيقونة المحددة في المكتب</sys:String>
-    <sys:String x:Key="LOCGameActivityIconFromFont">Use the icon defined in the plugin's font</sys:String>
+    <sys:String x:Key="LOCGameActivityIconFromFont">استخدم الرمز المحدد في خط الملحق</sys:String>
 
     <sys:String x:Key="LOCGameActivityIgnoreSession">تجاهل جلسات التشغيل القصير</sys:String>
-    <sys:String x:Key="LOCGameActivitySetVariatorTime">Set time variator</sys:String>
-    <sys:String x:Key="LOCGameActivitySetVariatorLog">Set log variator</sys:String>
+    <sys:String x:Key="LOCGameActivitySetVariatorTime">تعيين المتغير الزمني</sys:String>
+    <sys:String x:Key="LOCGameActivitySetVariatorLog">تعيين متغير السجل</sys:String>
 
     <!-- GameActivityViewSingle -->
 
@@ -122,27 +122,27 @@
     <sys:String x:Key="LOCGameActivityAvgGpu">متوسط GPU</sys:String>
     <sys:String x:Key="LOCGameActivityAvgRam">متوسط RAM</sys:String>
     <sys:String x:Key="LOCGameActivityAvgFps">متوسط FPS</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgCpuT">Avg CPU T</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgGpuT">Avg GPU T</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgCpuP">Avg CPU P</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgGpuP">Avg GPU P</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgCpuT">وَسَط وحدة المعالجة T</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgGpuT">وسط GPU T</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgCpuP">وسط CPU P</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgGpuP">وسط GPU P</sys:String>
 
     <sys:String x:Key="LOCGameActivityPCName">اسم الكمبيوتر</sys:String>
 
 
     <!-- GameActivity -->
 
-    <sys:String x:Key="LOCGameActivityWarningCaption">Warnings during game session</sys:String>
+    <sys:String x:Key="LOCGameActivityWarningCaption">تحذيرات خلال جلسة اللعبة</sys:String>
     <sys:String x:Key="LOCGameActivityWarningAt">ف</sys:String>
     <sys:String x:Key="LOCGameActivityCpuUsage">إستخدام CPU</sys:String>
     <sys:String x:Key="LOCGameActivityRamUsage">إستخدام RAM</sys:String>
 
-    <sys:String x:Key="LOCGameActivityNotificationHWiNFO">HWiNFO logging is enabled but application is not running.</sys:String>
-    <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">MSI AfterBurner logging is enabled but application is not running.</sys:String>
+    <sys:String x:Key="LOCGameActivityNotificationHWiNFO">تسجيل HWiNFO مفعل ولكن التطبيق لا يعمل.</sys:String>
+    <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">يتم تمكين تسجيل MSI AfterBurner لكن التطبيق لا يعمل.</sys:String>
 
     <!-- QuickSearch -->
 
-    <sys:String x:Key="LOCGaQuickSearchDescription">Search games on GameActivity data</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchDescription">البحث عن ألعاب في قسم بيانات نشاط اللعبة</sys:String>
     <sys:String x:Key="LOCGaQuickSearchByFPS">البحث بواسطة FPS</sys:String>
     <sys:String x:Key="LOCGaQuickSearchByTime">ابحث عن جلسة حسب الوقت</sys:String>
     <sys:String x:Key="LOCGaQuickSearchByDate">البحث حسب التاريخ الجلسة</sys:String>
@@ -156,6 +156,6 @@
 
 
     <!-- Temporary workaround for PlayState paused time until Playnite allows to share data among extensions -->
-    <sys:String x:Key="LOCGameActivitySubstPlayStateTime">Substract PlayState pause time from the session duration</sys:String>
+    <sys:String x:Key="LOCGameActivitySubstPlayStateTime">فترة إيقاف تشغيل لاعب من مدة الجلسة</sys:String>
 
 </ResourceDictionary>
