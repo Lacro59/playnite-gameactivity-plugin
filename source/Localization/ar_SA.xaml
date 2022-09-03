@@ -9,7 +9,7 @@
 
     <sys:String x:Key="LOCGameActivity">GameActivity</sys:String>
     <sys:String x:Key="LOCGameActivityTitle">النشاط</sys:String>
-    <sys:String x:Key="LOCGamesActivitiesTitle">نشاطات الألعا</sys:String>
+    <sys:String x:Key="LOCGamesActivitiesTitle">نشاطات الألعاب</sys:String>
     <sys:String x:Key="LOCGameActivitiesTitle">نشاطات اللعب</sys:String>
     <sys:String x:Key="LOCGameActivityViewGamesActivities">عرض أنشطة الألعاب</sys:String>
     <sys:String x:Key="LOCGameActivityViewGameActivity">عرض أنشطة اللعبة</sys:String>
@@ -49,9 +49,9 @@
 
     <sys:String x:Key="LOCGameActivityListGamesFields">حقول اللعبة ليتم عرضها</sys:String>
 
-    <sys:String x:Key="LOCGameActivityActiveLog">تفعيل التسجي</sys:String>
+    <sys:String x:Key="LOCGameActivityActiveLog">تفعيل التسجيل</sys:String>
     <sys:String x:Key="LOCGameActivityTimeInterval">التحقق من الفاصل الزمن</sys:String>
-    <sys:String x:Key="LOCGameActivityTimeLabel">دقائ</sys:String>
+    <sys:String x:Key="LOCGameActivityTimeLabel">دقائق</sys:String>
 
     <sys:String x:Key="LOCGameActivityUseMsiAfterburner">استخدام MSI Afterburner</sys:String>
     <sys:String x:Key="LOCGameActivityUseHWiNFO">استخدام HWiNFO</sys:String>
