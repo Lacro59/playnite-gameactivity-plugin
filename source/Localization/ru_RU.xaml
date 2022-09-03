@@ -127,7 +127,7 @@
     <sys:String x:Key="LOCGameActivityAvgCpuP">Avg CPU P</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpuP">Avg GPU P</sys:String>
 
-    <sys:String x:Key="LOCGameActivityPCName">Имя </sys:String>
+    <sys:String x:Key="LOCGameActivityPCName">Имя ПК</sys:String>
 
 
     <!-- GameActivity -->
