@@ -7,9 +7,9 @@ Used the difference play time: {1}s.</sys:String>
     
     <!-- MainView -->
 
-    <sys:String x:Key="LOCGameActivity"></sys:String>
-    <sys:String x:Key="LOCGameActivityTitle"></sys:String>
-    <sys:String x:Key="LOCGamesActivitiesTitle"></sys:String>
+    <sys:String x:Key="LOCGameActivity">ゲームアクティビティ</sys:String>
+    <sys:String x:Key="LOCGameActivityTitle">アクティビティ</sys:String>
+    <sys:String x:Key="LOCGamesActivitiesTitle">ゲームアクティビティ</sys:String>
     <sys:String x:Key="LOCGameActivitiesTitle">Game activities</sys:String>
     <sys:String x:Key="LOCGameActivityViewGamesActivities">View games activities</sys:String>
     <sys:String x:Key="LOCGameActivityViewGameActivity">View game activity</sys:String>
