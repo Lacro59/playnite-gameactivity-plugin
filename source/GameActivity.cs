@@ -1074,6 +1074,11 @@ namespace GameActivity
                         DataLogging_stop(args.Game.Id);
                     }
 
+                    if (runningActivity == null)
+                    {
+                        return;
+                    }
+
                     ulong ElapsedSeconds = args.ElapsedSeconds;
                     if (ElapsedSeconds == 0)
                     {
@@ -1161,14 +1166,7 @@ namespace GameActivity
             File.WriteAllLines(PlayStateFile, Info);
 
             // Check that the GameId is the same as the paused game. If so, return the paused time. If not, return 0.
-            if (game.Id.ToString() == Id)
-            {
-                return PausedSeconds;
-            }
-            else
-            {
-                return 0;
-            }
+            return game.Id.ToString() == Id ? PausedSeconds : 0;
         }
         #endregion
 
