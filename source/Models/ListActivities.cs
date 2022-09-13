@@ -51,21 +51,9 @@ namespace GameActivity.Models
         public string SourceIconText { get; set; }
 
         [DontSerialize]
-        public RelayCommand<Guid> GoToGame
-        {
-            get
-            {
-                return PluginDatabase.GoToGame;
-            }
-        }
+        public RelayCommand<Guid> GoToGame => PluginDatabase.GoToGame;
 
         [DontSerialize]
-        public bool GameExist
-        {
-            get
-            {
-                return PluginDatabase.PlayniteApi.Database.Games.Get(Id) != null;
-            }
-        }
+        public bool GameExist => PluginDatabase.PlayniteApi.Database.Games.Get(Id) != null;
     }
 }

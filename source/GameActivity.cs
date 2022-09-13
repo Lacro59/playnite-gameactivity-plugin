@@ -39,14 +39,9 @@ namespace GameActivity
 
         private List<RunningActivity> runningActivities = new List<RunningActivity>();
 
-        //private OldToNew oldToNew;
-
 
         public GameActivity(IPlayniteAPI api) : base(api)
         {
-            // Old database            
-            //oldToNew = new OldToNew(this.GetPluginUserDataPath());
-
             // Custom theme button
             EventManager.RegisterClassHandler(typeof(Button), Button.ClickEvent, new RoutedEventHandler(OnCustomThemeButtonClick));
 
@@ -958,40 +953,7 @@ namespace GameActivity
 
         #region Game event
         public override void OnGameSelected(OnGameSelectedEventArgs args)
-        {
-            // Old database
-            //if (oldToNew.IsOld)
-            //{
-            //    oldToNew.ConvertDB(PlayniteApi);
-            //}
-
-                       
-            // Old format
-            //var oldFormat = PluginDatabase.Database?.Select(x => x).Where(x => x.Items.FirstOrDefault() != null && x.Items.FirstOrDefault().PlatformIDs == null);
-            var oldFormat = PluginDatabase.Database?.Select(x => x).Where(x => x.Items.Where(y => y.PlatformID != default(Guid)).Count() > 0);
-            if (oldFormat?.Count() > 0)
-            {
-                GlobalProgressOptions globalProgressOptions = new GlobalProgressOptions(
-                    "GameActivity - Database migration",
-                    false
-                );
-                globalProgressOptions.IsIndeterminate = true;
-
-                PlayniteApi.Dialogs.ActivateGlobalProgress((activateGlobalProgress) =>
-                {
-                    foreach (GameActivities gameActivities in PluginDatabase.Database)
-                    {
-                        foreach(Activity activity in gameActivities.Items)
-                        {
-                            activity.PlatformIDs = new List<Guid> { activity.PlatformID };
-                            activity.PlatformID = default(Guid);
-                        }
-
-                        PluginDatabase.AddOrUpdate(gameActivities);
-                    }
-                }, globalProgressOptions);
-            }
-
+        {       
             try
             {
                 if (args.NewValue?.Count == 1 && PluginDatabase.IsLoaded)

@@ -17,17 +17,7 @@ namespace GameActivity.Services
     public class ActivityDatabase : PluginDatabaseObject<GameActivitySettingsViewModel, GameActivitiesCollection, GameActivities, Activity>
     {
         private LocalSystem _LocalSystem;
-        public LocalSystem LocalSystem
-        {
-            get
-            {
-                if (_LocalSystem == null)
-                {
-                    _LocalSystem = new LocalSystem(Path.Combine(Paths.PluginUserDataPath, $"Configurations.json"), false);
-                }
-                return _LocalSystem;
-            }
-        }
+        public LocalSystem LocalSystem => _LocalSystem ?? new LocalSystem(Path.Combine(Paths.PluginUserDataPath, $"Configurations.json"), false);
 
 
         public ActivityDatabase(IPlayniteAPI PlayniteApi, GameActivitySettingsViewModel PluginSettings, string PluginUserDataPath) : base(PlayniteApi, PluginSettings, "GameActivity", PluginUserDataPath)

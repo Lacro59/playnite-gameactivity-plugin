@@ -227,15 +227,7 @@ namespace GameActivity
         private GameActivitySettings EditingClone { get; set; }
 
         private GameActivitySettings _Settings;
-        public GameActivitySettings Settings
-        {
-            get => _Settings;
-            set
-            {
-                _Settings = value;
-                OnPropertyChanged();
-            }
-        }
+        public GameActivitySettings Settings { get => _Settings; set => SetValue(ref _Settings, value); }
 
 
         public GameActivitySettingsViewModel(GameActivity plugin)

@@ -24,13 +24,7 @@ namespace GameActivity.Models
 
         public bool DisplayAllIfQueryIsEmpty => true;
 
-        public string Icon
-        {
-            get
-            {
-                return Path.Combine(PluginDatabase.Paths.PluginPath, "Resources", "command-line.png");
-            }
-        }
+        public string Icon => Path.Combine(PluginDatabase.Paths.PluginPath, "Resources", "command-line.png");
 
 
         public IEnumerable<ISearchItem<string>> GetItems()

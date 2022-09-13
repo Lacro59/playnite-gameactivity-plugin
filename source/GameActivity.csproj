@@ -189,7 +189,6 @@
     <Compile Include="playnite-plugincommon\CommonPluginsControls\Views\TransfertData.xaml.cs">
       <DependentUpon>TransfertData.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Services\OldToNew.cs" />
     <Compile Include="Services\ActivityDatabase.cs" />
     <Compile Include="Services\PerfCounter.cs" />
     <Compile Include="Views\GameActivityAddTime.xaml.cs">
