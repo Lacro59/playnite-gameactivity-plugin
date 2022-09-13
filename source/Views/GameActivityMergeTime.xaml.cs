@@ -1,6 +1,7 @@
 ﻿using CommonPluginsShared;
 using GameActivity.Models;
 using GameActivity.Services;
+using Playnite.SDK;
 using Playnite.SDK.Models;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,8 @@ namespace GameActivity.Views
     /// </summary>
     public partial class GameActivityMergeTime : UserControl
     {
+        private static readonly ILogger logger = LogManager.GetLogger();
+
         private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
         private Game game;
 
@@ -39,9 +42,9 @@ namespace GameActivity.Views
         {
             try
             {
-                var pluginDataRoot = PluginDatabase.Get(game, true);
-                var TimeRoot = ((Activity)PART_CbTimeRoot.SelectedItem);                
-                var Time = ((Activity)PART_CbTime.SelectedItem);
+                GameActivities pluginDataRoot = PluginDatabase.Get(game, true);
+                Activity TimeRoot = (Activity)PART_CbTimeRoot.SelectedItem;
+                Activity Time = (Activity)PART_CbTime.SelectedItem;
 
 
                 pluginDataRoot.Items.Find(x => x.DateSession == TimeRoot.DateSession).ElapsedSeconds += Time.ElapsedSeconds;
@@ -50,7 +53,14 @@ namespace GameActivity.Views
                 pluginDataRoot.Items.Remove(Time);
                 pluginDataRoot.ItemsDetails.Items.TryRemove((DateTime)Time.DateSession, out List<ActivityDetailsData> deleted);
 
-                game.PlayCount--;
+                if (game.PlayCount != 0)
+                {
+                    game.PlayCount--;
+                }
+                else
+                {
+                    logger.Warn($"Play count is already at 0 for {game.Name}");
+                }
 
 
                 PluginDatabase.Update(pluginDataRoot);
@@ -78,14 +88,7 @@ namespace GameActivity.Views
             }
             else
             {
-                if (((Activity)PART_CbTimeRoot.SelectedItem).DateSession == ((Activity)PART_CbTime.SelectedItem).DateSession)
-                {
-                    PART_BtMerge.IsEnabled = false;
-                }
-                else
-                {
-                    PART_BtMerge.IsEnabled = true;
-                }
+                PART_BtMerge.IsEnabled = ((Activity)PART_CbTimeRoot.SelectedItem).DateSession != ((Activity)PART_CbTime.SelectedItem).DateSession;
             }
         }
     }
