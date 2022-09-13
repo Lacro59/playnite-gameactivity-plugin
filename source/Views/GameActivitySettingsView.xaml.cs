@@ -37,17 +37,14 @@ namespace GameActivity
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            var slider = sender as Slider;
+            if (sender != null) 
+            { 
+                Slider slider = sender as Slider;
 
-            try
-            {
                 if (labelIntervalLabel_text != null)
                 {
                     labelIntervalLabel_text.Content = "(" + slider.Value + " " + resources.GetString("LOCGameActivityTimeLabel") + ")";
                 }
-            }
-            catch
-            {
             }
         }
 
@@ -115,9 +112,7 @@ namespace GameActivity
 
                     if (spControl.Tag != null)
                     {
-                        int index;
-                        int.TryParse((string)spControl.Tag, out index);
-
+                        int.TryParse((string)spControl.Tag, out int index);
                         PluginDatabase.PluginSettings.Settings.StoreColors[index].Fill = new SolidColorBrush(color);
                     }
                     else

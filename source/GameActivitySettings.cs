@@ -7,6 +7,7 @@ using System;
 using Playnite.SDK.Models;
 using System.Windows.Media;
 using MoreLinq;
+using CommonPluginsShared.Extensions;
 
 namespace GameActivity
 {
@@ -236,17 +237,10 @@ namespace GameActivity
             Plugin = plugin;
 
             // Load saved settings.
-            var savedSettings = plugin.LoadPluginSettings<GameActivitySettings>();
+            GameActivitySettings savedSettings = plugin.LoadPluginSettings<GameActivitySettings>();
 
             // LoadPluginSettings returns null if not saved data is available.
-            if (savedSettings != null)
-            {
-                Settings = savedSettings;
-            }
-            else
-            {
-                Settings = new GameActivitySettings();
-            }
+            Settings = savedSettings ?? new GameActivitySettings();
         }
 
         // Code executed when settings view is opened and user starts editing values.
@@ -280,7 +274,7 @@ namespace GameActivity
                 {
                     logger.Warn($"No name for SourceId {Id}");
                 }
-                Name = (Name == "PC (Windows)" || Name == "PC (Mac)" || Name == "PC (Linux)") ? "Playnite" : Name;
+                Name = (Name.IsEqual("PC (Windows)") || Name.IsEqual("PC (Mac)") || Name.IsEqual("PC (Linux)")) ? "Playnite" : Name;
 
                 if (Settings.StoreColors.FindAll(x => x.Name.Equals(Name)) == null)
                 {
@@ -296,7 +290,7 @@ namespace GameActivity
             foreach (Platform platform in PlatformIds)
             {
                 string Name = platform.Name;
-                Name = (Name == "PC (Windows)" || Name == "PC (Mac)" || Name == "PC (Linux)") ? "Playnite" : Name;
+                Name = (Name.IsEqual("PC (Windows)") || Name.IsEqual("PC (Mac)") || Name.IsEqual("PC (Linux)")) ? "Playnite" : Name;
 
                 if (Settings.StoreColors.FindAll(x => x.Name.Equals(Name)) == null)
                 {

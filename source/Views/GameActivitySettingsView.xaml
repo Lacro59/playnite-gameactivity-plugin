@@ -468,9 +468,9 @@
                             </Grid.RowDefinitions>
 
                             <Button Name="PART_TM_ColorOK" Grid.Column="1" Grid.Row="1" Content="{DynamicResource LOCOKLabel}" 
-                                        Click="PART_ColorOK_Click" />
+                                    Click="PART_ColorOK_Click" />
                             <Button Name="PART_TM_ColorCancel" Grid.Column="3" Grid.Row="1" Content="{DynamicResource LOCCancelLabel}" 
-                                        Click="PART_ColorCancel_Click" />
+                                    Click="PART_ColorCancel_Click" />
                         </Grid>
                     </Grid>
 
@@ -510,7 +510,9 @@
                                         </Grid.ColumnDefinitions>
 
                                         <TextBlock Grid.Column="0" Text="{Binding Name}" VerticalAlignment="Center" />
-                                        <StackPanel Grid.Column="1" Height="28" Width="100" Background="{Binding Fill}" VerticalAlignment="Center" />
+                                        <StackPanel Grid.Column="1" Height="28" Width="100" Background="{Binding Fill}" 
+                                                    Tag="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}, Mode=OneWay, Converter={StaticResource IndexConverter}}"
+                                                    VerticalAlignment="Center" />
                                         <Button Grid.Column="3" Click="BtPickChartColor_Click" Content="&#x270f;" Width="41" VerticalAlignment="Center" />
                                     </Grid>
                                 </DataTemplate>
