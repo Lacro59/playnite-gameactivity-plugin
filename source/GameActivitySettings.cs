@@ -15,7 +15,6 @@ namespace GameActivity
     {
         #region Settings variables
         public bool MenuInExtensions { get; set; } = true;
-        public bool HasRemovingDuplicate { get; set; } = false;
 
         public bool SaveColumnOrder { get; set; } = false;
 

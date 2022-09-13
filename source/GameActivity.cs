@@ -59,55 +59,6 @@ namespace GameActivity
                 SettingsRoot = $"{nameof(PluginSettings)}.{nameof(PluginSettings.Settings)}"
             });
 
-            // Remove duplicate
-            Task.Run(() =>
-            {
-                if (!PluginSettings.Settings.HasRemovingDuplicate)
-                {
-                    System.Threading.SpinWait.SpinUntil(() => PluginDatabase.IsLoaded, -1);
-
-                    GlobalProgressOptions globalProgressOptions = new GlobalProgressOptions(
-                        $"GameActivity - Database updating...",
-                        false
-                    );
-                    globalProgressOptions.IsIndeterminate = false;
-
-                    PlayniteApi.Dialogs.ActivateGlobalProgress((activateGlobalProgress) =>
-                    {
-                        activateGlobalProgress.ProgressMaxValue = PluginDatabase.Database.Count;
-
-                        foreach (GameActivities gameActivities in PluginDatabase.Database)
-                        {
-                            Thread.Sleep(10);
-                            try
-                            {
-                                double countBefore = gameActivities.Items.Count();
-                                gameActivities.Items = gameActivities.Items.DistinctBy(x => new { x.DateSession, x.ElapsedSeconds }).ToList();
-                                double countAfter = gameActivities.Items.Count();
-
-                                if (countBefore > countAfter)
-                                {
-                                    logger.Warn($"Duplicate items ({countBefore - countAfter}) in {gameActivities.Name}");
-                                    PluginDatabase.Update(gameActivities);
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                Common.LogError(ex, false, true, PluginDatabase.PluginName);
-                            }
-
-                            activateGlobalProgress.CurrentProgressValue++;
-                        }
-
-                        PluginSettings.Settings.HasRemovingDuplicate = true;
-                        Application.Current.Dispatcher.BeginInvoke((Action)delegate
-                        {
-                            this.SavePluginSettings(PluginSettings.Settings);
-                        });
-                    }, globalProgressOptions);
-                }
-            });
-
             // Initialize top & side bar
             if (API.Instance.ApplicationInfo.Mode == ApplicationMode.Desktop)
             {
@@ -147,10 +98,9 @@ namespace GameActivity
         #region Custom event
         public void OnCustomThemeButtonClick(object sender, RoutedEventArgs e)
         {
-            string ButtonName = string.Empty;
             try
             {
-                ButtonName = ((Button)sender).Name;
+                string ButtonName = ((Button)sender).Name;
                 if (ButtonName == "PART_CustomGameActivityButton")
                 {
                     Common.LogDebug(true, $"OnCustomThemeButtonClick()");
@@ -966,7 +916,6 @@ namespace GameActivity
                     Task.Run(() =>
                     {
                         System.Threading.SpinWait.SpinUntil(() => PluginDatabase.IsLoaded, -1);
-
                         Application.Current.Dispatcher.BeginInvoke((Action)delegate
                         {
                             if (args.NewValue?.Count == 1)
@@ -1134,14 +1083,7 @@ namespace GameActivity
             // PlayState will write the Id and pausedTime to PlayState.txt file placed inside ExtensionsData Roaming Playnite folder
             // Check first if this file exists and if not return false to avoid executing unnecessary code.
             string PlayStateFile = Path.Combine(PlayniteApi.Paths.ExtensionsDataPath, "PlayState.txt");
-            if (File.Exists(PlayStateFile))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return File.Exists(PlayStateFile);
         }
 
         private ulong GetPlayStatePausedTimeInfo(Game game) // Temporary workaround for PlayState paused time until Playnite allows to share data among extensions
