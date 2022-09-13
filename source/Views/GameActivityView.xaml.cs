@@ -860,7 +860,6 @@ namespace GameActivity.Views
                     if (!listGameActivities[iGame].Name.IsNullOrEmpty())
                     {
                         string gameTitle = listGameActivities[iGame].Name;
-
                         string sourceName = string.Empty;
                         try
                         {
@@ -909,14 +908,14 @@ namespace GameActivity.Views
                             MaxGPU = _settings.MaxGpuUsage.ToString(),
                             MaxRAM = _settings.MaxRamUsage.ToString(),
 
-                            PCConfigurationId = listGameActivities[iGame].GetLastSessionActivity().IdConfiguration,
-                            PCName = listGameActivities[iGame].GetLastSessionActivity().Configuration.Name,
+                            PCConfigurationId = listGameActivities[iGame].GetLastSessionActivity()?.IdConfiguration ?? -1,
+                            PCName = listGameActivities[iGame].GetLastSessionActivity()?.Configuration.Name,
 
                             TypeStoreIcon = ModeSimple,
                             SourceIcon = PlayniteTools.GetPlatformIcon(sourceName),
                             SourceIconText = TransformIcon.Get(sourceName),
 
-                            GameActionName = listGameActivities[iGame].GetLastSessionActivity().GameActionName
+                            GameActionName = listGameActivities[iGame].GetLastSessionActivity()?.GameActionName
                         });
                     }
                     // Game is deleted

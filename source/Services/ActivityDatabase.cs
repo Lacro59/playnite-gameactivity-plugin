@@ -16,8 +16,18 @@ namespace GameActivity.Services
 {
     public class ActivityDatabase : PluginDatabaseObject<GameActivitySettingsViewModel, GameActivitiesCollection, GameActivities, Activity>
     {
-        private LocalSystem _LocalSystem;
-        public LocalSystem LocalSystem => _LocalSystem ?? new LocalSystem(Path.Combine(Paths.PluginUserDataPath, $"Configurations.json"), false);
+        private LocalSystem _LocalSystem { get; set; }
+        public LocalSystem LocalSystem
+        {
+            get
+            {
+                if (_LocalSystem == null)
+                {
+                    _LocalSystem = new LocalSystem(Path.Combine(Paths.PluginUserDataPath, $"Configurations.json"), false);
+                }
+                return _LocalSystem;
+            }
+        }
 
 
         public ActivityDatabase(IPlayniteAPI PlayniteApi, GameActivitySettingsViewModel PluginSettings, string PluginUserDataPath) : base(PlayniteApi, PluginSettings, "GameActivity", PluginUserDataPath)
@@ -104,10 +114,10 @@ namespace GameActivity.Services
         {
             if (e?.UpdatedItems != null)
             {
-                foreach (var GameUpdated in e.UpdatedItems)
+                foreach (ItemUpdateEvent<Game> GameUpdated in e.UpdatedItems)
                 {
                     Database.SetGameInfoDetails<Activity, ActivityDetails>(PlayniteApi, GameUpdated.NewData.Id);
-                    var data = Get(GameUpdated.NewData.Id);
+                    GameActivities data = Get(GameUpdated.NewData.Id);
                 }
             }
         }

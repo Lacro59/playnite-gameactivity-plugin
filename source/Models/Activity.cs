@@ -41,7 +41,7 @@ namespace GameActivity.Models
                     return new SystemConfiguration();
                 }
 
-                if (IdConfiguration >= PluginDatabase.LocalSystem.GetConfigurations().Count)
+                if (IdConfiguration >= (PluginDatabase.LocalSystem.GetConfigurations()?.Count ?? 0))
                 {
                     return new SystemConfiguration();
                 }
