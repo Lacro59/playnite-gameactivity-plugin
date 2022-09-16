@@ -34,6 +34,7 @@ namespace GameActivity.Views
         private static readonly ILogger logger = LogManager.GetLogger();
         private static IResourceProvider resources = new ResourceProvider();
 
+        private GameActivity plugin;
         private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
 
         private List<string> listSources { get; set; }
@@ -72,8 +73,10 @@ namespace GameActivity.Views
         public readonly string pathExtentionData;
 
 
-        public GameActivityView(Game GameSelected = null)
+        public GameActivityView(GameActivity plugin, Game GameSelected = null)
         {
+            this.plugin = plugin;
+
             _PlayniteApi = PluginDatabase.PlayniteApi;
             dbPlaynite = PluginDatabase.PlayniteApi.Database;
             pathsPlaynite = PluginDatabase.PlayniteApi.Paths;
@@ -1421,7 +1424,7 @@ namespace GameActivity.Views
         {
             Button bt = sender as Button;
             Game game = API.Instance.Database.Games.Get((Guid)bt.Tag);
-            GameActivityViewSingle ViewExtension = new GameActivityViewSingle(game);
+            GameActivityViewSingle ViewExtension = new GameActivityViewSingle(plugin, game);
             Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(API.Instance, resources.GetString("LOCGameActivity"), ViewExtension);
             windowExtension.ShowDialog();
         }

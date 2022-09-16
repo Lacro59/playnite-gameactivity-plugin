@@ -139,6 +139,9 @@ namespace GameActivity
 
         public int VariatorTime { get; set; } = 7;
         public int VariatorLog { get; set; } = 4;
+
+
+        public Dictionary<Guid, List<string>> CustomGameActions = new Dictionary<Guid, List<string>>();
         #endregion
 
         // Playnite serializes settings object to a JSON object and saves it as text file.

@@ -23,6 +23,8 @@ namespace GameActivity.Controls
     /// </summary>
     public partial class PluginButton : PluginUserControlExtend
     {
+        private GameActivity plugin;
+
         private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
         internal override IPluginDatabase _PluginDatabase
         {
@@ -38,8 +40,10 @@ namespace GameActivity.Controls
         }
 
 
-        public PluginButton()
+        public PluginButton(GameActivity plugin)
         {
+            this.plugin = plugin;
+
             InitializeComponent();
             this.DataContext = ControlDataContext;
 
@@ -92,7 +96,7 @@ namespace GameActivity.Controls
         #region Events
         private void PART_PluginButton_Click(object sender, RoutedEventArgs e)
         {
-            var ViewExtension = new GameActivityViewSingle(PluginDatabase.GameContext);
+            var ViewExtension = new GameActivityViewSingle(plugin, PluginDatabase.GameContext);
             Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PluginDatabase.PlayniteApi, resources.GetString("LOCGameActivity"), ViewExtension);
             windowExtension.ShowDialog();
         }

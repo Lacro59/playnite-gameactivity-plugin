@@ -82,7 +82,7 @@ namespace GameActivity
                             Height = 740
                         };
 
-                        GameActivityView ViewExtension = new GameActivityView();
+                        GameActivityView ViewExtension = new GameActivityView(this);
                         Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGamesActivitiesTitle"), ViewExtension, windowOptions);
                         windowExtension.ResizeMode = ResizeMode.CanResize;
                         windowExtension.ShowDialog();
@@ -114,7 +114,7 @@ namespace GameActivity
                         Height = 740
                     };
 
-                    GameActivityViewSingle ViewExtension = new GameActivityViewSingle(PluginDatabase.GameContext);
+                    GameActivityViewSingle ViewExtension = new GameActivityViewSingle(this, PluginDatabase.GameContext);
                     Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGameActivity"), ViewExtension, windowOptions);
                     windowExtension.ResizeMode = ResizeMode.CanResize;
                     windowExtension.ShowDialog();
@@ -599,7 +599,7 @@ namespace GameActivity
         {
             if (args.Name == "PluginButton")
             {
-                return new PluginButton();
+                return new PluginButton(this);
             }
 
             if (args.Name == "PluginChartTime")
@@ -631,7 +631,7 @@ namespace GameActivity
                 {
                     SidebarItemControl sidebarItemControl = new SidebarItemControl(PluginDatabase.PlayniteApi);
                     sidebarItemControl.SetTitle(resources.GetString("LOCGamesActivitiesTitle"));
-                    sidebarItemControl.AddContent(new GameActivityView());
+                    sidebarItemControl.AddContent(new GameActivityView(plugin));
 
                     return sidebarItemControl;
                 };
@@ -665,7 +665,7 @@ namespace GameActivity
                     Description = resources.GetString("LOCGameActivityViewGameActivity"),
                     Action = (gameMenuItem) =>
                     {
-                        GameActivityViewSingle ViewExtension = new GameActivityViewSingle(GameMenu);
+                        GameActivityViewSingle ViewExtension = new GameActivityViewSingle(this, GameMenu);
                         Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGameActivity"), ViewExtension);
                         windowExtension.ShowDialog();
                     }
@@ -714,7 +714,7 @@ namespace GameActivity
                             Height = 740
                         };
 
-                        GameActivityView ViewExtension = new GameActivityView();
+                        GameActivityView ViewExtension = new GameActivityView(this);
                         Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGamesActivitiesTitle"), ViewExtension, windowOptions);
                         windowExtension.ResizeMode = ResizeMode.CanResize;
                         windowExtension.ShowDialog();

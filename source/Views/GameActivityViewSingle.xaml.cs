@@ -36,11 +36,13 @@ namespace GameActivity.Views
 
         private GameActivities gameActivities;
         private Game game;
+        private GameActivity plugin;
 
 
-        public GameActivityViewSingle(Game game)
+        public GameActivityViewSingle(GameActivity plugin, Game game)
         {
             this.game = game;
+            this.plugin = plugin;
 
             InitializeComponent();
 
@@ -409,7 +411,7 @@ namespace GameActivity.Views
 
             try
             {
-                GameActivityAddTime ViewExtension = new GameActivityAddTime(game, null);
+                GameActivityAddTime ViewExtension = new GameActivityAddTime(plugin, game, null);
                 Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PluginDatabase.PlayniteApi, resources.GetString("LOCGaAddNewGameSession"), ViewExtension, windowOptions);
                 windowExtension.ShowDialog();
 
@@ -453,7 +455,7 @@ namespace GameActivity.Views
                     ShowCloseButton = true
                 };
 
-                GameActivityAddTime ViewExtension = new GameActivityAddTime(game, activity);
+                GameActivityAddTime ViewExtension = new GameActivityAddTime(plugin, game, activity);
                 Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PluginDatabase.PlayniteApi, resources.GetString("LOCGaAddNewGameSession"), ViewExtension, windowOptions);
                 windowExtension.ShowDialog();
 

@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GameActivity.Views"
              xmlns:temperaturemeasurementtool="clr-namespace:TemperatureMeasurementTool"
+             xmlns:pbeh="clr-namespace:CommonPlayniteShared.Behaviors"
              mc:Ignorable="d" 
              Height="350" Width="500">
 
@@ -34,14 +35,44 @@
         <DatePicker Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Name="PART_DateEnd" SelectedDateChanged="PART_SelectedDateChanged" />
         <temperaturemeasurementtool:TimePicker Grid.Column="3" Grid.Row="2" x:Name="PART_TimeEnd" TimeChanged="PART_TimeChanged" />
 
-        <Label Content="{DynamicResource LOCPlayAction}" Grid.Column="0" Grid.Row="4" />
-        <ComboBox Name="PART_CbPlayAction" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="3">
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding}" />
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-        </ComboBox>
+        <Label Content="{DynamicResource LOCIsPlayAction}" Grid.Column="0" Grid.Row="4" />
+        <Grid Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Button Content="&#xe9D0;" FontFamily="{DynamicResource CommonFont}" Click="ButtonAddPlayAction_Click_1"
+                    Name="ButtonAddPlayAction" Grid.Column="0" VerticalAlignment="Center" pbeh:LeftClickContextMenuBehavior.Enabled="True">
+                <Button.ContextMenu>
+                    <ContextMenu Placement="Bottom" Name="PART_ContextMenuPlayAction">
+                        <StackPanel Orientation="Horizontal" IsVisibleChanged="StackPanel_IsVisibleChanged">
+                            <TextBox x:Name="PART_PlayActionLabel" Width="200" VerticalAlignment="Center" />
+                            <Button Margin="10,0,0,0" FontFamily="{DynamicResource FontIcoFont}" Content="&#xF021;"
+                                    Click="ButtonAddPlayAction_Click" />
+                        </StackPanel>
+                    </ContextMenu>
+                </Button.ContextMenu>
+            </Button>
+
+            <Button FontFamily="{DynamicResource FontIcoFont}" Content="&#xEE09;" IsEnabled="False" Click="Button_Click" 
+                    Grid.Column="2" Name="Part_PlayActionDelete" />
+
+            <ComboBox Name="PART_CbPlayAction" Grid.Column="4" DisplayMemberPath="Name" SelectionChanged="PART_CbPlayAction_SelectionChanged">
+                <ComboBox.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" FontWeight="Bold" Margin="5" />
+                            </DataTemplate>
+                        </GroupStyle.HeaderTemplate>
+                    </GroupStyle>
+                </ComboBox.GroupStyle>
+            </ComboBox>
+        </Grid>
 
         <Label Content="{DynamicResource LOCGameActivityLvGamesElapsedSeconds}" Grid.Column="0" Grid.Row="6" />
         <Label Name="PART_ElapseTime" Grid.Column="1" Grid.Row="6" Content="any time"/>
