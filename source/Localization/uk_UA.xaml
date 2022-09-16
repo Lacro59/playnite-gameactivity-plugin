@@ -152,6 +152,9 @@
     <sys:String x:Key="LOCGaAddNewGameSession">Додати новий сеанс гри</sys:String>
     <sys:String x:Key="LOCGaDateStart">Дата початку</sys:String>
     <sys:String x:Key="LOCGaDateEnd">Дата завершення</sys:String>
+    
+    <sys:String x:Key="LOCGaGameActions">Game actions</sys:String>
+    <sys:String x:Key="LOCGaCustomGameActions">Custom game actions</sys:String>
 
 
 
