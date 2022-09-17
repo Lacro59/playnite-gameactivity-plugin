@@ -153,8 +153,8 @@
     <sys:String x:Key="LOCGaDateStart">Дата початку</sys:String>
     <sys:String x:Key="LOCGaDateEnd">Дата завершення</sys:String>
     
-    <sys:String x:Key="LOCGaGameActions">Game actions</sys:String>
-    <sys:String x:Key="LOCGaCustomGameActions">Custom game actions</sys:String>
+    <sys:String x:Key="LOCGaGameActions">Ігрові дії</sys:String>
+    <sys:String x:Key="LOCGaCustomGameActions">Власні ігрові дії</sys:String>
 
 
 
