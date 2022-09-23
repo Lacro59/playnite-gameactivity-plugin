@@ -1,7 +1,7 @@
 ﻿Id: playnite-gameactivity-plugin
 Name: GameActivity
 Author: Lacro59
-Version: 2.8.1
+Version: 3.0
 Module: GameActivity.dll
 Type: GenericPlugin
 Icon: icon.png

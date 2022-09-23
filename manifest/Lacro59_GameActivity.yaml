@@ -175,3 +175,14 @@ Packages:
       - Fixed issue with column visibility
       - Updated the last game activity when a game session is deleted
       - Fixed issue with chart colors configuration
+  - Version: 3.0
+    RequiredApiVersion: 6.4.0
+    ReleaseDate: 2022-09-23
+    PackageUrl: https://github.com/Lacro59/playnite-gameactivity-plugin/releases/download/v3.0/playnite-gameactivity-plugin_3_0.pext
+    Changelog:
+      - Playnite 10 only
+      - Updated localizations
+      - Fixed crashs
+      - Fixed issue with chart colors
+      - Fixed issue with play count and last played anomalies
+      - Added option to set custom game action name
