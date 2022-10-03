@@ -17,7 +17,10 @@ namespace GameActivity.Services
         public void VisitHardware(IHardware hardware)
         {
             hardware.Update();
-            foreach (IHardware subHardware in hardware.SubHardware) subHardware.Accept(this);
+            foreach (IHardware subHardware in hardware.SubHardware)
+            {
+                subHardware.Accept(this);
+            }
         }
         public void VisitSensor(ISensor sensor) { }
         public void VisitParameter(IParameter parameter) { }
@@ -75,9 +78,10 @@ namespace GameActivity.Services
 
             try
             {
-                PerformanceCounter cpuCounter = new PerformanceCounter("Processor", "% Processor Time");
-
-                cpuCounter.InstanceName = "_Total";
+                PerformanceCounter cpuCounter = new PerformanceCounter("Processor", "% Processor Time")
+                {
+                    InstanceName = "_Total"
+                };
 
                 for (int i = 0; i < 5; i++)
                 {
@@ -99,12 +103,12 @@ namespace GameActivity.Services
         {
             try
             {
-                foreach (var hardwareItem in myComputer.Hardware)
+                foreach (IHardware hardwareItem in myComputer.Hardware)
                 {
                     if (hardwareItem.HardwareType == HardwareType.CPU)
                     {
                         hardwareItem.Update();
-                        foreach (var sensor in hardwareItem.Sensors)
+                        foreach (ISensor sensor in hardwareItem.Sensors)
                         {
                             if (sensor.SensorType == SensorType.Temperature && sensor.Value.HasValue)
                             {
@@ -139,7 +143,7 @@ namespace GameActivity.Services
                 statEX.dwLength = (uint)Marshal.SizeOf(typeof(MEMORYSTATUSEX));
                 GlobalMemoryStatusEx(ref statEX);
 
-                double ram = (double)statEX.ullTotalPhys;
+                double ram = statEX.ullTotalPhys;
 
                 ram /= 1024;
                 ram /= 1024;
@@ -151,9 +155,9 @@ namespace GameActivity.Services
                     ramUsage += ramCounter.NextValue();
                     System.Threading.Thread.Sleep(1000);
                 }
-                AvailableRamMemory = Convert.ToInt32(Math.Round((ramUsage / 5), 0));
+                AvailableRamMemory = Convert.ToInt32(Math.Round(ramUsage / 5, 0));
                 UsedRamMemory = TotalRamMemory - AvailableRamMemory;
-                RamUsagePercentage = ((UsedRamMemory * 100) / TotalRamMemory);
+                RamUsagePercentage = UsedRamMemory * 100 / TotalRamMemory;
             }
             catch (Exception ex)
             {
@@ -168,12 +172,12 @@ namespace GameActivity.Services
         {
             try
             {
-                foreach (var hardwareItem in myComputer.Hardware)
+                foreach (IHardware hardwareItem in myComputer.Hardware)
                 {
                     if (hardwareItem.HardwareType == HardwareType.GpuNvidia)
                     {
                         hardwareItem.Update();
-                        foreach (var sensor in hardwareItem.Sensors)
+                        foreach (ISensor sensor in hardwareItem.Sensors)
                         {
                             if (sensor.Identifier.ToString().Contains("load/0"))
                             {
@@ -185,7 +189,7 @@ namespace GameActivity.Services
                     if (hardwareItem.HardwareType == HardwareType.GpuAti)
                     {
                         hardwareItem.Update();
-                        foreach (var sensor in hardwareItem.Sensors)
+                        foreach (ISensor sensor in hardwareItem.Sensors)
                         {
                             if (sensor.Identifier.ToString().Contains("load/0"))
                             {
@@ -208,12 +212,12 @@ namespace GameActivity.Services
         {
             try
             {
-                foreach (var hardwareItem in myComputer.Hardware)
+                foreach (IHardware hardwareItem in myComputer.Hardware)
                 {
                     if (hardwareItem.HardwareType == HardwareType.GpuNvidia)
                     {
                         hardwareItem.Update();
-                        foreach (var sensor in hardwareItem.Sensors)
+                        foreach (ISensor sensor in hardwareItem.Sensors)
                         {
                             if (sensor.Identifier.ToString().Contains("temperature/0"))
                             {
@@ -225,7 +229,7 @@ namespace GameActivity.Services
                     if (hardwareItem.HardwareType == HardwareType.GpuAti)
                     {
                         hardwareItem.Update();
-                        foreach (var sensor in hardwareItem.Sensors)
+                        foreach (ISensor sensor in hardwareItem.Sensors)
                         {
                             if (sensor.Identifier.ToString().Contains("temperature/0"))
                             {

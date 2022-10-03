@@ -158,7 +158,7 @@ namespace GameActivity.Controls
 
 
         private void SetData()
-        {           
+        {
             if (Values == null || Values.Count == 0)
             {
                 return;
@@ -171,7 +171,7 @@ namespace GameActivity.Controls
                 try
                 {
                     DateTime dt = LastDate.AddDays(idx * -1);
-                    var finded = Values.Find(x => x.PlayDate.ToString("yyyy-MM-dd") == dt.ToString("yyyy-MM-dd"));
+                    GanttValue finded = Values.Find(x => x.PlayDate.ToString("yyyy-MM-dd") == dt.ToString("yyyy-MM-dd"));
 
                     if (finded != null)
                     {

@@ -15,8 +15,7 @@ namespace TemperatureMeasurementTool
     /// </summary>
     public partial class TimePicker : UserControl
     {
-        public static readonly RoutedEvent TimeChangedEvent =
-            EventManager.RegisterRoutedEvent("TimeChanged", RoutingStrategy.Direct, typeof(RoutedEventHandler), typeof(TimePicker));
+        public static readonly RoutedEvent TimeChangedEvent = EventManager.RegisterRoutedEvent("TimeChanged", RoutingStrategy.Direct, typeof(RoutedEventHandler), typeof(TimePicker));
 
         public event RoutedEventHandler TimeChanged
         {
@@ -39,7 +38,7 @@ namespace TemperatureMeasurementTool
         /// <param name="e"></param>
         private void BtnUpHour_OnClick(object sender, RoutedEventArgs e)
         {
-            var value = Convert.ToInt32(Hour.Text);
+            int value = Convert.ToInt32(Hour.Text);
             if (value < 23)
             {
                 Hour.Text = (value + 1) <= 9 ? "0" + (++value).ToString() : (++value).ToString();
@@ -59,7 +58,7 @@ namespace TemperatureMeasurementTool
         /// <param name="e"></param>
         private void BtnUpMinute_OnClick(object sender, RoutedEventArgs e)
         {
-            var value = Convert.ToInt32(Minute.Text);
+            int value = Convert.ToInt32(Minute.Text);
             if (value < 59)
             {
                 Minute.Text = (value + 1) <= 9 ? "0" + (++value).ToString() : (++value).ToString();
@@ -74,7 +73,7 @@ namespace TemperatureMeasurementTool
 
         private void BtnUpSeconde_OnClick(object sender, RoutedEventArgs e)
         {
-            var value = Convert.ToInt32(Seconde.Text);
+            int value = Convert.ToInt32(Seconde.Text);
             if (value < 59)
             {
                 Seconde.Text = (value + 1) <= 9 ? "0" + (++value).ToString() : (++value).ToString();
@@ -94,7 +93,7 @@ namespace TemperatureMeasurementTool
         /// <param name="e"></param>
         private void BtnDownHour_OnClick(object sender, RoutedEventArgs e)
         {
-            var value = Convert.ToInt32(Hour.Text);
+            int value = Convert.ToInt32(Hour.Text);
             if (value > 0)
             {
                 Hour.Text = (value - 1) <= 9 ? "0" + (--value).ToString() : (--value).ToString();
@@ -114,7 +113,7 @@ namespace TemperatureMeasurementTool
         /// <param name="e"></param>
         private void BtnDownMinute_OnClick(object sender, RoutedEventArgs e)
         {
-            var value = Convert.ToInt32(Minute.Text);
+            int value = Convert.ToInt32(Minute.Text);
             if (value > 0)
             {
                 Minute.Text = (value - 1) <= 9 ? "0" + (--value).ToString() : (--value).ToString();
@@ -129,7 +128,7 @@ namespace TemperatureMeasurementTool
 
         private void BtnDownSeconde_OnClick(object sender, RoutedEventArgs e)
         {
-            var value = Convert.ToInt32(Seconde.Text);
+            int value = Convert.ToInt32(Seconde.Text);
             if (value > 0)
             {
                 Seconde.Text = (value - 1) <= 9 ? "0" + (--value).ToString() : (--value).ToString();
@@ -242,7 +241,7 @@ namespace TemperatureMeasurementTool
         /// <param name="e"></param>
         private void Minute_OnLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            var resultMinute = Convert.ToInt32(Minute.Text);
+            int resultMinute = Convert.ToInt32(Minute.Text);
             if (resultMinute > 59)
             {
                 Minute.Text = "59";
@@ -253,7 +252,7 @@ namespace TemperatureMeasurementTool
 
         private void Seconde_OnLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            var resultSeconde = Convert.ToInt32(Seconde.Text);
+            int resultSeconde = Convert.ToInt32(Seconde.Text);
             if (resultSeconde > 59)
             {
                 Seconde.Text = "59";
@@ -300,7 +299,7 @@ namespace TemperatureMeasurementTool
         /// <param name="e"></param>
         private void Hour_OnLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            var resultHour = Convert.ToInt32(Hour.Text);
+            int resultHour = Convert.ToInt32(Hour.Text);
             if (resultHour > 23)
             {
                 Hour.Text = "23";
