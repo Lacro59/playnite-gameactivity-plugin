@@ -282,6 +282,11 @@ namespace GameActivity.Controls
             {
                 try
                 {
+                    if (gameActivities?.GetSessionActivityDetails(dateSelected, titleChart) == null)
+                    {
+                        return;
+                    }
+
                     List<ActivityDetailsData> ActivitiesDetails = gameActivities.GetSessionActivityDetails(dateSelected, titleChart);
                     string[] activityForGameLogLabels = new string[0];
                     List<ActivityDetailsData> gameLogsDefinitive = new List<ActivityDetailsData>();
@@ -405,13 +410,20 @@ namespace GameActivity.Controls
                         };
                         Func<double, string> activityForGameLogFormatter = value => value.ToString("N0") + "%";
 
-                        PART_ChartLogActivity.DataTooltip = new LiveCharts.Wpf.DefaultTooltip();
-                        PART_ChartLogActivity.DataTooltip.FontSize = 16;
-                        PART_ChartLogActivity.DataTooltip.Background = (Brush)resources.GetResource("CommonToolTipBackgroundBrush");
-                        PART_ChartLogActivity.DataTooltip.Padding = new Thickness(10);
-                        PART_ChartLogActivity.DataTooltip.BorderThickness = (Thickness)resources.GetResource("CommonToolTipBorderThickness");
-                        PART_ChartLogActivity.DataTooltip.BorderBrush = (Brush)resources.GetResource("CommonToolTipBorderBrush");
-                        PART_ChartLogActivity.DataTooltip.Foreground = (Brush)resources.GetResource("CommonToolTipForeground");
+                        try
+                        {
+                            PART_ChartLogActivity.DataTooltip = new LiveCharts.Wpf.DefaultTooltip();
+                            PART_ChartLogActivity.DataTooltip.FontSize = 16;
+                            PART_ChartLogActivity.DataTooltip.Background = (Brush)resources.GetResource("CommonToolTipBackgroundBrush");
+                            PART_ChartLogActivity.DataTooltip.Padding = new Thickness(10);
+                            PART_ChartLogActivity.DataTooltip.BorderThickness = (Thickness)resources.GetResource("CommonToolTipBorderThickness");
+                            PART_ChartLogActivity.DataTooltip.BorderBrush = (Brush)resources.GetResource("CommonToolTipBorderBrush");
+                            PART_ChartLogActivity.DataTooltip.Foreground = (Brush)resources.GetResource("CommonToolTipForeground");
+                        }
+                        catch (Exception ex)
+                        {
+                            Common.LogError(ex, false);
+                        }
 
                         PART_ChartLogActivity.Series = activityForGameLogSeries;
                         PART_ChartLogActivityLabelsY.MinValue = 0;

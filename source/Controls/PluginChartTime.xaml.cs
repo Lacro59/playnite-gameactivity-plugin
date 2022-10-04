@@ -231,6 +231,11 @@ namespace GameActivity.Controls
         {
             try
             {
+                if (gameActivities?.FilterItems == null)
+                {
+                    return;
+                }
+
                 string[] listDate = new string[limit + 1];
                 ChartValues<CustomerForTime> series1 = new ChartValues<CustomerForTime>();
                 ChartValues<CustomerForTime> series2 = new ChartValues<CustomerForTime>();
