@@ -278,7 +278,7 @@ namespace GameActivity
                 }
                 Name = (Name.IsEqual("PC (Windows)") || Name.IsEqual("PC (Mac)") || Name.IsEqual("PC (Linux)")) ? "Playnite" : Name;
 
-                if (Settings.StoreColors.FindAll(x => x.Name.Equals(Name)) == null)
+                if (Settings.StoreColors.FindAll(x => x.Name.Equals(Name))?.Count == 0)
                 {
                     Fill = GetColor(Name);
                     Settings.StoreColors.Add(new StoreColor
@@ -398,13 +398,26 @@ namespace GameActivity
             Brush Fill = null;
             switch (Name.ToLower())
             {
+                case "android":
+                    Fill = new BrushConverter().ConvertFromString("#068962") as SolidColorBrush;
+                    break;
+                case "switch":
+                    Fill = new BrushConverter().ConvertFromString("#e60012") as SolidColorBrush;
+                    break;
+                case "legacy games":
+                    Fill = new BrushConverter().ConvertFromString("#0f2a53") as SolidColorBrush;
+                    break;
                 case "steam":
                     Fill = new BrushConverter().ConvertFromString("#1b2838") as SolidColorBrush;
+                    break;
+                case "riot games":
+                    Fill = new BrushConverter().ConvertFromString("#d13639") as SolidColorBrush;
                     break;
                 case "ps3":
                 case "ps4":
                 case "ps5":
                 case "ps vita":
+                case "playstation":
                     Fill = new BrushConverter().ConvertFromString("#296cc8") as SolidColorBrush;
                     break;
                 case "playnite":
@@ -415,6 +428,7 @@ namespace GameActivity
                 case "xbox one":
                 case "xbox 360":
                 case "xbox series":
+                case "microsoft store":
                     Fill = new BrushConverter().ConvertFromString("#107c10") as SolidColorBrush;
                     break;
                 case "origin":
