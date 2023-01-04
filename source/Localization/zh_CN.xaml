@@ -59,7 +59,7 @@
     <sys:String x:Key="LOCGameActivitySensorsID">传感器 ID</sys:String>
     <sys:String x:Key="LOCGameActivityElementID">单元 ID</sys:String>
 
-    <sys:String x:Key="LOCGameActivityGpuUsage">GPU 利用</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuUsage">GPU 利</sys:String>
     <sys:String x:Key="LOCGameActivityFps">帧数</sys:String>
     <sys:String x:Key="LOCGameActivityGpuTemp">GPU 温度</sys:String>
     <sys:String x:Key="LOCGameActivityCpuTemp">CPU 温度</sys:String>
@@ -68,12 +68,12 @@
     <sys:String x:Key="LOCGameActivityMinFps">最小帧数</sys:String>
     <sys:String x:Key="LOCGameActivityMaxCpuTemp">最高 CPU 温度</sys:String>
     <sys:String x:Key="LOCGameActivityMaxGpuTemp">最高 GPU 温度</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxCpuUsage">最大 CPU 利用</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxGpuUsage">最大 GPU 利用</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxRamUsage">最大内存利用</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxCpuUsage">最大 CPU 利</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxGpuUsage">最大 GPU 利</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxRamUsage">最大内存利</sys:String>
 
     <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">游戏时记录 CPU、GPU、内存和帧数。</sys:String>
-    <sys:String x:Key="LOCGameActivityEnableWarningToolTip">游戏结束后结合定义的限制显示警告消</sys:String>
+    <sys:String x:Key="LOCGameActivityEnableWarningToolTip">游戏结束后结合定义的限制显示警告</sys:String>
 
     <sys:String x:Key="LOCGameActivityIntegrationChartTime">图表中显示游戏会话时间</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationChartLog">图表中显示游戏会话记录</sys:String>
@@ -134,8 +134,8 @@
 
     <sys:String x:Key="LOCGameActivityWarningCaption">游戏会话时的警</sys:String>
     <sys:String x:Key="LOCGameActivityWarningAt">于</sys:String>
-    <sys:String x:Key="LOCGameActivityCpuUsage">CPU 利用</sys:String>
-    <sys:String x:Key="LOCGameActivityRamUsage">内存利用</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuUsage">CPU 利</sys:String>
+    <sys:String x:Key="LOCGameActivityRamUsage">内存利</sys:String>
 
     <sys:String x:Key="LOCGameActivityNotificationHWiNFO">HWiNFO 记录已启用，但应用程序未运行。</sys:String>
     <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">MSI AfterBurner 记录已启用，但应用程序未运行。</sys:String>
