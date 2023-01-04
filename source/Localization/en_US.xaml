@@ -11,7 +11,7 @@ Used the difference play time: {1}s.</sys:String>
     <sys:String x:Key="LOCGameActivityTitle">Activity</sys:String>
     <sys:String x:Key="LOCGamesActivitiesTitle">Games activities</sys:String>
     <sys:String x:Key="LOCGameActivitiesTitle">Game activities</sys:String>
-    <sys:String x:Key="LOCGameActivityViewGamesActivities">View games activities</sys:String>
+    <sys:String x:Key="LOCGameActivityViewGamesActivities">View all game activity</sys:String>
     <sys:String x:Key="LOCGameActivityViewGameActivity">View game activity</sys:String>
     
     <sys:String x:Key="LOCGameActivityDefaultAction">Default action</sys:String>
@@ -29,7 +29,7 @@ Used the difference play time: {1}s.</sys:String>
     <!-- Backup -->
 
     <sys:String x:Key="LOCGaBackupExist" xml:space="preserve">There is backup data for {0}.
-Probably after a playnite crash.
+Probably due to a playnite crash.
 Click for more information.</sys:String>
     <sys:String x:Key="LOCGaDateSession">Date session</sys:String>
     <sys:String x:Key="LOCGaPlayTimeSession">Play time session</sys:String>

@@ -23,7 +23,7 @@
     
     <sys:String x:Key="LOCGameActivitySetNumberDay">Выберите количество дней</sys:String>
     <sys:String x:Key="LOCGameActivityPeriod">Период</sys:String>
-    <sys:String x:Key="LOCGameActivitySetLastDate">Установить последнюю дату</sys:String>
+    <sys:String x:Key="LOCGameActivitySetLastDate">Установить последнюю дат</sys:String>
     
     
     <!-- Backup -->
@@ -39,7 +39,7 @@
     <!-- Merge -->
 
     <sys:String x:Key="LOCGaMerge">Объединить</sys:String>
-    <sys:String x:Key="LOCGaMergeSession">Объединить игровой сеанс</sys:String>
+    <sys:String x:Key="LOCGaMergeSession">Объединить игровой сеан</sys:String>
     
 
     <!-- GameActivitySettingsView -->

@@ -153,8 +153,8 @@ Klicken Sie für weitere Informationen.</sys:String>
     <sys:String x:Key="LOCGaDateStart">Startdatum</sys:String>
     <sys:String x:Key="LOCGaDateEnd">Enddatum</sys:String>
     
-    <sys:String x:Key="LOCGaGameActions">Game actions</sys:String>
-    <sys:String x:Key="LOCGaCustomGameActions">Custom game actions</sys:String>
+    <sys:String x:Key="LOCGaGameActions">Spielaktionen</sys:String>
+    <sys:String x:Key="LOCGaCustomGameActions">Benutzerdefinierte Spielaktionen</sys:String>
 
 
 
