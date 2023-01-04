@@ -49,7 +49,7 @@ Click for more information.</sys:String>
 
     <sys:String x:Key="LOCGameActivityListGamesFields">Game fields to be displayed</sys:String>
 
-    <sys:String x:Key="LOCGameActivityActiveLog">ログを記録する</sys:String>
+    <sys:String x:Key="LOCGameActivityActiveLog"></sys:String>
     <sys:String x:Key="LOCGameActivityTimeInterval">Check time interval</sys:String>
     <sys:String x:Key="LOCGameActivityTimeLabel">minute(s)</sys:String>
 
@@ -59,7 +59,7 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivitySensorsID">Sensors id</sys:String>
     <sys:String x:Key="LOCGameActivityElementID">Element id</sys:String>
 
-    <sys:String x:Key="LOCGameActivityGpuUsage">GPU 使用率</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuUsage">GPU 使用</sys:String>
     <sys:String x:Key="LOCGameActivityFps">FPS</sys:String>
     <sys:String x:Key="LOCGameActivityGpuTemp">GPU 温度</sys:String>
     <sys:String x:Key="LOCGameActivityCpuTemp">CPU 温度</sys:String>
@@ -68,9 +68,9 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivityMinFps">最小 FPS</sys:String>
     <sys:String x:Key="LOCGameActivityMaxCpuTemp">最大 CPU 温度</sys:String>
     <sys:String x:Key="LOCGameActivityMaxGpuTemp">最大 GPU 温度</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxCpuUsage">最大 CPU 使用率</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxGpuUsage">最大 GPU 使用率</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxRamUsage">最大メモリー使用率</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxCpuUsage">最大 CPU 使用</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxGpuUsage">最大 GPU 使用</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxRamUsage">最大メモリー使用</sys:String>
 
     <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">Log CPU, GPU, RAM and FPS performance during game session.</sys:String>
     <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Displays a warning message at the end of the game session within the defined limits.</sys:String>
@@ -105,37 +105,37 @@ Click for more information.</sys:String>
     <!-- GameActivityView -->
 
     <sys:String x:Key="LOCGameActivityTotalHours">合計プレイ時間</sys:String>
-    <sys:String x:Key="LOCGameActivityTotalHoursByWeeks">合計プレイ時間（週別）</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByWeeks">合計プレイ時間（週別</sys:String>
 
     <sys:String x:Key="LOCGameActivityWeekLabel">Week</sys:String>
 
     <sys:String x:Key="LOCGameActivityTime">Time</sys:String>
     <sys:String x:Key="LOCGameActivityLog">Log</sys:String>
-    <sys:String x:Key="LOCGameActivityTimeTitle">合計プレイ時間（日別）</sys:String>
+    <sys:String x:Key="LOCGameActivityTimeTitle">合計プレイ時間（日別</sys:String>
     <sys:String x:Key="LOCGameActivityLogTitle">Last session details</sys:String>
     <sys:String x:Key="LOCGameActivityLogTitleDate">Session details for</sys:String>
 
     <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Last session</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Elapsed time</sys:String>
     
-    <sys:String x:Key="LOCGameActivityAvgCpu">平均 CPU 使用率</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgGpu">平均 GPU 使用率</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgRam">平均メモリー使用率</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgCpu">平均 CPU 使用</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgGpu">平均 GPU 使用</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgRam">平均メモリー使用</sys:String>
     <sys:String x:Key="LOCGameActivityAvgFps">平均FPS</sys:String>
     <sys:String x:Key="LOCGameActivityAvgCpuT">平均CPU温度</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpuT">平均GPU温度</sys:String>
     <sys:String x:Key="LOCGameActivityAvgCpuP">Avg CPU P</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpuP">Avg GPU P</sys:String>
 
-    <sys:String x:Key="LOCGameActivityPCName">デバイス名</sys:String>
+    <sys:String x:Key="LOCGameActivityPCName"></sys:String>
 
 
     <!-- GameActivity -->
 
     <sys:String x:Key="LOCGameActivityWarningCaption">Warnings during game session</sys:String>
     <sys:String x:Key="LOCGameActivityWarningAt">At</sys:String>
-    <sys:String x:Key="LOCGameActivityCpuUsage">CPU 使用率</sys:String>
-    <sys:String x:Key="LOCGameActivityRamUsage">メモリー使用率</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuUsage">CPU 使用</sys:String>
+    <sys:String x:Key="LOCGameActivityRamUsage"></sys:String>
 
     <sys:String x:Key="LOCGameActivityNotificationHWiNFO">HWiNFO logging is enabled but application is not running.</sys:String>
     <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">MSI AfterBurner logging is enabled but application is not running.</sys:String>
