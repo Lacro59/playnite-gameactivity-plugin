@@ -243,6 +243,13 @@ namespace GameActivity
 
             // LoadPluginSettings returns null if not saved data is available.
             Settings = savedSettings ?? new GameActivitySettings();
+
+
+            StoreColor finded = Settings.StoreColors.Find(x => x.Name.IsEqual("Origin"));
+            if (finded != null)
+            {
+                finded.Name = "EA app";
+            }
         }
 
         // Code executed when settings view is opened and user starts editing values.
@@ -257,7 +264,7 @@ namespace GameActivity
             }
 
             // Set missing
-            List<Guid> SourceIds = GameActivity.PluginDatabase.Database.Items
+            List <Guid> SourceIds = GameActivity.PluginDatabase.Database.Items
                                                 .Where(x => !Settings.StoreColors.Any(y => x.Value.SourceId == y.Id))
                                                 .Select(x => x.Value.SourceId)
                                                 .Distinct().ToList();
@@ -432,6 +439,7 @@ namespace GameActivity
                     Fill = new BrushConverter().ConvertFromString("#107c10") as SolidColorBrush;
                     break;
                 case "origin":
+                case "ea app":
                     Fill = new BrushConverter().ConvertFromString("#f56c2d") as SolidColorBrush;
                     break;
                 case "blizzard":
