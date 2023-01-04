@@ -78,13 +78,13 @@ namespace GameActivity
                             ShowMinimizeButton = false,
                             ShowMaximizeButton = true,
                             ShowCloseButton = true,
-                            Width = 1280,
-                            Height = 740
+                            CanBeResizable = true,
+                            Height = 740,
+                            Width = 1280
                         };
 
                         GameActivityView ViewExtension = new GameActivityView(this);
                         Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGamesActivitiesTitle"), ViewExtension, windowOptions);
-                        windowExtension.ResizeMode = ResizeMode.CanResize;
                         windowExtension.ShowDialog();
                     },
                     Visible = PluginSettings.Settings.EnableIntegrationButtonHeader
@@ -110,13 +110,13 @@ namespace GameActivity
                         ShowMinimizeButton = false,
                         ShowMaximizeButton = true,
                         ShowCloseButton = true,
-                        Width = 1280,
-                        Height = 740
+                        CanBeResizable = true,
+                        Height = 740,
+                        Width = 1280
                     };
 
                     GameActivityViewSingle ViewExtension = new GameActivityViewSingle(this, PluginDatabase.GameContext);
                     Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGameActivity"), ViewExtension, windowOptions);
-                    windowExtension.ResizeMode = ResizeMode.CanResize;
                     windowExtension.ShowDialog();
                 }
             }
@@ -258,7 +258,7 @@ namespace GameActivity
         /// </summary>
         /// <param name="source"></param>
         /// <param name="e"></param>
-        private async void OnTimedEvent(Object source, ElapsedEventArgs e, Guid Id)
+        private void OnTimedEvent(Object source, ElapsedEventArgs e, Guid Id)
         {
             int fpsValue = 0;
             int cpuValue = PerfCounter.GetCpuPercentage();
@@ -564,7 +564,7 @@ namespace GameActivity
             runningActivity.timerBackup.Stop();
         }
 
-        private async void OnTimedBackupEvent(object source, ElapsedEventArgs e, Guid Id)
+        private void OnTimedBackupEvent(object source, ElapsedEventArgs e, Guid Id)
         {
             try
             {
@@ -664,9 +664,19 @@ namespace GameActivity
                     Icon = Path.Combine(PluginFolder, "Resources", "chart-646.png"),
                     Description = resources.GetString("LOCGameActivityViewGameActivity"),
                     Action = (gameMenuItem) =>
-                    {
+                    {            
+                        WindowOptions windowOptions = new WindowOptions
+                        {
+                            ShowMinimizeButton = false,
+                            ShowMaximizeButton = true,
+                            ShowCloseButton = true,
+                            CanBeResizable = true,
+                            Height = 740,
+                            Width = 1280
+                        };
+
                         GameActivityViewSingle ViewExtension = new GameActivityViewSingle(this, GameMenu);
-                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGameActivity"), ViewExtension);
+                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGameActivity"), ViewExtension, windowOptions);
                         windowExtension.ShowDialog();
                     }
                 }
@@ -710,13 +720,13 @@ namespace GameActivity
                             ShowMinimizeButton = false,
                             ShowMaximizeButton = true,
                             ShowCloseButton = true,
-                            Width = 1280,
-                            Height = 740
+                            CanBeResizable = true,
+                            Height = 740,
+                            Width = 1280
                         };
 
                         GameActivityView ViewExtension = new GameActivityView(this);
                         Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGamesActivitiesTitle"), ViewExtension, windowOptions);
-                        windowExtension.ResizeMode = ResizeMode.CanResize;
                         windowExtension.ShowDialog();
                     }
                 },

@@ -17,7 +17,7 @@ namespace GameActivity.Models
 {
     class QuickSearchItemSource : ISearchSubItemSource<string>
     {
-        private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
+        private ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
 
 
         public string Prefix => PluginDatabase.PluginName;

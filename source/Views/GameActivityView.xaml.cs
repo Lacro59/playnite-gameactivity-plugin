@@ -31,36 +31,37 @@ namespace GameActivity.Views
     /// </summary>
     public partial class GameActivityView : UserControl
     {
-        private static readonly ILogger logger = LogManager.GetLogger();
-        private static IResourceProvider resources = new ResourceProvider();
+        private static ILogger logger => LogManager.GetLogger();
+        private static IResourceProvider resources => new ResourceProvider();
 
-        private GameActivity plugin;
-        private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
+        private GameActivity plugin { get; set; }
+        private ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
+
 
         private List<string> listSources { get; set; }
         private DateTime LabelDataSelected { get; set; }
 
-        private PluginChartTime PART_GameActivityChartTime;
-        private PluginChartLog PART_GameActivityChartLog;
+        private PluginChartTime PART_GameActivityChartTime { get; set; }
+        private PluginChartLog PART_GameActivityChartLog { get; set; }
 
-        private PlayTimeToStringConverter converter = new PlayTimeToStringConverter();
+        private PlayTimeToStringConverter converter { get; set; } = new PlayTimeToStringConverter();
 
-        public int yearCurrent;
-        public int monthCurrent;
-        public string gameIDCurrent;
-        public int variateurTime = 0;
-        public int variateurLog = 0;
-        public int variateurLogTemp = 0;
-        public string titleChart;
+        public int yearCurrent { get; set; }
+        public int monthCurrent { get; set; }
+        public string gameIDCurrent { get; set; }
+        public int variateurTime { get; set; } = 0;
+        public int variateurLog { get; set; } = 0;
+        public int variateurLogTemp { get; set; } = 0;
+        public string titleChart { get; set; }
 
-        private List<ListSource> FilterSourceItems = new List<ListSource>();
-        private List<string> SearchSources = new List<string>();
+        private List<ListSource> FilterSourceItems { get; set; } = new List<ListSource>();
+        private List<string> SearchSources { get; set; } = new List<string>();
         public List<ListActivities> activityListByGame { get; set; }
 
         GameActivitySettings _settings { get; set; }
 
-        public bool isMonthSources = true;
-        public bool isGameTime = true;
+        public bool isMonthSources { get; set; } = true;
+        public bool isGameTime { get; set; } = true;
 
         public bool ShowIcon { get; set; }
         public TextBlockWithIconMode ModeComplet { get; set; }
@@ -1422,10 +1423,20 @@ namespace GameActivity.Views
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            WindowOptions windowOptions = new WindowOptions
+            {
+                ShowMinimizeButton = false,
+                ShowMaximizeButton = true,
+                ShowCloseButton = true,
+                CanBeResizable = true,
+                Height = 740,
+                Width = 1280
+            };
+
             Button bt = sender as Button;
             Game game = API.Instance.Database.Games.Get((Guid)bt.Tag);
             GameActivityViewSingle ViewExtension = new GameActivityViewSingle(plugin, game);
-            Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(API.Instance, resources.GetString("LOCGameActivity"), ViewExtension);
+            Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(API.Instance, resources.GetString("LOCGameActivity"), ViewExtension, windowOptions);
             windowExtension.ShowDialog();
         }
     }

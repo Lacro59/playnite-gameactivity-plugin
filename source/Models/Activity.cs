@@ -9,10 +9,11 @@ namespace GameActivity.Models
 {
     public class Activity : ObservableObject
     {
-        private static readonly ILogger logger = LogManager.GetLogger();
-        private static IResourceProvider resources = new ResourceProvider();
+        private static ILogger logger => LogManager.GetLogger();
+        private static IResourceProvider resources => new ResourceProvider();
 
-        private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
+        private ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
+
 
         public Guid SourceID { get; set; }
         public List<Guid> PlatformIDs { get; set; }

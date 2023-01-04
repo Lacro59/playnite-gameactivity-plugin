@@ -10,7 +10,7 @@ namespace GameActivity.Models
 {
     public class ListActivities
     {
-        private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
+        private ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
 
 
         public string GameTitle { get; set; }

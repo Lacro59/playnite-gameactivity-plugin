@@ -9,8 +9,7 @@
              xmlns:converters="clr-namespace:CommonPlayniteShared.Converters"
              xmlns:commonpluginsshared="clr-namespace:CommonPluginsShared.Converters"
              xmlns:commonpluginscontrols="clr-namespace:CommonPluginsControls.Controls"
-             mc:Ignorable="d" 
-             Height="700" Width="1100">
+             mc:Ignorable="d" d:DesignHeight="740" d:DesignWidth="1280">
 
     <UserControl.Resources>
         <commonpluginsshared:CompareValueConverter x:Key="CompareValueConverter" />
@@ -141,8 +140,8 @@
                         <StackPanel Orientation="Horizontal" Grid.Row="2">
                             <Button Content="&#xe945;" Height="33" FontSize="18" 
                                     Click="Bt_PrevTimePlus" FontFamily="{DynamicResource CommonFont}" />
-                        
-                            <Button Content="&#xe945;" Height="33" FontSize="18" 
+
+                            <Button Content="&#xe945;" Height="33" FontSize="18"  Margin="5,0,0,0" 
                                     Click="Bt_PrevTimePlus" FontFamily="{DynamicResource CommonFont}" />
                             <Button Content="&#xe941;" Height="33" FontSize="18" 
                                     Click="Bt_PrevTime" FontFamily="{DynamicResource CommonFont}" Margin="5,0,0,0" />

@@ -11,8 +11,8 @@ namespace GameActivity.Models
 {
     public class GameActivities : PluginDataBaseGameDetails<Activity, ActivityDetails>
     {
-        private static readonly ILogger logger = LogManager.GetLogger();
-        private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
+        private static ILogger logger => LogManager.GetLogger();
+        private ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
 
 
         private List<Activity> _Items = new List<Activity>();
@@ -390,18 +390,8 @@ namespace GameActivity.Models
 
         public bool HasActivity(int Year, int Month)
         {
-            try
-            {
-                var els = Items.FindAll(x => x.DateSession <= new DateTime(Year, Month, DateTime.DaysInMonth(Year, Month))
-                    && x.DateSession >= new DateTime(Year, Month, 1));
-                return els.Count > 0;
-            }
-            catch
-            {
-
-            }
-
-            return false;
+            var els = Items.FindAll(x => x.DateSession <= new DateTime(Year, Month, DateTime.DaysInMonth(Year, Month)) && x.DateSession >= new DateTime(Year, Month, 1));
+            return els?.Count > 0;
         }
 
         public List<string> GetListDateActivity()
