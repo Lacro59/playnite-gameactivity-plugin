@@ -23,16 +23,16 @@ namespace GameActivity.Controls
     /// </summary>
     public partial class PluginButton : PluginUserControlExtend
     {
-        private GameActivity plugin;
+        private GameActivity plugin { get; set; }
 
-        private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
+        private ActivityDatabase PluginDatabase { get; set; } = GameActivity.PluginDatabase;
         internal override IPluginDatabase _PluginDatabase
         {
             get => PluginDatabase;
             set => PluginDatabase = (ActivityDatabase)_PluginDatabase;
         }
 
-        private PluginButtonDataContext ControlDataContext = new PluginButtonDataContext();
+        private PluginButtonDataContext ControlDataContext { get; set; } = new PluginButtonDataContext();
         internal override IDataContext _ControlDataContext
         {
             get => ControlDataContext;

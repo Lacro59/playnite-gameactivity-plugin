@@ -8,7 +8,7 @@
         xmlns:local="clr-namespace:GameActivity.Controls"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:livechartscommon="clr-namespace:CommonPluginsControls.LiveChartsCommon"
-        mc:Ignorable="d" 
+        mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=local:PluginChartLogDataContext, IsDesignTimeCreatable=True}"
         MinHeight="{Binding RelativeSource={RelativeSource AncestorType=ContentControl}, Path=MinHeight}"
         Height="{Binding ChartLogHeight}"
         MaxHeight="{Binding RelativeSource={RelativeSource AncestorType=ContentControl}, Path=MaxHeight}">
@@ -60,7 +60,7 @@
                 </lvc:CartesianChart.ChartLegend>
                 
                 <lvc:CartesianChart.DataTooltip>
-                    <livechartscommon:CustomerToolTipForMultipleTime ShowIcon="{Binding ShowIcon}" />
+                    <livechartscommon:CustomerToolTipForMultipleTime />
                 </lvc:CartesianChart.DataTooltip>
 
                 <lvc:CartesianChart.AxisX>

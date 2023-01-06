@@ -30,14 +30,14 @@ namespace GameActivity.Controls
     /// </summary>
     public partial class PluginChartTime : PluginUserControlExtend
     {
-        private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
+        private ActivityDatabase PluginDatabase { get; set; } = GameActivity.PluginDatabase;
         internal override IPluginDatabase _PluginDatabase
         {
             get => PluginDatabase;
             set => PluginDatabase = (ActivityDatabase)_PluginDatabase;
         }
 
-        private PluginChartTimeDataContext ControlDataContext = new PluginChartTimeDataContext();
+        private PluginChartTimeDataContext ControlDataContext { get; set; } = new PluginChartTimeDataContext();
         internal override IDataContext _ControlDataContext
         {
             get => ControlDataContext;

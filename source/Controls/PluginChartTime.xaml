@@ -7,8 +7,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         xmlns:local="clr-namespace:GameActivity.Controls"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
-        xmlns:livechartscommon="clr-namespace:CommonPluginsControls.LiveChartsCommon"
-        mc:Ignorable="d" 
+        xmlns:livechartscommon="clr-namespace:CommonPluginsControls.LiveChartsCommon" 
+        mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=local:PluginChartTimeDataContext, IsDesignTimeCreatable=True}" 
         MinHeight="{Binding RelativeSource={RelativeSource AncestorType=ContentControl}, Path=MinHeight}"
         Height="{Binding ChartTimeHeight}"
         MaxHeight="{Binding RelativeSource={RelativeSource AncestorType=ContentControl}, Path=MaxHeight}">
@@ -24,7 +24,7 @@
             </lvc:CartesianChart.ChartLegend>
             
             <lvc:CartesianChart.DataTooltip>
-                <livechartscommon:CustomerToolTipForTime ShowIcon="{Binding ShowIcon}" />
+                <livechartscommon:CustomerToolTipForTime />
             </lvc:CartesianChart.DataTooltip>
 
             <lvc:CartesianChart.AxisX>
