@@ -17,11 +17,12 @@ namespace GameActivity.Views
     /// </summary>
     public partial class GameActivityBackup : UserControl
     {
-        private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
-        private ViewDataContext ViewDataContext = new ViewDataContext();
-        private ActivityBackup activityBackup;
+        private ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
+        private ViewDataContext ViewDataContext { get; set; } = new ViewDataContext();
+        private ActivityBackup activityBackup { get; set; }
 
         private Guid Id { get; set; }
+
 
         public GameActivityBackup(ActivityBackup activityBackup)
         {
@@ -40,7 +41,7 @@ namespace GameActivity.Views
             {
                 ViewDataContext.Cover = PluginDatabase.PlayniteApi.Database.GetFullFilePath(game.CoverImage);
             }
-            ViewDataContext.DateLastPlayed = (DateTime)game.LastActivity;
+            ViewDataContext.DateLastPlayed = (DateTime)game?.LastActivity;
             ViewDataContext.Playtime = game.Playtime;
         }
 
@@ -55,7 +56,7 @@ namespace GameActivity.Views
             try
             {
                 Game game = PluginDatabase.PlayniteApi.Database.Games.Get(activityBackup.Id);
-                var pluginData = PluginDatabase.Get(activityBackup.Id);
+                GameActivities pluginData = PluginDatabase.Get(activityBackup.Id);
 
                 game.Playtime += activityBackup.ElapsedSeconds;
                 pluginData.Items.Add(new Activity

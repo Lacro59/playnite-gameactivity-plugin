@@ -314,7 +314,7 @@ namespace GameActivity.Controls
                     DateTime dateStart = new DateTime(1982, 12, 15, 0, 0, 0);
                     for (int iActivity = 0; iActivity < Activities.Count; iActivity++)
                     {
-                        DateTime dateSession = Convert.ToDateTime(Activities[iActivity].DateSession).ToLocalTime();
+                        DateTime dateSession = Convert.ToDateTime(Activities[iActivity].DateSession?.ToLocalTime());
                         if (dateSession > dateStart)
                         {
                             dateStart = dateSession;
@@ -508,7 +508,7 @@ namespace GameActivity.Controls
             try
             {
                 List<Activity> Activities = Serialization.GetClone(gameActivities.FilterItems);
-                DateTime dtLastActivity = Activities.Select(x => (DateTime)x.DateSession).Max();
+                DateTime dtLastActivity = Activities.Select(x => (DateTime)x.DateSession?.ToLocalTime()).Max();
                 dtLastActivity = dtLastActivity.AddDays(7 * variateurTime);
 
                 List<string> labels = new List<string>();

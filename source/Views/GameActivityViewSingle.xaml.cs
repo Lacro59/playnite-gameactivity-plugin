@@ -26,17 +26,17 @@ namespace GameActivity.Views
     /// </summary>
     public partial class GameActivityViewSingle : UserControl
     {
-        private static readonly ILogger logger = LogManager.GetLogger();
-        private static IResourceProvider resources = new ResourceProvider();
+        private static ILogger logger => LogManager.GetLogger();
+        private static IResourceProvider resources => new ResourceProvider();
 
-        private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
+        private ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
 
-        private PluginChartTime PART_ChartTime;
-        private PluginChartLog PART_ChartLog;
+        private PluginChartTime PART_ChartTime { get; set; }
+        private PluginChartLog PART_ChartLog { get; set; }
 
-        private GameActivities gameActivities;
-        private Game game;
-        private GameActivity plugin;
+        private GameActivities gameActivities { get; set; }
+        private Game game { get; set; }
+        private GameActivity plugin { get; set; }
 
 
         public GameActivityViewSingle(GameActivity plugin, Game game)

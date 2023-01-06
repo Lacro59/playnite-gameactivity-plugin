@@ -21,10 +21,10 @@ namespace GameActivity.Views
     /// </summary>
     public partial class GameActivityGanttView : UserControl
     {
-        private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
-        private DataContextGanttView dataContextGanttView = new DataContextGanttView();
+        private ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
+        private DataContextGanttView dataContextGanttView { get; set; } = new DataContextGanttView();
 
-        private GanttControl ganttControl;
+        private GanttControl ganttControl { get; set; }
 
 
         public GameActivityGanttView()
@@ -40,7 +40,7 @@ namespace GameActivity.Views
         private void SetPeriod()
         {
             LocalDateConverter localDateConverter = new LocalDateConverter();
-            DateTime dtStart = dataContextGanttView.LastDate.AddDays(dataContextGanttView.ColumnCount * -1);
+            DateTime dtStart = dataContextGanttView.LastDate.AddDays(dataContextGanttView.ColumnCount * - 1);
             PART_Period.Content = localDateConverter.Convert(dtStart, null, null, CultureInfo.CurrentCulture)
                 + " - " + localDateConverter.Convert(dataContextGanttView.LastDate, null, null, CultureInfo.CurrentCulture);
         }
@@ -61,7 +61,7 @@ namespace GameActivity.Views
                         LastActivity = (DateTime)gameActivities.LastActivity
                     };
 
-                    List<GanttValue> data = gameActivities.Items.Select(x => new GanttValue { PlayDate = (DateTime)x.DateSession, PlayTime = x.ElapsedSeconds }).ToList();
+                    List<GanttValue> data = gameActivities.Items.Select(x => new GanttValue { PlayDate = (DateTime)x.DateSession?.ToLocalTime(), PlayTime = x.ElapsedSeconds }).ToList();
                     List<GanttValue> dataFinal = new List<GanttValue>();
 
                     data.ForEach(x =>
@@ -185,21 +185,9 @@ namespace GameActivity.Views
         public List<GanttValue> DateTimes { get; set; }
 
 
-        public RelayCommand<Guid> GoToGame
-        {
-            get
-            {
-                return PluginDatabase.GoToGame;
-            }
-        }
+        public RelayCommand<Guid> GoToGame => PluginDatabase.GoToGame;
 
-        public bool GameExist
-        {
-            get
-            {
-                return PluginDatabase.PlayniteApi.Database.Games.Get(Id) != null;
-            }
-        }
+        public bool GameExist => PluginDatabase.PlayniteApi.Database.Games.Get(Id) != null;
     }
 
     public class GanttValue

@@ -15,12 +15,12 @@ namespace GameActivity
 {
     public partial class GameActivitySettingsView : UserControl
     {
-        private static readonly ILogger logger = LogManager.GetLogger();
-        private static IResourceProvider resources = new ResourceProvider();
+        private static ILogger logger => LogManager.GetLogger();
+        private static IResourceProvider resources => new ResourceProvider();
 
-        private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
+        private ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
 
-        private StackPanel spControl;
+        private StackPanel spControl { get; set; }
 
 
         public GameActivitySettingsView()

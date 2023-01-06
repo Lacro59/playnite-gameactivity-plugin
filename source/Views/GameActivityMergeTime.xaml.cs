@@ -18,10 +18,10 @@ namespace GameActivity.Views
     /// </summary>
     public partial class GameActivityMergeTime : UserControl
     {
-        private static readonly ILogger logger = LogManager.GetLogger();
+        private static ILogger logger => LogManager.GetLogger();
 
-        private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
-        private Game game;
+        private ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
+        private Game game { get; set; }
 
 
         public GameActivityMergeTime(Game game)

@@ -15,9 +15,6 @@ namespace GameActivity.Views
     /// </summary>
     public partial class WarningsDialogs : UserControl
     {
-        private static readonly ILogger logger = LogManager.GetLogger();
-
-
         public WarningsDialogs(List<WarningData> Messages)
         {
             InitializeComponent();
@@ -33,8 +30,7 @@ namespace GameActivity.Views
 
     public class SetTextColor : IValueConverter
     {
-        private static readonly ILogger logger = LogManager.GetLogger();
-        public static IResourceProvider resources = new ResourceProvider();
+        public static IResourceProvider resources => new ResourceProvider();
 
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

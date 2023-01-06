@@ -15,7 +15,7 @@ namespace TemperatureMeasurementTool
     /// </summary>
     public partial class TimePicker : UserControl
     {
-        public static readonly RoutedEvent TimeChangedEvent = EventManager.RegisterRoutedEvent("TimeChanged", RoutingStrategy.Direct, typeof(RoutedEventHandler), typeof(TimePicker));
+        public static RoutedEvent TimeChangedEvent => EventManager.RegisterRoutedEvent("TimeChanged", RoutingStrategy.Direct, typeof(RoutedEventHandler), typeof(TimePicker));
 
         public event RoutedEventHandler TimeChanged
         {
