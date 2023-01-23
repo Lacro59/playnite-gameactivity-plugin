@@ -1,11 +1,11 @@
 ﻿<UserControl x:Class="GameActivity.Views.GameActivityViewSingle"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:GameActivity.Views"
              xmlns:controls="clr-namespace:GameActivity.Controls"
-             xmlns:controlsShared="clr-namespace:CommonPluginsShared.Controls" 
+             xmlns:controlsShared="clr-namespace:CommonPluginsShared.Controls"
              xmlns:converters="clr-namespace:CommonPlayniteShared.Converters"
              xmlns:commonpluginsshared="clr-namespace:CommonPluginsShared.Converters"
              xmlns:commonpluginscontrols="clr-namespace:CommonPluginsControls.Controls"
@@ -26,7 +26,7 @@
             <RowDefinition Height="10" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        
+
         <!-- Game infos -->
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
@@ -46,7 +46,7 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <TextBlock Grid.Column="0" Grid.Row="0" 
+                <TextBlock Grid.Column="0" Grid.Row="0"
                            Text="{Binding GameDisplayName, FallbackValue='Game Name'}"
                            FontSize="{DynamicResource FontSizeLargest}" TextWrapping="Wrap"
                            Foreground="{DynamicResource TextBrush}" />
@@ -82,42 +82,42 @@
                                 <RowDefinition Height="auto" />
                             </Grid.RowDefinitions>
 
-                            <Label Content="{DynamicResource LOCGameActivityAvgPerDay}" 
+                            <Label Content="{DynamicResource LOCGameActivityAvgPerDay}"
                                Grid.Column="0" Grid.Row="0"
                                VerticalAlignment="center" />
-                            <TextBlock Name="PART_TimeAvg" Text="any time" 
+                            <TextBlock Name="PART_TimeAvg" Text="any time"
                                    Grid.Column="2" Grid.Row="0"
                                    Foreground="{DynamicResource TextBrush}"
                                    VerticalAlignment="center" />
 
-                            <Label Content="{DynamicResource LOCGameActivityFirstSession}" 
+                            <Label Content="{DynamicResource LOCGameActivityFirstSession}"
                                    Grid.Column="0" Grid.Row="2"
                                    VerticalAlignment="center" />
-                            <TextBlock Name="PART_FirstSession" Text="any time" 
+                            <TextBlock Name="PART_FirstSession" Text="any time"
                                        Grid.Column="2" Grid.Row="2"
                                        Foreground="{DynamicResource TextBrush}"
                                        VerticalAlignment="center" />
 
-                            <Label Content="{DynamicResource LOCGameActivityLvGamesElapsedSeconds}" 
+                            <Label Content="{DynamicResource LOCGameActivityLvGamesElapsedSeconds}"
                                    Grid.Column="4" Grid.Row="2"
                                    VerticalAlignment="center" />
-                            <TextBlock Name="PART_FirstSessionElapsedTime" Text="any time" 
+                            <TextBlock Name="PART_FirstSessionElapsedTime" Text="any time"
                                        Grid.Column="6" Grid.Row="2"
                                        Foreground="{DynamicResource TextBrush}"
                                        VerticalAlignment="center" />
 
-                            <Label Content="{DynamicResource LOCGameActivityLastSession}" 
+                            <Label Content="{DynamicResource LOCGameActivityLastSession}"
                                    Grid.Column="0" Grid.Row="4"
                                    VerticalAlignment="center" />
-                            <TextBlock Name="PART_LastSession" Text="any time" 
+                            <TextBlock Name="PART_LastSession" Text="any time"
                                    Grid.Column="2" Grid.Row="4"
                                    Foreground="{DynamicResource TextBrush}"
                                    VerticalAlignment="center" />
 
-                            <Label Content="{DynamicResource LOCGameActivityLvGamesElapsedSeconds}" 
+                            <Label Content="{DynamicResource LOCGameActivityLvGamesElapsedSeconds}"
                                    Grid.Column="4" Grid.Row="4"
                                    VerticalAlignment="center" />
-                            <TextBlock Name="PART_LastSessionElapsedTime" Text="any time" 
+                            <TextBlock Name="PART_LastSessionElapsedTime" Text="any time"
                                    Grid.Column="6" Grid.Row="4"
                                    Foreground="{DynamicResource TextBrush}"
                                    VerticalAlignment="center" />
@@ -133,26 +133,23 @@
                         </Grid.RowDefinitions>
 
                         <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Right">
-                            <ToggleButton Content="{DynamicResource LOCGameActivityWeekLabel}" Height="33" FontSize="18" 
+                            <ToggleButton Content="{DynamicResource LOCGameActivityWeekLabel}" Height="33" FontSize="18"
                                           Name="PART_ToggleButton" Click="ToggleButton_Click" />
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Grid.Row="2">
-                            <Button Content="&#xe945;" Height="33" FontSize="18" 
+                            <Button Content="&#xe945;" Height="33" FontSize="18"  Margin="5,0,0,0"
                                     Click="Bt_PrevTimePlus" FontFamily="{DynamicResource CommonFont}" />
-
-                            <Button Content="&#xe945;" Height="33" FontSize="18"  Margin="5,0,0,0" 
-                                    Click="Bt_PrevTimePlus" FontFamily="{DynamicResource CommonFont}" />
-                            <Button Content="&#xe941;" Height="33" FontSize="18" 
+                            <Button Content="&#xe941;" Height="33" FontSize="18"
                                     Click="Bt_PrevTime" FontFamily="{DynamicResource CommonFont}" Margin="5,0,0,0" />
 
                             <ToggleButton Content="&#xe9b0;" Height="33" FontSize="18" Name="PART_Truncate"
                                           IsEnabled="{Binding ElementName=PART_ToggleButton, Path=IsChecked,Converter={StaticResource InvertedBoolenConverter}}"
                                           Click="Bt_Truncate" FontFamily="{DynamicResource CommonFont}" Margin="5,0,0,0" />
-                        
-                            <Button Content="&#xe942;" Height="33" FontSize="18" 
+
+                            <Button Content="&#xe942;" Height="33" FontSize="18"
                                     Click="Bt_NextTime" FontFamily="{DynamicResource CommonFont}" Margin="5,0,0,0" />
-                            <Button Content="&#xe946;" Height="33" FontSize="18" 
+                            <Button Content="&#xe946;" Height="33" FontSize="18"
                                     Click="Bt_NextTimePlus" FontFamily="{DynamicResource CommonFont}" Margin="5,0,0,0" />
                         </StackPanel>
                     </Grid>
@@ -164,7 +161,7 @@
                 </Grid>
             </Grid>
         </Grid>
-        
+
         <!-- Game sessions -->
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
@@ -175,12 +172,12 @@
 
             <Grid Grid.Column="0">
                 <controlsShared:ListViewExtend x:Name="lvSessions" Style="{StaticResource {x:Type ListView}}"
-                                               SelectionChanged="LvSessions_SelectionChanged" FontSize="24" 
+                                               SelectionChanged="LvSessions_SelectionChanged" FontSize="24"
                                                SortingSortDirection="Descending"
                                                SortingEnable="True" SortingDefaultDataName="GameLastActivity">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Width="150" 
+                            <GridViewColumn Width="150"
                                             DisplayMemberBinding="{Binding GameLastActivity, Converter={StaticResource LocalDateTimeConverter}}">
                                 <GridViewColumnHeader Content="{DynamicResource LOCGameActivityLvGamesLastActivity}" />
                             </GridViewColumn>
@@ -189,7 +186,7 @@
                                 <GridViewColumnHeader IsHitTestVisible="False" />
                             </GridViewColumn>
                             <GridViewColumn Width="130">
-                                <GridViewColumnHeader Content="{DynamicResource LOCGameActivityLvGamesElapsedSeconds}" 
+                                <GridViewColumnHeader Content="{DynamicResource LOCGameActivityLvGamesElapsedSeconds}"
                                                       Tag="GameElapsedSeconds" />
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
@@ -227,7 +224,7 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Tag="{Binding}">
-                                            <commonpluginscontrols:TextBlockWithIcon Mode="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=Tag.TypeStoreIcon}" 
+                                            <commonpluginscontrols:TextBlockWithIcon Mode="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=Tag.TypeStoreIcon}"
                                                                                      Icon="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=Tag.SourceIcon}"
                                                                                      IconText="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=Tag.SourceIconText}"
                                                                                      Style="{DynamicResource ListExtendStyleTextBlock}"
@@ -468,7 +465,7 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            
+
                             <GridViewColumn Width="100">
                                 <GridViewColumnHeader />
                                 <GridViewColumn.CellTemplate>
@@ -509,26 +506,26 @@
                         <ColumnDefinition Width="auto" />
                     </Grid.ColumnDefinitions>
 
-                    <Button Name="PART_BtAdd" Content="&#xe971;" Height="33" FontSize="22" 
+                    <Button Name="PART_BtAdd" Content="&#xe971;" Height="33" FontSize="22"
                             Click="PART_BtAdd_Click" FontFamily="{DynamicResource FontIcoFont}"  />
 
                     <Button Name="PART_BtMerged" Content="&#xe987;" Height="33" FontSize="22" Grid.Column="2"
                             Click="PART_BtMerged_Click" FontFamily="{DynamicResource CommonFont}"  />
 
-                    <ToggleButton Content="&#xef24;" FontFamily="{StaticResource FontIcoFont}" Name="ButtonShowConfig" 
+                    <ToggleButton Content="&#xef24;" FontFamily="{StaticResource FontIcoFont}" Name="ButtonShowConfig"
                                   Height="33" FontSize="20" Grid.Column="4"
                                   IsChecked="True" HorizontalAlignment="Left" />
                 </Grid>
 
                 <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2" Name="PART_BtLogContener"
                             VerticalAlignment="Bottom" HorizontalAlignment="Right">
-                    <Button Content="&#xe945;" Height="33" FontSize="18" 
+                    <Button Content="&#xe945;" Height="33" FontSize="18"
                                 Click="Bt_PrevLogPlus" FontFamily="{DynamicResource CommonFont}" />
-                    <Button Content="&#xe941;" Height="33" FontSize="18" 
+                    <Button Content="&#xe941;" Height="33" FontSize="18"
                                 Click="Bt_PrevLog" FontFamily="{DynamicResource CommonFont}" Margin="5,0,0,0" />
-                    <Button Content="&#xe942;" Height="33" FontSize="18" 
+                    <Button Content="&#xe942;" Height="33" FontSize="18"
                                 Click="Bt_NextLog" FontFamily="{DynamicResource CommonFont}" Margin="5,0,0,0" />
-                    <Button Content="&#xe946;" Height="33" FontSize="18" 
+                    <Button Content="&#xe946;" Height="33" FontSize="18"
                                 Click="Bt_NextLogPlus" FontFamily="{DynamicResource CommonFont}" Margin="5,0,0,0" />
                 </StackPanel>
 
