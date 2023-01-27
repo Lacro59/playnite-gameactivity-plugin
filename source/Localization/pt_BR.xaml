@@ -7,7 +7,7 @@ Usado a diferença de tempo de jogo:{1}s.</sys:String>
     
     <!-- MainView -->
 
-    <sys:String x:Key="LOCGameActivity">TempoDeJogo</sys:String>
+    <sys:String x:Key="LOCGameActivity">GameActivity</sys:String>
     <sys:String x:Key="LOCGameActivityTitle">Atividade</sys:String>
     <sys:String x:Key="LOCGamesActivitiesTitle">Atividades de Jogos</sys:String>
     <sys:String x:Key="LOCGameActivitiesTitle">Atividades de Jogos</sys:String>
@@ -154,7 +154,7 @@ Clique para mais informações.</sys:String>
     <sys:String x:Key="LOCGaDateEnd">Data final</sys:String>
     
     <sys:String x:Key="LOCGaGameActions">Ações do jogo</sys:String>
-    <sys:String x:Key="LOCGaCustomGameActions">Custom game actions</sys:String>
+    <sys:String x:Key="LOCGaCustomGameActions">Ações personalizadas de jogo</sys:String>
 
 
 
