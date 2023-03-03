@@ -267,7 +267,7 @@
                                 <ListView.View>
                                     <GridView>
                                         <GridViewColumn Width="70">
-                                            <GridViewColumnHeader Content="{DynamicResource LOCGameDetails}" Tag="NoSort" />
+                                            <GridViewColumnHeader Content="{DynamicResource LOCActionsLabel}" Tag="NoSort" />
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <Button FontFamily="{DynamicResource CommonFont}" Content="&#xe90f;"
@@ -307,22 +307,26 @@
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
 
-                                        <GridViewColumn Width="150" 
-                                                DisplayMemberBinding="{Binding GameLastActivity, Converter={StaticResource LocalDateTimeConverter}}">
+                                        <GridViewColumn Width="150">
                                             <GridViewColumnHeader Content="{DynamicResource LOCGameActivityLvGamesLastActivity}" />
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <Label Content="{Binding GameLastActivity, Converter={StaticResource LocalDateTimeConverter}}" 
+                                                           VerticalAlignment="Stretch" Style="{DynamicResource ListExtendStyleLabel}" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
 
                                         <GridViewColumn Width="0" DisplayMemberBinding="{Binding GameElapsedSeconds}">
                                             <GridViewColumnHeader IsHitTestVisible="False" />
                                         </GridViewColumn>
                                         <GridViewColumn Width="130">
-                                            <GridViewColumnHeader Content="{DynamicResource LOCGameActivityLvGamesElapsedSeconds}" 
-                                                          Tag="GameElapsedSeconds" />
+                                            <GridViewColumnHeader Content="{DynamicResource LOCGameActivityLvGamesElapsedSeconds}" Tag="GameElapsedSeconds" />
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <Label Content="{Binding GameElapsedSeconds, Mode=OneWay, Converter={StaticResource PlayTimeToStringConverter}}"
-                                                   HorizontalAlignment="Center" VerticalAlignment="Stretch"
-                                                   Style="{DynamicResource ListExtendStyleLabel}" />
+                                                           HorizontalAlignment="Center" VerticalAlignment="Stretch"
+                                                           Style="{DynamicResource ListExtendStyleLabel}" />
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
@@ -336,10 +340,10 @@
                                                 <DataTemplate>
                                                     <StackPanel Tag="{Binding}">
                                                         <commonpluginscontrols:TextBlockWithIcon Mode="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=Tag.TypeStoreIcon}" 
-                                                                                         Icon="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=Tag.SourceIcon}"
-                                                                                         IconText="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=Tag.SourceIconText}"
-                                                                                         Style="{DynamicResource ListExtendStyleTextBlock}"
-                                                                                         HorizontalAlignment="Center" VerticalAlignment="Stretch" FontSize="22" />
+                                                                                                 Icon="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=Tag.SourceIcon}"
+                                                                                                 IconText="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=Tag.SourceIconText}"
+                                                                                                 Style="{DynamicResource ListExtendStyleTextBlock}"
+                                                                                                 HorizontalAlignment="Center" VerticalAlignment="Stretch" FontSize="22" />
                                                     </StackPanel>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
@@ -358,9 +362,7 @@
                                             <GridViewColumnHeader Content="{DynamicResource LOCIsPlayAction}" Name="lvGamesPlayActionHeader" />
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <Label Content="{Binding GameActionName}" VerticalAlignment="Stretch" Style="{DynamicResource ListExtendStyleLabel}" />
-                                                    </StackPanel>
+                                                    <Label Content="{Binding GameActionName}" VerticalAlignment="Stretch" Style="{DynamicResource ListExtendStyleLabel}" />
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
