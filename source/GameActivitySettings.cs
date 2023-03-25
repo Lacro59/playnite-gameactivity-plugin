@@ -140,6 +140,8 @@ namespace GameActivity
         public int VariatorTime { get; set; } = 7;
         public int VariatorLog { get; set; } = 4;
 
+        public int RecentActivityWeek { get; set; } = 2;
+
 
         public Dictionary<Guid, List<string>> CustomGameActions = new Dictionary<Guid, List<string>>();
         #endregion
@@ -215,6 +217,18 @@ namespace GameActivity
             set
             {
                 _AvgFpsAllSession = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _RecentActivity { get; set; } = string.Empty;
+        [DontSerialize]
+        public string RecentActivity
+        {
+            get => _RecentActivity;
+            set
+            {
+                _RecentActivity = value;
                 OnPropertyChanged();
             }
         }

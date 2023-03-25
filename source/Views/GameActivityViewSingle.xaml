@@ -83,44 +83,36 @@
                             </Grid.RowDefinitions>
 
                             <Label Content="{DynamicResource LOCGameActivityAvgPerDay}"
-                               Grid.Column="0" Grid.Row="0"
-                               VerticalAlignment="center" />
-                            <TextBlock Name="PART_TimeAvg" Text="any time"
-                                   Grid.Column="2" Grid.Row="0"
-                                   Foreground="{DynamicResource TextBrush}"
-                                   VerticalAlignment="center" />
+                                   Grid.Column="0" Grid.Row="0" VerticalAlignment="center" />
+                            <TextBlock Name="PART_TimeAvg" Text="any time" Grid.Column="2" Grid.Row="0"
+                                       Foreground="{DynamicResource TextBrush}" VerticalAlignment="center" />
 
+                            <Label Content="{DynamicResource LOCGameActivityRecentActivity}"
+                                   Grid.Column="4" Grid.Row="0" VerticalAlignment="center" />
+                            <TextBlock Name="PART_RecentActivity" Text="any time" Grid.Column="6" Grid.Row="0"
+                                       Foreground="{DynamicResource TextBrush}" VerticalAlignment="center" />
+
+                            
                             <Label Content="{DynamicResource LOCGameActivityFirstSession}"
-                                   Grid.Column="0" Grid.Row="2"
-                                   VerticalAlignment="center" />
-                            <TextBlock Name="PART_FirstSession" Text="any time"
-                                       Grid.Column="2" Grid.Row="2"
-                                       Foreground="{DynamicResource TextBrush}"
-                                       VerticalAlignment="center" />
+                                   Grid.Column="0" Grid.Row="2" VerticalAlignment="center" />
+                            <TextBlock Name="PART_FirstSession" Text="any time" Grid.Column="2" Grid.Row="2"
+                                       Foreground="{DynamicResource TextBrush}" VerticalAlignment="center" />
 
                             <Label Content="{DynamicResource LOCGameActivityLvGamesElapsedSeconds}"
-                                   Grid.Column="4" Grid.Row="2"
-                                   VerticalAlignment="center" />
-                            <TextBlock Name="PART_FirstSessionElapsedTime" Text="any time"
-                                       Grid.Column="6" Grid.Row="2"
-                                       Foreground="{DynamicResource TextBrush}"
-                                       VerticalAlignment="center" />
+                                   Grid.Column="4" Grid.Row="2" VerticalAlignment="center" />
+                            <TextBlock Name="PART_FirstSessionElapsedTime" Text="any time" Grid.Column="6" Grid.Row="2"
+                                       Foreground="{DynamicResource TextBrush}" VerticalAlignment="center" />
 
-                            <Label Content="{DynamicResource LOCGameActivityLastSession}"
-                                   Grid.Column="0" Grid.Row="4"
-                                   VerticalAlignment="center" />
-                            <TextBlock Name="PART_LastSession" Text="any time"
-                                   Grid.Column="2" Grid.Row="4"
-                                   Foreground="{DynamicResource TextBrush}"
-                                   VerticalAlignment="center" />
+                            
+                            <Label Content="{DynamicResource LOCGameActivityLastSession}" 
+                                   Grid.Column="0" Grid.Row="4" VerticalAlignment="center" />
+                            <TextBlock Name="PART_LastSession" Text="any time" Grid.Column="2" Grid.Row="4"
+                                       Foreground="{DynamicResource TextBrush}" VerticalAlignment="center" />
 
                             <Label Content="{DynamicResource LOCGameActivityLvGamesElapsedSeconds}"
-                                   Grid.Column="4" Grid.Row="4"
-                                   VerticalAlignment="center" />
-                            <TextBlock Name="PART_LastSessionElapsedTime" Text="any time"
-                                   Grid.Column="6" Grid.Row="4"
-                                   Foreground="{DynamicResource TextBrush}"
-                                   VerticalAlignment="center" />
+                                   Grid.Column="4" Grid.Row="4" VerticalAlignment="center" />
+                            <TextBlock Name="PART_LastSessionElapsedTime" Text="any time" Grid.Column="6" Grid.Row="4"
+                                       Foreground="{DynamicResource TextBrush}" VerticalAlignment="center" />
 
                         </Grid>
                     </Grid>

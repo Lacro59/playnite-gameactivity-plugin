@@ -108,6 +108,8 @@ namespace GameActivity.Services
             PluginSettings.Settings.LastPlaytimeSession = playtime;
 
             PluginSettings.Settings.AvgFpsAllSession = gameActivities.ItemsDetails.AvgFpsAllSession;
+
+            PluginSettings.Settings.RecentActivity = gameActivities.GetRecentActivity();
         }
 
         public override void Games_ItemUpdated(object sender, ItemUpdatedEventArgs<Game> e)

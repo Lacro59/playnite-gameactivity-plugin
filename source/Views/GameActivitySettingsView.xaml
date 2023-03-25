@@ -135,6 +135,8 @@
                             <RowDefinition Height="auto" />
                             <RowDefinition Height="15" />
                             <RowDefinition Height="auto" />
+                            <RowDefinition Height="15" />
+                            <RowDefinition Height="auto" />
                         </Grid.RowDefinitions>
 
                         <CheckBox IsChecked="{Binding Settings.IgnoreSession}" Name="PART_IgnoreSession"
@@ -167,6 +169,15 @@
                                 ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Value}"
                                 Name="PART_SliderVariatorLog" />
                         <Label Grid.Row="4" Grid.Column="3" Content="{Binding ElementName=PART_SliderVariatorLog, Path=Value}" HorizontalAlignment="Center" />
+
+                        <Label Content="{DynamicResource LOCGameActivityRecentActivityWeek}"
+                               Grid.Row="6" Grid.Column="0" />
+                        <Slider Minimum="2" Maximum="20" Value="{Binding Settings.RecentActivityWeek, FallbackValue=4}" 
+                                Grid.Row="6" Grid.Column="1" Margin="20,0,0,0"
+                                IsSnapToTickEnabled="True" TickFrequency="1" AutoToolTipPlacement="TopLeft"
+                                ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Value}"
+                                Name="PART_SliderRecentActivityWeek" />
+                        <Label Grid.Row="6" Grid.Column="3" Content="{Binding ElementName=PART_SliderRecentActivityWeek, Path=Value}" HorizontalAlignment="Center" />
                     </Grid>
                 </DockPanel>
             </ScrollViewer>

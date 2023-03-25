@@ -63,6 +63,9 @@ namespace GameActivity.Views
             PART_TimeAvg.Text = (string)longToTimePlayedConverter.Convert(gameActivities.avgPlayTime(), null, null, CultureInfo.CurrentCulture);
 
 
+            PART_RecentActivity.Text = gameActivities.GetRecentActivity();
+
+
             LocalDateConverter localDateConverter = new LocalDateConverter();
             PlayTimeToStringConverter converter = new PlayTimeToStringConverter();
 

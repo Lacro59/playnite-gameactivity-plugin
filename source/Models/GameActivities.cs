@@ -12,6 +12,7 @@ namespace GameActivity.Models
     public class GameActivities : PluginDataBaseGameDetails<Activity, ActivityDetails>
     {
         private static ILogger logger => LogManager.GetLogger();
+        private static IResourceProvider resources => new ResourceProvider();
         private ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
 
 
@@ -375,6 +376,29 @@ namespace GameActivity.Models
             }
 
             return lastActivity;
+        }
+
+
+        public List<Activity> GetListActivitiesWeek(int week)
+        {
+            int CountDay = PluginDatabase.PluginSettings.Settings.RecentActivityWeek * 7;
+            DateTime dtEnd = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59, 59);
+            DateTime dtStart = new DateTime(DateTime.Now.AddDays(-CountDay).Year, DateTime.Now.AddDays(-CountDay).Month, DateTime.Now.AddDays(-CountDay).Day, 0, 0, 0, 0);
+
+            return Items.Where(x => x.DateSession >= dtStart && x.DateSession <= dtEnd)?.ToList() ?? new List<Activity>();
+        }
+
+        public string GetRecentActivity()
+        {
+            List<Activity> RecentActivities = GetListActivitiesWeek(PluginDatabase.PluginSettings.Settings.RecentActivityWeek);
+            ulong CountElapsedSeconds = RecentActivities?.Count == 0 ? 0 : RecentActivities?.Select(x => x.ElapsedSeconds)?.Aggregate((a, c) => a + c) ?? 0;
+            double CountElapsedHours = CountElapsedSeconds / 3600;
+
+            return CountElapsedHours == 0
+                ? resources.GetString("LOCGameActivityNoRecentActivity")
+                : PluginDatabase.PluginSettings.Settings.RecentActivityWeek == 1
+                    ? string.Format(resources.GetString("LOCGameActivityRecentActivitySingular"), CountElapsedHours, PluginDatabase.PluginSettings.Settings.RecentActivityWeek)
+                    : string.Format(resources.GetString("LOCGameActivityRecentActivityPlurial"), CountElapsedHours, PluginDatabase.PluginSettings.Settings.RecentActivityWeek);
         }
 
 
