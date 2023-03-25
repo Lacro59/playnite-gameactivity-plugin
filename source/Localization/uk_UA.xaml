@@ -95,9 +95,14 @@
     <sys:String x:Key="LOCGameActivityIgnoreSession">Ігнорувати короткі ігрові сесії</sys:String>
     <sys:String x:Key="LOCGameActivitySetVariatorTime">Встановити варіатор часу</sys:String>
     <sys:String x:Key="LOCGameActivitySetVariatorLog">Встановити варіатор журналу</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivityWeek">Number of weeks for recent activity</sys:String>
 
     <!-- GameActivityViewSingle -->
 
+    <sys:String x:Key="LOCGameActivityRecentActivity">Recent activity</sys:String>
+    <sys:String x:Key="LOCGameActivityNoRecentActivity">No recent activity</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} hours past {1} week</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} hours past {1} weeks</sys:String>
     <sys:String x:Key="LOCGameActivityAvgPerDay">Середній час на добу</sys:String>
     <sys:String x:Key="LOCGameActivityFirstSession">Перший сеанс</sys:String>
     <sys:String x:Key="LOCGameActivityLastSession">Останній сеанс</sys:String>
