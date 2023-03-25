@@ -95,9 +95,14 @@ Klikk for mer informasjon.</sys:String>
     <sys:String x:Key="LOCGameActivityIgnoreSession">Ignorer korte spilløkter</sys:String>
     <sys:String x:Key="LOCGameActivitySetVariatorTime">Angi tidsvariant</sys:String>
     <sys:String x:Key="LOCGameActivitySetVariatorLog">Angi loggvariant</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivityWeek">Number of weeks for recent activity</sys:String>
 
     <!-- GameActivityViewSingle -->
 
+    <sys:String x:Key="LOCGameActivityRecentActivity">Recent activity</sys:String>
+    <sys:String x:Key="LOCGameActivityNoRecentActivity">No recent activity</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} hours past {1} week</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} hours past {1} weeks</sys:String>
     <sys:String x:Key="LOCGameActivityAvgPerDay">Gjennomsnittlig tid per dag</sys:String>
     <sys:String x:Key="LOCGameActivityFirstSession">Første økt</sys:String>
     <sys:String x:Key="LOCGameActivityLastSession">Siste økt</sys:String>
