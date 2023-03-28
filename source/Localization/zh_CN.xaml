@@ -95,9 +95,14 @@
     <sys:String x:Key="LOCGameActivityIgnoreSession">忽略短的游戏会话</sys:String>
     <sys:String x:Key="LOCGameActivitySetVariatorTime">设置时间变量</sys:String>
     <sys:String x:Key="LOCGameActivitySetVariatorLog">设置日志变量</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivityWeek">Number of weeks for recent activity</sys:String>
 
     <!-- GameActivityViewSingle -->
 
+    <sys:String x:Key="LOCGameActivityRecentActivity">Recent activity</sys:String>
+    <sys:String x:Key="LOCGameActivityNoRecentActivity">No recent activity</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} hours past {1} week</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} hours past {1} weeks</sys:String>
     <sys:String x:Key="LOCGameActivityAvgPerDay">日平均时间</sys:String>
     <sys:String x:Key="LOCGameActivityFirstSession">首次会话</sys:String>
     <sys:String x:Key="LOCGameActivityLastSession">上次会话</sys:String>

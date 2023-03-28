@@ -95,9 +95,14 @@
     <sys:String x:Key="LOCGameActivityIgnoreSession">تجاهل جلسات التشغيل القصير</sys:String>
     <sys:String x:Key="LOCGameActivitySetVariatorTime">تعيين المتغير الزمن</sys:String>
     <sys:String x:Key="LOCGameActivitySetVariatorLog">تعيين متغير السج</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivityWeek">Number of weeks for recent activity</sys:String>
 
     <!-- GameActivityViewSingle -->
 
+    <sys:String x:Key="LOCGameActivityRecentActivity">Recent activity</sys:String>
+    <sys:String x:Key="LOCGameActivityNoRecentActivity">No recent activity</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} hours past {1} week</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} hours past {1} weeks</sys:String>
     <sys:String x:Key="LOCGameActivityAvgPerDay">متوسط الوقت في ال</sys:String>
     <sys:String x:Key="LOCGameActivityFirstSession">أول جلسة تشغ</sys:String>
     <sys:String x:Key="LOCGameActivityLastSession">آخر جلسة تشغيل</sys:String>

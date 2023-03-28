@@ -95,9 +95,14 @@ Cliquez pour plus d'informations.</sys:String>
     <sys:String x:Key="LOCGameActivityIgnoreSession">Ignorer les sessions de jeu courtes</sys:String>
     <sys:String x:Key="LOCGameActivitySetVariatorTime">Définir le variateur de temps</sys:String>
     <sys:String x:Key="LOCGameActivitySetVariatorLog">Définir le variateur de journal</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivityWeek">Nombre de semaines pour l'activité récente</sys:String>
 
     <!-- GameActivityViewSingle -->
 
+    <sys:String x:Key="LOCGameActivityRecentActivity">Activité récente</sys:String>
+    <sys:String x:Key="LOCGameActivityNoRecentActivity">Pas d'activité récente</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} heures sur {1} semaine</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} heures sur {1} semaines</sys:String>
     <sys:String x:Key="LOCGameActivityAvgPerDay">Temps moyen par jour</sys:String>
     <sys:String x:Key="LOCGameActivityFirstSession">Première session</sys:String>
     <sys:String x:Key="LOCGameActivityLastSession">Dernière session</sys:String>
