@@ -10,7 +10,7 @@
 Extension for [Playnite](https://playnite.link).  
 
 ## Informations
-This plugin can manage your cover and background images with more formats and more options.
+This plugin creates datas for your game activities and shows many statistics.
 
 <a href="https://github.com/Lacro59/playnite-gameactivity-plugin/blob/master/forum/main_01.jpg?raw=true">
   <picture>
