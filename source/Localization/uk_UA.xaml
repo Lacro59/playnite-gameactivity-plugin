@@ -54,7 +54,9 @@
     <sys:String x:Key="LOCGameActivityTimeLabel">хвилин(и)</sys:String>
 
     <sys:String x:Key="LOCGameActivityUseMsiAfterburner">Використовувати MSI Afterburner</sys:String>
-    <sys:String x:Key="LOCGameActivityUseHWiNFO">Використовувати HWiNFO</sys:String>
+    <sys:String x:Key="LOCGameActivityUseHWiNFOSharedMemory">Використовувати HWiNFO SharedMemory</sys:String>
+    <sys:String x:Key="LOCGameActivityUseHWiNFOGadget">Використовувати показники гаджета HWiNFO</sys:String>
+    <sys:String x:Key="LOCGameActivityIndex">Зміст</sys:String>
 
     <sys:String x:Key="LOCGameActivitySensorsID">ID датчиків</sys:String>
     <sys:String x:Key="LOCGameActivityElementID">ID елементу</sys:String>
@@ -63,6 +65,8 @@
     <sys:String x:Key="LOCGameActivityFps">FPS</sys:String>
     <sys:String x:Key="LOCGameActivityGpuTemp">Температура GPU</sys:String>
     <sys:String x:Key="LOCGameActivityCpuTemp">Температура CPU</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuPower">Живлення CPU</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuPower">Живлення GPU</sys:String>
 
     <sys:String x:Key="LOCGameActivityActiveWarning">Увімкнути попередження</sys:String>
     <sys:String x:Key="LOCGameActivityMinFps">Мін. FPS</sys:String>
