@@ -61,11 +61,22 @@ namespace GameActivity
 
             if ((cb.Name == "cbUseMsiAfterburner") && (bool)cb.IsChecked)
             {
-                cbUseHWiNFO.IsChecked = false;
+                cbUseHWiNFOSharedMemory.IsChecked = false;
+                cbUseHWiNFOGadget.IsChecked = false;
             }
-            if ((cb.Name == "cbUseHWiNFO") && (bool)cb.IsChecked)
+            if (cb.Name == "cbUseHWiNFOSharedMemory" && (bool)cb.IsChecked)
             {
                 cbUseMsiAfterburner.IsChecked = false;
+                cbUseHWiNFOGadget.IsChecked = false;
+
+                PART_TabHWiNFO.SelectedIndex = 0;
+            }
+            if (cb.Name == "cbUseHWiNFOGadget" && (bool)cb.IsChecked)
+            {
+                cbUseMsiAfterburner.IsChecked = false;
+                cbUseHWiNFOSharedMemory.IsChecked = false;
+
+                PART_TabHWiNFO.SelectedIndex = 1;
             }
         }
 

@@ -54,7 +54,9 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivityTimeLabel">minute(s)</sys:String>
 
     <sys:String x:Key="LOCGameActivityUseMsiAfterburner">Use MSI Afterburner</sys:String>
-    <sys:String x:Key="LOCGameActivityUseHWiNFO">Use HWiNFO</sys:String>
+    <sys:String x:Key="LOCGameActivityUseHWiNFOSharedMemory">Use HWiNFO SharedMemory</sys:String>
+    <sys:String x:Key="LOCGameActivityUseHWiNFOGadget">Use HWiNFO gadget reporting</sys:String>
+    <sys:String x:Key="LOCGameActivityIndex">Index</sys:String>
 
     <sys:String x:Key="LOCGameActivitySensorsID">Sensors id</sys:String>
     <sys:String x:Key="LOCGameActivityElementID">Element id</sys:String>

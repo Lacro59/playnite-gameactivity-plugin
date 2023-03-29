@@ -132,6 +132,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\HWiNFODumper.cs" />
+    <Compile Include="Common\HWiNFOGadget.cs" />
     <Compile Include="Controls\GanttControl.xaml.cs">
       <DependentUpon>GanttControl.xaml</DependentUpon>
     </Compile>
