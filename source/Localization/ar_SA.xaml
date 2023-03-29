@@ -54,7 +54,9 @@
     <sys:String x:Key="LOCGameActivityTimeLabel">دقائق</sys:String>
 
     <sys:String x:Key="LOCGameActivityUseMsiAfterburner">استخدام MSI Afterburner</sys:String>
-    <sys:String x:Key="LOCGameActivityUseHWiNFO">استخدام HWiNFO</sys:String>
+    <sys:String x:Key="LOCGameActivityUseHWiNFOSharedMemory">Use HWiNFO SharedMemory</sys:String>
+    <sys:String x:Key="LOCGameActivityUseHWiNFOGadget">Use HWiNFO gadget reporting</sys:String>
+    <sys:String x:Key="LOCGameActivityIndex">Index</sys:String>
 
     <sys:String x:Key="LOCGameActivitySensorsID">معرف أجهزة الاستشعار</sys:String>
     <sys:String x:Key="LOCGameActivityElementID">رقم تعريف العنصر</sys:String>
@@ -63,6 +65,8 @@
     <sys:String x:Key="LOCGameActivityFps">FPS</sys:String>
     <sys:String x:Key="LOCGameActivityGpuTemp">درجة حرارة GPU</sys:String>
     <sys:String x:Key="LOCGameActivityCpuTemp">درجة حرارة المعالج</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuPower">CPU power</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuPower">GPU power</sys:String>
 
     <sys:String x:Key="LOCGameActivityActiveWarning">تمكين التحذيرات</sys:String>
     <sys:String x:Key="LOCGameActivityMinFps">الحد الأدنى للإطار</sys:String>
