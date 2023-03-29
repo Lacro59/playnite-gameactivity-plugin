@@ -123,13 +123,19 @@ namespace GameActivity
         public string HWiNFO_fps_elementID { get; set; } = string.Empty;
         public string HWiNFO_gpuT_sensorsID { get; set; } = string.Empty;
         public string HWiNFO_gpuT_elementID { get; set; } = string.Empty;
+        public string HWiNFO_gpuP_sensorsID { get; set; } = string.Empty;
+        public string HWiNFO_gpuP_elementID { get; set; } = string.Empty;
         public string HWiNFO_cpuT_sensorsID { get; set; } = string.Empty;
         public string HWiNFO_cpuT_elementID { get; set; } = string.Empty;
+        public string HWiNFO_cpuP_sensorsID { get; set; } = string.Empty;
+        public string HWiNFO_cpuP_elementID { get; set; } = string.Empty;
 
         public long HWiNFO_gpu_index { get; set; } = 0;
-        public long HWiNFO_fps_index { get; set; } = 1;
-        public long HWiNFO_gpuT_index { get; set; } = 2;
-        public long HWiNFO_cpuT_index { get; set; } = 3;
+        public long HWiNFO_fps_index { get; set; } = 0;
+        public long HWiNFO_gpuT_index { get; set; } = 0;
+        public long HWiNFO_cpuT_index { get; set; } = 0;
+        public long HWiNFO_gpuP_index { get; set; } = 0;
+        public long HWiNFO_cpuP_index { get; set; } = 0;
 
         public bool EnableWarning { get; set; } = false;
         public int MinFps { get; set; } = 0;

@@ -446,6 +446,38 @@ namespace GameActivity
                                     }
                                 }
                             }
+
+                            // Find sensors gpu power
+                            if (sensorsID.ToLower() == PluginSettings.Settings.HWiNFO_gpuP_elementID.ToLower())
+                            {
+                                // Find data gpu
+                                foreach (dynamic items in sensorItemsOBJ["sensors"])
+                                {
+                                    dynamic itemOBJ = Serialization.FromJson<dynamic>(Serialization.ToJson(items));
+                                    string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
+
+                                    if (dataID.ToLower() == PluginSettings.Settings.HWiNFO_gpuP_elementID.ToLower())
+                                    {
+                                        gpuPValue = (int)Math.Round((Double)itemOBJ["Value"]);
+                                    }
+                                }
+                            }
+
+                            // Find sensors cpu power
+                            if (sensorsID.ToLower() == PluginSettings.Settings.HWiNFO_cpuP_sensorsID.ToLower())
+                            {
+                                // Find data gpu
+                                foreach (dynamic items in sensorItemsOBJ["sensors"])
+                                {
+                                    dynamic itemOBJ = Serialization.FromJson<dynamic>(Serialization.ToJson(items));
+                                    string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
+
+                                    if (dataID.ToLower() == PluginSettings.Settings.HWiNFO_cpuP_sensorsID.ToLower())
+                                    {
+                                        cpuPValue = (int)Math.Round((Double)itemOBJ["Value"]);
+                                    }
+                                }
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -463,6 +495,8 @@ namespace GameActivity
                     int.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_gpu_index), out gpuValue);
                     int.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_gpuT_index), out gpuTValue);
                     int.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_cpuT_index), out cpuTValue);
+                    int.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_cpuP_index), out cpuPValue);
+                    int.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_gpuP_index), out gpuPValue);
                 }
                 catch (Exception ex)
                 {

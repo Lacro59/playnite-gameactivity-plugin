@@ -717,6 +717,32 @@
                                                 </GroupBox>
                                             </StackPanel>
                                         </DockPanel>
+
+                                        <DockPanel DockPanel.Dock="Top" HorizontalAlignment="Center" Margin="0,10,0,0">
+                                            <StackPanel DockPanel.Dock="Left" Margin="0,0,5,0">
+                                                <GroupBox Header="{DynamicResource LOCGameActivityGpuPower}" Height="100" Width="250">
+                                                    <Grid>
+                                                        <Label Content="{DynamicResource LOCGameActivitySensorsID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,5,0,0" />
+                                                        <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.HWiNFO_gpuP_sensorsID}" VerticalAlignment="Top" Width="100" Margin="110,5,0,0" />
+
+                                                        <Label Content="{DynamicResource LOCGameActivityElementID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,35,0,0" />
+                                                        <TextBox HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="{Binding Settings.HWiNFO_gpuP_elementID}" VerticalAlignment="Top" Width="100" Margin="110,35,0,0" />
+                                                    </Grid>
+                                                </GroupBox>
+                                            </StackPanel>
+
+                                            <StackPanel DockPanel.Dock="Right" Margin="5,0,0,0">
+                                                <GroupBox Header="{DynamicResource LOCGameActivityCpuPower}" Height="100" Width="250">
+                                                    <Grid>
+                                                        <Label Content="{DynamicResource LOCGameActivitySensorsID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,5,0,0" />
+                                                        <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.HWiNFO_cpuP_sensorsID}" VerticalAlignment="Top" Width="100" Margin="110,5,0,0" />
+
+                                                        <Label Content="{DynamicResource LOCGameActivityElementID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,35,0,0" />
+                                                        <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.HWiNFO_cpuP_elementID}" VerticalAlignment="Top" Width="100" Margin="110,35,0,0" />
+                                                    </Grid>
+                                                </GroupBox>
+                                            </StackPanel>
+                                        </DockPanel>
                                     </DockPanel>
                                 </TabItem>
 
@@ -785,6 +811,40 @@
                                                         
                                                         <Label Grid.Column="1" Content="{DynamicResource LOCGameActivityIndex}" />
                                                         <playnitecontrols:NumericBox Grid.Column="3" LongValue="{Binding Settings.HWiNFO_cpuT_index}" MinLongValue="0" />
+                                                    </Grid>
+                                                </GroupBox>
+                                            </StackPanel>
+                                        </DockPanel>
+
+                                        <DockPanel DockPanel.Dock="Top" HorizontalAlignment="Center" Margin="0,10,0,0">
+                                            <StackPanel DockPanel.Dock="Left" Margin="0,0,5,0">
+                                                <GroupBox Header="{DynamicResource LOCGameActivityGpuPower}" Width="250">
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="25" />
+                                                            <ColumnDefinition Width="auto" />
+                                                            <ColumnDefinition Width="10" />
+                                                            <ColumnDefinition Width="50" />
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <Label Grid.Column="1" Content="{DynamicResource LOCGameActivityIndex}" />
+                                                        <playnitecontrols:NumericBox Grid.Column="3" LongValue="{Binding Settings.HWiNFO_gpuP_index}" MinLongValue="0" />
+                                                    </Grid>
+                                                </GroupBox>
+                                            </StackPanel>
+
+                                            <StackPanel DockPanel.Dock="Right" Margin="5,0,0,0">
+                                                <GroupBox Header="{DynamicResource LOCGameActivityCpuPower}" Width="250">
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="25" />
+                                                            <ColumnDefinition Width="auto" />
+                                                            <ColumnDefinition Width="10" />
+                                                            <ColumnDefinition Width="50" />
+                                                        </Grid.ColumnDefinitions>
+                                                        
+                                                        <Label Grid.Column="1" Content="{DynamicResource LOCGameActivityIndex}" />
+                                                        <playnitecontrols:NumericBox Grid.Column="3" LongValue="{Binding Settings.HWiNFO_cpuP_index}" MinLongValue="0" />
                                                     </Grid>
                                                 </GroupBox>
                                             </StackPanel>

@@ -65,6 +65,8 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivityFps">FPS</sys:String>
     <sys:String x:Key="LOCGameActivityGpuTemp">GPU temperature</sys:String>
     <sys:String x:Key="LOCGameActivityCpuTemp">CPU temperature</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuPower">CPU power</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuPower">GPU power</sys:String>
 
     <sys:String x:Key="LOCGameActivityActiveWarning">Enable warnings</sys:String>
     <sys:String x:Key="LOCGameActivityMinFps">Min FPS</sys:String>
