@@ -54,7 +54,9 @@ Kattintson további információkért.</sys:String>
     <sys:String x:Key="LOCGameActivityTimeLabel">perc(ek)</sys:String>
 
     <sys:String x:Key="LOCGameActivityUseMsiAfterburner">MSI Afterburner használata</sys:String>
-    <sys:String x:Key="LOCGameActivityUseHWiNFO">HWiNFO használata</sys:String>
+    <sys:String x:Key="LOCGameActivityUseHWiNFOSharedMemory">Use HWiNFO SharedMemory</sys:String>
+    <sys:String x:Key="LOCGameActivityUseHWiNFOGadget">Use HWiNFO gadget reporting</sys:String>
+    <sys:String x:Key="LOCGameActivityIndex">Index</sys:String>
 
     <sys:String x:Key="LOCGameActivitySensorsID">Érzékelő ID</sys:String>
     <sys:String x:Key="LOCGameActivityElementID">Elem ID</sys:String>
@@ -63,6 +65,8 @@ Kattintson további információkért.</sys:String>
     <sys:String x:Key="LOCGameActivityFps">FPS</sys:String>
     <sys:String x:Key="LOCGameActivityGpuTemp">GPU hőmérséklet</sys:String>
     <sys:String x:Key="LOCGameActivityCpuTemp">CPU hőmérséklet</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuPower">CPU power</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuPower">GPU power</sys:String>
 
     <sys:String x:Key="LOCGameActivityActiveWarning">Figyelmeztetések engedélyezése</sys:String>
     <sys:String x:Key="LOCGameActivityMinFps">Minimum FPS</sys:String>
