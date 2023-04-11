@@ -146,8 +146,8 @@
     <sys:String x:Key="LOCGameActivityCpuUsage">Використання CPU</sys:String>
     <sys:String x:Key="LOCGameActivityRamUsage">Використання RAM</sys:String>
 
-    <sys:String x:Key="LOCGameActivityNotificationHWiNFO">Журналювання HWiNFO увімкнено, але додаток не запущений.</sys:String>
-    <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">Журналювання MSI AfterBurner увімкнено, але додаток не запущений.</sys:String>
+    <sys:String x:Key="LOCGameActivityNotificationHWiNFO">Журналювання HWiNFO увімкнено, але застосунок не запущений.</sys:String>
+    <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">Журналювання MSI AfterBurner увімкнено, але застосунок не запущений.</sys:String>
 
     <!-- QuickSearch -->
 
