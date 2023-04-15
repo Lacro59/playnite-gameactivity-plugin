@@ -197,7 +197,7 @@ Packages:
   - Version: 3.1.0
     RequiredApiVersion: 6.9.0
     ReleaseDate: 2023-04-15
-    PackageUrl: https://github.com/Lacro59/playnite-gameactivity-plugin/releases/download/v3.0.1/playnite-gameactivity-plugin_3_0_1.pext
+    PackageUrl: https://github.com/Lacro59/playnite-gameactivity-plugin/releases/download/v3.1.0/playnite-gameactivity-plugin_3_1_0.pext
     Changelog:
       - Updated localizations
       - Updated icons
