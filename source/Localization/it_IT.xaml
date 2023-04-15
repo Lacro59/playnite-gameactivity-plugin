@@ -54,7 +54,9 @@ Clicca per ulteriori informazioni.</sys:String>
     <sys:String x:Key="LOCGameActivityTimeLabel">minuto/i</sys:String>
 
     <sys:String x:Key="LOCGameActivityUseMsiAfterburner">Usa MSI Afterburner</sys:String>
-    <sys:String x:Key="LOCGameActivityUseHWiNFO">Usa HWiNFO</sys:String>
+    <sys:String x:Key="LOCGameActivityUseHWiNFOSharedMemory">Usa SharedMemory HWiNFo</sys:String>
+    <sys:String x:Key="LOCGameActivityUseHWiNFOGadget">Usa la segnalazione di gadget HWiNFO</sys:String>
+    <sys:String x:Key="LOCGameActivityIndex">Indice</sys:String>
 
     <sys:String x:Key="LOCGameActivitySensorsID">Id sensori</sys:String>
     <sys:String x:Key="LOCGameActivityElementID">Id elemento</sys:String>
@@ -63,6 +65,8 @@ Clicca per ulteriori informazioni.</sys:String>
     <sys:String x:Key="LOCGameActivityFps">FPS</sys:String>
     <sys:String x:Key="LOCGameActivityGpuTemp">Temperatura GPU</sys:String>
     <sys:String x:Key="LOCGameActivityCpuTemp">Temperatura CPU</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuPower">Potenza CPU</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuPower">Potenza GPU</sys:String>
 
     <sys:String x:Key="LOCGameActivityActiveWarning">Abilita avvisi</sys:String>
     <sys:String x:Key="LOCGameActivityMinFps">FPS minimi</sys:String>

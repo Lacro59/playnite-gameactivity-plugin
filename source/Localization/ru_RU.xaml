@@ -9,9 +9,9 @@
 
     <sys:String x:Key="LOCGameActivity">Игровая Активность</sys:String>
     <sys:String x:Key="LOCGameActivityTitle">Активность</sys:String>
-    <sys:String x:Key="LOCGamesActivitiesTitle">Игровая активность</sys:String>
+    <sys:String x:Key="LOCGamesActivitiesTitle">Действия в играх</sys:String>
     <sys:String x:Key="LOCGameActivitiesTitle">Действия в игре</sys:String>
-    <sys:String x:Key="LOCGameActivityViewGamesActivities">Просмотреть активность в игра</sys:String>
+    <sys:String x:Key="LOCGameActivityViewGamesActivities">Посмотреть игровые активности</sys:String>
     <sys:String x:Key="LOCGameActivityViewGameActivity">Просмотреть игровую активность</sys:String>
     
     <sys:String x:Key="LOCGameActivityDefaultAction">Действие по умолчанию</sys:String>
@@ -19,7 +19,7 @@
 
     <!-- GameActivityGanttView -->
 
-    <sys:String x:Key="LOCGameActivityGanttView">Gantt view</sys:String>
+    <sys:String x:Key="LOCGameActivityGanttView">Диаграмма Ганта</sys:String>
     
     <sys:String x:Key="LOCGameActivitySetNumberDay">Выберите количество дней</sys:String>
     <sys:String x:Key="LOCGameActivityPeriod">Период</sys:String>
@@ -54,7 +54,9 @@
     <sys:String x:Key="LOCGameActivityTimeLabel">минут(ы)</sys:String>
 
     <sys:String x:Key="LOCGameActivityUseMsiAfterburner">Использовать MSI Afterburner</sys:String>
-    <sys:String x:Key="LOCGameActivityUseHWiNFO">Использовать HWiNFO</sys:String>
+    <sys:String x:Key="LOCGameActivityUseHWiNFOSharedMemory">Использовать общую память HWiNFO</sys:String>
+    <sys:String x:Key="LOCGameActivityUseHWiNFOGadget">Использовать отчёты о гаджетах HWiNFO</sys:String>
+    <sys:String x:Key="LOCGameActivityIndex">Главная страница</sys:String>
 
     <sys:String x:Key="LOCGameActivitySensorsID">ID сенсоров</sys:String>
     <sys:String x:Key="LOCGameActivityElementID">Id элемента</sys:String>
@@ -63,6 +65,8 @@
     <sys:String x:Key="LOCGameActivityFps">FPS</sys:String>
     <sys:String x:Key="LOCGameActivityGpuTemp">Температура видеокарты</sys:String>
     <sys:String x:Key="LOCGameActivityCpuTemp">Температура процессора</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuPower">Мощность ЦП</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuPower">Мощность GPU</sys:String>
 
     <sys:String x:Key="LOCGameActivityActiveWarning">Включить предупреждения</sys:String>
     <sys:String x:Key="LOCGameActivityMinFps">Минимальный FPS</sys:String>
@@ -95,14 +99,14 @@
     <sys:String x:Key="LOCGameActivityIgnoreSession">Игнорировать короткие сессии</sys:String>
     <sys:String x:Key="LOCGameActivitySetVariatorTime">Задать вариант времени</sys:String>
     <sys:String x:Key="LOCGameActivitySetVariatorLog">Задать вариант времени</sys:String>
-    <sys:String x:Key="LOCGameActivityRecentActivityWeek">Number of weeks for recent activity</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivityWeek">Количество недель для недавней активности</sys:String>
 
     <!-- GameActivityViewSingle -->
 
-    <sys:String x:Key="LOCGameActivityRecentActivity">Recent activity</sys:String>
-    <sys:String x:Key="LOCGameActivityNoRecentActivity">No recent activity</sys:String>
-    <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} hours past {1} week</sys:String>
-    <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} hours past {1} weeks</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivity">Недавняя активность</sys:String>
+    <sys:String x:Key="LOCGameActivityNoRecentActivity">Нет активности в последнее время</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} часов за {1} неделю</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} часов за {1} недель</sys:String>
     <sys:String x:Key="LOCGameActivityAvgPerDay">Среднее время в день</sys:String>
     <sys:String x:Key="LOCGameActivityFirstSession">Первая сессия</sys:String>
     <sys:String x:Key="LOCGameActivityLastSession">Последняя сессия</sys:String>
@@ -129,8 +133,8 @@
     <sys:String x:Key="LOCGameActivityAvgFps">Средний ФПС</sys:String>
     <sys:String x:Key="LOCGameActivityAvgCpuT">Средний ЦП T</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpuT">Средний GPU T</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgCpuP">Avg CPU P</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgGpuP">Avg GPU P</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgCpuP">Средний ЦП P</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgGpuP">Среднее GPU P</sys:String>
 
     <sys:String x:Key="LOCGameActivityPCName">Имя ПК</sys:String>
 
@@ -158,8 +162,8 @@
     <sys:String x:Key="LOCGaDateStart">Дата начала</sys:String>
     <sys:String x:Key="LOCGaDateEnd">Дата Окончания</sys:String>
     
-    <sys:String x:Key="LOCGaGameActions">Game actions</sys:String>
-    <sys:String x:Key="LOCGaCustomGameActions">Custom game actions</sys:String>
+    <sys:String x:Key="LOCGaGameActions">Действия в игре</sys:String>
+    <sys:String x:Key="LOCGaCustomGameActions">Пользовательские действия в игре</sys:String>
 
 
 

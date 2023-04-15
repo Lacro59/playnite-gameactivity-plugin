@@ -54,7 +54,9 @@
     <sys:String x:Key="LOCGameActivityTimeLabel">分</sys:String>
 
     <sys:String x:Key="LOCGameActivityUseMsiAfterburner">使用 MSI Afterburner</sys:String>
-    <sys:String x:Key="LOCGameActivityUseHWiNFO">使用 HWiNFO</sys:String>
+    <sys:String x:Key="LOCGameActivityUseHWiNFOSharedMemory">Use HWiNFO SharedMemory</sys:String>
+    <sys:String x:Key="LOCGameActivityUseHWiNFOGadget">Use HWiNFO gadget reporting</sys:String>
+    <sys:String x:Key="LOCGameActivityIndex">Index</sys:String>
 
     <sys:String x:Key="LOCGameActivitySensorsID">传感器 ID</sys:String>
     <sys:String x:Key="LOCGameActivityElementID">单元 ID</sys:String>
@@ -63,6 +65,8 @@
     <sys:String x:Key="LOCGameActivityFps">帧数</sys:String>
     <sys:String x:Key="LOCGameActivityGpuTemp">GPU 温度</sys:String>
     <sys:String x:Key="LOCGameActivityCpuTemp">CPU 温度</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuPower">CPU power</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuPower">GPU power</sys:String>
 
     <sys:String x:Key="LOCGameActivityActiveWarning">启用警</sys:String>
     <sys:String x:Key="LOCGameActivityMinFps">最小帧数</sys:String>
