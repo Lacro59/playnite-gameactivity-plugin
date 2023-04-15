@@ -194,3 +194,16 @@ Packages:
       - Updated localizations
       - Fixed crashs
       - Fixed issue with chart colors
+  - Version: 3.1.0
+    RequiredApiVersion: 6.9.0
+    ReleaseDate: 2023-04-15
+    PackageUrl: https://github.com/Lacro59/playnite-gameactivity-plugin/releases/download/v3.0.1/playnite-gameactivity-plugin_3_0_1.pext
+    Changelog:
+      - Updated localizations
+      - Updated icons
+      - Updated HWiNFO to use gadget reports or memory sharing
+      - Added new elements for HWiNFO
+      - Added a new theme element (see wiki) to display playtile over some weeks
+      - UI tweaks
+      - Fixed bugs (thanks to CanRanBan)
+      - Fixed crashs
