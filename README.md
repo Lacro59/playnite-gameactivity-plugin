@@ -39,7 +39,7 @@ If the theme support function, you can:
 * add plugin data in game details  
 
 ## Warnings
-* Get sensors id and elements id with "HWiNFOSharedMemoryViewer".
+* Get sensors id and elements id with "HWiNFOSharedMemoryViewer" or "Reporting to gadget".
 * The fps with HWiNFO is got with "rivatuner statistics server".
 * The average data is visible if "enable log" is checked.
 
