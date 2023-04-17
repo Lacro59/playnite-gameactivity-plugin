@@ -50,7 +50,7 @@ Klicken Sie für weitere Informationen.</sys:String>
     <sys:String x:Key="LOCGameActivityListGamesFields">Anzuzeigende Spielfelder</sys:String>
 
     <sys:String x:Key="LOCGameActivityActiveLog">Logging aktivieren</sys:String>
-    <sys:String x:Key="LOCGameActivityTimeInterval">Zeige Beschriftung der vertikalen Achse</sys:String>
+    <sys:String x:Key="LOCGameActivityTimeInterval">Prüfintervall</sys:String>
     <sys:String x:Key="LOCGameActivityTimeLabel">Minute(n)</sys:String>
 
     <sys:String x:Key="LOCGameActivityUseMsiAfterburner">MSI Afterburner verwenden</sys:String>
@@ -65,8 +65,8 @@ Klicken Sie für weitere Informationen.</sys:String>
     <sys:String x:Key="LOCGameActivityFps">FPS</sys:String>
     <sys:String x:Key="LOCGameActivityGpuTemp">GPU Temperatur</sys:String>
     <sys:String x:Key="LOCGameActivityCpuTemp">CPU Temperatur</sys:String>
-    <sys:String x:Key="LOCGameActivityCpuPower">CPU Leistung</sys:String>
-    <sys:String x:Key="LOCGameActivityGpuPower">Grafikarten Leistung</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuPower">CPU Strom</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuPower">GPU Strom</sys:String>
 
     <sys:String x:Key="LOCGameActivityActiveWarning">Warnungen aktivieren</sys:String>
     <sys:String x:Key="LOCGameActivityMinFps">Min. FPS</sys:String>
@@ -83,7 +83,7 @@ Klicken Sie für weitere Informationen.</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationChartLog">Graphische Darstellung der Spielzeiten</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">Details anzeigen</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">Anzahl der Daten in der horizontalen Achse</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationChartTimeTruncate">Zeitdaten standardmäßig reduzieren</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationChartTimeTruncate">Zeitdaten standardmäßig kürzen</sys:String>
 
     <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabels">Zeige Beschriftung der horizontalen Achse</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">Zeige Beschriftung der vertikalen Achse</sys:String>
