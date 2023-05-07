@@ -54,8 +54,8 @@ Klicken Sie für weitere Informationen.</sys:String>
     <sys:String x:Key="LOCGameActivityTimeLabel">Minute(n)</sys:String>
 
     <sys:String x:Key="LOCGameActivityUseMsiAfterburner">MSI Afterburner verwenden</sys:String>
-    <sys:String x:Key="LOCGameActivityUseHWiNFOSharedMemory">Benutze HWiNFO Einstellung &quot;SharedMemory&quot;</sys:String>
-    <sys:String x:Key="LOCGameActivityUseHWiNFOGadget">Benutze von HWinfo &quot;gadget reporting&quot;</sys:String>
+    <sys:String x:Key="LOCGameActivityUseHWiNFOSharedMemory">HWiNFO SharedMemory verwenden</sys:String>
+    <sys:String x:Key="LOCGameActivityUseHWiNFOGadget">HWiNFO Gadget Berichterstattung verwenden</sys:String>
     <sys:String x:Key="LOCGameActivityIndex">Index</sys:String>
 
     <sys:String x:Key="LOCGameActivitySensorsID">Sensoren Id</sys:String>
@@ -65,8 +65,8 @@ Klicken Sie für weitere Informationen.</sys:String>
     <sys:String x:Key="LOCGameActivityFps">FPS</sys:String>
     <sys:String x:Key="LOCGameActivityGpuTemp">GPU Temperatur</sys:String>
     <sys:String x:Key="LOCGameActivityCpuTemp">CPU Temperatur</sys:String>
-    <sys:String x:Key="LOCGameActivityCpuPower">CPU Strom</sys:String>
-    <sys:String x:Key="LOCGameActivityGpuPower">GPU Strom</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuPower">CPU Leistung</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuPower">GPU Leistung</sys:String>
 
     <sys:String x:Key="LOCGameActivityActiveWarning">Warnungen aktivieren</sys:String>
     <sys:String x:Key="LOCGameActivityMinFps">Min. FPS</sys:String>
@@ -99,14 +99,14 @@ Klicken Sie für weitere Informationen.</sys:String>
     <sys:String x:Key="LOCGameActivityIgnoreSession">Kurze Spielsitzungen ignorieren</sys:String>
     <sys:String x:Key="LOCGameActivitySetVariatorTime">Zeit Variation einstellen</sys:String>
     <sys:String x:Key="LOCGameActivitySetVariatorLog">Log Variation einstellen</sys:String>
-    <sys:String x:Key="LOCGameActivityRecentActivityWeek">Anzahl Wochen welche zur Betrachtung der letzten Aktivitäten herangezogen werden</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivityWeek">Anzahl der Wochen für die letzte Aktivität</sys:String>
 
     <!-- GameActivityViewSingle -->
 
     <sys:String x:Key="LOCGameActivityRecentActivity">Letzte Aktivitäten</sys:String>
-    <sys:String x:Key="LOCGameActivityNoRecentActivity">Keine Aktivitäten in letzter Zeit</sys:String>
-    <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} Stunden in den letzten {1} Wochen</sys:String>
-    <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} Stunden in den letzten {1} Wochen</sys:String>
+    <sys:String x:Key="LOCGameActivityNoRecentActivity">Keine aktuelle Aktivität</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} Stunden nach {1} Woche</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} Stunden nach {1} Wochen</sys:String>
     <sys:String x:Key="LOCGameActivityAvgPerDay">Durchschnittliche Spielzeit pro Tag</sys:String>
     <sys:String x:Key="LOCGameActivityFirstSession">Erste Session</sys:String>
     <sys:String x:Key="LOCGameActivityLastSession">Letzte Session</sys:String>
