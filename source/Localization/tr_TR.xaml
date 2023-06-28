@@ -44,130 +44,130 @@ Daha fazla bilgi için tıklayın.</sys:String>
 
     <!-- GameActivitySettingsView -->
 
-    <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">Combine game sessions playtime on chart</sys:String>
-    <sys:String x:Key="LOCGameActivityCumulPlaytimeStore">Unify the time of different libraries</sys:String>
+    <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">Oyun oturumları oynama süresini çizelgede birleştir</sys:String>
+    <sys:String x:Key="LOCGameActivityCumulPlaytimeStore">Farklı kütüphanelerin süresini birleştir</sys:String>
 
-    <sys:String x:Key="LOCGameActivityListGamesFields">Game fields to be displayed</sys:String>
+    <sys:String x:Key="LOCGameActivityListGamesFields">Görüntülenecek oyun alanları</sys:String>
 
-    <sys:String x:Key="LOCGameActivityActiveLog">Enable logging</sys:String>
-    <sys:String x:Key="LOCGameActivityTimeInterval">Check time interval</sys:String>
-    <sys:String x:Key="LOCGameActivityTimeLabel">minute(s)</sys:String>
+    <sys:String x:Key="LOCGameActivityActiveLog">Günlük kaydını etkinleştir</sys:String>
+    <sys:String x:Key="LOCGameActivityTimeInterval">Zaman aralığını denetle</sys:String>
+    <sys:String x:Key="LOCGameActivityTimeLabel">dakika (lar)</sys:String>
 
-    <sys:String x:Key="LOCGameActivityUseMsiAfterburner">Use MSI Afterburner</sys:String>
-    <sys:String x:Key="LOCGameActivityUseHWiNFOSharedMemory">Use HWiNFO SharedMemory</sys:String>
-    <sys:String x:Key="LOCGameActivityUseHWiNFOGadget">Use HWiNFO gadget reporting</sys:String>
-    <sys:String x:Key="LOCGameActivityIndex">Index</sys:String>
+    <sys:String x:Key="LOCGameActivityUseMsiAfterburner">MSI Afterburner kullan</sys:String>
+    <sys:String x:Key="LOCGameActivityUseHWiNFOSharedMemory">HWiNFO SharedMemory kullan</sys:String>
+    <sys:String x:Key="LOCGameActivityUseHWiNFOGadget">HWiNFO araç raporlamasını kullan</sys:String>
+    <sys:String x:Key="LOCGameActivityIndex">Fihrist</sys:String>
 
-    <sys:String x:Key="LOCGameActivitySensorsID">Sensors id</sys:String>
-    <sys:String x:Key="LOCGameActivityElementID">Element id</sys:String>
+    <sys:String x:Key="LOCGameActivitySensorsID">Sensör kimliği</sys:String>
+    <sys:String x:Key="LOCGameActivityElementID">Öğe kimliği</sys:String>
 
-    <sys:String x:Key="LOCGameActivityGpuUsage">GPU usage</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuUsage">GPU kullanımı</sys:String>
     <sys:String x:Key="LOCGameActivityFps">FPS</sys:String>
-    <sys:String x:Key="LOCGameActivityGpuTemp">GPU temperature</sys:String>
-    <sys:String x:Key="LOCGameActivityCpuTemp">CPU temperature</sys:String>
-    <sys:String x:Key="LOCGameActivityCpuPower">CPU power</sys:String>
-    <sys:String x:Key="LOCGameActivityGpuPower">GPU power</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuTemp">GPU sıcaklığı</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuTemp">İşlemci sıcaklığı</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuPower">İşlemci gücü</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuPower">GPU gücü</sys:String>
 
-    <sys:String x:Key="LOCGameActivityActiveWarning">Enable warnings</sys:String>
-    <sys:String x:Key="LOCGameActivityMinFps">Min FPS</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxCpuTemp">Max CPU temp</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxGpuTemp">Max GPU temp</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxCpuUsage">Max CPU usage</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxGpuUsage">Max GPU usage</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxRamUsage">Max RAM usage</sys:String>
+    <sys:String x:Key="LOCGameActivityActiveWarning">Uyarıları etkinleştir</sys:String>
+    <sys:String x:Key="LOCGameActivityMinFps">En az FPS</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxCpuTemp">En çok işlemci sıcaklığı</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxGpuTemp">En çok GPU sıcaklığı</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxCpuUsage">En çok işlemci kullanımı</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxGpuUsage">En çok GPU kullanımı</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxRamUsage">En çok RAM kullanımı</sys:String>
 
-    <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">Log CPU, GPU, RAM and FPS performance during game session.</sys:String>
-    <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Displays a warning message at the end of the game session within the defined limits.</sys:String>
+    <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">Oyun oturumu sırasında İşlemci, GPU., RAM ve FPS veriminin günlük kaydını tut.</sys:String>
+    <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Belirlenen sınırlar içinde oyun oturumu sonunda bir uyarı iletisi görüntüler.</sys:String>
 
-    <sys:String x:Key="LOCGameActivityIntegrationChartTime">Display the chart with game session times</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationChartLog">Display the chart with game session logs</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">Toggle button with details</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">Number of data in horizontal axis</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationChartTimeTruncate">Truncate time data by default</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationChartTime">Oyun oturumu sürelerini gösteren çizelge görüntüle</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationChartLog">Oyun oturumu kayıtlarını gösteren çizelge görüntüle</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">Ayrıntıları içeren düğmeyi çevir</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">Yatay eksendeki veri sayısı</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationChartTimeTruncate">Zaman verisini öntanımlı olarak kısalt</sys:String>
 
-    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabels">Show labels on horizontal axis</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">Show labels on vertical axis</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationGraphicLogOptions">Chart options</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabels">Yatay eksende etiketleri göster</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">Dikey eksende etiketleri göster</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicLogOptions">Çizelge tercihleri</sys:String>
 
-    <sys:String x:Key="LOCGameActivityUseControls">Use chart controls</sys:String>
-    <sys:String x:Key="LOCGameActivitySelectChartSeriesToDisplay">Select the series to display on the chart</sys:String>
+    <sys:String x:Key="LOCGameActivityUseControls">Çizelge denetimlerini kullan</sys:String>
+    <sys:String x:Key="LOCGameActivitySelectChartSeriesToDisplay">Çizelgede gösterilecek dizileri seç</sys:String>
 
-    <sys:String x:Key="LOCGameActivityIconFrom">Select the icon origin</sys:String>
-    <sys:String x:Key="LOCGameActivityIconFromLibrary">Use the icon defined in the library</sys:String>
-    <sys:String x:Key="LOCGameActivityIconFromFont">Use the icon defined in the plugin's font</sys:String>
+    <sys:String x:Key="LOCGameActivityIconFrom">Simge kökenini seç</sys:String>
+    <sys:String x:Key="LOCGameActivityIconFromLibrary">Kütüphanede tanımlanan simgeyi kullan</sys:String>
+    <sys:String x:Key="LOCGameActivityIconFromFont">Eklentinin yazı tipinde tanımlanan simgeyi kullan</sys:String>
 
-    <sys:String x:Key="LOCGameActivityIgnoreSession">Ignore short play sessions</sys:String>
-    <sys:String x:Key="LOCGameActivitySetVariatorTime">Set time variator</sys:String>
-    <sys:String x:Key="LOCGameActivitySetVariatorLog">Set log variator</sys:String>
-    <sys:String x:Key="LOCGameActivityRecentActivityWeek">Number of weeks for recent activity</sys:String>
+    <sys:String x:Key="LOCGameActivityIgnoreSession">Kısa oyun oturumları yok say</sys:String>
+    <sys:String x:Key="LOCGameActivitySetVariatorTime">Süre değiştiriciyi ayarla</sys:String>
+    <sys:String x:Key="LOCGameActivitySetVariatorLog">Günlük kaydı değiştiriciyi ayarla</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivityWeek">En son etkinlik için hafta sayısı</sys:String>
 
     <!-- GameActivityViewSingle -->
 
-    <sys:String x:Key="LOCGameActivityRecentActivity">Recent activity</sys:String>
-    <sys:String x:Key="LOCGameActivityNoRecentActivity">No recent activity</sys:String>
-    <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} hours past {1} week</sys:String>
-    <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} hours past {1} weeks</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgPerDay">Average time per day</sys:String>
-    <sys:String x:Key="LOCGameActivityFirstSession">First session</sys:String>
-    <sys:String x:Key="LOCGameActivityLastSession">Last session</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivity">En son etkinlik</sys:String>
+    <sys:String x:Key="LOCGameActivityNoRecentActivity">Yeni etkinlik yok</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivitySingular">{1} haftayı {0} saat geçe</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{1} haftayı {0} saat geçe</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgPerDay">Günlük ortalama süre</sys:String>
+    <sys:String x:Key="LOCGameActivityFirstSession">İlk oturum</sys:String>
+    <sys:String x:Key="LOCGameActivityLastSession">Son oturum</sys:String>
     
     <!-- GameActivityView -->
 
-    <sys:String x:Key="LOCGameActivityTotalHours">Total hours</sys:String>
-    <sys:String x:Key="LOCGameActivityTotalHoursByWeeks">Total hours by week</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHours">Toplam saat sayısı</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByWeeks">Haftalık toplam saat sayısı</sys:String>
 
-    <sys:String x:Key="LOCGameActivityWeekLabel">Week</sys:String>
+    <sys:String x:Key="LOCGameActivityWeekLabel">Hafta</sys:String>
 
-    <sys:String x:Key="LOCGameActivityTime">Time</sys:String>
-    <sys:String x:Key="LOCGameActivityLog">Log</sys:String>
-    <sys:String x:Key="LOCGameActivityTimeTitle">Total hours by day</sys:String>
-    <sys:String x:Key="LOCGameActivityLogTitle">Last session details</sys:String>
-    <sys:String x:Key="LOCGameActivityLogTitleDate">Session details for</sys:String>
+    <sys:String x:Key="LOCGameActivityTime">Süre</sys:String>
+    <sys:String x:Key="LOCGameActivityLog">Günlük Kaydı</sys:String>
+    <sys:String x:Key="LOCGameActivityTimeTitle">Günlük saat sayısı</sys:String>
+    <sys:String x:Key="LOCGameActivityLogTitle">Son oturum ayrıntıları</sys:String>
+    <sys:String x:Key="LOCGameActivityLogTitleDate">Şunun için oturum ayrıntıları:</sys:String>
 
-    <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Last session</sys:String>
-    <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Elapsed time</sys:String>
+    <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Son oturum</sys:String>
+    <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Geçen süre</sys:String>
     
-    <sys:String x:Key="LOCGameActivityAvgCpu">Avg CPU</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgGpu">Avg GPU</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgRam">Avg RAM</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgFps">Avg FPS</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgCpuT">Avg CPU T</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgGpuT">Avg GPU T</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgCpuP">Avg CPU P</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgGpuP">Avg GPU P</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgCpu">Ort. İşlemci</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgGpu">Ort. GPU</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgRam">Ort. RAM</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgFps">Ort. FPS</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgCpuT">Ort. İşlemci T</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgGpuT">Ort. GPU T</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgCpuP">Ort. İşlemci P</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgGpuP">Ort. GPU P</sys:String>
 
-    <sys:String x:Key="LOCGameActivityPCName">PC name</sys:String>
+    <sys:String x:Key="LOCGameActivityPCName">Bilgisayar adı</sys:String>
 
 
     <!-- GameActivity -->
 
-    <sys:String x:Key="LOCGameActivityWarningCaption">Warnings during game session</sys:String>
-    <sys:String x:Key="LOCGameActivityWarningAt">At</sys:String>
-    <sys:String x:Key="LOCGameActivityCpuUsage">CPU usage</sys:String>
-    <sys:String x:Key="LOCGameActivityRamUsage">RAM usage</sys:String>
+    <sys:String x:Key="LOCGameActivityWarningCaption">Oyun oturumu sırasındaki uyarılar</sys:String>
+    <sys:String x:Key="LOCGameActivityWarningAt">Da/de</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuUsage">İşlemci kullanımı</sys:String>
+    <sys:String x:Key="LOCGameActivityRamUsage">RAM kullanımı</sys:String>
 
-    <sys:String x:Key="LOCGameActivityNotificationHWiNFO">HWiNFO logging is enabled but application is not running.</sys:String>
-    <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">MSI AfterBurner logging is enabled but application is not running.</sys:String>
+    <sys:String x:Key="LOCGameActivityNotificationHWiNFO">HWiNFO günlük kaydı tutma etkin ancak uygulama çalışmıyor.</sys:String>
+    <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">MSI AfterBurner günlük kaydı tutma etkin ancak uygulama çalışmıyor.</sys:String>
 
     <!-- QuickSearch -->
 
-    <sys:String x:Key="LOCGaQuickSearchDescription">Search games on GameActivity data</sys:String>
-    <sys:String x:Key="LOCGaQuickSearchByFPS">Find by FPS</sys:String>
-    <sys:String x:Key="LOCGaQuickSearchByTime">Find by time session</sys:String>
-    <sys:String x:Key="LOCGaQuickSearchByDate">Find by date session</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchDescription">OyunEtkinliği verisinde oyunları ara</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchByFPS">FPS ile bul</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchByTime">Oturum süresi ile bul</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchByDate">Oturum tarihi ile bul</sys:String>
 
     <!-- GameActivityAddTime -->
 
-    <sys:String x:Key="LOCGaAddNewGameSession">Add new game session</sys:String>
-    <sys:String x:Key="LOCGaDateStart">Date start</sys:String>
-    <sys:String x:Key="LOCGaDateEnd">Date end</sys:String>
+    <sys:String x:Key="LOCGaAddNewGameSession">Yeni oyun oturumu ekle</sys:String>
+    <sys:String x:Key="LOCGaDateStart">Tarih başlangıcı</sys:String>
+    <sys:String x:Key="LOCGaDateEnd">Tarih sonu</sys:String>
     
-    <sys:String x:Key="LOCGaGameActions">Game actions</sys:String>
-    <sys:String x:Key="LOCGaCustomGameActions">Custom game actions</sys:String>
+    <sys:String x:Key="LOCGaGameActions">Oyun etkinlikleri</sys:String>
+    <sys:String x:Key="LOCGaCustomGameActions">Kişisel oyun eylemleri</sys:String>
 
 
 
     <!-- Temporary workaround for PlayState paused time until Playnite allows to share data among extensions -->
-    <sys:String x:Key="LOCGameActivitySubstPlayStateTime">Substract PlayState pause time from the session duration</sys:String>
+    <sys:String x:Key="LOCGameActivitySubstPlayStateTime">Oturum süresinden OyunDurumu duraklamalarını çıkar</sys:String>
 
 </ResourceDictionary>
