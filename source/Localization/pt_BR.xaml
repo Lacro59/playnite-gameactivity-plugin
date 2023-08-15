@@ -77,9 +77,9 @@ Clique para mais informações.</sys:String>
     <sys:String x:Key="LOCGameActivityMaxRamUsage">Uso máx de RAM</sys:String>
 
     <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">Registro de desempenho CPU, GPU, RAM e FPS durante a sessão de jogo.</sys:String>
-    <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Exibe uma mensagem de alerta no final da sessão de jogo dentro dos limites definidos.</sys:String>
+    <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Exibe uma mensagem de alerta no final da sessão de jogo nos limites definidos.</sys:String>
 
-    <sys:String x:Key="LOCGameActivityIntegrationChartTime">Exibir gráfico com horários das sessões de jogos</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationChartTime">Exibir gráfico com tempos das sessões de jogos</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationChartLog">Exibir o gráfico com registros das sessões de jogos</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">Botão de alternância com detalhes</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">Número de dados no eixo horizontal</sys:String>
