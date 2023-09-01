@@ -1,28 +1,28 @@
 ﻿<?xml version="1.0"?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
-    <sys:String x:Key="LOCGameActivityNoPlaytime" xml:space="preserve">There is no play time for {0}.
-Used the difference play time: {1}s.</sys:String>
+    <sys:String x:Key="LOCGameActivityNoPlaytime" xml:space="preserve">{0} non ten tempo de xogo rexistrado.
+Usouse a diferenza de tempo de xogo: {1} s.</sys:String>
     
     
     <!-- MainView -->
 
     <sys:String x:Key="LOCGameActivity">GameActivity</sys:String>
-    <sys:String x:Key="LOCGameActivityTitle">Activity</sys:String>
-    <sys:String x:Key="LOCGamesActivitiesTitle">Games activities</sys:String>
-    <sys:String x:Key="LOCGameActivitiesTitle">Game activities</sys:String>
-    <sys:String x:Key="LOCGameActivityViewGamesActivities">View games activities</sys:String>
-    <sys:String x:Key="LOCGameActivityViewGameActivity">View game activity</sys:String>
+    <sys:String x:Key="LOCGameActivityTitle">Actividade</sys:String>
+    <sys:String x:Key="LOCGamesActivitiesTitle">Actividades dos xogos</sys:String>
+    <sys:String x:Key="LOCGameActivitiesTitle">Actividades do xogo</sys:String>
+    <sys:String x:Key="LOCGameActivityViewGamesActivities">Ver actividades dos xogos</sys:String>
+    <sys:String x:Key="LOCGameActivityViewGameActivity">Ver actividade do xogo</sys:String>
     
-    <sys:String x:Key="LOCGameActivityDefaultAction">Default action</sys:String>
+    <sys:String x:Key="LOCGameActivityDefaultAction">Acción predefinida</sys:String>
 
 
     <!-- GameActivityGanttView -->
 
-    <sys:String x:Key="LOCGameActivityGanttView">Gantt view</sys:String>
+    <sys:String x:Key="LOCGameActivityGanttView">Visualización de Gantt</sys:String>
     
-    <sys:String x:Key="LOCGameActivitySetNumberDay">Set number of days</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriod">Period</sys:String>
+    <sys:String x:Key="LOCGameActivitySetNumberDay">Establecer o número de días</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriod">Período</sys:String>
     <sys:String x:Key="LOCGameActivitySetLastDate">Set the last date</sys:String>
     
     
