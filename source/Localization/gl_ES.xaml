@@ -23,7 +23,7 @@ Usouse a diferenza de tempo de xogo: {1} s.</sys:String>
     
     <sys:String x:Key="LOCGameActivitySetNumberDay">Establecer o número de días</sys:String>
     <sys:String x:Key="LOCGameActivityPeriod">Período</sys:String>
-    <sys:String x:Key="LOCGameActivitySetLastDate">Set the last date</sys:String>
+    <sys:String x:Key="LOCGameActivitySetLastDate">Establecer a última data</sys:String>
     
     
     <!-- Backup -->
