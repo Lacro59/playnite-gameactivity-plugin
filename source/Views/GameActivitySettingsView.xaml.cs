@@ -82,7 +82,7 @@ namespace GameActivity
 
         private void Hyperlink_Click(object sender, RoutedEventArgs e)
         {
-            Hyperlink link = (Hyperlink)sender;
+            FrameworkElement link = (FrameworkElement)sender;
             Process.Start((string)link.Tag);
         }
 

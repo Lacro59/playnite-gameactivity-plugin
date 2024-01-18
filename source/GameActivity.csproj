@@ -65,6 +65,10 @@
       <HintPath>packages\AngleSharp.0.9.9\lib\net45\AngleSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="LibreHardwareMonitorLib, Version=0.8.9.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Resources\LibreHardwareMonitorLib.dll</HintPath>
+    </Reference>
     <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
       <HintPath>packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
     </Reference>
@@ -154,6 +158,7 @@
     <Compile Include="Models\ExportedData.cs" />
     <Compile Include="Models\GameActivities.cs" />
     <Compile Include="Models\GameActivitiesCollection.cs" />
+    <Compile Include="Models\LibreHardwareData.cs" />
     <Compile Include="Models\ListActivities.cs" />
     <Compile Include="Models\QuickSearchItemSource.cs" />
     <Compile Include="Models\RunningActivity.cs" />
@@ -201,7 +206,10 @@
       <DependentUpon>TransfertData.xaml</DependentUpon>
     </Compile>
     <Compile Include="Services\ActivityDatabase.cs" />
+    <Compile Include="Services\LibreHardware.cs" />
     <Compile Include="Services\PerfCounter.cs" />
+    <Compile Include="Services\UpdateVisitorLibreHardware.cs" />
+    <Compile Include="Services\UpdateVisitorOpenHardware.cs" />
     <Compile Include="Views\GameActivityAddTime.xaml.cs">
       <DependentUpon>GameActivityAddTime.xaml</DependentUpon>
     </Compile>
@@ -468,6 +476,9 @@
     <None Include="Resources\command-line.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LibreHardwareMonitorLib.dll" />
   </ItemGroup>
   <Import Project="playnite-plugincommon\CommonPluginsShared\CommonPluginsShared.projitems" Label="Shared" />
   <Import Project="playnite-plugincommon\CommonPlayniteShared\CommonPlayniteShared.projitems" Label="Shared" />

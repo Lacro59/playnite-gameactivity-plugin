@@ -551,9 +551,44 @@
                                     <TextBlock><Hyperlink Tag="https://openhardwaremonitor.org/" Click="Hyperlink_Click">Open Hardware Monitor</Hyperlink></TextBlock>
                                     <Label Content=")" />
                                 </StackPanel>
-
                             </CheckBox>
                         </StackPanel>
+
+                        <StackPanel DockPanel.Dock="Top" Margin="50,15,0,0">
+                            <CheckBox IsChecked="{Binding Settings.UsedLibreHardware}" Name="cbUsedLibreHardware"
+                                      IsEnabled="{Binding ElementName=cbLogging, Path=IsChecked}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="{DynamicResource LOCGameActivityUsedLibreHardware}" Margin="0,0,5,0" />
+
+                                    <Label Content="(" />
+                                    <TextBlock><Hyperlink Tag="https://github.com/LibreHardwareMonitor/LibreHardwareMonitor" Click="Hyperlink_Click">github</Hyperlink></TextBlock>
+                                    <Label Content=")" />
+                                </StackPanel>
+                            </CheckBox>
+                        </StackPanel>
+
+                        <Grid DockPanel.Dock="Top" Margin="50,15,0,0"
+                                      IsEnabled="{Binding ElementName=cbUsedLibreHardware, Path=IsChecked}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <CheckBox IsChecked="{Binding Settings.WithRemoteServerWeb}" Grid.Column="0"
+                                      Content="{DynamicResource LOCGameActivityRemoteWebServer}"/>
+
+                            <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Center">
+                                <Label Content="IP" Margin="0,0,10,0" />
+                                <TextBox Width="120" 
+                                         Text="{Binding Settings.IpRemoteServerWeb, FallbackValue='192.168.10.20'}" />
+                            </StackPanel>
+
+
+                            <Button Content="&#xefca;" FontFamily="{DynamicResource FontIcoFont}"
+                                    Click="Hyperlink_Click" Grid.Column="2" HorizontalAlignment="Right"
+                                    Tag="https://github.com/Lacro59/playnite-gameactivity-plugin/wiki/How-to-use-log-with-LibreHardwareMonitor-Remote-Web-Server" />
+                        </Grid>
 
                         <Grid DockPanel.Dock="Bottom" Margin="0,15,0,0" IsEnabled="{Binding ElementName=cbLogging, Path=IsChecked, TargetNullValue=false}">
                             <Grid.ColumnDefinitions>

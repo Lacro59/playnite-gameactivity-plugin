@@ -27,6 +27,7 @@ using System.Threading;
 using QuickSearch.SearchItems;
 using MoreLinq;
 using CommonPluginsControls.Views;
+using System.Globalization;
 
 namespace GameActivity
 {
@@ -216,7 +217,7 @@ namespace GameActivity
         /// </summary>
         public void DataLogging_start(Guid Id)
         {
-            logger.Info($"DataLogging_start - {Id}");            
+            logger.Info($"DataLogging_start - {Id}");          
             RunningActivity runningActivity = runningActivities.Find(x => x.Id == Id);
 
             runningActivity.timer = new System.Timers.Timer(PluginSettings.Settings.TimeIntervalLogging * 60000);
@@ -258,16 +259,108 @@ namespace GameActivity
         /// </summary>
         /// <param name="source"></param>
         /// <param name="e"></param>
-        private void OnTimedEvent(Object source, ElapsedEventArgs e, Guid Id)
+        private void OnTimedEvent(object source, ElapsedEventArgs e, Guid Id)
         {
             int fpsValue = 0;
-            int cpuValue = PerfCounter.GetCpuPercentage();
-            int gpuValue = PerfCounter.GetGpuPercentage();
-            int ramValue = PerfCounter.GetRamPercentage();
-            int gpuTValue = PerfCounter.GetGpuTemperature();
-            int cpuTValue = PerfCounter.GetCpuTemperature();
+            int cpuValue = 0;
+            int gpuValue = 0;
+            int ramValue = 0;
+            int gpuTValue = 0;
+            int cpuTValue = 0;
             int cpuPValue = 0;
             int gpuPValue = 0;
+
+            if (PluginSettings.Settings.UsedLibreHardware && PluginSettings.Settings.WithRemoteServerWeb && !PluginSettings.Settings.IpRemoteServerWeb.IsNullOrEmpty())
+            {
+                double temp;
+
+                LibreHardwareData libreHardwareMonitorData = Services.LibreHardware.GetDataWeb(PluginSettings.Settings.IpRemoteServerWeb);
+                if (libreHardwareMonitorData != null)
+                {
+                    string CpuPowers = libreHardwareMonitorData.Children[0]?.Children.Find(x => x.id == 3)?
+                        .Children?.Find(x => x.Text == "Powers")?
+                        .Children?.Find(x => x.Text == "CPU Package")?.Value;
+                    CpuPowers = CpuPowers?.Replace(".", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
+                        ?.Replace(",", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
+                        ?.Replace("W", string.Empty)
+                        ?.Trim();
+                    double.TryParse(CpuPowers, out temp);
+                    cpuPValue = Convert.ToInt32(Math.Round(temp, 0));
+
+                    string CpuLoad = libreHardwareMonitorData.Children[0]?.Children.Find(x => x.id == 3)?
+                        .Children?.Find(x => x.Text == "Load")?
+                        .Children?.Find(x => x.Text == "CPU Total")?.Value;
+                    CpuLoad = CpuLoad?.Replace(".", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
+                        ?.Replace(",", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
+                        ?.Replace("%", string.Empty)
+                        ?.Trim();
+                    double.TryParse(CpuLoad, out temp);
+                    cpuValue = Convert.ToInt32(Math.Round(temp, 0));
+
+                    string CpuTemperatures = libreHardwareMonitorData.Children[0]?.Children.Find(x => x.id == 3)?
+                        .Children?.Find(x => x.Text == "Temperatures")?
+                        .Children?.Find(x => x.Text == "CPU Package")?.Value;
+                    CpuTemperatures = CpuTemperatures?.Replace(".", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
+                        ?.Replace(",", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
+                        ?.Replace("°C", string.Empty)
+                        ?.Replace("°F", string.Empty)
+                        ?.Trim();
+                    double.TryParse(CpuTemperatures, out temp);
+                    cpuTValue = Convert.ToInt32(Math.Round(temp, 0));
+
+
+                    string LoadMemory = libreHardwareMonitorData.Children[0]?.Children.Find(x => x.id == 43)?
+                        .Children?.Find(x => x.Text == "Load")?
+                        .Children?.Find(x => x.Text == "Memory")?.Value;
+                    LoadMemory = LoadMemory?.Replace(".", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
+                        ?.Replace(",", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
+                        ?.Replace("%", string.Empty)
+                        ?.Trim();
+                    double.TryParse(LoadMemory, out temp);
+                    ramValue = Convert.ToInt32(Math.Round(temp, 0));
+
+
+                    string GpuPowers = libreHardwareMonitorData.Children[0]?.Children.Find(x => x.id == 52)?
+                        .Children?.Find(x => x.Text == "Powers")?
+                        .Children?.Find(x => x.Text == "GPU Power")?.Value;
+                    GpuPowers = GpuPowers?.Replace(".", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
+                        ?.Replace(",", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
+                        ?.Replace("W", string.Empty)
+                        ?.Trim();
+                    double.TryParse(GpuPowers, out temp);
+                    gpuPValue = Convert.ToInt32(Math.Round(temp, 0));
+
+                    string GpuLoad = libreHardwareMonitorData.Children[0]?.Children.Find(x => x.id == 52)?
+                        .Children?.Find(x => x.Text == "Load")?
+                        .Children?.Find(x => x.Text == "D3D 3D")?.Value;
+                    GpuLoad = GpuLoad?.Replace(".", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
+                        ?.Replace(",", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
+                        ?.Replace("%", string.Empty)
+                        ?.Trim();
+                    double.TryParse(GpuLoad, out temp);
+                    gpuValue = Convert.ToInt32(Math.Round(temp, 0));
+
+                    string GpuTemperatures = libreHardwareMonitorData.Children[0]?.Children.Find(x => x.id == 52)?
+                        .Children?.Find(x => x.Text == "Load")?
+                        .Children?.Find(x => x.Text == "?")?.Value;
+                    GpuTemperatures = GpuTemperatures?.Replace(".", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
+                        ?.Replace(",", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
+                        ?.Replace("°C", string.Empty)
+                        ?.Replace("°F", string.Empty)
+                        ?.Trim();
+                    double.TryParse(GpuTemperatures, out temp);
+                    gpuTValue = Convert.ToInt32(Math.Round(temp, 0));
+                }
+            }
+
+
+            cpuValue = cpuValue == 0 ? PerfCounter.GetCpuPercentage() : cpuValue;
+            gpuValue = gpuValue == 0 ? PerfCounter.GetGpuPercentage() : gpuValue;
+            ramValue = ramValue == 0 ? PerfCounter.GetRamPercentage() : ramValue;
+            gpuTValue = gpuTValue == 0 ? PerfCounter.GetGpuTemperature() : gpuTValue;
+            cpuTValue = cpuTValue == 0 ? PerfCounter.GetCpuTemperature() : cpuTValue;
+            cpuPValue = cpuPValue == 0 ? PerfCounter.GetCpuPower() : cpuPValue;
+            gpuPValue = gpuPValue == 0 ? PerfCounter.GetGpuPower() : gpuPValue;
 
 
             if (PluginSettings.Settings.UseMsiAfterburner && CheckGoodForLogging())
@@ -280,8 +373,8 @@ namespace GameActivity
                 }
                 catch (Exception ex)
                 {
-                    logger.Warn("Fail initialize MSIAfterburnerNET");
-                    Common.LogError(ex, true, "Fail initialize MSIAfterburnerNET");
+                    logger.Warn("MSIAfterburnerNET - Fail initialize");
+                    Common.LogError(ex, true, "MSIAfterburnerNET - Fail initialize");
                     MSIAfterburner = null;
                 }
 
@@ -289,71 +382,62 @@ namespace GameActivity
                 {
                     try
                     {
-                        cpuPValue = (int)MSIAfterburner.GetEntry(MONITORING_SOURCE_ID.CPU_POWER).Data;
+                        cpuPValue = cpuPValue == 0 ? (int)MSIAfterburner.GetEntry(MONITORING_SOURCE_ID.CPU_POWER).Data : cpuPValue;
                     }
                     catch (Exception ex)
                     {
-                        logger.Warn("Fail get cpuPower");
-                        Common.LogError(ex, true, "Fail get cpuPower");
+                        logger.Warn("MSIAfterburnerNET - Fail get cpuPower");
+                        Common.LogError(ex, true, "MSIAfterburnerNET - Fail get cpuPower");
                     }
 
                     try
                     {
-                        gpuPValue = (int)MSIAfterburner.GetEntry(MONITORING_SOURCE_ID.GPU_POWER).Data;
+                        gpuPValue = gpuPValue == 0 ? (int)MSIAfterburner.GetEntry(MONITORING_SOURCE_ID.GPU_POWER).Data : gpuPValue;
                     }
                     catch (Exception ex)
                     {
-                        logger.Warn("Fail get gpuPower");
-                        Common.LogError(ex, true, "Fail get gpuPower");
+                        logger.Warn("MSIAfterburnerNET - Fail get gpuPower");
+                        Common.LogError(ex, true, "MSIAfterburnerNET - Fail get gpuPower");
                     }
 
                     try
                     {
-                        fpsValue = (int)MSIAfterburner.GetEntry(MONITORING_SOURCE_ID.FRAMERATE).Data;
+                        fpsValue = fpsValue == 0 ? (int)MSIAfterburner.GetEntry(MONITORING_SOURCE_ID.FRAMERATE).Data : fpsValue;
                     }
                     catch (Exception ex)
                     {
-                        logger.Warn("Fail get fpsValue");
-                        Common.LogError(ex, true, "Fail get fpsValue");
+                        logger.Warn("FMSIAfterburnerNET - Fail get fpsValue");
+                        Common.LogError(ex, true, "MSIAfterburnerNET - Fail get fpsValue");
                     }
 
                     try
                     {
-                        if (gpuValue == 0)
-                        {
-                            gpuValue = (int)MSIAfterburner.GetEntry(MONITORING_SOURCE_ID.GPU_USAGE).Data;
-                        }
+                        gpuValue = gpuValue == 0 ? (int)MSIAfterburner.GetEntry(MONITORING_SOURCE_ID.GPU_USAGE).Data : gpuValue;
                     }
                     catch (Exception ex)
                     {
-                        logger.Warn("Fail get gpuValue");
-                        Common.LogError(ex, true, "Fail get gpuValue");
+                        logger.Warn("MSIAfterburnerNET - Fail get gpuValue");
+                        Common.LogError(ex, true, "MSIAfterburnerNET - Fail get gpuValue");
                     }
 
                     try
                     {
-                        if (gpuTValue == 0)
-                        {
-                            gpuTValue = (int)MSIAfterburner.GetEntry(MONITORING_SOURCE_ID.GPU_TEMPERATURE).Data;
-                        }
+                        gpuTValue = gpuTValue == 0 ? (int)MSIAfterburner.GetEntry(MONITORING_SOURCE_ID.GPU_TEMPERATURE).Data : gpuTValue;
                     }
                     catch (Exception ex)
                     {
-                        logger.Warn("Fail get gpuTValue");
-                        Common.LogError(ex, true, "Fail get gpuTValue");
+                        logger.Warn("MSIAfterburnerNET - Fail get gpuTValue");
+                        Common.LogError(ex, true, "MSIAfterburnerNET - Fail get gpuTValue");
                     }
 
                     try
                     {
-                        if (cpuTValue == 0)
-                        {
-                            cpuTValue = (int)MSIAfterburner.GetEntry(MONITORING_SOURCE_ID.CPU_TEMPERATURE).Data;
-                        }
+                        cpuTValue = cpuTValue == 0 ? (int)MSIAfterburner.GetEntry(MONITORING_SOURCE_ID.CPU_TEMPERATURE).Data : cpuTValue;
                     }
                     catch (Exception ex)
                     {
-                        logger.Warn("Fail get cpuTValue");
-                        Common.LogError(ex, true, "Fail get cpuTValue");
+                        logger.Warn("MSIAfterburnerNET - Fail get cpuTValue");
+                        Common.LogError(ex, true, "MSIAfterburnerNET - Fail get cpuTValue");
                     }
                 }
             }
@@ -369,8 +453,8 @@ namespace GameActivity
                 }
                 catch (Exception ex)
                 {
-                    logger.Error("Fail initialize HWiNFODumper");
-                    Common.LogError(ex, true, "Fail initialize HWiNFODumper");
+                    logger.Error("HWiNFODumper - Fail initialize");
+                    Common.LogError(ex, true, "HWiNFODumper - Fail initialize");
                 }
 
                 if (HWinFO != null && dataHWinfo != null)
@@ -380,11 +464,10 @@ namespace GameActivity
                         foreach (HWiNFODumper.JsonObj sensorItems in dataHWinfo)
                         {
                             dynamic sensorItemsOBJ = Serialization.FromJson<dynamic>(Serialization.ToJson(sensorItems));
-
                             string sensorsID = "0x" + ((uint)sensorItemsOBJ["szSensorSensorID"]).ToString("X");
 
                             // Find sensors fps
-                            if (sensorsID.ToLower() == PluginSettings.Settings.HWiNFO_fps_sensorsID.ToLower())
+                            if (fpsValue == 0 && sensorsID.ToLower() == PluginSettings.Settings.HWiNFO_fps_sensorsID.ToLower())
                             {
                                 // Find data fps
                                 foreach (dynamic items in sensorItemsOBJ["sensors"])
@@ -400,7 +483,7 @@ namespace GameActivity
                             }
 
                             // Find sensors gpu usage
-                            if (sensorsID.ToLower() == PluginSettings.Settings.HWiNFO_gpu_sensorsID.ToLower())
+                            if (gpuValue == 0 && sensorsID.ToLower() == PluginSettings.Settings.HWiNFO_gpu_sensorsID.ToLower())
                             {
                                 // Find data gpu
                                 foreach (dynamic items in sensorItemsOBJ["sensors"])
@@ -416,7 +499,7 @@ namespace GameActivity
                             }
 
                             // Find sensors gpu temp
-                            if (sensorsID.ToLower() == PluginSettings.Settings.HWiNFO_gpuT_sensorsID.ToLower())
+                            if (gpuTValue == 0 && sensorsID.ToLower() == PluginSettings.Settings.HWiNFO_gpuT_sensorsID.ToLower())
                             {
                                 // Find data gpu
                                 foreach (dynamic items in sensorItemsOBJ["sensors"])
@@ -432,7 +515,7 @@ namespace GameActivity
                             }
 
                             // Find sensors cpu temp
-                            if (sensorsID.ToLower() == PluginSettings.Settings.HWiNFO_cpuT_sensorsID.ToLower())
+                            if (cpuTValue == 0 && sensorsID.ToLower() == PluginSettings.Settings.HWiNFO_cpuT_sensorsID.ToLower())
                             {
                                 // Find data gpu
                                 foreach (dynamic items in sensorItemsOBJ["sensors"])
@@ -448,7 +531,7 @@ namespace GameActivity
                             }
 
                             // Find sensors gpu power
-                            if (sensorsID.ToLower() == PluginSettings.Settings.HWiNFO_gpuP_elementID.ToLower())
+                            if (gpuPValue == 0 && sensorsID.ToLower() == PluginSettings.Settings.HWiNFO_gpuP_elementID.ToLower())
                             {
                                 // Find data gpu
                                 foreach (dynamic items in sensorItemsOBJ["sensors"])
@@ -464,7 +547,7 @@ namespace GameActivity
                             }
 
                             // Find sensors cpu power
-                            if (sensorsID.ToLower() == PluginSettings.Settings.HWiNFO_cpuP_sensorsID.ToLower())
+                            if (cpuPValue == 0 && sensorsID.ToLower() == PluginSettings.Settings.HWiNFO_cpuP_sensorsID.ToLower())
                             {
                                 // Find data gpu
                                 foreach (dynamic items in sensorItemsOBJ["sensors"])
@@ -482,8 +565,8 @@ namespace GameActivity
                     }
                     catch (Exception ex)
                     {
-                        logger.Warn("Fail get HWiNFO");
-                        Common.LogError(ex, true, "Fail get HWiNFO");
+                        logger.Warn("HWiNFODumper - Fail get HWiNFO");
+                        Common.LogError(ex, true, "HWiNFODumper - Fail get HWiNFO");
                     }
                 }
             }
@@ -491,17 +574,35 @@ namespace GameActivity
             {
                 try
                 {
-                    int.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_fps_index), out fpsValue);
-                    int.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_gpu_index), out gpuValue);
-                    int.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_gpuT_index), out gpuTValue);
-                    int.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_cpuT_index), out cpuTValue);
-                    int.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_cpuP_index), out cpuPValue);
-                    int.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_gpuP_index), out gpuPValue);
+                    if (fpsValue == 0) 
+                    {
+                        int.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_fps_index), out fpsValue); 
+                    }
+                    if (gpuValue == 0)
+                    {
+                        int.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_gpu_index), out gpuValue);
+                    }
+                    if (gpuTValue == 0)
+                    {
+                        int.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_gpuT_index), out gpuTValue);
+                    }
+                    if (cpuTValue == 0)
+                    {
+                        int.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_cpuT_index), out cpuTValue);
+                    }
+                    if (cpuPValue == 0)
+                    {
+                        int.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_cpuP_index), out cpuPValue);
+                    }
+                    if (gpuPValue == 0)
+                    {
+                        int.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_gpuP_index), out gpuPValue);
+                    }
                 }
                 catch (Exception ex)
                 {
-                    logger.Error("Fail initialize HWiNFOGadget");
-                    Common.LogError(ex, true, "Fail initialize HWiNFOGadget");
+                    logger.Error("HWiNFOGadget - Fail initialize");
+                    Common.LogError(ex, true, "HWiNFOGadget - Fail initialize");
                 }
             }
 

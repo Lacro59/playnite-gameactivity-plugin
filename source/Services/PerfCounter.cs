@@ -1,5 +1,4 @@
-﻿using OpenHardwareMonitor.Hardware;
-using Playnite.SDK;
+﻿using Playnite.SDK;
 using CommonPluginsShared;
 using System;
 using System.Diagnostics;
@@ -8,28 +7,12 @@ using System.Runtime.InteropServices;
 
 namespace GameActivity.Services
 {
-    public class UpdateVisitor : IVisitor
-    {
-        public void VisitComputer(IComputer computer)
-        {
-            computer.Traverse(this);
-        }
-        public void VisitHardware(IHardware hardware)
-        {
-            hardware.Update();
-            foreach (IHardware subHardware in hardware.SubHardware)
-            {
-                subHardware.Accept(this);
-            }
-        }
-        public void VisitSensor(ISensor sensor) { }
-        public void VisitParameter(IParameter parameter) { }
-    }
-
-
     public class PerfCounter
     {
         private static readonly ILogger logger = LogManager.GetLogger();
+
+        private static ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
+
 
         [StructLayout(LayoutKind.Sequential)]
         internal struct MEMORYSTATUSEX
@@ -49,26 +32,46 @@ namespace GameActivity.Services
         [DllImport("Kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         internal static extern bool GlobalMemoryStatusEx(ref MEMORYSTATUSEX lpBuffer);
 
-        private static Computer _myComputer;
-        private static Computer myComputer
+
+        private static OpenHardwareMonitor.Hardware.Computer _myComputerOH;
+        private static OpenHardwareMonitor.Hardware.Computer myComputerOH
         {
             get
             {
-                if (_myComputer == null)
+                if (_myComputerOH == null)
                 {
-                    _myComputer = new Computer
+                    _myComputerOH = new OpenHardwareMonitor.Hardware.Computer
                     {
                         CPUEnabled = true,
                         GPUEnabled = true
                     };
-                    myComputer.Open();
-                    UpdateVisitor updateVisitor = new UpdateVisitor();
-                    myComputer.Accept(updateVisitor);
+                    _myComputerOH.Open();
+                    UpdateVisitorOpenHardware updateVisitor = new UpdateVisitorOpenHardware();
+                    _myComputerOH.Accept(updateVisitor);
                 }
-                return _myComputer;
+                return _myComputerOH;
             }
         }
 
+        private static LibreHardwareMonitor.Hardware.Computer _myComputerLH;
+        private static LibreHardwareMonitor.Hardware.Computer myComputerLH
+        {
+            get
+            {
+                if (_myComputerLH == null)
+                {
+                    _myComputerLH = new LibreHardwareMonitor.Hardware.Computer
+                    {
+                        IsCpuEnabled = true,
+                        IsGpuEnabled = true
+                    };
+                    _myComputerLH.Open();
+                    UpdateVisitorLibreHardware updateVisitor = new UpdateVisitorLibreHardware();
+                    _myComputerLH.Accept(updateVisitor);
+                }
+                return _myComputerLH;
+            }
+        }
 
 
         public static int GetCpuPercentage()
@@ -103,17 +106,33 @@ namespace GameActivity.Services
         {
             try
             {
-                foreach (IHardware hardwareItem in myComputer.Hardware)
+                if (PluginDatabase.PluginSettings.Settings.UsedLibreHardware)
                 {
-                    if (hardwareItem.HardwareType == HardwareType.CPU)
+                    LibreHardwareMonitor.Hardware.IHardware hardwareItem = myComputerLH.Hardware
+                        .Where(x => x.HardwareType == LibreHardwareMonitor.Hardware.HardwareType.Cpu)?.FirstOrDefault();
+                    if (hardwareItem != null)
                     {
                         hardwareItem.Update();
-                        foreach (ISensor sensor in hardwareItem.Sensors)
+                        LibreHardwareMonitor.Hardware.ISensor sensorItem = hardwareItem.Sensors
+                            .Where(x => x.SensorType == LibreHardwareMonitor.Hardware.SensorType.Temperature && x.Value.HasValue)?.FirstOrDefault();
+                        if (sensorItem != null)
                         {
-                            if (sensor.SensorType == SensorType.Temperature && sensor.Value.HasValue)
-                            {
-                                return (int)Math.Round((float)sensor.Value);
-                            }
+                            return (int)Math.Round((float)sensorItem.Value);
+                        }
+                    }
+                }
+                else
+                {
+                    OpenHardwareMonitor.Hardware.IHardware hardwareItem = myComputerOH.Hardware
+                        .Where(x => x.HardwareType == OpenHardwareMonitor.Hardware.HardwareType.CPU)?.FirstOrDefault();
+                    if (hardwareItem != null)
+                    {
+                        hardwareItem.Update();
+                        OpenHardwareMonitor.Hardware.ISensor sensorItem = hardwareItem.Sensors
+                            .Where(x => x.SensorType == OpenHardwareMonitor.Hardware.SensorType.Temperature && x.Value.HasValue)?.FirstOrDefault();
+                        if (sensorItem != null)
+                        {
+                            return (int)Math.Round((float)sensorItem.Value);
                         }
                     }
                 }
@@ -126,6 +145,51 @@ namespace GameActivity.Services
 
             return 0;
         }
+
+        public static int GetCpuPower()
+        {
+            try
+            {
+                if (PluginDatabase.PluginSettings.Settings.UsedLibreHardware)
+                {
+                    LibreHardwareMonitor.Hardware.IHardware hardwareItem = myComputerLH.Hardware
+                        .Where(x => x.HardwareType == LibreHardwareMonitor.Hardware.HardwareType.Cpu)?.FirstOrDefault();
+                    if (hardwareItem != null)
+                    {
+                        hardwareItem.Update();
+                        LibreHardwareMonitor.Hardware.ISensor sensorItem = hardwareItem.Sensors
+                            .Where(x => x.SensorType == LibreHardwareMonitor.Hardware.SensorType.Power && x.Value.HasValue)?.FirstOrDefault();
+                        if (sensorItem != null)
+                        {
+                            return (int)Math.Round((float)sensorItem.Value);
+                        }
+                    }
+                }
+                else
+                {
+                    OpenHardwareMonitor.Hardware.IHardware hardwareItem = myComputerOH.Hardware
+                        .Where(x => x.HardwareType == OpenHardwareMonitor.Hardware.HardwareType.CPU)?.FirstOrDefault();
+                    if (hardwareItem != null)
+                    {
+                        hardwareItem.Update();
+                        OpenHardwareMonitor.Hardware.ISensor sensorItem = hardwareItem.Sensors
+                            .Where(x => x.SensorType == OpenHardwareMonitor.Hardware.SensorType.Power && x.Value.HasValue)?.FirstOrDefault();
+                        if (sensorItem != null)
+                        {
+                            return (int)Math.Round((float)sensorItem.Value);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Warn($"No CPU power find");
+                Common.LogError(ex, true);
+            }
+
+            return 0;
+        }
+
 
         public static int GetRamPercentage()
         {
@@ -168,33 +232,38 @@ namespace GameActivity.Services
             return RamUsagePercentage;
         }
 
+
         public static int GetGpuPercentage()
         {
             try
             {
-                foreach (IHardware hardwareItem in myComputer.Hardware)
+                if (PluginDatabase.PluginSettings.Settings.UsedLibreHardware)
                 {
-                    if (hardwareItem.HardwareType == HardwareType.GpuNvidia)
+                    LibreHardwareMonitor.Hardware.IHardware hardwareItem = myComputerLH.Hardware
+                        .Where(x => x.HardwareType == LibreHardwareMonitor.Hardware.HardwareType.GpuAmd || x.HardwareType == LibreHardwareMonitor.Hardware.HardwareType.GpuNvidia)?.FirstOrDefault();
+                    if (hardwareItem != null)
                     {
                         hardwareItem.Update();
-                        foreach (ISensor sensor in hardwareItem.Sensors)
+                        LibreHardwareMonitor.Hardware.ISensor sensorItem = hardwareItem.Sensors
+                            .Where(x => x.SensorType == LibreHardwareMonitor.Hardware.SensorType.Load && x.Value.HasValue)?.FirstOrDefault();
+                        if (sensorItem != null)
                         {
-                            if (sensor.Identifier.ToString().Contains("load/0"))
-                            {
-                                return (int)Math.Round((float)sensor.Value);
-                            }
+                            return (int)Math.Round((float)sensorItem.Value);
                         }
                     }
-
-                    if (hardwareItem.HardwareType == HardwareType.GpuAti)
+                }
+                else
+                {
+                    OpenHardwareMonitor.Hardware.IHardware hardwareItem = myComputerOH.Hardware
+                        .Where(x => x.HardwareType == OpenHardwareMonitor.Hardware.HardwareType.GpuAti || x.HardwareType == OpenHardwareMonitor.Hardware.HardwareType.GpuNvidia)?.FirstOrDefault();
+                    if (hardwareItem != null)
                     {
                         hardwareItem.Update();
-                        foreach (ISensor sensor in hardwareItem.Sensors)
+                        OpenHardwareMonitor.Hardware.ISensor sensorItem = hardwareItem.Sensors
+                            .Where(x => x.SensorType == OpenHardwareMonitor.Hardware.SensorType.Load && x.Value.HasValue)?.FirstOrDefault();
+                        if (sensorItem != null)
                         {
-                            if (sensor.Identifier.ToString().Contains("load/0"))
-                            {
-                                return (int)Math.Round((float)sensor.Value);
-                            }
+                            return (int)Math.Round((float)sensorItem.Value);
                         }
                     }
                 }
@@ -212,29 +281,33 @@ namespace GameActivity.Services
         {
             try
             {
-                foreach (IHardware hardwareItem in myComputer.Hardware)
+                if (PluginDatabase.PluginSettings.Settings.UsedLibreHardware)
                 {
-                    if (hardwareItem.HardwareType == HardwareType.GpuNvidia)
+                    LibreHardwareMonitor.Hardware.IHardware hardwareItem = myComputerLH.Hardware
+                        .Where(x => x.HardwareType == LibreHardwareMonitor.Hardware.HardwareType.GpuAmd || x.HardwareType == LibreHardwareMonitor.Hardware.HardwareType.GpuNvidia)?.FirstOrDefault();
+                    if (hardwareItem != null)
                     {
                         hardwareItem.Update();
-                        foreach (ISensor sensor in hardwareItem.Sensors)
+                        LibreHardwareMonitor.Hardware.ISensor sensorItem = hardwareItem.Sensors
+                            .Where(x => x.SensorType == LibreHardwareMonitor.Hardware.SensorType.Temperature && x.Value.HasValue)?.FirstOrDefault();
+                        if (sensorItem != null)
                         {
-                            if (sensor.Identifier.ToString().Contains("temperature/0"))
-                            {
-                                return (int)Math.Round((float)sensor.Value);
-                            }
+                            return (int)Math.Round((float)sensorItem.Value);
                         }
                     }
-
-                    if (hardwareItem.HardwareType == HardwareType.GpuAti)
+                }
+                else
+                {
+                    OpenHardwareMonitor.Hardware.IHardware hardwareItem = myComputerOH.Hardware
+                        .Where(x => x.HardwareType == OpenHardwareMonitor.Hardware.HardwareType.GpuAti || x.HardwareType == OpenHardwareMonitor.Hardware.HardwareType.GpuNvidia)?.FirstOrDefault();
+                    if (hardwareItem != null)
                     {
                         hardwareItem.Update();
-                        foreach (ISensor sensor in hardwareItem.Sensors)
+                        OpenHardwareMonitor.Hardware.ISensor sensorItem = hardwareItem.Sensors
+                            .Where(x => x.SensorType == OpenHardwareMonitor.Hardware.SensorType.Temperature && x.Value.HasValue)?.FirstOrDefault();
+                        if (sensorItem != null)
                         {
-                            if (sensor.Identifier.ToString().Contains("temperature/0"))
-                            {
-                                return (int)Math.Round((float)sensor.Value);
-                            }
+                            return (int)Math.Round((float)sensorItem.Value);
                         }
                     }
                 }
@@ -242,6 +315,50 @@ namespace GameActivity.Services
             catch (Exception ex)
             {
                 logger.Warn($"No GPU temperature find");
+                Common.LogError(ex, true);
+            }
+
+            return 0;
+        }
+
+        public static int GetGpuPower()
+        {
+            try
+            {
+                if (PluginDatabase.PluginSettings.Settings.UsedLibreHardware)
+                {
+                    LibreHardwareMonitor.Hardware.IHardware hardwareItem = myComputerLH.Hardware
+                        .Where(x => x.HardwareType == LibreHardwareMonitor.Hardware.HardwareType.GpuAmd || x.HardwareType == LibreHardwareMonitor.Hardware.HardwareType.GpuNvidia)?.FirstOrDefault();
+                    if (hardwareItem != null)
+                    {
+                        hardwareItem.Update();
+                        LibreHardwareMonitor.Hardware.ISensor sensorItem = hardwareItem.Sensors
+                            .Where(x => x.SensorType == LibreHardwareMonitor.Hardware.SensorType.Power && x.Value.HasValue)?.FirstOrDefault();
+                        if (sensorItem != null)
+                        {
+                            return (int)Math.Round((float)sensorItem.Value);
+                        }
+                    }
+                }
+                else
+                {
+                    OpenHardwareMonitor.Hardware.IHardware hardwareItem = myComputerOH.Hardware
+                        .Where(x => x.HardwareType == OpenHardwareMonitor.Hardware.HardwareType.GpuAti || x.HardwareType == OpenHardwareMonitor.Hardware.HardwareType.GpuNvidia)?.FirstOrDefault();
+                    if (hardwareItem != null)
+                    {
+                        hardwareItem.Update();
+                        OpenHardwareMonitor.Hardware.ISensor sensorItem = hardwareItem.Sensors
+                            .Where(x => x.SensorType == OpenHardwareMonitor.Hardware.SensorType.Power && x.Value.HasValue)?.FirstOrDefault();
+                        if (sensorItem != null)
+                        {
+                            return (int)Math.Round((float)sensorItem.Value);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Warn($"No GPU power find");
                 Common.LogError(ex, true);
             }
 

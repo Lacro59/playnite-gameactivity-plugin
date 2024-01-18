@@ -21,38 +21,14 @@ namespace GameActivity
         public bool EnableIntegrationButtonHeader { get; set; } = false;
         public bool EnableIntegrationButtonSide { get; set; } = true;
 
-        private bool _EnableIntegrationButton { get; set; } = true;
-        public bool EnableIntegrationButton
-        {
-            get => _EnableIntegrationButton;
-            set
-            {
-                _EnableIntegrationButton = value;
-                OnPropertyChanged();
-            }
-        }
+        private bool _EnableIntegrationButton = true;
+        public bool EnableIntegrationButton { get => _EnableIntegrationButton; set => SetValue(ref _EnableIntegrationButton, value); }
 
-        private bool _EnableIntegrationButtonDetails { get; set; } = false;
-        public bool EnableIntegrationButtonDetails
-        {
-            get => _EnableIntegrationButtonDetails;
-            set
-            {
-                _EnableIntegrationButtonDetails = value;
-                OnPropertyChanged();
-            }
-        }
+        private bool _EnableIntegrationButtonDetails = false;
+        public bool EnableIntegrationButtonDetails { get => _EnableIntegrationButtonDetails; set => SetValue(ref _EnableIntegrationButtonDetails, value); }
 
-        private bool _EnableIntegrationChartTime { get; set; } = true;
-        public bool EnableIntegrationChartTime
-        {
-            get => _EnableIntegrationChartTime;
-            set
-            {
-                _EnableIntegrationChartTime = value;
-                OnPropertyChanged();
-            }
-        }
+        private bool _EnableIntegrationChartTime = true;
+        public bool EnableIntegrationChartTime { get => _EnableIntegrationChartTime; set => SetValue(ref _EnableIntegrationChartTime, value); }
 
         public bool ChartTimeTruncate { get; set; } = true;
         public bool ChartTimeVisibleEmpty { get; set; } = true;
@@ -61,16 +37,8 @@ namespace GameActivity
         public bool ChartTimeOrdinates { get; set; } = true;
         public int ChartTimeCountAbscissa { get; set; } = 11;
 
-        private bool _EnableIntegrationChartLog { get; set; } = true;
-        public bool EnableIntegrationChartLog
-        {
-            get => _EnableIntegrationChartLog;
-            set
-            {
-                _EnableIntegrationChartLog = value;
-                OnPropertyChanged();
-            }
-        }
+        private bool _EnableIntegrationChartLog = true;
+        public bool EnableIntegrationChartLog { get => _EnableIntegrationChartLog; set => SetValue(ref _EnableIntegrationChartLog, value); }
 
         public bool ChartLogVisibleEmpty { get; set; } = true;
         public double ChartLogHeight { get; set; } = 120;
@@ -97,6 +65,9 @@ namespace GameActivity
         public SolidColorBrush ChartColors { get; set; } = (SolidColorBrush)(new BrushConverter().ConvertFrom("#2195f2"));
 
         public bool EnableLogging { get; set; } = false;
+        public bool UsedLibreHardware { get; set; } = false;
+        public bool WithRemoteServerWeb { get; set; } = false;
+        public string IpRemoteServerWeb { get; set; } = string.Empty;
         public int TimeIntervalLogging { get; set; } = 5;
 
         public bool lvGamesIcon { get; set; } = true;
@@ -161,89 +132,33 @@ namespace GameActivity
         // Playnite serializes settings object to a JSON object and saves it as text file.
         // If you want to exclude some property from being saved then use `JsonDontSerialize` ignore attribute.
         #region Variables exposed
-        private bool _HasData { get; set; } = false;
+        private bool _HasData = false;
         [DontSerialize]
-        public bool HasData
-        {
-            get => _HasData;
-            set
-            {
-                _HasData = value;
-                OnPropertyChanged();
-            }
-        }
+        public bool HasData { get => _HasData; set => SetValue(ref _HasData, value); }
 
-        private bool _HasDataLog { get; set; } = false;
+        private bool _HasDataLog = false;
         [DontSerialize]
-        public bool HasDataLog
-        {
-            get => _HasDataLog;
-            set
-            {
-                _HasDataLog = value;
-                OnPropertyChanged();
-            }
-        }
+        public bool HasDataLog { get => _HasDataLog; set => SetValue(ref _HasDataLog, value); }
 
-        private string _LastDateSession { get; set; } = string.Empty;
+        private string _LastDateSession = string.Empty;
         [DontSerialize]
-        public string LastDateSession
-        {
-            get => _LastDateSession;
-            set
-            {
-                _LastDateSession = value;
-                OnPropertyChanged();
-            }
-        }
+        public string LastDateSession { get => _LastDateSession; set => SetValue(ref _LastDateSession, value); }
 
-        private string _LastDateTimeSession { get; set; } = string.Empty;
+        private string _LastDateTimeSession = string.Empty;
         [DontSerialize]
-        public string LastDateTimeSession
-        {
-            get => _LastDateTimeSession;
-            set
-            {
-                _LastDateTimeSession = value;
-                OnPropertyChanged();
-            }
-        }
+        public string LastDateTimeSession { get => _LastDateTimeSession; set => SetValue(ref _LastDateTimeSession, value); }
 
-        private string _LastPlaytimeSession { get; set; } = string.Empty;
+        private string _LastPlaytimeSession = string.Empty;
         [DontSerialize]
-        public string LastPlaytimeSession
-        {
-            get => _LastPlaytimeSession;
-            set
-            {
-                _LastPlaytimeSession = value;
-                OnPropertyChanged();
-            }
-        }
+        public string LastPlaytimeSession { get => _LastPlaytimeSession; set => SetValue(ref _LastPlaytimeSession, value); }
 
-        private int _AvgFpsAllSession { get; set; } = 0;
+        private int _AvgFpsAllSession = 0;
         [DontSerialize]
-        public int AvgFpsAllSession
-        {
-            get => _AvgFpsAllSession;
-            set
-            {
-                _AvgFpsAllSession = value;
-                OnPropertyChanged();
-            }
-        }
+        public int AvgFpsAllSession { get => _AvgFpsAllSession; set => SetValue(ref _AvgFpsAllSession, value); }
 
-        private string _RecentActivity { get; set; } = string.Empty;
+        private string _RecentActivity  = string.Empty;
         [DontSerialize]
-        public string RecentActivity
-        {
-            get => _RecentActivity;
-            set
-            {
-                _RecentActivity = value;
-                OnPropertyChanged();
-            }
-        }
+        public string RecentActivity { get => _RecentActivity; set => SetValue(ref _RecentActivity, value); }
         #endregion  
     }
 
