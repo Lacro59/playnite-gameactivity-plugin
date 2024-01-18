@@ -110,6 +110,7 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} hours past {1} week</sys:String>
     <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} hours past {1} weeks</sys:String>
     <sys:String x:Key="LOCGameActivityAvgPerDay">Average time per day</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgPerSession">Average time per session</sys:String>
     <sys:String x:Key="LOCGameActivityFirstSession">First session</sys:String>
     <sys:String x:Key="LOCGameActivityLastSession">Last session</sys:String>
     

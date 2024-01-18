@@ -82,7 +82,7 @@
                                 <RowDefinition Height="auto" />
                             </Grid.RowDefinitions>
 
-                            <Label Content="{DynamicResource LOCGameActivityAvgPerDay}"
+                            <Label Content="{DynamicResource LOCGameActivityAvgPerSession}"
                                    Grid.Column="0" Grid.Row="0" VerticalAlignment="center" />
                             <TextBlock Name="PART_TimeAvg" Text="any time" Grid.Column="2" Grid.Row="0"
                                        Foreground="{DynamicResource TextBrush}" VerticalAlignment="center" />
