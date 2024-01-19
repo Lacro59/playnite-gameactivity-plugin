@@ -169,14 +169,8 @@
                                                SortingEnable="True" SortingDefaultDataName="GameLastActivity">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Width="150">
+                            <GridViewColumn Width="150" DisplayMemberBinding="{Binding GameLastActivity, Converter={StaticResource LocalDateTimeConverter}}" >
                                 <GridViewColumnHeader Content="{DynamicResource LOCGameActivityLvGamesLastActivity}" />
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Label Content="{Binding GameLastActivity, Converter={StaticResource LocalDateTimeConverter}}" 
-                                               VerticalAlignment="Stretch" Style="{DynamicResource ListExtendStyleLabel}" />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
                             </GridViewColumn>
 
                             <GridViewColumn Width="0" DisplayMemberBinding="{Binding GameElapsedSeconds}">

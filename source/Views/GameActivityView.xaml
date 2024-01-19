@@ -41,7 +41,7 @@
                 </Grid>
 
                 <Border Grid.Row="0" Name="PART_DataTop" BorderBrush="{DynamicResource NormalBorderBrush}" 
-                BorderThickness="{DynamicResource ControlBorderThickness}">
+                        BorderThickness="{DynamicResource ControlBorderThickness}">
                     <Grid Margin="10">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto" />
@@ -222,7 +222,7 @@
                         </Grid.RowDefinitions>
 
                         <Border Grid.Column="0" Grid.Row="0" BorderThickness="{DynamicResource PopupBorderThickness}" 
-                    BorderBrush="{DynamicResource NormalBorderBrush}">
+                                BorderBrush="{DynamicResource NormalBorderBrush}">
                             <Grid Margin="10">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto" />
@@ -307,14 +307,8 @@
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
 
-                                        <GridViewColumn Width="150">
+                                        <GridViewColumn Width="150" DisplayMemberBinding="{Binding GameLastActivity, Converter={StaticResource LocalDateTimeConverter}}" >
                                             <GridViewColumnHeader Content="{DynamicResource LOCGameActivityLvGamesLastActivity}" />
-                                            <GridViewColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <Label Content="{Binding GameLastActivity, Converter={StaticResource LocalDateTimeConverter}}" 
-                                                           VerticalAlignment="Stretch" Style="{DynamicResource ListExtendStyleLabel}" />
-                                                </DataTemplate>
-                                            </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
 
                                         <GridViewColumn Width="0" DisplayMemberBinding="{Binding GameElapsedSeconds}">
