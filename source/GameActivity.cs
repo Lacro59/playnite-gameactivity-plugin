@@ -270,10 +270,10 @@ namespace GameActivity
             int cpuPValue = 0;
             int gpuPValue = 0;
 
+            double temp;
+
             if (PluginSettings.Settings.UsedLibreHardware && PluginSettings.Settings.WithRemoteServerWeb && !PluginSettings.Settings.IpRemoteServerWeb.IsNullOrEmpty())
             {
-                double temp;
-
                 LibreHardwareData libreHardwareMonitorData = Services.LibreHardware.GetDataWeb(PluginSettings.Settings.IpRemoteServerWeb);
                 if (libreHardwareMonitorData != null)
                 {
@@ -574,29 +574,53 @@ namespace GameActivity
             {
                 try
                 {
-                    if (fpsValue == 0) 
+                    if (fpsValue == 0)
                     {
-                        int.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_fps_index), out fpsValue); 
+                        double.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_fps_index)
+                            ?.Replace(".", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
+                            ?.Replace(",", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
+                            ?.Trim(), out temp);
+                        fpsValue = Convert.ToInt32(Math.Round(temp, 0));
                     }
                     if (gpuValue == 0)
                     {
-                        int.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_gpu_index), out gpuValue);
+                        double.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_gpu_index)
+                            ?.Replace(".", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
+                            ?.Replace(",", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
+                            ?.Trim(), out temp);
+                        gpuValue = Convert.ToInt32(Math.Round(temp, 0));
                     }
                     if (gpuTValue == 0)
                     {
-                        int.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_gpuT_index), out gpuTValue);
+                        double.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_gpuT_index)
+                            ?.Replace(".", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
+                            ?.Replace(",", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
+                            ?.Trim(), out temp);
+                        gpuTValue = Convert.ToInt32(Math.Round(temp, 0));
                     }
                     if (cpuTValue == 0)
                     {
-                        int.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_cpuT_index), out cpuTValue);
+                        double.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_cpuT_index)
+                            ?.Replace(".", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
+                            ?.Replace(",", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
+                            ?.Trim(), out temp);
+                        cpuTValue = Convert.ToInt32(Math.Round(temp, 0));
                     }
                     if (cpuPValue == 0)
                     {
-                        int.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_cpuP_index), out cpuPValue);
+                        double.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_cpuP_index)
+                            ?.Replace(".", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
+                            ?.Replace(",", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
+                            ?.Trim(), out temp);
+                        cpuPValue = Convert.ToInt32(Math.Round(temp, 0));
                     }
                     if (gpuPValue == 0)
                     {
-                        int.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_gpuP_index), out gpuPValue);
+                        double.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_gpuP_index)
+                            ?.Replace(".", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
+                            ?.Replace(",", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
+                            ?.Trim(), out temp);
+                        gpuPValue = Convert.ToInt32(Math.Round(temp, 0));
                     }
                 }
                 catch (Exception ex)
