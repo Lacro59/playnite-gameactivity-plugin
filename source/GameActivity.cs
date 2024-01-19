@@ -1380,7 +1380,7 @@ namespace GameActivity
         // Add code to be executed when Playnite is shutting down.
         public override void OnApplicationStopped(OnApplicationStoppedEventArgs args)
         {
-            
+
         }
         #endregion
 

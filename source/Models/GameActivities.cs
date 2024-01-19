@@ -28,14 +28,9 @@ namespace GameActivity.Models
         {
             get
             {
-                if (PluginDatabase.PluginSettings.Settings.IgnoreSession)
-                {
-                    return Items.Where(x => (int)x.ElapsedSeconds > PluginDatabase.PluginSettings.Settings.IgnoreSessionTime).Distinct().ToList();
-                }
-                else
-                {
-                    return Items.Where(x => (int)x.ElapsedSeconds > 0).Distinct().ToList();
-                }
+                return PluginDatabase.PluginSettings.Settings.IgnoreSession
+                    ? Items.Where(x => (int)x.ElapsedSeconds > PluginDatabase.PluginSettings.Settings.IgnoreSessionTime).Distinct().ToList()
+                    : Items.Where(x => (int)x.ElapsedSeconds > 0).Distinct().ToList();
             }
         }
 
@@ -50,14 +45,7 @@ namespace GameActivity.Models
                 avg += acDetailsData[iData].CPU;
             }
 
-            if (acDetailsData.Count != 0)
-            {
-                return (int)Math.Round(avg / acDetailsData.Count);
-            }
-            else
-            {
-                return 0;
-            }
+            return acDetailsData.Count != 0 ? (int)Math.Round(avg / acDetailsData.Count) : 0;
         }
 
         public int avgGPU(DateTime dateSession)
@@ -70,14 +58,7 @@ namespace GameActivity.Models
                 avg += acDetailsData[iData].GPU;
             }
 
-            if (acDetailsData.Count != 0)
-            {
-                return (int)Math.Round(avg / acDetailsData.Count);
-            }
-            else
-            {
-                return 0;
-            }
+            return acDetailsData.Count != 0 ? (int)Math.Round(avg / acDetailsData.Count) : 0;
         }
 
         public int avgRAM(DateTime dateSession)
@@ -90,14 +71,7 @@ namespace GameActivity.Models
                 avg += acDetailsData[iData].RAM;
             }
 
-            if (acDetailsData.Count != 0)
-            {
-                return (int)Math.Round(avg / acDetailsData.Count);
-            }
-            else
-            {
-                return 0;
-            }
+            return acDetailsData.Count != 0 ? (int)Math.Round(avg / acDetailsData.Count) : 0;
         }
 
 
@@ -111,14 +85,7 @@ namespace GameActivity.Models
                 avg += acDetailsData[iData].FPS;
             }
 
-            if (acDetailsData.Count != 0)
-            {
-                return (int)Math.Round(avg / acDetailsData.Count);
-            }
-            else
-            {
-                return 0;
-            }
+            return acDetailsData.Count != 0 ? (int)Math.Round(avg / acDetailsData.Count) : 0;
         }
 
         public int avgCPUT(DateTime dateSession)
@@ -131,14 +98,7 @@ namespace GameActivity.Models
                 avg += acDetailsData[iData].CPUT;
             }
 
-            if (acDetailsData.Count != 0)
-            {
-                return (int)Math.Round(avg / acDetailsData.Count);
-            }
-            else
-            {
-                return 0;
-            }
+            return acDetailsData.Count != 0 ? (int)Math.Round(avg / acDetailsData.Count) : 0;
         }
 
         public int avgGPUT(DateTime dateSession)
@@ -151,14 +111,7 @@ namespace GameActivity.Models
                 avg += acDetailsData[iData].GPUT;
             }
 
-            if (acDetailsData.Count != 0)
-            {
-                return (int)Math.Round(avg / acDetailsData.Count);
-            }
-            else
-            {
-                return 0;
-            }
+            return acDetailsData.Count != 0 ? (int)Math.Round(avg / acDetailsData.Count) : 0;
         }
 
         public int avgCPUP(DateTime dateSession)
@@ -171,14 +124,7 @@ namespace GameActivity.Models
                 avg += acDetailsData[iData].CPUP;
             }
 
-            if (acDetailsData.Count != 0)
-            {
-                return (int)Math.Round(avg / acDetailsData.Count);
-            }
-            else
-            {
-                return 0;
-            }
+            return acDetailsData.Count != 0 ? (int)Math.Round(avg / acDetailsData.Count) : 0;
         }
 
         public int avgGPUP(DateTime dateSession)
@@ -191,14 +137,7 @@ namespace GameActivity.Models
                 avg += acDetailsData[iData].GPUP;
             }
 
-            if (acDetailsData.Count != 0)
-            {
-                return (int)Math.Round(avg / acDetailsData.Count);
-            }
-            else
-            {
-                return 0;
-            }
+            return acDetailsData.Count != 0 ? (int)Math.Round(avg / acDetailsData.Count) : 0;
         }
 
 
@@ -414,7 +353,7 @@ namespace GameActivity.Models
 
         public bool HasActivity(int Year, int Month)
         {
-            var els = Items.FindAll(x => x.DateSession <= new DateTime(Year, Month, DateTime.DaysInMonth(Year, Month)) && x.DateSession >= new DateTime(Year, Month, 1));
+            List<Activity> els = Items.FindAll(x => x.DateSession <= new DateTime(Year, Month, DateTime.DaysInMonth(Year, Month)) && x.DateSession >= new DateTime(Year, Month, 1));
             return els?.Count > 0;
         }
 
@@ -439,7 +378,7 @@ namespace GameActivity.Models
                         Result.Add(DateString);
                     }
                 }
-            }            
+            }
 
             return Result;
         }
@@ -447,7 +386,7 @@ namespace GameActivity.Models
 
         public void DeleteActivity(DateTime dateSelected)
         {
-            var activity = Items.Where(x => x.DateSession == dateSelected.ToUniversalTime()).FirstOrDefault();
+            Activity activity = Items.Where(x => x.DateSession == dateSelected.ToUniversalTime()).FirstOrDefault();
             if (activity != null)
             {
                 Items.Remove(activity);
