@@ -50,6 +50,8 @@ Klikk for mer informasjon.</sys:String>
     <sys:String x:Key="LOCGameActivityListGamesFields">Spillfelt som skal vises</sys:String>
 
     <sys:String x:Key="LOCGameActivityActiveLog">Aktiver logging</sys:String>
+    <sys:String x:Key="LOCGameActivityUsedLibreHardware">Used LibreHarwareMonitor instead</sys:String>
+    <sys:String x:Key="LOCGameActivityRemoteWebServer">With remote web server</sys:String>
     <sys:String x:Key="LOCGameActivityTimeInterval">Kontroller tidsintervall</sys:String>
     <sys:String x:Key="LOCGameActivityTimeLabel">minutt(er)</sys:String>
 
@@ -108,6 +110,7 @@ Klikk for mer informasjon.</sys:String>
     <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} hours past {1} week</sys:String>
     <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} hours past {1} weeks</sys:String>
     <sys:String x:Key="LOCGameActivityAvgPerDay">Gjennomsnittlig tid per dag</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgPerSession">Average time per session</sys:String>
     <sys:String x:Key="LOCGameActivityFirstSession">Første økt</sys:String>
     <sys:String x:Key="LOCGameActivityLastSession">Siste økt</sys:String>
     
