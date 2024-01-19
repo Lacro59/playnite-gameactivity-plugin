@@ -1,5 +1,6 @@
 ﻿using CommonPlayniteShared.Common;
 using CommonPluginsShared;
+using GameActivity.Controls;
 using GameActivity.Models;
 using GameActivity.Services;
 using Playnite.SDK.Models;
@@ -43,6 +44,30 @@ namespace GameActivity.Views
             }
             ViewDataContext.DateLastPlayed = (DateTime)game?.LastActivity;
             ViewDataContext.Playtime = game.Playtime;
+
+            if (activityBackup.ItemsDetailsDatas?.Count == 0)
+            {
+                PART_ChartLogContener.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                PluginChartLog PART_ChartLog = (PluginChartLog)PART_ChartLogContener.Children[0];
+                PART_ChartLog.SetDefaultDataContext();
+
+                GameActivities pluginData = PluginDatabase.GetDefault(activityBackup.Id);
+                pluginData.Items.Add(new Activity
+                {
+                    IdConfiguration = activityBackup.IdConfiguration,
+                    GameActionName = activityBackup.GameActionName,
+                    DateSession = activityBackup.DateSession,
+                    SourceID = activityBackup.SourceID,
+                    PlatformIDs = activityBackup.PlatformIDs,
+                    ElapsedSeconds = activityBackup.ElapsedSeconds
+                });
+                pluginData.ItemsDetails.Items.TryAdd(activityBackup.DateSession, activityBackup.ItemsDetailsDatas);
+
+                PART_ChartLog.GetActivityForGamesLogGraphics(pluginData, 0, 10, activityBackup.DateSession, "1");
+            }
         }
 
 
@@ -98,6 +123,14 @@ namespace GameActivity.Views
             }
 
             ((Window)this.Parent).Close();
+        }
+
+        private void Grid_Loaded(object sender, RoutedEventArgs e)
+        {
+            PluginChartLog PART_ChartLog = (PluginChartLog)PART_ChartLogContener.Children[0];
+            PART_ChartLog.Width = PART_ChartLogContener.ActualWidth;
+            PART_ChartLog.Height = PART_ChartLogContener.ActualHeight;
+            ((PluginChartLogDataContext)PART_ChartLog.DataContext).UseControls = false;
         }
     }
 

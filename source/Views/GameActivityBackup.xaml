@@ -5,21 +5,25 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GameActivity.Views"
              xmlns:converters="clr-namespace:CommonPluginsShared.Converters"
-             xmlns:converters1="clr-namespace:CommonPlayniteShared.Converters"
+             xmlns:converters1="clr-namespace:CommonPlayniteShared.Converters" 
+             xmlns:controls="clr-namespace:GameActivity.Controls"
              mc:Ignorable="d" 
              Height="320" Width="800">
 
     <UserControl.Resources>
         <converters:LocalDateConverter x:Key="LocalDateConverter" />
+        <converters:LocalDateTimeConverter x:Key="LocalDateTimeConverter" />
         <converters1:PlayTimeToStringConverter x:Key="PlayTimeToStringConverter" />
     </UserControl.Resources>
     
-    <Grid Margin="10">
+    <Grid Margin="10" Loaded="Grid_Loaded">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="10" />
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="10" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="20" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -49,7 +53,7 @@
 
         <TextBlock Grid.Column="2" Grid.Row="2" Text="{DynamicResource LOCGaDateSession}"
                    Foreground="{DynamicResource TextBrush}" />
-        <TextBlock Grid.Column="4" Grid.Row="2" Text="{Binding DateSession, FallbackValue='xx/xx/xx xx:xx:xx', Converter={StaticResource LocalDateConverter}}"
+        <TextBlock Grid.Column="4" Grid.Row="2" Text="{Binding DateSession, FallbackValue='xx/xx/xx xx:xx:xx', Converter={StaticResource LocalDateTimeConverter}}"
                    Foreground="{DynamicResource TextBrush}" />
 
         <TextBlock Grid.Column="2" Grid.Row="4" Text="{DynamicResource LOCGameActivityLvGamesElapsedSeconds}"
@@ -59,7 +63,7 @@
 
         <TextBlock Grid.Column="2" Grid.Row="6" Text="{DynamicResource LOCLastPlayedLabel}"
                    Foreground="{DynamicResource TextBrush}" />
-        <TextBlock Grid.Column="4" Grid.Row="6" Text="{Binding DateLastPlayed, FallbackValue='xx/xx/xx xx:xx:xx', Converter={StaticResource LocalDateConverter}}"
+        <TextBlock Grid.Column="4" Grid.Row="6" Text="{Binding DateLastPlayed, FallbackValue='xx/xx/xx xx:xx:xx', Converter={StaticResource LocalDateTimeConverter}}"
                    Foreground="{DynamicResource TextBrush}" />
 
         <TextBlock Grid.Column="2" Grid.Row="8" Text="{DynamicResource LOCTimePlayed}"
@@ -83,5 +87,10 @@
                         Style="{StaticResource BottomButton}" Click="PART_BtAdd_Click" />
             </DockPanel>
         </Border>
+
+        <!-- Game logs -->
+        <Grid Grid.Column="10" Grid.Row="3" Grid.RowSpan="7" Name="PART_ChartLogContener">
+            <controls:PluginChartLog IgnoreSettings="True" AxisLimit="10" DisableAnimations="True" />
+        </Grid>
     </Grid>
 </UserControl>

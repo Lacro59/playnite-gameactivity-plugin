@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GameActivity.Services;
 using Playnite.SDK.Data;
-using MoreLinq.Extensions;
+//using MoreLinq.Extensions;
 
 namespace GameActivity.Models
 {
@@ -73,7 +73,6 @@ namespace GameActivity.Models
 
             return acDetailsData.Count != 0 ? (int)Math.Round(avg / acDetailsData.Count) : 0;
         }
-
 
         public int avgFPS(DateTime dateSession)
         {
@@ -143,18 +142,24 @@ namespace GameActivity.Models
 
         public ulong avgPlayTime()
         {
+            int TimeIgnore = -1;
+            if (PluginDatabase.PluginSettings.Settings.IgnoreSession)
+            {
+                TimeIgnore = PluginDatabase.PluginSettings.Settings.IgnoreSessionTime;
+            }
+
             ulong avgPlayTime = 0;
             int CountWithTime = 0;
 
-            foreach (Activity Item in Items)
+            Items.Where(x => x.DateSession != null && (int)x.ElapsedSeconds > TimeIgnore).ForEach(x => 
             {
-                avgPlayTime += Item.ElapsedSeconds;
+                avgPlayTime += x.ElapsedSeconds;
                 CountWithTime++;
-            }
+            });
 
             if (avgPlayTime != 0 && CountWithTime != 0)
             {
-                avgPlayTime = avgPlayTime / (ulong)CountWithTime;
+                avgPlayTime /= (ulong)CountWithTime;
             }
 
             return avgPlayTime;
@@ -170,28 +175,15 @@ namespace GameActivity.Models
                 TimeIgnore = PluginDatabase.PluginSettings.Settings.IgnoreSessionTime;
             }
 
-            DateTime datePrev = new DateTime(2050, 12, 15, 00, 15, 23);
-            DateTime dateFirstSession = DateTime.Now;
-            for (int iActivity = 0; iActivity < Items.Count; iActivity++)
-            {
-                if ((int)Items[iActivity].ElapsedSeconds > TimeIgnore)
-                {
-                    DateTime dateTemp = Convert.ToDateTime(Items[iActivity].DateSession).ToLocalTime();
-                    if (datePrev > dateTemp)
-                    {
-                        dateFirstSession = Convert.ToDateTime(Items[iActivity].DateSession).ToLocalTime();
-                        datePrev = dateFirstSession;
-                    }
-                }
-            }
-
-            return dateFirstSession.ToUniversalTime();
+            return Items.OrderBy(x => x.DateSession)
+                .Where(x => x.DateSession != null && (int)x.ElapsedSeconds > TimeIgnore)?.FirstOrDefault()?.DateSession ?? DateTime.Now;
         }
 
         /// <summary>
         /// Get the date last session.
         /// </summary>
         /// <returns></returns>
+        // TODO Don't use to get on playing session
         public DateTime GetLastSession()
         {
             int TimeIgnore = -1;
@@ -200,22 +192,8 @@ namespace GameActivity.Models
                 TimeIgnore = PluginDatabase.PluginSettings.Settings.IgnoreSessionTime;
             }
 
-            DateTime datePrev = new DateTime(1982, 12, 15, 00, 15, 23);
-            DateTime dateLastSession = DateTime.Now;
-            for (int iActivity = 0; iActivity < Items.Count; iActivity++)
-            {
-                if ((int)Items[iActivity].ElapsedSeconds > TimeIgnore)
-                {
-                    DateTime dateTemp = Convert.ToDateTime(Items[iActivity].DateSession).ToLocalTime();
-                    if (datePrev < dateTemp)
-                    {
-                        dateLastSession = Convert.ToDateTime(Items[iActivity].DateSession).ToLocalTime();
-                        datePrev = dateLastSession;
-                    }
-                }
-            }
-
-            return dateLastSession.ToUniversalTime();
+            return Items.OrderByDescending(x => x.DateSession)
+                .Where(x => x.DateSession != null && (int)x.ElapsedSeconds > TimeIgnore)?.FirstOrDefault()?.DateSession ?? DateTime.Now;
         }
 
         public DateTime GetDateSelectedSession(DateTime? dateSelected, string title)
@@ -239,8 +217,7 @@ namespace GameActivity.Models
                     DateTime dateTemp = Convert.ToDateTime(Items[iActivity].DateSession).ToLocalTime();
                     if (((DateTime)dateSelected).ToString("yyyy-MM-dd HH:mm:ss") == dateTemp.ToString("yyyy-MM-dd HH:mm:ss"))
                     {
-                        int titleValue = 0;
-                        int.TryParse(title, out titleValue);
+                        int.TryParse(title, out int titleValue);
                         if (indicator == titleValue)
                         {
                             return dateTemp.ToUniversalTime();
@@ -269,24 +246,8 @@ namespace GameActivity.Models
                 TimeIgnore = PluginDatabase.PluginSettings.Settings.IgnoreSessionTime;
             }
 
-            DateTime datePrev = new DateTime(1982, 12, 15, 00, 15, 23);
-            DateTime dateLastSession = DateTime.Now;
-            Activity lastActivity = new Activity();
-            for (int iActivity = 0; iActivity < Items.Count; iActivity++)
-            {
-                if ((int)Items[iActivity].ElapsedSeconds > TimeIgnore)
-                {
-                    DateTime dateTemp = Convert.ToDateTime(Items[iActivity].DateSession).ToLocalTime();
-                    if (datePrev < dateTemp)
-                    {
-                        lastActivity = Items[iActivity];
-                        dateLastSession = Convert.ToDateTime(Items[iActivity].DateSession).ToLocalTime();
-                        datePrev = dateLastSession;
-                    }
-                }
-            }
-
-            return lastActivity;
+            return Items.OrderByDescending(x => x.DateSession)
+                .Where(x => x.DateSession != null && (int)x.ElapsedSeconds > TimeIgnore)?.FirstOrDefault() ?? new Activity();
         }
 
         public Activity GetFirstSessionactivity()
@@ -297,24 +258,8 @@ namespace GameActivity.Models
                 TimeIgnore = PluginDatabase.PluginSettings.Settings.IgnoreSessionTime;
             }
 
-            DateTime datePrev = new DateTime(2050, 12, 15, 00, 15, 23);
-            DateTime dateLastSession = DateTime.Now;
-            Activity lastActivity = new Activity();
-            for (int iActivity = 0; iActivity < Items.Count; iActivity++)
-            {
-                if ((int)Items[iActivity].ElapsedSeconds > TimeIgnore)
-                {
-                    DateTime dateTemp = Convert.ToDateTime(Items[iActivity].DateSession).ToLocalTime();
-                    if (datePrev > dateTemp)
-                    {
-                        lastActivity = Items[iActivity];
-                        dateLastSession = Convert.ToDateTime(Items[iActivity].DateSession).ToLocalTime();
-                        datePrev = dateLastSession;
-                    }
-                }
-            }
-
-            return lastActivity;
+            return Items.OrderBy(x => x.DateSession)
+                .Where(x => x.DateSession != null && (int)x.ElapsedSeconds > TimeIgnore)?.FirstOrDefault() ?? new Activity();
         }
 
 
@@ -324,7 +269,7 @@ namespace GameActivity.Models
             DateTime dtEnd = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59, 59);
             DateTime dtStart = new DateTime(DateTime.Now.AddDays(-CountDay).Year, DateTime.Now.AddDays(-CountDay).Month, DateTime.Now.AddDays(-CountDay).Day, 0, 0, 0, 0);
 
-            return Items.Where(x => x.DateSession >= dtStart && x.DateSession <= dtEnd)?.ToList() ?? new List<Activity>();
+            return Items.Where(x => x.DateSession != null && x.DateSession >= dtStart && x.DateSession <= dtEnd)?.ToList() ?? new List<Activity>();
         }
 
         public string GetRecentActivity()
@@ -353,7 +298,7 @@ namespace GameActivity.Models
 
         public bool HasActivity(int Year, int Month)
         {
-            List<Activity> els = Items.FindAll(x => x.DateSession <= new DateTime(Year, Month, DateTime.DaysInMonth(Year, Month)) && x.DateSession >= new DateTime(Year, Month, 1));
+            List<Activity> els = Items.FindAll(x => x.DateSession != null && x.DateSession <= new DateTime(Year, Month, DateTime.DaysInMonth(Year, Month)) && x.DateSession >= new DateTime(Year, Month, 1));
             return els?.Count > 0;
         }
 
@@ -365,22 +310,9 @@ namespace GameActivity.Models
                 TimeIgnore = PluginDatabase.PluginSettings.Settings.IgnoreSessionTime;
             }
 
-            List<string> Result = new List<string>();
-
-            foreach(Activity el in Items)
-            {
-                if ((int)el.ElapsedSeconds > TimeIgnore)
-                {
-                    string DateString = ((DateTime)el.DateSession).ToString("yyyy-MM");
-
-                    if (!Result.Contains(DateString))
-                    {
-                        Result.Add(DateString);
-                    }
-                }
-            }
-
-            return Result;
+            return Items.Where(x => x.DateSession != null && (int)x.ElapsedSeconds > TimeIgnore)?
+                .Select(x => ((DateTime)x.DateSession).ToString("yyyy-MM"))?
+                .ToList() ?? new List<string>();
         }
 
 

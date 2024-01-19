@@ -665,8 +665,7 @@ namespace GameActivity
                 }
             }
 
-
-            List<ActivityDetailsData> ActivitiesDetailsData = runningActivity.GameActivitiesLog.ItemsDetails.Get(runningActivity.GameActivitiesLog.GetLastSession());
+            List<ActivityDetailsData> ActivitiesDetailsData = runningActivity.GameActivitiesLog.ItemsDetails.Get(runningActivity.activityBackup.DateSession);
             ActivityDetailsData activityDetailsData = new ActivityDetailsData
             {
                 Datelog = DateTime.Now.ToUniversalTime(),
@@ -1143,17 +1142,18 @@ namespace GameActivity
                 });
                 runningActivity.GameActivitiesLog.ItemsDetails.Items.TryAdd(DateSession, new List<ActivityDetailsData>());
 
-
-                runningActivity.activityBackup = new ActivityBackup();
-                runningActivity.activityBackup.Id = runningActivity.GameActivitiesLog.Id;
-                runningActivity.activityBackup.Name = runningActivity.GameActivitiesLog.Name;
-                runningActivity.activityBackup.ElapsedSeconds = 0;
-                runningActivity.activityBackup.GameActionName = args.SourceAction?.Name ?? resources.GetString("LOCGameActivityDefaultAction");
-                runningActivity.activityBackup.IdConfiguration = PluginDatabase?.LocalSystem?.GetIdConfiguration() ?? -1;
-                runningActivity.activityBackup.DateSession = DateSession;
-                runningActivity.activityBackup.SourceID = args.Game.SourceId == null ? default : args.Game.SourceId;
-                runningActivity.activityBackup.PlatformIDs = args.Game.PlatformIds ?? new List<Guid>();
-                runningActivity.activityBackup.ItemsDetailsDatas = new List<ActivityDetailsData>();
+                runningActivity.activityBackup = new ActivityBackup
+                {
+                    Id = runningActivity.GameActivitiesLog.Id,
+                    Name = runningActivity.GameActivitiesLog.Name,
+                    ElapsedSeconds = 0,
+                    GameActionName = args.SourceAction?.Name ?? resources.GetString("LOCGameActivityDefaultAction"),
+                    IdConfiguration = PluginDatabase?.LocalSystem?.GetIdConfiguration() ?? -1,
+                    DateSession = DateSession,
+                    SourceID = args.Game.SourceId == null ? default : args.Game.SourceId,
+                    PlatformIDs = args.Game.PlatformIds ?? new List<Guid>(),
+                    ItemsDetailsDatas = new List<ActivityDetailsData>()
+                };
             }
             catch (Exception ex)
             {

@@ -235,15 +235,7 @@ namespace GameActivity.Controls
 
             GameActivities gameActivities = (GameActivities)PluginGameData;
 
-            if (!IgnoreSettings && !ControlDataContext.ChartLogVisibleEmpty)
-            {
-                MustDisplay = gameActivities.HasDataDetails();
-            }
-            else
-            {
-                MustDisplay = true;
-            }
-
+            MustDisplay = !IgnoreSettings && !ControlDataContext.ChartLogVisibleEmpty ? gameActivities.HasDataDetails() : true;
             if (MustDisplay)
             {
                 GetActivityForGamesLogGraphics(gameActivities, AxisVariator, Limit, DateSelected, TitleChart);
