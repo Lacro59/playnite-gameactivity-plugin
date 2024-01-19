@@ -7,77 +7,23 @@
              xmlns:converters="clr-namespace:CommonPluginsShared.Converters"
              xmlns:converters1="clr-namespace:CommonPlayniteShared.Converters" 
              xmlns:controls="clr-namespace:GameActivity.Controls"
-             mc:Ignorable="d" 
-             Height="320" Width="800">
+             mc:Ignorable="d" d:DesignHeight="350" d:DesignWidth="800">
 
     <UserControl.Resources>
         <converters:LocalDateConverter x:Key="LocalDateConverter" />
         <converters:LocalDateTimeConverter x:Key="LocalDateTimeConverter" />
         <converters1:PlayTimeToStringConverter x:Key="PlayTimeToStringConverter" />
     </UserControl.Resources>
-    
-    <Grid Margin="10" Loaded="Grid_Loaded">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto" />
-            <ColumnDefinition Width="10" />
-            <ColumnDefinition Width="auto" />
-            <ColumnDefinition Width="10" />
-            <ColumnDefinition Width="auto" />
-            <ColumnDefinition Width="20" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="10" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="10" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="30" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="10" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="auto" />
-        </Grid.RowDefinitions>
 
-        <Image Width="250" StretchDirection="Both" Stretch="Uniform"
-               Source="{Binding Cover}"
-               VerticalAlignment="Center" HorizontalAlignment="Center"
-               Grid.Column="0" Grid.Row="0" Grid.RowSpan="10"
-               RenderOptions.BitmapScalingMode="Fant" />
-
-        <TextBlock Grid.Column="2" Grid.Row="0" Grid.ColumnSpan="10"
-                   Text="{Binding Name, FallbackValue='Game Name'}"
-                   FontSize="{DynamicResource FontSizeLargest}" TextWrapping="Wrap"
-                   Foreground="{DynamicResource TextBrush}" />
-
-        <TextBlock Grid.Column="2" Grid.Row="2" Text="{DynamicResource LOCGaDateSession}"
-                   Foreground="{DynamicResource TextBrush}" />
-        <TextBlock Grid.Column="4" Grid.Row="2" Text="{Binding DateSession, FallbackValue='xx/xx/xx xx:xx:xx', Converter={StaticResource LocalDateTimeConverter}}"
-                   Foreground="{DynamicResource TextBrush}" />
-
-        <TextBlock Grid.Column="2" Grid.Row="4" Text="{DynamicResource LOCGameActivityLvGamesElapsedSeconds}"
-                   Foreground="{DynamicResource TextBrush}" />
-        <TextBlock Grid.Column="4" Grid.Row="4" Text="{Binding ElapsedSeconds, FallbackValue='36min', Converter={StaticResource PlayTimeToStringConverter}}"
-                   Foreground="{DynamicResource TextBrush}" />
-
-        <TextBlock Grid.Column="2" Grid.Row="6" Text="{DynamicResource LOCLastPlayedLabel}"
-                   Foreground="{DynamicResource TextBrush}" />
-        <TextBlock Grid.Column="4" Grid.Row="6" Text="{Binding DateLastPlayed, FallbackValue='xx/xx/xx xx:xx:xx', Converter={StaticResource LocalDateTimeConverter}}"
-                   Foreground="{DynamicResource TextBrush}" />
-
-        <TextBlock Grid.Column="2" Grid.Row="8" Text="{DynamicResource LOCTimePlayed}"
-                   Foreground="{DynamicResource TextBrush}" />
-        <TextBlock Grid.Column="4" Grid.Row="8" Text="{Binding Playtime, FallbackValue='xxh xxmin', Converter={StaticResource PlayTimeToStringConverter}}"
-                   Foreground="{DynamicResource TextBrush}" />
-
+    <DockPanel Margin="10" Loaded="Grid_Loaded" LastChildFill="True">
         <Border BorderThickness="0,1,0,0" BorderBrush="{StaticResource NormalBorderBrush}"
-                Margin="0,10,0,0" Grid.Column="0" Grid.ColumnSpan="10" Grid.Row="10">
+                Margin="0,10,0,0" Grid.Column="0" Grid.ColumnSpan="10" Grid.Row="10"
+                DockPanel.Dock="Bottom">
             <DockPanel KeyboardNavigation.TabNavigation="Local" LastChildFill="False" Margin="0,5">
                 <Button TabIndex="3" Name="PART_BtRemove" Content="{DynamicResource LOCRemoveTitle}" 
                         DockPanel.Dock="Right"
                         Style="{StaticResource BottomButton}" Click="PART_BtRemove_Click" />
-                
+
                 <Button TabIndex="1" Name="PART_BtClose" Content="{DynamicResource LOCCancelLabel}" 
                         DockPanel.Dock="Right"
                         Style="{StaticResource BottomButton}" Click="PART_BtClose_Click" />
@@ -88,9 +34,46 @@
             </DockPanel>
         </Border>
 
-        <!-- Game logs -->
-        <Grid Grid.Column="10" Grid.Row="3" Grid.RowSpan="7" Name="PART_ChartLogContener">
-            <controls:PluginChartLog IgnoreSettings="True" AxisLimit="10" DisableAnimations="True" />
-        </Grid>
-    </Grid>
+        <DockPanel LastChildFill="False">
+            <Image Width="250" StretchDirection="Both" Stretch="Uniform"
+                   Margin="0,0,20,0"
+                   DockPanel.Dock="Left"
+                   Source="{Binding Cover}"
+                   RenderOptions.BitmapScalingMode="Fant" />
+
+            <!-- Game logs -->
+            <StackPanel Name="PART_ChartLogContener" DockPanel.Dock="Right" Margin="0,50,0,0" Width="330">
+                <controls:PluginChartLog IgnoreSettings="True" AxisLimit="10" DisableAnimations="True" />
+            </StackPanel>
+            
+            <TextBlock DockPanel.Dock="Top" Width="500"
+                       Text="{Binding Name, FallbackValue='Game Name'}"
+                       FontSize="{DynamicResource FontSizeLargest}" TextWrapping="Wrap"
+                       Foreground="{DynamicResource TextBrush}" />
+
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,10,0,0">
+                <TextBlock Text="{DynamicResource LOCGaDateSession}" Foreground="{DynamicResource TextBrush}" />
+                <TextBlock Text="{Binding DateSession, FallbackValue='xx/xx/xx xx:xx:xx', Converter={StaticResource LocalDateTimeConverter}}"
+                           Margin="10,0,0,0" Foreground="{DynamicResource TextBrush}" />
+            </StackPanel>
+
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,10,0,0">
+                <TextBlock Text="{DynamicResource LOCGameActivityLvGamesElapsedSeconds}" Foreground="{DynamicResource TextBrush}" />
+                <TextBlock Text="{Binding ElapsedSeconds, FallbackValue='36min', Converter={StaticResource PlayTimeToStringConverter}}"
+                           Margin="10,0,0,0" Foreground="{DynamicResource TextBrush}" />
+            </StackPanel>
+
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,30,0,0">
+                <TextBlock Text="{DynamicResource LOCLastPlayedLabel}" Foreground="{DynamicResource TextBrush}" />
+                <TextBlock Text="{Binding DateLastPlayed, FallbackValue='xx/xx/xx xx:xx:xx', Converter={StaticResource LocalDateTimeConverter}}"
+                           Margin="10,0,0,0" Foreground="{DynamicResource TextBrush}" />
+            </StackPanel>
+
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,10,0,0">
+                <TextBlock Text="{DynamicResource LOCTimePlayed}" Foreground="{DynamicResource TextBrush}" />
+                <TextBlock Text="{Binding Playtime, FallbackValue='xxh xxmin', Converter={StaticResource PlayTimeToStringConverter}}"
+                           Margin="10,0,0,0" Foreground="{DynamicResource TextBrush}" />
+            </StackPanel>
+        </DockPanel>
+    </DockPanel>
 </UserControl>
