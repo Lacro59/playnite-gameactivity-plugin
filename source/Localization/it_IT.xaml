@@ -50,8 +50,8 @@ Clicca per ulteriori informazioni.</sys:String>
     <sys:String x:Key="LOCGameActivityListGamesFields">Campi del gioco da visualizzare</sys:String>
 
     <sys:String x:Key="LOCGameActivityActiveLog">Abilita registrazioni</sys:String>
-    <sys:String x:Key="LOCGameActivityUsedLibreHardware">Used LibreHarwareMonitor instead</sys:String>
-    <sys:String x:Key="LOCGameActivityRemoteWebServer">With remote web server</sys:String>
+    <sys:String x:Key="LOCGameActivityUsedLibreHardware">Usa invece LibreHarwareMonitor</sys:String>
+    <sys:String x:Key="LOCGameActivityRemoteWebServer">Con server web remoto</sys:String>
     <sys:String x:Key="LOCGameActivityTimeInterval">Verifica intervallo di tempo</sys:String>
     <sys:String x:Key="LOCGameActivityTimeLabel">minuto/i</sys:String>
 
@@ -110,7 +110,7 @@ Clicca per ulteriori informazioni.</sys:String>
     <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} ore passate dopo {1} settimana</sys:String>
     <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} ore passate dopo {1} settimane</sys:String>
     <sys:String x:Key="LOCGameActivityAvgPerDay">Tempo medio al giorno</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgPerSession">Average time per session</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgPerSession">Tempo medio per sessione</sys:String>
     <sys:String x:Key="LOCGameActivityFirstSession">Primo sessione</sys:String>
     <sys:String x:Key="LOCGameActivityLastSession">Ultima sessione</sys:String>
     
