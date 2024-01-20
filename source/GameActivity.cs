@@ -28,6 +28,7 @@ using QuickSearch.SearchItems;
 using MoreLinq;
 using CommonPluginsControls.Views;
 using System.Globalization;
+using CommonPluginsShared.Collections;
 
 namespace GameActivity
 {

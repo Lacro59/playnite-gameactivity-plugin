@@ -52,7 +52,7 @@ namespace GameActivity.Services
             }
             catch (Exception ex)
             {
-                Common.LogError(ex, false, true, "GameActivity");
+                Common.LogError(ex, false, true, PluginName);
                 return false;
             }
 
@@ -132,6 +132,29 @@ namespace GameActivity.Services
         public List<GameActivities> GetListGameActivity()
         {
             return Database.ToList();
+        }
+
+
+        public override PluginDataBaseGameBase MergeData(Guid fromId, Guid toId)
+        {
+            try
+            {
+                GameActivities fromData = Get(fromId, true);
+                GameActivities toData = Get(toId, true);
+
+                toData.Items.AddRange(fromData.Items);
+                fromData.ItemsDetails.Items.ForEach(x => 
+                {
+                    toData.ItemsDetails.Items.TryAdd(x.Key, x.Value);
+                });
+
+                return toData;
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex, false, true, PluginName);
+                return null;
+            }
         }
     }
 }
