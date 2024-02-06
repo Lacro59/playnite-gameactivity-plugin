@@ -62,7 +62,7 @@ namespace GameActivity
         public bool SubstPlayStateTime { get; set; } = false; // Temporary workaround for PlayState paused time until Playnite allows to share data among extensions
 
         public List<StoreColor> StoreColors { get; set; } = new List<StoreColor>();
-        public SolidColorBrush ChartColors { get; set; } = (SolidColorBrush)(new BrushConverter().ConvertFrom("#2195f2"));
+        public SolidColorBrush ChartColors { get; set; } = (SolidColorBrush)new BrushConverter().ConvertFrom("#2195f2");
 
         public bool EnableLogging { get; set; } = false;
         public bool UsedLibreHardware { get; set; } = false;
@@ -242,7 +242,7 @@ namespace GameActivity
                 string Name = platform.Name;
                 Name = (Name.IsEqual("PC (Windows)") || Name.IsEqual("PC (Mac)") || Name.IsEqual("PC (Linux)")) ? "Playnite" : Name;
 
-                if (Settings.StoreColors.FindAll(x => x.Name.Equals(Name)) == null)
+                if (Settings.StoreColors.FindAll(x => x.Name.IsEqual(Name)) == null)
                 {
                     Fill = GetColor(Name);
                     Settings.StoreColors.Add(new StoreColor
@@ -302,22 +302,25 @@ namespace GameActivity
             Brush Fill = null;
             foreach (Guid Id in SourceIds)
             {
-                string Name = (Id == default(Guid)) ? "Playnite" : GameActivity.PluginDatabase.PlayniteApi.Database.Sources.Get(Id)?.Name;
+                string Name = (Id == default) ? "Playnite" : GameActivity.PluginDatabase.PlayniteApi.Database.Sources.Get(Id)?.Name;
                 if (Name.IsNullOrEmpty())
                 {
                     logger.Warn($"No name for SourceId {Id}");
                 }
-                Name = (Name == "PC (Windows)" || Name == "PC (Mac)" || Name == "PC (Linux)") ? "Playnite" : Name;
-
-                if (StoreColors.FindAll(x => x.Name.Equals(Name)).Count() == 0)
+                else
                 {
-                    Fill = GetColor(Name);
-                    StoreColors.Add(new StoreColor
+                    Name = (Name.IsEqual("PC (Windows)") || Name.IsEqual("PC (Mac)") || Name.IsEqual("PC (Linux)")) ? "Playnite" : Name;
+
+                    if (StoreColors.FindAll(x => x.Name.IsEqual(Name)).Count() == 0)
                     {
-                        Name = Name,
-                        Id = Id,
-                        Fill = Fill
-                    });
+                        Fill = GetColor(Name);
+                        StoreColors.Add(new StoreColor
+                        {
+                            Name = Name,
+                            Id = Id,
+                            Fill = Fill
+                        });
+                    }
                 }
             }
 
@@ -344,7 +347,7 @@ namespace GameActivity
         private static Brush GetColor(string Name)
         {
             Brush Fill = null;
-            switch (Name.ToLower())
+            switch (Name?.ToLower())
             {
                 case "android":
                     Fill = new BrushConverter().ConvertFromString("#068962") as SolidColorBrush;
@@ -417,6 +420,8 @@ namespace GameActivity
                     break;
                 case "humble":
                     Fill = new BrushConverter().ConvertFromString("#3b3e48") as SolidColorBrush;
+                    break;
+                default:
                     break;
             }
 
