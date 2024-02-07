@@ -61,6 +61,7 @@ namespace GameActivity.Views
         GameActivitySettings _settings { get; set; }
 
         public bool isMonthSources { get; set; } = true;
+        public bool isGenresSources { get; set; } = false;
         public bool isGameTime { get; set; } = true;
 
         public bool ShowIcon { get; set; }
@@ -339,6 +340,9 @@ namespace GameActivity.Views
 
             Dictionary<string, ulong> activityByMonth = new Dictionary<string, ulong>();
 
+            List<GameActivities> listGameActivities = GameActivity.PluginDatabase.GetListGameActivity();
+            listGameActivities = listGameActivities.Where(x => x.GetListDateTimeActivity().Any(y => y >= startOfMonth && y <= endOfMonth)).ToList();
+
             // Total hours by source.
             if (isMonthSources)
             {
@@ -353,7 +357,6 @@ namespace GameActivity.Views
                     PART_ChartTotalHoursSource_X.FontSize = (double)resources.GetResource("FontSize");
                 }
 
-                List<GameActivities> listGameActivities = GameActivity.PluginDatabase.GetListGameActivity();
                 for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
                 {
                     try
@@ -391,12 +394,11 @@ namespace GameActivity.Views
                 PART_ChartTotalHoursSource.DataTooltip = new CustomerToolTipForTime { ShowIcon = ShowIcon, Mode = ModeComplet };
             }
             // Total hours by genres.
-            else
+            else if (isGenresSources)
             {
                 PART_ChartTotalHoursSource_X.LabelsRotation = 160;
                 PART_ChartTotalHoursSource_X.FontSize = (double)resources.GetResource("FontSize");
 
-                List<GameActivities> listGameActivities = GameActivity.PluginDatabase.GetListGameActivity();
                 for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
                 {
                     try
@@ -415,7 +417,7 @@ namespace GameActivity.Views
                                 {
                                     if (startOfMonth <= dateSession && dateSession <= endOfMonth)
                                     {
-                                        activityByMonth[listGameListGenres[iGenre].Name] = (ulong)activityByMonth[listGameListGenres[iGenre].Name] + elapsedSeconds;
+                                        activityByMonth[listGameListGenres[iGenre].Name] = activityByMonth[listGameListGenres[iGenre].Name] + elapsedSeconds;
                                     }
                                 }
                                 else
@@ -436,13 +438,75 @@ namespace GameActivity.Views
                     }
                 }
             }
+            else
+            {
+                PART_ChartTotalHoursSource_X.LabelsRotation = 160;
+                PART_ChartTotalHoursSource_X.FontSize = (double)resources.GetResource("FontSize");
+
+                for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
+                {
+                    try
+                    {
+                        List<Tag> listGameListTags = listGameActivities[iGame].Tags;
+                        List<Activity> Activities = listGameActivities[iGame].FilterItems;
+                        for (int iActivity = 0; iActivity < Activities.Count; iActivity++)
+                        {
+                            ulong elapsedSeconds = Activities[iActivity].ElapsedSeconds;
+                            DateTime dateSession = Convert.ToDateTime(Activities[iActivity].DateSession).AddSeconds(-(double)elapsedSeconds).ToLocalTime();
+
+                            for (int iTag = 0; iTag < listGameListTags?.Count; iTag++)
+                            {
+                                // Cumul data
+                                if (activityByMonth.ContainsKey(listGameListTags[iTag].Name))
+                                {
+                                    if (startOfMonth <= dateSession && dateSession <= endOfMonth)
+                                    {
+                                        activityByMonth[listGameListTags[iTag].Name] = activityByMonth[listGameListTags[iTag].Name] + elapsedSeconds;
+                                    }
+                                }
+                                else
+                                {
+                                    if (startOfMonth <= dateSession && dateSession <= endOfMonth)
+                                    {
+                                        activityByMonth.Add(listGameListTags[iTag].Name, elapsedSeconds);
+                                    }
+                                }
+                            }
+                        }
+
+                        Dictionary<string, ulong> activityTEMP = new Dictionary<string, ulong>();
+                        activityByMonth.ForEach(x =>
+                        {
+                            if (activityTEMP.Where(y => y.Value == x.Value).Count() != 0)
+                            {
+                                string k = activityTEMP.Where(y => y.Value == x.Value).First().Key;
+                                ulong v = activityTEMP.Where(y => y.Value == x.Value).First().Value;
+
+                                activityTEMP.Remove(k);
+                                activityTEMP.Add(k + "\r\n" + x.Key, v);
+                            }
+                            else
+                            {
+                                activityTEMP.Add(x.Key, x.Value);
+                            }
+                        });
+                        activityByMonth = activityTEMP;
+
+                        PART_ChartTotalHoursSource.DataTooltip = new CustomerToolTipForTime { ShowIcon = false, Mode = TextBlockWithIconMode.TextOnly };
+                    }
+                    catch (Exception ex)
+                    {
+                        Common.LogError(ex, false, $"Error in getActivityByMonth({year}, {month}) with {listGameActivities[iGame].Name}", true, PluginDatabase.PluginName);
+                    }
+                }
+            }
 
 
             // Set data in graphic.
             ChartValues<CustomerForTime> series = new ChartValues<CustomerForTime>();
             string[] labels = new string[activityByMonth.Count];
             int compteur = 0;
-            foreach (var item in activityByMonth)
+            foreach (KeyValuePair<string, ulong> item in activityByMonth)
             {
                 series.Add(new CustomerForTime
                 {
@@ -457,19 +521,19 @@ namespace GameActivity.Views
                 {
                     labels[compteur] = TransformIcon.Get(labels[compteur]);
                 }
-                compteur = compteur + 1;
+                compteur++;
             }
 
-
-            SeriesCollection ActivityByMonthSeries = new SeriesCollection
+            SeriesCollection ActivityByMonthSeries;
+            ActivityByMonthSeries = new SeriesCollection
+            {
+                new ColumnSeries
                 {
-                    new ColumnSeries
-                    {
-                        Title = string.Empty,
-                        Values = series,
-                        Fill = PluginDatabase.PluginSettings.Settings.ChartColors
-                    }
-                };
+                    Title = string.Empty,
+                    Values = series,
+                    Fill = PluginDatabase.PluginSettings.Settings.ChartColors
+                }
+            };
             string[] ActivityByMonthLabels = labels;
 
             //let create a mapper so LiveCharts know how to plot our CustomerViewModel class
@@ -514,17 +578,25 @@ namespace GameActivity.Views
                 acwLabel.Visibility = Visibility.Hidden;
             }
 
+    
             PART_ChartTotalHoursSource_Y.LabelFormatter = activityForGameLogFormatter;
             PART_ChartTotalHoursSource.Series = ActivityByMonthSeries;
             PART_ChartTotalHoursSource_Y.MinValue = 0;
             ((CustomerToolTipForTime)PART_ChartTotalHoursSource.DataTooltip).ShowIcon = _settings.ShowLauncherIcons;
             PART_ChartTotalHoursSource_X.Labels = ActivityByMonthLabels;
+
+            PART_ChartTotalHoursSource_X.ShowLabels = true;
+            if (!isMonthSources && !isGenresSources)
+            {
+                PART_ChartTotalHoursSource_X.ShowLabels = false;
+            }
         }
 
         public void getActivityByDay(int year, int month)
         {
             DateTime StartDate = new DateTime(year, month, 1, 0, 0, 0);
             int NumberDayInMonth = DateTime.DaysInMonth(year, month);
+            DateTime EndDate = new DateTime(year, month, NumberDayInMonth, 23, 59, 59);
 
             string[] activityByDateLabels = new string[NumberDayInMonth];
             SeriesCollection activityByDaySeries = new SeriesCollection();
@@ -541,6 +613,7 @@ namespace GameActivity.Views
                 });
 
                 List<GameActivities> listGameActivities = GameActivity.PluginDatabase.GetListGameActivity();
+                listGameActivities = listGameActivities.Where(x => x.GetListDateTimeActivity().Any(y => y >= StartDate && y <= EndDate)).ToList();
                 for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
                 {
                     List<Activity> Activities = listGameActivities[iGame].FilterItems;
@@ -658,7 +731,10 @@ namespace GameActivity.Views
                 activityByWeek.Add(activityByWeek5);
                 activityByWeek.Add(activityByWeek6);
 
+
                 List<GameActivities> listGameActivities = GameActivity.PluginDatabase.GetListGameActivity();
+                listGameActivities = listGameActivities.Where(x => x.GetListDateTimeActivity().Any(y => y >= StartDate && y <= SeriesEndDate)).ToList();
+
                 for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
                 {
                     List<Activity> Activities = listGameActivities[iGame].FilterItems;
@@ -695,7 +771,7 @@ namespace GameActivity.Views
                 List<string> listNoDelete = new List<string>();
                 for (int i = 0; i < activityByWeek.Count; i++)
                 {
-                    foreach (var item in activityByWeek[i])
+                    foreach (KeyValuePair<string, long> item in activityByWeek[i])
                     {
                         if (item.Value != 0 && listNoDelete.TakeWhile(x => x.ToString() == item.Key).Count() != 1)
                         {
@@ -710,10 +786,10 @@ namespace GameActivity.Views
                 string[] labels = new string[listNoDelete.Count];
                 for (int iSource = 0; iSource < listNoDelete.Count; iSource++)
                 {
-                    labels[iSource] = (string)listNoDelete[iSource];
+                    labels[iSource] = listNoDelete[iSource];
                     if (_settings.ShowLauncherIcons)
                     {
-                        labels[iSource] = TransformIcon.Get((string)listNoDelete[iSource]);
+                        labels[iSource] = TransformIcon.Get(listNoDelete[iSource]);
                     }
 
 
@@ -723,13 +799,13 @@ namespace GameActivity.Views
                         PluginDatabase.PluginSettings.Settings.StoreColors = GameActivitySettingsViewModel.GetDefaultStoreColors();
                     }
                     Fill = PluginDatabase.PluginSettings.Settings.StoreColors
-                                .Where(x => x.Name.Contains((string)listNoDelete[iSource], StringComparison.InvariantCultureIgnoreCase))?.FirstOrDefault()?.Fill;
+                                .Where(x => x.Name.Contains(listNoDelete[iSource], StringComparison.InvariantCultureIgnoreCase))?.FirstOrDefault()?.Fill;
 
 
                     Values = new ChartValues<CustomerForTime>();
                     for (int i = 0; i < datesPeriodes.Count; i++)
                     {
-                        Values.Add(new CustomerForTime { Name = (string)listNoDelete[iSource], Values = (int)activityByWeek[i][(string)listNoDelete[iSource]] });
+                        Values.Add(new CustomerForTime { Name = listNoDelete[iSource], Values = (int)activityByWeek[i][listNoDelete[iSource]] });
                     }
 
                     activityByWeekSeries.Add(new StackedColumnSeries
@@ -829,7 +905,7 @@ namespace GameActivity.Views
             }
 
             //let create a mapper so LiveCharts know how to plot our CustomerViewModel class
-            var customerVmMapper = Mappers.Xy<CustomerForTime>()
+            CartesianMapper<CustomerForTime> customerVmMapper = Mappers.Xy<CustomerForTime>()
                 .X((value, index) => index)
                 .Y(value => value.Values);
 
@@ -977,16 +1053,11 @@ namespace GameActivity.Views
 
             if (!isNavigation)
             {
-                if (dateSelected == null || dateSelected == default(DateTime))
-                {
-                    gameLabel.Content = resources.GetString("LOCGameActivityLogTitleDate") + " ("
-                        + Convert.ToDateTime(gameActivities.GetLastSession()).ToString(Constants.DateUiFormat) + ")";
-                }
-                else
-                {
-                    gameLabel.Content = resources.GetString("LOCGameActivityLogTitleDate") + " "
+                gameLabel.Content = dateSelected == null || dateSelected == default(DateTime)
+                    ? resources.GetString("LOCGameActivityLogTitleDate") + " ("
+                        + Convert.ToDateTime(gameActivities.GetLastSession()).ToString(Constants.DateUiFormat) + ")"
+                    : resources.GetString("LOCGameActivityLogTitleDate") + " "
                         + Convert.ToDateTime(dateSelected).ToString(Constants.DateUiFormat);
-                }
             }
         }
         #endregion
@@ -1134,7 +1205,7 @@ namespace GameActivity.Views
 
         private void ToggleButtonTime_Checked(object sender, RoutedEventArgs e)
         {
-            var toggleButton = sender as ToggleButton;
+            ToggleButton toggleButton = sender as ToggleButton;
             if (toggleButton.IsChecked == true)
             {
                 try
@@ -1152,7 +1223,9 @@ namespace GameActivity.Views
             try
             {
                 if (ToggleButtonLog.IsChecked == false && toggleButton.IsChecked == false)
+                {
                     toggleButton.IsChecked = true;
+                }
             }
             catch
             {
@@ -1161,7 +1234,7 @@ namespace GameActivity.Views
 
         private void ToggleButtonLog_Checked(object sender, RoutedEventArgs e)
         {
-            var toggleButton = sender as ToggleButton;
+            ToggleButton toggleButton = sender as ToggleButton;
             if (toggleButton.IsChecked == true)
             {
                 try
@@ -1179,7 +1252,9 @@ namespace GameActivity.Views
             try
             {
                 if (ToggleButtonTime.IsChecked == false && toggleButton.IsChecked == false)
+                {
                     toggleButton.IsChecked = true;
+                }
             }
             catch
             {
@@ -1189,13 +1264,15 @@ namespace GameActivity.Views
 
         private void ToggleButtonSources_Checked(object sender, RoutedEventArgs e)
         {
-            var toggleButton = sender as ToggleButton;
+            ToggleButton toggleButton = sender as ToggleButton;
             if (toggleButton.IsChecked == true)
             {
                 try
                 {
                     isMonthSources = true;
+                    isGenresSources = false;
                     tbMonthGenres.IsChecked = false;
+                    tbMonthTags.IsChecked = false;
                     getActivityByMonth(yearCurrent, monthCurrent);
                     getActivityByWeek(yearCurrent, monthCurrent);
                     getActivityByDay(yearCurrent, monthCurrent);
@@ -1207,7 +1284,7 @@ namespace GameActivity.Views
 
             try
             {
-                if (tbMonthGenres.IsChecked == false && toggleButton.IsChecked == false)
+                if (tbMonthGenres.IsChecked == false && tbMonthTags.IsChecked == false && toggleButton.IsChecked == false)
                 {
                     toggleButton.IsChecked = true;
                 }
@@ -1219,16 +1296,16 @@ namespace GameActivity.Views
 
         private void ToggleButtonGenres_Checked(object sender, RoutedEventArgs e)
         {
-            var toggleButton = sender as ToggleButton;
+            ToggleButton toggleButton = sender as ToggleButton;
             if (toggleButton.IsChecked == true)
             {
                 try
                 {
                     isMonthSources = false;
+                    isGenresSources = true;
                     tbMonthSources.IsChecked = false;
+                    tbMonthTags.IsChecked = false;
                     getActivityByMonth(yearCurrent, monthCurrent);
-                    getActivityByWeek(yearCurrent, monthCurrent);
-                    getActivityByDay(yearCurrent, monthCurrent);
                 }
                 catch
                 {
@@ -1237,7 +1314,37 @@ namespace GameActivity.Views
 
             try
             {
-                if (tbMonthSources.IsChecked == false && toggleButton.IsChecked == false)
+                if (tbMonthSources.IsChecked == false && tbMonthSources.IsChecked == false && toggleButton.IsChecked == false)
+                {
+                    toggleButton.IsChecked = true;
+                }
+            }
+            catch
+            {
+            }
+        }
+
+        private void ToggleButtonTags_Checked(object sender, RoutedEventArgs e)
+        {
+            ToggleButton toggleButton = sender as ToggleButton;
+            if (toggleButton.IsChecked == true)
+            {
+                try
+                {
+                    isMonthSources = false;
+                    isGenresSources = false;
+                    tbMonthSources.IsChecked = false;
+                    tbMonthGenres.IsChecked = false;
+                    getActivityByMonth(yearCurrent, monthCurrent);
+                }
+                catch
+                {
+                }
+            }
+
+            try
+            {
+                if (tbMonthSources.IsChecked == false && tbMonthSources.IsChecked == false && toggleButton.IsChecked == false)
                 {
                     toggleButton.IsChecked = true;
                 }

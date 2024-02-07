@@ -55,6 +55,8 @@
                                 <ColumnDefinition Width="100" />
                                 <ColumnDefinition Width="10" />
                                 <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="10" />
+                                <ColumnDefinition Width="100" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
@@ -68,13 +70,14 @@
 
                             <ToggleButton Grid.Column="0" x:Name="tbMonthSources" IsChecked='True' Content="{DynamicResource LOCSourcesLabel}" Width="100" FontSize="20" Click="ToggleButtonSources_Checked" />
                             <ToggleButton Grid.Column="2" x:Name="tbMonthGenres" IsChecked='False' Content="{DynamicResource LOCGenresLabel}" Width="100" FontSize="20" Click="ToggleButtonGenres_Checked" />
+                            <ToggleButton Grid.Column="4" x:Name="tbMonthTags" IsChecked='False' Content="{DynamicResource LOCTagsLabel}" Width="100" FontSize="20" Click="ToggleButtonTags_Checked" />
 
-                            <Button Grid.Column="3" Content="" Width="50" FontSize="20" Click="Button_Click_PrevMonth" FontFamily="Wingdings" />
-                            <Label Grid.Column="4" x:Name="activityLabel" Content="month data label" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" FontWeight="Bold" MinWidth="50" />
-                            <Button Grid.Column="5" Content="" Width="50" FontSize="20" Click="Button_Click_NextMonth" FontFamily="Wingdings" />
+                            <Button Grid.Column="5" Content="" Width="50" FontSize="20" Click="Button_Click_PrevMonth" FontFamily="Wingdings" />
+                            <Label Grid.Column="6" x:Name="activityLabel" Content="month data label" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" FontWeight="Bold" MinWidth="50" />
+                            <Button Grid.Column="7" Content="" Width="50" FontSize="20" Click="Button_Click_NextMonth" FontFamily="Wingdings" />
 
 
-                            <DatePicker Grid.Column="8" HorizontalAlignment="Right" Width="35" SelectedDateChanged="DatePicker_SelectedDateChanged"
+                            <DatePicker Grid.Column="10" HorizontalAlignment="Right" Width="35" SelectedDateChanged="DatePicker_SelectedDateChanged"
                                 Commonpluginsbehaviors:DatePickerCalendar.IsMonthYear="True">
                                 <DatePicker.CalendarStyle>
                                     <Style TargetType="Calendar" BasedOn="{StaticResource {x:Type Calendar}}">

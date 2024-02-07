@@ -315,6 +315,18 @@ namespace GameActivity.Models
                 .ToList() ?? new List<string>();
         }
 
+        public List<DateTime> GetListDateTimeActivity()
+        {
+            int TimeIgnore = -1;
+            if (PluginDatabase.PluginSettings.Settings.IgnoreSession)
+            {
+                TimeIgnore = PluginDatabase.PluginSettings.Settings.IgnoreSessionTime;
+            }
+
+            return Items.Where(x => x.DateSession != null && (int)x.ElapsedSeconds > TimeIgnore)?
+                .Select(x => (DateTime)x.DateSession)?
+                .ToList() ?? new List<DateTime>();
+        }
 
         public void DeleteActivity(DateTime dateSelected)
         {
