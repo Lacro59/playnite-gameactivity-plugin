@@ -499,23 +499,6 @@ namespace GameActivity.Views
                 GameActivityMergeTime ViewExtension = new GameActivityMergeTime(GameContext);
                 Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PluginDatabase.PlayniteApi, resources.GetString("LOCGaMergeSession"), ViewExtension, windowOptions);
                 windowExtension.ShowDialog();
-
-                gameActivities = PluginDatabase.Get(GameContext);
-                getActivityByListGame(gameActivities);
-
-                // Set last played date
-                GameContext.LastActivity = (DateTime)gameActivities.Items.Max(x => x.DateSession);
-
-                if (GameContext.PlayCount != 0)
-                {
-                    GameContext.PlayCount--;
-                }
-                else
-                {
-                    Logger.Warn($"Play count is already at 0 for {GameContext.Name}");
-                }
-
-                PluginDatabase.PlayniteApi.Database.Games.Update(GameContext);
             }
             catch (Exception ex)
             {

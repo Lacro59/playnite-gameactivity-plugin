@@ -53,6 +53,10 @@ namespace GameActivity.Views
                 pluginDataRoot.Items.Remove(Time);
                 pluginDataRoot.ItemsDetails.Items.TryRemove((DateTime)Time.DateSession, out List<ActivityDetailsData> deleted);
 
+
+                // Set last played date
+                GameContext.LastActivity = (DateTime)pluginDataRoot.Items.Max(x => x.DateSession);
+
                 if (GameContext.PlayCount != 0)
                 {
                     GameContext.PlayCount--;
@@ -61,7 +65,6 @@ namespace GameActivity.Views
                 {
                     Logger.Warn($"Play count is already at 0 for {GameContext.Name}");
                 }
-
 
                 PluginDatabase.Update(pluginDataRoot);
                 PluginDatabase.PlayniteApi.Database.Games.Update(GameContext);
