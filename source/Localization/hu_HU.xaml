@@ -50,11 +50,13 @@ Kattintson további információkért.</sys:String>
     <sys:String x:Key="LOCGameActivityListGamesFields">Megjelenítendő játékmezők</sys:String>
 
     <sys:String x:Key="LOCGameActivityActiveLog">Naplózás engedélyezése</sys:String>
+    <sys:String x:Key="LOCGameActivityUsedLibreHardware">Used LibreHarwareMonitor instead</sys:String>
+    <sys:String x:Key="LOCGameActivityRemoteWebServer">Távoli webkiszolgálóval</sys:String>
     <sys:String x:Key="LOCGameActivityTimeInterval">Ellenőrizze az időintervallumot</sys:String>
     <sys:String x:Key="LOCGameActivityTimeLabel">perc(ek)</sys:String>
 
     <sys:String x:Key="LOCGameActivityUseMsiAfterburner">MSI Afterburner használata</sys:String>
-    <sys:String x:Key="LOCGameActivityUseHWiNFOSharedMemory">Use HWiNFO SharedMemory</sys:String>
+    <sys:String x:Key="LOCGameActivityUseHWiNFOSharedMemory">HWiNFO megosztott memória használata</sys:String>
     <sys:String x:Key="LOCGameActivityUseHWiNFOGadget">Use HWiNFO gadget reporting</sys:String>
     <sys:String x:Key="LOCGameActivityIndex">Index</sys:String>
 
@@ -65,8 +67,8 @@ Kattintson további információkért.</sys:String>
     <sys:String x:Key="LOCGameActivityFps">FPS</sys:String>
     <sys:String x:Key="LOCGameActivityGpuTemp">GPU hőmérséklet</sys:String>
     <sys:String x:Key="LOCGameActivityCpuTemp">CPU hőmérséklet</sys:String>
-    <sys:String x:Key="LOCGameActivityCpuPower">CPU power</sys:String>
-    <sys:String x:Key="LOCGameActivityGpuPower">GPU power</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuPower">CPU teljesítmény</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuPower">GPU teljesítmény</sys:String>
 
     <sys:String x:Key="LOCGameActivityActiveWarning">Figyelmeztetések engedélyezése</sys:String>
     <sys:String x:Key="LOCGameActivityMinFps">Minimum FPS</sys:String>
@@ -103,11 +105,12 @@ Kattintson további információkért.</sys:String>
 
     <!-- GameActivityViewSingle -->
 
-    <sys:String x:Key="LOCGameActivityRecentActivity">Recent activity</sys:String>
-    <sys:String x:Key="LOCGameActivityNoRecentActivity">No recent activity</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivity">Legutóbbi tevékenység</sys:String>
+    <sys:String x:Key="LOCGameActivityNoRecentActivity">Nincs friss tevékenység</sys:String>
     <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} hours past {1} week</sys:String>
     <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} hours past {1} weeks</sys:String>
     <sys:String x:Key="LOCGameActivityAvgPerDay">Átlagos idő naponta</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgPerSession">Average time per session</sys:String>
     <sys:String x:Key="LOCGameActivityFirstSession">Első játékmenet</sys:String>
     <sys:String x:Key="LOCGameActivityLastSession">Legutóbbi játékmenet</sys:String>
     

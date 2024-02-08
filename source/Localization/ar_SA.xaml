@@ -50,6 +50,8 @@
     <sys:String x:Key="LOCGameActivityListGamesFields">حقول اللعبة ليتم عرضها</sys:String>
 
     <sys:String x:Key="LOCGameActivityActiveLog">تفعيل التسجيل</sys:String>
+    <sys:String x:Key="LOCGameActivityUsedLibreHardware">Used LibreHarwareMonitor instead</sys:String>
+    <sys:String x:Key="LOCGameActivityRemoteWebServer">With remote web server</sys:String>
     <sys:String x:Key="LOCGameActivityTimeInterval">التحقق من الفاصل الز</sys:String>
     <sys:String x:Key="LOCGameActivityTimeLabel">دقائق</sys:String>
 
@@ -108,6 +110,7 @@
     <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} hours past {1} week</sys:String>
     <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} hours past {1} weeks</sys:String>
     <sys:String x:Key="LOCGameActivityAvgPerDay">متوسط الوقت في ال</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgPerSession">Average time per session</sys:String>
     <sys:String x:Key="LOCGameActivityFirstSession">أول جلسة تشغ</sys:String>
     <sys:String x:Key="LOCGameActivityLastSession">آخر جلسة تشغيل</sys:String>
     

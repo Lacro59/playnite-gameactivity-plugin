@@ -8,7 +8,7 @@ Utilisation de la différence de temps de jeu : {1}s.</sys:String>
     <!-- MainView -->
 
     <sys:String x:Key="LOCGameActivity">GameActivity</sys:String>
-    <sys:String x:Key="LOCGameActivityTitle">Activités</sys:String>
+    <sys:String x:Key="LOCGameActivityTitle">Activité</sys:String>
     <sys:String x:Key="LOCGamesActivitiesTitle">Activités des jeux</sys:String>
     <sys:String x:Key="LOCGameActivitiesTitle">Activités du jeu</sys:String>
     <sys:String x:Key="LOCGameActivityViewGamesActivities">Voir les activités des jeux</sys:String>
@@ -50,23 +50,25 @@ Cliquez pour plus d'informations.</sys:String>
     <sys:String x:Key="LOCGameActivityListGamesFields">Sélectionner les éléments à afficher</sys:String>
 
     <sys:String x:Key="LOCGameActivityActiveLog">Activer la journalisation</sys:String>
+    <sys:String x:Key="LOCGameActivityUsedLibreHardware">Utilisation de LibreHarwareMonitor à la place</sys:String>
+    <sys:String x:Key="LOCGameActivityRemoteWebServer">Avec le serveur web distant</sys:String>
     <sys:String x:Key="LOCGameActivityTimeInterval">Intervalle de vérification</sys:String>
     <sys:String x:Key="LOCGameActivityTimeLabel">minute(s)</sys:String>
 
     <sys:String x:Key="LOCGameActivityUseMsiAfterburner">Utiliser MSI Afterburner</sys:String>
-    <sys:String x:Key="LOCGameActivityUseHWiNFOSharedMemory">Use HWiNFO SharedMemory</sys:String>
-    <sys:String x:Key="LOCGameActivityUseHWiNFOGadget">Use HWiNFO gadget reporting</sys:String>
+    <sys:String x:Key="LOCGameActivityUseHWiNFOSharedMemory">Utiliser la mémoire partagée de HWiNFO</sys:String>
+    <sys:String x:Key="LOCGameActivityUseHWiNFOGadget">Utiliser le gadget de rapport de HWiNFO</sys:String>
     <sys:String x:Key="LOCGameActivityIndex">Index</sys:String>
 
     <sys:String x:Key="LOCGameActivitySensorsID">Id capteurs</sys:String>
     <sys:String x:Key="LOCGameActivityElementID">Id élément</sys:String>
 
-    <sys:String x:Key="LOCGameActivityGpuUsage">GPU utilisation</sys:String>
-    <sys:String x:Key="LOCGameActivityFps">IPS</sys:String>
-    <sys:String x:Key="LOCGameActivityGpuTemp">GPU température</sys:String>
-    <sys:String x:Key="LOCGameActivityCpuTemp">CPU température</sys:String>
-    <sys:String x:Key="LOCGameActivityCpuPower">CPU power</sys:String>
-    <sys:String x:Key="LOCGameActivityGpuPower">GPU power</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuUsage">Utilisation GPU</sys:String>
+    <sys:String x:Key="LOCGameActivityFps">FPS</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuTemp">Température GPU</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuTemp">Température CPU</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuPower">Puissance CPU</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuPower">Puissance GPU</sys:String>
 
     <sys:String x:Key="LOCGameActivityActiveWarning">Activer les avertissements</sys:String>
     <sys:String x:Key="LOCGameActivityMinFps">FPS min</sys:String>
@@ -108,6 +110,7 @@ Cliquez pour plus d'informations.</sys:String>
     <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} heures sur {1} semaine</sys:String>
     <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} heures sur {1} semaines</sys:String>
     <sys:String x:Key="LOCGameActivityAvgPerDay">Temps moyen par jour</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgPerSession">Temps moyen par session</sys:String>
     <sys:String x:Key="LOCGameActivityFirstSession">Première session</sys:String>
     <sys:String x:Key="LOCGameActivityLastSession">Dernière session</sys:String>
     

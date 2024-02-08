@@ -1,91 +1,91 @@
 ﻿<?xml version="1.0"?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
-    <sys:String x:Key="LOCGameActivityNoPlaytime" xml:space="preserve">There is no play time for {0}.
-Used the difference play time: {1}s.</sys:String>
+    <sys:String x:Key="LOCGameActivityNoPlaytime" xml:space="preserve">Det finns ingen speltid för {0}.
+Använde istället speltid: {1}s.</sys:String>
     
     
     <!-- MainView -->
 
     <sys:String x:Key="LOCGameActivity">GameActivity</sys:String>
-    <sys:String x:Key="LOCGameActivityTitle">Activity</sys:String>
-    <sys:String x:Key="LOCGamesActivitiesTitle">Games activities</sys:String>
-    <sys:String x:Key="LOCGameActivitiesTitle">Game activities</sys:String>
-    <sys:String x:Key="LOCGameActivityViewGamesActivities">View games activities</sys:String>
-    <sys:String x:Key="LOCGameActivityViewGameActivity">View game activity</sys:String>
+    <sys:String x:Key="LOCGameActivityTitle">Aktivitet</sys:String>
+    <sys:String x:Key="LOCGamesActivitiesTitle">Spel aktiviteter</sys:String>
+    <sys:String x:Key="LOCGameActivitiesTitle">Spel aktiviteter</sys:String>
+    <sys:String x:Key="LOCGameActivityViewGamesActivities">Visa spelaktiviteter</sys:String>
+    <sys:String x:Key="LOCGameActivityViewGameActivity">Visa spelaktivitet</sys:String>
     
-    <sys:String x:Key="LOCGameActivityDefaultAction">Default action</sys:String>
+    <sys:String x:Key="LOCGameActivityDefaultAction">Standardåtgärd</sys:String>
 
 
     <!-- GameActivityGanttView -->
 
-    <sys:String x:Key="LOCGameActivityGanttView">Gantt view</sys:String>
+    <sys:String x:Key="LOCGameActivityGanttView">Gantt vy</sys:String>
     
-    <sys:String x:Key="LOCGameActivitySetNumberDay">Set number of days</sys:String>
+    <sys:String x:Key="LOCGameActivitySetNumberDay">Ange antal dagar</sys:String>
     <sys:String x:Key="LOCGameActivityPeriod">Period</sys:String>
-    <sys:String x:Key="LOCGameActivitySetLastDate">Set the last date</sys:String>
+    <sys:String x:Key="LOCGameActivitySetLastDate">Ange sista datum</sys:String>
     
     
     <!-- Backup -->
 
-    <sys:String x:Key="LOCGaBackupExist" xml:space="preserve">There is backup data for {0}.
-Probably after a playnite crash.
-Click for more information.</sys:String>
-    <sys:String x:Key="LOCGaDateSession">Date session</sys:String>
-    <sys:String x:Key="LOCGaPlayTimeSession">Play time session</sys:String>
-    <sys:String x:Key="LOCGaBackupDataInfo">Backup data info</sys:String>
+    <sys:String x:Key="LOCGaBackupExist" xml:space="preserve">Det finns säkerhetskopieringsdata för {0}.
+Förmodligen efter en playnite krasch.
+Klicka för mer information.</sys:String>
+    <sys:String x:Key="LOCGaDateSession">Datum session</sys:String>
+    <sys:String x:Key="LOCGaPlayTimeSession">Speltid session</sys:String>
+    <sys:String x:Key="LOCGaBackupDataInfo">Information om säkerhetskopiering</sys:String>
     
 
     <!-- Merge -->
 
-    <sys:String x:Key="LOCGaMerge">Merge</sys:String>
-    <sys:String x:Key="LOCGaMergeSession">Merge game session</sys:String>
+    <sys:String x:Key="LOCGaMerge">Slå ihop</sys:String>
+    <sys:String x:Key="LOCGaMergeSession">Slå ihop spelsessionen</sys:String>
     
 
     <!-- GameActivitySettingsView -->
 
-    <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">Combine game sessions playtime on chart</sys:String>
-    <sys:String x:Key="LOCGameActivityCumulPlaytimeStore">Unify the time of different libraries</sys:String>
+    <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">Kombinera spelsessioners speltid i diagrammet</sys:String>
+    <sys:String x:Key="LOCGameActivityCumulPlaytimeStore">Skapa gemensam tid för olika bibliotek</sys:String>
 
-    <sys:String x:Key="LOCGameActivityListGamesFields">Game fields to be displayed</sys:String>
+    <sys:String x:Key="LOCGameActivityListGamesFields">Spelfält som ska visas</sys:String>
 
-    <sys:String x:Key="LOCGameActivityActiveLog">Enable logging</sys:String>
+    <sys:String x:Key="LOCGameActivityActiveLog">Aktivera loggning</sys:String>
     <sys:String x:Key="LOCGameActivityUsedLibreHardware">Used LibreHarwareMonitor instead</sys:String>
     <sys:String x:Key="LOCGameActivityRemoteWebServer">With remote web server</sys:String>
-    <sys:String x:Key="LOCGameActivityTimeInterval">Check time interval</sys:String>
-    <sys:String x:Key="LOCGameActivityTimeLabel">minute(s)</sys:String>
+    <sys:String x:Key="LOCGameActivityTimeInterval">Kontrollera tidsintervall</sys:String>
+    <sys:String x:Key="LOCGameActivityTimeLabel">minut(er)</sys:String>
 
-    <sys:String x:Key="LOCGameActivityUseMsiAfterburner">Use MSI Afterburner</sys:String>
-    <sys:String x:Key="LOCGameActivityUseHWiNFOSharedMemory">Use HWiNFO SharedMemory</sys:String>
-    <sys:String x:Key="LOCGameActivityUseHWiNFOGadget">Use HWiNFO gadget reporting</sys:String>
+    <sys:String x:Key="LOCGameActivityUseMsiAfterburner">Använd MSI Afterburner</sys:String>
+    <sys:String x:Key="LOCGameActivityUseHWiNFOSharedMemory">Använd HWiNFO SharedMemory</sys:String>
+    <sys:String x:Key="LOCGameActivityUseHWiNFOGadget">Använd HWiNFO verktygsrapportering</sys:String>
     <sys:String x:Key="LOCGameActivityIndex">Index</sys:String>
 
-    <sys:String x:Key="LOCGameActivitySensorsID">Sensors id</sys:String>
+    <sys:String x:Key="LOCGameActivitySensorsID">Sensorernas id</sys:String>
     <sys:String x:Key="LOCGameActivityElementID">Element id</sys:String>
 
-    <sys:String x:Key="LOCGameActivityGpuUsage">GPU usage</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuUsage">GPU användning</sys:String>
     <sys:String x:Key="LOCGameActivityFps">FPS</sys:String>
-    <sys:String x:Key="LOCGameActivityGpuTemp">GPU temperature</sys:String>
-    <sys:String x:Key="LOCGameActivityCpuTemp">CPU temperature</sys:String>
-    <sys:String x:Key="LOCGameActivityCpuPower">CPU power</sys:String>
-    <sys:String x:Key="LOCGameActivityGpuPower">GPU power</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuTemp">GPU temperatur</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuTemp">CPU Temperatur</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuPower">CPU effekt</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuPower">GPU effekt</sys:String>
 
-    <sys:String x:Key="LOCGameActivityActiveWarning">Enable warnings</sys:String>
-    <sys:String x:Key="LOCGameActivityMinFps">Min FPS</sys:String>
+    <sys:String x:Key="LOCGameActivityActiveWarning">Aktivera varningar</sys:String>
+    <sys:String x:Key="LOCGameActivityMinFps">Minsta FPS</sys:String>
     <sys:String x:Key="LOCGameActivityMaxCpuTemp">Max CPU temp</sys:String>
     <sys:String x:Key="LOCGameActivityMaxGpuTemp">Max GPU temp</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxCpuUsage">Max CPU usage</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxGpuUsage">Max GPU usage</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxRamUsage">Max RAM usage</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxCpuUsage">Max CPU användning</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxGpuUsage">Max GPU användning</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxRamUsage">Max RAM användning</sys:String>
 
-    <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">Log CPU, GPU, RAM and FPS performance during game session.</sys:String>
-    <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Displays a warning message at the end of the game session within the defined limits.</sys:String>
+    <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">Logga CPU, GPU, RAM och FPS prestanda under spelsessionen.</sys:String>
+    <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Visar ett varningsmeddelande i slutet av spelsessionen inom de angivna gränserna.</sys:String>
 
-    <sys:String x:Key="LOCGameActivityIntegrationChartTime">Display the chart with game session times</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationChartLog">Display the chart with game session logs</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationChartTime">Visa diagrammet med spelsessionstider</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationChartLog">Visa diagrammet med spelsessionsloggar</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">Toggle button with details</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">Number of data in horizontal axis</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationChartTimeTruncate">Truncate time data by default</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">Antal data i horisontell axel</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationChartTimeTruncate">Trunkera tidsdata som standard</sys:String>
 
     <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabels">Show labels on horizontal axis</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">Show labels on vertical axis</sys:String>
@@ -162,15 +162,15 @@ Click for more information.</sys:String>
     <!-- GameActivityAddTime -->
 
     <sys:String x:Key="LOCGaAddNewGameSession">Add new game session</sys:String>
-    <sys:String x:Key="LOCGaDateStart">Date start</sys:String>
-    <sys:String x:Key="LOCGaDateEnd">Date end</sys:String>
+    <sys:String x:Key="LOCGaDateStart">Startdatum</sys:String>
+    <sys:String x:Key="LOCGaDateEnd">Slutdatum</sys:String>
     
-    <sys:String x:Key="LOCGaGameActions">Game actions</sys:String>
-    <sys:String x:Key="LOCGaCustomGameActions">Custom game actions</sys:String>
+    <sys:String x:Key="LOCGaGameActions">Spelåtgärder</sys:String>
+    <sys:String x:Key="LOCGaCustomGameActions">Anpassade spelåtgärder</sys:String>
 
 
 
     <!-- Temporary workaround for PlayState paused time until Playnite allows to share data among extensions -->
-    <sys:String x:Key="LOCGameActivitySubstPlayStateTime">Substract PlayState pause time from the session duration</sys:String>
+    <sys:String x:Key="LOCGameActivitySubstPlayStateTime">Subtrahera PlayState paustid från sessionens varaktighet</sys:String>
 
 </ResourceDictionary>

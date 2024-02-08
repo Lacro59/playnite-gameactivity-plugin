@@ -49,9 +49,11 @@ Click for more information.</sys:String>
 
     <sys:String x:Key="LOCGameActivityListGamesFields">Game fields to be displayed</sys:String>
 
-    <sys:String x:Key="LOCGameActivityActiveLog"></sys:String>
+    <sys:String x:Key="LOCGameActivityActiveLog">ログを有効にする</sys:String>
+    <sys:String x:Key="LOCGameActivityUsedLibreHardware">Used LibreHarwareMonitor instead</sys:String>
+    <sys:String x:Key="LOCGameActivityRemoteWebServer">With remote web server</sys:String>
     <sys:String x:Key="LOCGameActivityTimeInterval">Check time interval</sys:String>
-    <sys:String x:Key="LOCGameActivityTimeLabel">minute(s)</sys:String>
+    <sys:String x:Key="LOCGameActivityTimeLabel">分</sys:String>
 
     <sys:String x:Key="LOCGameActivityUseMsiAfterburner">MSI Afterburner を使用する</sys:String>
     <sys:String x:Key="LOCGameActivityUseHWiNFOSharedMemory">Use HWiNFO SharedMemory</sys:String>
@@ -61,12 +63,12 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivitySensorsID">Sensors id</sys:String>
     <sys:String x:Key="LOCGameActivityElementID">Element id</sys:String>
 
-    <sys:String x:Key="LOCGameActivityGpuUsage">GPU 使用</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuUsage">GPU 使用率</sys:String>
     <sys:String x:Key="LOCGameActivityFps">FPS</sys:String>
     <sys:String x:Key="LOCGameActivityGpuTemp">GPU 温度</sys:String>
     <sys:String x:Key="LOCGameActivityCpuTemp">CPU 温度</sys:String>
-    <sys:String x:Key="LOCGameActivityCpuPower">CPU power</sys:String>
-    <sys:String x:Key="LOCGameActivityGpuPower">GPU power</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuPower">CPU 電力</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuPower">GPU 電力</sys:String>
 
     <sys:String x:Key="LOCGameActivityActiveWarning">警告を有効にする</sys:String>
     <sys:String x:Key="LOCGameActivityMinFps">最小 FPS</sys:String>
@@ -85,8 +87,8 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">Number of data in horizontal axis</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationChartTimeTruncate">Truncate time data by default</sys:String>
 
-    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabels">Show labels on horizontal axis</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">Show labels on vertical axis</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabels">横軸にラベルを表示</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">縦軸にラベルを表示</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicLogOptions">Chart options</sys:String>
 
     <sys:String x:Key="LOCGameActivityUseControls">Use chart controls</sys:String>
@@ -105,69 +107,70 @@ Click for more information.</sys:String>
 
     <sys:String x:Key="LOCGameActivityRecentActivity">Recent activity</sys:String>
     <sys:String x:Key="LOCGameActivityNoRecentActivity">No recent activity</sys:String>
-    <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} hours past {1} week</sys:String>
-    <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} hours past {1} weeks</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivitySingular">過去 {1} 週間で {0} 時間</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivityPlurial">過去 {1} 週間で {0} 時間</sys:String>
     <sys:String x:Key="LOCGameActivityAvgPerDay">Average time per day</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgPerSession">Average time per session</sys:String>
     <sys:String x:Key="LOCGameActivityFirstSession">First session</sys:String>
     <sys:String x:Key="LOCGameActivityLastSession">Last session</sys:String>
     
     <!-- GameActivityView -->
 
     <sys:String x:Key="LOCGameActivityTotalHours">合計プレイ時間</sys:String>
-    <sys:String x:Key="LOCGameActivityTotalHoursByWeeks">合計プレイ時間（週別</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByWeeks">合計プレイ時間（週別）</sys:String>
 
-    <sys:String x:Key="LOCGameActivityWeekLabel">Week</sys:String>
+    <sys:String x:Key="LOCGameActivityWeekLabel">週</sys:String>
 
-    <sys:String x:Key="LOCGameActivityTime">Time</sys:String>
-    <sys:String x:Key="LOCGameActivityLog">Log</sys:String>
-    <sys:String x:Key="LOCGameActivityTimeTitle">合計プレイ時間（日別</sys:String>
+    <sys:String x:Key="LOCGameActivityTime">時間</sys:String>
+    <sys:String x:Key="LOCGameActivityLog">ログ</sys:String>
+    <sys:String x:Key="LOCGameActivityTimeTitle">合計プレイ時間（日別）</sys:String>
     <sys:String x:Key="LOCGameActivityLogTitle">Last session details</sys:String>
     <sys:String x:Key="LOCGameActivityLogTitleDate">Session details for</sys:String>
 
     <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Last session</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Elapsed time</sys:String>
     
-    <sys:String x:Key="LOCGameActivityAvgCpu">平均 CPU 使用</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgGpu">平均 GPU 使用</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgRam">平均メモリー使用</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgFps">平均FPS</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgCpuT">平均CPU温度</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgGpuT">平均GPU温度</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgCpuP">Avg CPU P</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgGpuP">Avg GPU P</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgCpu">平均 CPU 使用率</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgGpu">平均 GPU 使用率</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgRam">平均メモリ使用率</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgFps">平均 FPS</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgCpuT">平均 CPU 温度</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgGpuT">平均 GPU 温度</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgCpuP">平均 CPU P</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgGpuP">平均 GPU P</sys:String>
 
-    <sys:String x:Key="LOCGameActivityPCName"></sys:String>
+    <sys:String x:Key="LOCGameActivityPCName">デバイス名</sys:String>
 
 
     <!-- GameActivity -->
 
-    <sys:String x:Key="LOCGameActivityWarningCaption">Warnings during game session</sys:String>
-    <sys:String x:Key="LOCGameActivityWarningAt">At</sys:String>
-    <sys:String x:Key="LOCGameActivityCpuUsage">CPU 使用</sys:String>
-    <sys:String x:Key="LOCGameActivityRamUsage"></sys:String>
+    <sys:String x:Key="LOCGameActivityWarningCaption">ゲームセッション中に警告を表示</sys:String>
+    <sys:String x:Key="LOCGameActivityWarningAt">時</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuUsage">CPU 使用率</sys:String>
+    <sys:String x:Key="LOCGameActivityRamUsage">メモリ使用率</sys:String>
 
-    <sys:String x:Key="LOCGameActivityNotificationHWiNFO">HWiNFO logging is enabled but application is not running.</sys:String>
-    <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">MSI AfterBurner logging is enabled but application is not running.</sys:String>
+    <sys:String x:Key="LOCGameActivityNotificationHWiNFO">HWiNFO ログは有効になっていますが、アプリケーションは実行されていません。</sys:String>
+    <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">MSI AfterBurner ログは有効になっていますが、アプリケーションが実行されていません。</sys:String>
 
     <!-- QuickSearch -->
 
-    <sys:String x:Key="LOCGaQuickSearchDescription">Search games on GameActivity data</sys:String>
-    <sys:String x:Key="LOCGaQuickSearchByFPS">Find by FPS</sys:String>
-    <sys:String x:Key="LOCGaQuickSearchByTime">Find by time session</sys:String>
-    <sys:String x:Key="LOCGaQuickSearchByDate">Find by date session</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchDescription">GameActivity データでゲームを検索</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchByFPS">FPS で検索</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchByTime">時間セッションで検索</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchByDate">日付セッションで検索</sys:String>
 
     <!-- GameActivityAddTime -->
 
-    <sys:String x:Key="LOCGaAddNewGameSession">Add new game session</sys:String>
-    <sys:String x:Key="LOCGaDateStart">Date start</sys:String>
-    <sys:String x:Key="LOCGaDateEnd">Date end</sys:String>
+    <sys:String x:Key="LOCGaAddNewGameSession">新しいゲームセッションを追加</sys:String>
+    <sys:String x:Key="LOCGaDateStart">開始日</sys:String>
+    <sys:String x:Key="LOCGaDateEnd">終了日</sys:String>
     
-    <sys:String x:Key="LOCGaGameActions">Game actions</sys:String>
-    <sys:String x:Key="LOCGaCustomGameActions">Custom game actions</sys:String>
+    <sys:String x:Key="LOCGaGameActions">ゲームアクション</sys:String>
+    <sys:String x:Key="LOCGaCustomGameActions">カスタムゲームアクション</sys:String>
 
 
 
     <!-- Temporary workaround for PlayState paused time until Playnite allows to share data among extensions -->
-    <sys:String x:Key="LOCGameActivitySubstPlayStateTime">Substract PlayState pause time from the session duration</sys:String>
+    <sys:String x:Key="LOCGameActivitySubstPlayStateTime">セッション時間から PlayState の一時停止時間を短縮する</sys:String>
 
 </ResourceDictionary>
