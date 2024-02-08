@@ -371,17 +371,11 @@ namespace GameActivity.Views
                             // Cumul data
                             if (activityByMonth.ContainsKey(sourceName))
                             {
-                                if (startOfMonth <= dateSession && dateSession <= endOfMonth)
-                                {
-                                    activityByMonth[sourceName] = (ulong)activityByMonth[sourceName] + elapsedSeconds;
-                                }
+                                activityByMonth[sourceName] = (ulong)activityByMonth[sourceName] + elapsedSeconds;
                             }
                             else
                             {
-                                if (startOfMonth <= dateSession && dateSession <= endOfMonth)
-                                {
-                                    activityByMonth.Add(sourceName, elapsedSeconds);
-                                }
+                                activityByMonth.Add(sourceName, elapsedSeconds);
                             }
                         }
                     }
@@ -415,17 +409,11 @@ namespace GameActivity.Views
                                 // Cumul data
                                 if (activityByMonth.ContainsKey(listGameListGenres[iGenre].Name))
                                 {
-                                    if (startOfMonth <= dateSession && dateSession <= endOfMonth)
-                                    {
-                                        activityByMonth[listGameListGenres[iGenre].Name] = activityByMonth[listGameListGenres[iGenre].Name] + elapsedSeconds;
-                                    }
+                                    activityByMonth[listGameListGenres[iGenre].Name] = activityByMonth[listGameListGenres[iGenre].Name] + elapsedSeconds;
                                 }
                                 else
                                 {
-                                    if (startOfMonth <= dateSession && dateSession <= endOfMonth)
-                                    {
-                                        activityByMonth.Add(listGameListGenres[iGenre].Name, elapsedSeconds);
-                                    }
+                                    activityByMonth.Add(listGameListGenres[iGenre].Name, elapsedSeconds);
                                 }
                             }
                         }
@@ -459,38 +447,14 @@ namespace GameActivity.Views
                                 // Cumul data
                                 if (activityByMonth.ContainsKey(listGameListTags[iTag].Name))
                                 {
-                                    if (startOfMonth <= dateSession && dateSession <= endOfMonth)
-                                    {
-                                        activityByMonth[listGameListTags[iTag].Name] = activityByMonth[listGameListTags[iTag].Name] + elapsedSeconds;
-                                    }
+                                    activityByMonth[listGameListTags[iTag].Name] = activityByMonth[listGameListTags[iTag].Name] + elapsedSeconds;
                                 }
                                 else
                                 {
-                                    if (startOfMonth <= dateSession && dateSession <= endOfMonth)
-                                    {
-                                        activityByMonth.Add(listGameListTags[iTag].Name, elapsedSeconds);
-                                    }
+                                    activityByMonth.Add(listGameListTags[iTag].Name, elapsedSeconds);
                                 }
                             }
                         }
-
-                        Dictionary<string, ulong> activityTEMP = new Dictionary<string, ulong>();
-                        activityByMonth.ForEach(x =>
-                        {
-                            if (activityTEMP.Where(y => y.Value == x.Value).Count() != 0)
-                            {
-                                string k = activityTEMP.Where(y => y.Value == x.Value).First().Key;
-                                ulong v = activityTEMP.Where(y => y.Value == x.Value).First().Value;
-
-                                activityTEMP.Remove(k);
-                                activityTEMP.Add(k + "\r\n" + x.Key, v);
-                            }
-                            else
-                            {
-                                activityTEMP.Add(x.Key, x.Value);
-                            }
-                        });
-                        activityByMonth = activityTEMP;
 
                         PART_ChartTotalHoursSource.DataTooltip = new CustomerToolTipForTime { ShowIcon = false, Mode = TextBlockWithIconMode.TextOnly };
                     }
@@ -499,6 +463,27 @@ namespace GameActivity.Views
                         Common.LogError(ex, false, $"Error in getActivityByMonth({year}, {month}) with {listGameActivities[iGame].Name}", true, PluginDatabase.PluginName);
                     }
                 }
+
+                // Join same time
+                Dictionary<string, ulong> activityTEMP = new Dictionary<string, ulong>();
+                activityByMonth.ForEach(x =>
+                {
+                    string val = (string)converter.Convert(x.Value, null, null, CultureInfo.CurrentCulture);
+                    IEnumerable<KeyValuePair<string, ulong>> d = activityTEMP.Where(y => ((string)converter.Convert(y.Value, null, null, CultureInfo.CurrentCulture)).IsEqual(val));
+                    if (d.Count() != 0)
+                    {
+                        string k = d.First().Key;
+                        ulong v = d.First().Value;
+
+                        activityTEMP.Remove(k);
+                        activityTEMP.Add(k + "\r\n" + x.Key, v);
+                    }
+                    else
+                    {
+                        activityTEMP.Add(x.Key, x.Value);
+                    }
+                });
+                activityByMonth = activityTEMP;
             }
 
 

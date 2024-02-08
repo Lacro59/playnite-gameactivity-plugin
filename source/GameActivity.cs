@@ -28,7 +28,6 @@ using QuickSearch.SearchItems;
 using MoreLinq;
 using CommonPluginsControls.Views;
 using System.Globalization;
-using CommonPluginsShared.Collections;
 
 namespace GameActivity
 {
@@ -833,12 +832,13 @@ namespace GameActivity
             List<GameMenuItem> gameMenuItems = new List<GameMenuItem>
             {
                 // Show plugin view with all activities for all game in database with data of selected game
-                new GameMenuItem {
+                new GameMenuItem 
+                {
                     //MenuSection = "",
                     Icon = Path.Combine(PluginFolder, "Resources", "chart-646.png"),
                     Description = resources.GetString("LOCGameActivityViewGameActivity"),
                     Action = (gameMenuItem) =>
-                    {            
+                    {
                         WindowOptions windowOptions = new WindowOptions
                         {
                             ShowMinimizeButton = false,
@@ -1348,9 +1348,9 @@ namespace GameActivity
                     Parallel.ForEach(Directory.EnumerateFiles(PluginDatabase.Paths.PluginUserDataPath, "SaveSession_*.json"), (objectFile) =>
                     {
                         // Wait extension database are loaded
-                        System.Threading.SpinWait.SpinUntil(() => PluginDatabase.IsLoaded, -1);
+                        SpinWait.SpinUntil(() => PluginDatabase.IsLoaded, -1);
 
-                        Serialization.TryFromJsonFile<ActivityBackup>(objectFile, out ActivityBackup backupData);
+                        Serialization.TryFromJsonFile(objectFile, out ActivityBackup backupData);
                         if (backupData != null)
                         {
                             // If game is deleted...
