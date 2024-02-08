@@ -26,7 +26,7 @@ namespace GameActivity.Views
     /// </summary>
     public partial class GameActivityViewSingle : UserControl
     {
-        private static ILogger logger => LogManager.GetLogger();
+        private static ILogger Logger => LogManager.GetLogger();
         private static IResourceProvider resources => new ResourceProvider();
 
         private ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
@@ -35,14 +35,14 @@ namespace GameActivity.Views
         private PluginChartLog PART_ChartLog { get; set; }
 
         private GameActivities gameActivities { get; set; }
-        private Game game { get; set; }
-        private GameActivity plugin { get; set; }
+        private Game GameContext { get; set; }
+        private GameActivity Plugin { get; set; }
 
 
         public GameActivityViewSingle(GameActivity plugin, Game game)
         {
-            this.game = game;
-            this.plugin = plugin;
+            this.GameContext = game;
+            this.Plugin = plugin;
 
             InitializeComponent();
 
@@ -367,30 +367,30 @@ namespace GameActivity.Views
                     // Delete playtime
                     if (activity.GameElapsedSeconds != 0)
                     {
-                        if ((long)(game.Playtime - activity.GameElapsedSeconds) >= 0)
+                        if ((long)(GameContext.Playtime - activity.GameElapsedSeconds) >= 0)
                         {
-                            game.Playtime -= activity.GameElapsedSeconds;
-                            if (game.PlayCount != 0)
+                            GameContext.Playtime -= activity.GameElapsedSeconds;
+                            if (GameContext.PlayCount != 0)
                             {
-                                game.PlayCount--;
+                                GameContext.PlayCount--;
                             }
                             else
                             {
-                                logger.Warn($"Play count is already at 0 for {game.Name}");
+                                Logger.Warn($"Play count is already at 0 for {GameContext.Name}");
                             }
                         }
                         else
                         {
-                            logger.Warn($"Impossible to remove GameElapsedSeconds ({activity.GameElapsedSeconds}) in Playtime ({game.Playtime}) of {game.Name}");
+                            Logger.Warn($"Impossible to remove GameElapsedSeconds ({activity.GameElapsedSeconds}) in Playtime ({GameContext.Playtime}) of {GameContext.Name}");
                         }
                     }
 
                     gameActivities.DeleteActivity(activity.GameLastActivity);
 
                     // Set last played date
-                    game.LastActivity = (DateTime)gameActivities.Items.Max(x => x.DateSession);
+                    GameContext.LastActivity = (DateTime)gameActivities.Items.Max(x => x.DateSession);
 
-                    PluginDatabase.PlayniteApi.Database.Games.Update(game);
+                    PluginDatabase.PlayniteApi.Database.Games.Update(GameContext);
                     PluginDatabase.Update(gameActivities);
 
                     lvSessions.SelectedIndex = -1;
@@ -414,25 +414,25 @@ namespace GameActivity.Views
 
             try
             {
-                GameActivityAddTime ViewExtension = new GameActivityAddTime(plugin, game, null);
+                GameActivityAddTime ViewExtension = new GameActivityAddTime(Plugin, GameContext, null);
                 Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PluginDatabase.PlayniteApi, resources.GetString("LOCGaAddNewGameSession"), ViewExtension, windowOptions);
                 windowExtension.ShowDialog();
 
-                if (ViewExtension.activity != null)
+                if (ViewExtension.Activity != null)
                 {
-                    gameActivities.Items.Add(ViewExtension.activity);
+                    gameActivities.Items.Add(ViewExtension.Activity);
                     getActivityByListGame(gameActivities);
 
-                    if (ViewExtension.activity.ElapsedSeconds >= 0)
+                    if (ViewExtension.Activity.ElapsedSeconds >= 0)
                     {
-                        game.Playtime += ViewExtension.activity.ElapsedSeconds;
-                        game.PlayCount++;
+                        GameContext.Playtime += ViewExtension.Activity.ElapsedSeconds;
+                        GameContext.PlayCount++;
                     }
 
                     // Set last played date
-                    game.LastActivity = (DateTime)gameActivities.Items.Max(x => x.DateSession);
+                    GameContext.LastActivity = (DateTime)gameActivities.Items.Max(x => x.DateSession);
 
-                    PluginDatabase.PlayniteApi.Database.Games.Update(game);
+                    PluginDatabase.PlayniteApi.Database.Games.Update(GameContext);
                     PluginDatabase.Update(gameActivities);
                 }
             }
@@ -458,24 +458,24 @@ namespace GameActivity.Views
                     ShowCloseButton = true
                 };
 
-                GameActivityAddTime ViewExtension = new GameActivityAddTime(plugin, game, activity);
+                GameActivityAddTime ViewExtension = new GameActivityAddTime(Plugin, GameContext, activity);
                 Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PluginDatabase.PlayniteApi, resources.GetString("LOCGaAddNewGameSession"), ViewExtension, windowOptions);
                 windowExtension.ShowDialog();
 
-                if (ViewExtension.activity != null)
+                if (ViewExtension.Activity != null)
                 {
-                    gameActivities.Items[index] = ViewExtension.activity;
+                    gameActivities.Items[index] = ViewExtension.Activity;
                     getActivityByListGame(gameActivities);
 
-                    if (ViewExtension.activity.ElapsedSeconds >= 0)
+                    if (ViewExtension.Activity.ElapsedSeconds >= 0)
                     {
-                        game.Playtime += ViewExtension.activity.ElapsedSeconds - ElapsedSeconds;
+                        GameContext.Playtime += ViewExtension.Activity.ElapsedSeconds - ElapsedSeconds;
                     }
 
                     // Set last played date
-                    game.LastActivity = (DateTime)gameActivities.Items.Max(x => x.DateSession);
+                    GameContext.LastActivity = (DateTime)gameActivities.Items.Max(x => x.DateSession);
 
-                    PluginDatabase.PlayniteApi.Database.Games.Update(game);
+                    PluginDatabase.PlayniteApi.Database.Games.Update(GameContext);
                     PluginDatabase.Update(gameActivities);
                 }
             }
@@ -496,26 +496,26 @@ namespace GameActivity.Views
                     ShowCloseButton = true
                 };
 
-                GameActivityMergeTime ViewExtension = new GameActivityMergeTime(game);
+                GameActivityMergeTime ViewExtension = new GameActivityMergeTime(GameContext);
                 Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PluginDatabase.PlayniteApi, resources.GetString("LOCGaMergeSession"), ViewExtension, windowOptions);
                 windowExtension.ShowDialog();
 
-                gameActivities = PluginDatabase.Get(game);
+                gameActivities = PluginDatabase.Get(GameContext);
                 getActivityByListGame(gameActivities);
 
                 // Set last played date
-                game.LastActivity = (DateTime)gameActivities.Items.Max(x => x.DateSession);
+                GameContext.LastActivity = (DateTime)gameActivities.Items.Max(x => x.DateSession);
 
-                if (game.PlayCount != 0)
+                if (GameContext.PlayCount != 0)
                 {
-                    game.PlayCount--;
+                    GameContext.PlayCount--;
                 }
                 else
                 {
-                    logger.Warn($"Play count is already at 0 for {game.Name}");
+                    Logger.Warn($"Play count is already at 0 for {GameContext.Name}");
                 }
 
-                PluginDatabase.PlayniteApi.Database.Games.Update(game);
+                PluginDatabase.PlayniteApi.Database.Games.Update(GameContext);
             }
             catch (Exception ex)
             {

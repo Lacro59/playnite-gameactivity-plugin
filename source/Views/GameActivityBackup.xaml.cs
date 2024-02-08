@@ -20,14 +20,14 @@ namespace GameActivity.Views
     {
         private ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
         private ViewDataContext ViewDataContext { get; set; } = new ViewDataContext();
-        private ActivityBackup activityBackup { get; set; }
+        private ActivityBackup ActivityBackup { get; set; }
 
         private Guid Id { get; set; }
 
 
         public GameActivityBackup(ActivityBackup activityBackup)
         {
-            this.activityBackup = activityBackup;
+            this.ActivityBackup = activityBackup;
             Game game = PluginDatabase.PlayniteApi.Database.Games.Get(activityBackup.Id);
             this.Id = game.Id;
 
@@ -80,20 +80,20 @@ namespace GameActivity.Views
         {
             try
             {
-                Game game = PluginDatabase.PlayniteApi.Database.Games.Get(activityBackup.Id);
-                GameActivities pluginData = PluginDatabase.Get(activityBackup.Id);
+                Game game = PluginDatabase.PlayniteApi.Database.Games.Get(ActivityBackup.Id);
+                GameActivities pluginData = PluginDatabase.Get(ActivityBackup.Id);
 
-                game.Playtime += activityBackup.ElapsedSeconds;
+                game.Playtime += ActivityBackup.ElapsedSeconds;
                 pluginData.Items.Add(new Activity
                 {
-                    IdConfiguration = activityBackup.IdConfiguration,
-                    GameActionName = activityBackup.GameActionName,
-                    DateSession = activityBackup.DateSession,
-                    SourceID = activityBackup.SourceID,
-                    PlatformIDs = activityBackup.PlatformIDs,
-                    ElapsedSeconds = activityBackup.ElapsedSeconds
+                    IdConfiguration = ActivityBackup.IdConfiguration,
+                    GameActionName = ActivityBackup.GameActionName,
+                    DateSession = ActivityBackup.DateSession,
+                    SourceID = ActivityBackup.SourceID,
+                    PlatformIDs = ActivityBackup.PlatformIDs,
+                    ElapsedSeconds = ActivityBackup.ElapsedSeconds
                 });
-                pluginData.ItemsDetails.Items.TryAdd(activityBackup.DateSession, activityBackup.ItemsDetailsDatas);
+                pluginData.ItemsDetails.Items.TryAdd(ActivityBackup.DateSession, ActivityBackup.ItemsDetailsDatas);
 
                 PluginDatabase.PlayniteApi.Database.Games.Update(game);
                 PluginDatabase.Update(pluginData);

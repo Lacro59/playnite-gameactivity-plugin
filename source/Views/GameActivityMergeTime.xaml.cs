@@ -18,15 +18,15 @@ namespace GameActivity.Views
     /// </summary>
     public partial class GameActivityMergeTime : UserControl
     {
-        private static ILogger logger => LogManager.GetLogger();
+        private static ILogger Logger => LogManager.GetLogger();
 
         private ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
-        private Game game { get; set; }
+        private Game GameContext { get; set; }
 
 
         public GameActivityMergeTime(Game game)
         {
-            this.game = game;
+            this.GameContext = game;
             InitializeComponent();
 
             PART_CbTimeRoot.ItemsSource = PluginDatabase.Get(game, true).Items;
@@ -42,7 +42,7 @@ namespace GameActivity.Views
         {
             try
             {
-                GameActivities pluginDataRoot = PluginDatabase.Get(game, true);
+                GameActivities pluginDataRoot = PluginDatabase.Get(GameContext, true);
                 Activity TimeRoot = (Activity)PART_CbTimeRoot.SelectedItem;
                 Activity Time = (Activity)PART_CbTime.SelectedItem;
 
@@ -53,18 +53,18 @@ namespace GameActivity.Views
                 pluginDataRoot.Items.Remove(Time);
                 pluginDataRoot.ItemsDetails.Items.TryRemove((DateTime)Time.DateSession, out List<ActivityDetailsData> deleted);
 
-                if (game.PlayCount != 0)
+                if (GameContext.PlayCount != 0)
                 {
-                    game.PlayCount--;
+                    GameContext.PlayCount--;
                 }
                 else
                 {
-                    logger.Warn($"Play count is already at 0 for {game.Name}");
+                    Logger.Warn($"Play count is already at 0 for {GameContext.Name}");
                 }
 
 
                 PluginDatabase.Update(pluginDataRoot);
-                PluginDatabase.PlayniteApi.Database.Games.Update(game);
+                PluginDatabase.PlayniteApi.Database.Games.Update(GameContext);
             }
             catch (Exception ex)
             {
@@ -79,17 +79,12 @@ namespace GameActivity.Views
         {
             if (PART_CbTimeRoot.SelectedIndex != -1 && ((FrameworkElement)sender).Name == "PART_CbTimeRoot")
             {
-                PART_CbTime.ItemsSource = PluginDatabase.Get(game, true).Items.Where(x => x.DateSession > ((Activity)PART_CbTimeRoot.SelectedItem).DateSession).ToList();
+                PART_CbTime.ItemsSource = PluginDatabase.Get(GameContext, true).Items.Where(x => x.DateSession > ((Activity)PART_CbTimeRoot.SelectedItem).DateSession).ToList();
             }
 
-            if (PART_CbTimeRoot.SelectedIndex == -1 || PART_CbTime.SelectedIndex == -1)
-            {
-                PART_BtMerge.IsEnabled = false;
-            }
-            else
-            {
-                PART_BtMerge.IsEnabled = ((Activity)PART_CbTimeRoot.SelectedItem).DateSession != ((Activity)PART_CbTime.SelectedItem).DateSession;
-            }
+            PART_BtMerge.IsEnabled = PART_CbTimeRoot.SelectedIndex == -1 || PART_CbTime.SelectedIndex == -1
+                ? false
+                : ((Activity)PART_CbTimeRoot.SelectedItem).DateSession != ((Activity)PART_CbTime.SelectedItem).DateSession;
         }
     }
 }

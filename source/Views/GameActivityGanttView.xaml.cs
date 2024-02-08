@@ -22,15 +22,15 @@ namespace GameActivity.Views
     public partial class GameActivityGanttView : UserControl
     {
         private ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
-        private DataContextGanttView dataContextGanttView { get; set; } = new DataContextGanttView();
+        private DataContextGanttView DataContextGanttView { get; set; } = new DataContextGanttView();
 
-        private GanttControl ganttControl { get; set; }
+        private GanttControl GanttControl { get; set; }
 
 
         public GameActivityGanttView()
         {
             InitializeComponent();
-            this.DataContext = dataContextGanttView;
+            this.DataContext = DataContextGanttView;
 
             SetPeriod();
             GetData();
@@ -40,9 +40,9 @@ namespace GameActivity.Views
         private void SetPeriod()
         {
             LocalDateConverter localDateConverter = new LocalDateConverter();
-            DateTime dtStart = dataContextGanttView.LastDate.AddDays(dataContextGanttView.ColumnCount * - 1);
+            DateTime dtStart = DataContextGanttView.LastDate.AddDays(DataContextGanttView.ColumnCount * - 1);
             PART_Period.Content = localDateConverter.Convert(dtStart, null, null, CultureInfo.CurrentCulture)
-                + " - " + localDateConverter.Convert(dataContextGanttView.LastDate, null, null, CultureInfo.CurrentCulture);
+                + " - " + localDateConverter.Convert(DataContextGanttView.LastDate, null, null, CultureInfo.CurrentCulture);
         }
 
 
@@ -86,7 +86,7 @@ namespace GameActivity.Views
                 }
             }
 
-            dataContextGanttView.GanttDatas = ganttDatas;
+            DataContextGanttView.GanttDatas = ganttDatas;
         }
 
 
@@ -94,21 +94,21 @@ namespace GameActivity.Views
         {
             DatePicker control = sender as DatePicker;
             DateTime dateNew = (DateTime)control.SelectedDate;
-            dataContextGanttView.LastDate = dateNew;
+            DataContextGanttView.LastDate = dateNew;
             SetPeriod();
 
-            if (ganttControl != null)
+            if (GanttControl != null)
             {
-                ganttControl.LastDate = dataContextGanttView.LastDate;
+                GanttControl.LastDate = DataContextGanttView.LastDate;
             }
         }
 
 
         private void Grid_Loaded(object sender, RoutedEventArgs e)
         {
-            if (ganttControl == null)
+            if (GanttControl == null)
             {
-                ganttControl = new GanttControl
+                GanttControl = new GanttControl
                 {
                     OnlyDate = true,
                     HorizontalAlignment = HorizontalAlignment.Center,
@@ -119,21 +119,21 @@ namespace GameActivity.Views
                 //bindingColumnCount.Source = (int)PART_ColumnCount.Value;
                 //bindingColumnCount.Mode = BindingMode.OneWay;
                 //ganttControl.SetBinding(GanttControl.ColumnCountProperty, bindingColumnCount);
-                ganttControl.ColumnCount = (int)PART_ColumnCount.Value;
+                GanttControl.ColumnCount = (int)PART_ColumnCount.Value;
 
                 //Binding bindingLastDate = new Binding();
                 //bindingLastDate.Source = dataContextGanttView.LastDate;
                 //bindingLastDate.Mode = BindingMode.OneWay;
                 //ganttControl.SetBinding(GanttControl.LastDateProperty, bindingLastDate);
-                ganttControl.LastDate = dataContextGanttView.LastDate;
+                GanttControl.LastDate = DataContextGanttView.LastDate;
 
                 //Binding bindingWidth = new Binding();
                 //bindingWidth.Source = dataContextGanttView.HeaderWidth - 10;
                 //bindingWidth.Mode = BindingMode.OneWay;
                 //ganttControl.SetBinding(GanttControl.WidthProperty, bindingWidth);
-                ganttControl.Width = dataContextGanttView.HeaderWidth - 10;
+                GanttControl.Width = DataContextGanttView.HeaderWidth - 10;
 
-                PART_GanttHeader.Content = ganttControl;
+                PART_GanttHeader.Content = GanttControl;
             }
         }
 
@@ -141,17 +141,17 @@ namespace GameActivity.Views
         {
             SetPeriod();
 
-            if (ganttControl != null)
+            if (GanttControl != null)
             {
-                ganttControl.ColumnCount = (int)PART_ColumnCount.Value;
+                GanttControl.ColumnCount = (int)PART_ColumnCount.Value;
             }
         }
 
         private void PART_GanttHeader_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            if (ganttControl != null)
+            if (GanttControl != null)
             {
-                ganttControl.Width = dataContextGanttView.HeaderWidth - 10 >= 0 ? dataContextGanttView.HeaderWidth - 10 : 0;
+                GanttControl.Width = DataContextGanttView.HeaderWidth - 10 >= 0 ? DataContextGanttView.HeaderWidth - 10 : 0;
             }
         }
     }

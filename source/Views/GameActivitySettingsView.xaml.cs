@@ -5,7 +5,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
-using System.Windows.Documents;
 using System.Diagnostics;
 using System.Windows.Media;
 using CommonPluginsShared;
@@ -15,12 +14,12 @@ namespace GameActivity
 {
     public partial class GameActivitySettingsView : UserControl
     {
-        private static ILogger logger => LogManager.GetLogger();
+        private static ILogger Logger => LogManager.GetLogger();
         private static IResourceProvider resources => new ResourceProvider();
 
         private ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
 
-        private StackPanel spControl { get; set; }
+        private StackPanel SpControl { get; set; }
 
 
         public GameActivitySettingsView()
@@ -37,8 +36,8 @@ namespace GameActivity
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (sender != null) 
-            { 
+            if (sender != null)
+            {
                 Slider slider = sender as Slider;
 
                 if (labelIntervalLabel_text != null)
@@ -92,11 +91,11 @@ namespace GameActivity
         {
             try
             {
-                spControl = ((Grid)((FrameworkElement)sender).Parent).Children.OfType<StackPanel>().FirstOrDefault();
+                SpControl = ((Grid)((FrameworkElement)sender).Parent).Children.OfType<StackPanel>().FirstOrDefault();
 
-                if (spControl.Background is SolidColorBrush)
+                if (SpControl.Background is SolidColorBrush brush)
                 {
-                    Color color = ((SolidColorBrush)spControl.Background).Color;
+                    Color color = brush.Color;
                     PART_SelectorColorPicker.SetColors(color);
                 }
 
@@ -112,18 +111,16 @@ namespace GameActivity
 
         private void PART_ColorOK_Click(object sender, RoutedEventArgs e)
         {
-            Color color = default(Color);
-
-            if (spControl != null)
+            if (SpControl != null)
             {
                 if (PART_SelectorColorPicker.IsSimpleColor)
                 {
-                    color = PART_SelectorColorPicker.SimpleColor;
-                    spControl.Background = new SolidColorBrush(color);
+                    Color color = PART_SelectorColorPicker.SimpleColor;
+                    SpControl.Background = new SolidColorBrush(color);
 
-                    if (spControl.Tag != null)
+                    if (SpControl.Tag != null)
                     {
-                        int.TryParse((string)spControl.Tag, out int index);
+                        int.TryParse((string)SpControl.Tag, out int index);
                         PluginDatabase.PluginSettings.Settings.StoreColors[index].Fill = new SolidColorBrush(color);
                     }
                     else
@@ -134,7 +131,7 @@ namespace GameActivity
             }
             else
             {
-                logger.Warn("One control is undefined");
+                Logger.Warn("One control is undefined");
             }
 
             PART_SelectorColor.Visibility = Visibility.Collapsed;
@@ -155,11 +152,11 @@ namespace GameActivity
         {
             try
             {
-                spControl = ((Grid)((FrameworkElement)sender).Parent).Children.OfType<StackPanel>().FirstOrDefault();
+                SpControl = ((Grid)((FrameworkElement)sender).Parent).Children.OfType<StackPanel>().FirstOrDefault();
 
-                if (spControl.Background is SolidColorBrush)
+                if (SpControl.Background is SolidColorBrush brush)
                 {
-                    Color color = ((SolidColorBrush)spControl.Background).Color;
+                    Color color = brush.Color;
                     PART_SelectorColorPicker.SetColors(color);
                 }
 
@@ -175,8 +172,8 @@ namespace GameActivity
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            PART_Color.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#2195f2"));
-            PluginDatabase.PluginSettings.Settings.ChartColors = (SolidColorBrush)(new BrushConverter().ConvertFrom("#2195f2"));
+            PART_Color.Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#2195f2");
+            PluginDatabase.PluginSettings.Settings.ChartColors = (SolidColorBrush)new BrushConverter().ConvertFrom("#2195f2");
         }
         #endregion
     }
