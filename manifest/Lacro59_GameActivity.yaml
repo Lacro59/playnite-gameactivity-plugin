@@ -207,3 +207,16 @@ Packages:
       - UI tweaks
       - Fixed bugs (thanks to CanRanBan)
       - Fixed crashs
+  - Version: 3.2
+    RequiredApiVersion: 6.11.0
+    ReleaseDate: 2024-02-08
+    PackageUrl: https://github.com/Lacro59/playnite-gameactivity-plugin/releases/download/v3.2/playnite-gameactivity-plugin_3_2.pext
+    Changelog:
+      - Updated localizations
+      - Fixed bug with merge function
+      - Added new graphic in general view
+      - Fixed bugs with HWiNFO
+      - Fixed bugs with game list order
+      - UI tweaks
+      - Added log with Open Hardware Monitor
+      - Fixed crashs
