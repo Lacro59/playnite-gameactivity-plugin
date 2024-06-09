@@ -50,7 +50,7 @@ Haz clic para más información.</sys:String>
     <sys:String x:Key="LOCGameActivityListGamesFields">Campos de juego que se mostrarán</sys:String>
 
     <sys:String x:Key="LOCGameActivityActiveLog">Habilitar registro</sys:String>
-    <sys:String x:Key="LOCGameActivityUsedLibreHardware">Used LibreHarwareMonitor instead</sys:String>
+    <sys:String x:Key="LOCGameActivityUsedLibreHardware">En su lugar, usar LibreHardwareMonitor</sys:String>
     <sys:String x:Key="LOCGameActivityRemoteWebServer">Con servidor web remoto</sys:String>
     <sys:String x:Key="LOCGameActivityTimeInterval">Comprobar intervalo de tiempo</sys:String>
     <sys:String x:Key="LOCGameActivityTimeLabel">minuto (s)</sys:String>
