@@ -74,9 +74,9 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivityMinFps">最小 FPS</sys:String>
     <sys:String x:Key="LOCGameActivityMaxCpuTemp">最大 CPU 温度</sys:String>
     <sys:String x:Key="LOCGameActivityMaxGpuTemp">最大 GPU 温度</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxCpuUsage">最大 CPU 使</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxGpuUsage">最大 GPU 使</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxRamUsage">最大メモリー使</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxCpuUsage">最大 CPU 使用率</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxGpuUsage">最大 GPU 使用率</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxRamUsage">最大メモリー使用率</sys:String>
 
     <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">Log CPU, GPU, RAM and FPS performance during game session.</sys:String>
     <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Displays a warning message at the end of the game session within the defined limits.</sys:String>
