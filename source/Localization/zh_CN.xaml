@@ -50,15 +50,15 @@
     <sys:String x:Key="LOCGameActivityListGamesFields">要显示的游戏字段</sys:String>
 
     <sys:String x:Key="LOCGameActivityActiveLog">启用性能记录</sys:String>
-    <sys:String x:Key="LOCGameActivityUsedLibreHardware">Used LibreHarwareMonitor instead</sys:String>
-    <sys:String x:Key="LOCGameActivityRemoteWebServer">With remote web server</sys:String>
+    <sys:String x:Key="LOCGameActivityUsedLibreHardware">已使用 LibreHarwareMonitor而不是</sys:String>
+    <sys:String x:Key="LOCGameActivityRemoteWebServer">使用远程网络服务器</sys:String>
     <sys:String x:Key="LOCGameActivityTimeInterval">检查时间间隔</sys:String>
     <sys:String x:Key="LOCGameActivityTimeLabel">分</sys:String>
 
     <sys:String x:Key="LOCGameActivityUseMsiAfterburner">使用 MSI Afterburner</sys:String>
-    <sys:String x:Key="LOCGameActivityUseHWiNFOSharedMemory">Use HWiNFO SharedMemory</sys:String>
-    <sys:String x:Key="LOCGameActivityUseHWiNFOGadget">Use HWiNFO gadget reporting</sys:String>
-    <sys:String x:Key="LOCGameActivityIndex">Index</sys:String>
+    <sys:String x:Key="LOCGameActivityUseHWiNFOSharedMemory">使用 HWiNFO 共享内存</sys:String>
+    <sys:String x:Key="LOCGameActivityUseHWiNFOGadget">使用 HWiNFO 小工具报告</sys:String>
+    <sys:String x:Key="LOCGameActivityIndex">索引</sys:String>
 
     <sys:String x:Key="LOCGameActivitySensorsID">传感器 ID</sys:String>
     <sys:String x:Key="LOCGameActivityElementID">单元 ID</sys:String>
@@ -67,8 +67,8 @@
     <sys:String x:Key="LOCGameActivityFps">帧数</sys:String>
     <sys:String x:Key="LOCGameActivityGpuTemp">GPU 温度</sys:String>
     <sys:String x:Key="LOCGameActivityCpuTemp">CPU 温度</sys:String>
-    <sys:String x:Key="LOCGameActivityCpuPower">CPU power</sys:String>
-    <sys:String x:Key="LOCGameActivityGpuPower">GPU power</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuPower">CPU 功率</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuPower">CPU 功率</sys:String>
 
     <sys:String x:Key="LOCGameActivityActiveWarning">启用警</sys:String>
     <sys:String x:Key="LOCGameActivityMinFps">最小帧数</sys:String>
@@ -101,16 +101,16 @@
     <sys:String x:Key="LOCGameActivityIgnoreSession">忽略短的游戏会话</sys:String>
     <sys:String x:Key="LOCGameActivitySetVariatorTime">设置时间变量</sys:String>
     <sys:String x:Key="LOCGameActivitySetVariatorLog">设置日志变量</sys:String>
-    <sys:String x:Key="LOCGameActivityRecentActivityWeek">Number of weeks for recent activity</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivityWeek">最近活动的周数</sys:String>
 
     <!-- GameActivityViewSingle -->
 
-    <sys:String x:Key="LOCGameActivityRecentActivity">Recent activity</sys:String>
-    <sys:String x:Key="LOCGameActivityNoRecentActivity">No recent activity</sys:String>
-    <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} hours past {1} week</sys:String>
-    <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} hours past {1} weeks</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivity">最近的动态</sys:String>
+    <sys:String x:Key="LOCGameActivityNoRecentActivity">没有最近的活动</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivitySingular">{1} 周过去的 {0} 小时</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{1} 周过去的 {0} 小时</sys:String>
     <sys:String x:Key="LOCGameActivityAvgPerDay">日平均时间</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgPerSession">Average time per session</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgPerSession">日平均时间</sys:String>
     <sys:String x:Key="LOCGameActivityFirstSession">首次会话</sys:String>
     <sys:String x:Key="LOCGameActivityLastSession">上次会话</sys:String>
     
@@ -165,8 +165,8 @@
     <sys:String x:Key="LOCGaDateStart">开始日</sys:String>
     <sys:String x:Key="LOCGaDateEnd">结束日</sys:String>
     
-    <sys:String x:Key="LOCGaGameActions">Game actions</sys:String>
-    <sys:String x:Key="LOCGaCustomGameActions">Custom game actions</sys:String>
+    <sys:String x:Key="LOCGaGameActions">游戏操作</sys:String>
+    <sys:String x:Key="LOCGaCustomGameActions">自定义开关动作</sys:String>
 
 
 
