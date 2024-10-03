@@ -53,7 +53,7 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivityUsedLibreHardware">Used LibreHarwareMonitor instead</sys:String>
     <sys:String x:Key="LOCGameActivityRemoteWebServer">With remote web server</sys:String>
     <sys:String x:Key="LOCGameActivityTimeInterval">Check time interval</sys:String>
-    <sys:String x:Key="LOCGameActivityTimeLabel"></sys:String>
+    <sys:String x:Key="LOCGameActivityTimeLabel">分</sys:String>
 
     <sys:String x:Key="LOCGameActivityUseMsiAfterburner">MSI Afterburner を使用する</sys:String>
     <sys:String x:Key="LOCGameActivityUseHWiNFOSharedMemory">Use HWiNFO SharedMemory</sys:String>
@@ -63,7 +63,7 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivitySensorsID">Sensors id</sys:String>
     <sys:String x:Key="LOCGameActivityElementID">Element id</sys:String>
 
-    <sys:String x:Key="LOCGameActivityGpuUsage">GPU 使用</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuUsage">GPU 使用率</sys:String>
     <sys:String x:Key="LOCGameActivityFps">FPS</sys:String>
     <sys:String x:Key="LOCGameActivityGpuTemp">GPU 温度</sys:String>
     <sys:String x:Key="LOCGameActivityCpuTemp">CPU 温度</sys:String>
@@ -117,40 +117,40 @@ Click for more information.</sys:String>
     <!-- GameActivityView -->
 
     <sys:String x:Key="LOCGameActivityTotalHours">合計プレイ時間</sys:String>
-    <sys:String x:Key="LOCGameActivityTotalHoursByWeeks">合計プレイ時間（週別</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByWeeks">合計プレイ時間（週別）</sys:String>
 
     <sys:String x:Key="LOCGameActivityWeekLabel">週</sys:String>
 
     <sys:String x:Key="LOCGameActivityTime">時間</sys:String>
-    <sys:String x:Key="LOCGameActivityLog"></sys:String>
-    <sys:String x:Key="LOCGameActivityTimeTitle">合計プレイ時間（日別</sys:String>
+    <sys:String x:Key="LOCGameActivityLog">ログ</sys:String>
+    <sys:String x:Key="LOCGameActivityTimeTitle">合計プレイ時間（日別）</sys:String>
     <sys:String x:Key="LOCGameActivityLogTitle">Last session details</sys:String>
     <sys:String x:Key="LOCGameActivityLogTitleDate">Session details for</sys:String>
 
     <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Last session</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Elapsed time</sys:String>
     
-    <sys:String x:Key="LOCGameActivityAvgCpu">平均 CPU 使用</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgGpu">平均 GPU 使用</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgRam">平均メモリ使用</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgCpu">平均 CPU 使用率</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgGpu">平均 GPU 使用率</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgRam">平均メモリ使用率</sys:String>
     <sys:String x:Key="LOCGameActivityAvgFps">平均 FPS</sys:String>
     <sys:String x:Key="LOCGameActivityAvgCpuT">平均 CPU 温度</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpuT">平均 GPU 温度</sys:String>
     <sys:String x:Key="LOCGameActivityAvgCpuP">平均 CPU P</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpuP">平均 GPU P</sys:String>
 
-    <sys:String x:Key="LOCGameActivityPCName"></sys:String>
+    <sys:String x:Key="LOCGameActivityPCName">デバイス名</sys:String>
 
 
     <!-- GameActivity -->
 
-    <sys:String x:Key="LOCGameActivityWarningCaption"></sys:String>
-    <sys:String x:Key="LOCGameActivityWarningAt"></sys:String>
-    <sys:String x:Key="LOCGameActivityCpuUsage">CPU 使用</sys:String>
-    <sys:String x:Key="LOCGameActivityRamUsage"></sys:String>
+    <sys:String x:Key="LOCGameActivityWarningCaption">ゲームセッション中に警告を表示</sys:String>
+    <sys:String x:Key="LOCGameActivityWarningAt">時</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuUsage">CPU 使用率</sys:String>
+    <sys:String x:Key="LOCGameActivityRamUsage">メモリ使用率</sys:String>
 
-    <sys:String x:Key="LOCGameActivityNotificationHWiNFO">HWiNFO ログは有効になっていますが、アプリケーションは実行されていません</sys:String>
-    <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">MSI AfterBurner ログは有効になっていますが、アプリケーションが実行されていません</sys:String>
+    <sys:String x:Key="LOCGameActivityNotificationHWiNFO">HWiNFO ログは有効になっていますが、アプリケーションは実行されていません。</sys:String>
+    <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">MSI AfterBurner ログは有効になっていますが、アプリケーションが実行されていません。</sys:String>
 
     <!-- QuickSearch -->
 
@@ -161,16 +161,16 @@ Click for more information.</sys:String>
 
     <!-- GameActivityAddTime -->
 
-    <sys:String x:Key="LOCGaAddNewGameSession">新しいゲームセッションを追</sys:String>
+    <sys:String x:Key="LOCGaAddNewGameSession">新しいゲームセッションを追加</sys:String>
     <sys:String x:Key="LOCGaDateStart">開始日</sys:String>
     <sys:String x:Key="LOCGaDateEnd">終了日</sys:String>
     
-    <sys:String x:Key="LOCGaGameActions"></sys:String>
-    <sys:String x:Key="LOCGaCustomGameActions"></sys:String>
+    <sys:String x:Key="LOCGaGameActions">ゲームアクション</sys:String>
+    <sys:String x:Key="LOCGaCustomGameActions">カスタムゲームアクション</sys:String>
 
 
 
     <!-- Temporary workaround for PlayState paused time until Playnite allows to share data among extensions -->
-    <sys:String x:Key="LOCGameActivitySubstPlayStateTime"></sys:String>
+    <sys:String x:Key="LOCGameActivitySubstPlayStateTime">セッション時間から PlayState の一時停止時間を短縮する</sys:String>
 
 </ResourceDictionary>
