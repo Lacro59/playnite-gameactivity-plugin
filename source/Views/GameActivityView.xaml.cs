@@ -341,7 +341,10 @@ namespace GameActivity.Views
             Dictionary<string, ulong> activityByMonth = new Dictionary<string, ulong>();
 
             List<GameActivities> listGameActivities = GameActivity.PluginDatabase.GetListGameActivity();
+            //This gets all activities from Games played in the selected month
             listGameActivities = listGameActivities.Where(x => x.GetListDateTimeActivity().Any(y => y >= startOfMonth && y <= endOfMonth)).ToList();
+            //This should filter out unrelevant data sets because the FilterItems getter doesn't do this
+            listGameActivities.ForEach(x => x.GetListDateTimeActivity().RemoveAll(y => y < startOfMonth || y > endOfMonth));
 
             // Total hours by source.
             if (IsMonthSources)
@@ -361,6 +364,8 @@ namespace GameActivity.Views
                 {
                     try
                     {
+                        //This filters the items but only of the session is valid, so longer than ignored seconds or has any duration at all
+                        //This does not return a filtered session data!
                         List<Activity> Activities = listGameActivities[iGame].FilterItems;
                         for (int iActivity = 0; iActivity < Activities.Count; iActivity++)
                         {
