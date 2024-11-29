@@ -23,7 +23,6 @@ using System.Windows.Media;
 using System.IO;
 using CommonPluginsShared.Extensions;
 using Playnite.SDK.Data;
-using System.Runtime.InteropServices.ComTypes;
 
 namespace GameActivity.Views
 {
