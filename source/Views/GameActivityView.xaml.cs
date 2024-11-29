@@ -23,6 +23,7 @@ using System.Windows.Media;
 using System.IO;
 using CommonPluginsShared.Extensions;
 using Playnite.SDK.Data;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace GameActivity.Views
 {
@@ -343,8 +344,6 @@ namespace GameActivity.Views
             List<GameActivities> listGameActivities = GameActivity.PluginDatabase.GetListGameActivity();
             //This gets all activities from Games played in the selected month
             listGameActivities = listGameActivities.Where(x => x.GetListDateTimeActivity().Any(y => y >= startOfMonth && y <= endOfMonth)).ToList();
-            //This should filter out unrelevant data sets because the FilterItems getter doesn't do this
-            listGameActivities.ForEach(x => x.GetListDateTimeActivity().RemoveAll(y => y < startOfMonth || y > endOfMonth));
 
             // Total hours by source.
             if (IsMonthSources)
@@ -365,22 +364,24 @@ namespace GameActivity.Views
                     try
                     {
                         //This filters the items but only of the session is valid, so longer than ignored seconds or has any duration at all
-                        //This does not return a filtered session data!
+                        //This does not return a filtered session data for dates
                         List<Activity> Activities = listGameActivities[iGame].FilterItems;
                         for (int iActivity = 0; iActivity < Activities.Count; iActivity++)
                         {
                             ulong elapsedSeconds = Activities[iActivity].ElapsedSeconds;
                             DateTime dateSession = Convert.ToDateTime(Activities[iActivity].DateSession).ToLocalTime();
                             string sourceName = Activities[iActivity].SourceName;
-
-                            // Cumul data
-                            if (activityByMonth.ContainsKey(sourceName))
+                            if (dateSession >= startOfMonth && dateSession <= endOfMonth)
                             {
-                                activityByMonth[sourceName] = (ulong)activityByMonth[sourceName] + elapsedSeconds;
-                            }
-                            else
-                            {
-                                activityByMonth.Add(sourceName, elapsedSeconds);
+                                // Cumul data
+                                if (activityByMonth.ContainsKey(sourceName))
+                                {
+                                    activityByMonth[sourceName] = (ulong)activityByMonth[sourceName] + elapsedSeconds;
+                                }
+                                else
+                                {
+                                    activityByMonth.Add(sourceName, elapsedSeconds);
+                                }
                             }
                         }
                     }
@@ -411,14 +412,17 @@ namespace GameActivity.Views
 
                             for (int iGenre = 0; iGenre < listGameListGenres?.Count; iGenre++)
                             {
-                                // Cumul data
-                                if (activityByMonth.ContainsKey(listGameListGenres[iGenre].Name))
+                                if (dateSession >= startOfMonth && dateSession <= endOfMonth)
                                 {
-                                    activityByMonth[listGameListGenres[iGenre].Name] = activityByMonth[listGameListGenres[iGenre].Name] + elapsedSeconds;
-                                }
-                                else
-                                {
-                                    activityByMonth.Add(listGameListGenres[iGenre].Name, elapsedSeconds);
+                                    // Cumul data
+                                    if (activityByMonth.ContainsKey(listGameListGenres[iGenre].Name))
+                                    {
+                                        activityByMonth[listGameListGenres[iGenre].Name] = activityByMonth[listGameListGenres[iGenre].Name] + elapsedSeconds;
+                                    }
+                                    else
+                                    {
+                                        activityByMonth.Add(listGameListGenres[iGenre].Name, elapsedSeconds);
+                                    }
                                 }
                             }
                         }
@@ -449,14 +453,17 @@ namespace GameActivity.Views
 
                             for (int iTag = 0; iTag < listGameListTags?.Count; iTag++)
                             {
-                                // Cumul data
-                                if (activityByMonth.ContainsKey(listGameListTags[iTag].Name))
+                                if (dateSession >= startOfMonth && dateSession <= endOfMonth)
                                 {
-                                    activityByMonth[listGameListTags[iTag].Name] = activityByMonth[listGameListTags[iTag].Name] + elapsedSeconds;
-                                }
-                                else
-                                {
-                                    activityByMonth.Add(listGameListTags[iTag].Name, elapsedSeconds);
+                                    // Cumul data
+                                    if (activityByMonth.ContainsKey(listGameListTags[iTag].Name))
+                                    {
+                                        activityByMonth[listGameListTags[iTag].Name] = activityByMonth[listGameListTags[iTag].Name] + elapsedSeconds;
+                                    }
+                                    else
+                                    {
+                                        activityByMonth.Add(listGameListTags[iTag].Name, elapsedSeconds);
+                                    }
                                 }
                             }
                         }
