@@ -450,10 +450,9 @@ namespace GameActivity
                                 {
                                     dynamic itemOBJ = Serialization.FromJson<dynamic>(Serialization.ToJson(items));
                                     string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
-
                                     if (dataID.ToLower() == PluginSettings.Settings.HWiNFO_fps_elementID.ToLower())
                                     {
-                                        fpsValue = (int)Math.Round((Double)itemOBJ["Value"]);
+                                        fpsValue = (int)Math.Round((double)itemOBJ["Value"]);
                                     }
                                 }
                             }
@@ -466,10 +465,9 @@ namespace GameActivity
                                 {
                                     dynamic itemOBJ = Serialization.FromJson<dynamic>(Serialization.ToJson(items));
                                     string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
-
                                     if (dataID.ToLower() == PluginSettings.Settings.HWiNFO_gpu_elementID.ToLower())
                                     {
-                                        gpuValue = (int)Math.Round((Double)itemOBJ["Value"]);
+                                        gpuValue = (int)Math.Round((double)itemOBJ["Value"]);
                                     }
                                 }
                             }
@@ -482,10 +480,9 @@ namespace GameActivity
                                 {
                                     dynamic itemOBJ = Serialization.FromJson<dynamic>(Serialization.ToJson(items));
                                     string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
-
                                     if (dataID.ToLower() == PluginSettings.Settings.HWiNFO_gpuT_elementID.ToLower())
                                     {
-                                        gpuTValue = (int)Math.Round((Double)itemOBJ["Value"]);
+                                        gpuTValue = (int)Math.Round((double)itemOBJ["Value"]);
                                     }
                                 }
                             }
@@ -498,10 +495,9 @@ namespace GameActivity
                                 {
                                     dynamic itemOBJ = Serialization.FromJson<dynamic>(Serialization.ToJson(items));
                                     string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
-
                                     if (dataID.ToLower() == PluginSettings.Settings.HWiNFO_cpuT_elementID.ToLower())
                                     {
-                                        cpuTValue = (int)Math.Round((Double)itemOBJ["Value"]);
+                                        cpuTValue = (int)Math.Round((double)itemOBJ["Value"]);
                                     }
                                 }
                             }
@@ -514,10 +510,9 @@ namespace GameActivity
                                 {
                                     dynamic itemOBJ = Serialization.FromJson<dynamic>(Serialization.ToJson(items));
                                     string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
-
                                     if (dataID.ToLower() == PluginSettings.Settings.HWiNFO_gpuP_elementID.ToLower())
                                     {
-                                        gpuPValue = (int)Math.Round((Double)itemOBJ["Value"]);
+                                        gpuPValue = (int)Math.Round((double)itemOBJ["Value"]);
                                     }
                                 }
                             }
@@ -530,10 +525,9 @@ namespace GameActivity
                                 {
                                     dynamic itemOBJ = Serialization.FromJson<dynamic>(Serialization.ToJson(items));
                                     string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
-                                    string tt = Serialization.ToJson(sensorItems);
                                     if (dataID.ToLower() == PluginSettings.Settings.HWiNFO_cpuP_elementID.ToLower())
                                     {
-                                        cpuPValue = (int)Math.Round((Double)itemOBJ["Value"]);
+                                        cpuPValue = (int)Math.Round((double)itemOBJ["Value"]);
                                     }
                                 }
                             }
