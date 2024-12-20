@@ -39,7 +39,7 @@ namespace GameActivity
         internal SidebarItem SidebarItem { get; set; }
         internal SidebarItemControl SidebarItemControl { get; set; }
 
-        private List<RunningActivity> RunningActivities => new List<RunningActivity>();
+        private List<RunningActivity> RunningActivities { get; set; } = new List<RunningActivity>();
 
 
         public GameActivity(IPlayniteAPI api) : base(api)
@@ -530,8 +530,8 @@ namespace GameActivity
                                 {
                                     dynamic itemOBJ = Serialization.FromJson<dynamic>(Serialization.ToJson(items));
                                     string dataID = "0x" + ((uint)itemOBJ["dwSensorID"]).ToString("X");
-
-                                    if (dataID.ToLower() == PluginSettings.Settings.HWiNFO_cpuP_sensorsID.ToLower())
+                                    string tt = Serialization.ToJson(sensorItems);
+                                    if (dataID.ToLower() == PluginSettings.Settings.HWiNFO_cpuP_elementID.ToLower())
                                     {
                                         cpuPValue = (int)Math.Round((Double)itemOBJ["Value"]);
                                     }
@@ -1086,10 +1086,11 @@ namespace GameActivity
         {
             try
             {
-                RunningActivity runningActivity = new RunningActivity();
-                runningActivity.Id = args.Game.Id;
-                runningActivity.PlaytimeOnStarted = args.Game.Playtime;
-
+                RunningActivity runningActivity = new RunningActivity
+                {
+                    Id = args.Game.Id,
+                    PlaytimeOnStarted = args.Game.Playtime
+                };
                 RunningActivities.Add(runningActivity);
 
                 DataBackup_start(args.Game.Id);
