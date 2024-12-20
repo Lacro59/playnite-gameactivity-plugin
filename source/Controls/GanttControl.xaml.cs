@@ -21,10 +21,9 @@ namespace GameActivity.Controls
     /// </summary>
     public partial class GanttControl : UserControl
     {
-        internal static readonly ILogger logger = LogManager.GetLogger();
-        internal static IResourceProvider resources = new ResourceProvider();
+        internal static ILogger Logger => LogManager.GetLogger();
 
-        private DataContextGanttControl dataContextGanttControl = new DataContextGanttControl();
+        private DataContextGanttControl DataContextGanttControl { get; set; } = new DataContextGanttControl();
 
 
         #region Properties
@@ -118,6 +117,9 @@ namespace GameActivity.Controls
                     case "OnlyDate":
                         obj.SetDataDate();
                         break;
+
+                    default:
+                        break;
                 }
             }
         }
@@ -127,7 +129,7 @@ namespace GameActivity.Controls
         public GanttControl()
         {
             InitializeComponent();
-            this.DataContext = dataContextGanttControl;
+            DataContext = DataContextGanttControl;
 
             PART_Gantt.Children.Clear();
 
@@ -179,37 +181,44 @@ namespace GameActivity.Controls
                         border.Background = ColorItem;
                         Grid.SetColumn(border, ColumnCount - idx);
 
-                        border.BorderThickness = (Thickness)resources.GetResource("CommonToolTipBorderThickness");
-                        border.BorderBrush = (Brush)resources.GetResource("CommonToolTipBorderBrush");
+                        border.BorderThickness = (Thickness)ResourceProvider.GetResource("CommonToolTipBorderThickness");
+                        border.BorderBrush = (Brush)ResourceProvider.GetResource("CommonToolTipBorderBrush");
 
                         // Tooltip
                         StackPanel stackPanel = new StackPanel();
 
-                        TextBlock textBlock = new TextBlock();
-                        textBlock.FontWeight = FontWeights.Bold;
+                        TextBlock textBlock = new TextBlock
+                        {
+                            FontWeight = FontWeights.Bold
+                        };
 
-                        Binding bindingText = new Binding();
-                        bindingText.Source = DataName;
-                        bindingText.Mode = BindingMode.OneWay;
-                        textBlock.SetBinding(TextBlock.TextProperty, bindingText);
+                        Binding bindingText = new Binding
+                        {
+                            Source = DataName,
+                            Mode = BindingMode.OneWay
+                        };
+                        _ = textBlock.SetBinding(TextBlock.TextProperty, bindingText);
 
-                        Binding bindingVisibility = new Binding();
-                        bindingVisibility.Converter = new StringNullOrEmptyToVisibilityConverter();
-                        bindingVisibility.Source = DataName;
-                        bindingVisibility.Mode = BindingMode.OneWay;
-                        textBlock.SetBinding(VisibilityProperty, bindingVisibility);
+                        Binding bindingVisibility = new Binding
+                        {
+                            Converter = new StringNullOrEmptyToVisibilityConverter(),
+                            Source = DataName,
+                            Mode = BindingMode.OneWay
+                        };
+                        _ = textBlock.SetBinding(VisibilityProperty, bindingVisibility);
 
-                        stackPanel.Children.Add(textBlock);
+                        _ = stackPanel.Children.Add(textBlock);
 
-                        Label label = new Label();
-                        label.Content = new LocalDateConverter().Convert(finded.PlayDate, null, null, CultureInfo.CurrentCulture)
-                             + " - " + new PlayTimeToStringConverterWithZero().Convert(finded.PlayTime, null, null, CultureInfo.CurrentCulture);
+                        Label label = new Label
+                        {
+                            Content = new LocalDateConverter().Convert(finded.PlayDate, null, null, CultureInfo.CurrentCulture) + " - " + new PlayTimeToStringConverterWithZero().Convert(finded.PlayTime, null, null, CultureInfo.CurrentCulture)
+                        };
 
-                        stackPanel.Children.Add(label);
+                        _ = stackPanel.Children.Add(label);
 
                         border.ToolTip = stackPanel;
 
-                        PART_Gantt.Children.Add(border);
+                        _ = PART_Gantt.Children.Add(border);
                     }
                 }
                 catch (Exception ex)
@@ -236,9 +245,11 @@ namespace GameActivity.Controls
                         Grid grid = new Grid();
                         Grid.SetColumn(grid, ColumnCount - idx);
 
-                        TextBlock textBlock = new TextBlock();
-                        textBlock.Text = localDateConverter.Convert(dt, null, null, CultureInfo.CurrentCulture).ToString();
-                        
+                        TextBlock textBlock = new TextBlock
+                        {
+                            Text = localDateConverter.Convert(dt, null, null, CultureInfo.CurrentCulture).ToString()
+                        };
+
                         RotateTransform rotateTransform = new RotateTransform { Angle = 270 };
                         textBlock.LayoutTransform = rotateTransform;
 
@@ -247,8 +258,8 @@ namespace GameActivity.Controls
 
                         textBlock.TextAlignment = TextAlignment.Center;
 
-                        grid.Children.Add(textBlock);
-                        PART_Gantt.Children.Add(grid);
+                        _ = grid.Children.Add(textBlock);
+                        _ = PART_Gantt.Children.Add(grid);
                     }
                     catch (Exception ex)
                     {
@@ -262,6 +273,5 @@ namespace GameActivity.Controls
 
     public class DataContextGanttControl : ObservableObject
     {
-
     }
 }

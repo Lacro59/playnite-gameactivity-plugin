@@ -3,6 +3,7 @@ using CommonPluginsShared;
 using GameActivity.Controls;
 using GameActivity.Models;
 using GameActivity.Services;
+using Playnite.SDK;
 using Playnite.SDK.Models;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace GameActivity.Views
     /// </summary>
     public partial class GameActivityBackup : UserControl
     {
-        private ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
+        private static ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
         private ViewDataContext ViewDataContext { get; set; } = new ViewDataContext();
         private ActivityBackup ActivityBackup { get; set; }
 
@@ -27,12 +28,12 @@ namespace GameActivity.Views
 
         public GameActivityBackup(ActivityBackup activityBackup)
         {
-            this.ActivityBackup = activityBackup;
-            Game game = PluginDatabase.PlayniteApi.Database.Games.Get(activityBackup.Id);
-            this.Id = game.Id;
+            ActivityBackup = activityBackup;
+            Game game = API.Instance.Database.Games.Get(activityBackup.Id);
+            Id = game.Id;
 
             InitializeComponent();
-            this.DataContext = ViewDataContext;
+            DataContext = ViewDataContext;
 
             ViewDataContext.Name = activityBackup.Name;
             ViewDataContext.DateSession = activityBackup.DateSession;
@@ -40,7 +41,7 @@ namespace GameActivity.Views
 
             if (!game.CoverImage.IsNullOrEmpty())
             {
-                ViewDataContext.Cover = PluginDatabase.PlayniteApi.Database.GetFullFilePath(game.CoverImage);
+                ViewDataContext.Cover = API.Instance.Database.GetFullFilePath(game.CoverImage);
             }
             ViewDataContext.DateLastPlayed = (DateTime)game?.LastActivity;
             ViewDataContext.Playtime = game.Playtime;
@@ -73,14 +74,14 @@ namespace GameActivity.Views
 
         private void PART_BtClose_Click(object sender, RoutedEventArgs e)
         {
-            ((Window)this.Parent).Close();
+            ((Window)Parent).Close();
         }
 
         private void PART_BtAdd_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                Game game = PluginDatabase.PlayniteApi.Database.Games.Get(ActivityBackup.Id);
+                Game game = API.Instance.Database.Games.Get(ActivityBackup.Id);
                 GameActivities pluginData = PluginDatabase.Get(ActivityBackup.Id);
 
                 game.Playtime += ActivityBackup.ElapsedSeconds;
@@ -95,7 +96,7 @@ namespace GameActivity.Views
                 });
                 pluginData.ItemsDetails.Items.TryAdd(ActivityBackup.DateSession, ActivityBackup.ItemsDetailsDatas);
 
-                PluginDatabase.PlayniteApi.Database.Games.Update(game);
+                API.Instance.Database.Games.Update(game);
                 PluginDatabase.Update(pluginData);
 
 
@@ -107,7 +108,7 @@ namespace GameActivity.Views
                 Common.LogError(ex, false, true, PluginDatabase.PluginName);
             }
 
-            ((Window)this.Parent).Close();
+            ((Window)Parent).Close();
         }
 
         private void PART_BtRemove_Click(object sender, RoutedEventArgs e)
@@ -122,7 +123,7 @@ namespace GameActivity.Views
                 Common.LogError(ex, false, true, PluginDatabase.PluginName);
             }
 
-            ((Window)this.Parent).Close();
+            ((Window)Parent).Close();
         }
 
         private void Grid_Loaded(object sender, RoutedEventArgs e)
@@ -137,22 +138,22 @@ namespace GameActivity.Views
 
     public class ViewDataContext : ObservableObject
     {
-        private string _Name;
-        public string Name { get => _Name; set => SetValue(ref _Name, value); }
+        private string _name;
+        public string Name { get => _name; set => SetValue(ref _name, value); }
 
-        private string _Cover;
-        public string Cover { get => _Cover; set => SetValue(ref _Cover, value); }
+        private string _cover;
+        public string Cover { get => _cover; set => SetValue(ref _cover, value); }
 
-        private DateTime _DateSession;
-        public DateTime DateSession { get => _DateSession; set => SetValue(ref _DateSession, value); }
+        private DateTime _dateSession;
+        public DateTime DateSession { get => _dateSession; set => SetValue(ref _dateSession, value); }
 
-        private ulong _ElapsedSeconds;
-        public ulong ElapsedSeconds { get => _ElapsedSeconds; set => SetValue(ref _ElapsedSeconds, value); }
+        private ulong _elapsedSeconds;
+        public ulong ElapsedSeconds { get => _elapsedSeconds; set => SetValue(ref _elapsedSeconds, value); }
 
-        private DateTime? _DateLastPlayed;
-        public DateTime? DateLastPlayed { get => _DateLastPlayed; set => SetValue(ref _DateLastPlayed, value); }
+        private DateTime? _dateLastPlayed;
+        public DateTime? DateLastPlayed { get => _dateLastPlayed; set => SetValue(ref _dateLastPlayed, value); }
 
-        private ulong _Playtime;
-        public ulong Playtime { get => _Playtime; set => SetValue(ref _Playtime, value); }
+        private ulong _playtime;
+        public ulong Playtime { get => _playtime; set => SetValue(ref _playtime, value); }
     }
 }

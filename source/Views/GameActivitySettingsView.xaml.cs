@@ -15,7 +15,6 @@ namespace GameActivity
     public partial class GameActivitySettingsView : UserControl
     {
         private static ILogger Logger => LogManager.GetLogger();
-        private static IResourceProvider resources => new ResourceProvider();
 
         private ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
 
@@ -26,7 +25,7 @@ namespace GameActivity
         {
             InitializeComponent();
 
-            labelIntervalLabel_text.Content = "(5 " + resources.GetString("LOCGameActivityTimeLabel") + ")";
+            labelIntervalLabel_text.Content = "(5 " + ResourceProvider.GetString("LOCGameActivityTimeLabel") + ")";
             Slider_ValueChanged(hwSlider, null);
 
 
@@ -42,7 +41,7 @@ namespace GameActivity
 
                 if (labelIntervalLabel_text != null)
                 {
-                    labelIntervalLabel_text.Content = "(" + slider.Value + " " + resources.GetString("LOCGameActivityTimeLabel") + ")";
+                    labelIntervalLabel_text.Content = "(" + slider.Value + " " + ResourceProvider.GetString("LOCGameActivityTimeLabel") + ")";
                 }
             }
         }
@@ -82,7 +81,7 @@ namespace GameActivity
         private void Hyperlink_Click(object sender, RoutedEventArgs e)
         {
             FrameworkElement link = (FrameworkElement)sender;
-            Process.Start((string)link.Tag);
+            _ = Process.Start((string)link.Tag);
         }
 
 

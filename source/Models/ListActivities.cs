@@ -5,14 +5,12 @@ using Playnite.SDK;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CommonPluginsShared;
 
 namespace GameActivity.Models
 {
     public class ListActivities
     {
-        private ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
-
-
         public string GameTitle { get; set; }
         public string GameId { get; set; }
         public Guid Id { get; set; }
@@ -51,9 +49,9 @@ namespace GameActivity.Models
         public string SourceIconText { get; set; }
 
         [DontSerialize]
-        public RelayCommand<Guid> GoToGame => PluginDatabase.GoToGame;
+        public RelayCommand<Guid> GoToGame => Commands.GoToGame;
 
         [DontSerialize]
-        public bool GameExist => PluginDatabase.PlayniteApi.Database.Games.Get(Id) != null;
+        public bool GameExist => API.Instance.Database.Games.Get(Id) != null;
     }
 }

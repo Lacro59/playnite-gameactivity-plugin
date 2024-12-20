@@ -57,7 +57,7 @@ namespace GameActivity.Views
                     {
                         Id = gameActivities.Id,
                         Name = gameActivities.Name,
-                        Icon = gameActivities.Icon.IsNullOrEmpty() ? gameActivities.Icon : PluginDatabase.PlayniteApi.Database.GetFullFilePath(gameActivities.Icon),
+                        Icon = gameActivities.Icon.IsNullOrEmpty() ? gameActivities.Icon : API.Instance.Database.GetFullFilePath(gameActivities.Icon),
                         LastActivity = (DateTime)gameActivities.LastActivity
                     };
 
@@ -159,24 +159,22 @@ namespace GameActivity.Views
 
     public class DataContextGanttView : ObservableObject
     {
-        private List<GanttData> _GanttDatas;
-        public List<GanttData> GanttDatas { get => _GanttDatas; set => SetValue(ref _GanttDatas, value); }
+        private List<GanttData> _ganttDatas;
+        public List<GanttData> GanttDatas { get => _ganttDatas; set => SetValue(ref _ganttDatas, value); }
 
-        private int _ColumnCount = 30;
-        public int ColumnCount { get => _ColumnCount; set => SetValue(ref _ColumnCount, value); }
+        private int _columnCount = 30;
+        public int ColumnCount { get => _columnCount; set => SetValue(ref _columnCount, value); }
 
-        private double _HeaderWidth = 790;
-        public double HeaderWidth { get => _HeaderWidth; set => SetValue(ref _HeaderWidth, value); }
+        private double _headerWidth = 790;
+        public double HeaderWidth { get => _headerWidth; set => SetValue(ref _headerWidth, value); }
 
-        private DateTime _LastDate = DateTime.Now;
-        public DateTime LastDate { get => _LastDate; set => SetValue(ref _LastDate, value); }
+        private DateTime _lastDate = DateTime.Now;
+        public DateTime LastDate { get => _lastDate; set => SetValue(ref _lastDate, value); }
     }
 
 
     public class GanttData
     {
-        private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
-
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Icon { get; set; }
@@ -185,9 +183,9 @@ namespace GameActivity.Views
         public List<GanttValue> DateTimes { get; set; }
 
 
-        public RelayCommand<Guid> GoToGame => PluginDatabase.GoToGame;
+        public RelayCommand<Guid> GoToGame => Commands.GoToGame;
 
-        public bool GameExist => PluginDatabase.PlayniteApi.Database.Games.Get(Id) != null;
+        public bool GameExist => API.Instance.Database.Games.Get(Id) != null;
     }
 
     public class GanttValue

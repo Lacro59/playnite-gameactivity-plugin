@@ -20,7 +20,7 @@ namespace GameActivity.Views
     {
         private static ILogger Logger => LogManager.GetLogger();
 
-        private ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
+        private static ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
         private Game GameContext { get; set; }
 
 
@@ -35,7 +35,7 @@ namespace GameActivity.Views
 
         private void PART_BtClose_Click(object sender, RoutedEventArgs e)
         {
-            ((Window)this.Parent).Close();
+            ((Window)Parent).Close();
         }
 
         private void PART_BtMerge_Click(object sender, RoutedEventArgs e)
@@ -67,14 +67,14 @@ namespace GameActivity.Views
                 }
 
                 PluginDatabase.Update(pluginDataRoot);
-                PluginDatabase.PlayniteApi.Database.Games.Update(GameContext);
+                API.Instance.Database.Games.Update(GameContext);
             }
             catch (Exception ex)
             {
                 Common.LogError(ex, false, true, PluginDatabase.PluginName);
             }
 
-            ((Window)this.Parent).Close();
+            ((Window)Parent).Close();
         }
 
 

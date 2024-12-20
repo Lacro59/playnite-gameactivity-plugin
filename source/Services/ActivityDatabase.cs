@@ -16,23 +16,22 @@ namespace GameActivity.Services
 {
     public class ActivityDatabase : PluginDatabaseObject<GameActivitySettingsViewModel, GameActivitiesCollection, GameActivities, Activity>
     {
-        private LocalSystem _LocalSystem { get; set; }
+        private LocalSystem _localSystem { get; set; }
         public LocalSystem LocalSystem
         {
             get
             {
-                if (_LocalSystem == null)
+                if (_localSystem == null)
                 {
-                    _LocalSystem = new LocalSystem(Path.Combine(Paths.PluginUserDataPath, $"Configurations.json"), false);
+                    _localSystem = new LocalSystem(Path.Combine(Paths.PluginUserDataPath, $"Configurations.json"), false);
                 }
-                return _LocalSystem;
+                return _localSystem;
             }
         }
 
 
-        public ActivityDatabase(IPlayniteAPI PlayniteApi, GameActivitySettingsViewModel PluginSettings, string PluginUserDataPath) : base(PlayniteApi, PluginSettings, "GameActivity", PluginUserDataPath)
+        public ActivityDatabase(GameActivitySettingsViewModel pluginSettings, string pluginUserDataPath) : base(pluginSettings, "GameActivity", pluginUserDataPath)
         {
-
         }
 
 
@@ -44,11 +43,11 @@ namespace GameActivity.Services
                 stopWatch.Start();
 
                 Database = new GameActivitiesCollection(Paths.PluginDatabasePath);
-                Database.SetGameInfoDetails<Activity, ActivityDetails>(PlayniteApi);
+                Database.SetGameInfoDetails<Activity, ActivityDetails>();
 
                 stopWatch.Stop();
                 TimeSpan ts = stopWatch.Elapsed;
-                logger.Info($"LoadDatabase with {Database.Count} items - {string.Format("{0:00}:{1:00}.{2:00}", ts.Minutes, ts.Seconds, ts.Milliseconds / 10)}");
+                Logger.Info($"LoadDatabase with {Database.Count} items - {string.Format("{0:00}:{1:00}.{2:00}", ts.Minutes, ts.Seconds, ts.Milliseconds / 10)}");
             }
             catch (Exception ex)
             {
@@ -60,20 +59,18 @@ namespace GameActivity.Services
         }
 
 
-        public override GameActivities Get(Guid Id, bool OnlyCache = false, bool Force = false)
+        public override GameActivities Get(Guid id, bool onlyCache = false, bool force = false)
         {
-            GameActivities gameActivities = GetOnlyCache(Id);
-
+            GameActivities gameActivities = GetOnlyCache(id);
             if (gameActivities == null)
             {
-                Game game = PlayniteApi.Database.Games.Get(Id);
+                Game game = API.Instance.Database.Games.Get(id);
                 if (game != null)
                 {
                     gameActivities = GetDefault(game);
                     Add(gameActivities);
                 }
             }
-
             return gameActivities;
         }
 
@@ -118,8 +115,8 @@ namespace GameActivity.Services
             {
                 foreach (ItemUpdateEvent<Game> GameUpdated in e.UpdatedItems)
                 {
-                    Database.SetGameInfoDetails<Activity, ActivityDetails>(PlayniteApi, GameUpdated.NewData.Id);
-                    GameActivities data = Get(GameUpdated.NewData.Id);
+                    Database.SetGameInfoDetails<Activity, ActivityDetails>(GameUpdated.NewData.Id);
+                    _ = Get(GameUpdated.NewData.Id);
                 }
             }
         }
@@ -143,7 +140,7 @@ namespace GameActivity.Services
                 GameActivities toData = Get(toId, true);
 
                 toData.Items.AddRange(fromData.Items);
-                fromData.ItemsDetails.Items.ForEach(x => 
+                fromData.ItemsDetails.Items.ForEach(x =>
                 {
                     toData.ItemsDetails.Items.TryAdd(x.Key, x.Value);
                 });

@@ -38,7 +38,7 @@ namespace GameActivity
         internal TopPanelItem topPanelItem;
         internal GameActivityViewSidebar gameActivityViewSidebar;
 
-        private List<RunningActivity> runningActivities = new List<RunningActivity>();
+        private List<RunningActivity> RunningActivities => new List<RunningActivity>();
 
 
         public GameActivity(IPlayniteAPI api) : base(api)
@@ -69,9 +69,9 @@ namespace GameActivity
                     {
                         Text = "\ue97f",
                         FontSize = 20,
-                        FontFamily = resources.GetResource("FontIcoFont") as FontFamily
+                        FontFamily = ResourceProvider.GetResource("FontIcoFont") as FontFamily
                     },
-                    Title = resources.GetString("LOCGameActivityViewGamesActivities"),
+                    Title = ResourceProvider.GetString("LOCGameActivityViewGamesActivities"),
                     Activated = () =>
                     {
                         WindowOptions windowOptions = new WindowOptions
@@ -85,8 +85,8 @@ namespace GameActivity
                         };
 
                         GameActivityView ViewExtension = new GameActivityView(this);
-                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGamesActivitiesTitle"), ViewExtension, windowOptions);
-                        windowExtension.ShowDialog();
+                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(ResourceProvider.GetString("LOCGamesActivitiesTitle"), ViewExtension, windowOptions);
+                        _ = windowExtension.ShowDialog();
                     },
                     Visible = PluginSettings.Settings.EnableIntegrationButtonHeader
                 };
@@ -117,8 +117,8 @@ namespace GameActivity
                     };
 
                     GameActivityViewSingle ViewExtension = new GameActivityViewSingle(this, PluginDatabase.GameContext);
-                    Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGameActivity"), ViewExtension, windowOptions);
-                    windowExtension.ShowDialog();
+                    Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(ResourceProvider.GetString("LOCGameActivity"), ViewExtension, windowOptions);
+                    _ = windowExtension.ShowDialog();
                 }
             }
             catch (Exception ex)
@@ -150,7 +150,7 @@ namespace GameActivity
                 {
                     PlayniteApi.Notifications.Add(new NotificationMessage(
                         $"{PluginDatabase.PluginName}-runHWiNFO",
-                        PluginDatabase.PluginName + Environment.NewLine + resources.GetString("LOCGameActivityNotificationHWiNFO"),
+                        PluginDatabase.PluginName + Environment.NewLine + ResourceProvider.GetString("LOCGameActivityNotificationHWiNFO"),
                         NotificationType.Error,
                         () => OpenSettingsView()
                     ));
@@ -158,7 +158,7 @@ namespace GameActivity
 
                 if (!runHWiNFO)
                 {
-                    logger.Error("No HWiNFO running");
+                    Logger.Error("No HWiNFO running");
                 }
 
                 if (!WithNotification)
@@ -186,7 +186,7 @@ namespace GameActivity
                 {
                     PlayniteApi.Notifications.Add(new NotificationMessage(
                         $"{PluginDatabase.PluginName }- runMSI",
-                        PluginDatabase.PluginName + Environment.NewLine + resources.GetString("LOCGameActivityNotificationMSIAfterBurner"),
+                        PluginDatabase.PluginName + Environment.NewLine + ResourceProvider.GetString("LOCGameActivityNotificationMSIAfterBurner"),
                         NotificationType.Error,
                         () => OpenSettingsView()
                     ));
@@ -194,11 +194,11 @@ namespace GameActivity
 
                 if (!runMSI)
                 {
-                    logger.Warn("No MSI Afterburner running");
+                    Logger.Warn("No MSI Afterburner running");
                 }
                 if (!runRTSS)
                 {
-                    logger.Warn("No RivaTunerStatisticsServer running");
+                    Logger.Warn("No RivaTunerStatisticsServer running");
                 }
 
                 if (!WithNotification)
@@ -217,11 +217,13 @@ namespace GameActivity
         /// </summary>
         public void DataLogging_start(Guid Id)
         {
-            logger.Info($"DataLogging_start - {Id}");          
-            RunningActivity runningActivity = runningActivities.Find(x => x.Id == Id);
+            Logger.Info($"DataLogging_start - {Id}");
+            RunningActivity runningActivity = RunningActivities.Find(x => x.Id == Id);
 
-            runningActivity.timer = new System.Timers.Timer(PluginSettings.Settings.TimeIntervalLogging * 60000);
-            runningActivity.timer.AutoReset = true;
+            runningActivity.timer = new System.Timers.Timer(PluginSettings.Settings.TimeIntervalLogging * 60000)
+            {
+                AutoReset = true
+            };
             runningActivity.timer.Elapsed += (sender, e) => OnTimedEvent(sender, e, Id);
             runningActivity.timer.Start();
         }
@@ -231,17 +233,17 @@ namespace GameActivity
         /// </summary>
         public void DataLogging_stop(Guid Id)
         {
-            logger.Info($"DataLogging_stop - {Id}");
-            RunningActivity runningActivity = runningActivities.Find(x => x.Id == Id);
+            Logger.Info($"DataLogging_stop - {Id}");
+            RunningActivity runningActivity = RunningActivities.Find(x => x.Id == Id);
             if (runningActivity.WarningsMessage.Count != 0 && PlayniteApi.ApplicationInfo.Mode == ApplicationMode.Desktop)
             {
                 try
                 {
-                    Application.Current.Dispatcher.BeginInvoke((Action)delegate
+                    _= Application.Current.Dispatcher.BeginInvoke((Action)delegate
                     {
                         WarningsDialogs ViewExtension = new WarningsDialogs(runningActivity.WarningsMessage);
-                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGameActivityWarningCaption"), ViewExtension);
-                        windowExtension.ShowDialog();
+                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(ResourceProvider.GetString("LOCGameActivityWarningCaption"), ViewExtension);
+                       _ = windowExtension.ShowDialog();
                     });
                 }
                 catch (Exception ex)
@@ -274,7 +276,7 @@ namespace GameActivity
 
             if (PluginSettings.Settings.UsedLibreHardware && PluginSettings.Settings.WithRemoteServerWeb && !PluginSettings.Settings.IpRemoteServerWeb.IsNullOrEmpty())
             {
-                LibreHardwareData libreHardwareMonitorData = Services.LibreHardware.GetDataWeb(PluginSettings.Settings.IpRemoteServerWeb);
+                LibreHardwareData libreHardwareMonitorData = LibreHardware.GetDataWeb(PluginSettings.Settings.IpRemoteServerWeb);
                 if (libreHardwareMonitorData != null)
                 {
                     string CpuPowers = libreHardwareMonitorData.Children[0]?.Children.Find(x => x.id == 3)?
@@ -284,7 +286,7 @@ namespace GameActivity
                         ?.Replace(",", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
                         ?.Replace("W", string.Empty)
                         ?.Trim();
-                    double.TryParse(CpuPowers, out temp);
+                    _ = double.TryParse(CpuPowers, out temp);
                     cpuPValue = Convert.ToInt32(Math.Round(temp, 0));
 
                     string CpuLoad = libreHardwareMonitorData.Children[0]?.Children.Find(x => x.id == 3)?
@@ -294,7 +296,7 @@ namespace GameActivity
                         ?.Replace(",", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
                         ?.Replace("%", string.Empty)
                         ?.Trim();
-                    double.TryParse(CpuLoad, out temp);
+                    _ = double.TryParse(CpuLoad, out temp);
                     cpuValue = Convert.ToInt32(Math.Round(temp, 0));
 
                     string CpuTemperatures = libreHardwareMonitorData.Children[0]?.Children.Find(x => x.id == 3)?
@@ -305,7 +307,7 @@ namespace GameActivity
                         ?.Replace("°C", string.Empty)
                         ?.Replace("°F", string.Empty)
                         ?.Trim();
-                    double.TryParse(CpuTemperatures, out temp);
+                    _ = double.TryParse(CpuTemperatures, out temp);
                     cpuTValue = Convert.ToInt32(Math.Round(temp, 0));
 
 
@@ -316,7 +318,7 @@ namespace GameActivity
                         ?.Replace(",", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
                         ?.Replace("%", string.Empty)
                         ?.Trim();
-                    double.TryParse(LoadMemory, out temp);
+                    _ = double.TryParse(LoadMemory, out temp);
                     ramValue = Convert.ToInt32(Math.Round(temp, 0));
 
 
@@ -327,7 +329,7 @@ namespace GameActivity
                         ?.Replace(",", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
                         ?.Replace("W", string.Empty)
                         ?.Trim();
-                    double.TryParse(GpuPowers, out temp);
+                    _ = double.TryParse(GpuPowers, out temp);
                     gpuPValue = Convert.ToInt32(Math.Round(temp, 0));
 
                     string GpuLoad = libreHardwareMonitorData.Children[0]?.Children.Find(x => x.id == 52)?
@@ -337,7 +339,7 @@ namespace GameActivity
                         ?.Replace(",", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
                         ?.Replace("%", string.Empty)
                         ?.Trim();
-                    double.TryParse(GpuLoad, out temp);
+                    _ = double.TryParse(GpuLoad, out temp);
                     gpuValue = Convert.ToInt32(Math.Round(temp, 0));
 
                     string GpuTemperatures = libreHardwareMonitorData.Children[0]?.Children.Find(x => x.id == 52)?
@@ -348,7 +350,7 @@ namespace GameActivity
                         ?.Replace("°C", string.Empty)
                         ?.Replace("°F", string.Empty)
                         ?.Trim();
-                    double.TryParse(GpuTemperatures, out temp);
+                    _ = double.TryParse(GpuTemperatures, out temp);
                     gpuTValue = Convert.ToInt32(Math.Round(temp, 0));
                 }
             }
@@ -373,7 +375,7 @@ namespace GameActivity
                 }
                 catch (Exception ex)
                 {
-                    logger.Warn("MSIAfterburnerNET - Fail initialize");
+                    Logger.Warn("MSIAfterburnerNET - Fail initialize");
                     Common.LogError(ex, true, "MSIAfterburnerNET - Fail initialize");
                     MSIAfterburner = null;
                 }
@@ -386,7 +388,7 @@ namespace GameActivity
                     }
                     catch (Exception ex)
                     {
-                        logger.Warn("MSIAfterburnerNET - Fail get cpuPower");
+                        Logger.Warn("MSIAfterburnerNET - Fail get cpuPower");
                         Common.LogError(ex, true, "MSIAfterburnerNET - Fail get cpuPower");
                     }
 
@@ -396,7 +398,7 @@ namespace GameActivity
                     }
                     catch (Exception ex)
                     {
-                        logger.Warn("MSIAfterburnerNET - Fail get gpuPower");
+                        Logger.Warn("MSIAfterburnerNET - Fail get gpuPower");
                         Common.LogError(ex, true, "MSIAfterburnerNET - Fail get gpuPower");
                     }
 
@@ -406,7 +408,7 @@ namespace GameActivity
                     }
                     catch (Exception ex)
                     {
-                        logger.Warn("FMSIAfterburnerNET - Fail get fpsValue");
+                        Logger.Warn("FMSIAfterburnerNET - Fail get fpsValue");
                         Common.LogError(ex, true, "MSIAfterburnerNET - Fail get fpsValue");
                     }
 
@@ -416,7 +418,7 @@ namespace GameActivity
                     }
                     catch (Exception ex)
                     {
-                        logger.Warn("MSIAfterburnerNET - Fail get gpuValue");
+                        Logger.Warn("MSIAfterburnerNET - Fail get gpuValue");
                         Common.LogError(ex, true, "MSIAfterburnerNET - Fail get gpuValue");
                     }
 
@@ -426,7 +428,7 @@ namespace GameActivity
                     }
                     catch (Exception ex)
                     {
-                        logger.Warn("MSIAfterburnerNET - Fail get gpuTValue");
+                        Logger.Warn("MSIAfterburnerNET - Fail get gpuTValue");
                         Common.LogError(ex, true, "MSIAfterburnerNET - Fail get gpuTValue");
                     }
 
@@ -436,7 +438,7 @@ namespace GameActivity
                     }
                     catch (Exception ex)
                     {
-                        logger.Warn("MSIAfterburnerNET - Fail get cpuTValue");
+                        Logger.Warn("MSIAfterburnerNET - Fail get cpuTValue");
                         Common.LogError(ex, true, "MSIAfterburnerNET - Fail get cpuTValue");
                     }
                 }
@@ -453,7 +455,7 @@ namespace GameActivity
                 }
                 catch (Exception ex)
                 {
-                    logger.Error("HWiNFODumper - Fail initialize");
+                    Logger.Error("HWiNFODumper - Fail initialize");
                     Common.LogError(ex, true, "HWiNFODumper - Fail initialize");
                 }
 
@@ -565,7 +567,7 @@ namespace GameActivity
                     }
                     catch (Exception ex)
                     {
-                        logger.Warn("HWiNFODumper - Fail get HWiNFO");
+                        Logger.Warn("HWiNFODumper - Fail get HWiNFO");
                         Common.LogError(ex, true, "HWiNFODumper - Fail get HWiNFO");
                     }
                 }
@@ -576,7 +578,7 @@ namespace GameActivity
                 {
                     if (fpsValue == 0)
                     {
-                        double.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_fps_index)
+                        _ = double.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_fps_index)
                             ?.Replace(".", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
                             ?.Replace(",", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
                             ?.Trim(), out temp);
@@ -584,7 +586,7 @@ namespace GameActivity
                     }
                     if (gpuValue == 0)
                     {
-                        double.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_gpu_index)
+                        _ = double.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_gpu_index)
                             ?.Replace(".", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
                             ?.Replace(",", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
                             ?.Trim(), out temp);
@@ -592,7 +594,7 @@ namespace GameActivity
                     }
                     if (gpuTValue == 0)
                     {
-                        double.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_gpuT_index)
+                        _ = double.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_gpuT_index)
                             ?.Replace(".", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
                             ?.Replace(",", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
                             ?.Trim(), out temp);
@@ -600,7 +602,7 @@ namespace GameActivity
                     }
                     if (cpuTValue == 0)
                     {
-                        double.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_cpuT_index)
+                        _ = double.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_cpuT_index)
                             ?.Replace(".", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
                             ?.Replace(",", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
                             ?.Trim(), out temp);
@@ -608,7 +610,7 @@ namespace GameActivity
                     }
                     if (cpuPValue == 0)
                     {
-                        double.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_cpuP_index)
+                        _ = double.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_cpuP_index)
                             ?.Replace(".", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
                             ?.Replace(",", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
                             ?.Trim(), out temp);
@@ -616,7 +618,7 @@ namespace GameActivity
                     }
                     if (gpuPValue == 0)
                     {
-                        double.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_gpuP_index)
+                        _ = double.TryParse(HWiNFOGadget.GetData(PluginSettings.Settings.HWiNFO_gpuP_index)
                             ?.Replace(".", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
                             ?.Replace(",", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
                             ?.Trim(), out temp);
@@ -625,13 +627,13 @@ namespace GameActivity
                 }
                 catch (Exception ex)
                 {
-                    logger.Error("HWiNFOGadget - Fail initialize");
+                    Logger.Error("HWiNFOGadget - Fail initialize");
                     Common.LogError(ex, true, "HWiNFOGadget - Fail initialize");
                 }
             }
 
 
-            RunningActivity runningActivity = runningActivities.Find(x => x.Id == Id);
+            RunningActivity runningActivity = RunningActivities.Find(x => x.Id == Id);
             if (runningActivity == null)
             {
                 return;
@@ -674,13 +676,13 @@ namespace GameActivity
 
                 WarningData Message = new WarningData
                 {
-                    At = resources.GetString("LOCGameActivityWarningAt") + " " + DateTime.Now.ToString("HH:mm"),
-                    FpsData = new Data { Name = resources.GetString("LOCGameActivityFps"), Value = fpsValue, IsWarm = WarningMinFps },
-                    CpuTempData = new Data { Name = resources.GetString("LOCGameActivityCpuTemp"), Value = cpuTValue, IsWarm = WarningMaxCpuTemp },
-                    GpuTempData = new Data { Name = resources.GetString("LOCGameActivityGpuTemp"), Value = gpuTValue, IsWarm = WarningMaxGpuTemp },
-                    CpuUsageData = new Data { Name = resources.GetString("LOCGameActivityCpuUsage"), Value = cpuValue, IsWarm = WarningMaxCpuUsage },
-                    GpuUsageData = new Data { Name = resources.GetString("LOCGameActivityGpuUsage"), Value = gpuValue, IsWarm = WarningMaxGpuUsage },
-                    RamUsageData = new Data { Name = resources.GetString("LOCGameActivityRamUsage"), Value = ramValue, IsWarm = WarningMaxRamUsage },
+                    At = ResourceProvider.GetString("LOCGameActivityWarningAt") + " " + DateTime.Now.ToString("HH:mm"),
+                    FpsData = new Data { Name = ResourceProvider.GetString("LOCGameActivityFps"), Value = fpsValue, IsWarm = WarningMinFps },
+                    CpuTempData = new Data { Name = ResourceProvider.GetString("LOCGameActivityCpuTemp"), Value = cpuTValue, IsWarm = WarningMaxCpuTemp },
+                    GpuTempData = new Data { Name = ResourceProvider.GetString("LOCGameActivityGpuTemp"), Value = gpuTValue, IsWarm = WarningMaxGpuTemp },
+                    CpuUsageData = new Data { Name = ResourceProvider.GetString("LOCGameActivityCpuUsage"), Value = cpuValue, IsWarm = WarningMaxCpuUsage },
+                    GpuUsageData = new Data { Name = ResourceProvider.GetString("LOCGameActivityGpuUsage"), Value = gpuValue, IsWarm = WarningMaxGpuUsage },
+                    RamUsageData = new Data { Name = ResourceProvider.GetString("LOCGameActivityRamUsage"), Value = ramValue, IsWarm = WarningMaxRamUsage },
                 };
 
                 if (WarningMinFps || WarningMaxCpuTemp || WarningMaxGpuTemp || WarningMaxCpuUsage || WarningMaxGpuUsage)
@@ -711,25 +713,25 @@ namespace GameActivity
         #region Backup functions
         public void DataBackup_start(Guid Id)
         {
-            RunningActivity runningActivity = runningActivities.Find(x => x.Id == Id);
+            RunningActivity runningActivity = RunningActivities.Find(x => x.Id == Id);
             if (runningActivity == null)
             {
-                logger.Warn($"No runningActivity find for {Id}");
+                Logger.Warn($"No runningActivity find for {Id}");
                 return;
             }
 
             runningActivity.timerBackup = new System.Timers.Timer(PluginSettings.Settings.TimeIntervalLogging * 60000);
             runningActivity.timerBackup.AutoReset = true;
             runningActivity.timerBackup.Elapsed += (sender, e) => OnTimedBackupEvent(sender, e, Id);
-            runningActivity.timerBackup.Start();            
+            runningActivity.timerBackup.Start();
         }
 
         public void DataBackup_stop(Guid Id)
         {
-            RunningActivity runningActivity = runningActivities.Find(x => x.Id == Id);
+            RunningActivity runningActivity = RunningActivities.Find(x => x.Id == Id);
             if (runningActivity == null)
             {
-                logger.Warn($"No runningActivity find for {Id}");
+                Logger.Warn($"No runningActivity find for {Id}");
                 return;
             }
 
@@ -741,7 +743,7 @@ namespace GameActivity
         {
             try
             {
-                RunningActivity runningActivity = runningActivities.Find(x => x.Id == Id);
+                RunningActivity runningActivity = RunningActivities.Find(x => x.Id == Id);
 
                 ulong ElapsedSeconds = (ulong)(DateTime.Now.ToUniversalTime() - runningActivity.activityBackup.DateSession).TotalSeconds;
                 runningActivity.activityBackup.ElapsedSeconds = ElapsedSeconds;
@@ -784,7 +786,7 @@ namespace GameActivity
             {
                 return new PluginChartLog { DisableAnimations = true, LabelsRotation = true };
             }
-             
+
             return null;
         }
 
@@ -794,16 +796,16 @@ namespace GameActivity
             public GameActivityViewSidebar(GameActivity plugin)
             {
                 Type = SiderbarItemType.View;
-                Title = resources.GetString("LOCGameActivityViewGamesActivities");
+                Title = ResourceProvider.GetString("LOCGameActivityViewGamesActivities");
                 Icon = new TextBlock
                 {
                     Text = "\ue97f",
-                    FontFamily = resources.GetResource("FontIcoFont") as FontFamily
+                    FontFamily = ResourceProvider.GetResource("FontIcoFont") as FontFamily
                 };
                 Opened = () =>
                 {
-                    SidebarItemControl sidebarItemControl = new SidebarItemControl(PluginDatabase.PlayniteApi);
-                    sidebarItemControl.SetTitle(resources.GetString("LOCGamesActivitiesTitle"));
+                    SidebarItemControl sidebarItemControl = new SidebarItemControl();
+                    sidebarItemControl.SetTitle(ResourceProvider.GetString("LOCGamesActivitiesTitle"));
                     sidebarItemControl.AddContent(new GameActivityView(plugin));
 
                     return sidebarItemControl;
@@ -832,11 +834,11 @@ namespace GameActivity
             List<GameMenuItem> gameMenuItems = new List<GameMenuItem>
             {
                 // Show plugin view with all activities for all game in database with data of selected game
-                new GameMenuItem 
+                new GameMenuItem
                 {
                     //MenuSection = "",
                     Icon = Path.Combine(PluginFolder, "Resources", "chart-646.png"),
-                    Description = resources.GetString("LOCGameActivityViewGameActivity"),
+                    Description = ResourceProvider.GetString("LOCGameActivityViewGameActivity"),
                     Action = (gameMenuItem) =>
                     {
                         WindowOptions windowOptions = new WindowOptions
@@ -850,8 +852,8 @@ namespace GameActivity
                         };
 
                         GameActivityViewSingle ViewExtension = new GameActivityViewSingle(this, GameMenu);
-                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGameActivity"), ViewExtension, windowOptions);
-                        windowExtension.ShowDialog();
+                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(ResourceProvider.GetString("LOCGameActivity"), ViewExtension, windowOptions);
+                        _ = windowExtension.ShowDialog();
                     }
                 }
             };
@@ -859,9 +861,9 @@ namespace GameActivity
 #if DEBUG
             gameMenuItems.Add(new GameMenuItem
             {
-                MenuSection = resources.GetString("LOCGameActivity"),
+                MenuSection = ResourceProvider.GetString("LOCGameActivity"),
                 Description = "Test",
-                Action = (mainMenuItem) => 
+                Action = (mainMenuItem) =>
                 {
 
                 }
@@ -885,8 +887,8 @@ namespace GameActivity
                 // Show plugin view with all activities for all game in database
                 new MainMenuItem
                 {
-                    MenuSection = MenuInExtensions + resources.GetString("LOCGameActivity"),
-                    Description = resources.GetString("LOCGameActivityViewGamesActivities"),
+                    MenuSection = MenuInExtensions + ResourceProvider.GetString("LOCGameActivity"),
+                    Description = ResourceProvider.GetString("LOCGameActivityViewGamesActivities"),
                     Action = (mainMenuItem) =>
                     {
                         WindowOptions windowOptions = new WindowOptions
@@ -900,31 +902,28 @@ namespace GameActivity
                         };
 
                         GameActivityView ViewExtension = new GameActivityView(this);
-                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGamesActivitiesTitle"), ViewExtension, windowOptions);
-                        windowExtension.ShowDialog();
+                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(ResourceProvider.GetString("LOCGamesActivitiesTitle"), ViewExtension, windowOptions);
+                        _ = windowExtension.ShowDialog();
                     }
                 },
 
                 new MainMenuItem
                 {
-                    MenuSection = MenuInExtensions + resources.GetString("LOCGameActivity"),
+                    MenuSection = MenuInExtensions + ResourceProvider.GetString("LOCGameActivity"),
                     Description = "-"
                 },
 
                 // Show plugin view with all activities for all game in database
                 new MainMenuItem
                 {
-                    MenuSection = MenuInExtensions + resources.GetString("LOCGameActivity"),
-                    Description = resources.GetString("LOCCommonExportData"),
+                    MenuSection = MenuInExtensions + ResourceProvider.GetString("LOCGameActivity"),
+                    Description = ResourceProvider.GetString("LOCCommonExportData"),
                     Action = (mainMenuItem) =>
                     {
-                        GlobalProgressOptions globalProgressOptions = new GlobalProgressOptions(
-                            $"GameActivity - {resources.GetString("LOCCommonProcessing")}",
-                            false
-                        );
-                        globalProgressOptions.IsIndeterminate = true;
+                        GlobalProgressOptions globalProgressOptions = new GlobalProgressOptions($"GameActivity - {ResourceProvider.GetString("LOCCommonProcessing")}") { Cancelable = false,
+                        IsIndeterminate = true };
 
-                        PlayniteApi.Dialogs.ActivateGlobalProgress((activateGlobalProgress) =>
+                        PlayniteApi.Dialogs.ActivateGlobalProgress((a) =>
                         {
                             try
                             {
@@ -994,7 +993,7 @@ namespace GameActivity
                                     {
                                         FileSystem.WriteStringToFileSafe(SavPath, ExportedDatasCsv);
 
-                                        string Message = string.Format(resources.GetString("LOCCommonExportDataResult"), ExportedDatasCsv.Count());
+                                        string Message = string.Format(ResourceProvider.GetString("LOCCommonExportDataResult"), ExportedDatasCsv.Count());
                                         MessageBoxResult result = PlayniteApi.Dialogs.ShowMessage(Message, PluginDatabase.PluginName, MessageBoxButton.YesNo);
                                         if (result == MessageBoxResult.Yes)
                                         {
@@ -1020,14 +1019,14 @@ namespace GameActivity
                 // Database management
                 new MainMenuItem
                 {
-                    MenuSection = MenuInExtensions + resources.GetString("LOCGameActivity"),
+                    MenuSection = MenuInExtensions + ResourceProvider.GetString("LOCGameActivity"),
                     Description = "-"
                 },
 
                 new MainMenuItem
                 {
-                    MenuSection = MenuInExtensions + resources.GetString("LOCGameActivity"),
-                    Description = resources.GetString("LOCCommonTransferPluginData"),
+                    MenuSection = MenuInExtensions + ResourceProvider.GetString("LOCGameActivity"),
+                    Description = ResourceProvider.GetString("LOCCommonTransferPluginData"),
                     Action = (mainMenuItem) =>
                     {
                         WindowOptions windowOptions = new WindowOptions
@@ -1037,16 +1036,16 @@ namespace GameActivity
                             ShowCloseButton = true,
                         };
 
-                        TransfertData ViewExtension = new TransfertData(PluginDatabase.GetDataGames(), PluginDatabase);
-                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCCommonSelectTransferData"), ViewExtension, windowOptions);
-                        windowExtension.ShowDialog();
+                        TransfertData ViewExtension = new TransfertData(PluginDatabase.GetDataGames().ToList(), PluginDatabase);
+                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(ResourceProvider.GetString("LOCCommonSelectTransferData"), ViewExtension, windowOptions);
+                        _ = windowExtension.ShowDialog();
                     }
                 },
 
                 new MainMenuItem
                 {
-                    MenuSection = MenuInExtensions + resources.GetString("LOCGameActivity"),
-                    Description = resources.GetString("LOCCommonIsolatedPluginData"),
+                    MenuSection = MenuInExtensions + ResourceProvider.GetString("LOCGameActivity"),
+                    Description = ResourceProvider.GetString("LOCCommonIsolatedPluginData"),
                     Action = (mainMenuItem) =>
                     {
                         WindowOptions windowOptions = new WindowOptions
@@ -1056,9 +1055,9 @@ namespace GameActivity
                             ShowCloseButton = true,
                         };
 
-                        ListDataWithoutGame ViewExtension = new ListDataWithoutGame(PluginDatabase.GetIsolatedDataGames(), PluginDatabase);
-                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCCommonIsolatedPluginData"), ViewExtension, windowOptions);
-                        windowExtension.ShowDialog();
+                        ListDataWithoutGame ViewExtension = new ListDataWithoutGame(PluginDatabase.GetIsolatedDataGames().ToList(), PluginDatabase);
+                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(ResourceProvider.GetString("LOCCommonIsolatedPluginData"), ViewExtension, windowOptions);
+                        _ = windowExtension.ShowDialog();
                     }
                 }
             };
@@ -1066,12 +1065,12 @@ namespace GameActivity
 #if DEBUG
             mainMenuItems.Add(new MainMenuItem
             {
-                MenuSection = MenuInExtensions + resources.GetString("LOCGameActivity"),
+                MenuSection = MenuInExtensions + ResourceProvider.GetString("LOCGameActivity"),
                 Description = "-"
             });
             mainMenuItems.Add(new MainMenuItem
             {
-                MenuSection = MenuInExtensions + resources.GetString("LOCGameActivity"),
+                MenuSection = MenuInExtensions + ResourceProvider.GetString("LOCGameActivity"),
                 Description = "Test",
                 Action = (mainMenuItem) =>
                 {
@@ -1087,7 +1086,7 @@ namespace GameActivity
 
         #region Game event
         public override void OnGameSelected(OnGameSelectedEventArgs args)
-        {       
+        {
             try
             {
                 if (args.NewValue?.Count == 1 && PluginDatabase.IsLoaded)
@@ -1097,9 +1096,9 @@ namespace GameActivity
                 }
                 else
                 {
-                    Task.Run(() =>
+                    _ = Task.Run(() =>
                     {
-                        System.Threading.SpinWait.SpinUntil(() => PluginDatabase.IsLoaded, -1);
+                        SpinWait.SpinUntil(() => PluginDatabase.IsLoaded, -1);
                         Application.Current.Dispatcher.BeginInvoke((Action)delegate
                         {
                             if (args.NewValue?.Count == 1)
@@ -1144,7 +1143,7 @@ namespace GameActivity
                 runningActivity.Id = args.Game.Id;
                 runningActivity.PlaytimeOnStarted = args.Game.Playtime;
 
-                runningActivities.Add(runningActivity);
+                RunningActivities.Add(runningActivity);
 
                 DataBackup_start(args.Game.Id);
 
@@ -1160,19 +1159,19 @@ namespace GameActivity
                 runningActivity.GameActivitiesLog.Items.Add(new Activity
                 {
                     IdConfiguration = PluginDatabase?.LocalSystem?.GetIdConfiguration() ?? -1,
-                    GameActionName = args.SourceAction?.Name ?? resources.GetString("LOCGameActivityDefaultAction"),
+                    GameActionName = args.SourceAction?.Name ?? ResourceProvider.GetString("LOCGameActivityDefaultAction"),
                     DateSession = DateSession,
                     SourceID = args.Game.SourceId == null ? default : args.Game.SourceId,
                     PlatformIDs = args.Game.PlatformIds ?? new List<Guid>()
                 });
-                runningActivity.GameActivitiesLog.ItemsDetails.Items.TryAdd(DateSession, new List<ActivityDetailsData>());
+                _ = runningActivity.GameActivitiesLog.ItemsDetails.Items.TryAdd(DateSession, new List<ActivityDetailsData>());
 
                 runningActivity.activityBackup = new ActivityBackup
                 {
                     Id = runningActivity.GameActivitiesLog.Id,
                     Name = runningActivity.GameActivitiesLog.Name,
                     ElapsedSeconds = 0,
-                    GameActionName = args.SourceAction?.Name ?? resources.GetString("LOCGameActivityDefaultAction"),
+                    GameActionName = args.SourceAction?.Name ?? ResourceProvider.GetString("LOCGameActivityDefaultAction"),
                     IdConfiguration = PluginDatabase?.LocalSystem?.GetIdConfiguration() ?? -1,
                     DateSession = DateSession,
                     SourceID = args.Game.SourceId == null ? default : args.Game.SourceId,
@@ -1195,11 +1194,11 @@ namespace GameActivity
         // Add code to be executed when game is preparing to be started.
         public override void OnGameStopped(OnGameStoppedEventArgs args)
         {
-            Task.Run(() =>
+            _ = Task.Run(() =>
             {
                 try
                 {
-                    RunningActivity runningActivity = runningActivities.Find(x => x.Id == args.Game.Id);
+                    RunningActivity runningActivity = RunningActivities.Find(x => x.Id == args.Game.Id);
                     DataBackup_stop(args.Game.Id);
 
                     // Stop timer si HWiNFO log is enable.
@@ -1217,18 +1216,14 @@ namespace GameActivity
                     if (ElapsedSeconds == 0)
                     {
                         Thread.Sleep(5000);
-                        if (PluginSettings.Settings.SubstPlayStateTime && ExistsPlayStateInfoFile()) // Temporary workaround for PlayState paused time until Playnite allows to share data among extensions
-                        {
-                            ElapsedSeconds = args.Game.Playtime - runningActivity.PlaytimeOnStarted - GetPlayStatePausedTimeInfo(args.Game);
-                        }
-                        else
-                        {
-                            ElapsedSeconds = args.Game.Playtime - runningActivity.PlaytimeOnStarted;
-                        }
+                        // Temporary workaround for PlayState paused time until Playnite allows to share data among extensions
+                        ElapsedSeconds = PluginSettings.Settings.SubstPlayStateTime && ExistsPlayStateInfoFile()
+                            ? args.Game.Playtime - runningActivity.PlaytimeOnStarted - GetPlayStatePausedTimeInfo(args.Game)
+                            : args.Game.Playtime - runningActivity.PlaytimeOnStarted;
 
                         PlayniteApi.Notifications.Add(new NotificationMessage(
                             $"{PluginDatabase.PluginName}- noElapsedSeconds",
-                            PluginDatabase.PluginName + System.Environment.NewLine + string.Format(resources.GetString("LOCGameActivityNoPlaytime"), args.Game.Name, ElapsedSeconds),
+                            PluginDatabase.PluginName + Environment.NewLine + string.Format(ResourceProvider.GetString("LOCGameActivityNoPlaytime"), args.Game.Name, ElapsedSeconds),
                             NotificationType.Info
                         ));
                     }
@@ -1249,7 +1244,7 @@ namespace GameActivity
                     }
 
                     // Delete running data
-                    runningActivities.Remove(runningActivity);
+                    _ = RunningActivities.Remove(runningActivity);
                 }
                 catch (Exception ex)
                 {
@@ -1303,7 +1298,7 @@ namespace GameActivity
         public override void OnApplicationStarted(OnApplicationStartedEventArgs args)
         {
             // CheckGoodForLogging 
-            Task.Run(() =>
+            _ = Task.Run(() =>
             {
                 Common.LogDebug(true, "CheckGoodForLogging_1");
                 if (!CheckGoodForLogging(false))
@@ -1336,7 +1331,7 @@ namespace GameActivity
                 CommandItem GaCommand = new CommandItem(PluginDatabase.PluginName, new List<CommandAction>(), ResourceProvider.GetString("LOCGaQuickSearchDescription"), icon);
                 GaCommand.Keys.Add(new CommandItemKey() { Key = "ga", Weight = 1 });
                 GaCommand.Actions.Add(GaSubItemsAction);
-                QuickSearch.QuickSearchSDK.AddCommand(GaCommand);
+                _ = QuickSearch.QuickSearchSDK.AddCommand(GaCommand);
             }
             catch { }
 
@@ -1344,17 +1339,18 @@ namespace GameActivity
             // Check backup
             try
             {
-                Task.Run(() => { 
+                _ = Task.Run(() =>
+                {
                     Parallel.ForEach(Directory.EnumerateFiles(PluginDatabase.Paths.PluginUserDataPath, "SaveSession_*.json"), (objectFile) =>
                     {
                         // Wait extension database are loaded
-                        SpinWait.SpinUntil(() => PluginDatabase.IsLoaded, -1);
+                        _ = SpinWait.SpinUntil(() => PluginDatabase.IsLoaded, -1);
 
-                        Serialization.TryFromJsonFile(objectFile, out ActivityBackup backupData);
+                        _ = Serialization.TryFromJsonFile(objectFile, out ActivityBackup backupData);
                         if (backupData != null)
                         {
                             // If game is deleted...
-                            Game game = PluginDatabase.PlayniteApi.Database.Games.Get(backupData.Id);
+                            Game game = API.Instance.Database.Games.Get(backupData.Id);
                             if (game == null)
                             {
                                 try
@@ -1369,11 +1365,11 @@ namespace GameActivity
                             // Otherwise...
                             else
                             {
-                                Application.Current.Dispatcher.BeginInvoke((Action)delegate
+                                _ = Application.Current.Dispatcher.BeginInvoke((Action)delegate
                                 {
                                     PlayniteApi.Notifications.Add(new NotificationMessage(
                                         $"{PluginDatabase.PluginName}-backup-{Path.GetFileNameWithoutExtension(objectFile)}",
-                                        PluginDatabase.PluginName + System.Environment.NewLine + string.Format(resources.GetString("LOCGaBackupExist"), backupData.Name),
+                                        PluginDatabase.PluginName + System.Environment.NewLine + string.Format(ResourceProvider.GetString("LOCGaBackupExist"), backupData.Name),
                                         NotificationType.Info,
                                         () =>
                                         {
@@ -1388,8 +1384,8 @@ namespace GameActivity
                                             };
 
                                             GameActivityBackup ViewExtension = new GameActivityBackup(backupData);
-                                            Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PlayniteApi, resources.GetString("LOCGaBackupDataInfo"), ViewExtension, windowOptions);
-                                            windowExtension.ShowDialog();
+                                            Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(ResourceProvider.GetString("LOCGaBackupDataInfo"), ViewExtension, windowOptions);
+                                            _ = windowExtension.ShowDialog();
                                         }
                                     ));
                                 });
@@ -1414,7 +1410,7 @@ namespace GameActivity
         // Add code to be executed when library is updated.
         public override void OnLibraryUpdated(OnLibraryUpdatedEventArgs args)
         {
-            
+
         }
 
         #region Settings

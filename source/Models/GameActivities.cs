@@ -11,16 +11,15 @@ namespace GameActivity.Models
 {
     public class GameActivities : PluginDataBaseGameDetails<Activity, ActivityDetails>
     {
-        private static ILogger logger => LogManager.GetLogger();
-        private static IResourceProvider resources => new ResourceProvider();
-        private ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
+        private static ILogger Logger => LogManager.GetLogger();
+        private static ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
 
 
-        private List<Activity> _Items = new List<Activity>();
-        public override List<Activity> Items { get => _Items; set => SetValue(ref _Items, value); }
+        private List<Activity> _items = new List<Activity>();
+        public override List<Activity> Items { get => _items; set => SetValue(ref _items, value); }
 
-        private ActivityDetails _ItemsDetails = new ActivityDetails();
-        public override ActivityDetails ItemsDetails { get => _ItemsDetails; set => SetValue(ref _ItemsDetails, value); }
+        private ActivityDetails _itemsDetails = new ActivityDetails();
+        public override ActivityDetails ItemsDetails { get => _itemsDetails; set => SetValue(ref _itemsDetails, value); }
 
 
         [DontSerialize]
@@ -35,7 +34,7 @@ namespace GameActivity.Models
         }
 
 
-        public int avgCPU(DateTime dateSession)
+        public int AvgCPU(DateTime dateSession)
         {
             decimal avg = 0;
 
@@ -48,7 +47,7 @@ namespace GameActivity.Models
             return acDetailsData.Count != 0 ? (int)Math.Round(avg / acDetailsData.Count) : 0;
         }
 
-        public int avgGPU(DateTime dateSession)
+        public int AvgGPU(DateTime dateSession)
         {
             decimal avg = 0;
 
@@ -61,7 +60,7 @@ namespace GameActivity.Models
             return acDetailsData.Count != 0 ? (int)Math.Round(avg / acDetailsData.Count) : 0;
         }
 
-        public int avgRAM(DateTime dateSession)
+        public int AvgRAM(DateTime dateSession)
         {
             decimal avg = 0;
 
@@ -74,7 +73,7 @@ namespace GameActivity.Models
             return acDetailsData.Count != 0 ? (int)Math.Round(avg / acDetailsData.Count) : 0;
         }
 
-        public int avgFPS(DateTime dateSession)
+        public int AvgFPS(DateTime dateSession)
         {
             decimal avg = 0;
 
@@ -87,7 +86,7 @@ namespace GameActivity.Models
             return acDetailsData.Count != 0 ? (int)Math.Round(avg / acDetailsData.Count) : 0;
         }
 
-        public int avgCPUT(DateTime dateSession)
+        public int AvgCPUT(DateTime dateSession)
         {
             decimal avg = 0;
 
@@ -100,7 +99,7 @@ namespace GameActivity.Models
             return acDetailsData.Count != 0 ? (int)Math.Round(avg / acDetailsData.Count) : 0;
         }
 
-        public int avgGPUT(DateTime dateSession)
+        public int AvgGPUT(DateTime dateSession)
         {
             decimal avg = 0;
 
@@ -113,7 +112,7 @@ namespace GameActivity.Models
             return acDetailsData.Count != 0 ? (int)Math.Round(avg / acDetailsData.Count) : 0;
         }
 
-        public int avgCPUP(DateTime dateSession)
+        public int AvgCPUP(DateTime dateSession)
         {
             decimal avg = 0;
 
@@ -126,7 +125,7 @@ namespace GameActivity.Models
             return acDetailsData.Count != 0 ? (int)Math.Round(avg / acDetailsData.Count) : 0;
         }
 
-        public int avgGPUP(DateTime dateSession)
+        public int AvgGPUP(DateTime dateSession)
         {
             decimal avg = 0;
 
@@ -140,7 +139,7 @@ namespace GameActivity.Models
         }
 
 
-        public ulong avgPlayTime()
+        public ulong AvgPlayTime()
         {
             int TimeIgnore = -1;
             if (PluginDatabase.PluginSettings.Settings.IgnoreSession)
@@ -279,10 +278,10 @@ namespace GameActivity.Models
             double CountElapsedHours = CountElapsedSeconds / 3600;
 
             return CountElapsedHours == 0
-                ? resources.GetString("LOCGameActivityNoRecentActivity")
+                ? ResourceProvider.GetString("LOCGameActivityNoRecentActivity")
                 : PluginDatabase.PluginSettings.Settings.RecentActivityWeek == 1
-                    ? string.Format(resources.GetString("LOCGameActivityRecentActivitySingular"), CountElapsedHours, PluginDatabase.PluginSettings.Settings.RecentActivityWeek)
-                    : string.Format(resources.GetString("LOCGameActivityRecentActivityPlurial"), CountElapsedHours, PluginDatabase.PluginSettings.Settings.RecentActivityWeek);
+                    ? string.Format(ResourceProvider.GetString("LOCGameActivityRecentActivitySingular"), CountElapsedHours, PluginDatabase.PluginSettings.Settings.RecentActivityWeek)
+                    : string.Format(ResourceProvider.GetString("LOCGameActivityRecentActivityPlurial"), CountElapsedHours, PluginDatabase.PluginSettings.Settings.RecentActivityWeek);
         }
 
 
@@ -337,7 +336,7 @@ namespace GameActivity.Models
             }
             else
             {
-                logger.Warn($"No activity for {Name} with date {dateSelected.ToString("yyyy-MM-dd HH:mm:ss")}");
+                Logger.Warn($"No activity for {Name} with date {dateSelected.ToString("yyyy-MM-dd HH:mm:ss")}");
             }
         }
         #endregion

@@ -8,27 +8,26 @@ using Playnite.SDK.Models;
 using System.Windows.Media;
 using MoreLinq;
 using CommonPluginsShared.Extensions;
+using CommonPluginsShared.Plugins;
 
 namespace GameActivity
 {
-    public class GameActivitySettings : ObservableObject
+    public class GameActivitySettings : PluginSettings
     {
         #region Settings variables
-        public bool MenuInExtensions { get; set; } = true;
-
         public bool SaveColumnOrder { get; set; } = false;
 
         public bool EnableIntegrationButtonHeader { get; set; } = false;
         public bool EnableIntegrationButtonSide { get; set; } = true;
 
-        private bool _EnableIntegrationButton = true;
-        public bool EnableIntegrationButton { get => _EnableIntegrationButton; set => SetValue(ref _EnableIntegrationButton, value); }
+        private bool _enableIntegrationButton = true;
+        public bool EnableIntegrationButton { get => _enableIntegrationButton; set => SetValue(ref _enableIntegrationButton, value); }
 
-        private bool _EnableIntegrationButtonDetails = false;
-        public bool EnableIntegrationButtonDetails { get => _EnableIntegrationButtonDetails; set => SetValue(ref _EnableIntegrationButtonDetails, value); }
+        private bool _enableIntegrationButtonDetails = false;
+        public bool EnableIntegrationButtonDetails { get => _enableIntegrationButtonDetails; set => SetValue(ref _enableIntegrationButtonDetails, value); }
 
-        private bool _EnableIntegrationChartTime = true;
-        public bool EnableIntegrationChartTime { get => _EnableIntegrationChartTime; set => SetValue(ref _EnableIntegrationChartTime, value); }
+        private bool _enableIntegrationChartTime = true;
+        public bool EnableIntegrationChartTime { get => _enableIntegrationChartTime; set => SetValue(ref _enableIntegrationChartTime, value); }
 
         public bool ChartTimeTruncate { get; set; } = true;
         public bool ChartTimeVisibleEmpty { get; set; } = true;
@@ -37,8 +36,8 @@ namespace GameActivity
         public bool ChartTimeOrdinates { get; set; } = true;
         public int ChartTimeCountAbscissa { get; set; } = 11;
 
-        private bool _EnableIntegrationChartLog = true;
-        public bool EnableIntegrationChartLog { get => _EnableIntegrationChartLog; set => SetValue(ref _EnableIntegrationChartLog, value); }
+        private bool _enableIntegrationChartLog = true;
+        public bool EnableIntegrationChartLog { get => _enableIntegrationChartLog; set => SetValue(ref _enableIntegrationChartLog, value); }
 
         public bool ChartLogVisibleEmpty { get; set; } = true;
         public double ChartLogHeight { get; set; } = 120;
@@ -132,33 +131,29 @@ namespace GameActivity
         // Playnite serializes settings object to a JSON object and saves it as text file.
         // If you want to exclude some property from being saved then use `JsonDontSerialize` ignore attribute.
         #region Variables exposed
-        private bool _HasData = false;
+        private bool _hasDataLog = false;
         [DontSerialize]
-        public bool HasData { get => _HasData; set => SetValue(ref _HasData, value); }
+        public bool HasDataLog { get => _hasDataLog; set => SetValue(ref _hasDataLog, value); }
 
-        private bool _HasDataLog = false;
+        private string _lastDateSession = string.Empty;
         [DontSerialize]
-        public bool HasDataLog { get => _HasDataLog; set => SetValue(ref _HasDataLog, value); }
+        public string LastDateSession { get => _lastDateSession; set => SetValue(ref _lastDateSession, value); }
 
-        private string _LastDateSession = string.Empty;
+        private string _lastDateTimeSession = string.Empty;
         [DontSerialize]
-        public string LastDateSession { get => _LastDateSession; set => SetValue(ref _LastDateSession, value); }
+        public string LastDateTimeSession { get => _lastDateTimeSession; set => SetValue(ref _lastDateTimeSession, value); }
 
-        private string _LastDateTimeSession = string.Empty;
+        private string _lastPlaytimeSession = string.Empty;
         [DontSerialize]
-        public string LastDateTimeSession { get => _LastDateTimeSession; set => SetValue(ref _LastDateTimeSession, value); }
+        public string LastPlaytimeSession { get => _lastPlaytimeSession; set => SetValue(ref _lastPlaytimeSession, value); }
 
-        private string _LastPlaytimeSession = string.Empty;
+        private int _avgFpsAllSession = 0;
         [DontSerialize]
-        public string LastPlaytimeSession { get => _LastPlaytimeSession; set => SetValue(ref _LastPlaytimeSession, value); }
+        public int AvgFpsAllSession { get => _avgFpsAllSession; set => SetValue(ref _avgFpsAllSession, value); }
 
-        private int _AvgFpsAllSession = 0;
+        private string _recentActivity  = string.Empty;
         [DontSerialize]
-        public int AvgFpsAllSession { get => _AvgFpsAllSession; set => SetValue(ref _AvgFpsAllSession, value); }
-
-        private string _RecentActivity  = string.Empty;
-        [DontSerialize]
-        public string RecentActivity { get => _RecentActivity; set => SetValue(ref _RecentActivity, value); }
+        public string RecentActivity { get => _recentActivity; set => SetValue(ref _recentActivity, value); }
         #endregion  
     }
 
@@ -170,8 +165,8 @@ namespace GameActivity
         private readonly GameActivity Plugin;
         private GameActivitySettings EditingClone { get; set; }
 
-        private GameActivitySettings _Settings;
-        public GameActivitySettings Settings { get => _Settings; set => SetValue(ref _Settings, value); }
+        private GameActivitySettings _settings;
+        public GameActivitySettings Settings { get => _settings; set => SetValue(ref _settings, value); }
 
 
         public GameActivitySettingsViewModel(GameActivity plugin)
@@ -184,13 +179,6 @@ namespace GameActivity
 
             // LoadPluginSettings returns null if not saved data is available.
             Settings = savedSettings ?? new GameActivitySettings();
-
-
-            StoreColor finded = Settings.StoreColors.Find(x => x.Name.IsEqual("Origin"));
-            if (finded != null)
-            {
-                finded.Name = "EA app";
-            }
         }
 
         // Code executed when settings view is opened and user starts editing values.
@@ -205,50 +193,50 @@ namespace GameActivity
             }
 
             // Set missing
-            List <Guid> SourceIds = GameActivity.PluginDatabase.Database.Items
+            List <Guid> sourceIds = GameActivity.PluginDatabase.Database.Items
                                                 .Where(x => !Settings.StoreColors.Any(y => x.Value.SourceId == y.Id))
                                                 .Select(x => x.Value.SourceId)
                                                 .Distinct().ToList();
-            List<Platform> PlatformIds = GameActivity.PluginDatabase.Database.Items
+            List<Platform> platformIds = GameActivity.PluginDatabase.Database.Items
                                                 .Where(x => x.Value != null && x.Value.Platforms != null)
                                                 .Select(x => x.Value.Platforms)
                                                 .SelectMany(x => x)
                                                 .Where(x => !Settings.StoreColors.Any(y => x.Id == y.Id))
                                                 .Distinct().ToList();
 
-            Brush Fill = null;
-            foreach (Guid Id in SourceIds)
+            Brush fill = null;
+            foreach (Guid id in sourceIds)
             {
-                string Name = (Id == default(Guid)) ? "Playnite" : GameActivity.PluginDatabase.PlayniteApi.Database.Sources.Get(Id)?.Name;
-                if (Name.IsNullOrEmpty())
+                string name = (id == default) ? "Playnite" : API.Instance.Database.Sources.Get(id)?.Name;
+                if (name.IsNullOrEmpty())
                 {
-                    logger.Warn($"No name for SourceId {Id}");
+                    logger.Warn($"No name for SourceId {id}");
                 }
-                Name = (Name.IsEqual("PC (Windows)") || Name.IsEqual("PC (Mac)") || Name.IsEqual("PC (Linux)")) ? "Playnite" : Name;
+                name = (name.IsEqual("PC (Windows)") || name.IsEqual("PC (Mac)") || name.IsEqual("PC (Linux)")) ? "Playnite" : name;
 
-                if (Settings.StoreColors.FindAll(x => x.Name.Equals(Name))?.Count == 0)
+                if (Settings.StoreColors.FindAll(x => x.Name.Equals(name))?.Count == 0)
                 {
-                    Fill = GetColor(Name);
+                    fill = GetColor(name);
                     Settings.StoreColors.Add(new StoreColor
                     {
-                        Name = Name,
-                        Fill = Fill
+                        Name = name,
+                        Fill = fill
                     });
                 }
             }
 
-            foreach (Platform platform in PlatformIds)
+            foreach (Platform platform in platformIds)
             {
-                string Name = platform.Name;
-                Name = (Name.IsEqual("PC (Windows)") || Name.IsEqual("PC (Mac)") || Name.IsEqual("PC (Linux)")) ? "Playnite" : Name;
+                string name = platform.Name;
+                name = (name.IsEqual("PC (Windows)") || name.IsEqual("PC (Mac)") || name.IsEqual("PC (Linux)")) ? "Playnite" : name;
 
-                if (Settings.StoreColors.FindAll(x => x.Name.IsEqual(Name)) == null)
+                if (Settings.StoreColors.FindAll(x => x.Name.IsEqual(name)) == null)
                 {
-                    Fill = GetColor(Name);
+                    fill = GetColor(name);
                     Settings.StoreColors.Add(new StoreColor
                     {
-                        Name = Name,
-                        Fill = Fill
+                        Name = name,
+                        Fill = fill
                     });
                 }
             }
@@ -291,88 +279,88 @@ namespace GameActivity
 
         public static List<StoreColor> GetDefaultStoreColors()
         {
-            List<StoreColor> StoreColors = new List<StoreColor>();
+            List<StoreColor> storeColors = new List<StoreColor>();
 
-            List<Guid> SourceIds = GameActivity.PluginDatabase.Database.Items.Select(x => x.Value.SourceId).Distinct().ToList();
-            List<Platform> PlatformIds = GameActivity.PluginDatabase.Database.Items
+            List<Guid> sourceIds = GameActivity.PluginDatabase.Database.Items.Select(x => x.Value.SourceId).Distinct().ToList();
+            List<Platform> platformIds = GameActivity.PluginDatabase.Database.Items
                 .Where(x => x.Value != null && x.Value.Platforms != null)
                 .Select(x => x.Value.Platforms)
                 .SelectMany(x => x).Distinct().ToList();
 
-            Brush Fill = null;
-            foreach (Guid Id in SourceIds)
+            Brush fill = null;
+            foreach (Guid id in sourceIds)
             {
-                string Name = (Id == default) ? "Playnite" : GameActivity.PluginDatabase.PlayniteApi.Database.Sources.Get(Id)?.Name;
-                if (Name.IsNullOrEmpty())
+                string name = (id == default) ? "Playnite" : API.Instance.Database.Sources.Get(id)?.Name;
+                if (name.IsNullOrEmpty())
                 {
-                    logger.Warn($"No name for SourceId {Id}");
+                    logger.Warn($"No name for SourceId {id}");
                 }
                 else
                 {
-                    Name = (Name.IsEqual("PC (Windows)") || Name.IsEqual("PC (Mac)") || Name.IsEqual("PC (Linux)")) ? "Playnite" : Name;
+                    name = (name.IsEqual("PC (Windows)") || name.IsEqual("PC (Mac)") || name.IsEqual("PC (Linux)")) ? "Playnite" : name;
 
-                    if (StoreColors.FindAll(x => x.Name.IsEqual(Name)).Count() == 0)
+                    if (storeColors.FindAll(x => x.Name.IsEqual(name)).Count() == 0)
                     {
-                        Fill = GetColor(Name);
-                        StoreColors.Add(new StoreColor
+                        fill = GetColor(name);
+                        storeColors.Add(new StoreColor
                         {
-                            Name = Name,
-                            Id = Id,
-                            Fill = Fill
+                            Name = name,
+                            Id = id,
+                            Fill = fill
                         });
                     }
                 }
             }
 
-            foreach (Platform platform in PlatformIds)
+            foreach (Platform platform in platformIds)
             {
-                string Name = platform.Name;
-                Name = (Name == "PC (Windows)" || Name == "PC (Mac)" || Name == "PC (Linux)") ? "Playnite" : Name;
+                string name = platform.Name;
+                name = (name == "PC (Windows)" || name == "PC (Mac)" || name == "PC (Linux)") ? "Playnite" : name;
 
-                if (StoreColors.FindAll(x => x.Name.Equals(Name)).Count() == 0)
+                if (storeColors.FindAll(x => x.Name.Equals(name)).Count() == 0)
                 {
-                    Fill = GetColor(Name);
-                    StoreColors.Add(new StoreColor
+                    fill = GetColor(name);
+                    storeColors.Add(new StoreColor
                     {
-                        Name = Name,
+                        Name = name,
                         Id = platform.Id,
-                        Fill = Fill
+                        Fill = fill
                     });
                 }
             }
 
-            return StoreColors;
+            return storeColors;
         }
 
-        private static Brush GetColor(string Name)
+        private static Brush GetColor(string name)
         {
-            Brush Fill = null;
-            switch (Name?.ToLower())
+            Brush fill = null;
+            switch (name?.ToLower())
             {
                 case "android":
-                    Fill = new BrushConverter().ConvertFromString("#068962") as SolidColorBrush;
+                    fill = new BrushConverter().ConvertFromString("#068962") as SolidColorBrush;
                     break;
                 case "switch":
-                    Fill = new BrushConverter().ConvertFromString("#e60012") as SolidColorBrush;
+                    fill = new BrushConverter().ConvertFromString("#e60012") as SolidColorBrush;
                     break;
                 case "legacy games":
-                    Fill = new BrushConverter().ConvertFromString("#0f2a53") as SolidColorBrush;
+                    fill = new BrushConverter().ConvertFromString("#0f2a53") as SolidColorBrush;
                     break;
                 case "steam":
-                    Fill = new BrushConverter().ConvertFromString("#1b2838") as SolidColorBrush;
+                    fill = new BrushConverter().ConvertFromString("#1b2838") as SolidColorBrush;
                     break;
                 case "riot games":
-                    Fill = new BrushConverter().ConvertFromString("#d13639") as SolidColorBrush;
+                    fill = new BrushConverter().ConvertFromString("#d13639") as SolidColorBrush;
                     break;
                 case "ps3":
                 case "ps4":
                 case "ps5":
                 case "ps vita":
                 case "playstation":
-                    Fill = new BrushConverter().ConvertFromString("#296cc8") as SolidColorBrush;
+                    fill = new BrushConverter().ConvertFromString("#296cc8") as SolidColorBrush;
                     break;
                 case "playnite":
-                    Fill = new BrushConverter().ConvertFromString("#ff5832") as SolidColorBrush;
+                    fill = new BrushConverter().ConvertFromString("#ff5832") as SolidColorBrush;
                     break;
                 case "xbox":
                 case "xbox game pass":
@@ -380,52 +368,52 @@ namespace GameActivity
                 case "xbox 360":
                 case "xbox series":
                 case "microsoft store":
-                    Fill = new BrushConverter().ConvertFromString("#107c10") as SolidColorBrush;
+                    fill = new BrushConverter().ConvertFromString("#107c10") as SolidColorBrush;
                     break;
                 case "origin":
                 case "ea app":
-                    Fill = new BrushConverter().ConvertFromString("#f56c2d") as SolidColorBrush;
+                    fill = new BrushConverter().ConvertFromString("#f56c2d") as SolidColorBrush;
                     break;
                 case "blizzard":
-                    Fill = new BrushConverter().ConvertFromString("#01b2f1") as SolidColorBrush;
+                    fill = new BrushConverter().ConvertFromString("#01b2f1") as SolidColorBrush;
                     break;
                 case "gog":
-                    Fill = new BrushConverter().ConvertFromString("#5c2f74") as SolidColorBrush;
+                    fill = new BrushConverter().ConvertFromString("#5c2f74") as SolidColorBrush;
                     break;
                 case "ubisoft connect":
                 case "ubisoft":
                 case "uplay":
-                    Fill = new BrushConverter().ConvertFromString("#0070ff") as SolidColorBrush;
+                    fill = new BrushConverter().ConvertFromString("#0070ff") as SolidColorBrush;
                     break;
                 case "epic":
-                    Fill = new BrushConverter().ConvertFromString("#2a2a2a") as SolidColorBrush;
+                    fill = new BrushConverter().ConvertFromString("#2a2a2a") as SolidColorBrush;
                     break;
                 case "itch.io":
-                    Fill = new BrushConverter().ConvertFromString("#ff244a") as SolidColorBrush;
+                    fill = new BrushConverter().ConvertFromString("#ff244a") as SolidColorBrush;
                     break;
                 case "indiegala":
-                    Fill = new BrushConverter().ConvertFromString("#e41f27") as SolidColorBrush;
+                    fill = new BrushConverter().ConvertFromString("#e41f27") as SolidColorBrush;
                     break;
                 case "twitch":
-                    Fill = new BrushConverter().ConvertFromString("#a970ff") as SolidColorBrush;
+                    fill = new BrushConverter().ConvertFromString("#a970ff") as SolidColorBrush;
                     break;
                 case "amazon":
-                    Fill = new BrushConverter().ConvertFromString("#f99601") as SolidColorBrush;
+                    fill = new BrushConverter().ConvertFromString("#f99601") as SolidColorBrush;
                     break;
                 case "battle.net":
-                    Fill = new BrushConverter().ConvertFromString("#148eff") as SolidColorBrush;
+                    fill = new BrushConverter().ConvertFromString("#148eff") as SolidColorBrush;
                     break;
                 case "bethesda":
-                    Fill = new BrushConverter().ConvertFromString("#202020") as SolidColorBrush;
+                    fill = new BrushConverter().ConvertFromString("#202020") as SolidColorBrush;
                     break;
                 case "humble":
-                    Fill = new BrushConverter().ConvertFromString("#3b3e48") as SolidColorBrush;
+                    fill = new BrushConverter().ConvertFromString("#3b3e48") as SolidColorBrush;
                     break;
                 default:
                     break;
             }
 
-            return Fill;
+            return fill;
         }
     }
 }

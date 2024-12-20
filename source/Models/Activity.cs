@@ -9,9 +9,6 @@ namespace GameActivity.Models
 {
     public class Activity : ObservableObject
     {
-        private static ILogger logger => LogManager.GetLogger();
-        private static IResourceProvider resources => new ResourceProvider();
-
         private ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
 
 
@@ -19,12 +16,12 @@ namespace GameActivity.Models
         public List<Guid> PlatformIDs { get; set; }
 
         [SerializationPropertyName("GameActionName")]
-        public string _GameActionName;
+        public string _gameActionName;
         [DontSerialize]
         public string GameActionName
         {
-            get => _GameActionName.IsNullOrEmpty() ? resources.GetString("LOCGameActivityDefaultAction") : _GameActionName;
-            set => _GameActionName = value;
+            get => _gameActionName.IsNullOrEmpty() ? ResourceProvider.GetString("LOCGameActivityDefaultAction") : _gameActionName;
+            set => _gameActionName = value;
         }
 
         [DontSerialize]

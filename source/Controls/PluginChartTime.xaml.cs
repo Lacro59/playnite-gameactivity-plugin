@@ -22,6 +22,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Playnite.SDK.Data;
 using System.ComponentModel;
+using Playnite.SDK;
 
 namespace GameActivity.Controls
 {
@@ -31,17 +32,13 @@ namespace GameActivity.Controls
     public partial class PluginChartTime : PluginUserControlExtend
     {
         private ActivityDatabase PluginDatabase { get; set; } = GameActivity.PluginDatabase;
-        internal override IPluginDatabase _PluginDatabase
-        {
-            get => PluginDatabase;
-            set => PluginDatabase = (ActivityDatabase)_PluginDatabase;
-        }
+        internal override IPluginDatabase pluginDatabase => PluginDatabase;
 
         private PluginChartTimeDataContext ControlDataContext { get; set; } = new PluginChartTimeDataContext();
-        internal override IDataContext _ControlDataContext
+        internal override IDataContext controlDataContext
         {
             get => ControlDataContext;
-            set => ControlDataContext = (PluginChartTimeDataContext)_ControlDataContext;
+            set => ControlDataContext = (PluginChartTimeDataContext)controlDataContext;
         }
 
         public event DataClickHandler GameSeriesDataClick;
@@ -130,7 +127,7 @@ namespace GameActivity.Controls
                     PluginDatabase.PluginSettings.PropertyChanged += PluginSettings_PropertyChanged;
                     PluginDatabase.Database.ItemUpdated += Database_ItemUpdated;
                     PluginDatabase.Database.ItemCollectionChanged += Database_ItemCollectionChanged;
-                    PluginDatabase.PlayniteApi.Database.Games.ItemUpdated += Games_ItemUpdated;
+                    API.Instance.Database.Games.ItemUpdated += Games_ItemUpdated;
 
                     // Apply settings
                     PluginSettings_PropertyChanged(null, null);
@@ -523,7 +520,7 @@ namespace GameActivity.Controls
 
                     DateTime First = dt.StartOfWeek(DayOfWeek.Monday);
                     DateTime Last = First.AddDays(6);
-                    string DataTitleInfo = $"{resources.GetString("LOCGameActivityWeekLabel")} {WeekNumber}";
+                    string DataTitleInfo = $"{ResourceProvider.GetString("LOCGameActivityWeekLabel")} {WeekNumber}";
                     labels.Add(DataTitleInfo);
 
                     datesPeriodes.Add(new WeekStartEnd

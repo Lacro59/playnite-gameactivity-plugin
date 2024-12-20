@@ -27,7 +27,6 @@ namespace GameActivity.Views
     public partial class GameActivityViewSingle : UserControl
     {
         private static ILogger Logger => LogManager.GetLogger();
-        private static IResourceProvider resources => new ResourceProvider();
 
         private ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
 
@@ -41,8 +40,8 @@ namespace GameActivity.Views
 
         public GameActivityViewSingle(GameActivity plugin, Game game)
         {
-            this.GameContext = game;
-            this.Plugin = plugin;
+            GameContext = game;
+            Plugin = plugin;
 
             InitializeComponent();
 
@@ -52,15 +51,15 @@ namespace GameActivity.Views
             // Cover
             if (!game.CoverImage.IsNullOrEmpty())
             {
-                string CoverImage = PluginDatabase.PlayniteApi.Database.GetFullFilePath(game.CoverImage);
-                PART_ImageCover.Source = BitmapExtensions.BitmapFromFile(CoverImage);
+                string coverImage = API.Instance.Database.GetFullFilePath(game.CoverImage);
+                PART_ImageCover.Source = BitmapExtensions.BitmapFromFile(coverImage);
             }
 
             // Game sessions infos
             gameActivities = PluginDatabase.Get(game);
 
             PlayTimeToStringConverter longToTimePlayedConverter = new PlayTimeToStringConverter();
-            PART_TimeAvg.Text = (string)longToTimePlayedConverter.Convert(gameActivities.avgPlayTime(), null, null, CultureInfo.CurrentCulture);
+            PART_TimeAvg.Text = (string)longToTimePlayedConverter.Convert(gameActivities.AvgPlayTime(), null, null, CultureInfo.CurrentCulture);
 
 
             PART_RecentActivity.Text = gameActivities.GetRecentActivity();
@@ -177,11 +176,10 @@ namespace GameActivity.Views
             PART_ChartLog = (PluginChartLog)PART_ChartLogContener.Children[0];
             PART_ChartLog.GameContext = game;
 
-            this.DataContext = new
-            {
-                GameDisplayName = game.Name,
-                Settings = PluginDatabase.PluginSettings
-            };
+            DataContext = (
+                GameDisplayName: game.Name,
+                Settings: PluginDatabase.PluginSettings
+            );
         }
         
 
@@ -214,14 +212,7 @@ namespace GameActivity.Views
         private void ToggleButton_Click(object sender, RoutedEventArgs e)
         {
             ToggleButton tb = sender as ToggleButton;
-            if ((bool)tb.IsChecked)
-            {
-                PART_ChartTime.ShowByWeeks = true;
-            }
-            else
-            {
-                PART_ChartTime.ShowByWeeks = false;
-            }
+            PART_ChartTime.ShowByWeeks = (bool)tb.IsChecked;
             PART_ChartTime.AxisVariator = 0;
         }
         #endregion
@@ -288,7 +279,7 @@ namespace GameActivity.Views
 
         public void getActivityByListGame(GameActivities gameActivities)
         {
-            Task.Run(() => 
+            _ = Task.Run(() => 
             { 
                 ObservableCollection<ListActivities> activityListByGame = new ObservableCollection<ListActivities>();
 
@@ -299,20 +290,20 @@ namespace GameActivity.Views
                         ulong elapsedSeconds = gameActivities.FilterItems[iItem].ElapsedSeconds;
                         DateTime dateSession = Convert.ToDateTime(gameActivities.FilterItems[iItem].DateSession).ToLocalTime();
                         string sourceName = gameActivities.FilterItems[iItem].SourceName;
-                        var ModeSimple = (PluginDatabase.PluginSettings.Settings.ModeStoreIcon == 1) ? TextBlockWithIconMode.IconTextFirstOnly : TextBlockWithIconMode.IconFirstOnly;
+                        TextBlockWithIconMode ModeSimple = (PluginDatabase.PluginSettings.Settings.ModeStoreIcon == 1) ? TextBlockWithIconMode.IconTextFirstOnly : TextBlockWithIconMode.IconFirstOnly;
 
                         activityListByGame.Add(new ListActivities()
                         {
                             GameLastActivity = dateSession,
                             GameElapsedSeconds = elapsedSeconds,
-                            AvgCPU = gameActivities.avgCPU(dateSession.ToUniversalTime()) + "%",
-                            AvgGPU = gameActivities.avgGPU(dateSession.ToUniversalTime()) + "%",
-                            AvgRAM = gameActivities.avgRAM(dateSession.ToUniversalTime()) + "%",
-                            AvgFPS = gameActivities.avgFPS(dateSession.ToUniversalTime()) + "",
-                            AvgCPUT = gameActivities.avgCPUT(dateSession.ToUniversalTime()) + "°",
-                            AvgGPUT = gameActivities.avgGPUT(dateSession.ToUniversalTime()) + "°",
-                            AvgCPUP = gameActivities.avgCPUP(dateSession.ToUniversalTime()) + "W",
-                            AvgGPUP = gameActivities.avgGPUP(dateSession.ToUniversalTime()) + "W",
+                            AvgCPU = gameActivities.AvgCPU(dateSession.ToUniversalTime()) + "%",
+                            AvgGPU = gameActivities.AvgGPU(dateSession.ToUniversalTime()) + "%",
+                            AvgRAM = gameActivities.AvgRAM(dateSession.ToUniversalTime()) + "%",
+                            AvgFPS = gameActivities.AvgFPS(dateSession.ToUniversalTime()) + "",
+                            AvgCPUT = gameActivities.AvgCPUT(dateSession.ToUniversalTime()) + "°",
+                            AvgGPUT = gameActivities.AvgGPUT(dateSession.ToUniversalTime()) + "°",
+                            AvgCPUP = gameActivities.AvgCPUP(dateSession.ToUniversalTime()) + "W",
+                            AvgGPUP = gameActivities.AvgGPUP(dateSession.ToUniversalTime()) + "W",
 
                             GameSourceName = sourceName,
                             TypeStoreIcon = ModeSimple,
@@ -356,13 +347,13 @@ namespace GameActivity.Views
         #region Data actions
         private void PART_Delete_Click(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult result = PluginDatabase.PlayniteApi.Dialogs.ShowMessage(ResourceProvider.GetString("LOCConfirumationAskGeneric"), PluginDatabase.PluginName, MessageBoxButton.YesNo);
+            MessageBoxResult result = API.Instance.Dialogs.ShowMessage(ResourceProvider.GetString("LOCConfirumationAskGeneric"), PluginDatabase.PluginName, MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
                 try
                 {
                     object GameLastActivity = ((FrameworkElement)sender).Tag;
-                    ListActivities activity = ((ObservableCollection<ListActivities>)lvSessions.ItemsSource).Where(x => x.GameLastActivity == (DateTime)GameLastActivity).FirstOrDefault();
+                    ListActivities activity = ((ObservableCollection<ListActivities>)lvSessions.ItemsSource).FirstOrDefault(x => x.GameLastActivity == (DateTime)GameLastActivity);
 
                     // Delete playtime
                     if (activity.GameElapsedSeconds != 0)
@@ -390,11 +381,11 @@ namespace GameActivity.Views
                     // Set last played date
                     GameContext.LastActivity = (DateTime)gameActivities.Items.Max(x => x.DateSession);
 
-                    PluginDatabase.PlayniteApi.Database.Games.Update(GameContext);
+                    API.Instance.Database.Games.Update(GameContext);
                     PluginDatabase.Update(gameActivities);
 
                     lvSessions.SelectedIndex = -1;
-                    ((ObservableCollection<ListActivities>)lvSessions.ItemsSource).Remove(activity);
+                    _ = ((ObservableCollection<ListActivities>)lvSessions.ItemsSource).Remove(activity);
                 }
                 catch (Exception ex)
                 {
@@ -415,8 +406,8 @@ namespace GameActivity.Views
             try
             {
                 GameActivityAddTime ViewExtension = new GameActivityAddTime(Plugin, GameContext, null);
-                Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PluginDatabase.PlayniteApi, resources.GetString("LOCGaAddNewGameSession"), ViewExtension, windowOptions);
-                windowExtension.ShowDialog();
+                Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(ResourceProvider.GetString("LOCGaAddNewGameSession"), ViewExtension, windowOptions);
+                _ = windowExtension.ShowDialog();
 
                 if (ViewExtension.Activity != null)
                 {
@@ -432,7 +423,7 @@ namespace GameActivity.Views
                     // Set last played date
                     GameContext.LastActivity = (DateTime)gameActivities.Items.Max(x => x.DateSession);
 
-                    PluginDatabase.PlayniteApi.Database.Games.Update(GameContext);
+                    API.Instance.Database.Games.Update(GameContext);
                     PluginDatabase.Update(gameActivities);
                 }
             }
@@ -459,8 +450,8 @@ namespace GameActivity.Views
                 };
 
                 GameActivityAddTime ViewExtension = new GameActivityAddTime(Plugin, GameContext, activity);
-                Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PluginDatabase.PlayniteApi, resources.GetString("LOCGaAddNewGameSession"), ViewExtension, windowOptions);
-                windowExtension.ShowDialog();
+                Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(ResourceProvider.GetString("LOCGaAddNewGameSession"), ViewExtension, windowOptions);
+                _ = windowExtension.ShowDialog();
 
                 if (ViewExtension.Activity != null)
                 {
@@ -475,7 +466,7 @@ namespace GameActivity.Views
                     // Set last played date
                     GameContext.LastActivity = (DateTime)gameActivities.Items.Max(x => x.DateSession);
 
-                    PluginDatabase.PlayniteApi.Database.Games.Update(GameContext);
+                    API.Instance.Database.Games.Update(GameContext);
                     PluginDatabase.Update(gameActivities);
                 }
             }
@@ -497,8 +488,8 @@ namespace GameActivity.Views
                 };
 
                 GameActivityMergeTime ViewExtension = new GameActivityMergeTime(GameContext);
-                Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PluginDatabase.PlayniteApi, resources.GetString("LOCGaMergeSession"), ViewExtension, windowOptions);
-                windowExtension.ShowDialog();
+                Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(ResourceProvider.GetString("LOCGaMergeSession"), ViewExtension, windowOptions);
+                _ = windowExtension.ShowDialog();
             }
             catch (Exception ex)
             {

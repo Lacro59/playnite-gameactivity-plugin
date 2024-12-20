@@ -24,15 +24,12 @@ namespace GameActivity.Views
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            ((Window)this.Parent).Close();
+            ((Window)Parent).Close();
         }
     }
 
     public class SetTextColor : IValueConverter
     {
-        public static IResourceProvider resources => new ResourceProvider();
-
-
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             try
@@ -47,7 +44,7 @@ namespace GameActivity.Views
                 Common.LogError(ex, false, true, "GameActivity");
             }
 
-            return resources.GetResource("TextBrush");
+            return ResourceProvider.GetResource("TextBrush");
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

@@ -22,9 +22,7 @@ namespace GameActivity.Views
     /// </summary>
     public partial class GameActivityAddTime : UserControl
     {
-        internal static IResourceProvider resources = new ResourceProvider();
-
-        private ActivityDatabase PluginDatabase = GameActivity.PluginDatabase;
+        private static ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
 
         public GameActivity Plugin { get; set; }
         public Activity Activity { get; set; }
@@ -33,25 +31,25 @@ namespace GameActivity.Views
 
         private List<CbListHeader> CbListHeaders { get; set; }
 
-        private PlayTimeToStringConverter playTimeToStringConverter = new PlayTimeToStringConverter();
+        private PlayTimeToStringConverter PlayTimeToStringConverter => new PlayTimeToStringConverter();
 
 
         public GameActivityAddTime(GameActivity plugin, Game game, Activity activityEdit)
         {
-            this.Plugin = plugin;
-            this.GameContext = game;
+            Plugin = plugin;
+            GameContext = game;
 
             InitializeComponent();
 
             PART_ElapseTime.Content = "--";
 
-            List<string> listCb = game.GameActions?.Select(x => x.Name.IsNullOrEmpty() ? resources.GetString("LOCGameActivityDefaultAction") : x.Name)?.ToList() ?? new List<string> { ResourceProvider.GetString("LOCGameActivityDefaultAction") };
-            PluginDatabase.PluginSettings.Settings.CustomGameActions.TryGetValue(game.Id, out List<string> listCbCustom);
+            List<string> listCb = game.GameActions?.Select(x => x.Name.IsNullOrEmpty() ? ResourceProvider.GetString("LOCGameActivityDefaultAction") : x.Name)?.ToList() ?? new List<string> { ResourceProvider.GetString("LOCGameActivityDefaultAction") };
+            _ = PluginDatabase.PluginSettings.Settings.CustomGameActions.TryGetValue(game.Id, out List<string> listCbCustom);
 
-            CbListHeaders = listCb.Select(x => new CbListHeader { Name = x, Category = resources.GetString("LOCGaGameActions") }).ToList();
-            if (listCbCustom != null) 
+            CbListHeaders = listCb.Select(x => new CbListHeader { Name = x, Category = ResourceProvider.GetString("LOCGaGameActions") }).ToList();
+            if (listCbCustom != null)
             {
-                List<CbListHeader> tmp = listCbCustom.Select(x => new CbListHeader { Name = x, Category = resources.GetString("LOCGaCustomGameActions"), IsCustom = true }).ToList();
+                List<CbListHeader> tmp = listCbCustom.Select(x => new CbListHeader { Name = x, Category = ResourceProvider.GetString("LOCGaCustomGameActions"), IsCustom = true }).ToList();
                 CbListHeaders = CbListHeaders.Concat(tmp).ToList();
             }
 
@@ -75,13 +73,13 @@ namespace GameActivity.Views
                 playAction = CbListHeaders?.Find(x => x.Name.IsEqual(activityEdit.GameActionName)) ?? null;
                 if (playAction == null)
                 {
-                    CbListHeaders.Add(new CbListHeader { Name = activityEdit.GameActionName, Category = resources.GetString("LOCOther") });
+                    CbListHeaders.Add(new CbListHeader { Name = activityEdit.GameActionName, Category = ResourceProvider.GetString("LOCOther") });
                     playAction = CbListHeaders?.Find(x => x.Name.IsEqual(activityEdit.GameActionName)) ?? null;
                 }
 
                 SetElapsedTime();
 
-                PART_Add.Content = resources.GetString("LOCSaveLabel");
+                PART_Add.Content = ResourceProvider.GetString("LOCSaveLabel");
             }
 
             ListCollectionView lcv = new ListCollectionView(CbListHeaders);
@@ -90,7 +88,7 @@ namespace GameActivity.Views
             PART_CbPlayAction.ItemsSource = lcv;
             PART_CbPlayAction.SelectedItem = playAction;
 
-            this.ActivityEdit = activityEdit;
+            ActivityEdit = activityEdit;
         }
 
 
@@ -101,15 +99,7 @@ namespace GameActivity.Views
                 DateTime DateStart = DateTime.Parse(((DateTime)PART_DateStart.SelectedDate).ToString("yyyy-MM-dd") + " " + PART_TimeStart.GetValueAsString());
                 DateTime DateEnd = DateTime.Parse(((DateTime)PART_DateEnd.SelectedDate).ToString("yyyy-MM-dd") + " " + PART_TimeEnd.GetValueAsString());
 
-                if (PART_DateStart.IsEnabled)
-                {
-                    Activity = new Activity();
-                    Activity.DateSession = DateStart.ToUniversalTime();
-                }
-                else
-                {
-                    Activity = ActivityEdit;
-                }
+                Activity = PART_DateStart.IsEnabled ? new Activity { DateSession = DateStart.ToUniversalTime() } : ActivityEdit;
                 Activity.GameActionName = ((CbListHeader)PART_CbPlayAction.SelectedItem).Name;
                 Activity.ElapsedSeconds = (ulong)(DateEnd - DateStart).TotalSeconds;
                 Activity.IdConfiguration = PluginDatabase.LocalSystem.GetIdConfiguration();
@@ -121,12 +111,12 @@ namespace GameActivity.Views
                 Common.LogError(ex, false, true, PluginDatabase.PluginName);
             }
 
-            ((Window)this.Parent).Close();
+            ((Window)Parent).Close();
         }
 
         private void PART_Cancel_Click(object sender, RoutedEventArgs e)
         {
-            ((Window)this.Parent).Close();
+            ((Window)Parent).Close();
         }
 
 
@@ -147,7 +137,7 @@ namespace GameActivity.Views
             {
                 DateTime DateStart = DateTime.Parse(((DateTime)PART_DateStart.SelectedDate).ToString("yyyy-MM-dd") + " " + PART_TimeStart.GetValueAsString());
                 DateTime DateEnd = DateTime.Parse(((DateTime)PART_DateEnd.SelectedDate).ToString("yyyy-MM-dd") + " " + PART_TimeEnd.GetValueAsString());
-                PART_ElapseTime.Content = (string)playTimeToStringConverter.Convert((ulong)(DateEnd - DateStart).TotalSeconds, null, null, CultureInfo.CurrentCulture);
+                PART_ElapseTime.Content = (string)PlayTimeToStringConverter.Convert((ulong)(DateEnd - DateStart).TotalSeconds, null, null, CultureInfo.CurrentCulture);
 
                 PART_Add.IsEnabled = true;
             }
@@ -169,7 +159,7 @@ namespace GameActivity.Views
         {
             if (!PART_PlayActionLabel.Text.IsNullOrEmpty())
             {
-                CbListHeaders.Add(new CbListHeader { Name = PART_PlayActionLabel.Text, Category = resources.GetString("LOCGaCustomGameActions"), IsCustom = true });
+                CbListHeaders.Add(new CbListHeader { Name = PART_PlayActionLabel.Text, Category = ResourceProvider.GetString("LOCGaCustomGameActions"), IsCustom = true });
 
                 ListCollectionView lcv = new ListCollectionView(CbListHeaders);
                 lcv.GroupDescriptions.Add(new PropertyGroupDescription("Category"));
@@ -178,7 +168,7 @@ namespace GameActivity.Views
                 PART_CbPlayAction.ItemsSource = lcv;
 
                 // Save in settings
-                PluginDatabase.PluginSettings.Settings.CustomGameActions.TryGetValue(GameContext.Id, out List<string> listCbCustom);
+                _ = PluginDatabase.PluginSettings.Settings.CustomGameActions.TryGetValue(GameContext.Id, out List<string> listCbCustom);
                 if (listCbCustom == null)
                 {
                     listCbCustom = new List<string>();
@@ -199,7 +189,7 @@ namespace GameActivity.Views
             CbListHeader finded = CbListHeaders.Find(x => x.Name.IsEqual(bt.Tag.ToString()));
             if (finded != null)
             {
-                CbListHeaders.Remove(finded);
+                _ = CbListHeaders.Remove(finded);
 
                 ListCollectionView lcv = new ListCollectionView(CbListHeaders);
                 lcv.GroupDescriptions.Add(new PropertyGroupDescription("Category"));
@@ -208,12 +198,12 @@ namespace GameActivity.Views
                 PART_CbPlayAction.ItemsSource = lcv;
 
                 // Save in settings
-                PluginDatabase.PluginSettings.Settings.CustomGameActions.TryGetValue(GameContext.Id, out List<string> listCbCustom);
+                _ = PluginDatabase.PluginSettings.Settings.CustomGameActions.TryGetValue(GameContext.Id, out List<string> listCbCustom);
                 if (listCbCustom == null)
                 {
                     listCbCustom = new List<string>();
                 }
-                listCbCustom.Remove(finded.Name);
+                _ = listCbCustom.Remove(finded.Name);
                 PluginDatabase.PluginSettings.Settings.CustomGameActions[GameContext.Id] = listCbCustom;
                 Plugin.SavePluginSettings(PluginDatabase.PluginSettings.Settings);
             }
@@ -226,7 +216,7 @@ namespace GameActivity.Views
             {
                 if (((FrameworkElement)ui).Name == "HoverBorder")
                 {
-                    ((Border)ui).Background = (System.Windows.Media.Brush)resources.GetResource("NormalBrush");
+                    ((Border)ui).Background = (System.Windows.Media.Brush)ResourceProvider.GetResource("NormalBrush");
                     break;
                 }
             }

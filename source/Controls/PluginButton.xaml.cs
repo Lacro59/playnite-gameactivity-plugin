@@ -6,6 +6,7 @@ using CommonPluginsShared.Interfaces;
 using GameActivity.Models;
 using GameActivity.Services;
 using GameActivity.Views;
+using Playnite.SDK;
 using Playnite.SDK.Models;
 using System;
 using System.Collections.Generic;
@@ -23,41 +24,37 @@ namespace GameActivity.Controls
     /// </summary>
     public partial class PluginButton : PluginUserControlExtend
     {
-        private GameActivity plugin { get; set; }
+        private GameActivity Plugin { get; set; }
 
         private ActivityDatabase PluginDatabase { get; set; } = GameActivity.PluginDatabase;
-        internal override IPluginDatabase _PluginDatabase
-        {
-            get => PluginDatabase;
-            set => PluginDatabase = (ActivityDatabase)_PluginDatabase;
-        }
+        internal override IPluginDatabase pluginDatabase => PluginDatabase;
 
         private PluginButtonDataContext ControlDataContext { get; set; } = new PluginButtonDataContext();
-        internal override IDataContext _ControlDataContext
+        internal override IDataContext controlDataContext
         {
             get => ControlDataContext;
-            set => ControlDataContext = (PluginButtonDataContext)_ControlDataContext;
+            set => ControlDataContext = (PluginButtonDataContext)controlDataContext;
         }
 
 
         public PluginButton(GameActivity plugin)
         {
-            this.plugin = plugin;
+            Plugin = plugin;
 
             InitializeComponent();
-            this.DataContext = ControlDataContext;
+            DataContext = ControlDataContext;
 
-            Task.Run(() =>
+            _ = Task.Run(() =>
             {
                 // Wait extension database are loaded
-                System.Threading.SpinWait.SpinUntil(() => PluginDatabase.IsLoaded, -1);
+                _ = SpinWait.SpinUntil(() => PluginDatabase.IsLoaded, -1);
 
                 this.Dispatcher.BeginInvoke((Action)delegate
                 {
                     PluginDatabase.PluginSettings.PropertyChanged += PluginSettings_PropertyChanged;
                     PluginDatabase.Database.ItemUpdated += Database_ItemUpdated;
                     PluginDatabase.Database.ItemCollectionChanged += Database_ItemCollectionChanged;
-                    PluginDatabase.PlayniteApi.Database.Games.ItemUpdated += Games_ItemUpdated;
+                    API.Instance.Database.Games.ItemUpdated += Games_ItemUpdated;
 
                     // Apply settings
                     PluginSettings_PropertyChanged(null, null);
@@ -106,9 +103,9 @@ namespace GameActivity.Controls
                 Width = 1280
             };
 
-            GameActivityViewSingle ViewExtension = new GameActivityViewSingle(plugin, PluginDatabase.GameContext);
-            Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(PluginDatabase.PlayniteApi, resources.GetString("LOCGameActivity"), ViewExtension, windowOptions);
-            windowExtension.ShowDialog();
+            GameActivityViewSingle ViewExtension = new GameActivityViewSingle(Plugin, PluginDatabase.GameContext);
+            Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(ResourceProvider.GetString("LOCGameActivity"), ViewExtension, windowOptions);
+            _ = windowExtension.ShowDialog();
         }
         #endregion
     }
@@ -116,20 +113,20 @@ namespace GameActivity.Controls
 
     public class PluginButtonDataContext : ObservableObject, IDataContext
     {
-        private bool _IsActivated;
-        public bool IsActivated { get => _IsActivated; set => SetValue(ref _IsActivated, value); }
+        private bool _isActivated;
+        public bool IsActivated { get => _isActivated; set => SetValue(ref _isActivated, value); }
 
-        public bool _DisplayDetails;
-        public bool DisplayDetails { get => _DisplayDetails; set => SetValue(ref _DisplayDetails, value); }
+        public bool _displayDetails;
+        public bool DisplayDetails { get => _displayDetails; set => SetValue(ref _displayDetails, value); }
 
-        public string _Text;
-        public string Text { get => _Text; set => SetValue(ref _Text, value); }
+        public string _text;
+        public string Text { get => _text; set => SetValue(ref _text, value); }
 
-        public string _LastActivity;
-        public string LastActivity { get => _LastActivity; set => SetValue(ref _LastActivity, value); }
+        public string _lastActivity;
+        public string LastActivity { get => _lastActivity; set => SetValue(ref _lastActivity, value); }
 
-        public ulong _LastPlaytime;
-        public ulong LastPlaytime { get => _LastPlaytime; set => SetValue(ref _LastPlaytime, value); }
+        public ulong _lastPlaytime;
+        public ulong LastPlaytime { get => _lastPlaytime; set => SetValue(ref _lastPlaytime, value); }
 
     }
 }

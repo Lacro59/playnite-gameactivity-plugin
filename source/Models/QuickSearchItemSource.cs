@@ -117,7 +117,7 @@ namespace GameActivity.Models
             var LastSession = data.LastActivity == null ? string.Empty : ResourceProvider.GetString("LOCLastPlayedLabel") 
                     + " " + dateSession;
 
-            var item = new CommandItem(title, () => PluginDatabase.PlayniteApi.MainView.SelectGame(data.Id), "", null, icon)
+            var item = new CommandItem(title, () => API.Instance.MainView.SelectGame(data.Id), "", null, icon)
             {
                 IconChar = null,
                 BottomLeft = PlayniteTools.GetSourceName(data.Id),
@@ -153,7 +153,7 @@ namespace GameActivity.Models
 
         private List<KeyValuePair<Guid, GameActivities>> GetDb(ConcurrentDictionary<Guid, GameActivities> db)
         {
-            return db.Where(x => PluginDatabase.PlayniteApi.Database.Games.Get(x.Key) != null).ToList();
+            return db.Where(x => API.Instance.Database.Games.Get(x.Key) != null).ToList();
         }
 
 

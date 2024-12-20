@@ -7,6 +7,7 @@ using GameActivity.Models;
 using GameActivity.Services;
 using LiveCharts;
 using LiveCharts.Wpf;
+using Playnite.SDK;
 using Playnite.SDK.Models;
 using System;
 using System.Collections.Generic;
@@ -27,17 +28,13 @@ namespace GameActivity.Controls
     public partial class PluginChartLog : PluginUserControlExtend
     {
         private ActivityDatabase PluginDatabase { get; set; } = GameActivity.PluginDatabase;
-        internal override IPluginDatabase _PluginDatabase
-        {
-            get => PluginDatabase;
-            set =>PluginDatabase = (ActivityDatabase)_PluginDatabase;           
-        }
+        internal override IPluginDatabase pluginDatabase => PluginDatabase;
 
         private PluginChartLogDataContext ControlDataContext { get; set; } = new PluginChartLogDataContext();
-        internal override IDataContext _ControlDataContext
+        internal override IDataContext controlDataContext
         {
-            get =>ControlDataContext;
-            set =>ControlDataContext = (PluginChartLogDataContext)_ControlDataContext;
+            get => ControlDataContext;
+            set => ControlDataContext = (PluginChartLogDataContext)controlDataContext;
         }
 
         private ColumnSeries CpuSeries;
@@ -156,19 +153,19 @@ namespace GameActivity.Controls
             AlwaysShow = true;
 
             InitializeComponent();
-            this.DataContext = ControlDataContext;
+            DataContext = ControlDataContext;
 
-            Task.Run(() =>
+            _ = Task.Run(() =>
             {
                 // Wait extension database are loaded
-                System.Threading.SpinWait.SpinUntil(() => PluginDatabase.IsLoaded, -1);
+                _ = SpinWait.SpinUntil(() => PluginDatabase.IsLoaded, -1);
 
                 this.Dispatcher.BeginInvoke((Action)delegate
                 {
                     PluginDatabase.PluginSettings.PropertyChanged += PluginSettings_PropertyChanged;
                     PluginDatabase.Database.ItemUpdated += Database_ItemUpdated;
                     PluginDatabase.Database.ItemCollectionChanged += Database_ItemCollectionChanged;
-                    PluginDatabase.PlayniteApi.Database.Games.ItemUpdated += Games_ItemUpdated;
+                    API.Instance.Database.Games.ItemUpdated += Games_ItemUpdated;
 
                     DisplayCpu = PluginDatabase.PluginSettings.Settings.DisplayCpu;
                     DisplayGpu = PluginDatabase.PluginSettings.Settings.DisplayGpu;
@@ -258,7 +255,7 @@ namespace GameActivity.Controls
 
         public void GetActivityForGamesLogGraphics(GameActivities gameActivities, int variateurLog = 0, int limit = 10, DateTime? dateSelected = null, string titleChart = "")
         {
-            Task.Run(() =>
+            _ = Task.Run(() =>
             {
                 try
                 {
@@ -294,7 +291,7 @@ namespace GameActivity.Controls
                             {
                                 conteurStart = 0;
                                 conteurEnd = limit;
-                                
+
                                 this.Dispatcher.BeginInvoke((Action)delegate
                                 {
                                     AxisVariator++;
@@ -394,11 +391,11 @@ namespace GameActivity.Controls
                         {
                             PART_ChartLogActivity.DataTooltip = new LiveCharts.Wpf.DefaultTooltip();
                             PART_ChartLogActivity.DataTooltip.FontSize = 16;
-                            PART_ChartLogActivity.DataTooltip.Background = (Brush)resources.GetResource("CommonToolTipBackgroundBrush");
+                            PART_ChartLogActivity.DataTooltip.Background = (Brush)ResourceProvider.GetResource("CommonToolTipBackgroundBrush");
                             PART_ChartLogActivity.DataTooltip.Padding = new Thickness(10);
-                            PART_ChartLogActivity.DataTooltip.BorderThickness = (Thickness)resources.GetResource("CommonToolTipBorderThickness");
-                            PART_ChartLogActivity.DataTooltip.BorderBrush = (Brush)resources.GetResource("CommonToolTipBorderBrush");
-                            PART_ChartLogActivity.DataTooltip.Foreground = (Brush)resources.GetResource("CommonToolTipForeground");
+                            PART_ChartLogActivity.DataTooltip.BorderThickness = (Thickness)ResourceProvider.GetResource("CommonToolTipBorderThickness");
+                            PART_ChartLogActivity.DataTooltip.BorderBrush = (Brush)ResourceProvider.GetResource("CommonToolTipBorderBrush");
+                            PART_ChartLogActivity.DataTooltip.Foreground = (Brush)ResourceProvider.GetResource("CommonToolTipForeground");
                         }
                         catch (Exception ex)
                         {
@@ -445,20 +442,20 @@ namespace GameActivity.Controls
         {
             if (CpuSeries != null)
             {
-                CpuSeries.Visibility = (DisplayCpu) ? Visibility.Visible : Visibility.Collapsed;
+                CpuSeries.Visibility = DisplayCpu ? Visibility.Visible : Visibility.Collapsed;
             }
             if (GpuSeries != null)
             {
-                GpuSeries.Visibility = (DisplayGpu) ? Visibility.Visible : Visibility.Collapsed;
+                GpuSeries.Visibility = DisplayGpu ? Visibility.Visible : Visibility.Collapsed;
             }
             if (RamSeries != null)
             {
-                RamSeries.Visibility = (DisplayRam) ? Visibility.Visible : Visibility.Collapsed;
+                RamSeries.Visibility = DisplayRam ? Visibility.Visible : Visibility.Collapsed;
             }
 
             if (FpsSeries != null)
             {
-                FpsSeries.Visibility = (DisplayFps) ? Visibility.Visible : Visibility.Collapsed;
+                FpsSeries.Visibility = DisplayFps ? Visibility.Visible : Visibility.Collapsed;
             }
         }
 
@@ -472,40 +469,40 @@ namespace GameActivity.Controls
 
     public class PluginChartLogDataContext : ObservableObject, IDataContext
     {
-        private bool _IsActivated;
-        public bool IsActivated { get => _IsActivated; set => SetValue(ref _IsActivated, value); }
+        private bool _isActivated;
+        public bool IsActivated { get => _isActivated; set => SetValue(ref _isActivated, value); }
 
-        public double _ChartLogHeight;
-        public double ChartLogHeight { get => _ChartLogHeight; set => SetValue(ref _ChartLogHeight, value); }
+        public double _chartLogHeight;
+        public double ChartLogHeight { get => _chartLogHeight; set => SetValue(ref _chartLogHeight, value); }
 
-        public bool _ChartLogAxis;
-        public bool ChartLogAxis { get => _ChartLogAxis; set => SetValue(ref _ChartLogAxis, value); }
+        public bool _chartLogAxis;
+        public bool ChartLogAxis { get => _chartLogAxis; set => SetValue(ref _chartLogAxis, value); }
 
-        public bool _ChartLogOrdinates;
-        public bool ChartLogOrdinates { get => _ChartLogOrdinates; set => SetValue(ref _ChartLogOrdinates, value); }
+        public bool _chartLogOrdinates;
+        public bool ChartLogOrdinates { get => _chartLogOrdinates; set => SetValue(ref _chartLogOrdinates, value); }
 
-        public bool _ChartLogVisibleEmpty;
-        public bool ChartLogVisibleEmpty { get => _ChartLogVisibleEmpty; set => SetValue(ref _ChartLogVisibleEmpty, value); }
+        public bool _chartLogVisibleEmpty;
+        public bool ChartLogVisibleEmpty { get => _chartLogVisibleEmpty; set => SetValue(ref _chartLogVisibleEmpty, value); }
 
-        public bool _UseControls;
-        public bool UseControls { get => _UseControls; set => SetValue(ref _UseControls, value); }
+        public bool _useControls;
+        public bool UseControls { get => _useControls; set => SetValue(ref _useControls, value); }
 
-        public bool _DisableAnimations = true;
-        public bool DisableAnimations { get => _DisableAnimations; set => SetValue(ref _DisableAnimations, value); }
+        public bool _disableAnimations = true;
+        public bool DisableAnimations { get => _disableAnimations; set => SetValue(ref _disableAnimations, value); }
 
-        public double _LabelsRotationValue;
-        public double LabelsRotationValue { get => _LabelsRotationValue; set => SetValue(ref _LabelsRotationValue, value); }
+        public double _labelsRotationValue;
+        public double LabelsRotationValue { get => _labelsRotationValue; set => SetValue(ref _labelsRotationValue, value); }
 
-        public bool _DisplayCpu;
-        public bool DisplayCpu { get => _DisplayCpu; set => SetValue(ref _DisplayCpu, value); }
+        public bool _displayCpu;
+        public bool DisplayCpu { get => _displayCpu; set => SetValue(ref _displayCpu, value); }
 
-        public bool _DisplayGpu;
-        public bool DisplayGpu { get => _DisplayGpu; set => SetValue(ref _DisplayGpu, value); }
+        public bool _displayGpu;
+        public bool DisplayGpu { get => _displayGpu; set => SetValue(ref _displayGpu, value); }
 
-        public bool _DisplayRam;
-        public bool DisplayRam { get => _DisplayRam; set => SetValue(ref _DisplayRam, value); }
+        public bool _displayRam;
+        public bool DisplayRam { get => _displayRam; set => SetValue(ref _displayRam, value); }
 
-        public bool _DisplayFps;
-        public bool DisplayFps { get => _DisplayFps; set => SetValue(ref _DisplayFps, value); }
+        public bool _displayFps;
+        public bool DisplayFps { get => _displayFps; set => SetValue(ref _displayFps, value); }
     }
 }
