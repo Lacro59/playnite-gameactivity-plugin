@@ -1,4 +1,5 @@
 ﻿using CommonPlayniteShared.Common;
+using CommonPlayniteShared.Converters;
 using CommonPluginsShared;
 using CommonPluginsShared.Collections;
 using CommonPluginsShared.Controls;
@@ -82,6 +83,7 @@ namespace GameActivity.Controls
             {
                 ControlDataContext.LastActivity = gameActivities.GetLastSession().ToLocalTime().ToString(Constants.DateUiFormat);
                 ControlDataContext.LastPlaytime = gameActivities.GetLastSessionActivity().ElapsedSeconds;
+                ControlDataContext.LastPlaytimeString = new PlayTimeToStringConverter().Convert(ControlDataContext.LastPlaytime, null, null, null).ToString();
             }
             else
             {
@@ -127,6 +129,9 @@ namespace GameActivity.Controls
 
         public ulong _lastPlaytime;
         public ulong LastPlaytime { get => _lastPlaytime; set => SetValue(ref _lastPlaytime, value); }
+
+        public string _lastPlaytimeString;
+        public string LastPlaytimeString { get => _lastPlaytimeString; set => SetValue(ref _lastPlaytimeString, value); }
 
     }
 }

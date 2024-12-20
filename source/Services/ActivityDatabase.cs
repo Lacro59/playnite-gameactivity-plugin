@@ -101,7 +101,7 @@ namespace GameActivity.Services
                 + " " + gameActivities.GetLastSession().ToLocalTime().ToString(Constants.TimeUiFormat);
 
             PlayTimeToStringConverter converter = new PlayTimeToStringConverter();
-            string playtime = (string)converter.Convert((long)gameActivities.GetLastSessionActivity().ElapsedSeconds, null, null, CultureInfo.CurrentCulture);
+            string playtime = (string)converter.Convert(gameActivities.GetLastSessionActivity().ElapsedSeconds, null, null, CultureInfo.CurrentCulture);
             PluginSettings.Settings.LastPlaytimeSession = playtime;
 
             PluginSettings.Settings.AvgFpsAllSession = gameActivities.ItemsDetails.AvgFpsAllSession;
