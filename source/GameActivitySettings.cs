@@ -260,8 +260,8 @@ namespace GameActivity
 
             if (API.Instance.ApplicationInfo.Mode == ApplicationMode.Desktop)
             {
-                Plugin.topPanelItem.Visible = Settings.EnableIntegrationButtonHeader;
-                Plugin.gameActivityViewSidebar.Visible = Settings.EnableIntegrationButtonSide;
+                Plugin.TopPanelItem.Visible = Settings.EnableIntegrationButtonHeader;
+                Plugin.SidebarItem.Visible = Settings.EnableIntegrationButtonSide;
             }
 
             this.OnPropertyChanged();

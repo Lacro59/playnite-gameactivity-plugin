@@ -35,8 +35,9 @@ namespace GameActivity
     {
         public override Guid Id { get; } = Guid.Parse("afbb1a0d-04a1-4d0c-9afa-c6e42ca855b4");
 
-        internal TopPanelItem topPanelItem;
-        internal GameActivityViewSidebar gameActivityViewSidebar;
+        internal TopPanelItem TopPanelItem { get; set; }
+        internal SidebarItem SidebarItem { get; set; }
+        internal SidebarItemControl SidebarItemControl { get; set; }
 
         private List<RunningActivity> RunningActivities => new List<RunningActivity>();
 
@@ -63,35 +64,8 @@ namespace GameActivity
             // Initialize top & side bar
             if (API.Instance.ApplicationInfo.Mode == ApplicationMode.Desktop)
             {
-                topPanelItem = new TopPanelItem()
-                {
-                    Icon = new TextBlock
-                    {
-                        Text = "\ue97f",
-                        FontSize = 20,
-                        FontFamily = ResourceProvider.GetResource("FontIcoFont") as FontFamily
-                    },
-                    Title = ResourceProvider.GetString("LOCGameActivityViewGamesActivities"),
-                    Activated = () =>
-                    {
-                        WindowOptions windowOptions = new WindowOptions
-                        {
-                            ShowMinimizeButton = false,
-                            ShowMaximizeButton = true,
-                            ShowCloseButton = true,
-                            CanBeResizable = true,
-                            Height = 740,
-                            Width = 1280
-                        };
-
-                        GameActivityView ViewExtension = new GameActivityView(this);
-                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(ResourceProvider.GetString("LOCGamesActivitiesTitle"), ViewExtension, windowOptions);
-                        _ = windowExtension.ShowDialog();
-                    },
-                    Visible = PluginSettings.Settings.EnableIntegrationButtonHeader
-                };
-
-                gameActivityViewSidebar = new GameActivityViewSidebar(this);
+                TopPanelItem = new GameActivityTopPanelItem(this);
+                SidebarItem = new GameActivityViewSidebar(this);
             }
         }
 
@@ -766,7 +740,7 @@ namespace GameActivity
         // Button on top panel
         public override IEnumerable<TopPanelItem> GetTopPanelItems()
         {
-            yield return topPanelItem;
+            yield return TopPanelItem;
         }
 
         // List custom controls
@@ -790,36 +764,9 @@ namespace GameActivity
             return null;
         }
 
-        // SidebarItem
-        public class GameActivityViewSidebar : SidebarItem
-        {
-            public GameActivityViewSidebar(GameActivity plugin)
-            {
-                Type = SiderbarItemType.View;
-                Title = ResourceProvider.GetString("LOCGameActivityViewGamesActivities");
-                Icon = new TextBlock
-                {
-                    Text = "\ue97f",
-                    FontFamily = ResourceProvider.GetResource("FontIcoFont") as FontFamily
-                };
-                Opened = () =>
-                {
-                    SidebarItemControl sidebarItemControl = new SidebarItemControl();
-                    sidebarItemControl.SetTitle(ResourceProvider.GetString("LOCGamesActivitiesTitle"));
-                    sidebarItemControl.AddContent(new GameActivityView(plugin));
-
-                    return sidebarItemControl;
-                };
-                Visible = plugin.PluginSettings.Settings.EnableIntegrationButtonSide;
-            }
-        }
-
         public override IEnumerable<SidebarItem> GetSidebarItems()
         {
-            List<SidebarItem> items = new List<SidebarItem>
-            {
-                gameActivityViewSidebar
-            };
+            List<SidebarItem> items = new List<SidebarItem> { SidebarItem };
             return items;
         }
         #endregion
