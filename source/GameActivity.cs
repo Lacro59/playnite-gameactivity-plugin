@@ -507,7 +507,7 @@ namespace GameActivity
                             }
 
                             // Find sensors gpu power
-                            if (gpuPValue == 0 && sensorsID.ToLower() == PluginSettings.Settings.HWiNFO_gpuP_elementID.ToLower())
+                            if (gpuPValue == 0 && sensorsID.ToLower() == PluginSettings.Settings.HWiNFO_gpuP_sensorsID.ToLower())
                             {
                                 // Find data gpu
                                 foreach (dynamic items in sensorItemsOBJ["sensors"])
