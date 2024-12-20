@@ -42,6 +42,10 @@ namespace GameActivity.Views
             InitializeComponent();
 
             PART_ElapseTime.Content = "--";
+            PART_DateStart.SelectedDate = DateTime.Now;
+            PART_TimeStart.SetValueAsString(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(), DateTime.Now.Second.ToString());
+            PART_DateEnd.SelectedDate = DateTime.Now;
+            PART_TimeEnd.SetValueAsString(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(), DateTime.Now.Second.ToString());
 
             List<string> listCb = game.GameActions?.Select(x => x.Name.IsNullOrEmpty() ? ResourceProvider.GetString("LOCGameActivityDefaultAction") : x.Name)?.ToList() ?? new List<string> { ResourceProvider.GetString("LOCGameActivityDefaultAction") };
             _ = PluginDatabase.PluginSettings.Settings.CustomGameActions.TryGetValue(game.Id, out List<string> listCbCustom);
