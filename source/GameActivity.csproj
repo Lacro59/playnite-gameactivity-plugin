@@ -155,7 +155,8 @@
     <Compile Include="GameActivity.cs" />
     <Compile Include="GameActivitySettings.cs" />
     <Compile Include="Models\ActivityBackup.cs" />
-    <Compile Include="Models\ExportedData.cs" />
+    <Compile Include="Models\ExportData\ExportData.cs" />
+    <Compile Include="Models\ExportData\ExportDataAll.cs" />
     <Compile Include="Models\GameActivities.cs" />
     <Compile Include="Models\GameActivitiesCollection.cs" />
     <Compile Include="Models\LibreHardwareData.cs" />

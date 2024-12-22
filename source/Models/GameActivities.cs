@@ -23,15 +23,9 @@ namespace GameActivity.Models
 
 
         [DontSerialize]
-        public List<Activity> FilterItems
-        {
-            get
-            {
-                return PluginDatabase.PluginSettings.Settings.IgnoreSession
+        public List<Activity> FilterItems => PluginDatabase.PluginSettings.Settings.IgnoreSession
                     ? Items.Where(x => (int)x.ElapsedSeconds > PluginDatabase.PluginSettings.Settings.IgnoreSessionTime).Distinct().ToList()
                     : Items.Where(x => (int)x.ElapsedSeconds > 0).Distinct().ToList();
-            }
-        }
 
 
         public int AvgCPU(DateTime dateSession)
@@ -332,7 +326,7 @@ namespace GameActivity.Models
             Activity activity = Items.Where(x => x.DateSession == dateSelected.ToUniversalTime()).FirstOrDefault();
             if (activity != null)
             {
-                Items.Remove(activity);
+                _ = Items.Remove(activity);
             }
             else
             {

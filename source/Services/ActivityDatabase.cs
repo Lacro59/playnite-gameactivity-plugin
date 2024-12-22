@@ -11,6 +11,8 @@ using CommonPluginsShared;
 using System.IO;
 using System.Linq;
 using System.Diagnostics;
+using GameActivity.Models.ExportData;
+using CommonPluginsShared.Extensions;
 
 namespace GameActivity.Services
 {
@@ -142,7 +144,7 @@ namespace GameActivity.Services
                 toData.Items.AddRange(fromData.Items);
                 fromData.ItemsDetails.Items.ForEach(x =>
                 {
-                    toData.ItemsDetails.Items.TryAdd(x.Key, x.Value);
+                    _ = toData.ItemsDetails.Items.TryAdd(x.Key, x.Value);
                 });
 
                 return toData;
@@ -152,6 +154,136 @@ namespace GameActivity.Services
                 Common.LogError(ex, false, true, PluginName);
                 return null;
             }
+        }
+
+
+        internal override string GetCsvData(GlobalProgressActionArgs a, bool minimum)
+        {
+            List<string> header = minimum
+                ? new List<string>
+                {
+                    ResourceProvider.GetString("LOCGameNameTitle"),
+                    ResourceProvider.GetString("LOCSourceLabel"),
+                    ResourceProvider.GetString("LOCPlayCountLabel"),
+                    ResourceProvider.GetString("LOCStatsTotalPlayTime"),
+                    ResourceProvider.GetString("LOCStatsTotalPlayTime"),
+                    ResourceProvider.GetString("LOCGameActivityLvGamesLastActivity"),
+                    ResourceProvider.GetString("LOCGameActivityAvgCpu"),
+                    ResourceProvider.GetString("LOCGameActivityAvgRam"),
+                    ResourceProvider.GetString("LOCGameActivityAvgGpu"),
+                    ResourceProvider.GetString("LOCGameActivityAvgFps"),
+                    ResourceProvider.GetString("LOCGameActivityAvgCpuT"),
+                    ResourceProvider.GetString("LOCGameActivityAvgGpuT"),
+                    ResourceProvider.GetString("LOCGameActivityAvgCpuP"),
+                    ResourceProvider.GetString("LOCGameActivityAvgGpuP")
+                }
+                : new List<string>
+                {
+                    ResourceProvider.GetString("LOCGameNameTitle"),
+                    ResourceProvider.GetString("LOCSourceLabel"),
+                    ResourceProvider.GetString("LOCGameActivityDateSession"),
+                    ResourceProvider.GetString("LOCGameActivityDateLog"),
+                    ResourceProvider.GetString("LOCTimePlayed"),
+                    ResourceProvider.GetString("LOCTimePlayed"),
+                    ResourceProvider.GetString("LOCGameActivityPCName"),
+                    ResourceProvider.GetString("LOCGameActivityCpuUsage"),
+                    ResourceProvider.GetString("LOCGameActivityRamUsage"),
+                    ResourceProvider.GetString("LOCGameActivityGpuUsage"),
+                    ResourceProvider.GetString("LOCGameActivityFps"),
+                    ResourceProvider.GetString("LOCGameActivityCpuTemp"),
+                    ResourceProvider.GetString("LOCGameActivityGpuTemp"),
+                    ResourceProvider.GetString("LOCGameActivityCpuPower"),
+                    ResourceProvider.GetString("LOCGameActivityGpuPower")
+                }; ;
+
+            a.ProgressMaxValue = minimum
+                ? Database.Items?.Where(x => x.Value.HasData)?.Count() ?? 0
+                : Database.Items?.Where(x => x.Value.HasData)?.Sum(x => x.Value.ItemsDetails.Count) ?? 0;
+
+            List<ExportData> exportDatas = new List<ExportData>();
+            List<ExportDataAll> exportDataAlls = new List<ExportDataAll>();
+
+            Database.Items?.Where(x => x.Value.HasData && x.Value?.Game != null)?.ForEach(x =>
+            {
+                if (a.CancelToken.IsCancellationRequested)
+                {
+                    return;
+                }
+
+                if (minimum)
+                {
+                    a.Text = $"{PluginName} - {ResourceProvider.GetString("LOCCommonExtracting")}"
+                       + "\n\n" + $"{a.CurrentProgressValue}/{a.ProgressMaxValue}"
+                       + "\n" + x.Value.Game?.Name + (x.Value.Game?.Source == null ? string.Empty : $" ({x.Value.Game?.Source.Name})");
+
+                    TimeSpan ts = new TimeSpan(0, 0, (int)x.Value.Game.Playtime);
+                    string playtimeFormat = string.Format("{0:00}:{1:00}:{1:00}", ts.Hours, ts.Minutes, ts.Seconds);
+
+                    ExportData exportData = new ExportData
+                    {
+                        Name = x.Value.Name,
+                        SourceName = x.Value.Source?.Name ?? x.Value.Platforms?.First()?.Name ?? "Playnite",
+                        PlayCount = x.Value.Count,
+                        Playtime = x.Value.Playtime,
+                        PlaytimeFormat = playtimeFormat,
+                        LastSession = x.Value.GetLastSession(),
+                        AvgCPU = x.Value.AvgCPU(x.Value.GetLastSession()),
+                        AvgRAM = x.Value.AvgRAM(x.Value.GetLastSession()),
+                        AvgGPU = x.Value.AvgGPU(x.Value.GetLastSession()),
+                        AvgFPS = x.Value.AvgFPS(x.Value.GetLastSession()),
+                        AvgCPUT = x.Value.AvgCPUT(x.Value.GetLastSession()),
+                        AvgGPUT = x.Value.AvgGPUT(x.Value.GetLastSession()),
+                        AvgCPUP = x.Value.AvgCPUP(x.Value.GetLastSession()),
+                        AvgGPUP = x.Value.AvgGPUP(x.Value.GetLastSession())
+                    };
+                    exportDatas.Add(exportData);
+                    a.CurrentProgressValue++;
+                }
+                else
+                {
+                    x.Value.Items.ForEach(y =>
+                    {
+                        if (a.CancelToken.IsCancellationRequested)
+                        {
+                            return;
+                        }
+
+                        a.Text = $"{PluginName} - {ResourceProvider.GetString("LOCCommonExtracting")}"
+                            + "\n\n" + $"{a.CurrentProgressValue}/{a.ProgressMaxValue}"
+                            + "\n" + x.Value.Game?.Name + (x.Value.Game?.Source == null ? string.Empty : $" ({x.Value.Game?.Source.Name})");
+
+                        TimeSpan ts = new TimeSpan(0, 0, (int)y.ElapsedSeconds);
+                        string playtimeFormat = string.Format("{0:00}:{1:00}:{1:00}", ts.Hours, ts.Minutes, ts.Seconds);
+
+                        List<ActivityDetailsData> details = x.Value.ItemsDetails.Get((DateTime)y.DateSession);
+                        details.ForEach(z =>
+                        {
+                            ExportDataAll exportDataAll = new ExportDataAll
+                            {
+                                Name = x.Value.Name,
+                                SourceName = x.Value.Source?.Name ?? x.Value.Platforms?.First()?.Name ?? "Playnite",
+                                Session = y.DateSession,
+                                DateTimeValue = z.Datelog,
+                                Playtime = y.ElapsedSeconds,
+                                PlaytimeFormat = playtimeFormat,
+                                PC = y.Configuration.Name,
+                                CPU = z.CPU,
+                                RAM = z.RAM,
+                                GPU = z.GPU,
+                                FPS = z.FPS,
+                                CPUT = z.CPUT,
+                                GPUT = z.GPUT,
+                                CPUP = z.CPUP,
+                                GPUP = z.GPUP
+                            };
+                            exportDataAlls.Add(exportDataAll);
+                        });
+                        a.CurrentProgressValue++;
+                    });
+                }
+            });
+
+            return minimum ? exportDatas.ToCsv(false, ";", false, header) : exportDataAlls.ToCsv(false, ";", false, header);
         }
     }
 }

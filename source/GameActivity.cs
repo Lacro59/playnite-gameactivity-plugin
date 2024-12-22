@@ -854,108 +854,32 @@ namespace GameActivity
                     Description = "-"
                 },
 
-                // Show plugin view with all activities for all game in database
                 new MainMenuItem
                 {
                     MenuSection = MenuInExtensions + ResourceProvider.GetString("LOCGameActivity"),
-                    Description = ResourceProvider.GetString("LOCCommonExportData"),
+                    Description = ResourceProvider.GetString("LOCCommonExtractToCsv"),
                     Action = (mainMenuItem) =>
                     {
-                        GlobalProgressOptions globalProgressOptions = new GlobalProgressOptions($"GameActivity - {ResourceProvider.GetString("LOCCommonProcessing")}") { Cancelable = false,
-                        IsIndeterminate = true };
-
-                        PlayniteApi.Dialogs.ActivateGlobalProgress((a) =>
+                        string path = API.Instance.Dialogs.SelectFolder();
+                        if (Directory.Exists(path))
                         {
-                            try
-                            {
-                                List<ExportedData> ExportedDatas = new List<ExportedData>();
-
-                                foreach(GameActivities gameActivities in PluginDatabase.Database)
-                                {
-                                    List<ExportedData> GameExportedDatas = gameActivities.Items.Select(x => new ExportedData
-                                    {
-                                        Id = gameActivities.Id,
-                                        Name = gameActivities.Name,
-                                        LastActivity = gameActivities.LastActivity,
-
-                                        SourceName = x.SourceName,
-                                        DateSession = x.DateSession,
-                                        ElapsedSeconds = x.ElapsedSeconds
-                                    }).ToList();
-
-
-                                    for(int i = 0; i < GameExportedDatas.Count; i++)
-                                    {
-                                        List<ActivityDetailsData> ActivityDetailsDatas = gameActivities.GetSessionActivityDetails(GameExportedDatas[i].DateSession);
-
-                                        if (ActivityDetailsDatas.Count > 0)
-                                        {
-                                            ActivityDetailsDatas.ForEach(x => ExportedDatas.Add(new ExportedData
-                                            {
-                                                Id = GameExportedDatas[i].Id,
-                                                Name = GameExportedDatas[i].Name,
-                                                LastActivity = GameExportedDatas[i].LastActivity,
-
-                                                SourceName = GameExportedDatas[i].SourceName,
-                                                DateSession = GameExportedDatas[i].DateSession,
-                                                ElapsedSeconds = GameExportedDatas[i].ElapsedSeconds,
-
-                                                FPS = x.FPS,
-                                                CPU = x.CPU,
-                                                GPU = x.GPU,
-                                                RAM = x.RAM,
-                                                CPUT = x.CPUT,
-                                                GPUT = x.GPUT
-                                            }));
-                                        }
-                                        else
-                                        {
-                                            ExportedDatas.Add(new ExportedData
-                                            {
-                                                Id = GameExportedDatas[i].Id,
-                                                Name = GameExportedDatas[i].Name,
-                                                LastActivity = GameExportedDatas[i].LastActivity,
-
-                                                SourceName = GameExportedDatas[i].SourceName,
-                                                DateSession = GameExportedDatas[i].DateSession,
-                                                ElapsedSeconds = GameExportedDatas[i].ElapsedSeconds
-                                            });
-                                        }
-                                    }
-                                }
-
-
-                                string ExportedDatasCsv = ExportedDatas.ToCsv();
-                                string SavPath = PlayniteApi.Dialogs.SaveFile("CSV|*.csv");
-
-                                if (!SavPath.IsNullOrEmpty())
-                                {
-                                    try
-                                    {
-                                        FileSystem.WriteStringToFileSafe(SavPath, ExportedDatasCsv);
-
-                                        string Message = string.Format(ResourceProvider.GetString("LOCCommonExportDataResult"), ExportedDatasCsv.Count());
-                                        MessageBoxResult result = PlayniteApi.Dialogs.ShowMessage(Message, PluginDatabase.PluginName, MessageBoxButton.YesNo);
-                                        if (result == MessageBoxResult.Yes)
-                                        {
-                                            Process.Start(Path.GetDirectoryName(SavPath));
-                                        }
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        Common.LogError(ex, false, true, PluginDatabase.PluginName, PluginDatabase.PluginName + Environment.NewLine + ex.Message);
-                                    }
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                Common.LogError(ex, true);
-                            }
-
-                        }, globalProgressOptions);
+                            PluginDatabase.ExtractToCsv(path, true);
+                        }
                     }
                 },
-
+                new MainMenuItem
+                {
+                    MenuSection = MenuInExtensions + ResourceProvider.GetString("LOCGameActivity"),
+                    Description = ResourceProvider.GetString("LOCCommonExtractAllToCsv"),
+                    Action = (mainMenuItem) =>
+                    {
+                        string path = API.Instance.Dialogs.SelectFolder();
+                        if (Directory.Exists(path))
+                        {
+                            PluginDatabase.ExtractToCsv(path, false);
+                        }
+                    }
+                },
 
                 // Database management
                 new MainMenuItem
