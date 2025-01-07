@@ -37,7 +37,7 @@
 
     <!-- Merge -->
 
-    <sys:String x:Key="LOCGaMerge">Merge</sys:String>
+    <sys:String x:Key="LOCGaMerge">結合</sys:String>
     <sys:String x:Key="LOCGaMergeSession">Merge game session</sys:String>
     
 
@@ -104,14 +104,14 @@
 
     <!-- GameActivityViewSingle -->
 
-    <sys:String x:Key="LOCGameActivityRecentActivity">Recent activity</sys:String>
-    <sys:String x:Key="LOCGameActivityNoRecentActivity">No recent activity</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivity">最近のアクティビティ</sys:String>
+    <sys:String x:Key="LOCGameActivityNoRecentActivity">最近のアクティビティがありません</sys:String>
     <sys:String x:Key="LOCGameActivityRecentActivitySingular">過去 {1} 週間で {0} 時間</sys:String>
     <sys:String x:Key="LOCGameActivityRecentActivityPlurial">過去 {1} 週間で {0} 時間</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgPerDay">Average time per day</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgPerSession">Average time per session</sys:String>
-    <sys:String x:Key="LOCGameActivityFirstSession">First session</sys:String>
-    <sys:String x:Key="LOCGameActivityLastSession">Last session</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgPerDay">1日あたりの平均時間</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgPerSession">1プレイあたりの平均時間</sys:String>
+    <sys:String x:Key="LOCGameActivityFirstSession">最初のプレイ</sys:String>
+    <sys:String x:Key="LOCGameActivityLastSession">最後のプレイ</sys:String>
     
     <!-- GameActivityView -->
 
@@ -126,8 +126,8 @@
     <sys:String x:Key="LOCGameActivityLogTitle">Last session details</sys:String>
     <sys:String x:Key="LOCGameActivityLogTitleDate">Session details for</sys:String>
 
-    <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Last session</sys:String>
-    <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Elapsed time</sys:String>
+    <sys:String x:Key="LOCGameActivityLvGamesLastActivity">最後のプレイ</sys:String>
+    <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">プレイ時間</sys:String>
     
     <sys:String x:Key="LOCGameActivityAvgCpu">平均 CPU 使用率</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpu">平均 GPU 使用率</sys:String>
