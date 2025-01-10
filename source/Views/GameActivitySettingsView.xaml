@@ -6,6 +6,7 @@
              xmlns:converters="clr-namespace:CommonPlayniteShared.Converters"
              xmlns:AttachedProperties="clr-namespace:CommonPluginsShared.Controls"
              xmlns:pcmd="clr-namespace:CommonPluginsShared"
+             xmlns:pcmd2="clr-namespace:CommonPlayniteShared.Commands"
              xmlns:controls="clr-namespace:CommonPluginsControls.Controls"
              xmlns:convertersshared="clr-namespace:CommonPluginsShared.Converters"
              xmlns:playnitecontrols="clr-namespace:CommonPluginsControls.PlayniteControls"
@@ -548,7 +549,13 @@
                                     <Label Content="{DynamicResource LOCGameActivityActiveLog}" Margin="0,0,5,0" />
 
                                     <Label Content="(Performance Monitor &amp; " />
-                                    <TextBlock><Hyperlink Tag="https://openhardwaremonitor.org/" Click="Hyperlink_Click">Open Hardware Monitor</Hyperlink></TextBlock>
+                                    <TextBlock>
+                                        <Hyperlink NavigateUri="https://openhardwaremonitor.org"
+                                                   Command="{x:Static pcmd2:GlobalCommands.NavigateUrlCommand}"
+                                                   CommandParameter="{Binding NavigateUri, RelativeSource={RelativeSource Self}}">
+                                            <Run Text="Open Hardware Monitor" />
+                                        </Hyperlink>                                        
+                                    </TextBlock>
                                     <Label Content=")" />
                                 </StackPanel>
                             </CheckBox>
@@ -561,7 +568,13 @@
                                     <Label Content="{DynamicResource LOCGameActivityUsedLibreHardware}" Margin="0,0,5,0" />
 
                                     <Label Content="(" />
-                                    <TextBlock><Hyperlink Tag="https://github.com/LibreHardwareMonitor/LibreHardwareMonitor" Click="Hyperlink_Click">github</Hyperlink></TextBlock>
+                                    <TextBlock>
+                                        <Hyperlink NavigateUri="https://github.com/LibreHardwareMonitor/LibreHardwareMonitor"
+                                                   Command="{x:Static pcmd2:GlobalCommands.NavigateUrlCommand}"
+                                                   CommandParameter="{Binding NavigateUri, RelativeSource={RelativeSource Self}}">
+                                            <Run Text="github" />
+                                        </Hyperlink>
+                                    </TextBlock>
                                     <Label Content=")" />
                                 </StackPanel>
                             </CheckBox>
@@ -672,7 +685,9 @@
                             <CheckBox Name="cbUseMsiAfterburner" IsChecked="{Binding Settings.UseMsiAfterburner}" Click="CbLogging_Click"
                                       Grid.Column="0" Grid.Row="0">
                                 <TextBlock>
-                                    <Hyperlink Tag="https://fr.msi.com/page/afterburner" Click="Hyperlink_Click">
+                                    <Hyperlink NavigateUri="https://fr.msi.com/page/afterburner"
+                                                Command="{x:Static pcmd2:GlobalCommands.NavigateUrlCommand}"
+                                                CommandParameter="{Binding NavigateUri, RelativeSource={RelativeSource Self}}">
                                         <Run Text="{DynamicResource LOCGameActivityUseMsiAfterburner}" />
                                     </Hyperlink>
                                 </TextBlock>
@@ -681,7 +696,9 @@
                             <CheckBox Name="cbUseHWiNFOSharedMemory" IsChecked="{Binding Settings.UseHWiNFO}" Click="CbLogging_Click"
                                       Grid.Column="0" Grid.Row="2">
                                 <TextBlock>
-                                    <Hyperlink Tag="https://www.hwinfo.com/" Click="Hyperlink_Click">
+                                    <Hyperlink NavigateUri="https://www.hwinfo.com"
+                                                Command="{x:Static pcmd2:GlobalCommands.NavigateUrlCommand}"
+                                                CommandParameter="{Binding NavigateUri, RelativeSource={RelativeSource Self}}">
                                         <Run Text="{DynamicResource LOCGameActivityUseHWiNFOSharedMemory}" />
                                     </Hyperlink>
                                 </TextBlock>
@@ -690,7 +707,9 @@
                             <CheckBox Name="cbUseHWiNFOGadget" IsChecked="{Binding Settings.UseHWiNFOGadget}" Click="CbLogging_Click"
                                       Grid.Column="1" Grid.Row="2">
                                 <TextBlock>
-                                    <Hyperlink Tag="https://www.hwinfo.com/" Click="Hyperlink_Click">
+                                    <Hyperlink NavigateUri="https://www.hwinfo.com"
+                                                Command="{x:Static pcmd2:GlobalCommands.NavigateUrlCommand}"
+                                                CommandParameter="{Binding NavigateUri, RelativeSource={RelativeSource Self}}">
                                         <Run Text="{DynamicResource LOCGameActivityUseHWiNFOGadget}" />
                                     </Hyperlink>
                                 </TextBlock>
