@@ -140,6 +140,9 @@ Kattintson további információkért.</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpuP">Átlagos GPU P</sys:String>
 
     <sys:String x:Key="LOCGameActivityPCName">PC neve</sys:String>
+    
+    <sys:String x:Key="LOCGameActivityDateSession">Date session</sys:String>
+    <sys:String x:Key="LOCGameActivityDateLog">Date log</sys:String>
 
 
     <!-- GameActivity -->
