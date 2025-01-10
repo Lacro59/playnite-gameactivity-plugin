@@ -65,7 +65,7 @@ namespace GameActivity.Views
                     PlatformIDs = activityBackup.PlatformIDs,
                     ElapsedSeconds = activityBackup.ElapsedSeconds
                 });
-                pluginData.ItemsDetails.Items.TryAdd(activityBackup.DateSession, activityBackup.ItemsDetailsDatas);
+                _ = pluginData.ItemsDetails.Items.TryAdd(activityBackup.DateSession, activityBackup.ItemsDetailsDatas);
 
                 PART_ChartLog.GetActivityForGamesLogGraphics(pluginData, 0, 10, activityBackup.DateSession, "1");
             }
@@ -94,7 +94,7 @@ namespace GameActivity.Views
                     PlatformIDs = ActivityBackup.PlatformIDs,
                     ElapsedSeconds = ActivityBackup.ElapsedSeconds
                 });
-                pluginData.ItemsDetails.Items.TryAdd(ActivityBackup.DateSession, ActivityBackup.ItemsDetailsDatas);
+                _ = pluginData.ItemsDetails.Items.TryAdd(ActivityBackup.DateSession, ActivityBackup.ItemsDetailsDatas);
 
                 API.Instance.Database.Games.Update(game);
                 PluginDatabase.Update(pluginData);
@@ -144,8 +144,8 @@ namespace GameActivity.Views
         private string _cover;
         public string Cover { get => _cover; set => SetValue(ref _cover, value); }
 
-        private DateTime _dateSession;
-        public DateTime DateSession { get => _dateSession; set => SetValue(ref _dateSession, value); }
+        private DateTime? _dateSession;
+        public DateTime? DateSession { get => _dateSession; set => SetValue(ref _dateSession, value); }
 
         private ulong _elapsedSeconds;
         public ulong ElapsedSeconds { get => _elapsedSeconds; set => SetValue(ref _elapsedSeconds, value); }

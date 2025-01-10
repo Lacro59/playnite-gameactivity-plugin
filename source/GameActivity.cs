@@ -1207,7 +1207,7 @@ namespace GameActivity
             {
                 _ = Task.Run(() =>
                 {
-                    Parallel.ForEach(Directory.EnumerateFiles(PluginDatabase.Paths.PluginUserDataPath, "SaveSession_*.json"), (objectFile) =>
+                    _ = Parallel.ForEach(Directory.EnumerateFiles(PluginDatabase.Paths.PluginUserDataPath, "SaveSession_*.json"), (objectFile) =>
                     {
                         // Wait extension database are loaded
                         _ = SpinWait.SpinUntil(() => PluginDatabase.IsLoaded, -1);
@@ -1239,19 +1239,26 @@ namespace GameActivity
                                         NotificationType.Info,
                                         () =>
                                         {
-                                            WindowOptions windowOptions = new WindowOptions
+                                            try
                                             {
-                                                ShowMinimizeButton = false,
-                                                ShowMaximizeButton = false,
-                                                ShowCloseButton = true,
-                                                CanBeResizable = true,
-                                                Height = 350,
-                                                Width = 800
-                                            };
+                                                WindowOptions windowOptions = new WindowOptions
+                                                {
+                                                    ShowMinimizeButton = false,
+                                                    ShowMaximizeButton = false,
+                                                    ShowCloseButton = true,
+                                                    CanBeResizable = true,
+                                                    Height = 350,
+                                                    Width = 800
+                                                };
 
-                                            GameActivityBackup ViewExtension = new GameActivityBackup(backupData);
-                                            Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(ResourceProvider.GetString("LOCGaBackupDataInfo"), ViewExtension, windowOptions);
-                                            _ = windowExtension.ShowDialog();
+                                                GameActivityBackup ViewExtension = new GameActivityBackup(backupData);
+                                                Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(ResourceProvider.GetString("LOCGaBackupDataInfo"), ViewExtension, windowOptions);
+                                                _ = windowExtension.ShowDialog();
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                Common.LogError(ex, false, true, PluginDatabase.PluginName);
+                                            }
                                         }
                                     ));
                                 });
