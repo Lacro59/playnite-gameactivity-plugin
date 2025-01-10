@@ -140,6 +140,9 @@ Daha fazla bilgi için tıklayın.</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpuP">Ort. GPU P</sys:String>
 
     <sys:String x:Key="LOCGameActivityPCName">Bilgisayar adı</sys:String>
+    
+    <sys:String x:Key="LOCGameActivityDateSession">Date session</sys:String>
+    <sys:String x:Key="LOCGameActivityDateLog">Date log</sys:String>
 
 
     <!-- GameActivity -->
