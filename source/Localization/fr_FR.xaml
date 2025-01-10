@@ -140,6 +140,9 @@ Cliquez pour plus d'informations.</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpuP">CPU moyen P</sys:String>
 
     <sys:String x:Key="LOCGameActivityPCName">Nom du PC</sys:String>
+    
+    <sys:String x:Key="LOCGameActivityDateSession">Date session</sys:String>
+    <sys:String x:Key="LOCGameActivityDateLog">Date log</sys:String>
 
 
     <!-- GameActivity -->
