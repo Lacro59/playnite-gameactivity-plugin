@@ -140,6 +140,9 @@
     <sys:String x:Key="LOCGameActivityAvgGpuP">وسط GPU P</sys:String>
 
     <sys:String x:Key="LOCGameActivityPCName">اسم الكمبيوتر</sys:String>
+    
+    <sys:String x:Key="LOCGameActivityDateSession">Date session</sys:String>
+    <sys:String x:Key="LOCGameActivityDateLog">Date log</sys:String>
 
 
     <!-- GameActivity -->
