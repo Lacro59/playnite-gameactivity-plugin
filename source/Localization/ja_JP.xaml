@@ -139,6 +139,9 @@
     <sys:String x:Key="LOCGameActivityAvgGpuP">平均 GPU P</sys:String>
 
     <sys:String x:Key="LOCGameActivityPCName">デバイス名</sys:String>
+    
+    <sys:String x:Key="LOCGameActivityDateSession">Date session</sys:String>
+    <sys:String x:Key="LOCGameActivityDateLog">Date log</sys:String>
 
 
     <!-- GameActivity -->
