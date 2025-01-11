@@ -141,8 +141,8 @@ Daha fazla bilgi için tıklayın.</sys:String>
 
     <sys:String x:Key="LOCGameActivityPCName">Bilgisayar adı</sys:String>
     
-    <sys:String x:Key="LOCGameActivityDateSession">Date session</sys:String>
-    <sys:String x:Key="LOCGameActivityDateLog">Date log</sys:String>
+    <sys:String x:Key="LOCGameActivityDateSession">Oturum tarihi</sys:String>
+    <sys:String x:Key="LOCGameActivityDateLog">Oturum günlüğü</sys:String>
 
 
     <!-- GameActivity -->
