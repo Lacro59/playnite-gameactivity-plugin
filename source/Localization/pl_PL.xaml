@@ -141,8 +141,8 @@ Kliknij, aby uzyskać więcej informacji.</sys:String>
 
     <sys:String x:Key="LOCGameActivityPCName">Nazwa komputera</sys:String>
     
-    <sys:String x:Key="LOCGameActivityDateSession">Date session</sys:String>
-    <sys:String x:Key="LOCGameActivityDateLog">Date log</sys:String>
+    <sys:String x:Key="LOCGameActivityDateSession">Data sesji</sys:String>
+    <sys:String x:Key="LOCGameActivityDateLog">Data logowania</sys:String>
 
 
     <!-- GameActivity -->
