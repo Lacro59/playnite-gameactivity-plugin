@@ -42,10 +42,11 @@ namespace GameActivity.Views
             InitializeComponent();
 
             PART_ElapseTime.Content = "--";
-            PART_DateStart.SelectedDate = DateTime.Now;
-            PART_TimeStart.SetValueAsString(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(), DateTime.Now.Second.ToString());
-            PART_DateEnd.SelectedDate = DateTime.Now;
-            PART_TimeEnd.SetValueAsString(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(), DateTime.Now.Second.ToString());
+            DateTime dt = DateTime.Now;
+            PART_DateStart.SelectedDate = dt;
+            PART_TimeStart.SetValueAsString(dt.ToString("HH"), dt.ToString("mm"), dt.ToString("ss"));
+            PART_DateEnd.SelectedDate = dt;
+            PART_TimeEnd.SetValueAsString(dt.ToString("HH"), dt.ToString("mm"), dt.ToString("ss"));
 
             List<string> listCb = game.GameActions?.Select(x => x.Name.IsNullOrEmpty() ? ResourceProvider.GetString("LOCGameActivityDefaultAction") : x.Name)?.ToList() ?? new List<string> { ResourceProvider.GetString("LOCGameActivityDefaultAction") };
             _ = PluginDatabase.PluginSettings.Settings.CustomGameActions.TryGetValue(game.Id, out List<string> listCbCustom);
@@ -104,7 +105,7 @@ namespace GameActivity.Views
                 DateTime DateEnd = DateTime.Parse(((DateTime)PART_DateEnd.SelectedDate).ToString("yyyy-MM-dd") + " " + PART_TimeEnd.GetValueAsString());
 
                 Activity = PART_DateStart.IsEnabled ? new Activity { DateSession = DateStart.ToUniversalTime() } : ActivityEdit;
-                Activity.GameActionName = ((CbListHeader)PART_CbPlayAction.SelectedItem).Name;
+                Activity.GameActionName = ((CbListHeader)PART_CbPlayAction.SelectedItem)?.Name ?? ResourceProvider.GetString("LOCGameActivityDefaultAction");
                 Activity.ElapsedSeconds = (ulong)(DateEnd - DateStart).TotalSeconds;
                 Activity.IdConfiguration = PluginDatabase.LocalSystem.GetIdConfiguration();
                 Activity.PlatformIDs = GameContext.PlatformIds;
@@ -141,9 +142,10 @@ namespace GameActivity.Views
             {
                 DateTime DateStart = DateTime.Parse(((DateTime)PART_DateStart.SelectedDate).ToString("yyyy-MM-dd") + " " + PART_TimeStart.GetValueAsString());
                 DateTime DateEnd = DateTime.Parse(((DateTime)PART_DateEnd.SelectedDate).ToString("yyyy-MM-dd") + " " + PART_TimeEnd.GetValueAsString());
-                PART_ElapseTime.Content = (string)PlayTimeToStringConverter.Convert((ulong)(DateEnd - DateStart).TotalSeconds, null, null, CultureInfo.CurrentCulture);
 
-                PART_Add.IsEnabled = true;
+                ulong TotalSeconds = DateEnd <= DateStart ? 0 : (ulong)(DateEnd - DateStart).TotalSeconds;
+                PART_ElapseTime.Content = (string)PlayTimeToStringConverter.Convert(TotalSeconds, null, null, CultureInfo.CurrentCulture);
+                PART_Add.IsEnabled = TotalSeconds > 0;
             }
             catch
             {
