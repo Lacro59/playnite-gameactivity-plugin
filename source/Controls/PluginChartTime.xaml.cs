@@ -261,7 +261,7 @@ namespace GameActivity.Controls
                         else if (dtList.Count + variateurTime - limit <= 0)
                         {
                             AxisVariator++;
-                            for (int idx = (dtList.Count - 1); idx > limit; idx--)
+                            for (int idx = dtList.Count - 1; idx > limit; idx--)
                             {
                                 if (dtList.Count > limit)
                                 {
@@ -272,7 +272,7 @@ namespace GameActivity.Controls
                         else
                         {
                             int min = dtList.Count + variateurTime - 1;
-                            for (int idx = (dtList.Count - 1); idx > min; idx--)
+                            for (int idx = dtList.Count - 1; idx > min; idx--)
                             {
                                 if (dtList.Count > limit)
                                 {
@@ -322,7 +322,7 @@ namespace GameActivity.Controls
                     // Periode data showned
                     for (int i = limit; i >= 0; i--)
                     {
-                        listDate[(limit - i)] = dateStart.AddDays(-i).ToString("yyyy-MM-dd");
+                        listDate[limit - i] = dateStart.AddDays(-i).ToString("yyyy-MM-dd");
                         CustomerForTime customerForTime = new CustomerForTime
                         {
                             Name = dateStart.AddDays(-i).ToString("yyyy-MM-dd"),
@@ -464,7 +464,7 @@ namespace GameActivity.Controls
                 string[] activityForGameLabels = listDate;
 
                 //let create a mapper so LiveCharts know how to plot our CustomerViewModel class
-                var customerVmMapper = Mappers.Xy<CustomerForTime>()
+                CartesianMapper<CustomerForTime> customerVmMapper = Mappers.Xy<CustomerForTime>()
                         .X((value, index) => index)
                         .Y(value => value.Values);
 
@@ -477,18 +477,13 @@ namespace GameActivity.Controls
                 Func<double, string> activityForGameLogFormatter = value => (string)converter.Convert((ulong)value, null, null, CultureInfo.CurrentCulture);
                 PART_ChartTimeActivityLabelsY.LabelFormatter = activityForGameLogFormatter;
 
-                if (PluginDatabase.PluginSettings.Settings.CumulPlaytimeSession)
-                {
-                    PART_ChartTimeActivity.DataTooltip = new CustomerToolTipForTime
+                PART_ChartTimeActivity.DataTooltip = PluginDatabase.PluginSettings.Settings.CumulPlaytimeSession
+                    ? new CustomerToolTipForTime
                     {
                         ShowIcon = PluginDatabase.PluginSettings.Settings.ShowLauncherIcons,
                         Mode = (PluginDatabase.PluginSettings.Settings.ModeStoreIcon == 1) ? TextBlockWithIconMode.IconTextFirstWithText : TextBlockWithIconMode.IconFirstWithText
-                    };
-                }
-                else
-                {
-                    PART_ChartTimeActivity.DataTooltip = new CustomerToolTipForMultipleTime { ShowTitle = false };
-                }
+                    }
+                    : (System.Windows.Controls.UserControl)new CustomerToolTipForMultipleTime { ShowTitle = false };
 
                 PART_ChartTimeActivityLabelsY.MinValue = 0;
                 PART_ChartTimeActivity.Series = activityForGameSeries;
@@ -554,7 +549,7 @@ namespace GameActivity.Controls
                 activityForGameSeries.Add(new ColumnSeries { Title = "1", Values = seriesData });
 
                 //let create a mapper so LiveCharts know how to plot our CustomerViewModel class
-                var customerVmMapper = Mappers.Xy<CustomerForTime>()
+                CartesianMapper<CustomerForTime> customerVmMapper = Mappers.Xy<CustomerForTime>()
                         .X((value, index) => index)
                         .Y(value => value.Values);
 
@@ -599,25 +594,25 @@ namespace GameActivity.Controls
 
     public class PluginChartTimeDataContext : ObservableObject, IDataContext
     {
-        private bool _IsActivated;
-        public bool IsActivated { get => _IsActivated; set => SetValue(ref _IsActivated, value); }
+        private bool _isActivated;
+        public bool IsActivated { get => _isActivated; set => SetValue(ref _isActivated, value); }
 
-        public double _ChartTimeHeight;
-        public double ChartTimeHeight { get => _ChartTimeHeight; set => SetValue(ref _ChartTimeHeight, value); }
+        public double _chartTimeHeight;
+        public double ChartTimeHeight { get => _chartTimeHeight; set => SetValue(ref _chartTimeHeight, value); }
 
-        public bool _ChartTimeAxis;
-        public bool ChartTimeAxis { get => _ChartTimeAxis; set => SetValue(ref _ChartTimeAxis, value); }
+        public bool _chartTimeAxis;
+        public bool ChartTimeAxis { get => _chartTimeAxis; set => SetValue(ref _chartTimeAxis, value); }
 
-        public bool _ChartTimeOrdinates;
-        public bool ChartTimeOrdinates { get => _ChartTimeOrdinates; set => SetValue(ref _ChartTimeOrdinates, value); }
+        public bool _chartTimeOrdinates;
+        public bool ChartTimeOrdinates { get => _chartTimeOrdinates; set => SetValue(ref _chartTimeOrdinates, value); }
 
-        public bool _ChartTimeVisibleEmpty;
-        public bool ChartTimeVisibleEmpty { get => _ChartTimeVisibleEmpty; set => SetValue(ref _ChartTimeVisibleEmpty, value); }
+        public bool _chartTimeVisibleEmpty;
+        public bool ChartTimeVisibleEmpty { get => _chartTimeVisibleEmpty; set => SetValue(ref _chartTimeVisibleEmpty, value); }
 
-        public bool _DisableAnimations = true;
-        public bool DisableAnimations { get => _DisableAnimations; set => SetValue(ref _DisableAnimations, value); }
+        public bool _disableAnimations = true;
+        public bool DisableAnimations { get => _disableAnimations; set => SetValue(ref _disableAnimations, value); }
 
-        public double _LabelsRotationValue;
-        public double LabelsRotationValue { get => _LabelsRotationValue; set => SetValue(ref _LabelsRotationValue, value); }
+        public double _labelsRotationValue;
+        public double LabelsRotationValue { get => _labelsRotationValue; set => SetValue(ref _labelsRotationValue, value); }
     }
 }
