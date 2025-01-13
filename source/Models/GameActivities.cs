@@ -262,7 +262,7 @@ namespace GameActivity.Models
             DateTime dtEnd = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59, 59);
             DateTime dtStart = new DateTime(DateTime.Now.AddDays(-CountDay).Year, DateTime.Now.AddDays(-CountDay).Month, DateTime.Now.AddDays(-CountDay).Day, 0, 0, 0, 0);
 
-            return Items.Where(x => x.DateSession != null && x.DateSession >= dtStart && x.DateSession <= dtEnd)?.ToList() ?? new List<Activity>();
+            return Items.Where(x => x.DateSession != null && ((DateTime)x.DateSession).ToLocalTime() >= dtStart && ((DateTime)x.DateSession).ToLocalTime() <= dtEnd)?.ToList() ?? new List<Activity>();
         }
 
         public string GetRecentActivity()
@@ -291,7 +291,7 @@ namespace GameActivity.Models
 
         public bool HasActivity(int Year, int Month)
         {
-            List<Activity> els = Items.FindAll(x => x.DateSession != null && x.DateSession <= new DateTime(Year, Month, DateTime.DaysInMonth(Year, Month)) && x.DateSession >= new DateTime(Year, Month, 1));
+            List<Activity> els = Items.FindAll(x => x.DateSession != null && ((DateTime)x.DateSession).ToLocalTime() <= new DateTime(Year, Month, DateTime.DaysInMonth(Year, Month)) && ((DateTime)x.DateSession).ToLocalTime() >= new DateTime(Year, Month, 1));
             return els?.Count > 0;
         }
 
@@ -304,7 +304,7 @@ namespace GameActivity.Models
             }
 
             return Items.Where(x => x.DateSession != null && (int)x.ElapsedSeconds > TimeIgnore)?
-                .Select(x => ((DateTime)x.DateSession).ToString("yyyy-MM"))?
+                .Select(x => ((DateTime)x.DateSession).ToLocalTime().ToString("yyyy-MM"))?
                 .ToList() ?? new List<string>();
         }
 
@@ -317,20 +317,20 @@ namespace GameActivity.Models
             }
 
             return Items.Where(x => x.DateSession != null && (int)x.ElapsedSeconds > TimeIgnore)?
-                .Select(x => (DateTime)x.DateSession)?
+                .Select(x => ((DateTime)x.DateSession).ToLocalTime())?
                 .ToList() ?? new List<DateTime>();
         }
 
         public void DeleteActivity(DateTime dateSelected)
         {
-            Activity activity = Items.Where(x => x.DateSession == dateSelected.ToUniversalTime()).FirstOrDefault();
+            Activity activity = Items.FirstOrDefault(x => x.DateSession == dateSelected.ToUniversalTime());
             if (activity != null)
             {
                 _ = Items.Remove(activity);
             }
             else
             {
-                Logger.Warn($"No activity for {Name} with date {dateSelected.ToString("yyyy-MM-dd HH:mm:ss")}");
+                Logger.Warn($"No activity for {Name} with date {dateSelected:yyyy-MM-dd HH:mm:ss}");
             }
         }
         #endregion
