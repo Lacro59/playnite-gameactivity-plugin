@@ -23,6 +23,8 @@ using System.Windows;
 using Playnite.SDK.Data;
 using System.ComponentModel;
 using Playnite.SDK;
+using System.Windows.Threading;
+using System.Threading;
 
 namespace GameActivity.Controls
 {
@@ -115,12 +117,12 @@ namespace GameActivity.Controls
             AlwaysShow = true;
 
             InitializeComponent();
-            this.DataContext = ControlDataContext;
+            DataContext = ControlDataContext;
 
-            Task.Run(() =>
+            _ = Task.Run(() =>
             {
                 // Wait extension database are loaded
-                System.Threading.SpinWait.SpinUntil(() => PluginDatabase.IsLoaded, -1);
+                SpinWait.SpinUntil(() => PluginDatabase.IsLoaded, -1);
 
                 this.Dispatcher.BeginInvoke((Action)delegate
                 {
@@ -173,6 +175,9 @@ namespace GameActivity.Controls
 
             ControlDataContext.DisableAnimations = DisableAnimations;
             ControlDataContext.LabelsRotationValue = LabelsRotationValue;
+
+            PART_ChartTimeActivity.Series = null;
+            PART_ChartTimeActivityLabelsX.Labels = null;
         }
 
 
@@ -188,14 +193,7 @@ namespace GameActivity.Controls
 
             GameActivities gameActivities = (GameActivities)PluginGameData;
 
-            if (!IgnoreSettings && !ControlDataContext.ChartTimeVisibleEmpty)
-            {
-                MustDisplay = gameActivities.HasData;
-            }
-            else
-            {
-                MustDisplay = true;
-            }
+            MustDisplay = !IgnoreSettings && !ControlDataContext.ChartTimeVisibleEmpty ? gameActivities.HasData : true;
 
             if (MustDisplay)
             {

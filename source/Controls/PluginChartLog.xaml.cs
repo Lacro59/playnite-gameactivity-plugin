@@ -181,7 +181,7 @@ namespace GameActivity.Controls
 
         public override void SetDefaultDataContext()
         {
-            bool IsActivated = PluginDatabase.PluginSettings.Settings.EnableIntegrationChartTime;
+            bool IsActivated = PluginDatabase.PluginSettings.Settings.EnableIntegrationChartLog;
             double ChartLogHeight = PluginDatabase.PluginSettings.Settings.ChartLogHeight;
             bool ChartLogAxis = PluginDatabase.PluginSettings.Settings.ChartLogAxis;
             bool ChartLogOrdinates = PluginDatabase.PluginSettings.Settings.ChartLogOrdinates;
@@ -215,6 +215,9 @@ namespace GameActivity.Controls
             ControlDataContext.DisplayGpu = DisplayGpu;
             ControlDataContext.DisplayRam = DisplayRam;
             ControlDataContext.DisplayFps = DisplayFps;
+
+            PART_ChartLogActivity.Series = null;
+            PART_ChartLogActivityLabelsX.Labels = null;
         }
 
 
