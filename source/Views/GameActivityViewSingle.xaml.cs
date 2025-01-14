@@ -176,10 +176,11 @@ namespace GameActivity.Views
             PART_ChartLog = (PluginChartLog)PART_ChartLogContener.Children[0];
             PART_ChartLog.GameContext = game;
 
-            DataContext = (
-                GameDisplayName: game.Name,
-                Settings: PluginDatabase.PluginSettings
-            );
+            DataContext = new
+            {
+                GameDisplayName = game.Name,
+                Settings = PluginDatabase.PluginSettings
+            };
         }
         
 
@@ -379,7 +380,7 @@ namespace GameActivity.Views
                     gameActivities.DeleteActivity(activity.GameLastActivity);
 
                     // Set last played date
-                    GameContext.LastActivity = (DateTime)gameActivities.Items.Max(x => x.DateSession);
+                    GameContext.LastActivity = gameActivities?.Items?.Max(x => x.DateSession) ?? null;
 
                     API.Instance.Database.Games.Update(GameContext);
                     PluginDatabase.Update(gameActivities);
