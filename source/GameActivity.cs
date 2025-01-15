@@ -1104,7 +1104,7 @@ namespace GameActivity
                     Common.LogDebug(true, Serialization.ToJson(runningActivity.GameActivitiesLog));
                     PluginDatabase.Update(runningActivity.GameActivitiesLog);
 
-                    if (args.Game.Id == PluginDatabase.GameContext.Id)
+                    if (PluginDatabase.GameContext != null && args.Game.Id == PluginDatabase.GameContext.Id)
                     {
                         PluginDatabase.SetThemesResources(PluginDatabase.GameContext);
                     }
