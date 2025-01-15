@@ -2,24 +2,24 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <sys:String x:Key="LOCGameActivityNoPlaytime" xml:space="preserve">Non c'è tempo di gioco per {0}.
-Usato il tempo di gioco della differenza: {1}s.</sys:String>
+Utilizzato il tempo di gioco differenziale:: {1}s.</sys:String>
     
     
     <!-- MainView -->
 
     <sys:String x:Key="LOCGameActivity">Attività di gioco</sys:String>
-    <sys:String x:Key="LOCGameActivityTitle">Attivit</sys:String>
-    <sys:String x:Key="LOCGamesActivitiesTitle">Attività di giochi</sys:String>
+    <sys:String x:Key="LOCGameActivityTitle">Attività</sys:String>
+    <sys:String x:Key="LOCGamesActivitiesTitle">Attività dei giochi</sys:String>
     <sys:String x:Key="LOCGameActivitiesTitle">Attività del gioco</sys:String>
-    <sys:String x:Key="LOCGameActivityViewGamesActivities">Visualizza le attività del gioco</sys:String>
-    <sys:String x:Key="LOCGameActivityViewGameActivity">Visualizza le attività del gioco</sys:String>
+    <sys:String x:Key="LOCGameActivityViewGamesActivities">Visualizza le attività dei giochi</sys:String>
+    <sys:String x:Key="LOCGameActivityViewGameActivity">Visualizza l'attività di gioco</sys:String>
     
     <sys:String x:Key="LOCGameActivityDefaultAction">Azione predefinita</sys:String>
 
 
     <!-- GameActivityGanttView -->
 
-    <sys:String x:Key="LOCGameActivityGanttView">Vista di Gantt</sys:String>
+    <sys:String x:Key="LOCGameActivityGanttView">Diagramma di Gantt</sys:String>
     
     <sys:String x:Key="LOCGameActivitySetNumberDay">Imposta numero di giorni</sys:String>
     <sys:String x:Key="LOCGameActivityPeriod">Periodo</sys:String>
@@ -29,10 +29,10 @@ Usato il tempo di gioco della differenza: {1}s.</sys:String>
     <!-- Backup -->
 
     <sys:String x:Key="LOCGaBackupExist" xml:space="preserve">Ci sono dati di backup per {0}.
-Probabilmente dopo un crash playnite.
+Probabilmente dopo un crash di playnite.
 Clicca per ulteriori informazioni.</sys:String>
     <sys:String x:Key="LOCGaDateSession">Data sessione</sys:String>
-    <sys:String x:Key="LOCGaPlayTimeSession">Sessione tempo di gioco</sys:String>
+    <sys:String x:Key="LOCGaPlayTimeSession">Tempo di gioco della sessione</sys:String>
     <sys:String x:Key="LOCGaBackupDataInfo">Informazioni dati di backup</sys:String>
     
 
@@ -45,19 +45,19 @@ Clicca per ulteriori informazioni.</sys:String>
     <!-- GameActivitySettingsView -->
 
     <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">Combina le sessioni di gioco sul grafico</sys:String>
-    <sys:String x:Key="LOCGameActivityCumulPlaytimeStore">Unificare il tempo delle diverse biblioteche</sys:String>
+    <sys:String x:Key="LOCGameActivityCumulPlaytimeStore">Unisci il tempo dalle diverse librerie</sys:String>
 
-    <sys:String x:Key="LOCGameActivityListGamesFields">Campi del gioco da visualizzare</sys:String>
+    <sys:String x:Key="LOCGameActivityListGamesFields">Campi di gioco da visualizzare</sys:String>
 
-    <sys:String x:Key="LOCGameActivityActiveLog">Abilita registrazioni</sys:String>
-    <sys:String x:Key="LOCGameActivityUsedLibreHardware">Usa invece LibreHarwareMonitor</sys:String>
-    <sys:String x:Key="LOCGameActivityRemoteWebServer">Con server web remoto</sys:String>
+    <sys:String x:Key="LOCGameActivityActiveLog">Abilita logging</sys:String>
+    <sys:String x:Key="LOCGameActivityUsedLibreHardware">Usato LibreHardwareMonitor al suo posto</sys:String>
+    <sys:String x:Key="LOCGameActivityRemoteWebServer">Con web server remoto</sys:String>
     <sys:String x:Key="LOCGameActivityTimeInterval">Verifica intervallo di tempo</sys:String>
     <sys:String x:Key="LOCGameActivityTimeLabel">minuto/i</sys:String>
 
     <sys:String x:Key="LOCGameActivityUseMsiAfterburner">Usa MSI Afterburner</sys:String>
-    <sys:String x:Key="LOCGameActivityUseHWiNFOSharedMemory">Usa SharedMemory HWiNFo</sys:String>
-    <sys:String x:Key="LOCGameActivityUseHWiNFOGadget">Usa la segnalazione di gadget HWiNFO</sys:String>
+    <sys:String x:Key="LOCGameActivityUseHWiNFOSharedMemory">Usa SharedMemory di HWiNFo</sys:String>
+    <sys:String x:Key="LOCGameActivityUseHWiNFOGadget">Usa il gadget di HWiNFO per i report</sys:String>
     <sys:String x:Key="LOCGameActivityIndex">Indice</sys:String>
 
     <sys:String x:Key="LOCGameActivitySensorsID">Id sensori</sys:String>
@@ -78,29 +78,29 @@ Clicca per ulteriori informazioni.</sys:String>
     <sys:String x:Key="LOCGameActivityMaxGpuUsage">Uso massimo GPU</sys:String>
     <sys:String x:Key="LOCGameActivityMaxRamUsage">Uso massimo RAM</sys:String>
 
-    <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">Registro prestazioni CPU, GPU, RAM e FPS durante la sessione di gioco.</sys:String>
+    <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">Logga le prestazioni di CPU, GPU, RAM ed FPS durante la sessione di gioco.</sys:String>
     <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Mostra un messaggio d'avviso alla fine della sessione di gioco entro i limiti definiti.</sys:String>
 
     <sys:String x:Key="LOCGameActivityIntegrationChartTime">Mostra il grafico con i tempi di sessione</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationChartLog">Mostra il grafico con i registri delle sessioni di gioco</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationChartLog">Mostra il grafico con i log delle sessioni di gioco</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">Attiva/disattiva con dettagli</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">Numero di dati nell'asse orizzontale</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationChartTimeTruncate">Troncare i dati dell'ora per impostazione predefinita</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationChartTimeTruncate">Tronca i dati dell'orario di default</sys:String>
 
     <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabels">Mostra etichette sull'asse orizzontale</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">Mostra etichette sull'asse verticale</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicLogOptions">Opzioni del grafico</sys:String>
 
-    <sys:String x:Key="LOCGameActivityUseControls">Usa i controlli grafici</sys:String>
+    <sys:String x:Key="LOCGameActivityUseControls">Usa i controlli del grafico</sys:String>
     <sys:String x:Key="LOCGameActivitySelectChartSeriesToDisplay">Selezionare le serie da visualizzare sul grafico</sys:String>
 
     <sys:String x:Key="LOCGameActivityIconFrom">Seleziona l'origine dell'icona</sys:String>
     <sys:String x:Key="LOCGameActivityIconFromLibrary">Use l'icona definita nella libreria</sys:String>
     <sys:String x:Key="LOCGameActivityIconFromFont">Usa l'icona definita nel font del plugin</sys:String>
 
-    <sys:String x:Key="LOCGameActivityIgnoreSession">Ignora sessioni di riproduzione brevi</sys:String>
+    <sys:String x:Key="LOCGameActivityIgnoreSession">Ignora sessioni di gioco brevi</sys:String>
     <sys:String x:Key="LOCGameActivitySetVariatorTime">Imposta variatore orario</sys:String>
-    <sys:String x:Key="LOCGameActivitySetVariatorLog">Imposta variatore di registro</sys:String>
+    <sys:String x:Key="LOCGameActivitySetVariatorLog">Imposta variatore di log</sys:String>
     <sys:String x:Key="LOCGameActivityRecentActivityWeek">Numero di settimane per le attività recenti</sys:String>
 
     <!-- GameActivityViewSingle -->
@@ -111,7 +111,7 @@ Clicca per ulteriori informazioni.</sys:String>
     <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} ore passate dopo {1} settimane</sys:String>
     <sys:String x:Key="LOCGameActivityAvgPerDay">Tempo medio al giorno</sys:String>
     <sys:String x:Key="LOCGameActivityAvgPerSession">Tempo medio per sessione</sys:String>
-    <sys:String x:Key="LOCGameActivityFirstSession">Primo sessione</sys:String>
+    <sys:String x:Key="LOCGameActivityFirstSession">Prima sessione</sys:String>
     <sys:String x:Key="LOCGameActivityLastSession">Ultima sessione</sys:String>
     
     <!-- GameActivityView -->
@@ -124,20 +124,20 @@ Clicca per ulteriori informazioni.</sys:String>
     <sys:String x:Key="LOCGameActivityTime">Ora</sys:String>
     <sys:String x:Key="LOCGameActivityLog">Registro</sys:String>
     <sys:String x:Key="LOCGameActivityTimeTitle">Ore totali per giorno</sys:String>
-    <sys:String x:Key="LOCGameActivityLogTitle">Ultimi dettagli della sessione</sys:String>
-    <sys:String x:Key="LOCGameActivityLogTitleDate">Dettagli sessione per</sys:String>
+    <sys:String x:Key="LOCGameActivityLogTitle">Dettagli dell'ultima sessione</sys:String>
+    <sys:String x:Key="LOCGameActivityLogTitleDate">Dettagli della sessione per</sys:String>
 
     <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Ultima sessione</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Tempo trascorso</sys:String>
     
-    <sys:String x:Key="LOCGameActivityAvgCpu">Cpu Media</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgGpu">Gpu Media</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgRam">RAM Media</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgFps">FPS Medio</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgCpu">Media CPU</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgGpu">Media GPU</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgRam">Media RAM</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgFps">FPS Medi</sys:String>
     <sys:String x:Key="LOCGameActivityAvgCpuT">Media CPU T</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpuT">Media GPU T</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgCpuP">CPU Media P</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgGpuP">GPU Media P</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgCpuP">Media CPU P</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgGpuP">Media GPU P</sys:String>
 
     <sys:String x:Key="LOCGameActivityPCName">Nome PC</sys:String>
     
@@ -152,15 +152,15 @@ Clicca per ulteriori informazioni.</sys:String>
     <sys:String x:Key="LOCGameActivityCpuUsage">Uso CPU</sys:String>
     <sys:String x:Key="LOCGameActivityRamUsage">Uso RAM</sys:String>
 
-    <sys:String x:Key="LOCGameActivityNotificationHWiNFO">La registrazione HWiNFO è abilitata, ma l'applicazione non è in esecuzione.</sys:String>
-    <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">La MSI AfterBurner registrazione è abilitata ma l'applicazione non è in esecuzione.</sys:String>
+    <sys:String x:Key="LOCGameActivityNotificationHWiNFO">Il logging di HWiNFO è abilitato, ma l'applicazione non è in esecuzione.</sys:String>
+    <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">Il logging di MSI AfterBurner è abilitato, ma l'applicazione non è in esecuzione.</sys:String>
 
     <!-- QuickSearch -->
 
-    <sys:String x:Key="LOCGaQuickSearchDescription">Cerca giochi su dati GameActivity</sys:String>
-    <sys:String x:Key="LOCGaQuickSearchByFPS">Trova per FPS</sys:String>
-    <sys:String x:Key="LOCGaQuickSearchByTime">Trova per sessione oraria</sys:String>
-    <sys:String x:Key="LOCGaQuickSearchByDate">Trova per data di sessione</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchDescription">Cerca giochi nei dati di GameActivity</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchByFPS">Cerca per FPS</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchByTime">Cerca in base al tempo della sessione</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchByDate">Cerca in base alla data della sessione</sys:String>
 
     <!-- GameActivityAddTime -->
 
@@ -174,6 +174,6 @@ Clicca per ulteriori informazioni.</sys:String>
 
 
     <!-- Temporary workaround for PlayState paused time until Playnite allows to share data among extensions -->
-    <sys:String x:Key="LOCGameActivitySubstPlayStateTime">Sottrai PlayState tempo di pausa dalla durata della sessione</sys:String>
+    <sys:String x:Key="LOCGameActivitySubstPlayStateTime">Sottrai il tempo di pausa di PlayState dalla durata della sessione</sys:String>
 
 </ResourceDictionary>
