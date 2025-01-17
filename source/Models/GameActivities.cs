@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using GameActivity.Services;
 using Playnite.SDK.Data;
-//using MoreLinq.Extensions;
 
 namespace GameActivity.Models
 {
@@ -243,7 +242,7 @@ namespace GameActivity.Models
                 .Where(x => x.DateSession != null && (int)x.ElapsedSeconds > TimeIgnore)?.FirstOrDefault() ?? new Activity();
         }
 
-        public Activity GetFirstSessionactivity()
+        public Activity GetFirstSessionActivity()
         {
             int TimeIgnore = -1;
             if (PluginDatabase.PluginSettings.Settings.IgnoreSession)
@@ -253,6 +252,14 @@ namespace GameActivity.Models
 
             return Items.OrderBy(x => x.DateSession)
                 .Where(x => x.DateSession != null && (int)x.ElapsedSeconds > TimeIgnore)?.FirstOrDefault() ?? new Activity();
+        }
+
+        public List<Activity> GetActivities(int year, int month)
+        {
+            return Items
+                .OrderBy(x => x.DateSession)
+                .Where(x => x.DateSession != null && ((DateTime)x.DateSession).ToLocalTime().Year == year && ((DateTime)x.DateSession).ToLocalTime().Month == month)                
+                .ToList();
         }
 
 

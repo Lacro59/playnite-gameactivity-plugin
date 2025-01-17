@@ -118,6 +118,14 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
 
+                        <GridViewColumn Width="100" DisplayMemberBinding="{Binding Playtime, Converter={StaticResource PlayTimeToStringConverter}}">
+                            <GridViewColumnHeader Content="{DynamicResource LOCTimePlayed}" />
+                        </GridViewColumn>
+
+                        <GridViewColumn Width="150" DisplayMemberBinding="{Binding PlaytimeInPerdiod, Converter={StaticResource PlayTimeToStringConverter}}">
+                            <GridViewColumnHeader Content="{DynamicResource LOCGameActivityTimePlayedInPeriod}" />
+                        </GridViewColumn>
+
                         <GridViewColumn Width="150" DisplayMemberBinding="{Binding LastActivity, Converter={StaticResource LocalDateTimeConverter}}">
                             <GridViewColumnHeader Content="{DynamicResource LOCGameActivityLvGamesLastActivity}" />
                         </GridViewColumn>

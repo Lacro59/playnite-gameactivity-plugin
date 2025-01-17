@@ -30,10 +30,10 @@ namespace GameActivity.Views
         public GameActivityGanttView()
         {
             InitializeComponent();
-            this.DataContext = DataContextGanttView;
+            DataContext = DataContextGanttView;
 
-            SetPeriod();
             GetData();
+            SetPeriod();
         }
 
 
@@ -43,6 +43,20 @@ namespace GameActivity.Views
             DateTime dtStart = DataContextGanttView.LastDate.AddDays(DataContextGanttView.ColumnCount * - 1);
             PART_Period.Content = localDateConverter.Convert(dtStart, null, null, CultureInfo.CurrentCulture)
                 + " - " + localDateConverter.Convert(DataContextGanttView.LastDate, null, null, CultureInfo.CurrentCulture);
+
+            if (DataContextGanttView?.GanttDatas != null)
+            {
+                foreach (GanttData ganttData in DataContextGanttView.GanttDatas)
+                {
+                    ganttData.PlaytimeInPerdiod = 0;
+                    ganttData.DateTimes
+                        .Where(x => x.PlayDate >= new DateTime(dtStart.Year, dtStart.Month, dtStart.Day, 0, 0, 0, DateTimeKind.Local) && x.PlayDate <= new DateTime(DataContextGanttView.LastDate.Year, DataContextGanttView.LastDate.Month, DataContextGanttView.LastDate.Day, 23, 59, 59, DateTimeKind.Local))
+                        ?.ForEach(x =>
+                        {
+                            ganttData.PlaytimeInPerdiod += x.PlayTime;
+                        });
+                }
+            }
         }
 
 
@@ -58,7 +72,8 @@ namespace GameActivity.Views
                         Id = gameActivities.Id,
                         Name = gameActivities.Name,
                         Icon = gameActivities.Icon.IsNullOrEmpty() ? gameActivities.Icon : API.Instance.Database.GetFullFilePath(gameActivities.Icon),
-                        LastActivity = (DateTime)gameActivities.LastActivity
+                        LastActivity = (DateTime)gameActivities.LastActivity,
+                        Playtime = gameActivities.Game.Playtime
                     };
 
                     List<GanttValue> data = gameActivities.Items.Select(x => new GanttValue { PlayDate = (DateTime)x.DateSession?.ToLocalTime(), PlayTime = x.ElapsedSeconds }).ToList();
@@ -165,7 +180,7 @@ namespace GameActivity.Views
         private int _columnCount = 30;
         public int ColumnCount { get => _columnCount; set => SetValue(ref _columnCount, value); }
 
-        private double _headerWidth = 790;
+        private double _headerWidth = 690;
         public double HeaderWidth { get => _headerWidth; set => SetValue(ref _headerWidth, value); }
 
         private DateTime _lastDate = DateTime.Now;
@@ -173,12 +188,16 @@ namespace GameActivity.Views
     }
 
 
-    public class GanttData
+    public class GanttData: ObservableObject
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Icon { get; set; }
         public DateTime LastActivity { get; set; }
+        public ulong Playtime { get; set; }
+
+        private ulong _playtimeInPerdiod;
+        public ulong PlaytimeInPerdiod { get => _playtimeInPerdiod; set => SetValue(ref _playtimeInPerdiod, value); }
 
         public List<GanttValue> DateTimes { get; set; }
 
@@ -188,7 +207,7 @@ namespace GameActivity.Views
         public bool GameExist => API.Instance.Database.Games.Get(Id) != null;
     }
 
-    public class GanttValue
+    public class GanttValue : ObservableObject
     {
         public DateTime PlayDate { get; set; }
         public ulong PlayTime { get; set; }

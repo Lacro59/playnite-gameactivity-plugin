@@ -17,6 +17,7 @@ namespace GameActivity.Models
         public string GameIcon { get; set; }
         public DateTime GameLastActivity { get; set; }
         public ulong GameElapsedSeconds { get; set; }
+        public ulong TimePlayedInMonth { get; set; }
 
         public List<string> DateActivity { get; set; }
 

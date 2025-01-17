@@ -18,7 +18,7 @@ namespace GameActivity.Services
 {
     public class ActivityDatabase : PluginDatabaseObject<GameActivitySettingsViewModel, GameActivitiesCollection, GameActivities, Activity>
     {
-        private LocalSystem _localSystem { get; set; }
+        private LocalSystem _localSystem;
         public LocalSystem LocalSystem
         {
             get

@@ -69,7 +69,7 @@ namespace GameActivity.Views
             PlayTimeToStringConverter converter = new PlayTimeToStringConverter();
 
             PART_FirstSession.Text = (string)localDateConverter.Convert(gameActivities.GetFirstSession(), null, null, CultureInfo.CurrentCulture);
-            PART_FirstSessionElapsedTime.Text = (string)converter.Convert(gameActivities.GetFirstSessionactivity().ElapsedSeconds, null, null, CultureInfo.CurrentCulture);
+            PART_FirstSessionElapsedTime.Text = (string)converter.Convert(gameActivities.GetFirstSessionActivity().ElapsedSeconds, null, null, CultureInfo.CurrentCulture);
 
             PART_LastSession.Text = (string)localDateConverter.Convert(gameActivities.GetLastSession(), null, null, CultureInfo.CurrentCulture);
             PART_LastSessionElapsedTime.Text = (string)converter.Convert(gameActivities.GetLastSessionActivity().ElapsedSeconds, null, null, CultureInfo.CurrentCulture);

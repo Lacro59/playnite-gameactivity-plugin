@@ -310,6 +310,10 @@
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
 
+                                        <GridViewColumn Width="150" DisplayMemberBinding="{Binding TimePlayedInMonth, Converter={StaticResource PlayTimeToStringConverter}}" >
+                                            <GridViewColumnHeader Content="{DynamicResource LOCGameActivityTimePlayedInMonth}" />
+                                        </GridViewColumn>
+
                                         <GridViewColumn Width="150" DisplayMemberBinding="{Binding GameLastActivity, Converter={StaticResource LocalDateTimeConverter}}" >
                                             <GridViewColumnHeader Content="{DynamicResource LOCGameActivityLvGamesLastActivity}" />
                                         </GridViewColumn>

@@ -207,6 +207,7 @@
       <DependentUpon>TransfertData.xaml</DependentUpon>
     </Compile>
     <Compile Include="Services\ActivityDatabase.cs" />
+    <Compile Include="Services\GameActivityStats.cs" />
     <Compile Include="Services\GameActivityTopPanelItem.cs" />
     <Compile Include="Services\GameActivityViewSidebar.cs" />
     <Compile Include="Services\LibreHardware.cs" />

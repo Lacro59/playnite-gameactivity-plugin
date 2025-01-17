@@ -57,8 +57,6 @@ namespace GameActivity.Views
         private List<string> SearchSources { get; set; } = new List<string>();
         public List<ListActivities> ActivityListByGame { get; set; }
 
-        private GameActivitySettings Settings { get; set; }
-
         public bool IsMonthSources { get; set; } = true;
         public bool IsGenresSources { get; set; } = false;
         public bool IsGameTime { get; set; } = true;
@@ -67,21 +65,10 @@ namespace GameActivity.Views
         public TextBlockWithIconMode ModeComplet { get; set; }
         public TextBlockWithIconMode ModeSimple { get; set; }
 
-        // Variables api.
-        public readonly IPlayniteAPI _PlayniteApi;
-        public readonly IGameDatabaseAPI dbPlaynite;
-        public readonly IPlaynitePathsAPI pathsPlaynite;
-        public readonly string pathExtentionData;
-
 
         public GameActivityView(GameActivity plugin, Game gameContext = null)
         {
             Plugin = plugin;
-
-            dbPlaynite = API.Instance.Database;
-            pathsPlaynite = API.Instance.Paths;
-            Settings = PluginDatabase.PluginSettings.Settings;
-            pathExtentionData = PluginDatabase.Paths.PluginUserDataPath;
 
             // Set dates variables
             YearCurrent = DateTime.Now.Year;
@@ -224,7 +211,8 @@ namespace GameActivity.Views
             // Graphics game details activities.
             activityForGamesGraphics.Visibility = Visibility.Hidden;
 
-            activityLabel.Content = new DateTime(YearCurrent, MonthCurrent, 1).ToString("MMMM yyyy");
+            activityLabel.Content = new DateTime(YearCurrent, MonthCurrent, 1).ToString("MMMM yyyy")
+                + $" ({Converter.Convert(GameActivityStats.GetPlayTimeYearMonth((uint)YearCurrent, (uint)MonthCurrent, false), null, null, CultureInfo.CurrentCulture)})";
 
 
             #region Get & set datas
@@ -259,7 +247,7 @@ namespace GameActivity.Views
                     }
                     lvGames.ScrollIntoView(lvGames.SelectedItem);
 
-                    if (Settings.CumulPlaytimeStore)
+                    if (PluginDatabase.PluginSettings.Settings.CumulPlaytimeStore)
                     {
                         PART_ChartTotalHoursSource.Visibility = Visibility.Hidden;
                         PART_ChartTotalHoursSource_Label.Visibility = Visibility.Hidden;
@@ -282,7 +270,7 @@ namespace GameActivity.Views
 
 
             // Set Binding data
-            ShowIcon = Settings.ShowLauncherIcons;
+            ShowIcon = PluginDatabase.PluginSettings.Settings.ShowLauncherIcons;
             ModeComplet = (PluginDatabase.PluginSettings.Settings.ModeStoreIcon == 1) ? TextBlockWithIconMode.IconTextFirstWithText : TextBlockWithIconMode.IconFirstWithText;
             ModeSimple = (PluginDatabase.PluginSettings.Settings.ModeStoreIcon == 1) ? TextBlockWithIconMode.IconTextFirstOnly : TextBlockWithIconMode.IconFirstOnly;
 
@@ -350,7 +338,7 @@ namespace GameActivity.Views
             // Total hours by source.
             if (IsMonthSources)
             {
-                if (Settings.ShowLauncherIcons)
+                if (PluginDatabase.PluginSettings.Settings.ShowLauncherIcons)
                 {
                     PART_ChartTotalHoursSource_X.LabelsRotation = 0;
                     PART_ChartTotalHoursSource_X.FontSize = 30;
@@ -489,7 +477,7 @@ namespace GameActivity.Views
                         string k = d.First().Key;
                         ulong v = d.First().Value;
 
-                        activityTEMP.Remove(k);
+                        _ = activityTEMP.Remove(k);
                         activityTEMP.Add(k + "\r\n" + x.Key, v);
                     }
                     else
@@ -516,7 +504,7 @@ namespace GameActivity.Views
                     Values = (long)item.Value,
                 });
                 labels[compteur] = item.Key;
-                if (Settings.ShowLauncherIcons)
+                if (PluginDatabase.PluginSettings.Settings.ShowLauncherIcons)
                 {
                     labels[compteur] = TransformIcon.Get(labels[compteur]);
                 }
@@ -547,7 +535,7 @@ namespace GameActivity.Views
 
             if (IsMonthSources)
             {
-                if (Settings.CumulPlaytimeStore)
+                if (PluginDatabase.PluginSettings.Settings.CumulPlaytimeStore)
                 {
                     PART_ChartTotalHoursSource.Visibility = Visibility.Hidden;
                     PART_ChartTotalHoursSource_Label.Visibility = Visibility.Hidden;
@@ -564,7 +552,7 @@ namespace GameActivity.Views
             }
             else
             {
-                if (Settings.CumulPlaytimeStore)
+                if (PluginDatabase.PluginSettings.Settings.CumulPlaytimeStore)
                 {
                     PART_ChartTotalHoursSource.Visibility = Visibility.Visible;
                     PART_ChartTotalHoursSource_Label.Visibility = Visibility.Visible;
@@ -581,7 +569,7 @@ namespace GameActivity.Views
             PART_ChartTotalHoursSource_Y.LabelFormatter = activityForGameLogFormatter;
             PART_ChartTotalHoursSource.Series = ActivityByMonthSeries;
             PART_ChartTotalHoursSource_Y.MinValue = 0;
-            ((CustomerToolTipForTime)PART_ChartTotalHoursSource.DataTooltip).ShowIcon = Settings.ShowLauncherIcons;
+            ((CustomerToolTipForTime)PART_ChartTotalHoursSource.DataTooltip).ShowIcon = PluginDatabase.PluginSettings.Settings.ShowLauncherIcons;
             PART_ChartTotalHoursSource_X.Labels = ActivityByMonthLabels;
 
             PART_ChartTotalHoursSource_X.ShowLabels = true;
@@ -786,7 +774,7 @@ namespace GameActivity.Views
                 for (int iSource = 0; iSource < listNoDelete.Count; iSource++)
                 {
                     labels[iSource] = listNoDelete[iSource];
-                    if (Settings.ShowLauncherIcons)
+                    if (PluginDatabase.PluginSettings.Settings.ShowLauncherIcons)
                     {
                         labels[iSource] = TransformIcon.Get(listNoDelete[iSource]);
                     }
@@ -852,7 +840,7 @@ namespace GameActivity.Views
             }
 
 
-            if (Settings.CumulPlaytimeStore)
+            if (PluginDatabase.PluginSettings.Settings.CumulPlaytimeStore)
             {
                 ChartValues<CustomerForTime> series = new ChartValues<CustomerForTime>();
                 for (int i = 0; i < activityByWeekSeries.Count; i++)
@@ -952,11 +940,12 @@ namespace GameActivity.Views
                         Activity lastSessionActivity = listGameActivities[iGame].GetLastSessionActivity();
                         ulong elapsedSeconds = lastSessionActivity.ElapsedSeconds;
                         DateTime dateSession = Convert.ToDateTime(lastSessionActivity.DateSession).ToLocalTime();
+                        ulong timePlayedInMonth = 0;
 
                         string GameIcon = listGameActivities[iGame].Icon;
                         if (!GameIcon.IsNullOrEmpty())
                         {
-                            GameIcon = dbPlaynite.GetFullFilePath(GameIcon);
+                            GameIcon = API.Instance.Database.GetFullFilePath(GameIcon);
                         }
 
                         ActivityListByGame.Add(new ListActivities()
@@ -967,6 +956,7 @@ namespace GameActivity.Views
                             GameIcon = GameIcon,
                             GameLastActivity = dateSession,
                             GameElapsedSeconds = elapsedSeconds,
+                            TimePlayedInMonth = timePlayedInMonth,
                             GameSourceName = sourceName,
                             GameSourceIcon = TransformIcon.Get(sourceName),
                             DateActivity = listGameActivities[iGame].GetListDateActivity(),
@@ -979,13 +969,13 @@ namespace GameActivity.Views
                             AvgCPUP = listGameActivities[iGame].AvgCPUP(listGameActivities[iGame].GetLastSession()) + "W",
                             AvgGPUP = listGameActivities[iGame].AvgGPUP(listGameActivities[iGame].GetLastSession()) + "W",
 
-                            EnableWarm = Settings.EnableWarning,
-                            MaxCPUT = Settings.MaxCpuTemp.ToString(),
-                            MaxGPUT = Settings.MaxGpuTemp.ToString(),
-                            MinFPS = Settings.MinFps.ToString(),
-                            MaxCPU = Settings.MaxCpuUsage.ToString(),
-                            MaxGPU = Settings.MaxGpuUsage.ToString(),
-                            MaxRAM = Settings.MaxRamUsage.ToString(),
+                            EnableWarm = PluginDatabase.PluginSettings.Settings.EnableWarning,
+                            MaxCPUT = PluginDatabase.PluginSettings.Settings.MaxCpuTemp.ToString(),
+                            MaxGPUT = PluginDatabase.PluginSettings.Settings.MaxGpuTemp.ToString(),
+                            MinFPS = PluginDatabase.PluginSettings.Settings.MinFps.ToString(),
+                            MaxCPU = PluginDatabase.PluginSettings.Settings.MaxCpuUsage.ToString(),
+                            MaxGPU = PluginDatabase.PluginSettings.Settings.MaxGpuUsage.ToString(),
+                            MaxRAM = PluginDatabase.PluginSettings.Settings.MaxRamUsage.ToString(),
 
                             PCConfigurationId = listGameActivities[iGame].GetLastSessionActivity()?.IdConfiguration ?? -1,
                             PCName = listGameActivities[iGame].GetLastSessionActivity()?.Configuration.Name,
@@ -1026,7 +1016,7 @@ namespace GameActivity.Views
         /// <param name="variateur"></param>
         public void GetActivityForGamesTimeGraphics(string gameID, bool isNavigation = false)
         {
-            PART_GameActivityChartTime.GameContext = _PlayniteApi.Database.Games.Get(Guid.Parse(gameID));
+            PART_GameActivityChartTime.GameContext = API.Instance.Database.Games.Get(Guid.Parse(gameID));
             PART_GameActivityChartTime.DisableAnimations = true;
             PART_GameActivityChartTime.AxisVariator = VariateurTime;
 
@@ -1044,7 +1034,7 @@ namespace GameActivity.Views
         {
             GameActivities gameActivities = GameActivity.PluginDatabase.Get(Guid.Parse(gameID));
 
-            PART_GameActivityChartLog.GameContext = _PlayniteApi.Database.Games.Get(Guid.Parse(gameID));
+            PART_GameActivityChartLog.GameContext = API.Instance.Database.Games.Get(Guid.Parse(gameID));
             PART_GameActivityChartLog.DisableAnimations = true;
             PART_GameActivityChartLog.DateSelected = dateSelected;
             PART_GameActivityChartLog.TitleChart = title;
@@ -1069,11 +1059,11 @@ namespace GameActivity.Views
         public List<string> GetListSourcesName()
         {
             List<string> arrayReturn = new List<string>();
-            foreach (GameSource source in dbPlaynite.Sources)
+            foreach (GameSource source in API.Instance.Database.Sources)
             {
                 if (arrayReturn.Find(x => x.IsEqual(source.Name)) == null)
                 {
-                    arrayReturn.AddMissing(source.Name);
+                    _ = arrayReturn.AddMissing(source.Name);
                 }
             }
 
@@ -1159,7 +1149,8 @@ namespace GameActivity.Views
             GetActivityByWeek(YearCurrent, MonthCurrent);
             GetActivityByDay(YearCurrent, MonthCurrent);
 
-            activityLabel.Content = new DateTime(YearCurrent, MonthCurrent, 1).ToString("MMMM yyyy");
+            activityLabel.Content = new DateTime(YearCurrent, MonthCurrent, 1).ToString("MMMM yyyy")
+                + $" ({Converter.Convert(GameActivityStats.GetPlayTimeYearMonth((uint)YearCurrent, (uint)MonthCurrent, false), null, null, CultureInfo.CurrentCulture)})";
 
 
             Filter();
@@ -1176,7 +1167,8 @@ namespace GameActivity.Views
             GetActivityByWeek(YearCurrent, MonthCurrent);
             GetActivityByDay(YearCurrent, MonthCurrent);
 
-            activityLabel.Content = new DateTime(YearCurrent, MonthCurrent, 1).ToString("MMMM yyyy");
+            activityLabel.Content = new DateTime(YearCurrent, MonthCurrent, 1).ToString("MMMM yyyy")
+                + $" ({Converter.Convert(GameActivityStats.GetPlayTimeYearMonth((uint)YearCurrent, (uint)MonthCurrent, false), null, null, CultureInfo.CurrentCulture)})";
 
 
             Filter();
@@ -1195,7 +1187,8 @@ namespace GameActivity.Views
             GetActivityByWeek(YearCurrent, MonthCurrent);
             GetActivityByDay(YearCurrent, MonthCurrent);
 
-            activityLabel.Content = new DateTime(YearCurrent, MonthCurrent, 1).ToString("MMMM yyyy");
+            activityLabel.Content = new DateTime(YearCurrent, MonthCurrent, 1).ToString("MMMM yyyy")
+                + $" ({Converter.Convert(GameActivityStats.GetPlayTimeYearMonth((uint)YearCurrent, (uint)MonthCurrent, false), null, null, CultureInfo.CurrentCulture)})";
 
 
             Filter();
@@ -1433,7 +1426,7 @@ namespace GameActivity.Views
         // TODO Select details data
         private void GameSeries_DataClick(object sender, ChartPoint chartPoint)
         {
-            if (Settings.EnableLogging)
+            if (PluginDatabase.PluginSettings.Settings.EnableLogging)
             {
                 int index = (int)chartPoint.X;
                 TitleChart = chartPoint.SeriesView.Title;
@@ -1491,7 +1484,24 @@ namespace GameActivity.Views
                 return;
             }
 
-            lvGames.ItemsSource = ActivityListByGame.FindAll(x => x.DateActivity.Contains(YearCurrent + "-" + ((MonthCurrent > 9) ? MonthCurrent.ToString() : "0" + MonthCurrent)));
+            List<ListActivities> filteredData = ActivityListByGame.FindAll(x => x.DateActivity.Contains($"{YearCurrent}-{MonthCurrent:D2}"));
+            foreach (ListActivities activity in filteredData)
+            {
+                List<Activity> activities = PluginDatabase.Database.Get(activity.Id)?.GetActivities(YearCurrent, MonthCurrent);
+                if (activities != null)
+                {
+                    activities?.ForEach(y =>
+                    {
+                        activity.TimePlayedInMonth += y.ElapsedSeconds;
+                    });
+                }
+                else
+                {
+                    activity.TimePlayedInMonth = 0;
+                }
+            }
+
+            lvGames.ItemsSource = filteredData;
             lvGames.Sorting();
         }
 
