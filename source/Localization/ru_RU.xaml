@@ -129,6 +129,8 @@
 
     <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Последняя сессия</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Проведённое время</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInMonth">Time played (month)</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">Time played (period)</sys:String>
     
     <sys:String x:Key="LOCGameActivityAvgCpu">Среднее значение Ц</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpu">Среднее значение Г</sys:String>
