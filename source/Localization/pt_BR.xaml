@@ -130,6 +130,8 @@ Clique para mais informações.</sys:String>
 
     <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Última sessão</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Tempo decorrido</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInMonth">Time played (month)</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">Time played (period)</sys:String>
     
     <sys:String x:Key="LOCGameActivityAvgCpu">CPU Méd</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpu">GPU Méd</sys:String>
