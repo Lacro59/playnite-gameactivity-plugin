@@ -129,8 +129,8 @@ Daha fazla bilgi için tıklayın.</sys:String>
 
     <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Son oturum</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Geçen süre</sys:String>
-    <sys:String x:Key="LOCGameActivityTimePlayedInMonth">Time played (month)</sys:String>
-    <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">Time played (period)</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInMonth">Oynanan süre (ay)</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">Oynanan süre (dönem)</sys:String>
     
     <sys:String x:Key="LOCGameActivityAvgCpu">Ort. İşlemci</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpu">Ort. GPU</sys:String>
