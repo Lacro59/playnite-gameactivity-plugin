@@ -34,7 +34,18 @@ Clica per més informació.</sys:String>
     <sys:String x:Key="LOCGaDateSession">Data de sessió</sys:String>
     <sys:String x:Key="LOCGaPlayTimeSession">Temps de joc de sessió</sys:String>
     <sys:String x:Key="LOCGaBackupDataInfo">Dades de recuperació</sys:String>
+
+
+    <!-- GamesDataMismatch -->
+
+    <sys:String x:Key="LOCGaGamesDataMismatch">Game data mismatch</sys:String>
+    <sys:String x:Key="LOCGaSessionCount">Session count</sys:String>
+    <sys:String x:Key="LOCGaSessionPlayed">Session played</sys:String>
     
+    <sys:String x:Key="LOCGaGaToPlaynite">Set GameActivity data to Playnite</sys:String>
+    <sys:String x:Key="LOCGaPlayniteToGa">Set Playnite data to GameActivity</sys:String>
+
+    <sys:String x:Key="LOCGaPlayniteToGaWarning">This irreversible action will force the play count and times coming from GameActivity to Playnite.</sys:String>
 
     <!-- Merge -->
 
