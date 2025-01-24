@@ -26,6 +26,8 @@ namespace GameActivity.Models
                     ? Items.Where(x => (int)x.ElapsedSeconds > PluginDatabase.PluginSettings.Settings.IgnoreSessionTime).Distinct().ToList()
                     : Items.Where(x => (int)x.ElapsedSeconds > 0).Distinct().ToList();
 
+        public ulong SessionPlaytime => (ulong)(Items?.Sum(x => (long)x.ElapsedSeconds) ?? 0);
+
 
         public int AvgCPU(DateTime dateSession)
         {

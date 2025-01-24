@@ -285,5 +285,21 @@ namespace GameActivity.Services
 
             return minimum ? exportDatas.ToCsv(false, ";", false, header) : exportDataAlls.ToCsv(false, ";", false, header);
         }
+
+
+        public IEnumerable<GameActivities> GetGamesDataMismatch(bool withHidden)
+        {
+            try
+            {
+                return Database.Items
+                    ?.Where(x => x.Value.GameExist && (x.Value.SessionPlaytime != x.Value.Game.Playtime || x.Value.Game.PlayCount != (ulong)x.Value.Count) && (!x.Value.Game.Hidden || withHidden))
+                    ?.Select(x => x.Value) ?? Enumerable.Empty<GameActivities>();
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex, false, true, PluginName);
+            }
+            return Enumerable.Empty<GameActivities>();
+        }
     }
 }

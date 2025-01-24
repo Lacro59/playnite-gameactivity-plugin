@@ -891,6 +891,27 @@ namespace GameActivity
                 new MainMenuItem
                 {
                     MenuSection = MenuInExtensions + ResourceProvider.GetString("LOCGameActivity"),
+                    Description = ResourceProvider.GetString("LOCGaGamesDataMismatch"),
+                    Action = (mainMenuItem) =>
+                    {
+                        WindowOptions windowOptions = new WindowOptions
+                        {
+                            ShowMinimizeButton = false,
+                            ShowMaximizeButton = true,
+                            ShowCloseButton = true,
+                            Width = 900,
+                            Height= 500
+                        };
+
+                        GamesDataMismatch ViewExtension = new GamesDataMismatch();
+                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(ResourceProvider.GetString("LOCGaGamesDataMismatch"), ViewExtension, windowOptions);
+                        _ = windowExtension.ShowDialog();
+                    }
+                },
+
+                new MainMenuItem
+                {
+                    MenuSection = MenuInExtensions + ResourceProvider.GetString("LOCGameActivity"),
                     Description = ResourceProvider.GetString("LOCCommonTransferPluginData"),
                     Action = (mainMenuItem) =>
                     {

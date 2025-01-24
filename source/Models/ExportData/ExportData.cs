@@ -6,7 +6,7 @@ namespace GameActivity.Models.ExportData
     {
         public string Name { get; set; }
         public string SourceName { get; set; }
-        public int PlayCount { get; set; }
+        public ulong PlayCount { get; set; }
         public ulong Playtime { get; set; }
         public string PlaytimeFormat { get; set; }
         public DateTime? LastSession { get; set; }
