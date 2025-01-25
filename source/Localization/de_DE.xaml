@@ -40,7 +40,7 @@ Klicken Sie für weitere Informationen.</sys:String>
 
     <sys:String x:Key="LOCGaGamesDataMismatch">Game data mismatch</sys:String>
     <sys:String x:Key="LOCGaSessionCount">Session count</sys:String>
-    <sys:String x:Key="LOCGaSessionPlayed">Session played</sys:String>
+    <sys:String x:Key="LOCGaSessionPlayed">Sitzung gespielt</sys:String>
     
     <sys:String x:Key="LOCGaGaToPlaynite">Set GameActivity data to Playnite</sys:String>
     <sys:String x:Key="LOCGaPlayniteToGa">Set Playnite data to GameActivity</sys:String>
