@@ -38,14 +38,14 @@ Clicca per ulteriori informazioni.</sys:String>
 
     <!-- GamesDataMismatch -->
 
-    <sys:String x:Key="LOCGaGamesDataMismatch">Game data mismatch</sys:String>
-    <sys:String x:Key="LOCGaSessionCount">Session count</sys:String>
-    <sys:String x:Key="LOCGaSessionPlayed">Session played</sys:String>
+    <sys:String x:Key="LOCGaGamesDataMismatch">Dati di gioco non corrispondenti</sys:String>
+    <sys:String x:Key="LOCGaSessionCount">Conteggio sessione</sys:String>
+    <sys:String x:Key="LOCGaSessionPlayed">Sessione giocata</sys:String>
     
-    <sys:String x:Key="LOCGaGaToPlaynite">Set GameActivity data to Playnite</sys:String>
-    <sys:String x:Key="LOCGaPlayniteToGa">Set Playnite data to GameActivity</sys:String>
+    <sys:String x:Key="LOCGaGaToPlaynite">Imposta dati GameActivity su Playnite</sys:String>
+    <sys:String x:Key="LOCGaPlayniteToGa">Imposta i dati Playnite su GameActivity</sys:String>
 
-    <sys:String x:Key="LOCGaPlayniteToGaWarning">This irreversible action will force the play count and times coming from GameActivity to Playnite.</sys:String>
+    <sys:String x:Key="LOCGaPlayniteToGaWarning">Questa azione irreversibile costringerà il tempo di gioco e il conteggio delle partite provenienti da GameActivity a Playnite.</sys:String>
 
     <!-- Merge -->
 
