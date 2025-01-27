@@ -220,3 +220,19 @@ Packages:
       - UI tweaks
       - Added log with Open Hardware Monitor
       - Fixed crashs
+  - Version: 3.3
+    RequiredApiVersion: 6.11.0
+    ReleaseDate: 2025-01-27
+    PackageUrl: https://github.com/Lacro59/playnite-gameactivity-plugin/releases/download/v3.3/playnite-gameactivity-plugin_3_3.pext
+    Changelog:
+      - 'Updated: Localizations'
+      - 'Fixed: Issue with filtred/unfiltred data (thanks to da3ch1r)'
+      - 'Optimized: UI'
+      - 'Fixed: No data for CPU & GPU power'
+      - 'Updated: Export data functions'
+      - 'Fixed: Many crash'
+      - 'Fixed: Last played not updated when adding manual session'
+      - 'Fixed: Cannot remove play session from game or game from recently played'
+      - 'Fixed: Can''t hide the chart from details'
+      - 'Addded: New data in plugin view'
+      - 'Addded: New view to show data inconsistencies'
