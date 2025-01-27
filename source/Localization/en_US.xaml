@@ -33,7 +33,18 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGaDateSession">Date session</sys:String>
     <sys:String x:Key="LOCGaPlayTimeSession">Play time session</sys:String>
     <sys:String x:Key="LOCGaBackupDataInfo">Backup data info</sys:String>
+
+
+    <!-- GamesDataMismatch -->
+
+    <sys:String x:Key="LOCGaGamesDataMismatch">Game data mismatch</sys:String>
+    <sys:String x:Key="LOCGaSessionCount">Session count</sys:String>
+    <sys:String x:Key="LOCGaSessionPlayed">Session played</sys:String>
     
+    <sys:String x:Key="LOCGaGaToPlaynite">Set GameActivity data to Playnite</sys:String>
+    <sys:String x:Key="LOCGaPlayniteToGa">Set Playnite data to GameActivity</sys:String>
+
+    <sys:String x:Key="LOCGaPlayniteToGaWarning">This irreversible action will force the play count and times coming from GameActivity to Playnite.</sys:String>
 
     <!-- Merge -->
 
@@ -128,6 +139,8 @@ Click for more information.</sys:String>
 
     <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Last session</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Elapsed time</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInMonth">Time played (month)</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">Time played (period)</sys:String>
     
     <sys:String x:Key="LOCGameActivityAvgCpu">Avg CPU</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpu">Avg GPU</sys:String>
@@ -139,6 +152,9 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpuP">Avg GPU P</sys:String>
 
     <sys:String x:Key="LOCGameActivityPCName">PC name</sys:String>
+    
+    <sys:String x:Key="LOCGameActivityDateSession">Date session</sys:String>
+    <sys:String x:Key="LOCGameActivityDateLog">Date log</sys:String>
 
 
     <!-- GameActivity -->

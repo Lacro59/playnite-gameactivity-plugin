@@ -34,7 +34,18 @@ Daha fazla bilgi için tıklayın.</sys:String>
     <sys:String x:Key="LOCGaDateSession">Oturum tarihi</sys:String>
     <sys:String x:Key="LOCGaPlayTimeSession">Oyun süresi oturumu</sys:String>
     <sys:String x:Key="LOCGaBackupDataInfo">Veri bilgisini yedekle</sys:String>
+
+
+    <!-- GamesDataMismatch -->
+
+    <sys:String x:Key="LOCGaGamesDataMismatch">Game data mismatch</sys:String>
+    <sys:String x:Key="LOCGaSessionCount">Session count</sys:String>
+    <sys:String x:Key="LOCGaSessionPlayed">Session played</sys:String>
     
+    <sys:String x:Key="LOCGaGaToPlaynite">Set GameActivity data to Playnite</sys:String>
+    <sys:String x:Key="LOCGaPlayniteToGa">Set Playnite data to GameActivity</sys:String>
+
+    <sys:String x:Key="LOCGaPlayniteToGaWarning">This irreversible action will force the play count and times coming from GameActivity to Playnite.</sys:String>
 
     <!-- Merge -->
 
@@ -129,6 +140,8 @@ Daha fazla bilgi için tıklayın.</sys:String>
 
     <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Son oturum</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Geçen süre</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInMonth">Oynanan süre (ay)</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">Oynanan süre (dönem)</sys:String>
     
     <sys:String x:Key="LOCGameActivityAvgCpu">Ort. İşlemci</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpu">Ort. GPU</sys:String>
@@ -140,6 +153,9 @@ Daha fazla bilgi için tıklayın.</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpuP">Ort. GPU P</sys:String>
 
     <sys:String x:Key="LOCGameActivityPCName">Bilgisayar adı</sys:String>
+    
+    <sys:String x:Key="LOCGameActivityDateSession">Oturum tarihi</sys:String>
+    <sys:String x:Key="LOCGameActivityDateLog">Oturum günlüğü</sys:String>
 
 
     <!-- GameActivity -->
