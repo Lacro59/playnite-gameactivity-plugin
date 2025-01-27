@@ -34,7 +34,18 @@ Klicken Sie für weitere Informationen.</sys:String>
     <sys:String x:Key="LOCGaDateSession">Datum der Sitzung</sys:String>
     <sys:String x:Key="LOCGaPlayTimeSession">Spielzeit Sitzung</sys:String>
     <sys:String x:Key="LOCGaBackupDataInfo">Dateninformationen sichern</sys:String>
+
+
+    <!-- GamesDataMismatch -->
+
+    <sys:String x:Key="LOCGaGamesDataMismatch">Game data mismatch</sys:String>
+    <sys:String x:Key="LOCGaSessionCount">Session count</sys:String>
+    <sys:String x:Key="LOCGaSessionPlayed">Sitzung gespielt</sys:String>
     
+    <sys:String x:Key="LOCGaGaToPlaynite">Set GameActivity data to Playnite</sys:String>
+    <sys:String x:Key="LOCGaPlayniteToGa">Set Playnite data to GameActivity</sys:String>
+
+    <sys:String x:Key="LOCGaPlayniteToGaWarning">This irreversible action will force the play count and times coming from GameActivity to Playnite.</sys:String>
 
     <!-- Merge -->
 
@@ -50,8 +61,8 @@ Klicken Sie für weitere Informationen.</sys:String>
     <sys:String x:Key="LOCGameActivityListGamesFields">Anzuzeigende Spielfelder</sys:String>
 
     <sys:String x:Key="LOCGameActivityActiveLog">Logging aktivieren</sys:String>
-    <sys:String x:Key="LOCGameActivityUsedLibreHardware">Used LibreHarwareMonitor instead</sys:String>
-    <sys:String x:Key="LOCGameActivityRemoteWebServer">With remote web server</sys:String>
+    <sys:String x:Key="LOCGameActivityUsedLibreHardware">Stattdessen LibreHarwareMonitor verwenden</sys:String>
+    <sys:String x:Key="LOCGameActivityRemoteWebServer">Mit Remote Web Server</sys:String>
     <sys:String x:Key="LOCGameActivityTimeInterval">Prüfintervall</sys:String>
     <sys:String x:Key="LOCGameActivityTimeLabel">Minute(n)</sys:String>
 
@@ -63,7 +74,7 @@ Klicken Sie für weitere Informationen.</sys:String>
     <sys:String x:Key="LOCGameActivitySensorsID">Sensoren Id</sys:String>
     <sys:String x:Key="LOCGameActivityElementID">Elementen Id</sys:String>
 
-    <sys:String x:Key="LOCGameActivityGpuUsage">GPU-Nutzung</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuUsage">GPU Nutzung</sys:String>
     <sys:String x:Key="LOCGameActivityFps">FPS</sys:String>
     <sys:String x:Key="LOCGameActivityGpuTemp">GPU Temperatur</sys:String>
     <sys:String x:Key="LOCGameActivityCpuTemp">CPU Temperatur</sys:String>
@@ -75,10 +86,10 @@ Klicken Sie für weitere Informationen.</sys:String>
     <sys:String x:Key="LOCGameActivityMaxCpuTemp">Max CPU Temperatur</sys:String>
     <sys:String x:Key="LOCGameActivityMaxGpuTemp">Max GPU Temperatur</sys:String>
     <sys:String x:Key="LOCGameActivityMaxCpuUsage">Max CPU-Nutzung</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxGpuUsage">Max GPU-Nutzung</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxGpuUsage">Max GPU Nutzung</sys:String>
     <sys:String x:Key="LOCGameActivityMaxRamUsage">Max RAM-Nutzung</sys:String>
 
-    <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">CPU-, GPU-, RAM- und FPS-Leistung beim Spielen aufzeichnen</sys:String>
+    <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">Die Leistung von CPU, GPU, RAM und FPS während der Spielsitzung protokollieren.</sys:String>
     <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Zeigt eine Warnung beim Beenden des Spiels innerhalb der definierten Grenzen an.</sys:String>
 
     <sys:String x:Key="LOCGameActivityIntegrationChartTime">Graphische Darstellung der einzelnen Spielzeiten</sys:String>
@@ -110,7 +121,7 @@ Klicken Sie für weitere Informationen.</sys:String>
     <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} Stunden nach {1} Woche</sys:String>
     <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} Stunden nach {1} Wochen</sys:String>
     <sys:String x:Key="LOCGameActivityAvgPerDay">Durchschnittliche Spielzeit pro Tag</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgPerSession">Average time per session</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgPerSession">Durchschnittliche Zeit pro Sitzung</sys:String>
     <sys:String x:Key="LOCGameActivityFirstSession">Erste Session</sys:String>
     <sys:String x:Key="LOCGameActivityLastSession">Letzte Session</sys:String>
     
@@ -129,6 +140,8 @@ Klicken Sie für weitere Informationen.</sys:String>
 
     <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Letzte Spiele-Session</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Spieldauer</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInMonth">Spielzeit (Monat)</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">Spielzeit (Zeitraum)</sys:String>
     
     <sys:String x:Key="LOCGameActivityAvgCpu">CPU durchschnitt</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpu">GPU Durchschnitt</sys:String>
@@ -140,17 +153,20 @@ Klicken Sie für weitere Informationen.</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpuP">Durchschn. GPU P</sys:String>
 
     <sys:String x:Key="LOCGameActivityPCName">PC Name</sys:String>
+    
+    <sys:String x:Key="LOCGameActivityDateSession">Datum Sitzung</sys:String>
+    <sys:String x:Key="LOCGameActivityDateLog">Datumsprotokoll</sys:String>
 
 
     <!-- GameActivity -->
 
-    <sys:String x:Key="LOCGameActivityWarningCaption">Zeigt Warnungen im Spielan</sys:String>
+    <sys:String x:Key="LOCGameActivityWarningCaption">Warnungen während der Spielsitzung</sys:String>
     <sys:String x:Key="LOCGameActivityWarningAt">Um</sys:String>
     <sys:String x:Key="LOCGameActivityCpuUsage">CPU-Nutzung</sys:String>
     <sys:String x:Key="LOCGameActivityRamUsage">RAM-Nutzung</sys:String>
 
-    <sys:String x:Key="LOCGameActivityNotificationHWiNFO">HWiNFO logs sind aktiviert aber die Applikation läuft nicht.</sys:String>
-    <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">MSI AfterBurner logs sind aktiviert aber die Applikation läuft nicht.</sys:String>
+    <sys:String x:Key="LOCGameActivityNotificationHWiNFO">HWiNFO Protokollierung ist aktiviert, aber die Anwendung läuft nicht.</sys:String>
+    <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">MSI AfterBurner Protokollierung ist aktiviert, aber die Anwendung läuft nicht.</sys:String>
 
     <!-- QuickSearch -->
 

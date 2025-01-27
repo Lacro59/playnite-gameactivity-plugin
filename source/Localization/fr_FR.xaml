@@ -8,7 +8,7 @@ Utilisation de la différence de temps de jeu : {1}s.</sys:String>
     <!-- MainView -->
 
     <sys:String x:Key="LOCGameActivity">GameActivity</sys:String>
-    <sys:String x:Key="LOCGameActivityTitle">Activité</sys:String>
+    <sys:String x:Key="LOCGameActivityTitle">Activit</sys:String>
     <sys:String x:Key="LOCGamesActivitiesTitle">Activités des jeux</sys:String>
     <sys:String x:Key="LOCGameActivitiesTitle">Activités du jeu</sys:String>
     <sys:String x:Key="LOCGameActivityViewGamesActivities">Voir les activités des jeux</sys:String>
@@ -34,7 +34,18 @@ Cliquez pour plus d'informations.</sys:String>
     <sys:String x:Key="LOCGaDateSession">Date de la session</sys:String>
     <sys:String x:Key="LOCGaPlayTimeSession">Temps de jeu de la session</sys:String>
     <sys:String x:Key="LOCGaBackupDataInfo">Informations sur la sauvegarde des données</sys:String>
+
+
+    <!-- GamesDataMismatch -->
+
+    <sys:String x:Key="LOCGaGamesDataMismatch">Game data mismatch</sys:String>
+    <sys:String x:Key="LOCGaSessionCount">Session count</sys:String>
+    <sys:String x:Key="LOCGaSessionPlayed">Session played</sys:String>
     
+    <sys:String x:Key="LOCGaGaToPlaynite">Set GameActivity data to Playnite</sys:String>
+    <sys:String x:Key="LOCGaPlayniteToGa">Set Playnite data to GameActivity</sys:String>
+
+    <sys:String x:Key="LOCGaPlayniteToGaWarning">This irreversible action will force the play count and times coming from GameActivity to Playnite.</sys:String>
 
     <!-- Merge -->
 
@@ -129,6 +140,8 @@ Cliquez pour plus d'informations.</sys:String>
 
     <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Dernière session</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Temps passés</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInMonth">Time played (month)</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">Time played (period)</sys:String>
     
     <sys:String x:Key="LOCGameActivityAvgCpu">CPU moyen</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpu">GPU moyen</sys:String>
@@ -140,6 +153,9 @@ Cliquez pour plus d'informations.</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpuP">CPU moyen P</sys:String>
 
     <sys:String x:Key="LOCGameActivityPCName">Nom du PC</sys:String>
+    
+    <sys:String x:Key="LOCGameActivityDateSession">Date session</sys:String>
+    <sys:String x:Key="LOCGameActivityDateLog">Date log</sys:String>
 
 
     <!-- GameActivity -->

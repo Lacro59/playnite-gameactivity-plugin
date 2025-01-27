@@ -9,7 +9,7 @@
 
     <sys:String x:Key="LOCGameActivity">Игровая Активность</sys:String>
     <sys:String x:Key="LOCGameActivityTitle">Активность</sys:String>
-    <sys:String x:Key="LOCGamesActivitiesTitle">Действия в играх</sys:String>
+    <sys:String x:Key="LOCGamesActivitiesTitle">Действия в игра</sys:String>
     <sys:String x:Key="LOCGameActivitiesTitle">Действия в игре</sys:String>
     <sys:String x:Key="LOCGameActivityViewGamesActivities">Посмотреть игровые активности</sys:String>
     <sys:String x:Key="LOCGameActivityViewGameActivity">Просмотреть игровую активность</sys:String>
@@ -23,7 +23,7 @@
     
     <sys:String x:Key="LOCGameActivitySetNumberDay">Выберите количество дней</sys:String>
     <sys:String x:Key="LOCGameActivityPeriod">Период</sys:String>
-    <sys:String x:Key="LOCGameActivitySetLastDate">Установить последнюю дат</sys:String>
+    <sys:String x:Key="LOCGameActivitySetLastDate">Установить последнюю да</sys:String>
     
     
     <!-- Backup -->
@@ -34,7 +34,18 @@
     <sys:String x:Key="LOCGaDateSession">Последняя сессия</sys:String>
     <sys:String x:Key="LOCGaPlayTimeSession">Время игры</sys:String>
     <sys:String x:Key="LOCGaBackupDataInfo">Информация о резервном копировании</sys:String>
+
+
+    <!-- GamesDataMismatch -->
+
+    <sys:String x:Key="LOCGaGamesDataMismatch">Game data mismatch</sys:String>
+    <sys:String x:Key="LOCGaSessionCount">Session count</sys:String>
+    <sys:String x:Key="LOCGaSessionPlayed">Session played</sys:String>
     
+    <sys:String x:Key="LOCGaGaToPlaynite">Set GameActivity data to Playnite</sys:String>
+    <sys:String x:Key="LOCGaPlayniteToGa">Set Playnite data to GameActivity</sys:String>
+
+    <sys:String x:Key="LOCGaPlayniteToGaWarning">This irreversible action will force the play count and times coming from GameActivity to Playnite.</sys:String>
 
     <!-- Merge -->
 
@@ -50,8 +61,8 @@
     <sys:String x:Key="LOCGameActivityListGamesFields">Поля для отображения</sys:String>
 
     <sys:String x:Key="LOCGameActivityActiveLog">Включить ведение журнала</sys:String>
-    <sys:String x:Key="LOCGameActivityUsedLibreHardware">Used LibreHarwareMonitor instead</sys:String>
-    <sys:String x:Key="LOCGameActivityRemoteWebServer">With remote web server</sys:String>
+    <sys:String x:Key="LOCGameActivityUsedLibreHardware">Вместо этого используется LibreHarwareMonitor</sys:String>
+    <sys:String x:Key="LOCGameActivityRemoteWebServer">С удаленным веб-сервером</sys:String>
     <sys:String x:Key="LOCGameActivityTimeInterval">Период проверки</sys:String>
     <sys:String x:Key="LOCGameActivityTimeLabel">минут(ы)</sys:String>
 
@@ -67,7 +78,7 @@
     <sys:String x:Key="LOCGameActivityFps">FPS</sys:String>
     <sys:String x:Key="LOCGameActivityGpuTemp">Температура видеокарты</sys:String>
     <sys:String x:Key="LOCGameActivityCpuTemp">Температура процессора</sys:String>
-    <sys:String x:Key="LOCGameActivityCpuPower">Мощность ЦП</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuPower">Мощность Ц</sys:String>
     <sys:String x:Key="LOCGameActivityGpuPower">Мощность GPU</sys:String>
 
     <sys:String x:Key="LOCGameActivityActiveWarning">Включить предупреждения</sys:String>
@@ -110,7 +121,7 @@
     <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} часов за {1} неделю</sys:String>
     <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} часов за {1} недель</sys:String>
     <sys:String x:Key="LOCGameActivityAvgPerDay">Среднее время в день</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgPerSession">Average time per session</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgPerSession">Среднее время за сеанс</sys:String>
     <sys:String x:Key="LOCGameActivityFirstSession">Первая сессия</sys:String>
     <sys:String x:Key="LOCGameActivityLastSession">Последняя сессия</sys:String>
     
@@ -129,6 +140,8 @@
 
     <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Последняя сессия</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Проведённое время</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInMonth">Time played (month)</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">Time played (period)</sys:String>
     
     <sys:String x:Key="LOCGameActivityAvgCpu">Среднее значение Ц</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpu">Среднее значение Г</sys:String>
@@ -140,6 +153,9 @@
     <sys:String x:Key="LOCGameActivityAvgGpuP">Среднее GPU P</sys:String>
 
     <sys:String x:Key="LOCGameActivityPCName">Имя ПК</sys:String>
+    
+    <sys:String x:Key="LOCGameActivityDateSession">Date session</sys:String>
+    <sys:String x:Key="LOCGameActivityDateLog">Date log</sys:String>
 
 
     <!-- GameActivity -->

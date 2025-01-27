@@ -34,7 +34,18 @@ Kliknij, aby uzyskać więcej informacji.</sys:String>
     <sys:String x:Key="LOCGaDateSession">Data sesji</sys:String>
     <sys:String x:Key="LOCGaPlayTimeSession">Czas sesji gry</sys:String>
     <sys:String x:Key="LOCGaBackupDataInfo">Informacje o kopii zapasowej</sys:String>
+
+
+    <!-- GamesDataMismatch -->
+
+    <sys:String x:Key="LOCGaGamesDataMismatch">Game data mismatch</sys:String>
+    <sys:String x:Key="LOCGaSessionCount">Session count</sys:String>
+    <sys:String x:Key="LOCGaSessionPlayed">Session played</sys:String>
     
+    <sys:String x:Key="LOCGaGaToPlaynite">Set GameActivity data to Playnite</sys:String>
+    <sys:String x:Key="LOCGaPlayniteToGa">Set Playnite data to GameActivity</sys:String>
+
+    <sys:String x:Key="LOCGaPlayniteToGaWarning">This irreversible action will force the play count and times coming from GameActivity to Playnite.</sys:String>
 
     <!-- Merge -->
 
@@ -50,8 +61,8 @@ Kliknij, aby uzyskać więcej informacji.</sys:String>
     <sys:String x:Key="LOCGameActivityListGamesFields">Pola gry do wyświetlenia</sys:String>
 
     <sys:String x:Key="LOCGameActivityActiveLog">Włącz zapis logów</sys:String>
-    <sys:String x:Key="LOCGameActivityUsedLibreHardware">Used LibreHarwareMonitor instead</sys:String>
-    <sys:String x:Key="LOCGameActivityRemoteWebServer">With remote web server</sys:String>
+    <sys:String x:Key="LOCGameActivityUsedLibreHardware">Zamiast tego użyto LibreHarwareMonitor</sys:String>
+    <sys:String x:Key="LOCGameActivityRemoteWebServer">Ze zdalnym serwerem sieciowym</sys:String>
     <sys:String x:Key="LOCGameActivityTimeInterval">Częstotliwość sprawdzania</sys:String>
     <sys:String x:Key="LOCGameActivityTimeLabel">minuta(y)</sys:String>
 
@@ -105,12 +116,12 @@ Kliknij, aby uzyskać więcej informacji.</sys:String>
 
     <!-- GameActivityViewSingle -->
 
-    <sys:String x:Key="LOCGameActivityRecentActivity">Ostatnia aktywność</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivity">Ostatnia aktywnoś</sys:String>
     <sys:String x:Key="LOCGameActivityNoRecentActivity">Brak ostatniej aktywności</sys:String>
     <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} godzin w ostatnim {1} tygodniu</sys:String>
     <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} godzin w ostatnim {1} tygodniu</sys:String>
     <sys:String x:Key="LOCGameActivityAvgPerDay">Średni czas dziennie</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgPerSession">Average time per session</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgPerSession">Średni czas trwania sesji</sys:String>
     <sys:String x:Key="LOCGameActivityFirstSession">Pierwsza sesja</sys:String>
     <sys:String x:Key="LOCGameActivityLastSession">Ostatnia sesja</sys:String>
     
@@ -119,7 +130,7 @@ Kliknij, aby uzyskać więcej informacji.</sys:String>
     <sys:String x:Key="LOCGameActivityTotalHours">Suma godzin</sys:String>
     <sys:String x:Key="LOCGameActivityTotalHoursByWeeks">Całkowita liczba godzin tygodniowo</sys:String>
 
-    <sys:String x:Key="LOCGameActivityWeekLabel">Tydzień</sys:String>
+    <sys:String x:Key="LOCGameActivityWeekLabel">Tydzie</sys:String>
 
     <sys:String x:Key="LOCGameActivityTime">Czas</sys:String>
     <sys:String x:Key="LOCGameActivityLog">Dziennik</sys:String>
@@ -129,6 +140,8 @@ Kliknij, aby uzyskać więcej informacji.</sys:String>
 
     <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Ostatnia sesja</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Upłynęło czasu</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInMonth">Czas gry (w miesiącu)</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">Czas gry (w okresie)</sys:String>
     
     <sys:String x:Key="LOCGameActivityAvgCpu">Śr. aktywność procesora</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpu">Śr. aktywność GPU</sys:String>
@@ -140,6 +153,9 @@ Kliknij, aby uzyskać więcej informacji.</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpuP">Śr. GPU P</sys:String>
 
     <sys:String x:Key="LOCGameActivityPCName">Nazwa komputera</sys:String>
+    
+    <sys:String x:Key="LOCGameActivityDateSession">Data sesji</sys:String>
+    <sys:String x:Key="LOCGameActivityDateLog">Data logowania</sys:String>
 
 
     <!-- GameActivity -->

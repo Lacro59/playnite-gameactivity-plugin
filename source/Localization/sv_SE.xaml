@@ -34,7 +34,18 @@ Klicka för mer information.</sys:String>
     <sys:String x:Key="LOCGaDateSession">Datum session</sys:String>
     <sys:String x:Key="LOCGaPlayTimeSession">Speltid session</sys:String>
     <sys:String x:Key="LOCGaBackupDataInfo">Information om säkerhetskopiering</sys:String>
+
+
+    <!-- GamesDataMismatch -->
+
+    <sys:String x:Key="LOCGaGamesDataMismatch">Game data mismatch</sys:String>
+    <sys:String x:Key="LOCGaSessionCount">Session count</sys:String>
+    <sys:String x:Key="LOCGaSessionPlayed">Session played</sys:String>
     
+    <sys:String x:Key="LOCGaGaToPlaynite">Set GameActivity data to Playnite</sys:String>
+    <sys:String x:Key="LOCGaPlayniteToGa">Set Playnite data to GameActivity</sys:String>
+
+    <sys:String x:Key="LOCGaPlayniteToGaWarning">This irreversible action will force the play count and times coming from GameActivity to Playnite.</sys:String>
 
     <!-- Merge -->
 
@@ -50,8 +61,8 @@ Klicka för mer information.</sys:String>
     <sys:String x:Key="LOCGameActivityListGamesFields">Spelfält som ska visas</sys:String>
 
     <sys:String x:Key="LOCGameActivityActiveLog">Aktivera loggning</sys:String>
-    <sys:String x:Key="LOCGameActivityUsedLibreHardware">Used LibreHarwareMonitor instead</sys:String>
-    <sys:String x:Key="LOCGameActivityRemoteWebServer">With remote web server</sys:String>
+    <sys:String x:Key="LOCGameActivityUsedLibreHardware">Använd LibreHarwareMonitor istället</sys:String>
+    <sys:String x:Key="LOCGameActivityRemoteWebServer">Med fjärr-webbserver</sys:String>
     <sys:String x:Key="LOCGameActivityTimeInterval">Kontrollera tidsintervall</sys:String>
     <sys:String x:Key="LOCGameActivityTimeLabel">minut(er)</sys:String>
 
@@ -87,8 +98,8 @@ Klicka för mer information.</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">Antal data i horisontell axel</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationChartTimeTruncate">Trunkera tidsdata som standard</sys:String>
 
-    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabels">Show labels on horizontal axis</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">Show labels on vertical axis</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabels">Visa etiketter på horisontell axel</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">Visa etiketter på vertikal axel</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicLogOptions">Chart options</sys:String>
 
     <sys:String x:Key="LOCGameActivityUseControls">Use chart controls</sys:String>
@@ -98,37 +109,39 @@ Klicka för mer information.</sys:String>
     <sys:String x:Key="LOCGameActivityIconFromLibrary">Use the icon defined in the library</sys:String>
     <sys:String x:Key="LOCGameActivityIconFromFont">Use the icon defined in the plugin's font</sys:String>
 
-    <sys:String x:Key="LOCGameActivityIgnoreSession">Ignore short play sessions</sys:String>
+    <sys:String x:Key="LOCGameActivityIgnoreSession">Ignorera korta spelsessioner</sys:String>
     <sys:String x:Key="LOCGameActivitySetVariatorTime">Set time variator</sys:String>
     <sys:String x:Key="LOCGameActivitySetVariatorLog">Set log variator</sys:String>
     <sys:String x:Key="LOCGameActivityRecentActivityWeek">Number of weeks for recent activity</sys:String>
 
     <!-- GameActivityViewSingle -->
 
-    <sys:String x:Key="LOCGameActivityRecentActivity">Recent activity</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivity">Senaste aktivitet</sys:String>
     <sys:String x:Key="LOCGameActivityNoRecentActivity">No recent activity</sys:String>
     <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} hours past {1} week</sys:String>
     <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} hours past {1} weeks</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgPerDay">Average time per day</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgPerSession">Average time per session</sys:String>
-    <sys:String x:Key="LOCGameActivityFirstSession">First session</sys:String>
-    <sys:String x:Key="LOCGameActivityLastSession">Last session</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgPerDay">Genomsnittlig tid per dag</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgPerSession">Genomsnittlig tid per session</sys:String>
+    <sys:String x:Key="LOCGameActivityFirstSession">Första sessionen</sys:String>
+    <sys:String x:Key="LOCGameActivityLastSession">Senaste session</sys:String>
     
     <!-- GameActivityView -->
 
-    <sys:String x:Key="LOCGameActivityTotalHours">Total hours</sys:String>
-    <sys:String x:Key="LOCGameActivityTotalHoursByWeeks">Total hours by week</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHours">Totalt antal timmar</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByWeeks">Totalt antal timmar per vecka</sys:String>
 
-    <sys:String x:Key="LOCGameActivityWeekLabel">Week</sys:String>
+    <sys:String x:Key="LOCGameActivityWeekLabel">Vecka</sys:String>
 
-    <sys:String x:Key="LOCGameActivityTime">Time</sys:String>
-    <sys:String x:Key="LOCGameActivityLog">Log</sys:String>
-    <sys:String x:Key="LOCGameActivityTimeTitle">Total hours by day</sys:String>
-    <sys:String x:Key="LOCGameActivityLogTitle">Last session details</sys:String>
+    <sys:String x:Key="LOCGameActivityTime">Tid</sys:String>
+    <sys:String x:Key="LOCGameActivityLog">Logg</sys:String>
+    <sys:String x:Key="LOCGameActivityTimeTitle">Totalt antal timmar per dag</sys:String>
+    <sys:String x:Key="LOCGameActivityLogTitle">Senaste sessionsdetaljer</sys:String>
     <sys:String x:Key="LOCGameActivityLogTitleDate">Session details for</sys:String>
 
     <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Last session</sys:String>
-    <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Elapsed time</sys:String>
+    <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Förfluten tid</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInMonth">Time played (month)</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">Time played (period)</sys:String>
     
     <sys:String x:Key="LOCGameActivityAvgCpu">Avg CPU</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpu">Avg GPU</sys:String>
@@ -140,17 +153,20 @@ Klicka för mer information.</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpuP">Avg GPU P</sys:String>
 
     <sys:String x:Key="LOCGameActivityPCName">PC name</sys:String>
+    
+    <sys:String x:Key="LOCGameActivityDateSession">Date session</sys:String>
+    <sys:String x:Key="LOCGameActivityDateLog">Date log</sys:String>
 
 
     <!-- GameActivity -->
 
-    <sys:String x:Key="LOCGameActivityWarningCaption">Warnings during game session</sys:String>
+    <sys:String x:Key="LOCGameActivityWarningCaption">Varningar under spelets session</sys:String>
     <sys:String x:Key="LOCGameActivityWarningAt">At</sys:String>
     <sys:String x:Key="LOCGameActivityCpuUsage">CPU usage</sys:String>
     <sys:String x:Key="LOCGameActivityRamUsage">RAM usage</sys:String>
 
-    <sys:String x:Key="LOCGameActivityNotificationHWiNFO">HWiNFO logging is enabled but application is not running.</sys:String>
-    <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">MSI AfterBurner logging is enabled but application is not running.</sys:String>
+    <sys:String x:Key="LOCGameActivityNotificationHWiNFO">HWiNFO loggning är aktiverat men programmet körs inte.</sys:String>
+    <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">MSI AfterBurner loggning är aktiverat men programmet körs inte.</sys:String>
 
     <!-- QuickSearch -->
 
@@ -161,7 +177,7 @@ Klicka för mer information.</sys:String>
 
     <!-- GameActivityAddTime -->
 
-    <sys:String x:Key="LOCGaAddNewGameSession">Add new game session</sys:String>
+    <sys:String x:Key="LOCGaAddNewGameSession">Lägg till ny spelsession</sys:String>
     <sys:String x:Key="LOCGaDateStart">Startdatum</sys:String>
     <sys:String x:Key="LOCGaDateEnd">Slutdatum</sys:String>
     

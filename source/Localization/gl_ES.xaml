@@ -34,7 +34,18 @@ Preme para obter máis información.</sys:String>
     <sys:String x:Key="LOCGaDateSession">Data da sesión</sys:String>
     <sys:String x:Key="LOCGaPlayTimeSession">Tempo da sesión</sys:String>
     <sys:String x:Key="LOCGaBackupDataInfo">Información dos datos de respaldo</sys:String>
+
+
+    <!-- GamesDataMismatch -->
+
+    <sys:String x:Key="LOCGaGamesDataMismatch">Game data mismatch</sys:String>
+    <sys:String x:Key="LOCGaSessionCount">Session count</sys:String>
+    <sys:String x:Key="LOCGaSessionPlayed">Session played</sys:String>
     
+    <sys:String x:Key="LOCGaGaToPlaynite">Set GameActivity data to Playnite</sys:String>
+    <sys:String x:Key="LOCGaPlayniteToGa">Set Playnite data to GameActivity</sys:String>
+
+    <sys:String x:Key="LOCGaPlayniteToGaWarning">This irreversible action will force the play count and times coming from GameActivity to Playnite.</sys:String>
 
     <!-- Merge -->
 
@@ -129,6 +140,8 @@ Preme para obter máis información.</sys:String>
 
     <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Última sesión</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Tempo transcorrido</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInMonth">Time played (month)</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">Time played (period)</sys:String>
     
     <sys:String x:Key="LOCGameActivityAvgCpu">Media da CPU</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpu">Media da GPU</sys:String>
@@ -140,6 +153,9 @@ Preme para obter máis información.</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpuP">Media de pot. da GPU</sys:String>
 
     <sys:String x:Key="LOCGameActivityPCName">Nome do computador</sys:String>
+    
+    <sys:String x:Key="LOCGameActivityDateSession">Date session</sys:String>
+    <sys:String x:Key="LOCGameActivityDateLog">Date log</sys:String>
 
 
     <!-- GameActivity -->
