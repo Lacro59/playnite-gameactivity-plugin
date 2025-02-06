@@ -38,9 +38,9 @@ Daha fazla bilgi için tıklayın.</sys:String>
 
     <!-- GamesDataMismatch -->
 
-    <sys:String x:Key="LOCGaGamesDataMismatch">Game data mismatch</sys:String>
-    <sys:String x:Key="LOCGaSessionCount">Session count</sys:String>
-    <sys:String x:Key="LOCGaSessionPlayed">Session played</sys:String>
+    <sys:String x:Key="LOCGaGamesDataMismatch">Oyun verileri uyuşmazlığı</sys:String>
+    <sys:String x:Key="LOCGaSessionCount">Oturum sayısı</sys:String>
+    <sys:String x:Key="LOCGaSessionPlayed">Oynatılan oturum</sys:String>
     
     <sys:String x:Key="LOCGaGaToPlaynite">Set GameActivity data to Playnite</sys:String>
     <sys:String x:Key="LOCGaPlayniteToGa">Set Playnite data to GameActivity</sys:String>
