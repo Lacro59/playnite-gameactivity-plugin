@@ -6,9 +6,13 @@ Module: GameActivity.dll
 Type: GenericPlugin
 Icon: icon.png
 Links:
-  - Name: Forum
-    Url: https://playnite.link/forum/thread-264.html
   - Name: Github
     Url: https://github.com/Lacro59/playnite-gameactivity-plugin
+  - Name: Help and Troubleshooting
+    Url: https://github.com/Lacro59/playnite-gameactivity-plugin/wiki
+  - Name: Issues Tracker
+    Url: https://github.com/Lacro59/playnite-gameactivity-plugin/issues
   - Name: Translate
     Url: https://crowdin.com/project/playnite-extensions
+  - Name: Ko-fi (Tips and Donations)
+    Url: https://ko-fi.com/lacro59
