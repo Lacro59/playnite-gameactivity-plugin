@@ -42,10 +42,10 @@ Daha fazla bilgi için tıklayın.</sys:String>
     <sys:String x:Key="LOCGaSessionCount">Oturum sayısı</sys:String>
     <sys:String x:Key="LOCGaSessionPlayed">Oynatılan oturum</sys:String>
     
-    <sys:String x:Key="LOCGaGaToPlaynite">Set GameActivity data to Playnite</sys:String>
-    <sys:String x:Key="LOCGaPlayniteToGa">Set Playnite data to GameActivity</sys:String>
+    <sys:String x:Key="LOCGaGaToPlaynite">OyunEtkinliği verilerini Playnite olarak ayarla</sys:String>
+    <sys:String x:Key="LOCGaPlayniteToGa">Playnite verilerini OyunEtkinliği olarak ayarla</sys:String>
 
-    <sys:String x:Key="LOCGaPlayniteToGaWarning">This irreversible action will force the play count and times coming from GameActivity to Playnite.</sys:String>
+    <sys:String x:Key="LOCGaPlayniteToGaWarning">Bu geri dönüşü olmayan eylem, OyunEtkinliği üstünen Playnite üstüne gelen oyun sayısını ve sürelerini zorlayacaktır.</sys:String>
 
     <!-- Merge -->
 
