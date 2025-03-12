@@ -39,14 +39,14 @@ Clique para mais informações.</sys:String>
 
     <!-- GamesDataMismatch -->
 
-    <sys:String x:Key="LOCGaGamesDataMismatch">Game data mismatch</sys:String>
+    <sys:String x:Key="LOCGaGamesDataMismatch">Incompatibilidade de dados do jogo</sys:String>
     <sys:String x:Key="LOCGaSessionCount">Session count</sys:String>
-    <sys:String x:Key="LOCGaSessionPlayed">Session played</sys:String>
+    <sys:String x:Key="LOCGaSessionPlayed">Sessão tocada</sys:String>
     
-    <sys:String x:Key="LOCGaGaToPlaynite">Set GameActivity data to Playnite</sys:String>
-    <sys:String x:Key="LOCGaPlayniteToGa">Set Playnite data to GameActivity</sys:String>
+    <sys:String x:Key="LOCGaGaToPlaynite">Definir dados do GameActivity para Playnite</sys:String>
+    <sys:String x:Key="LOCGaPlayniteToGa">Definir dados do Playnite para GameActivity</sys:String>
 
-    <sys:String x:Key="LOCGaPlayniteToGaWarning">This irreversible action will force the play count and times coming from GameActivity to Playnite.</sys:String>
+    <sys:String x:Key="LOCGaPlayniteToGaWarning">Essa ação irreversível forçará a contagem de jogadas e os tempos vindos de GameActivity para Playnite.</sys:String>
 
     <!-- Merge -->
 
@@ -141,8 +141,8 @@ Clique para mais informações.</sys:String>
 
     <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Última sessão</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Tempo decorrido</sys:String>
-    <sys:String x:Key="LOCGameActivityTimePlayedInMonth">Time played (month)</sys:String>
-    <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">Time played (period)</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInMonth">Tempo jogado (mês)</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">Tempo jogado (período)</sys:String>
     
     <sys:String x:Key="LOCGameActivityAvgCpu">CPU Méd</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpu">GPU Méd</sys:String>
@@ -155,8 +155,8 @@ Clique para mais informações.</sys:String>
 
     <sys:String x:Key="LOCGameActivityPCName">Nome do PC</sys:String>
     
-    <sys:String x:Key="LOCGameActivityDateSession">Date session</sys:String>
-    <sys:String x:Key="LOCGameActivityDateLog">Date log</sys:String>
+    <sys:String x:Key="LOCGameActivityDateSession">Sessão de data</sys:String>
+    <sys:String x:Key="LOCGameActivityDateLog">Registro de datas</sys:String>
 
 
     <!-- GameActivity -->
