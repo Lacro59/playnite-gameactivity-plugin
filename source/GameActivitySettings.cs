@@ -64,7 +64,8 @@ namespace GameActivity
         public SolidColorBrush ChartColors { get; set; } = (SolidColorBrush)new BrushConverter().ConvertFrom("#2195f2");
 
         public bool EnableLogging { get; set; } = false;
-        public bool UsedLibreHardware { get; set; } = false;
+        [DontSerialize]
+        public bool UsedLibreHardware => false;
         public bool WithRemoteServerWeb { get; set; } = false;
         public string IpRemoteServerWeb { get; set; } = string.Empty;
         public int TimeIntervalLogging { get; set; } = 5;

@@ -1,4 +1,4 @@
-﻿using LibreHardwareMonitor.Hardware;
+﻿//using LibreHardwareMonitor.Hardware;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace GameActivity.Services
 {
+    /*
     public class UpdateVisitorLibreHardware : IVisitor
     {
         public void VisitComputer(IComputer computer)
@@ -21,4 +22,5 @@ namespace GameActivity.Services
         public void VisitSensor(ISensor sensor) { }
         public void VisitParameter(IParameter parameter) { }
     }
+    */
 }

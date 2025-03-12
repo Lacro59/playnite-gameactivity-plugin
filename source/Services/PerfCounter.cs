@@ -32,7 +32,7 @@ namespace GameActivity.Services
         [DllImport("Kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         internal static extern bool GlobalMemoryStatusEx(ref MEMORYSTATUSEX lpBuffer);
 
-
+        /*
         private static OpenHardwareMonitor.Hardware.Computer _myComputerOH;
         private static OpenHardwareMonitor.Hardware.Computer myComputerOH
         {
@@ -72,7 +72,7 @@ namespace GameActivity.Services
                 return _myComputerLH;
             }
         }
-
+        */
 
         public static int GetCpuPercentage()
         {
@@ -101,9 +101,10 @@ namespace GameActivity.Services
 
             return totalCpuUsage;
         }
-
+        //
         public static int GetCpuTemperature()
         {
+            /*
             try
             {
                 if (PluginDatabase.PluginSettings.Settings.UsedLibreHardware)
@@ -142,12 +143,14 @@ namespace GameActivity.Services
                 logger.Warn($"No CPU temperature find");
                 Common.LogError(ex, true);
             }
+            */
 
             return 0;
         }
-
+        //
         public static int GetCpuPower()
         {
+            /*
             try
             {
                 if (PluginDatabase.PluginSettings.Settings.UsedLibreHardware)
@@ -186,6 +189,7 @@ namespace GameActivity.Services
                 logger.Warn($"No CPU power find");
                 Common.LogError(ex, true);
             }
+            */
 
             return 0;
         }
@@ -232,9 +236,10 @@ namespace GameActivity.Services
             return RamUsagePercentage;
         }
 
-
+        //
         public static int GetGpuPercentage()
         {
+            /*
             try
             {
                 if (PluginDatabase.PluginSettings.Settings.UsedLibreHardware)
@@ -273,12 +278,14 @@ namespace GameActivity.Services
                 logger.Warn($"No GPU usage find");
                 Common.LogError(ex, true);
             }
+            */
 
             return 0;
         }
-
+        //
         public static int GetGpuTemperature()
         {
+            /*
             try
             {
                 if (PluginDatabase.PluginSettings.Settings.UsedLibreHardware)
@@ -317,12 +324,14 @@ namespace GameActivity.Services
                 logger.Warn($"No GPU temperature find");
                 Common.LogError(ex, true);
             }
+            */
 
             return 0;
         }
-
+        //
         public static int GetGpuPower()
         {
+            /*
             try
             {
                 if (PluginDatabase.PluginSettings.Settings.UsedLibreHardware)
@@ -361,6 +370,7 @@ namespace GameActivity.Services
                 logger.Warn($"No GPU power find");
                 Common.LogError(ex, true);
             }
+            */
 
             return 0;
         }
