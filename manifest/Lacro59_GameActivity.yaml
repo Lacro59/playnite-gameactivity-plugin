@@ -236,3 +236,9 @@ Packages:
       - 'Fixed: Can''t hide the chart from details'
       - 'Addded: New data in plugin view'
       - 'Addded: New view to show data inconsistencies'
+  - Version: 3.3.1
+    RequiredApiVersion: 6.11.0
+    ReleaseDate: 2025-02-13
+    PackageUrl: https://github.com/Lacro59/playnite-gameactivity-plugin/releases/download/v3.3.1/playnite-gameactivity-plugin_3_3_1.pext
+    Changelog:
+      - 'Updated: Removed LibreHardwareMonitor & OpenHardwareMonitor'
