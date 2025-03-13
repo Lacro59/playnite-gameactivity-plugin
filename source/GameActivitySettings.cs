@@ -64,8 +64,7 @@ namespace GameActivity
         public SolidColorBrush ChartColors { get; set; } = (SolidColorBrush)new BrushConverter().ConvertFrom("#2195f2");
 
         public bool EnableLogging { get; set; } = false;
-        [DontSerialize]
-        public bool UsedLibreHardware => false;
+        public bool UsedLibreHardware { get; set; } = false;
         public bool WithRemoteServerWeb { get; set; } = false;
         public string IpRemoteServerWeb { get; set; } = string.Empty;
         public int TimeIntervalLogging { get; set; } = 5;
@@ -180,6 +179,9 @@ namespace GameActivity
 
             // LoadPluginSettings returns null if not saved data is available.
             Settings = savedSettings ?? new GameActivitySettings();
+
+            // TODO TEMP
+            Settings.UsedLibreHardware = false;
         }
 
         // Code executed when settings view is opened and user starts editing values.
