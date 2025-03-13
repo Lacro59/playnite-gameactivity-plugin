@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Management;
 
 namespace GameActivity.Services
 {
@@ -236,7 +237,7 @@ namespace GameActivity.Services
             return RamUsagePercentage;
         }
 
-        //
+        // OK
         public static int GetGpuPercentage()
         {
             /*
@@ -280,7 +281,9 @@ namespace GameActivity.Services
             }
             */
 
-            return 0;
+            float gpuUsage = GetGpuUsageWMI();
+            gpuUsage = gpuUsage > -1 ? gpuUsage : GetGpuUsagePerformanceCounter();
+            return gpuUsage > -1 ? (int)gpuUsage : 0;
         }
         //
         public static int GetGpuTemperature()
@@ -373,6 +376,80 @@ namespace GameActivity.Services
             */
 
             return 0;
+        }
+
+
+        private static float GetGpuUsagePerformanceCounter()
+        {
+            try
+            {
+                PerformanceCounterCategory category = new PerformanceCounterCategory("GPU Engine");
+                string[] instances = category.GetInstanceNames();
+
+                float totalGpuUsage = 0;
+                bool has3DEngine = false;
+
+                foreach (string instance in instances)
+                {
+                    if (instance.Contains("engtype_3D"))
+                    {
+                        using (PerformanceCounter gpuCounter = new PerformanceCounter("GPU Engine", "Utilization Percentage", instance))
+                        {
+                            float value = gpuCounter.NextValue();
+                            if (value > 0)
+                            {
+                                has3DEngine = true;
+                            }
+                            totalGpuUsage += value;
+                        }
+                    }
+                }
+
+                if (!has3DEngine)
+                {
+                    foreach (string instance in instances)
+                    {
+                        if (instance.Contains("engtype_VideoDecode") || instance.Contains("engtype_VideoProcessing"))
+                        {
+                            using (PerformanceCounter gpuCounter = new PerformanceCounter("GPU Engine", "Utilization Percentage", instance))
+                            {
+                                totalGpuUsage += gpuCounter.NextValue();
+                            }
+                        }
+                    }
+                }
+
+                return totalGpuUsage;
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex, false, false, GameActivity.PluginDatabase.PluginName);
+                return -1;
+            }
+        }
+
+        private static float GetGpuUsageWMI()
+        {
+            try
+            {
+                ManagementObjectSearcher searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_PerfFormattedData_GPUPerformanceCounters_GPUEngine");
+
+                float totalUsage = 0;
+                foreach (ManagementObject obj in searcher.Get())
+                {
+                    if (obj["UtilizationPercentage"] != null)
+                    {
+                        totalUsage += Convert.ToSingle(obj["UtilizationPercentage"]);
+                    }
+                }
+
+                return totalUsage;
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex, false, false, GameActivity.PluginDatabase.PluginName);
+                return -1;
+            }
         }
     }
 }
