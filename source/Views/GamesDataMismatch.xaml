@@ -9,7 +9,7 @@
              xmlns:converters="clr-namespace:CommonPlayniteShared.Converters"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance Type=local:GameDataMismatchDataContext}"
-             d:DesignHeight="500" d:DesignWidth="900">
+             d:DesignHeight="500" d:DesignWidth="1000">
 
     <UserControl.Resources>
         <converters:PlayTimeToStringConverter x:Key="PlayTimeToStringConverter" />
@@ -69,20 +69,11 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
-                    <GridViewColumn Width="110">
-                        <GridViewColumnHeader Content="{DynamicResource LOCPlayCountLabel}" />
+                    <GridViewColumn Width="100">
+                        <GridViewColumnHeader Content="{DynamicResource LOCGameActivity}" Tag="NoSort" />
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <Label Content="{Binding PlayCount}" HorizontalAlignment="Right" />
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-
-                    <GridViewColumn Width="110">
-                        <GridViewColumnHeader Content="{DynamicResource LOCTimePlayed}" />
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <Label Content="{Binding Playtime, Converter={StaticResource PlayTimeToStringConverter}}" HorizontalAlignment="Center" />
+                                <Label Content="" HorizontalAlignment="Right" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -106,6 +97,32 @@
                     </GridViewColumn>
 
 
+                    <GridViewColumn Width="70">
+                        <GridViewColumnHeader Content="Playnite" Tag="NoSort" />
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Label Content="" HorizontalAlignment="Right" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    
+                    <GridViewColumn Width="110">
+                        <GridViewColumnHeader Content="{DynamicResource LOCPlayCountLabel}" />
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Label Content="{Binding PlayCount}" HorizontalAlignment="Right" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Width="110">
+                        <GridViewColumnHeader Content="{DynamicResource LOCTimePlayed}" />
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Label Content="{Binding Playtime, Converter={StaticResource PlayTimeToStringConverter}}" HorizontalAlignment="Center" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                 </GridView>
             </ListView.View>
         </controlsShared:ListViewExtend>

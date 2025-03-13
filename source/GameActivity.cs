@@ -899,7 +899,7 @@ namespace GameActivity
                             ShowMinimizeButton = false,
                             ShowMaximizeButton = true,
                             ShowCloseButton = true,
-                            Width = 900,
+                            Width = 1000,
                             Height= 500
                         };
 
