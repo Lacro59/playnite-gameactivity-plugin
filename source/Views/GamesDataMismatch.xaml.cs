@@ -72,7 +72,7 @@ namespace GameActivity.Views
 
                 game.PlayCount = gameActivities.Count;
                 game.Playtime = gameActivities.SessionPlaytime;
-                game.LastActivity = gameActivities.GetLastSession().Date;
+                game.LastActivity = gameActivities.GetLastSessionActivity()?.DateSession;
                 API.Instance.Database.Games.Update(game);
 
                 ControlDataContext.DataMismatch = PluginDatabase.GetGamesDataMismatch(false).ToObservable();
@@ -126,7 +126,7 @@ namespace GameActivity.Views
 
                         game.PlayCount = gameActivities.Count;
                         game.Playtime = gameActivities.SessionPlaytime;
-                        game.LastActivity = gameActivities.GetLastSession().Date;
+                        game.LastActivity = gameActivities.GetLastSessionActivity()?.DateSession;
                         API.Instance.Database.Games.Update(game);
                         a.CurrentProgressValue++;
                     });
