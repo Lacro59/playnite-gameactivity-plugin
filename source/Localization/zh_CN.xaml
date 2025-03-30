@@ -7,8 +7,8 @@
     
     <!-- MainView -->
 
-    <sys:String x:Key="LOCGameActivity">游戏活动-GameActivity</sys:String>
-    <sys:String x:Key="LOCGameActivityTitle">活</sys:String>
+    <sys:String x:Key="LOCGameActivity">游戏活动记录</sys:String>
+    <sys:String x:Key="LOCGameActivityTitle">活动记录</sys:String>
     <sys:String x:Key="LOCGamesActivitiesTitle">游戏活动</sys:String>
     <sys:String x:Key="LOCGameActivitiesTitle">游戏活动</sys:String>
     <sys:String x:Key="LOCGameActivityViewGamesActivities">查看游戏活动</sys:String>
@@ -23,22 +23,22 @@
     
     <sys:String x:Key="LOCGameActivitySetNumberDay">设定天数</sys:String>
     <sys:String x:Key="LOCGameActivityPeriod">时</sys:String>
-    <sys:String x:Key="LOCGameActivitySetLastDate">设置最近日</sys:String>
+    <sys:String x:Key="LOCGameActivitySetLastDate">设置最近日期</sys:String>
     
     
     <!-- Backup -->
 
     <sys:String x:Key="LOCGaBackupExist" xml:space="preserve">存在 {0} 的备份数据。
 可能是在 Playnite 崩溃后出现的。
-点击获取更多信</sys:String>
-    <sys:String x:Key="LOCGaDateSession">会话日</sys:String>
+点击获取更多信息。</sys:String>
+    <sys:String x:Key="LOCGaDateSession">会话日期</sys:String>
     <sys:String x:Key="LOCGaPlayTimeSession">游玩时间会话</sys:String>
-    <sys:String x:Key="LOCGaBackupDataInfo">备份数据信</sys:String>
+    <sys:String x:Key="LOCGaBackupDataInfo">备份数据信息</sys:String>
 
 
     <!-- GamesDataMismatch -->
 
-    <sys:String x:Key="LOCGaGamesDataMismatch">Game data mismatch</sys:String>
+    <sys:String x:Key="LOCGaGamesDataMismatch">不匹配的游戏数据</sys:String>
     <sys:String x:Key="LOCGaSessionCount">Session count</sys:String>
     <sys:String x:Key="LOCGaSessionPlayed">Session played</sys:String>
     
@@ -74,14 +74,14 @@
     <sys:String x:Key="LOCGameActivitySensorsID">传感器 ID</sys:String>
     <sys:String x:Key="LOCGameActivityElementID">单元 ID</sys:String>
 
-    <sys:String x:Key="LOCGameActivityGpuUsage">GPU </sys:String>
+    <sys:String x:Key="LOCGameActivityGpuUsage">GPU 利用率</sys:String>
     <sys:String x:Key="LOCGameActivityFps">帧数</sys:String>
     <sys:String x:Key="LOCGameActivityGpuTemp">GPU 温度</sys:String>
     <sys:String x:Key="LOCGameActivityCpuTemp">CPU 温度</sys:String>
     <sys:String x:Key="LOCGameActivityCpuPower">CPU 功率</sys:String>
     <sys:String x:Key="LOCGameActivityGpuPower">CPU 功率</sys:String>
 
-    <sys:String x:Key="LOCGameActivityActiveWarning">启用警</sys:String>
+    <sys:String x:Key="LOCGameActivityActiveWarning">启用警告</sys:String>
     <sys:String x:Key="LOCGameActivityMinFps">最小帧数</sys:String>
     <sys:String x:Key="LOCGameActivityMaxCpuTemp">最高 CPU 温度</sys:String>
     <sys:String x:Key="LOCGameActivityMaxGpuTemp">最高 GPU 温度</sys:String>
