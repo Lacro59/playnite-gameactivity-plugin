@@ -22,7 +22,7 @@
     <sys:String x:Key="LOCGameActivityGanttView">甘特图</sys:String>
     
     <sys:String x:Key="LOCGameActivitySetNumberDay">设定天数</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriod">时</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriod">时期</sys:String>
     <sys:String x:Key="LOCGameActivitySetLastDate">设置最近日期</sys:String>
     
     
@@ -39,13 +39,13 @@
     <!-- GamesDataMismatch -->
 
     <sys:String x:Key="LOCGaGamesDataMismatch">不匹配的游戏数据</sys:String>
-    <sys:String x:Key="LOCGaSessionCount">Session count</sys:String>
-    <sys:String x:Key="LOCGaSessionPlayed">Session played</sys:String>
+    <sys:String x:Key="LOCGaSessionCount">会话次数</sys:String>
+    <sys:String x:Key="LOCGaSessionPlayed">已游玩会话</sys:String>
     
-    <sys:String x:Key="LOCGaGaToPlaynite">Set GameActivity data to Playnite</sys:String>
-    <sys:String x:Key="LOCGaPlayniteToGa">Set Playnite data to GameActivity</sys:String>
+    <sys:String x:Key="LOCGaGaToPlaynite">将 GameActivity 数据应用到 Playnite</sys:String>
+    <sys:String x:Key="LOCGaPlayniteToGa">将 Playnite 数据应用到 GameActivity</sys:String>
 
-    <sys:String x:Key="LOCGaPlayniteToGaWarning">This irreversible action will force the play count and times coming from GameActivity to Playnite.</sys:String>
+    <sys:String x:Key="LOCGaPlayniteToGaWarning">该不可逆操作将会用 GameActivity 中的游戏次数与时间强制覆盖 Playnite 中的。</sys:String>
 
     <!-- Merge -->
 
@@ -61,7 +61,7 @@
     <sys:String x:Key="LOCGameActivityListGamesFields">要显示的游戏字段</sys:String>
 
     <sys:String x:Key="LOCGameActivityActiveLog">启用性能记录</sys:String>
-    <sys:String x:Key="LOCGameActivityUsedLibreHardware">已使用 LibreHarwareMonitor而不是</sys:String>
+    <sys:String x:Key="LOCGameActivityUsedLibreHardware">使用 LibreHarwareMonitor 而不是</sys:String>
     <sys:String x:Key="LOCGameActivityRemoteWebServer">使用远程网络服务器</sys:String>
     <sys:String x:Key="LOCGameActivityTimeInterval">检查时间间隔</sys:String>
     <sys:String x:Key="LOCGameActivityTimeLabel">分</sys:String>
@@ -85,16 +85,16 @@
     <sys:String x:Key="LOCGameActivityMinFps">最小帧数</sys:String>
     <sys:String x:Key="LOCGameActivityMaxCpuTemp">最高 CPU 温度</sys:String>
     <sys:String x:Key="LOCGameActivityMaxGpuTemp">最高 GPU 温度</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxCpuUsage">最大 CPU </sys:String>
-    <sys:String x:Key="LOCGameActivityMaxGpuUsage">最大 GPU </sys:String>
+    <sys:String x:Key="LOCGameActivityMaxCpuUsage">最大 CPU 利用率</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxGpuUsage">最大 GPU 利用率</sys:String>
     <sys:String x:Key="LOCGameActivityMaxRamUsage">最大内存</sys:String>
 
     <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">游戏时记录 CPU、GPU、内存和帧数。</sys:String>
-    <sys:String x:Key="LOCGameActivityEnableWarningToolTip">游戏结束后结合定义的限制显示警</sys:String>
+    <sys:String x:Key="LOCGameActivityEnableWarningToolTip">游戏结束后结合定义的限制显示警告消息。</sys:String>
 
     <sys:String x:Key="LOCGameActivityIntegrationChartTime">图表中显示游戏会话时间</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationChartLog">图表中显示游戏会话记录</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">在切换按钮中显示详</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">在切换按钮中显示详情</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">横坐标轴上的数据数量</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationChartTimeTruncate">默认地截断时间数据</sys:String>
 
@@ -106,8 +106,8 @@
     <sys:String x:Key="LOCGameActivitySelectChartSeriesToDisplay">选择要在图表中显示的系列</sys:String>
 
     <sys:String x:Key="LOCGameActivityIconFrom">选择图标来源</sys:String>
-    <sys:String x:Key="LOCGameActivityIconFromLibrary">使用库定义的图</sys:String>
-    <sys:String x:Key="LOCGameActivityIconFromFont">使用插件字体定义的图</sys:String>
+    <sys:String x:Key="LOCGameActivityIconFromLibrary">使用库定义的图标</sys:String>
+    <sys:String x:Key="LOCGameActivityIconFromFont">使用插件字体定义的图标</sys:String>
 
     <sys:String x:Key="LOCGameActivityIgnoreSession">忽略短的游戏会话</sys:String>
     <sys:String x:Key="LOCGameActivitySetVariatorTime">设置时间变量</sys:String>
@@ -130,23 +130,23 @@
     <sys:String x:Key="LOCGameActivityTotalHours">总小时数</sys:String>
     <sys:String x:Key="LOCGameActivityTotalHoursByWeeks">周小时数</sys:String>
 
-    <sys:String x:Key="LOCGameActivityWeekLabel"></sys:String>
+    <sys:String x:Key="LOCGameActivityWeekLabel">周</sys:String>
 
     <sys:String x:Key="LOCGameActivityTime">时长</sys:String>
     <sys:String x:Key="LOCGameActivityLog">性能记录</sys:String>
     <sys:String x:Key="LOCGameActivityTimeTitle">日小时数</sys:String>
-    <sys:String x:Key="LOCGameActivityLogTitle">上次会话详</sys:String>
+    <sys:String x:Key="LOCGameActivityLogTitle">上次会话详情</sys:String>
     <sys:String x:Key="LOCGameActivityLogTitleDate">会话详情来自</sys:String>
 
     <sys:String x:Key="LOCGameActivityLvGamesLastActivity">上次会话</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">经过时间</sys:String>
-    <sys:String x:Key="LOCGameActivityTimePlayedInMonth">Time played (month)</sys:String>
-    <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">Time played (period)</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInMonth">游戏时间 (月)</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">游戏时间 (时期)</sys:String>
     
     <sys:String x:Key="LOCGameActivityAvgCpu">平均 CPU</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpu">平均 GPU</sys:String>
     <sys:String x:Key="LOCGameActivityAvgRam">平均内存</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgFps">平均帧</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgFps">平均帧数</sys:String>
     <sys:String x:Key="LOCGameActivityAvgCpuT">平均 CPU T</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpuT">平均 GPU T</sys:String>
     <sys:String x:Key="LOCGameActivityAvgCpuP">平均 CPU P</sys:String>
@@ -154,15 +154,15 @@
 
     <sys:String x:Key="LOCGameActivityPCName">PC 名称</sys:String>
     
-    <sys:String x:Key="LOCGameActivityDateSession">Date session</sys:String>
-    <sys:String x:Key="LOCGameActivityDateLog">Date log</sys:String>
+    <sys:String x:Key="LOCGameActivityDateSession">会话日期</sys:String>
+    <sys:String x:Key="LOCGameActivityDateLog">日期日志</sys:String>
 
 
     <!-- GameActivity -->
 
-    <sys:String x:Key="LOCGameActivityWarningCaption">游戏会话时的警</sys:String>
+    <sys:String x:Key="LOCGameActivityWarningCaption">游戏会话时的警告</sys:String>
     <sys:String x:Key="LOCGameActivityWarningAt">于</sys:String>
-    <sys:String x:Key="LOCGameActivityCpuUsage">CPU </sys:String>
+    <sys:String x:Key="LOCGameActivityCpuUsage">CPU 利用率</sys:String>
     <sys:String x:Key="LOCGameActivityRamUsage">内存</sys:String>
 
     <sys:String x:Key="LOCGameActivityNotificationHWiNFO">HWiNFO 记录已启用，但应用程序未运行。</sys:String>
