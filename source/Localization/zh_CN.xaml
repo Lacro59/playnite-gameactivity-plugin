@@ -61,14 +61,14 @@
     <sys:String x:Key="LOCGameActivityListGamesFields">要显示的游戏字段</sys:String>
 
     <sys:String x:Key="LOCGameActivityActiveLog">启用性能记录</sys:String>
-    <sys:String x:Key="LOCGameActivityUsedLibreHardware">使用 LibreHarwareMonitor 而不是</sys:String>
-    <sys:String x:Key="LOCGameActivityRemoteWebServer">使用远程网络服务器</sys:String>
+    <sys:String x:Key="LOCGameActivityUsedLibreHardware">已使用 LibreHarwareMonitor而不</sys:String>
+    <sys:String x:Key="LOCGameActivityRemoteWebServer">使用远程网络服务</sys:String>
     <sys:String x:Key="LOCGameActivityTimeInterval">检查时间间隔</sys:String>
     <sys:String x:Key="LOCGameActivityTimeLabel">分</sys:String>
 
     <sys:String x:Key="LOCGameActivityUseMsiAfterburner">使用 MSI Afterburner</sys:String>
     <sys:String x:Key="LOCGameActivityUseHWiNFOSharedMemory">使用 HWiNFO 共享内存</sys:String>
-    <sys:String x:Key="LOCGameActivityUseHWiNFOGadget">使用 HWiNFO 小工具报告</sys:String>
+    <sys:String x:Key="LOCGameActivityUseHWiNFOGadget">使用 HWiNFO 小工具报</sys:String>
     <sys:String x:Key="LOCGameActivityIndex">索引</sys:String>
 
     <sys:String x:Key="LOCGameActivitySensorsID">传感器 ID</sys:String>
@@ -78,8 +78,8 @@
     <sys:String x:Key="LOCGameActivityFps">帧数</sys:String>
     <sys:String x:Key="LOCGameActivityGpuTemp">GPU 温度</sys:String>
     <sys:String x:Key="LOCGameActivityCpuTemp">CPU 温度</sys:String>
-    <sys:String x:Key="LOCGameActivityCpuPower">CPU 功率</sys:String>
-    <sys:String x:Key="LOCGameActivityGpuPower">CPU 功率</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuPower">CPU 功</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuPower">CPU 功</sys:String>
 
     <sys:String x:Key="LOCGameActivityActiveWarning">启用警告</sys:String>
     <sys:String x:Key="LOCGameActivityMinFps">最小帧数</sys:String>
@@ -116,8 +116,8 @@
 
     <!-- GameActivityViewSingle -->
 
-    <sys:String x:Key="LOCGameActivityRecentActivity">最近的动态</sys:String>
-    <sys:String x:Key="LOCGameActivityNoRecentActivity">没有最近的活动</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivity">最近的动</sys:String>
+    <sys:String x:Key="LOCGameActivityNoRecentActivity">没有最近的活</sys:String>
     <sys:String x:Key="LOCGameActivityRecentActivitySingular">{1} 周过去的 {0} 小时</sys:String>
     <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{1} 周过去的 {0} 小时</sys:String>
     <sys:String x:Key="LOCGameActivityAvgPerDay">日平均时间</sys:String>
