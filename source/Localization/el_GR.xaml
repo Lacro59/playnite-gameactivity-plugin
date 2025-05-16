@@ -7,11 +7,11 @@
     
     <!-- MainView -->
 
-    <sys:String x:Key="LOCGameActivity">Δραστηριότητα Παιχνιδιών </sys:String>
+    <sys:String x:Key="LOCGameActivity">Δραστηριότητα Παιχνιδιών</sys:String>
     <sys:String x:Key="LOCGameActivityTitle">Δραστηριότητα</sys:String>
     <sys:String x:Key="LOCGamesActivitiesTitle">Δραστηριότητες παιχνιδιών</sys:String>
-    <sys:String x:Key="LOCGameActivitiesTitle">Δραστηριότητες παιχνιδιού </sys:String>
-    <sys:String x:Key="LOCGameActivityViewGamesActivities">Προβολή Δραστηριότητας Παιχνιδιών </sys:String>
+    <sys:String x:Key="LOCGameActivitiesTitle">Δραστηριότητες παιχνιδιού</sys:String>
+    <sys:String x:Key="LOCGameActivityViewGamesActivities">Προβολή Δραστηριότητας Παιχνιδιών</sys:String>
     <sys:String x:Key="LOCGameActivityViewGameActivity">Προβολή δραστηριότητας παιχνιδιού</sys:String>
     
     <sys:String x:Key="LOCGameActivityDefaultAction">Προεπιλεγμένη ενέργεια</sys:String>
@@ -22,7 +22,7 @@
     <sys:String x:Key="LOCGameActivityGanttView">Προβολή Gantt</sys:String>
     
     <sys:String x:Key="LOCGameActivitySetNumberDay">Ορισμός αριθμού ημερών</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriod">Περίοδος</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriod">Περίοδο</sys:String>
     <sys:String x:Key="LOCGameActivitySetLastDate">Ορίστε την τελευταία ημερομηνία</sys:String>
     
     
@@ -31,9 +31,9 @@
     <sys:String x:Key="LOCGaBackupExist" xml:space="preserve">Υπάρχουν αντίγραφα ασφαλείας για {0}.
 Πιθανώς μετά από μη αναμενόμενο τερματισμό.
 Κάντε κλικ για περισσότερες πληροφορίες.</sys:String>
-    <sys:String x:Key="LOCGaDateSession">Ημερομηνία συνεδρίας</sys:String>
+    <sys:String x:Key="LOCGaDateSession">Ημερομηνία συνεδρία</sys:String>
     <sys:String x:Key="LOCGaPlayTimeSession">Συνεδρία Χρόνου Παιχνιδιού</sys:String>
-    <sys:String x:Key="LOCGaBackupDataInfo">Πληροφορίες Αντιγρ. Ασφαλείας</sys:String>
+    <sys:String x:Key="LOCGaBackupDataInfo">Πληροφορίες Αντιγρ. Ασφαλεία</sys:String>
 
 
     <!-- GamesDataMismatch -->
@@ -56,14 +56,14 @@
     <!-- GameActivitySettingsView -->
 
     <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">Συνένωση συνεδριών χρόνου παιχνιδιού στο γράφημα</sys:String>
-    <sys:String x:Key="LOCGameActivityCumulPlaytimeStore">Ενοποίηση του χρόνου από διαφορετικές βιβλιοθήκες</sys:String>
+    <sys:String x:Key="LOCGameActivityCumulPlaytimeStore">Ενοποίηση του χρόνου από διαφορετικές βιβλιοθήκε</sys:String>
 
     <sys:String x:Key="LOCGameActivityListGamesFields">Πεδία παιχνιδιού προς εμφάνιση</sys:String>
 
-    <sys:String x:Key="LOCGameActivityActiveLog">Ενεργοποίηση καταγραφής</sys:String>
+    <sys:String x:Key="LOCGameActivityActiveLog">Ενεργοποίηση καταγραφή</sys:String>
     <sys:String x:Key="LOCGameActivityUsedLibreHardware">Αντ' αυτού χρησιμοποιείται LibreHarwareMonitor</sys:String>
     <sys:String x:Key="LOCGameActivityRemoteWebServer">Με απομακρυσμένο διακομιστή ιστού</sys:String>
-    <sys:String x:Key="LOCGameActivityTimeInterval">Χρονικό διάστημα ελέγχου</sys:String>
+    <sys:String x:Key="LOCGameActivityTimeInterval">Χρονικό διάστημα ελέγχο</sys:String>
     <sys:String x:Key="LOCGameActivityTimeLabel">λεπτό/ά</sys:String>
 
     <sys:String x:Key="LOCGameActivityUseMsiAfterburner">Χρήση MSI Afterburner</sys:String>
@@ -72,7 +72,7 @@
     <sys:String x:Key="LOCGameActivityIndex">Ευρετήριο</sys:String>
 
     <sys:String x:Key="LOCGameActivitySensorsID">Αναγνωριστικό αισθητήρων</sys:String>
-    <sys:String x:Key="LOCGameActivityElementID">Ταυτότητα στοιχείου</sys:String>
+    <sys:String x:Key="LOCGameActivityElementID">Ταυτότητα στοιχείο</sys:String>
 
     <sys:String x:Key="LOCGameActivityGpuUsage">Χρήση GPU</sys:String>
     <sys:String x:Key="LOCGameActivityFps">FPS</sys:String>
@@ -87,7 +87,7 @@
     <sys:String x:Key="LOCGameActivityMaxGpuTemp">Μέγιστη θερμοκρασία GPU</sys:String>
     <sys:String x:Key="LOCGameActivityMaxCpuUsage">Μέγιστη χρήση επεξεργαστή</sys:String>
     <sys:String x:Key="LOCGameActivityMaxGpuUsage">Μέγιστη χρήση GPU</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxRamUsage">Μέγιστη χρήση Μνήμης</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxRamUsage">Μέγιστη χρήση Μνήμη</sys:String>
 
     <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">Καταγραφή επεξεργαστή, GPU, μνήμης RAM και απόδοσης Καρέ κατά τη διάρκεια της συνεδρίας παιχνιδιού.</sys:String>
     <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Εμφανίζει ένα προειδοποιητικό μήνυμα στο τέλος της συνεδρίας του παιχνιδιού εντός των καθορισμένων ορίων.</sys:String>
