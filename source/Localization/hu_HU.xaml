@@ -2,7 +2,7 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <sys:String x:Key="LOCGameActivityNoPlaytime" xml:space="preserve">Nincs játékidő a következőhöz: {0}.
-A játékidő különbségét használta: {1}. </sys:String>
+A játékidő különbségét használta: {1}.</sys:String>
     
     
     <!-- MainView -->

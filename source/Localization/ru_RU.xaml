@@ -121,7 +121,7 @@
     <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} часов за {1} неделю</sys:String>
     <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} часов за {1} недель</sys:String>
     <sys:String x:Key="LOCGameActivityAvgPerDay">Среднее время в день</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgPerSession">Среднее время за сеанс</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgPerSession">Среднее время за сеан</sys:String>
     <sys:String x:Key="LOCGameActivityFirstSession">Первая сессия</sys:String>
     <sys:String x:Key="LOCGameActivityLastSession">Последняя сессия</sys:String>
     

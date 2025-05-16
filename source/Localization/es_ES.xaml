@@ -38,14 +38,14 @@ Haz clic para más información.</sys:String>
 
     <!-- GamesDataMismatch -->
 
-    <sys:String x:Key="LOCGaGamesDataMismatch">Game data mismatch</sys:String>
-    <sys:String x:Key="LOCGaSessionCount">Session count</sys:String>
-    <sys:String x:Key="LOCGaSessionPlayed">Session played</sys:String>
+    <sys:String x:Key="LOCGaGamesDataMismatch">Los datos del juego no coinciden</sys:String>
+    <sys:String x:Key="LOCGaSessionCount">Número de sesiones</sys:String>
+    <sys:String x:Key="LOCGaSessionPlayed">Sesiones jugadas</sys:String>
     
-    <sys:String x:Key="LOCGaGaToPlaynite">Set GameActivity data to Playnite</sys:String>
-    <sys:String x:Key="LOCGaPlayniteToGa">Set Playnite data to GameActivity</sys:String>
+    <sys:String x:Key="LOCGaGaToPlaynite">Establecer ActividadDelJuego a Playnite</sys:String>
+    <sys:String x:Key="LOCGaPlayniteToGa">Establecer datos de Playnite a DatosDelJuego</sys:String>
 
-    <sys:String x:Key="LOCGaPlayniteToGaWarning">This irreversible action will force the play count and times coming from GameActivity to Playnite.</sys:String>
+    <sys:String x:Key="LOCGaPlayniteToGaWarning">Esta acción irreversible forzará el conteo del juego y el tiempo de juego que vienen de ActividadDelJuego a Playnite.</sys:String>
 
     <!-- Merge -->
 
@@ -140,8 +140,8 @@ Haz clic para más información.</sys:String>
 
     <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Última sesión</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Tiempo transcurrido</sys:String>
-    <sys:String x:Key="LOCGameActivityTimePlayedInMonth">Time played (month)</sys:String>
-    <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">Time played (period)</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInMonth">Tiempo jugado (meses)</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">Tiempo jugado (período)</sys:String>
     
     <sys:String x:Key="LOCGameActivityAvgCpu">CPU promedio</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpu">GPU promedio</sys:String>
@@ -154,8 +154,8 @@ Haz clic para más información.</sys:String>
 
     <sys:String x:Key="LOCGameActivityPCName">Nombre de PC</sys:String>
     
-    <sys:String x:Key="LOCGameActivityDateSession">Date session</sys:String>
-    <sys:String x:Key="LOCGameActivityDateLog">Date log</sys:String>
+    <sys:String x:Key="LOCGameActivityDateSession">Fecha de sesión</sys:String>
+    <sys:String x:Key="LOCGameActivityDateLog">Registro de fecha</sys:String>
 
 
     <!-- GameActivity -->
