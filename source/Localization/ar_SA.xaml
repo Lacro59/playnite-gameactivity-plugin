@@ -56,7 +56,7 @@
     <!-- GameActivitySettingsView -->
 
     <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">جمع وقت جلسات اللعب على الرسم البيا</sys:String>
-    <sys:String x:Key="LOCGameActivityCumulPlaytimeStore">توحيد وقت مكتبات مختل</sys:String>
+    <sys:String x:Key="LOCGameActivityCumulPlaytimeStore">توحيد وقت مكتبات مخت</sys:String>
 
     <sys:String x:Key="LOCGameActivityListGamesFields">حقول اللعبة ليتم عرضها</sys:String>
 
@@ -98,19 +98,19 @@
     <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">عدد البيانات في المحور الأ</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationChartTimeTruncate">اقتطاع بيانات الوقت بشكل افتراض</sys:String>
 
-    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabels">إظهار التسميات على المحور الأف</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">إظهار التسميات على المحور الأف</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabels">إظهار التسميات على المحور الأ</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">إظهار التسميات على المحور الأ</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicLogOptions">خصائص الرسم البيا</sys:String>
 
     <sys:String x:Key="LOCGameActivityUseControls">استخدام ضوابط المخططات</sys:String>
     <sys:String x:Key="LOCGameActivitySelectChartSeriesToDisplay">حدد السلسلة لعرضها على الرسم البيا</sys:String>
 
-    <sys:String x:Key="LOCGameActivityIconFrom">حدد أصل الأيق</sys:String>
+    <sys:String x:Key="LOCGameActivityIconFrom">حدد أصل الأي</sys:String>
     <sys:String x:Key="LOCGameActivityIconFromLibrary">استخدام الأيقونة المحددة في المكت</sys:String>
     <sys:String x:Key="LOCGameActivityIconFromFont">استخدم الرمز المحدد في خط الملح</sys:String>
 
     <sys:String x:Key="LOCGameActivityIgnoreSession">تجاهل جلسات التشغيل القصير</sys:String>
-    <sys:String x:Key="LOCGameActivitySetVariatorTime">تعيين المتغير الزم</sys:String>
+    <sys:String x:Key="LOCGameActivitySetVariatorTime">تعيين المتغير الز</sys:String>
     <sys:String x:Key="LOCGameActivitySetVariatorLog">تعيين متغير السج</sys:String>
     <sys:String x:Key="LOCGameActivityRecentActivityWeek">Number of weeks for recent activity</sys:String>
 
@@ -177,7 +177,7 @@
 
     <!-- GameActivityAddTime -->
 
-    <sys:String x:Key="LOCGaAddNewGameSession">إضافة جلسة جد</sys:String>
+    <sys:String x:Key="LOCGaAddNewGameSession">إضافة جلسة ج</sys:String>
     <sys:String x:Key="LOCGaDateStart">تاريخ البدء</sys:String>
     <sys:String x:Key="LOCGaDateEnd">تاريخ الانتهاء</sys:String>
     
