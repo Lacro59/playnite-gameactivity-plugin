@@ -38,14 +38,14 @@
 
     <!-- GamesDataMismatch -->
 
-    <sys:String x:Key="LOCGaGamesDataMismatch">Game data mismatch</sys:String>
-    <sys:String x:Key="LOCGaSessionCount">Session count</sys:String>
-    <sys:String x:Key="LOCGaSessionPlayed">Session played</sys:String>
+    <sys:String x:Key="LOCGaGamesDataMismatch">Не збігаються ігрові дані</sys:String>
+    <sys:String x:Key="LOCGaSessionCount">Кількість сеансів</sys:String>
+    <sys:String x:Key="LOCGaSessionPlayed">Сеансів зіграно</sys:String>
     
-    <sys:String x:Key="LOCGaGaToPlaynite">Set GameActivity data to Playnite</sys:String>
-    <sys:String x:Key="LOCGaPlayniteToGa">Set Playnite data to GameActivity</sys:String>
+    <sys:String x:Key="LOCGaGaToPlaynite">Встановити дані GameActivity в Playnite</sys:String>
+    <sys:String x:Key="LOCGaPlayniteToGa">Встановити дані Playnite у GameActivity</sys:String>
 
-    <sys:String x:Key="LOCGaPlayniteToGaWarning">This irreversible action will force the play count and times coming from GameActivity to Playnite.</sys:String>
+    <sys:String x:Key="LOCGaPlayniteToGaWarning">Ця незворотна дія перенесе кількість сеансів і час гри з GameActivity у Playnite.</sys:String>
 
     <!-- Merge -->
 
@@ -140,8 +140,8 @@
 
     <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Останній сеанс</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Минуло часу</sys:String>
-    <sys:String x:Key="LOCGameActivityTimePlayedInMonth">Time played (month)</sys:String>
-    <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">Time played (period)</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInMonth">Час гри (місяць)</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">Час гри (період)</sys:String>
     
     <sys:String x:Key="LOCGameActivityAvgCpu">Сер. CPU</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpu">Сер. GPU</sys:String>
@@ -154,8 +154,8 @@
 
     <sys:String x:Key="LOCGameActivityPCName">Ім'я ПК</sys:String>
     
-    <sys:String x:Key="LOCGameActivityDateSession">Date session</sys:String>
-    <sys:String x:Key="LOCGameActivityDateLog">Date log</sys:String>
+    <sys:String x:Key="LOCGameActivityDateSession">Дата сеансу</sys:String>
+    <sys:String x:Key="LOCGameActivityDateLog">Журнал дат</sys:String>
 
 
     <!-- GameActivity -->
