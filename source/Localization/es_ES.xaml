@@ -83,11 +83,11 @@ Haz clic para más información.</sys:String>
 
     <sys:String x:Key="LOCGameActivityActiveWarning">Activar advertencias</sys:String>
     <sys:String x:Key="LOCGameActivityMinFps">FPS mínimo</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxCpuTemp">Máx temp CPU</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxGpuTemp">Máx temp GPU</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxCpuUsage">Máx uso CPU</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxGpuUsage">Máx uso GPU</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxRamUsage">Máx uso RAM</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxCpuTemp">Máx. temp CPU</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxGpuTemp">Máx. temp GPU</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxCpuUsage">Máx. uso CPU</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxGpuUsage">Máx. uso GPU</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxRamUsage">Máx. uso RAM</sys:String>
 
     <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">Registrar el rendimiento de CPU, GPU, RAM y FPS durante la sesión de juego.</sys:String>
     <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Muestra un mensaje de advertencia al final de la sesión del juego dentro de los límites definidos.</sys:String>
