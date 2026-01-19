@@ -7,11 +7,11 @@
     
     <!-- MainView -->
 
-    <sys:String x:Key="LOCGameActivity">Δραστηριότητα Παιχνιδιών </sys:String>
+    <sys:String x:Key="LOCGameActivity">Δραστηριότητα Παιχνιδιών</sys:String>
     <sys:String x:Key="LOCGameActivityTitle">Δραστηριότητα</sys:String>
     <sys:String x:Key="LOCGamesActivitiesTitle">Δραστηριότητες παιχνιδιών</sys:String>
-    <sys:String x:Key="LOCGameActivitiesTitle">Δραστηριότητες παιχνιδιού </sys:String>
-    <sys:String x:Key="LOCGameActivityViewGamesActivities">Προβολή Δραστηριότητας Παιχνιδιών </sys:String>
+    <sys:String x:Key="LOCGameActivitiesTitle">Δραστηριότητες παιχνιδιού</sys:String>
+    <sys:String x:Key="LOCGameActivityViewGamesActivities">Προβολή Δραστηριότητας Παιχνιδιών</sys:String>
     <sys:String x:Key="LOCGameActivityViewGameActivity">Προβολή δραστηριότητας παιχνιδιού</sys:String>
     
     <sys:String x:Key="LOCGameActivityDefaultAction">Προεπιλεγμένη ενέργεια</sys:String>
