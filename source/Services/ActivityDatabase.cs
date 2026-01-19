@@ -37,30 +37,6 @@ namespace GameActivity.Services
         }
 
 
-        protected override bool LoadDatabase()
-        {
-            try
-            {
-                Stopwatch stopWatch = new Stopwatch();
-                stopWatch.Start();
-
-                Database = new GameActivitiesCollection(Paths.PluginDatabasePath);
-                Database.SetGameInfoDetails<Activity, ActivityDetails>();
-
-                stopWatch.Stop();
-                TimeSpan ts = stopWatch.Elapsed;
-                Logger.Info($"LoadDatabase with {Database.Count} items - {string.Format("{0:00}:{1:00}.{2:00}", ts.Minutes, ts.Seconds, ts.Milliseconds / 10)}");
-            }
-            catch (Exception ex)
-            {
-                Common.LogError(ex, false, true, PluginName);
-                return false;
-            }
-
-            return true;
-        }
-
-
         public override GameActivities Get(Guid id, bool onlyCache = false, bool force = false)
         {
             GameActivities gameActivities = GetOnlyCache(id);

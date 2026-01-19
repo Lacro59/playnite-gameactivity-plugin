@@ -28,10 +28,10 @@ namespace GameActivity.Controls
     public partial class PluginChartLog : PluginUserControlExtend
     {
         private ActivityDatabase PluginDatabase { get; set; } = GameActivity.PluginDatabase;
-        internal override IPluginDatabase pluginDatabase => PluginDatabase;
+        protected override IPluginDatabase pluginDatabase => PluginDatabase;
 
         private PluginChartLogDataContext ControlDataContext { get; set; } = new PluginChartLogDataContext();
-        internal override IDataContext controlDataContext
+        protected override IDataContext controlDataContext
         {
             get => ControlDataContext;
             set => ControlDataContext = (PluginChartLogDataContext)controlDataContext;

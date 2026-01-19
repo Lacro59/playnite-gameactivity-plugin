@@ -28,10 +28,10 @@ namespace GameActivity.Controls
         private GameActivity Plugin { get; set; }
 
         private ActivityDatabase PluginDatabase { get; set; } = GameActivity.PluginDatabase;
-        internal override IPluginDatabase pluginDatabase => PluginDatabase;
+        protected override IPluginDatabase pluginDatabase => PluginDatabase;
 
         private PluginButtonDataContext ControlDataContext { get; set; } = new PluginButtonDataContext();
-        internal override IDataContext controlDataContext
+        protected override IDataContext controlDataContext
         {
             get => ControlDataContext;
             set => ControlDataContext = (PluginButtonDataContext)controlDataContext;

@@ -34,10 +34,10 @@ namespace GameActivity.Controls
     public partial class PluginChartTime : PluginUserControlExtend
     {
         private ActivityDatabase PluginDatabase { get; set; } = GameActivity.PluginDatabase;
-        internal override IPluginDatabase pluginDatabase => PluginDatabase;
+        protected override IPluginDatabase pluginDatabase => PluginDatabase;
 
         private PluginChartTimeDataContext ControlDataContext { get; set; } = new PluginChartTimeDataContext();
-        internal override IDataContext controlDataContext
+        protected override IDataContext controlDataContext
         {
             get => ControlDataContext;
             set => ControlDataContext = (PluginChartTimeDataContext)controlDataContext;
@@ -138,7 +138,7 @@ namespace GameActivity.Controls
         }
 
 
-        internal override void PluginSettings_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        protected override void PluginSettings_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             Truncate = PluginDatabase.PluginSettings.Settings.ChartTimeTruncate;
 

@@ -13,14 +13,6 @@ namespace GameActivity.Models
         private static ILogger Logger => LogManager.GetLogger();
         private static ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
 
-
-        private List<Activity> _items = new List<Activity>();
-        public override List<Activity> Items { get => _items; set => SetValue(ref _items, value); }
-
-        private ActivityDetails _itemsDetails = new ActivityDetails();
-        public override ActivityDetails ItemsDetails { get => _itemsDetails; set => SetValue(ref _itemsDetails, value); }
-
-
         [DontSerialize]
         public List<Activity> FilterItems => PluginDatabase.PluginSettings.Settings.IgnoreSession
                     ? Items.Where(x => (int)x.ElapsedSeconds > PluginDatabase.PluginSettings.Settings.IgnoreSessionTime).Distinct().ToList()

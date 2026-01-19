@@ -42,7 +42,7 @@ namespace GameActivity
         private List<RunningActivity> RunningActivities { get; set; } = new List<RunningActivity>();
 
 
-        public GameActivity(IPlayniteAPI api) : base(api)
+        public GameActivity(IPlayniteAPI api) : base(api, "GameActivity")
         {
             // Custom theme button
             EventManager.RegisterClassHandler(typeof(Button), Button.ClickEvent, new RoutedEventHandler(OnCustomThemeButtonClick));
