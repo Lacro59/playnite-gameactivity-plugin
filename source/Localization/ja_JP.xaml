@@ -31,7 +31,7 @@
 おそらくプレイナイトのクラッシュ後です。
 詳細についてはクリックしてくださ</sys:String>
     <sys:String x:Key="LOCGaDateSession">Date session</sys:String>
-    <sys:String x:Key="LOCGaPlayTimeSession">Play time session</sys:String>
+    <sys:String x:Key="LOCGaPlayTimeSession">遊びの時間</sys:String>
     <sys:String x:Key="LOCGaBackupDataInfo">Backup data info</sys:String>
 
 
