@@ -1,93 +1,93 @@
 ﻿<?xml version="1.0"?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
-    <sys:String x:Key="LOCGameActivityNoPlaytime" xml:space="preserve">There is no play time for {0}.
-Used the difference play time: {1}s.</sys:String>
+    <sys:String x:Key="LOCGameActivityNoPlaytime" xml:space="preserve">هیچ زمان بازی‌ای برای {0} نیست.
+زمان بازی تفاوت به کار رفت: {1} ثانیه.</sys:String>
     
     
     <!-- MainView -->
 
-    <sys:String x:Key="LOCGameActivity">GameActivity</sys:String>
-    <sys:String x:Key="LOCGameActivityTitle">Activity</sys:String>
-    <sys:String x:Key="LOCGamesActivitiesTitle">Games activities</sys:String>
-    <sys:String x:Key="LOCGameActivitiesTitle">Game activities</sys:String>
-    <sys:String x:Key="LOCGameActivityViewGamesActivities">View games activities</sys:String>
-    <sys:String x:Key="LOCGameActivityViewGameActivity">View game activity</sys:String>
+    <sys:String x:Key="LOCGameActivity">فعالیت بازی</sys:String>
+    <sys:String x:Key="LOCGameActivityTitle">فعالیت</sys:String>
+    <sys:String x:Key="LOCGamesActivitiesTitle">فعالیت بازی‌ها</sys:String>
+    <sys:String x:Key="LOCGameActivitiesTitle">فعالیت بازی</sys:String>
+    <sys:String x:Key="LOCGameActivityViewGamesActivities">دیدن فعالیت بازی‌ها</sys:String>
+    <sys:String x:Key="LOCGameActivityViewGameActivity">دیدن فعالیت بازی</sys:String>
     
-    <sys:String x:Key="LOCGameActivityDefaultAction">Default action</sys:String>
+    <sys:String x:Key="LOCGameActivityDefaultAction">کنش پیش‌فرض</sys:String>
 
 
     <!-- GameActivityGanttView -->
 
-    <sys:String x:Key="LOCGameActivityGanttView">Gantt view</sys:String>
+    <sys:String x:Key="LOCGameActivityGanttView">نمای گانت</sys:String>
     
-    <sys:String x:Key="LOCGameActivitySetNumberDay">Set number of days</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriod">Period</sys:String>
-    <sys:String x:Key="LOCGameActivitySetLastDate">Set the last date</sys:String>
+    <sys:String x:Key="LOCGameActivitySetNumberDay">نشاندن شمار روزها</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriod">دوره</sys:String>
+    <sys:String x:Key="LOCGameActivitySetLastDate">نشاندن آخرین تاریخ</sys:String>
     
     
     <!-- Backup -->
 
-    <sys:String x:Key="LOCGaBackupExist" xml:space="preserve">There is backup data for {0}.
-Probably after a playnite crash.
-Click for more information.</sys:String>
-    <sys:String x:Key="LOCGaDateSession">Date session</sys:String>
-    <sys:String x:Key="LOCGaPlayTimeSession">Play time session</sys:String>
-    <sys:String x:Key="LOCGaBackupDataInfo">Backup data info</sys:String>
+    <sys:String x:Key="LOCGaBackupExist" xml:space="preserve">برای {0} دادهٔ پشتیبانی‌شده هست.
+به‌احتمال پس از سرنگونی پلی‌نایت.
+برای اطلاعات بیشتر کلیک کنید.</sys:String>
+    <sys:String x:Key="LOCGaDateSession">نشست تاریخ</sys:String>
+    <sys:String x:Key="LOCGaPlayTimeSession">نشست زمان بازی</sys:String>
+    <sys:String x:Key="LOCGaBackupDataInfo">اطلاعات دادهٔ پشتیبانی‌شده</sys:String>
 
 
     <!-- GamesDataMismatch -->
 
-    <sys:String x:Key="LOCGaGamesDataMismatch">Game data mismatch</sys:String>
-    <sys:String x:Key="LOCGaSessionCount">Session count</sys:String>
-    <sys:String x:Key="LOCGaSessionPlayed">Session played</sys:String>
+    <sys:String x:Key="LOCGaGamesDataMismatch">ناهمخوانی دادهٔ بازی</sys:String>
+    <sys:String x:Key="LOCGaSessionCount">شمار نشست‌ها</sys:String>
+    <sys:String x:Key="LOCGaSessionPlayed">نشست بازی‌شده</sys:String>
     
-    <sys:String x:Key="LOCGaGaToPlaynite">Set GameActivity data to Playnite</sys:String>
-    <sys:String x:Key="LOCGaPlayniteToGa">Set Playnite data to GameActivity</sys:String>
+    <sys:String x:Key="LOCGaGaToPlaynite">نشاندن دادهٔ فعالیت بازی در پلی‌نایت</sys:String>
+    <sys:String x:Key="LOCGaPlayniteToGa">نشاندن دادهٔ پلی‌نایت در فعالیت بازی</sys:String>
 
-    <sys:String x:Key="LOCGaPlayniteToGaWarning">This irreversible action will force the play count and times coming from GameActivity to Playnite.</sys:String>
+    <sys:String x:Key="LOCGaPlayniteToGaWarning">این کنشِ برگشت‌ناپذیر دریافت شمار نشست‌های بازی و زمان از فعالیت بازی به پلی‌نایت را مجبور خواهد کرد.</sys:String>
 
     <!-- Merge -->
 
-    <sys:String x:Key="LOCGaMerge">Merge</sys:String>
-    <sys:String x:Key="LOCGaMergeSession">Merge game session</sys:String>
+    <sys:String x:Key="LOCGaMerge">یکپارچه‌سازی</sys:String>
+    <sys:String x:Key="LOCGaMergeSession">یکپارچه‌سازی نشست‌های بازی</sys:String>
     
 
     <!-- GameActivitySettingsView -->
 
-    <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">Combine game sessions playtime on chart</sys:String>
-    <sys:String x:Key="LOCGameActivityCumulPlaytimeStore">Unify the time of different libraries</sys:String>
+    <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">هم‌آمیزی زمان بازی نشست‌های بازی در نمودار</sys:String>
+    <sys:String x:Key="LOCGameActivityCumulPlaytimeStore">یکیستن زمان کتابخانه‌های گوناگون</sys:String>
 
-    <sys:String x:Key="LOCGameActivityListGamesFields">Game fields to be displayed</sys:String>
+    <sys:String x:Key="LOCGameActivityListGamesFields">میدان‌های بازی برای نمایش</sys:String>
 
-    <sys:String x:Key="LOCGameActivityActiveLog">Enable logging</sys:String>
-    <sys:String x:Key="LOCGameActivityUsedLibreHardware">Used LibreHarwareMonitor instead</sys:String>
-    <sys:String x:Key="LOCGameActivityRemoteWebServer">With remote web server</sys:String>
-    <sys:String x:Key="LOCGameActivityTimeInterval">Check time interval</sys:String>
-    <sys:String x:Key="LOCGameActivityTimeLabel">minute(s)</sys:String>
+    <sys:String x:Key="LOCGameActivityActiveLog">به‌کاراندازی ثبت</sys:String>
+    <sys:String x:Key="LOCGameActivityUsedLibreHardware">به‌کارگیری LibreHarwareMonitor به‌جایش</sys:String>
+    <sys:String x:Key="LOCGameActivityRemoteWebServer">با کارساز وب از دور</sys:String>
+    <sys:String x:Key="LOCGameActivityTimeInterval">بررسی بازهٔ زمانی</sys:String>
+    <sys:String x:Key="LOCGameActivityTimeLabel">دقیقه(ها)</sys:String>
 
     <sys:String x:Key="LOCGameActivityUseMsiAfterburner">Use MSI Afterburner</sys:String>
     <sys:String x:Key="LOCGameActivityUseHWiNFOSharedMemory">Use HWiNFO SharedMemory</sys:String>
     <sys:String x:Key="LOCGameActivityUseHWiNFOGadget">Use HWiNFO gadget reporting</sys:String>
-    <sys:String x:Key="LOCGameActivityIndex">Index</sys:String>
+    <sys:String x:Key="LOCGameActivityIndex">اندیس</sys:String>
 
-    <sys:String x:Key="LOCGameActivitySensorsID">Sensors id</sys:String>
-    <sys:String x:Key="LOCGameActivityElementID">Element id</sys:String>
+    <sys:String x:Key="LOCGameActivitySensorsID">شناسهٔ حسگرها</sys:String>
+    <sys:String x:Key="LOCGameActivityElementID">شناسهٔ المان</sys:String>
 
-    <sys:String x:Key="LOCGameActivityGpuUsage">GPU usage</sys:String>
-    <sys:String x:Key="LOCGameActivityFps">FPS</sys:String>
-    <sys:String x:Key="LOCGameActivityGpuTemp">GPU temperature</sys:String>
-    <sys:String x:Key="LOCGameActivityCpuTemp">CPU temperature</sys:String>
-    <sys:String x:Key="LOCGameActivityCpuPower">CPU power</sys:String>
-    <sys:String x:Key="LOCGameActivityGpuPower">GPU power</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuUsage">کارکرد کارت گرافیک</sys:String>
+    <sys:String x:Key="LOCGameActivityFps">فریم در ثانیه</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuTemp">دمای کارت گرافیک</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuTemp">دمای پردازنده</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuPower">توان پردازنده</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuPower">توان کارت گرافیک</sys:String>
 
-    <sys:String x:Key="LOCGameActivityActiveWarning">Enable warnings</sys:String>
-    <sys:String x:Key="LOCGameActivityMinFps">Min FPS</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxCpuTemp">Max CPU temp</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxGpuTemp">Max GPU temp</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxCpuUsage">Max CPU usage</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxGpuUsage">Max GPU usage</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxRamUsage">Max RAM usage</sys:String>
+    <sys:String x:Key="LOCGameActivityActiveWarning">به‌کاراندازی هشدارها</sys:String>
+    <sys:String x:Key="LOCGameActivityMinFps">کمینهٔ فریم در ثانیه</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxCpuTemp">بیشینهٔ دمای پردازنده</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxGpuTemp">بیشینهٔ دمای کارت گرافیک</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxCpuUsage">بیشینهٔ کارکرد پردازنده</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxGpuUsage">بیشینهٔ کارکرد کارت گرافیک</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxRamUsage">بیشینهٔ کارکرد حافظهٔ موقت</sys:String>
 
     <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">Log CPU, GPU, RAM and FPS performance during game session.</sys:String>
     <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Displays a warning message at the end of the game session within the defined limits.</sys:String>
@@ -116,73 +116,73 @@ Click for more information.</sys:String>
 
     <!-- GameActivityViewSingle -->
 
-    <sys:String x:Key="LOCGameActivityRecentActivity">Recent activity</sys:String>
-    <sys:String x:Key="LOCGameActivityNoRecentActivity">No recent activity</sys:String>
-    <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} hours past {1} week</sys:String>
-    <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} hours past {1} weeks</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgPerDay">Average time per day</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgPerSession">Average time per session</sys:String>
-    <sys:String x:Key="LOCGameActivityFirstSession">First session</sys:String>
-    <sys:String x:Key="LOCGameActivityLastSession">Last session</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivity">فعالیت اخیر</sys:String>
+    <sys:String x:Key="LOCGameActivityNoRecentActivity">بی‌فعالیت اخیر</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} ساعت در {1} هفتهٔ گذشته</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} ساعت در {1} هفتهٔ گذشته</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgPerDay">میانگین زمان در روز</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgPerSession">میانگین زمان در نشست</sys:String>
+    <sys:String x:Key="LOCGameActivityFirstSession">نخستین نشست</sys:String>
+    <sys:String x:Key="LOCGameActivityLastSession">آخرین نشست</sys:String>
     
     <!-- GameActivityView -->
 
-    <sys:String x:Key="LOCGameActivityTotalHours">Total hours</sys:String>
-    <sys:String x:Key="LOCGameActivityTotalHoursByWeeks">Total hours by week</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHours">زمان کل</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByWeeks">زمان کل در هفته</sys:String>
 
-    <sys:String x:Key="LOCGameActivityWeekLabel">Week</sys:String>
+    <sys:String x:Key="LOCGameActivityWeekLabel">هفته</sys:String>
 
-    <sys:String x:Key="LOCGameActivityTime">Time</sys:String>
-    <sys:String x:Key="LOCGameActivityLog">Log</sys:String>
-    <sys:String x:Key="LOCGameActivityTimeTitle">Total hours by day</sys:String>
-    <sys:String x:Key="LOCGameActivityLogTitle">Last session details</sys:String>
-    <sys:String x:Key="LOCGameActivityLogTitleDate">Session details for</sys:String>
+    <sys:String x:Key="LOCGameActivityTime">زمان</sys:String>
+    <sys:String x:Key="LOCGameActivityLog">لاگ</sys:String>
+    <sys:String x:Key="LOCGameActivityTimeTitle">زمان کل در روز</sys:String>
+    <sys:String x:Key="LOCGameActivityLogTitle">جزئیات نشست آخر</sys:String>
+    <sys:String x:Key="LOCGameActivityLogTitleDate">جزئیات نشست برای</sys:String>
 
-    <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Last session</sys:String>
-    <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Elapsed time</sys:String>
-    <sys:String x:Key="LOCGameActivityTimePlayedInMonth">Time played (month)</sys:String>
-    <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">Time played (period)</sys:String>
+    <sys:String x:Key="LOCGameActivityLvGamesLastActivity">آخرین نشست</sys:String>
+    <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">زمان سپری‌شده</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInMonth">زمان بازی‌شده (ماه)</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">زمان بازی‌شده (دوره)</sys:String>
     
-    <sys:String x:Key="LOCGameActivityAvgCpu">Avg CPU</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgGpu">Avg GPU</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgRam">Avg RAM</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgFps">Avg FPS</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgCpu">میانگین پردازنده</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgGpu">میانگین کارت گرافیک</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgRam">میانگین حافظهٔ موقت</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgFps">میانگی فریم‌بر‌ثانیه</sys:String>
     <sys:String x:Key="LOCGameActivityAvgCpuT">Avg CPU T</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpuT">Avg GPU T</sys:String>
     <sys:String x:Key="LOCGameActivityAvgCpuP">Avg CPU P</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpuP">Avg GPU P</sys:String>
 
-    <sys:String x:Key="LOCGameActivityPCName">PC name</sys:String>
+    <sys:String x:Key="LOCGameActivityPCName">نام رایانه</sys:String>
     
-    <sys:String x:Key="LOCGameActivityDateSession">Date session</sys:String>
-    <sys:String x:Key="LOCGameActivityDateLog">Date log</sys:String>
+    <sys:String x:Key="LOCGameActivityDateSession">تاریخ نشست</sys:String>
+    <sys:String x:Key="LOCGameActivityDateLog">تاریخ لاگ</sys:String>
 
 
     <!-- GameActivity -->
 
-    <sys:String x:Key="LOCGameActivityWarningCaption">Warnings during game session</sys:String>
-    <sys:String x:Key="LOCGameActivityWarningAt">At</sys:String>
-    <sys:String x:Key="LOCGameActivityCpuUsage">CPU usage</sys:String>
-    <sys:String x:Key="LOCGameActivityRamUsage">RAM usage</sys:String>
+    <sys:String x:Key="LOCGameActivityWarningCaption">هشدار هنگام نشست بازی</sys:String>
+    <sys:String x:Key="LOCGameActivityWarningAt">در</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuUsage">مصرف پردازنده</sys:String>
+    <sys:String x:Key="LOCGameActivityRamUsage">مصرف حافظهٔ موقت</sys:String>
 
     <sys:String x:Key="LOCGameActivityNotificationHWiNFO">HWiNFO logging is enabled but application is not running.</sys:String>
     <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">MSI AfterBurner logging is enabled but application is not running.</sys:String>
 
     <!-- QuickSearch -->
 
-    <sys:String x:Key="LOCGaQuickSearchDescription">Search games on GameActivity data</sys:String>
-    <sys:String x:Key="LOCGaQuickSearchByFPS">Find by FPS</sys:String>
-    <sys:String x:Key="LOCGaQuickSearchByTime">Find by time session</sys:String>
-    <sys:String x:Key="LOCGaQuickSearchByDate">Find by date session</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchDescription">جستجوی بازی‌ها در داده‌های فعالیت بازی</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchByFPS">یافتن با فریم‌بر‌ثانیه</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchByTime">یافتن با زمان نشست</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchByDate">یافتن با تاریخ نشست</sys:String>
 
     <!-- GameActivityAddTime -->
 
-    <sys:String x:Key="LOCGaAddNewGameSession">Add new game session</sys:String>
-    <sys:String x:Key="LOCGaDateStart">Date start</sys:String>
-    <sys:String x:Key="LOCGaDateEnd">Date end</sys:String>
+    <sys:String x:Key="LOCGaAddNewGameSession">افزودن نشست بازی نو</sys:String>
+    <sys:String x:Key="LOCGaDateStart">تاریخ آغاز</sys:String>
+    <sys:String x:Key="LOCGaDateEnd">تاریخ پایان</sys:String>
     
-    <sys:String x:Key="LOCGaGameActions">Game actions</sys:String>
-    <sys:String x:Key="LOCGaCustomGameActions">Custom game actions</sys:String>
+    <sys:String x:Key="LOCGaGameActions">کنش‌های بازی</sys:String>
+    <sys:String x:Key="LOCGaCustomGameActions">کنش‌های سفارشی بازی</sys:String>
 
 
 
