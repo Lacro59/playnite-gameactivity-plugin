@@ -9,7 +9,7 @@
 
     <sys:String x:Key="LOCGameActivity">Игровая Активность</sys:String>
     <sys:String x:Key="LOCGameActivityTitle">Активность</sys:String>
-    <sys:String x:Key="LOCGamesActivitiesTitle">Действия в игра</sys:String>
+    <sys:String x:Key="LOCGamesActivitiesTitle">Действия в играх</sys:String>
     <sys:String x:Key="LOCGameActivitiesTitle">Действия в игре</sys:String>
     <sys:String x:Key="LOCGameActivityViewGamesActivities">Посмотреть игровые активности</sys:String>
     <sys:String x:Key="LOCGameActivityViewGameActivity">Просмотреть игровую активность</sys:String>
@@ -38,19 +38,19 @@
 
     <!-- GamesDataMismatch -->
 
-    <sys:String x:Key="LOCGaGamesDataMismatch">Game data mismatch</sys:String>
-    <sys:String x:Key="LOCGaSessionCount">Session count</sys:String>
-    <sys:String x:Key="LOCGaSessionPlayed">Session played</sys:String>
+    <sys:String x:Key="LOCGaGamesDataMismatch">Несоответствие данных игры</sys:String>
+    <sys:String x:Key="LOCGaSessionCount">Количество сессий</sys:String>
+    <sys:String x:Key="LOCGaSessionPlayed">В сессия сыграно</sys:String>
     
-    <sys:String x:Key="LOCGaGaToPlaynite">Set GameActivity data to Playnite</sys:String>
-    <sys:String x:Key="LOCGaPlayniteToGa">Set Playnite data to GameActivity</sys:String>
+    <sys:String x:Key="LOCGaGaToPlaynite">Установить данные из GameActivity в Playnite</sys:String>
+    <sys:String x:Key="LOCGaPlayniteToGa">Установить данные Playnite в GameActivity</sys:String>
 
-    <sys:String x:Key="LOCGaPlayniteToGaWarning">This irreversible action will force the play count and times coming from GameActivity to Playnite.</sys:String>
+    <sys:String x:Key="LOCGaPlayniteToGaWarning">Это необратимое действие приведет к тому, что количество сыгранных игр и их время будут переведены из базы GameActivity в Playnite.</sys:String>
 
     <!-- Merge -->
 
     <sys:String x:Key="LOCGaMerge">Объединить</sys:String>
-    <sys:String x:Key="LOCGaMergeSession">Объединить игровой сеан</sys:String>
+    <sys:String x:Key="LOCGaMergeSession">Объединить игровой сеанс</sys:String>
     
 
     <!-- GameActivitySettingsView -->
@@ -121,7 +121,7 @@
     <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} часов за {1} неделю</sys:String>
     <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} часов за {1} недель</sys:String>
     <sys:String x:Key="LOCGameActivityAvgPerDay">Среднее время в день</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgPerSession">Среднее время за сеан</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgPerSession">Среднее время за сессию</sys:String>
     <sys:String x:Key="LOCGameActivityFirstSession">Первая сессия</sys:String>
     <sys:String x:Key="LOCGameActivityLastSession">Последняя сессия</sys:String>
     
@@ -140,8 +140,8 @@
 
     <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Последняя сессия</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Проведённое время</sys:String>
-    <sys:String x:Key="LOCGameActivityTimePlayedInMonth">Time played (month)</sys:String>
-    <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">Time played (period)</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInMonth">Время игры (за месяц)</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">Время игры (период)</sys:String>
     
     <sys:String x:Key="LOCGameActivityAvgCpu">Среднее значение Ц</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpu">Среднее значение Г</sys:String>
@@ -154,8 +154,8 @@
 
     <sys:String x:Key="LOCGameActivityPCName">Имя ПК</sys:String>
     
-    <sys:String x:Key="LOCGameActivityDateSession">Date session</sys:String>
-    <sys:String x:Key="LOCGameActivityDateLog">Date log</sys:String>
+    <sys:String x:Key="LOCGameActivityDateSession">Дата сессии</sys:String>
+    <sys:String x:Key="LOCGameActivityDateLog">Дата записи</sys:String>
 
 
     <!-- GameActivity -->
