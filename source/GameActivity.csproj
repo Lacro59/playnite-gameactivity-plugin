@@ -92,8 +92,8 @@
     <Reference Include="MSIAfterburnerNET.HM, Version=1.0.7.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\MSIAfterburnerNET.HM.1.0.7\lib\net462\MSIAfterburnerNET.HM.dll</HintPath>
     </Reference>
-    <Reference Include="Playnite.SDK, Version=6.11.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\PlayniteSDK.6.11.0\lib\net462\Playnite.SDK.dll</HintPath>
+    <Reference Include="Playnite.SDK, Version=6.14.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\PlayniteSDK.6.14.0\lib\net462\Playnite.SDK.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="PresentationCore" />
