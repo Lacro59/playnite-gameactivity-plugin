@@ -161,7 +161,7 @@
     <!-- GameActivity -->
 
     <sys:String x:Key="LOCGameActivityWarningCaption">تحذيرات خلال جلسة اللع</sys:String>
-    <sys:String x:Key="LOCGameActivityWarningAt"></sys:String>
+    <sys:String x:Key="LOCGameActivityWarningAt">At</sys:String>
     <sys:String x:Key="LOCGameActivityCpuUsage">إستخدام CPU</sys:String>
     <sys:String x:Key="LOCGameActivityRamUsage">إستخدام RAM</sys:String>
 
