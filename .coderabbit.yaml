@@ -1,0 +1,19 @@
+reviews:
+  auto_review:
+    enabled: true
+    base_branches:
+      - "devel"
+      - "master"
+    ignore_title_keywords:
+      - "l10n"
+      - "localization"
+      - "translation"
+      - "Crowdin"
+    ignore_branches:
+      - "l10n_*"
+    ignore_authors:
+      - "crowdin-bot"
+  path_filters:
+    - "!source/Localization/**"
+  from_forks:
+    enabled: true
