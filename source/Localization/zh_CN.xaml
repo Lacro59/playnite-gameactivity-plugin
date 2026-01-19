@@ -61,7 +61,7 @@
     <sys:String x:Key="LOCGameActivityListGamesFields">要显示的游戏字段</sys:String>
 
     <sys:String x:Key="LOCGameActivityActiveLog">启用性能记录</sys:String>
-    <sys:String x:Key="LOCGameActivityUsedLibreHardware">已使用 LibreHarwareMonitor而不</sys:String>
+    <sys:String x:Key="LOCGameActivityUsedLibreHardware">使用 LibreHarwareMonitor</sys:String>
     <sys:String x:Key="LOCGameActivityRemoteWebServer">使用远程网络服务</sys:String>
     <sys:String x:Key="LOCGameActivityTimeInterval">检查时间间隔</sys:String>
     <sys:String x:Key="LOCGameActivityTimeLabel">分</sys:String>
@@ -72,17 +72,17 @@
     <sys:String x:Key="LOCGameActivityIndex">索引</sys:String>
 
     <sys:String x:Key="LOCGameActivitySensorsID">传感器 ID</sys:String>
-    <sys:String x:Key="LOCGameActivityElementID">单元 ID</sys:String>
+    <sys:String x:Key="LOCGameActivityElementID">元素 ID</sys:String>
 
     <sys:String x:Key="LOCGameActivityGpuUsage">GPU 利用率</sys:String>
     <sys:String x:Key="LOCGameActivityFps">帧数</sys:String>
     <sys:String x:Key="LOCGameActivityGpuTemp">GPU 温度</sys:String>
     <sys:String x:Key="LOCGameActivityCpuTemp">CPU 温度</sys:String>
-    <sys:String x:Key="LOCGameActivityCpuPower">CPU 功</sys:String>
-    <sys:String x:Key="LOCGameActivityGpuPower">CPU 功</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuPower">CPU 功率</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuPower">GPU 功率</sys:String>
 
     <sys:String x:Key="LOCGameActivityActiveWarning">启用警告</sys:String>
-    <sys:String x:Key="LOCGameActivityMinFps">最小帧数</sys:String>
+    <sys:String x:Key="LOCGameActivityMinFps">最小帧率</sys:String>
     <sys:String x:Key="LOCGameActivityMaxCpuTemp">最高 CPU 温度</sys:String>
     <sys:String x:Key="LOCGameActivityMaxGpuTemp">最高 GPU 温度</sys:String>
     <sys:String x:Key="LOCGameActivityMaxCpuUsage">最大 CPU 利用率</sys:String>
@@ -112,12 +112,12 @@
     <sys:String x:Key="LOCGameActivityIgnoreSession">忽略短的游戏会话</sys:String>
     <sys:String x:Key="LOCGameActivitySetVariatorTime">设置时间变量</sys:String>
     <sys:String x:Key="LOCGameActivitySetVariatorLog">设置日志变量</sys:String>
-    <sys:String x:Key="LOCGameActivityRecentActivityWeek">最近活动的周数</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivityWeek">近期活动的周数</sys:String>
 
     <!-- GameActivityViewSingle -->
 
-    <sys:String x:Key="LOCGameActivityRecentActivity">最近的动</sys:String>
-    <sys:String x:Key="LOCGameActivityNoRecentActivity">没有最近的活</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivity">近期活动</sys:String>
+    <sys:String x:Key="LOCGameActivityNoRecentActivity">近期无活动</sys:String>
     <sys:String x:Key="LOCGameActivityRecentActivitySingular">{1} 周过去的 {0} 小时</sys:String>
     <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{1} 周过去的 {0} 小时</sys:String>
     <sys:String x:Key="LOCGameActivityAvgPerDay">日平均时间</sys:String>
@@ -163,7 +163,7 @@
     <sys:String x:Key="LOCGameActivityWarningCaption">游戏会话时的警告</sys:String>
     <sys:String x:Key="LOCGameActivityWarningAt">于</sys:String>
     <sys:String x:Key="LOCGameActivityCpuUsage">CPU 利用率</sys:String>
-    <sys:String x:Key="LOCGameActivityRamUsage">内存</sys:String>
+    <sys:String x:Key="LOCGameActivityRamUsage">内存利用率</sys:String>
 
     <sys:String x:Key="LOCGameActivityNotificationHWiNFO">HWiNFO 记录已启用，但应用程序未运行。</sys:String>
     <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">MSI AfterBurner 记录已启用，但应用程序未运行。</sys:String>
@@ -178,11 +178,11 @@
     <!-- GameActivityAddTime -->
 
     <sys:String x:Key="LOCGaAddNewGameSession">添加新的游戏会话</sys:String>
-    <sys:String x:Key="LOCGaDateStart">开始日</sys:String>
-    <sys:String x:Key="LOCGaDateEnd">结束日</sys:String>
+    <sys:String x:Key="LOCGaDateStart">开始日期</sys:String>
+    <sys:String x:Key="LOCGaDateEnd">结束日期</sys:String>
     
     <sys:String x:Key="LOCGaGameActions">游戏操作</sys:String>
-    <sys:String x:Key="LOCGaCustomGameActions">自定义开关动作</sys:String>
+    <sys:String x:Key="LOCGaCustomGameActions">自定义游戏动作</sys:String>
 
 
 
