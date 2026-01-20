@@ -15,6 +15,7 @@ namespace GameActivity
     public class GameActivitySettings : PluginSettings
     {
         #region Settings variables
+
         public bool SaveColumnOrder { get; set; } = false;
 
         public bool EnableIntegrationButtonHeader { get; set; } = false;
@@ -126,11 +127,13 @@ namespace GameActivity
 
 
         public Dictionary<Guid, List<string>> CustomGameActions = new Dictionary<Guid, List<string>>();
+
         #endregion
 
         // Playnite serializes settings object to a JSON object and saves it as text file.
         // If you want to exclude some property from being saved then use `JsonDontSerialize` ignore attribute.
         #region Variables exposed
+
         private bool _hasDataLog = false;
         [DontSerialize]
         public bool HasDataLog { get => _hasDataLog; set => SetValue(ref _hasDataLog, value); }
@@ -154,6 +157,7 @@ namespace GameActivity
         private string _recentActivity  = string.Empty;
         [DontSerialize]
         public string RecentActivity { get => _recentActivity; set => SetValue(ref _recentActivity, value); }
+
         #endregion  
     }
 

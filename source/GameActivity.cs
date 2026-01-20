@@ -19,10 +19,8 @@ using GameActivity.Services;
 using GameActivity.Views;
 using System.Threading.Tasks;
 using CommonPluginsShared.PlayniteExtended;
-using System.Windows.Media;
 using CommonPluginsShared.Controls;
 using CommonPlayniteShared.Common;
-using CommonPluginsShared.Extensions;
 using System.Threading;
 using QuickSearch.SearchItems;
 using MoreLinq;
@@ -71,6 +69,7 @@ namespace GameActivity
 
 
         #region Custom event
+
         public void OnCustomThemeButtonClick(object sender, RoutedEventArgs e)
         {
             try
@@ -184,7 +183,6 @@ namespace GameActivity
             return false;
         }
 
-
         #region Timer functions
         /// <summary>
         /// Start the timer.
@@ -194,12 +192,12 @@ namespace GameActivity
             Logger.Info($"DataLogging_start - {API.Instance.Database.Games.Get(id)?.Name} - {id}");
             RunningActivity runningActivity = RunningActivities.Find(x => x.Id == id);
 
-            runningActivity.timer = new System.Timers.Timer(PluginSettings.Settings.TimeIntervalLogging * 60000)
+            runningActivity.Timer = new System.Timers.Timer(PluginSettings.Settings.TimeIntervalLogging * 60000)
             {
                 AutoReset = true
             };
-            runningActivity.timer.Elapsed += (sender, e) => OnTimedEvent(sender, e, id);
-            runningActivity.timer.Start();
+            runningActivity.Timer.Elapsed += (sender, e) => OnTimedEvent(sender, e, id);
+            runningActivity.Timer.Start();
         }
 
         /// <summary>
@@ -226,8 +224,8 @@ namespace GameActivity
                 }
             }
 
-            runningActivity.timer.AutoReset = false;
-            runningActivity.timer.Stop();
+            runningActivity.Timer.AutoReset = false;
+            runningActivity.Timer.Stop();
         }
 
         /// <summary>
@@ -253,7 +251,7 @@ namespace GameActivity
                 LibreHardwareData libreHardwareMonitorData = LibreHardware.GetDataWeb(PluginSettings.Settings.IpRemoteServerWeb);
                 if (libreHardwareMonitorData != null)
                 {
-                    string CpuPowers = libreHardwareMonitorData.Children[0]?.Children.Find(x => x.id == 3)?
+                    string CpuPowers = libreHardwareMonitorData.Children[0]?.Children.Find(x => x.Id == 3)?
                         .Children?.Find(x => x.Text == "Powers")?
                         .Children?.Find(x => x.Text == "CPU Package")?.Value;
                     CpuPowers = CpuPowers?.Replace(".", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
@@ -263,7 +261,7 @@ namespace GameActivity
                     _ = double.TryParse(CpuPowers, out temp);
                     cpuPValue = Convert.ToInt32(Math.Round(temp, 0));
 
-                    string CpuLoad = libreHardwareMonitorData.Children[0]?.Children.Find(x => x.id == 3)?
+                    string CpuLoad = libreHardwareMonitorData.Children[0]?.Children.Find(x => x.Id == 3)?
                         .Children?.Find(x => x.Text == "Load")?
                         .Children?.Find(x => x.Text == "CPU Total")?.Value;
                     CpuLoad = CpuLoad?.Replace(".", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
@@ -273,7 +271,7 @@ namespace GameActivity
                     _ = double.TryParse(CpuLoad, out temp);
                     cpuValue = Convert.ToInt32(Math.Round(temp, 0));
 
-                    string CpuTemperatures = libreHardwareMonitorData.Children[0]?.Children.Find(x => x.id == 3)?
+                    string CpuTemperatures = libreHardwareMonitorData.Children[0]?.Children.Find(x => x.Id == 3)?
                         .Children?.Find(x => x.Text == "Temperatures")?
                         .Children?.Find(x => x.Text == "CPU Package")?.Value;
                     CpuTemperatures = CpuTemperatures?.Replace(".", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
@@ -285,7 +283,7 @@ namespace GameActivity
                     cpuTValue = Convert.ToInt32(Math.Round(temp, 0));
 
 
-                    string LoadMemory = libreHardwareMonitorData.Children[0]?.Children.Find(x => x.id == 43)?
+                    string LoadMemory = libreHardwareMonitorData.Children[0]?.Children.Find(x => x.Id == 43)?
                         .Children?.Find(x => x.Text == "Load")?
                         .Children?.Find(x => x.Text == "Memory")?.Value;
                     LoadMemory = LoadMemory?.Replace(".", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
@@ -296,7 +294,7 @@ namespace GameActivity
                     ramValue = Convert.ToInt32(Math.Round(temp, 0));
 
 
-                    string GpuPowers = libreHardwareMonitorData.Children[0]?.Children.Find(x => x.id == 52)?
+                    string GpuPowers = libreHardwareMonitorData.Children[0]?.Children.Find(x => x.Id == 52)?
                         .Children?.Find(x => x.Text == "Powers")?
                         .Children?.Find(x => x.Text == "GPU Power")?.Value;
                     GpuPowers = GpuPowers?.Replace(".", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
@@ -306,7 +304,7 @@ namespace GameActivity
                     _ = double.TryParse(GpuPowers, out temp);
                     gpuPValue = Convert.ToInt32(Math.Round(temp, 0));
 
-                    string GpuLoad = libreHardwareMonitorData.Children[0]?.Children.Find(x => x.id == 52)?
+                    string GpuLoad = libreHardwareMonitorData.Children[0]?.Children.Find(x => x.Id == 52)?
                         .Children?.Find(x => x.Text == "Load")?
                         .Children?.Find(x => x.Text == "D3D 3D")?.Value;
                     GpuLoad = GpuLoad?.Replace(".", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
@@ -316,7 +314,7 @@ namespace GameActivity
                     _ = double.TryParse(GpuLoad, out temp);
                     gpuValue = Convert.ToInt32(Math.Round(temp, 0));
 
-                    string GpuTemperatures = libreHardwareMonitorData.Children[0]?.Children.Find(x => x.id == 52)?
+                    string GpuTemperatures = libreHardwareMonitorData.Children[0]?.Children.Find(x => x.Id == 52)?
                         .Children?.Find(x => x.Text == "Load")?
                         .Children?.Find(x => x.Text == "?")?.Value;
                     GpuTemperatures = GpuTemperatures?.Replace(".", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator)
@@ -659,7 +657,7 @@ namespace GameActivity
                 }
             }
 
-            List<ActivityDetailsData> ActivitiesDetailsData = runningActivity.GameActivitiesLog.ItemsDetails.Get(runningActivity.activityBackup.DateSession);
+            List<ActivityDetailsData> ActivitiesDetailsData = runningActivity.GameActivitiesLog.ItemsDetails.Get(runningActivity.ActivityBackup.DateSession);
             ActivityDetailsData activityDetailsData = new ActivityDetailsData
             {
                 Datelog = DateTime.Now.ToUniversalTime(),
@@ -675,10 +673,11 @@ namespace GameActivity
             Common.LogDebug(true, Serialization.ToJson(activityDetailsData));
             ActivitiesDetailsData.Add(activityDetailsData);
         }
+
         #endregion
 
-
         #region Backup functions
+
         public void DataBackup_start(Guid id)
         {
             RunningActivity runningActivity = RunningActivities.Find(x => x.Id == id);
@@ -688,10 +687,10 @@ namespace GameActivity
                 return;
             }
 
-            runningActivity.timerBackup = new System.Timers.Timer(PluginSettings.Settings.TimeIntervalLogging * 60000);
-            runningActivity.timerBackup.AutoReset = true;
-            runningActivity.timerBackup.Elapsed += (sender, e) => OnTimedBackupEvent(sender, e, id);
-            runningActivity.timerBackup.Start();
+            runningActivity.TimerBackup = new System.Timers.Timer(PluginSettings.Settings.TimeIntervalLogging * 60000);
+            runningActivity.TimerBackup.AutoReset = true;
+            runningActivity.TimerBackup.Elapsed += (sender, e) => OnTimedBackupEvent(sender, e, id);
+            runningActivity.TimerBackup.Start();
         }
 
         public void DataBackup_stop(Guid Id)
@@ -703,8 +702,8 @@ namespace GameActivity
                 return;
             }
 
-            runningActivity.timerBackup.AutoReset = false;
-            runningActivity.timerBackup.Stop();
+            runningActivity.TimerBackup.AutoReset = false;
+            runningActivity.TimerBackup.Stop();
         }
 
         private void OnTimedBackupEvent(object source, ElapsedEventArgs e, Guid id)
@@ -713,24 +712,25 @@ namespace GameActivity
             {
                 RunningActivity runningActivity = RunningActivities.Find(x => x.Id == id);
 
-                ulong ElapsedSeconds = (ulong)(DateTime.Now.ToUniversalTime() - runningActivity.activityBackup.DateSession).TotalSeconds;
-                runningActivity.activityBackup.ElapsedSeconds = ElapsedSeconds;
-                runningActivity.activityBackup.ItemsDetailsDatas = runningActivity.GameActivitiesLog.ItemsDetails.Get(runningActivity.activityBackup.DateSession);
+                ulong ElapsedSeconds = (ulong)(DateTime.Now.ToUniversalTime() - runningActivity.ActivityBackup.DateSession).TotalSeconds;
+                runningActivity.ActivityBackup.ElapsedSeconds = ElapsedSeconds;
+                runningActivity.ActivityBackup.ItemsDetailsDatas = runningActivity.GameActivitiesLog.ItemsDetails.Get(runningActivity.ActivityBackup.DateSession);
 
                 string PathFileBackup = Path.Combine(PluginDatabase.Paths.PluginUserDataPath, $"SaveSession_{id}.json");
-                FileSystem.WriteStringToFileSafe(PathFileBackup, Serialization.ToJson(runningActivity.activityBackup));
+                FileSystem.WriteStringToFileSafe(PathFileBackup, Serialization.ToJson(runningActivity.ActivityBackup));
             }
             catch (Exception ex)
             {
                 Common.LogError(ex, false, true, PluginDatabase.PluginName);
             }
         }
-        #endregion
 
         #endregion
 
+        #endregion
 
         #region Theme integration
+
         // Button on top panel
         public override IEnumerable<TopPanelItem> GetTopPanelItems()
         {
@@ -763,10 +763,12 @@ namespace GameActivity
             List<SidebarItem> items = new List<SidebarItem> { SidebarItem };
             return items;
         }
+
         #endregion
 
 
         #region Menus
+
         // To add new game menu items override GetGameMenuItems
         public override IEnumerable<GameMenuItem> GetGameMenuItems(GetGameMenuItemsArgs args)
         {
@@ -967,10 +969,12 @@ namespace GameActivity
 
             return mainMenuItems;
         }
+
         #endregion
 
 
         #region Game event
+
         public override void OnGameSelected(OnGameSelectedEventArgs args)
         {
             try
@@ -1053,7 +1057,7 @@ namespace GameActivity
                 });
                 _ = runningActivity.GameActivitiesLog.ItemsDetails.Items.TryAdd(DateSession, new List<ActivityDetailsData>());
 
-                runningActivity.activityBackup = new ActivityBackup
+                runningActivity.ActivityBackup = new ActivityBackup
                 {
                     Id = runningActivity.GameActivitiesLog.Id,
                     Name = runningActivity.GameActivitiesLog.Name,
@@ -1177,10 +1181,12 @@ namespace GameActivity
             // Check that the GameId is the same as the paused game. If so, return the paused time. If not, return 0.
             return game.Id.ToString() == Id ? PausedSeconds : 0;
         }
+        
         #endregion
 
 
         #region Application event
+
         // Add code to be executed when Playnite is initialized.
         public override void OnApplicationStarted(OnApplicationStartedEventArgs args)
         {
@@ -1299,6 +1305,7 @@ namespace GameActivity
         {
 
         }
+        
         #endregion
 
         // Add code to be executed when library is updated.
@@ -1308,6 +1315,7 @@ namespace GameActivity
         }
 
         #region Settings
+        
         public override ISettings GetSettings(bool firstRunSettings)
         {
             return PluginSettings;
@@ -1317,6 +1325,7 @@ namespace GameActivity
         {
             return new GameActivitySettingsView();
         }
+        
         #endregion
     }
 }

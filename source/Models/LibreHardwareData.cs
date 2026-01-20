@@ -8,7 +8,7 @@ namespace GameActivity.Models
 {
     public class Child
     {
-        public int id { get; set; }
+        public int Id { get; set; }
         public string Text { get; set; }
         public string Min { get; set; }
         public string Value { get; set; }
@@ -21,7 +21,7 @@ namespace GameActivity.Models
 
     public class LibreHardwareData
     {
-        public int id { get; set; }
+        public int Id { get; set; }
         public string Text { get; set; }
         public string Min { get; set; }
         public string Value { get; set; }

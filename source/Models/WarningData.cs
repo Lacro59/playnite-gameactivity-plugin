@@ -10,6 +10,7 @@
         public Data GpuUsageData { get; set; }
         public Data RamUsageData { get; set; }
     }
+
     public class Data
     {
         public string Name { get; set; }

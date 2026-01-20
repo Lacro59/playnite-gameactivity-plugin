@@ -12,6 +12,7 @@ namespace GameActivity.Models
     {
         public GameActivitiesCollection(string path, GameDatabaseCollection type = GameDatabaseCollection.Uknown) : base(path, type)
         {
+
         }
     }
 }
