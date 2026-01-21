@@ -74,7 +74,7 @@
     <sys:String x:Key="LOCGameActivitySensorsID">传感器 ID</sys:String>
     <sys:String x:Key="LOCGameActivityElementID">单元 ID</sys:String>
 
-    <sys:String x:Key="LOCGameActivityGpuUsage">GPU </sys:String>
+    <sys:String x:Key="LOCGameActivityGpuUsage">GPU</sys:String>
     <sys:String x:Key="LOCGameActivityFps">帧数</sys:String>
     <sys:String x:Key="LOCGameActivityGpuTemp">GPU 温度</sys:String>
     <sys:String x:Key="LOCGameActivityCpuTemp">CPU 温度</sys:String>
@@ -85,8 +85,8 @@
     <sys:String x:Key="LOCGameActivityMinFps">最小帧数</sys:String>
     <sys:String x:Key="LOCGameActivityMaxCpuTemp">最高 CPU 温度</sys:String>
     <sys:String x:Key="LOCGameActivityMaxGpuTemp">最高 GPU 温度</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxCpuUsage">最大 CPU </sys:String>
-    <sys:String x:Key="LOCGameActivityMaxGpuUsage">最大 GPU </sys:String>
+    <sys:String x:Key="LOCGameActivityMaxCpuUsage">最大 CPU</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxGpuUsage">最大 GPU</sys:String>
     <sys:String x:Key="LOCGameActivityMaxRamUsage">最大内存</sys:String>
 
     <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">游戏时记录 CPU、GPU、内存和帧数。</sys:String>
@@ -130,7 +130,7 @@
     <sys:String x:Key="LOCGameActivityTotalHours">总小时数</sys:String>
     <sys:String x:Key="LOCGameActivityTotalHoursByWeeks">周小时数</sys:String>
 
-    <sys:String x:Key="LOCGameActivityWeekLabel"></sys:String>
+    <sys:String x:Key="LOCGameActivityWeekLabel">Week</sys:String>
 
     <sys:String x:Key="LOCGameActivityTime">时长</sys:String>
     <sys:String x:Key="LOCGameActivityLog">性能记录</sys:String>
@@ -162,7 +162,7 @@
 
     <sys:String x:Key="LOCGameActivityWarningCaption">游戏会话时的警</sys:String>
     <sys:String x:Key="LOCGameActivityWarningAt">于</sys:String>
-    <sys:String x:Key="LOCGameActivityCpuUsage">CPU </sys:String>
+    <sys:String x:Key="LOCGameActivityCpuUsage">CPU</sys:String>
     <sys:String x:Key="LOCGameActivityRamUsage">内存</sys:String>
 
     <sys:String x:Key="LOCGameActivityNotificationHWiNFO">HWiNFO 记录已启用，但应用程序未运行。</sys:String>
