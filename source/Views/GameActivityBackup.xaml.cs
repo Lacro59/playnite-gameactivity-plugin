@@ -65,7 +65,7 @@ namespace GameActivity.Views
                     PlatformIDs = activityBackup.PlatformIDs,
                     ElapsedSeconds = activityBackup.ElapsedSeconds
                 });
-                _ = pluginData.ItemsDetails.Items.TryAdd(activityBackup.DateSession, activityBackup.ItemsDetailsDatas);
+                pluginData.ItemsDetails.Items.TryAdd(activityBackup.DateSession, activityBackup.ItemsDetailsDatas);
 
                 PART_ChartLog.GetActivityForGamesLogGraphics(pluginData, 0, 10, activityBackup.DateSession, "1");
             }

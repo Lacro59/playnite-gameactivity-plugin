@@ -13,21 +13,22 @@ using System.Linq;
 using System.Diagnostics;
 using GameActivity.Models.ExportData;
 using CommonPluginsShared.Extensions;
+using CommonPluginsShared.SystemInfo;
 
 namespace GameActivity.Services
 {
     public class ActivityDatabase : PluginDatabaseObject<GameActivitySettingsViewModel, GameActivitiesCollection, GameActivities, Activity>
     {
-        private LocalSystem _localSystem;
-        public LocalSystem LocalSystem
+        private SystemConfigurationManager _systemConfigurationManager;
+        public SystemConfigurationManager SystemConfigurationManager
         {
             get
             {
-                if (_localSystem == null)
+                if (_systemConfigurationManager == null)
                 {
-                    _localSystem = new LocalSystem(Path.Combine(Paths.PluginUserDataPath, $"Configurations.json"), false);
+                    _systemConfigurationManager = new SystemConfigurationManager(Path.Combine(Paths.PluginUserDataPath, $"Configurations.json"), false);
                 }
-                return _localSystem;
+                return _systemConfigurationManager;
             }
         }
 

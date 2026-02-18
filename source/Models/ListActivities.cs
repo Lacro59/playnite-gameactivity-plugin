@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CommonPluginsShared;
+using CommonPluginsShared.UI;
 
 namespace GameActivity.Models
 {
@@ -50,7 +51,7 @@ namespace GameActivity.Models
         public string SourceIconText { get; set; }
 
         [DontSerialize]
-        public RelayCommand<Guid> GoToGame => Commands.GoToGame;
+        public RelayCommand<Guid> GoToGame => CommandsHelper.GoToGame;
 
         [DontSerialize]
         public bool GameExist => API.Instance.Database.Games.Get(Id) != null;

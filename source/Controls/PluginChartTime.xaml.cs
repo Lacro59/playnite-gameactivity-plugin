@@ -1,46 +1,41 @@
-﻿using CommonPluginsControls.Controls;
+﻿using CommonPlayniteShared.Common;
+using CommonPluginsControls.Controls;
 using CommonPluginsControls.LiveChartsCommon;
-using CommonPlayniteShared.Common;
-using CommonPluginsShared.Extensions;
 using CommonPluginsShared;
 using CommonPluginsShared.Collections;
 using CommonPluginsShared.Controls;
 using CommonPluginsShared.Converters;
+using CommonPluginsShared.Extensions;
 using CommonPluginsShared.Interfaces;
+using CommonPluginsShared.Utilities;
 using GameActivity.Models;
 using GameActivity.Services;
 using LiveCharts;
 using LiveCharts.Configurations;
 using LiveCharts.Events;
 using LiveCharts.Wpf;
+using Playnite.SDK;
+using Playnite.SDK.Data;
 using Playnite.SDK.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
-using Playnite.SDK.Data;
-using System.ComponentModel;
-using Playnite.SDK;
-using System.Windows.Threading;
-using System.Threading;
 
 namespace GameActivity.Controls
 {
-    /// <summary>
-    /// Logique d'interaction pour PluginChartTime.xaml
-    /// </summary>
     public partial class PluginChartTime : PluginUserControlExtend
     {
-        private ActivityDatabase PluginDatabase { get; set; } = GameActivity.PluginDatabase;
+        private ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
         protected override IPluginDatabase pluginDatabase => PluginDatabase;
 
-        private PluginChartTimeDataContext ControlDataContext { get; set; } = new PluginChartTimeDataContext();
+        private PluginChartTimeDataContext ControlDataContext = new PluginChartTimeDataContext();
         protected override IDataContext controlDataContext
         {
             get => ControlDataContext;
-            set => ControlDataContext = (PluginChartTimeDataContext)controlDataContext;
+            set => ControlDataContext = (PluginChartTimeDataContext)value; 
         }
 
         public event DataClickHandler GameSeriesDataClick;
@@ -52,11 +47,8 @@ namespace GameActivity.Controls
             get => (bool)GetValue(DisableAnimationsProperty);
             set => SetValue(DisableAnimationsProperty, value);
         }
-
         public static readonly DependencyProperty DisableAnimationsProperty = DependencyProperty.Register(
-            nameof(DisableAnimations),
-            typeof(bool),
-            typeof(PluginChartTime),
+            nameof(DisableAnimations), typeof(bool), typeof(PluginChartTime),
             new FrameworkPropertyMetadata(true, ControlsPropertyChangedCallback));
 
         public bool ShowByWeeks
@@ -64,11 +56,8 @@ namespace GameActivity.Controls
             get => (bool)GetValue(ShowByWeeksProperty);
             set => SetValue(ShowByWeeksProperty, value);
         }
-
         public static readonly DependencyProperty ShowByWeeksProperty = DependencyProperty.Register(
-            nameof(ShowByWeeks),
-            typeof(bool),
-            typeof(PluginChartTime),
+            nameof(ShowByWeeks), typeof(bool), typeof(PluginChartTime),
             new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback));
 
         public bool Truncate
@@ -76,11 +65,8 @@ namespace GameActivity.Controls
             get => (bool)GetValue(TruncateProperty);
             set => SetValue(TruncateProperty, value);
         }
-
         public static readonly DependencyProperty TruncateProperty = DependencyProperty.Register(
-            nameof(Truncate),
-            typeof(bool),
-            typeof(PluginChartTime),
+            nameof(Truncate), typeof(bool), typeof(PluginChartTime),
             new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback));
 
         public bool LabelsRotation
@@ -88,11 +74,8 @@ namespace GameActivity.Controls
             get => (bool)GetValue(LabelsRotationProperty);
             set => SetValue(LabelsRotationProperty, value);
         }
-
         public static readonly DependencyProperty LabelsRotationProperty = DependencyProperty.Register(
-            nameof(LabelsRotation),
-            typeof(bool),
-            typeof(PluginChartTime),
+            nameof(LabelsRotation), typeof(bool), typeof(PluginChartTime),
             new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback));
 
         public static readonly DependencyProperty AxisLimitProperty;
@@ -103,11 +86,8 @@ namespace GameActivity.Controls
             get => (int)GetValue(AxisVariatoryProperty);
             set => SetValue(AxisVariatoryProperty, value);
         }
-
         public static readonly DependencyProperty AxisVariatoryProperty = DependencyProperty.Register(
-            nameof(AxisVariator),
-            typeof(int),
-            typeof(PluginChartTime),
+            nameof(AxisVariator), typeof(int), typeof(PluginChartTime),
             new FrameworkPropertyMetadata(0, ControlsPropertyChangedCallback));
         #endregion
 
@@ -115,110 +95,95 @@ namespace GameActivity.Controls
         public PluginChartTime()
         {
             AlwaysShow = true;
-
             InitializeComponent();
             DataContext = ControlDataContext;
-
-            _ = Task.Run(() =>
-            {
-                // Wait extension database are loaded
-                SpinWait.SpinUntil(() => PluginDatabase.IsLoaded, -1);
-
-                this.Dispatcher.BeginInvoke((Action)delegate
-                {
-                    PluginDatabase.PluginSettings.PropertyChanged += PluginSettings_PropertyChanged;
-                    PluginDatabase.Database.ItemUpdated += Database_ItemUpdated;
-                    PluginDatabase.Database.ItemCollectionChanged += Database_ItemCollectionChanged;
-                    API.Instance.Database.Games.ItemUpdated += Games_ItemUpdated;
-
-                    // Apply settings
-                    PluginSettings_PropertyChanged(null, null);
-                });
-            });
+            Loaded += OnLoaded;
         }
 
+        protected override void AttachStaticEvents()
+        {
+            base.AttachStaticEvents();
+
+            AttachPluginEvents(PluginDatabase.PluginName, () =>
+            {
+                PluginDatabase.PluginSettings.PropertyChanged += CreatePluginSettingsHandler();
+                PluginDatabase.Database.ItemUpdated += CreateDatabaseItemUpdatedHandler<GameActivities>();
+                PluginDatabase.Database.ItemCollectionChanged += CreateDatabaseCollectionChangedHandler<GameActivities>();
+                API.Instance.Database.Games.ItemUpdated += Games_ItemUpdated;
+            });
+        }
 
         protected override void PluginSettings_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             Truncate = PluginDatabase.PluginSettings.Settings.ChartTimeTruncate;
-
-            // Publish changes for the currently displayed game
             GameContextChanged(null, GameContext);
         }
 
 
         public override void SetDefaultDataContext()
         {
-            bool IsActivated = PluginDatabase.PluginSettings.Settings.EnableIntegrationChartTime;
-            double ChartTimeHeight = PluginDatabase.PluginSettings.Settings.ChartTimeHeight;
-            bool ChartTimeAxis = PluginDatabase.PluginSettings.Settings.ChartTimeAxis;
-            bool ChartTimeOrdinates = PluginDatabase.PluginSettings.Settings.ChartTimeOrdinates;
+            bool isActivated = PluginDatabase.PluginSettings.Settings.EnableIntegrationChartTime;
+            double chartTimeHeight = PluginDatabase.PluginSettings.Settings.ChartTimeHeight;
+            bool chartTimeAxis = PluginDatabase.PluginSettings.Settings.ChartTimeAxis;
+            bool chartTimeOrdinates = PluginDatabase.PluginSettings.Settings.ChartTimeOrdinates;
+
             if (IgnoreSettings)
             {
-                IsActivated = true;
-                ChartTimeHeight = double.NaN;
-                ChartTimeAxis = true;
-                ChartTimeOrdinates = true;
+                isActivated = true;
+                chartTimeHeight = double.NaN;
+                chartTimeAxis = true;
+                chartTimeOrdinates = true;
             }
 
-            double LabelsRotationValue = 0;
-            if (LabelsRotation)
-            {
-                LabelsRotationValue = 160;
-            }
-
-            ControlDataContext.IsActivated = IsActivated;
-            ControlDataContext.ChartTimeHeight = ChartTimeHeight;
-            ControlDataContext.ChartTimeAxis = ChartTimeAxis;
-            ControlDataContext.ChartTimeOrdinates = ChartTimeOrdinates;
+            ControlDataContext.IsActivated = isActivated;
+            ControlDataContext.ChartTimeHeight = chartTimeHeight;
+            ControlDataContext.ChartTimeAxis = chartTimeAxis;
+            ControlDataContext.ChartTimeOrdinates = chartTimeOrdinates;
             ControlDataContext.ChartTimeVisibleEmpty = PluginDatabase.PluginSettings.Settings.ChartTimeVisibleEmpty;
-
             ControlDataContext.DisableAnimations = DisableAnimations;
-            ControlDataContext.LabelsRotationValue = LabelsRotationValue;
+            ControlDataContext.LabelsRotationValue = LabelsRotation ? 160d : 0d;
 
             PART_ChartTimeActivity.Series = null;
             PART_ChartTimeActivityLabelsX.Labels = null;
         }
 
 
-        public override void SetData(Game newContext, PluginDataBaseGameBase PluginGameData)
+        /// <summary>
+        /// Resolves the display limit once, then delegates to the appropriate chart builder.
+        /// </summary>
+        public override void SetData(Game newContext, PluginDataBaseGameBase pluginGameData)
         {
-            int Limit = PluginDatabase.PluginSettings.Settings.ChartTimeCountAbscissa;
-            if (AxisLimit != 0)
+            GameActivities gameActivities = (GameActivities)pluginGameData;
+
+            MustDisplay = !IgnoreSettings && !ControlDataContext.ChartTimeVisibleEmpty
+                ? gameActivities.HasData
+                : true;
+
+            if (!MustDisplay)
             {
-                Limit = AxisLimit;
+                return;
             }
 
-            int AxisVariator = this.AxisVariator;
+            int limit = AxisLimit != 0
+                ? AxisLimit
+                : PluginDatabase.PluginSettings.Settings.ChartTimeCountAbscissa;
 
-            GameActivities gameActivities = (GameActivities)PluginGameData;
+            int axisVariator = AxisVariator;
 
-            MustDisplay = !IgnoreSettings && !ControlDataContext.ChartTimeVisibleEmpty ? gameActivities.HasData : true;
-
-            if (MustDisplay)
+            if (ShowByWeeks)
             {
-                if (ShowByWeeks)
-                {
-                    GetActivityForGamesChartByWeek(gameActivities, AxisVariator, Limit);
-                }
-                else
-                {
-                    GetActivityForGamesTimeGraphics(gameActivities, AxisVariator, Limit);
-                }
+                GetActivityForGamesChartByWeek(gameActivities, axisVariator, limit);
+            }
+            else
+            {
+                GetActivityForGamesTimeGraphics(gameActivities, axisVariator, limit);
             }
         }
 
 
-        #region Public method
-        public void Next(int value = 1)
-        {
-            AxisVariator += value;
-        }
-
-        public void Prev(int value = 1)
-        {
-            AxisVariator -= value;
-        }
+        #region Public methods
+        public void Next(int value = 1) { AxisVariator += value; }
+        public void Prev(int value = 1) { AxisVariator -= value; }
         #endregion
 
 
@@ -238,17 +203,21 @@ namespace GameActivity.Controls
                 ChartValues<CustomerForTime> series4 = new ChartValues<CustomerForTime>();
                 ChartValues<CustomerForTime> series5 = new ChartValues<CustomerForTime>();
 
-                bool HasData2 = false;
-                bool HasData3 = false;
-                bool HasData4 = false;
-                bool HasData5 = false;
+                bool hasData2 = false;
+                bool hasData3 = false;
+                bool hasData4 = false;
+                bool hasData5 = false;
 
-                List<Activity> Activities = Serialization.GetClone(gameActivities.FilterItems);
+                List<Activity> activities = Serialization.GetClone(gameActivities.FilterItems);
 
                 if (Truncate)
                 {
-                    Activities = Activities.OrderBy(x => x.DateSession).ToList();
-                    List<string> dtList = Activities.Where(x => x.DateSession != null)?.Select(x => ((DateTime)x.DateSession).ToLocalTime().ToString("yyyy-MM-dd"))?.Distinct().ToList();
+                    activities = activities.OrderBy(x => x.DateSession).ToList();
+                    List<string> dtList = activities
+                        .Where(x => x.DateSession != null)
+                        .Select(x => ((DateTime)x.DateSession).ToLocalTime().ToString("yyyy-MM-dd"))
+                        .Distinct()
+                        .ToList();
 
                     if (dtList.Count > limit && variateurTime != 0)
                     {
@@ -280,36 +249,29 @@ namespace GameActivity.Controls
                         }
                     }
 
-                    // Periode data showned
                     int countActivities = dtList.Count;
-                    int NewLimit = (countActivities - limit - 1) >= 0 ? countActivities - limit - 1 : 0;
-                    listDate = new string[countActivities - NewLimit];
+                    int newLimit = (countActivities - limit - 1) >= 0 ? countActivities - limit - 1 : 0;
+                    listDate = new string[countActivities - newLimit];
 
-                    for (int i = NewLimit; i < countActivities; i++)
+                    for (int i = newLimit; i < countActivities; i++)
                     {
                         string dt = dtList[i];
-                        listDate[i - NewLimit] = dt;
+                        listDate[i - newLimit] = dt;
 
-                        CustomerForTime customerForTime = new CustomerForTime
-                        {
-                            Name = dt,
-                            Values = 0,
-                            HideIsZero = true
-                        };
-                        series1.Add(customerForTime);
-                        series2.Add(customerForTime);
-                        series3.Add(customerForTime);
-                        series4.Add(customerForTime);
-                        series5.Add(customerForTime);
+                        CustomerForTime placeholder = new CustomerForTime { Name = dt, Values = 0, HideIsZero = true };
+                        series1.Add(placeholder);
+                        series2.Add(placeholder);
+                        series3.Add(placeholder);
+                        series4.Add(placeholder);
+                        series5.Add(placeholder);
                     }
                 }
                 else
                 {
-                    // Find last activity date
                     DateTime dateStart = new DateTime(1982, 12, 15, 0, 0, 0);
-                    for (int iActivity = 0; iActivity < Activities.Count; iActivity++)
+                    foreach (Activity activity in activities)
                     {
-                        DateTime dateSession = Convert.ToDateTime(Activities[iActivity].DateSession?.ToLocalTime());
+                        DateTime dateSession = Convert.ToDateTime(activity.DateSession?.ToLocalTime());
                         if (dateSession > dateStart)
                         {
                             dateStart = dateSession;
@@ -317,119 +279,62 @@ namespace GameActivity.Controls
                     }
                     dateStart = dateStart.AddDays(variateurTime);
 
-                    // Periode data showned
                     for (int i = limit; i >= 0; i--)
                     {
-                        listDate[limit - i] = dateStart.AddDays(-i).ToString("yyyy-MM-dd");
-                        CustomerForTime customerForTime = new CustomerForTime
-                        {
-                            Name = dateStart.AddDays(-i).ToString("yyyy-MM-dd"),
-                            Values = 0,
-                            HideIsZero = true
-                        };
-                        series1.Add(customerForTime);
-                        series2.Add(customerForTime);
-                        series3.Add(customerForTime);
-                        series4.Add(customerForTime);
-                        series5.Add(customerForTime);
+                        string dateStr = dateStart.AddDays(-i).ToString("yyyy-MM-dd");
+                        listDate[limit - i] = dateStr;
+
+                        CustomerForTime placeholder = new CustomerForTime { Name = dateStr, Values = 0, HideIsZero = true };
+                        series1.Add(placeholder);
+                        series2.Add(placeholder);
+                        series3.Add(placeholder);
+                        series4.Add(placeholder);
+                        series5.Add(placeholder);
                     }
                 }
 
                 LocalDateConverter localDateConverter = new LocalDateConverter();
+                bool cumulSessions = PluginDatabase.PluginSettings.Settings.CumulPlaytimeSession;
 
-                // Search data in periode
-                limit = limit == (listDate.Count() - 1) ? limit : (listDate.Count() - 1);
-                for (int iActivity = 0; iActivity < Activities.Count; iActivity++)
+                int effectiveLimit = limit == (listDate.Length - 1) ? limit : (listDate.Length - 1);
+
+                for (int iActivity = 0; iActivity < activities.Count; iActivity++)
                 {
-                    ulong elapsedSeconds = Activities[iActivity].ElapsedSeconds;
-                    string dateSession = Convert.ToDateTime(Activities[iActivity].DateSession).ToLocalTime().ToString("yyyy-MM-dd");
+                    ulong elapsedSeconds = activities[iActivity].ElapsedSeconds;
+                    string dateSession = Convert.ToDateTime(activities[iActivity].DateSession).ToLocalTime().ToString("yyyy-MM-dd");
 
-                    for (int iDay = limit; iDay >= 0; iDay--)
+                    for (int iDay = effectiveLimit; iDay >= 0; iDay--)
                     {
-                        if (listDate[iDay] == dateSession)
+                        if (listDate[iDay] != dateSession)
                         {
-                            string tempName = series1[iDay].Name;
-                            try
-                            {
-                                tempName = (string)localDateConverter.Convert(DateTime.ParseExact(series1[iDay].Name, "yyyy-MM-dd", null).ToLocalTime(), null, null, CultureInfo.CurrentCulture);
-                            }
-                            catch
-                            {
-                            }
-
-                            if (PluginDatabase.PluginSettings.Settings.CumulPlaytimeSession)
-                            {
-                                series1[iDay] = new CustomerForTime
-                                {
-                                    Name = tempName,
-                                    Values = series1[iDay].Values + (long)elapsedSeconds,
-                                };
-                                continue;
-                            }
-                            else
-                            {
-                                if (series1[iDay].Values == 0)
-                                {
-                                    series1[iDay] = new CustomerForTime
-                                    {
-                                        Name = tempName,
-                                        Values = (long)elapsedSeconds,
-                                    };
-                                    continue;
-                                }
-
-                                if (series2[iDay].Values == 0)
-                                {
-                                    HasData2 = true;
-                                    series2[iDay] = new CustomerForTime
-                                    {
-                                        Name = tempName,
-                                        Values = (long)elapsedSeconds,
-                                    };
-                                    continue;
-                                }
-
-                                if (series3[iDay].Values == 0)
-                                {
-                                    HasData3 = true;
-                                    series3[iDay] = new CustomerForTime
-                                    {
-                                        Name = tempName,
-                                        Values = (long)elapsedSeconds,
-                                    };
-                                    continue;
-                                }
-
-                                if (series4[iDay].Values == 0)
-                                {
-                                    HasData4 = true;
-                                    series4[iDay] = new CustomerForTime
-                                    {
-                                        Name = tempName,
-                                        Values = (long)elapsedSeconds,
-                                    };
-                                    continue;
-                                }
-
-                                if (series5[iDay].Values == 0)
-                                {
-                                    HasData5 = true;
-                                    series5[iDay] = new CustomerForTime
-                                    {
-                                        Name = tempName,
-                                        Values = (long)elapsedSeconds,
-                                    };
-                                    continue;
-                                }
-                            }
+                            continue;
                         }
+
+                        string displayName = series1[iDay].Name;
+                        try
+                        {
+                            displayName = (string)localDateConverter.Convert(
+                                DateTime.ParseExact(series1[iDay].Name, "yyyy-MM-dd", null).ToLocalTime(),
+                                null, null, CultureInfo.CurrentCulture);
+                        }
+                        catch { }
+
+                        if (cumulSessions)
+                        {
+                            series1[iDay] = new CustomerForTime { Name = displayName, Values = series1[iDay].Values + (long)elapsedSeconds };
+                            continue;
+                        }
+
+                        if (series1[iDay].Values == 0) { series1[iDay] = new CustomerForTime { Name = displayName, Values = (long)elapsedSeconds }; continue; }
+                        if (series2[iDay].Values == 0) { hasData2 = true; series2[iDay] = new CustomerForTime { Name = displayName, Values = (long)elapsedSeconds }; continue; }
+                        if (series3[iDay].Values == 0) { hasData3 = true; series3[iDay] = new CustomerForTime { Name = displayName, Values = (long)elapsedSeconds }; continue; }
+                        if (series4[iDay].Values == 0) { hasData4 = true; series4[iDay] = new CustomerForTime { Name = displayName, Values = (long)elapsedSeconds }; continue; }
+                        if (series5[iDay].Values == 0) { hasData5 = true; series5[iDay] = new CustomerForTime { Name = displayName, Values = (long)elapsedSeconds }; continue; }
                     }
                 }
 
-
-                // Set data in graphic.
                 SeriesCollection activityForGameSeries = new SeriesCollection();
-                if (PluginDatabase.PluginSettings.Settings.CumulPlaytimeSession)
+                if (cumulSessions)
                 {
                     activityForGameSeries.Add(new ColumnSeries { Title = "1", Values = series1, Fill = PluginDatabase.PluginSettings.Settings.ChartColors });
                 }
@@ -438,54 +343,37 @@ namespace GameActivity.Controls
                     activityForGameSeries.Add(new ColumnSeries { Title = "1", Values = series1 });
                 }
 
-                if (HasData2)
-                {
-                    activityForGameSeries.Add(new ColumnSeries { Title = "2", Values = series2 });
-                }
-                if (HasData3)
-                {
-                    activityForGameSeries.Add(new ColumnSeries { Title = "3", Values = series3 });
-                }
-                if (HasData4)
-                {
-                    activityForGameSeries.Add(new ColumnSeries { Title = "4", Values = series4 });
-                }
-                if (HasData5)
-                {
-                    activityForGameSeries.Add(new ColumnSeries { Title = "5", Values = series5 });
-                }
+                if (hasData2) { activityForGameSeries.Add(new ColumnSeries { Title = "2", Values = series2 }); }
+                if (hasData3) { activityForGameSeries.Add(new ColumnSeries { Title = "3", Values = series3 }); }
+                if (hasData4) { activityForGameSeries.Add(new ColumnSeries { Title = "4", Values = series4 }); }
+                if (hasData5) { activityForGameSeries.Add(new ColumnSeries { Title = "5", Values = series5 }); }
 
                 for (int iDay = 0; iDay < listDate.Length; iDay++)
                 {
                     listDate[iDay] = Convert.ToDateTime(listDate[iDay]).ToString(Constants.DateUiFormat);
                 }
-                string[] activityForGameLabels = listDate;
 
-                //let create a mapper so LiveCharts know how to plot our CustomerViewModel class
                 CartesianMapper<CustomerForTime> customerVmMapper = Mappers.Xy<CustomerForTime>()
-                        .X((value, index) => index)
-                        .Y(value => value.Values);
-
-
-                //lets save the mapper globally
+                    .X((value, index) => index)
+                    .Y(value => value.Values);
                 Charting.For<CustomerForTime>(customerVmMapper);
 
-                //PlayTimeToStringConverter converter = new PlayTimeToStringConverter();
                 PlayTimeToStringConverterWithZero converter = new PlayTimeToStringConverterWithZero();
-                Func<double, string> activityForGameLogFormatter = value => (string)converter.Convert((ulong)value, null, null, CultureInfo.CurrentCulture);
-                PART_ChartTimeActivityLabelsY.LabelFormatter = activityForGameLogFormatter;
+                PART_ChartTimeActivityLabelsY.LabelFormatter = value => (string)converter.Convert((ulong)value, null, null, CultureInfo.CurrentCulture);
 
-                PART_ChartTimeActivity.DataTooltip = PluginDatabase.PluginSettings.Settings.CumulPlaytimeSession
-                    ? new CustomerToolTipForTime
+                PART_ChartTimeActivity.DataTooltip = cumulSessions
+                    ? (System.Windows.Controls.UserControl)new CustomerToolTipForTime
                     {
                         ShowIcon = PluginDatabase.PluginSettings.Settings.ShowLauncherIcons,
-                        Mode = (PluginDatabase.PluginSettings.Settings.ModeStoreIcon == 1) ? TextBlockWithIconMode.IconTextFirstWithText : TextBlockWithIconMode.IconFirstWithText
+                        Mode = PluginDatabase.PluginSettings.Settings.ModeStoreIcon == 1
+                            ? TextBlockWithIconMode.IconTextFirstWithText
+                            : TextBlockWithIconMode.IconFirstWithText
                     }
-                    : (System.Windows.Controls.UserControl)new CustomerToolTipForMultipleTime { ShowTitle = false };
+                    : new CustomerToolTipForMultipleTime { ShowTitle = false };
 
                 PART_ChartTimeActivityLabelsY.MinValue = 0;
                 PART_ChartTimeActivity.Series = activityForGameSeries;
-                PART_ChartTimeActivityLabelsX.Labels = activityForGameLabels;
+                PART_ChartTimeActivityLabelsX.Labels = listDate;
             }
             catch (Exception ex)
             {
@@ -497,78 +385,63 @@ namespace GameActivity.Controls
         {
             try
             {
-                List<Activity> Activities = Serialization.GetClone(gameActivities.FilterItems);
-                DateTime dtLastActivity = Activities.Select(x => (DateTime)x.DateSession?.ToLocalTime()).Max();
-                dtLastActivity = dtLastActivity.AddDays(7 * variateurTime);
+                List<Activity> activities = Serialization.GetClone(gameActivities.FilterItems);
+                DateTime dtLastActivity = activities
+                    .Select(x => (DateTime)x.DateSession?.ToLocalTime())
+                    .Max()
+                    .AddDays(7 * variateurTime);
 
                 List<string> labels = new List<string>();
                 ChartValues<CustomerForTime> seriesData = new ChartValues<CustomerForTime>();
                 List<WeekStartEnd> datesPeriodes = new List<WeekStartEnd>();
+
                 for (int i = limit; i >= 0; i--)
                 {
                     DateTime dt = dtLastActivity.AddDays(-7 * i).ToLocalTime();
+                    int weekNumber = UtilityTools.WeekOfYearISO8601(dt);
+                    DateTime first = dt.StartOfWeek(DayOfWeek.Monday);
+                    string dataTitleInfo = $"{ResourceProvider.GetString("LOCGameActivityWeekLabel")} {weekNumber}";
 
-                    int Year = dt.Year;
-                    int WeekNumber = Tools.WeekOfYearISO8601(dt);
-
-                    DateTime First = dt.StartOfWeek(DayOfWeek.Monday);
-                    DateTime Last = First.AddDays(6);
-                    string DataTitleInfo = $"{ResourceProvider.GetString("LOCGameActivityWeekLabel")} {WeekNumber}";
-                    labels.Add(DataTitleInfo);
-
+                    labels.Add(dataTitleInfo);
                     datesPeriodes.Add(new WeekStartEnd
                     {
-                        Monday = First,
-                        Sunday = Last.AddHours(23).AddMinutes(59).AddSeconds(59)
+                        Monday = first,
+                        Sunday = first.AddDays(6).AddHours(23).AddMinutes(59).AddSeconds(59)
                     });
-
-                    CustomerForTime customerForTime = new CustomerForTime
-                    {
-                        Name = DataTitleInfo,
-                        Values = 0,
-                        HideIsZero = true
-                    };
-                    seriesData.Add(customerForTime);
+                    seriesData.Add(new CustomerForTime { Name = dataTitleInfo, Values = 0, HideIsZero = true });
                 }
 
-                Activities.ForEach(x =>
+                activities.ForEach(x =>
                 {
-                    int idx = datesPeriodes.FindIndex(y => y.Monday <= ((DateTime)x.DateSession).ToLocalTime() && y.Sunday >= ((DateTime)x.DateSession).ToLocalTime());
+                    DateTime sessionTime = ((DateTime)x.DateSession).ToLocalTime();
+                    int idx = datesPeriodes.FindIndex(y => y.Monday <= sessionTime && y.Sunday >= sessionTime);
                     if (idx > -1)
                     {
                         seriesData[idx].Values += (long)x.ElapsedSeconds;
                     }
                 });
 
-
-
-                // Set data in graphic.
                 SeriesCollection activityForGameSeries = new SeriesCollection();
                 activityForGameSeries.Add(new ColumnSeries { Title = "1", Values = seriesData });
 
-                //let create a mapper so LiveCharts know how to plot our CustomerViewModel class
                 CartesianMapper<CustomerForTime> customerVmMapper = Mappers.Xy<CustomerForTime>()
-                        .X((value, index) => index)
-                        .Y(value => value.Values);
-
-
-                //lets save the mapper globally
+                    .X((value, index) => index)
+                    .Y(value => value.Values);
                 Charting.For<CustomerForTime>(customerVmMapper);
 
-                //PlayTimeToStringConverter converter = new PlayTimeToStringConverter();
                 PlayTimeToStringConverterWithZero converter = new PlayTimeToStringConverterWithZero();
-                Func<double, string> activityForGameLogFormatter = value => (string)converter.Convert((ulong)value, null, null, CultureInfo.CurrentCulture);
-                PART_ChartTimeActivityLabelsY.LabelFormatter = activityForGameLogFormatter;
+                PART_ChartTimeActivityLabelsY.LabelFormatter = value => (string)converter.Convert((ulong)value, null, null, CultureInfo.CurrentCulture);
 
                 PART_ChartTimeActivity.DataTooltip = new CustomerToolTipForTime
                 {
                     ShowIcon = PluginDatabase.PluginSettings.Settings.ShowLauncherIcons,
-                    Mode = (PluginDatabase.PluginSettings.Settings.ModeStoreIcon == 1) ? TextBlockWithIconMode.IconTextFirstWithText : TextBlockWithIconMode.IconFirstWithText,
+                    Mode = PluginDatabase.PluginSettings.Settings.ModeStoreIcon == 1
+                        ? TextBlockWithIconMode.IconTextFirstWithText
+                        : TextBlockWithIconMode.IconFirstWithText,
                     DatesPeriodes = datesPeriodes,
                     ShowWeekPeriode = true,
                     ShowTitle = true
                 };
-
 
                 PART_ChartTimeActivityLabelsY.MinValue = 0;
                 PART_ChartTimeActivity.Series = activityForGameSeries;
@@ -584,7 +457,7 @@ namespace GameActivity.Controls
         #region Events
         private void PART_ChartTimeActivity_DataClick(object sender, ChartPoint chartPoint)
         {
-            this.GameSeriesDataClick?.Invoke(this, chartPoint);
+            GameSeriesDataClick?.Invoke(this, chartPoint);
         }
         #endregion
     }
@@ -595,22 +468,22 @@ namespace GameActivity.Controls
         private bool _isActivated;
         public bool IsActivated { get => _isActivated; set => SetValue(ref _isActivated, value); }
 
-        public double _chartTimeHeight;
+        private double _chartTimeHeight;
         public double ChartTimeHeight { get => _chartTimeHeight; set => SetValue(ref _chartTimeHeight, value); }
 
-        public bool _chartTimeAxis;
+        private bool _chartTimeAxis;
         public bool ChartTimeAxis { get => _chartTimeAxis; set => SetValue(ref _chartTimeAxis, value); }
 
-        public bool _chartTimeOrdinates;
+        private bool _chartTimeOrdinates;
         public bool ChartTimeOrdinates { get => _chartTimeOrdinates; set => SetValue(ref _chartTimeOrdinates, value); }
 
-        public bool _chartTimeVisibleEmpty;
+        private bool _chartTimeVisibleEmpty;
         public bool ChartTimeVisibleEmpty { get => _chartTimeVisibleEmpty; set => SetValue(ref _chartTimeVisibleEmpty, value); }
 
-        public bool _disableAnimations = true;
+        private bool _disableAnimations = true;
         public bool DisableAnimations { get => _disableAnimations; set => SetValue(ref _disableAnimations, value); }
 
-        public double _labelsRotationValue;
+        private double _labelsRotationValue;
         public double LabelsRotationValue { get => _labelsRotationValue; set => SetValue(ref _labelsRotationValue, value); }
     }
 }

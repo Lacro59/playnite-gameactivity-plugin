@@ -236,9 +236,9 @@ namespace GameActivity.Views
 
 
             int index = ((ListActivities)lvSessions.SelectedItem).PCConfigurationId;
-            if (index != -1 && index < PluginDatabase.LocalSystem.GetConfigurations().Count)
+            if (index != -1 && index < PluginDatabase.SystemConfigurationManager.GetConfigurations().Count)
             {
-                var Configuration = PluginDatabase.LocalSystem.GetConfigurations()[index];
+                var Configuration = PluginDatabase.SystemConfigurationManager.GetConfigurations()[index];
 
                 PART_PcName.Content = Configuration.Name;
                 PART_Os.Content = Configuration.Os;

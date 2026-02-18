@@ -1,5 +1,6 @@
 ﻿using CommonPluginsShared;
 using CommonPluginsShared.Converters;
+using CommonPluginsShared.UI;
 using GameActivity.Controls;
 using GameActivity.Models;
 using GameActivity.Services;
@@ -202,7 +203,7 @@ namespace GameActivity.Views
         public List<GanttValue> DateTimes { get; set; }
 
 
-        public RelayCommand<Guid> GoToGame => Commands.GoToGame;
+        public RelayCommand<Guid> GoToGame => CommandsHelper.GoToGame;
 
         public bool GameExist => API.Instance.Database.Games.Get(Id) != null;
     }

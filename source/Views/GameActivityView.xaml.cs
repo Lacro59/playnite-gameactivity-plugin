@@ -23,6 +23,8 @@ using System.Windows.Media;
 using System.IO;
 using CommonPluginsShared.Extensions;
 using Playnite.SDK.Data;
+using CommonPluginsShared.SystemInfo;
+using CommonPluginsShared.Utilities;
 
 namespace GameActivity.Views
 {
@@ -810,32 +812,32 @@ namespace GameActivity.Views
             // Set data in graphics.
             string[] activityByWeekLabels = new[]
             {
-                ResourceProvider.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[0].Monday),
-                ResourceProvider.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[1].Monday),
-                ResourceProvider.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[2].Monday),
-                ResourceProvider.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[3].Monday)
+                ResourceProvider.GetString("LOCGameActivityWeekLabel") + " " + UtilityTools.WeekOfYearISO8601(datesPeriodes[0].Monday),
+                ResourceProvider.GetString("LOCGameActivityWeekLabel") + " " + UtilityTools.WeekOfYearISO8601(datesPeriodes[1].Monday),
+                ResourceProvider.GetString("LOCGameActivityWeekLabel") + " " + UtilityTools.WeekOfYearISO8601(datesPeriodes[2].Monday),
+                ResourceProvider.GetString("LOCGameActivityWeekLabel") + " " + UtilityTools.WeekOfYearISO8601(datesPeriodes[3].Monday)
             };
             if (datesPeriodes.Count == 5)
             {
                 activityByWeekLabels = new[]
                 {
-                    ResourceProvider.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[0].Monday),
-                    ResourceProvider.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[1].Monday),
-                    ResourceProvider.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[2].Monday),
-                    ResourceProvider.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[3].Monday),
-                    ResourceProvider.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[4].Monday)
+                    ResourceProvider.GetString("LOCGameActivityWeekLabel") + " " + UtilityTools.WeekOfYearISO8601(datesPeriodes[0].Monday),
+                    ResourceProvider.GetString("LOCGameActivityWeekLabel") + " " + UtilityTools.WeekOfYearISO8601(datesPeriodes[1].Monday),
+                    ResourceProvider.GetString("LOCGameActivityWeekLabel") + " " + UtilityTools.WeekOfYearISO8601(datesPeriodes[2].Monday),
+                    ResourceProvider.GetString("LOCGameActivityWeekLabel") + " " + UtilityTools.WeekOfYearISO8601(datesPeriodes[3].Monday),
+                    ResourceProvider.GetString("LOCGameActivityWeekLabel") + " " + UtilityTools.WeekOfYearISO8601(datesPeriodes[4].Monday)
                 };
             }
             if (datesPeriodes.Count == 6)
             {
                 activityByWeekLabels = new[]
                 {
-                    ResourceProvider.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[0].Monday),
-                    ResourceProvider.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[1].Monday),
-                    ResourceProvider.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[2].Monday),
-                    ResourceProvider.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[3].Monday),
-                    ResourceProvider.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[4].Monday),
-                    ResourceProvider.GetString("LOCGameActivityWeekLabel") + " " + Tools.WeekOfYearISO8601(datesPeriodes[5].Monday)
+                    ResourceProvider.GetString("LOCGameActivityWeekLabel") + " " + UtilityTools.WeekOfYearISO8601(datesPeriodes[0].Monday),
+                    ResourceProvider.GetString("LOCGameActivityWeekLabel") + " " + UtilityTools.WeekOfYearISO8601(datesPeriodes[1].Monday),
+                    ResourceProvider.GetString("LOCGameActivityWeekLabel") + " " + UtilityTools.WeekOfYearISO8601(datesPeriodes[2].Monday),
+                    ResourceProvider.GetString("LOCGameActivityWeekLabel") + " " + UtilityTools.WeekOfYearISO8601(datesPeriodes[3].Monday),
+                    ResourceProvider.GetString("LOCGameActivityWeekLabel") + " " + UtilityTools.WeekOfYearISO8601(datesPeriodes[4].Monday),
+                    ResourceProvider.GetString("LOCGameActivityWeekLabel") + " " + UtilityTools.WeekOfYearISO8601(datesPeriodes[5].Monday)
                 };
             }
 
@@ -1115,9 +1117,9 @@ namespace GameActivity.Views
                     index = ((ListActivities)lvGames.SelectedItem).PCConfigurationId;
                 }
 
-                if (index != -1 && index < PluginDatabase.LocalSystem.GetConfigurations().Count)
+                if (index != -1 && index < PluginDatabase.SystemConfigurationManager.GetConfigurations().Count)
                 {
-                    SystemConfiguration Configuration = PluginDatabase.LocalSystem.GetConfigurations()[index];
+                    SystemConfiguration Configuration = PluginDatabase.SystemConfigurationManager.GetConfigurations()[index];
 
                     PART_PcName.Content = Configuration.Name;
                     PART_Os.Content = Configuration.Os;

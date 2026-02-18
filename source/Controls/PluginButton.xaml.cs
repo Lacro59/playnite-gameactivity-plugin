@@ -11,55 +11,43 @@ using Playnite.SDK;
 using Playnite.SDK.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Threading;
 
 namespace GameActivity.Controls
 {
-    /// <summary>
-    /// Logique d'interaction pour PluginButton.xaml
-    /// </summary>
     public partial class PluginButton : PluginUserControlExtend
     {
-        private GameActivity Plugin { get; set; }
+        private GameActivity _plugin;
 
-        private ActivityDatabase PluginDatabase { get; set; } = GameActivity.PluginDatabase;
+        private ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
         protected override IPluginDatabase pluginDatabase => PluginDatabase;
 
-        private PluginButtonDataContext ControlDataContext { get; set; } = new PluginButtonDataContext();
+        private PluginButtonDataContext ControlDataContext = new PluginButtonDataContext();
         protected override IDataContext controlDataContext
         {
             get => ControlDataContext;
-            set => ControlDataContext = (PluginButtonDataContext)controlDataContext;
+            set => ControlDataContext = (PluginButtonDataContext)value; // Bug fix: was 'controlDataContext'
         }
 
 
         public PluginButton(GameActivity plugin)
         {
-            Plugin = plugin;
-
+            _plugin = plugin;
             InitializeComponent();
             DataContext = ControlDataContext;
+            Loaded += OnLoaded;
+        }
 
-            _ = Task.Run(() =>
+        protected override void AttachStaticEvents()
+        {
+            base.AttachStaticEvents();
+
+            AttachPluginEvents(PluginDatabase.PluginName, () =>
             {
-                // Wait extension database are loaded
-                _ = SpinWait.SpinUntil(() => PluginDatabase.IsLoaded, -1);
-
-                this.Dispatcher.BeginInvoke((Action)delegate
-                {
-                    PluginDatabase.PluginSettings.PropertyChanged += PluginSettings_PropertyChanged;
-                    PluginDatabase.Database.ItemUpdated += Database_ItemUpdated;
-                    PluginDatabase.Database.ItemCollectionChanged += Database_ItemCollectionChanged;
-                    API.Instance.Database.Games.ItemUpdated += Games_ItemUpdated;
-
-                    // Apply settings
-                    PluginSettings_PropertyChanged(null, null);
-                });
+                PluginDatabase.PluginSettings.PropertyChanged += CreatePluginSettingsHandler();
+                PluginDatabase.Database.ItemUpdated += CreateDatabaseItemUpdatedHandler<GameActivities>();
+                PluginDatabase.Database.ItemCollectionChanged += CreateDatabaseCollectionChangedHandler<GameActivities>();
+                API.Instance.Database.Games.ItemUpdated += Games_ItemUpdated;
             });
         }
 
@@ -68,27 +56,35 @@ namespace GameActivity.Controls
         {
             ControlDataContext.IsActivated = PluginDatabase.PluginSettings.Settings.EnableIntegrationButton;
             ControlDataContext.DisplayDetails = PluginDatabase.PluginSettings.Settings.EnableIntegrationButtonDetails;
-
             ControlDataContext.Text = "\ue97f";
             ControlDataContext.LastActivity = string.Empty;
             ControlDataContext.LastPlaytime = 0;
+            ControlDataContext.LastPlaytimeString = string.Empty;
         }
 
 
-        public override void SetData(Game newContext, PluginDataBaseGameBase PluginGameData)
+        /// <summary>
+        /// Populates last-session data. DisplayDetails is reset to false when no data exists
+        /// so the detail panel collapses without modifying the user's setting.
+        /// </summary>
+        public override void SetData(Game newContext, PluginDataBaseGameBase pluginGameData)
         {
-            GameActivities gameActivities = (GameActivities)PluginGameData;
+            GameActivities gameActivities = (GameActivities)pluginGameData;
 
-            if (gameActivities.HasData)
-            {
-                ControlDataContext.LastActivity = gameActivities.GetLastSession().ToLocalTime().ToString(Constants.DateUiFormat);
-                ControlDataContext.LastPlaytime = gameActivities.GetLastSessionActivity().ElapsedSeconds;
-                ControlDataContext.LastPlaytimeString = new PlayTimeToStringConverter().Convert(ControlDataContext.LastPlaytime, null, null, null).ToString();
-            }
-            else
+            if (!gameActivities.HasData)
             {
                 ControlDataContext.DisplayDetails = false;
+                return;
             }
+
+            Activity lastSessionActivity = gameActivities.GetLastSessionActivity();
+            ulong elapsedSeconds = lastSessionActivity.ElapsedSeconds;
+
+            ControlDataContext.LastActivity = gameActivities.GetLastSession().ToLocalTime().ToString(Constants.DateUiFormat);
+            ControlDataContext.LastPlaytime = elapsedSeconds;
+            ControlDataContext.LastPlaytimeString = new PlayTimeToStringConverter()
+                .Convert(elapsedSeconds, null, null, null)
+                .ToString();
         }
 
 
@@ -105,9 +101,10 @@ namespace GameActivity.Controls
                 Width = 1280
             };
 
-            GameActivityViewSingle ViewExtension = new GameActivityViewSingle(Plugin, PluginDatabase.GameContext);
-            Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(ResourceProvider.GetString("LOCGameActivity"), ViewExtension, windowOptions);
-            _ = windowExtension.ShowDialog();
+            GameActivityViewSingle viewExtension = new GameActivityViewSingle(_plugin, PluginDatabase.GameContext);
+            Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(
+                ResourceProvider.GetString("LOCGameActivity"), viewExtension, windowOptions);
+            windowExtension.ShowDialog();
         }
         #endregion
     }
@@ -118,20 +115,19 @@ namespace GameActivity.Controls
         private bool _isActivated;
         public bool IsActivated { get => _isActivated; set => SetValue(ref _isActivated, value); }
 
-        public bool _displayDetails;
+        private bool _displayDetails;
         public bool DisplayDetails { get => _displayDetails; set => SetValue(ref _displayDetails, value); }
 
-        public string _text;
+        private string _text;
         public string Text { get => _text; set => SetValue(ref _text, value); }
 
-        public string _lastActivity;
+        private string _lastActivity;
         public string LastActivity { get => _lastActivity; set => SetValue(ref _lastActivity, value); }
 
-        public ulong _lastPlaytime;
+        private ulong _lastPlaytime;
         public ulong LastPlaytime { get => _lastPlaytime; set => SetValue(ref _lastPlaytime, value); }
 
-        public string _lastPlaytimeString;
+        private string _lastPlaytimeString;
         public string LastPlaytimeString { get => _lastPlaytimeString; set => SetValue(ref _lastPlaytimeString, value); }
-
     }
 }

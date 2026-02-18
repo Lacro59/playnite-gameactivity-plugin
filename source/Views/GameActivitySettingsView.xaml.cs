@@ -52,39 +52,6 @@ namespace GameActivity
             e.Handled = regex.IsMatch(e.Text);
         }
 
-
-        private void CbLogging_Click(object sender, RoutedEventArgs e)
-        {
-            CheckBox cb = (CheckBox)sender;
-
-            if ((cb.Name == "cbUseMsiAfterburner") && (bool)cb.IsChecked)
-            {
-                cbUseHWiNFOSharedMemory.IsChecked = false;
-                cbUseHWiNFOGadget.IsChecked = false;
-            }
-            if (cb.Name == "cbUseHWiNFOSharedMemory" && (bool)cb.IsChecked)
-            {
-                cbUseMsiAfterburner.IsChecked = false;
-                cbUseHWiNFOGadget.IsChecked = false;
-
-                PART_TabHWiNFO.SelectedIndex = 0;
-            }
-            if (cb.Name == "cbUseHWiNFOGadget" && (bool)cb.IsChecked)
-            {
-                cbUseMsiAfterburner.IsChecked = false;
-                cbUseHWiNFOSharedMemory.IsChecked = false;
-
-                PART_TabHWiNFO.SelectedIndex = 1;
-            }
-        }
-
-        private void Hyperlink_Click(object sender, RoutedEventArgs e)
-        {
-            FrameworkElement link = (FrameworkElement)sender;
-            _ = Process.Start((string)link.Tag);
-        }
-
-
         #region SetColors
         private void BtPickColor_Click(object sender, RoutedEventArgs e)
         {

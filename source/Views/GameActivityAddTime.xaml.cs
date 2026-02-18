@@ -1,6 +1,7 @@
 ﻿using CommonPlayniteShared.Converters;
 using CommonPluginsShared;
 using CommonPluginsShared.Extensions;
+using CommonPluginsShared.UI;
 using GameActivity.Models;
 using GameActivity.Services;
 using Playnite.SDK;
@@ -107,7 +108,7 @@ namespace GameActivity.Views
                 Activity = PART_DateStart.IsEnabled ? new Activity { DateSession = DateStart.ToUniversalTime() } : ActivityEdit;
                 Activity.GameActionName = ((CbListHeader)PART_CbPlayAction.SelectedItem)?.Name ?? ResourceProvider.GetString("LOCGameActivityDefaultAction");
                 Activity.ElapsedSeconds = (ulong)(DateEnd - DateStart).TotalSeconds;
-                Activity.IdConfiguration = PluginDatabase.LocalSystem.GetIdConfiguration();
+                Activity.IdConfiguration = PluginDatabase.SystemConfigurationManager.GetConfigurationIndex();
                 Activity.PlatformIDs = GameContext.PlatformIds;
                 Activity.SourceID = GameContext.SourceId;
             }
@@ -217,12 +218,12 @@ namespace GameActivity.Views
 
         private void StackPanel_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            ContextMenu el = UI.FindParent<ContextMenu>((FrameworkElement)sender);
-            foreach (var ui in UI.FindVisualChildren<Border>(el))
+            ContextMenu el = UIHelper.FindParent<ContextMenu>((FrameworkElement)sender);
+            foreach (var ui in UIHelper.FindVisualChildren<Border>(el))
             {
-                if (((FrameworkElement)ui).Name == "HoverBorder")
+                if (ui.Name == "HoverBorder")
                 {
-                    ((Border)ui).Background = (System.Windows.Media.Brush)ResourceProvider.GetResource("NormalBrush");
+                    ui.Background = (System.Windows.Media.Brush)ResourceProvider.GetResource("NormalBrush");
                     break;
                 }
             }

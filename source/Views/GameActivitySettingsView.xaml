@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:converters="clr-namespace:CommonPlayniteShared.Converters"
              xmlns:AttachedProperties="clr-namespace:CommonPluginsShared.Controls"
-             xmlns:pcmd="clr-namespace:CommonPluginsShared"
+             xmlns:uiService="clr-namespace:CommonPluginsShared.UI"
              xmlns:pcmd2="clr-namespace:CommonPlayniteShared.Commands"
              xmlns:controls="clr-namespace:CommonPluginsControls.Controls"
              xmlns:convertersshared="clr-namespace:CommonPluginsShared.Converters"
@@ -27,7 +27,7 @@
                 <DockPanel Margin="0,20,0,0">
                     <StackPanel DockPanel.Dock="Top">
                         <CheckBox IsChecked="{Binding Settings.MenuInExtensions}" VerticalAlignment="Center"
-                                  Command="{x:Static pcmd:Commands.RestartRequired}" 
+                                  Command="{x:Static uiService:CommandsHelper.RestartRequired}" 
                                   CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
                             <Label Content="{DynamicResource LOCCommonMenuInExtensions}" />
                         </CheckBox>
@@ -536,380 +536,587 @@
         </TabItem>
 
         <TabItem Header="{DynamicResource LOCGameActivityLog}">
-            <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
-                <DockPanel Margin="0,20,0,0">
-                    <DockPanel DockPanel.Dock="Top">
-                        <StackPanel DockPanel.Dock="Top">
-                            <CheckBox x:Name="cbLogging" IsChecked="{Binding Settings.EnableLogging}">
-                                <CheckBox.ToolTip>
-                                    <ToolTip Content="{DynamicResource LOCGameActivityEnableLoggingToolTip}"></ToolTip>
-                                </CheckBox.ToolTip>
-
-                                <StackPanel Orientation="Horizontal">
-                                    <Label Content="{DynamicResource LOCGameActivityActiveLog}" Margin="0,0,5,0" />
-
-                                    <!--Label Content="(Performance Monitor &amp; " />
-                                    <TextBlock>
-                                        <Hyperlink NavigateUri="https://openhardwaremonitor.org"
-                                                   Command="{x:Static pcmd2:GlobalCommands.NavigateUrlCommand}"
-                                                   CommandParameter="{Binding NavigateUri, RelativeSource={RelativeSource Self}}">
-                                            <Run Text="Open Hardware Monitor" />
-                                        </Hyperlink>                                        
-                                    </TextBlock>
-                                    <Label Content=")" /-->
-                                </StackPanel>
-                            </CheckBox>
-                        </StackPanel>
-
-                        <!--StackPanel DockPanel.Dock="Top" Margin="50,15,0,0">
-                            <CheckBox IsChecked="{Binding Settings.UsedLibreHardware}" Name="cbUsedLibreHardware"
-                                      IsEnabled="{Binding ElementName=cbLogging, Path=IsChecked}">
-                                <StackPanel Orientation="Horizontal">
-                                    <Label Content="{DynamicResource LOCGameActivityUsedLibreHardware}" Margin="0,0,5,0" />
-
-                                    <Label Content="(" />
-                                    <TextBlock>
-                                        <Hyperlink NavigateUri="https://github.com/LibreHardwareMonitor/LibreHardwareMonitor"
-                                                   Command="{x:Static pcmd2:GlobalCommands.NavigateUrlCommand}"
-                                                   CommandParameter="{Binding NavigateUri, RelativeSource={RelativeSource Self}}">
-                                            <Run Text="github" />
-                                        </Hyperlink>
-                                    </TextBlock>
-                                    <Label Content=")" />
-                                </StackPanel>
-                            </CheckBox>
-                        </StackPanel-->
-
-                        <!--Grid DockPanel.Dock="Top" Margin="50,15,0,0"
-                                      IsEnabled="{Binding ElementName=cbUsedLibreHardware, Path=IsChecked}">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-
-                            <CheckBox IsChecked="{Binding Settings.WithRemoteServerWeb}" Grid.Column="0"
-                                      Content="{DynamicResource LOCGameActivityRemoteWebServer}"/>
-
-                            <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Center">
-                                <Label Content="IP" Margin="0,0,10,0" />
-                                <TextBox Width="120" 
-                                         Text="{Binding Settings.IpRemoteServerWeb, FallbackValue='192.168.10.20'}" />
+            <DockPanel Margin="0,20,0,0">
+                <!-- Enable Logging Section -->
+                <DockPanel DockPanel.Dock="Top">
+                    <StackPanel DockPanel.Dock="Top">
+                        <CheckBox x:Name="cbLogging" IsChecked="{Binding Settings.EnableLogging}">
+                            <CheckBox.ToolTip>
+                                <ToolTip Content="{DynamicResource LOCGameActivityEnableLoggingToolTip}"></ToolTip>
+                            </CheckBox.ToolTip>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="{DynamicResource LOCGameActivityActiveLog}" Margin="0,0,5,0" />
                             </StackPanel>
+                        </CheckBox>
+                    </StackPanel>
 
+                    <Grid DockPanel.Dock="Bottom" Margin="0,15,0,0" IsEnabled="{Binding ElementName=cbLogging, Path=IsChecked, TargetNullValue=false}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="100" />
+                        </Grid.ColumnDefinitions>
 
-                            <Button Content="&#xefca;" FontFamily="{DynamicResource FontIcoFont}"
-                                    Click="Hyperlink_Click" Grid.Column="2" HorizontalAlignment="Right"
-                                    Tag="https://github.com/Lacro59/playnite-gameactivity-plugin/wiki/How-to-use-log-with-LibreHardwareMonitor-Remote-Web-Server" />
-                        </Grid-->
-
-                        <Grid DockPanel.Dock="Bottom" Margin="0,15,0,0" IsEnabled="{Binding ElementName=cbLogging, Path=IsChecked, TargetNullValue=false}">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto" />
-                                <ColumnDefinition Width="10" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="10" />
-                                <ColumnDefinition Width="100" />
-                            </Grid.ColumnDefinitions>
-                            
-                            <Label Content="{DynamicResource LOCGameActivityTimeInterval}" Grid.Column="0" />
-                            <Slider x:Name="hwSlider" Minimum="1" Value="{Binding Settings.TimeIntervalLogging}" ValueChanged="Slider_ValueChanged" Grid.Column="2" />
-                            <Label x:Name="labelIntervalLabel_text" Content="{DynamicResource LOCGameActivityTimeLabel}" Grid.Column="4" />
-                        </Grid>
-                    </DockPanel>
-
-                    <DockPanel DockPanel.Dock="Bottom" Margin="0,15,0,0">
-                        <StackPanel DockPanel.Dock="Top">
-                            <CheckBox x:Name="cbWarning" IsChecked="{Binding Settings.EnableWarning}">
-                                <CheckBox.ToolTip>
-                                    <ToolTip Content="{DynamicResource LOCGameActivityEnableWarningToolTip}"></ToolTip>
-                                </CheckBox.ToolTip>
-
-                                <Label Content="{DynamicResource LOCGameActivityActiveWarning}" />
-                            </CheckBox>
-                        </StackPanel>
-
-                        <StackPanel DockPanel.Dock="Bottom" Margin="0,10,0,0" Orientation="Horizontal" 
-                               IsEnabled="{Binding ElementName=cbWarning, Path=IsChecked, TargetNullValue=false}">
-
-                            <StackPanel Orientation="Horizontal" Margin="15,0,0,0">
-                                <Label Content="{DynamicResource LOCGameActivityMaxCpuUsage}" Height="23" Width="135" />
-                                <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.MaxCpuUsage}" Width="35" PreviewTextInput="NumberValidationTextBox" MaxLength="3" />
-                            </StackPanel>
-
-                            <StackPanel Orientation="Horizontal" Margin="15,0,0,0">
-                                <Label Content="{DynamicResource LOCGameActivityMaxGpuUsage}" Height="23" Width="135" />
-                                <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.MaxGpuUsage}" Width="35" PreviewTextInput="NumberValidationTextBox" MaxLength="3" />
-                            </StackPanel>
-
-                            <StackPanel Orientation="Horizontal" Margin="15,0,0,0">
-                                <Label Content="{DynamicResource LOCGameActivityMaxRamUsage}" Height="23" Width="135" />
-                                <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.MaxRamUsage}" Width="35" PreviewTextInput="NumberValidationTextBox" MaxLength="3" />
-                            </StackPanel>
-
-                        </StackPanel>
-
-                        <StackPanel DockPanel.Dock="Bottom" Margin="0,10,0,0" Orientation="Horizontal" 
-                               IsEnabled="{Binding ElementName=cbWarning, Path=IsChecked, TargetNullValue=false}">
-
-                            <StackPanel Orientation="Horizontal" Margin="15,0,0,0">
-                                <Label Content="{DynamicResource LOCGameActivityMaxCpuTemp}" Height="23" Width="135" />
-                                <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.MaxCpuTemp}" Width="35" PreviewTextInput="NumberValidationTextBox" MaxLength="3" />
-                            </StackPanel>
-
-                            <StackPanel Orientation="Horizontal" Margin="15,0,0,0">
-                                <Label Content="{DynamicResource LOCGameActivityMaxGpuTemp}" Height="23" Width="135" />
-                                <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.MaxGpuTemp}" Width="35" PreviewTextInput="NumberValidationTextBox" MaxLength="3" />
-                            </StackPanel>
-
-                            <StackPanel Orientation="Horizontal" Margin="15,0,0,0">
-                                <Label Content="{DynamicResource LOCGameActivityMinFps}" Height="23" Width="135" />
-                                <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.MinFps}" Width="35" PreviewTextInput="NumberValidationTextBox" MaxLength="3" />
-                            </StackPanel>
-
-                        </StackPanel>
-                    </DockPanel>
-
-                    <DockPanel DockPanel.Dock="Bottom" Margin="0,15,0,0" IsEnabled="{Binding ElementName=cbLogging, Path=IsChecked, TargetNullValue=false}">
-                        <Grid DockPanel.Dock="Top">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="10" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-
-                            <CheckBox Name="cbUseMsiAfterburner" IsChecked="{Binding Settings.UseMsiAfterburner}" Click="CbLogging_Click"
-                                      Grid.Column="0" Grid.Row="0">
-                                <TextBlock>
-                                    <Hyperlink NavigateUri="https://fr.msi.com/page/afterburner"
-                                                Command="{x:Static pcmd2:GlobalCommands.NavigateUrlCommand}"
-                                                CommandParameter="{Binding NavigateUri, RelativeSource={RelativeSource Self}}">
-                                        <Run Text="{DynamicResource LOCGameActivityUseMsiAfterburner}" />
-                                    </Hyperlink>
-                                </TextBlock>
-                            </CheckBox>
-
-                            <CheckBox Name="cbUseHWiNFOSharedMemory" IsChecked="{Binding Settings.UseHWiNFO}" Click="CbLogging_Click"
-                                      Grid.Column="0" Grid.Row="2">
-                                <TextBlock>
-                                    <Hyperlink NavigateUri="https://www.hwinfo.com"
-                                                Command="{x:Static pcmd2:GlobalCommands.NavigateUrlCommand}"
-                                                CommandParameter="{Binding NavigateUri, RelativeSource={RelativeSource Self}}">
-                                        <Run Text="{DynamicResource LOCGameActivityUseHWiNFOSharedMemory}" />
-                                    </Hyperlink>
-                                </TextBlock>
-                            </CheckBox>
-
-                            <CheckBox Name="cbUseHWiNFOGadget" IsChecked="{Binding Settings.UseHWiNFOGadget}" Click="CbLogging_Click"
-                                      Grid.Column="1" Grid.Row="2">
-                                <TextBlock>
-                                    <Hyperlink NavigateUri="https://www.hwinfo.com"
-                                                Command="{x:Static pcmd2:GlobalCommands.NavigateUrlCommand}"
-                                                CommandParameter="{Binding NavigateUri, RelativeSource={RelativeSource Self}}">
-                                        <Run Text="{DynamicResource LOCGameActivityUseHWiNFOGadget}" />
-                                    </Hyperlink>
-                                </TextBlock>
-                            </CheckBox>
-                        </Grid>
-
-                        <DockPanel DockPanel.Dock="Bottom" Margin="0,15,0,0">
-                            <TabControl Name="PART_TabHWiNFO">
-                                <TabItem Header="SharedMemory">
-                                    <DockPanel Margin="0,5,0,0" IsEnabled="{Binding ElementName=cbUseHWiNFOSharedMemory, Path=IsChecked, TargetNullValue=false}">
-                                        <DockPanel DockPanel.Dock="Top" HorizontalAlignment="Center">
-                                            <StackPanel DockPanel.Dock="Left" Margin="0,0,5,0">
-                                                <GroupBox Header="{DynamicResource LOCGameActivityGpuUsage}" Height="100" Width="250">
-                                                    <Grid>
-                                                        <Label Content="{DynamicResource LOCGameActivitySensorsID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,5,0,0" />
-                                                        <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.HWiNFO_gpu_sensorsID}" VerticalAlignment="Top" Width="100" Margin="110,5,0,0" />
-
-                                                        <Label Content="{DynamicResource LOCGameActivityElementID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,35,0,0" />
-                                                        <TextBox HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="{Binding Settings.HWiNFO_gpu_elementID}" VerticalAlignment="Top" Width="100" Margin="110,35,0,0" />
-                                                    </Grid>
-                                                </GroupBox>
-                                            </StackPanel>
-
-                                            <StackPanel DockPanel.Dock="Right" Margin="5,0,0,0">
-                                                <GroupBox Header="{DynamicResource LOCGameActivityFps}" Height="100" Width="250">
-                                                    <Grid>
-                                                        <Label Content="{DynamicResource LOCGameActivitySensorsID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,5,0,0" />
-                                                        <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.HWiNFO_fps_sensorsID}" VerticalAlignment="Top" Width="100" Margin="110,5,0,0" />
-
-                                                        <Label Content="{DynamicResource LOCGameActivityElementID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,35,0,0" />
-                                                        <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.HWiNFO_fps_elementID}" VerticalAlignment="Top" Width="100" Margin="110,35,0,0" />
-                                                    </Grid>
-                                                </GroupBox>
-                                            </StackPanel>
-                                        </DockPanel>
-
-                                        <DockPanel DockPanel.Dock="Top" HorizontalAlignment="Center" Margin="0,10,0,0">
-                                            <StackPanel DockPanel.Dock="Left" Margin="0,0,5,0">
-                                                <GroupBox Header="{DynamicResource LOCGameActivityGpuTemp}" Height="100" Width="250">
-                                                    <Grid>
-                                                        <Label Content="{DynamicResource LOCGameActivitySensorsID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,5,0,0" />
-                                                        <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.HWiNFO_gpuT_sensorsID}" VerticalAlignment="Top" Width="100" Margin="110,5,0,0" />
-
-                                                        <Label Content="{DynamicResource LOCGameActivityElementID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,35,0,0" />
-                                                        <TextBox HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="{Binding Settings.HWiNFO_gpuT_elementID}" VerticalAlignment="Top" Width="100" Margin="110,35,0,0" />
-                                                    </Grid>
-                                                </GroupBox>
-                                            </StackPanel>
-
-                                            <StackPanel DockPanel.Dock="Right" Margin="5,0,0,0">
-                                                <GroupBox Header="{DynamicResource LOCGameActivityCpuTemp}" Height="100" Width="250">
-                                                    <Grid>
-                                                        <Label Content="{DynamicResource LOCGameActivitySensorsID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,5,0,0" />
-                                                        <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.HWiNFO_cpuT_sensorsID}" VerticalAlignment="Top" Width="100" Margin="110,5,0,0" />
-
-                                                        <Label Content="{DynamicResource LOCGameActivityElementID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,35,0,0" />
-                                                        <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.HWiNFO_cpuT_elementID}" VerticalAlignment="Top" Width="100" Margin="110,35,0,0" />
-                                                    </Grid>
-                                                </GroupBox>
-                                            </StackPanel>
-                                        </DockPanel>
-
-                                        <DockPanel DockPanel.Dock="Top" HorizontalAlignment="Center" Margin="0,10,0,0">
-                                            <StackPanel DockPanel.Dock="Left" Margin="0,0,5,0">
-                                                <GroupBox Header="{DynamicResource LOCGameActivityGpuPower}" Height="100" Width="250">
-                                                    <Grid>
-                                                        <Label Content="{DynamicResource LOCGameActivitySensorsID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,5,0,0" />
-                                                        <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.HWiNFO_gpuP_sensorsID}" VerticalAlignment="Top" Width="100" Margin="110,5,0,0" />
-
-                                                        <Label Content="{DynamicResource LOCGameActivityElementID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,35,0,0" />
-                                                        <TextBox HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="{Binding Settings.HWiNFO_gpuP_elementID}" VerticalAlignment="Top" Width="100" Margin="110,35,0,0" />
-                                                    </Grid>
-                                                </GroupBox>
-                                            </StackPanel>
-
-                                            <StackPanel DockPanel.Dock="Right" Margin="5,0,0,0">
-                                                <GroupBox Header="{DynamicResource LOCGameActivityCpuPower}" Height="100" Width="250">
-                                                    <Grid>
-                                                        <Label Content="{DynamicResource LOCGameActivitySensorsID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,5,0,0" />
-                                                        <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.HWiNFO_cpuP_sensorsID}" VerticalAlignment="Top" Width="100" Margin="110,5,0,0" />
-
-                                                        <Label Content="{DynamicResource LOCGameActivityElementID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,35,0,0" />
-                                                        <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.HWiNFO_cpuP_elementID}" VerticalAlignment="Top" Width="100" Margin="110,35,0,0" />
-                                                    </Grid>
-                                                </GroupBox>
-                                            </StackPanel>
-                                        </DockPanel>
-                                    </DockPanel>
-                                </TabItem>
-
-                                <TabItem Header="Gadget reporting">
-                                    <DockPanel Margin="0,5,0,0" IsEnabled="{Binding ElementName=cbUseHWiNFOGadget, Path=IsChecked, TargetNullValue=false}">
-                                        <DockPanel DockPanel.Dock="Top" HorizontalAlignment="Center">
-                                            <StackPanel DockPanel.Dock="Left" Margin="0,0,5,0">
-                                                <GroupBox Header="{DynamicResource LOCGameActivityGpuUsage}" Width="250">
-                                                    <Grid>
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="25" />
-                                                            <ColumnDefinition Width="auto" />
-                                                            <ColumnDefinition Width="10" />
-                                                            <ColumnDefinition Width="50" />
-                                                        </Grid.ColumnDefinitions>
-
-                                                        <Label Grid.Column="1" Content="{DynamicResource LOCGameActivityIndex}" />
-                                                        <playnitecontrols:NumericBox Grid.Column="3" LongValue="{Binding Settings.HWiNFO_gpu_index}" MinLongValue="0" />
-                                                    </Grid>
-                                                </GroupBox>
-                                            </StackPanel>
-
-                                            <StackPanel DockPanel.Dock="Right" Margin="5,0,0,0">
-                                                <GroupBox Header="{DynamicResource LOCGameActivityFps}" Width="250">
-                                                    <Grid>
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="25" />
-                                                            <ColumnDefinition Width="auto" />
-                                                            <ColumnDefinition Width="10" />
-                                                            <ColumnDefinition Width="50" />
-                                                        </Grid.ColumnDefinitions>
-
-                                                        <Label Grid.Column="1" Content="{DynamicResource LOCGameActivityIndex}" />
-                                                        <playnitecontrols:NumericBox Grid.Column="3" LongValue="{Binding Settings.HWiNFO_fps_index}" MinLongValue="0" />
-                                                    </Grid>
-                                                </GroupBox>
-                                            </StackPanel>
-                                        </DockPanel>
-
-                                        <DockPanel DockPanel.Dock="Top" HorizontalAlignment="Center" Margin="0,10,0,0">
-                                            <StackPanel DockPanel.Dock="Left" Margin="0,0,5,0">
-                                                <GroupBox Header="{DynamicResource LOCGameActivityGpuTemp}" Width="250">
-                                                    <Grid>
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="25" />
-                                                            <ColumnDefinition Width="auto" />
-                                                            <ColumnDefinition Width="10" />
-                                                            <ColumnDefinition Width="50" />
-                                                        </Grid.ColumnDefinitions>
-
-                                                        <Label Grid.Column="1" Content="{DynamicResource LOCGameActivityIndex}" />
-                                                        <playnitecontrols:NumericBox Grid.Column="3" LongValue="{Binding Settings.HWiNFO_gpuT_index}" MinLongValue="0" />
-                                                    </Grid>
-                                                </GroupBox>
-                                            </StackPanel>
-
-                                            <StackPanel DockPanel.Dock="Right" Margin="5,0,0,0">
-                                                <GroupBox Header="{DynamicResource LOCGameActivityCpuTemp}" Width="250">
-                                                    <Grid>
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="25" />
-                                                            <ColumnDefinition Width="auto" />
-                                                            <ColumnDefinition Width="10" />
-                                                            <ColumnDefinition Width="50" />
-                                                        </Grid.ColumnDefinitions>
-                                                        
-                                                        <Label Grid.Column="1" Content="{DynamicResource LOCGameActivityIndex}" />
-                                                        <playnitecontrols:NumericBox Grid.Column="3" LongValue="{Binding Settings.HWiNFO_cpuT_index}" MinLongValue="0" />
-                                                    </Grid>
-                                                </GroupBox>
-                                            </StackPanel>
-                                        </DockPanel>
-
-                                        <DockPanel DockPanel.Dock="Top" HorizontalAlignment="Center" Margin="0,10,0,0">
-                                            <StackPanel DockPanel.Dock="Left" Margin="0,0,5,0">
-                                                <GroupBox Header="{DynamicResource LOCGameActivityGpuPower}" Width="250">
-                                                    <Grid>
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="25" />
-                                                            <ColumnDefinition Width="auto" />
-                                                            <ColumnDefinition Width="10" />
-                                                            <ColumnDefinition Width="50" />
-                                                        </Grid.ColumnDefinitions>
-
-                                                        <Label Grid.Column="1" Content="{DynamicResource LOCGameActivityIndex}" />
-                                                        <playnitecontrols:NumericBox Grid.Column="3" LongValue="{Binding Settings.HWiNFO_gpuP_index}" MinLongValue="0" />
-                                                    </Grid>
-                                                </GroupBox>
-                                            </StackPanel>
-
-                                            <StackPanel DockPanel.Dock="Right" Margin="5,0,0,0">
-                                                <GroupBox Header="{DynamicResource LOCGameActivityCpuPower}" Width="250">
-                                                    <Grid>
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="25" />
-                                                            <ColumnDefinition Width="auto" />
-                                                            <ColumnDefinition Width="10" />
-                                                            <ColumnDefinition Width="50" />
-                                                        </Grid.ColumnDefinitions>
-                                                        
-                                                        <Label Grid.Column="1" Content="{DynamicResource LOCGameActivityIndex}" />
-                                                        <playnitecontrols:NumericBox Grid.Column="3" LongValue="{Binding Settings.HWiNFO_cpuP_index}" MinLongValue="0" />
-                                                    </Grid>
-                                                </GroupBox>
-                                            </StackPanel>
-                                        </DockPanel>
-                                    </DockPanel>
-                                </TabItem>
-                            </TabControl>
-                        </DockPanel>
-                    </DockPanel>
+                        <Label Content="{DynamicResource LOCGameActivityTimeInterval}" Grid.Column="0" />
+                        <Slider x:Name="hwSlider" Minimum="1" Value="{Binding Settings.TimeIntervalLogging}" ValueChanged="Slider_ValueChanged" Grid.Column="2" />
+                        <Label x:Name="labelIntervalLabel_text" Content="{DynamicResource LOCGameActivityTimeLabel}" Grid.Column="4" />
+                    </Grid>
                 </DockPanel>
-            </ScrollViewer>
+
+                <!-- Hardware Monitoring Providers Section -->
+                <DockPanel DockPanel.Dock="Bottom" Margin="0,25,0,0" IsEnabled="{Binding ElementName=cbLogging, Path=IsChecked, TargetNullValue=false}">
+                    <Label DockPanel.Dock="Top" Content="Hardware Monitoring Providers" FontWeight="Bold" FontSize="14" Margin="0,0,0,10" />
+
+                    <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
+                        <StackPanel DockPanel.Dock="Top">
+                            <!-- LibreHardwareMonitor Provider -->
+                            <Border Margin="0,0,0,10"
+                                    Background="{DynamicResource CommonToolTipBackgroundBrush}" CornerRadius="{DynamicResource CommonToolTipCornerRadius}"
+                                    BorderThickness="{DynamicResource CommonToolTipBorderThickness}" Padding="{DynamicResource CommonToolTipPadding}"
+                                    BorderBrush="{DynamicResource CommonToolTipBorderBrush}">
+
+                                <Expander>
+                                    <Expander.Style>
+                                        <Style TargetType="{x:Type Expander}" BasedOn="{StaticResource {x:Type Expander}}">
+                                            <Setter Property="Background" Value="Transparent" />
+                                        </Style>
+                                    </Expander.Style>
+
+                                    <Expander.Header>
+                                        <DockPanel>
+                                            <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" VerticalAlignment="Center">
+                                                <Border Background="#e74c3c" CornerRadius="3" Padding="5,2" Margin="3,0">
+                                                    <TextBlock Text="CPU" Foreground="White" FontSize="10" FontWeight="Bold" />
+                                                </Border>
+                                                <Border Background="#3498db" CornerRadius="3" Padding="5,2" Margin="3,0">
+                                                    <TextBlock Text="GPU" Foreground="White" FontSize="10" FontWeight="Bold" />
+                                                </Border>
+                                                <Border Background="#9b59b6" CornerRadius="3" Padding="5,2" Margin="3,0">
+                                                    <TextBlock Text="RAM" Foreground="White" FontSize="10" FontWeight="Bold" />
+                                                </Border>
+                                                <Border Background="#f39c12" CornerRadius="3" Padding="5,2" Margin="3,0">
+                                                    <TextBlock Text="TEMP" Foreground="White" FontSize="10" FontWeight="Bold" />
+                                                </Border>
+                                                <Border Background="#e67e22" CornerRadius="3" Padding="5,2" Margin="3,0">
+                                                    <TextBlock Text="PWR" Foreground="White" FontSize="10" FontWeight="Bold" />
+                                                </Border>
+
+                                                <TextBlock Foreground="#3498db" FontWeight="Bold" Margin="10,0,0,0" VerticalAlignment="Center">
+                                                    <Run Text="ℹ " />
+                                                    <Run Text="{DynamicResource LOCGameActivityExternalApp}" />
+                                                </TextBlock>
+                                            </StackPanel>
+
+                                            <CheckBox DockPanel.Dock="Left" IsChecked="{Binding Settings.UseLibreHardware}" 
+                                                      Name="cb_LibreHardware"
+                                                      VerticalAlignment="Center" Margin="0,0,15,0">
+                                                <TextBlock FontWeight="Bold" FontSize="13">
+                                                    <Hyperlink NavigateUri="https://github.com/LibreHardwareMonitor/LibreHardwareMonitor"
+                                                               Command="{x:Static pcmd2:GlobalCommands.NavigateUrlCommand}"
+                                                               CommandParameter="{Binding NavigateUri, RelativeSource={RelativeSource Self}}">
+                                                        <Run Text="LibreHardwareMonitor" />
+                                                    </Hyperlink>
+                                                </TextBlock>
+                                            </CheckBox>
+                                        </DockPanel>
+                                    </Expander.Header>
+
+                                    <Expander.Content>
+                                        <Grid Margin="60,10,10,10" 
+                                              IsEnabled="{Binding ElementName=cb_LibreHardware, Path=IsChecked}">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="20" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="20" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <CheckBox IsChecked="{Binding Settings.WithRemoteServerWeb}" Grid.Column="0" VerticalAlignment="Center"
+                                                      IsEnabled="False"
+                                                      Content="{DynamicResource LOCGameActivityRemoteWebServer}"/>
+
+                                            <StackPanel Orientation="Horizontal" Grid.Column="2" HorizontalAlignment="Center">
+                                                <Label Content="IP" Margin="0,0,10,0" />
+                                                <TextBox Width="180" 
+                                                         Text="{Binding Settings.IpRemoteServerWeb, FallbackValue='192.168.10.20'}" />
+                                            </StackPanel>
+
+                                            <Button Content="&#xefca;" FontFamily="{DynamicResource FontIcoFont}"
+                                                    Grid.Column="4" HorizontalAlignment="Right"
+                                                    Command="{x:Static pcmd2:GlobalCommands.NavigateUrlCommand}"
+                                                    CommandParameter="https://github.com/Lacro59/playnite-gameactivity-plugin/wiki/How-to-use-log-with-LibreHardwareMonitor-Remote-Web-Server" />
+                                        </Grid>
+                                    </Expander.Content>
+                                </Expander>
+                            </Border>
+
+                            <!-- RivaTuner Provider -->
+                            <Border Margin="0,0,0,10"
+                                    Background="{DynamicResource CommonToolTipBackgroundBrush}" CornerRadius="{DynamicResource CommonToolTipCornerRadius}"
+                                    BorderThickness="{DynamicResource CommonToolTipBorderThickness}" Padding="{DynamicResource CommonToolTipPadding}"
+                                    BorderBrush="{DynamicResource CommonToolTipBorderBrush}">
+                                <Expander AttachedProperties:ExpanderAttachedProperties.HideExpanderArrow="True">
+                                    <Expander.Style>
+                                        <Style TargetType="{x:Type Expander}" BasedOn="{StaticResource {x:Type Expander}}">
+                                            <Setter Property="Background" Value="Transparent" />
+                                        </Style>
+                                    </Expander.Style>
+
+                                    <Expander.Header>
+                                        <DockPanel>
+                                            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                                                <Border Background="#27ae60" CornerRadius="3" Padding="5,2" Margin="3,0">
+                                                    <TextBlock Text="FPS" Foreground="White" FontSize="10" FontWeight="Bold" />
+                                                </Border>
+                                                <TextBlock Foreground="#3498db" FontWeight="Bold" Margin="10,0,0,0" VerticalAlignment="Center">
+                                                    <Run Text="ℹ " />
+                                                    <Run Text="{DynamicResource LOCGameActivityExternalApp}" />
+                                                </TextBlock>
+                                            </StackPanel>
+
+                                            <CheckBox DockPanel.Dock="Left" Name="cbUseRivaTuner" IsChecked="{Binding Settings.UseRivaTuner}" 
+                                                      VerticalAlignment="Center" Margin="0,0,15,0">
+                                                <TextBlock FontWeight="Bold" FontSize="13">
+                                                    <Hyperlink NavigateUri="https://www.guru3d.com/files-details/rtss-rivatuner-statistics-server-download.html"
+                                                               Command="{x:Static pcmd2:GlobalCommands.NavigateUrlCommand}"
+                                                               CommandParameter="{Binding NavigateUri, RelativeSource={RelativeSource Self}}">
+                                                        <Run Text="RivaTuner Statistics Server" />
+                                                    </Hyperlink>
+                                                </TextBlock>
+                                            </CheckBox>
+                                        </DockPanel>
+                                    </Expander.Header>
+                                </Expander>
+                            </Border>
+
+                            <!-- HWiNFO Shared Memory -->
+                            <Border Margin="0,0,0,10"
+                                    Background="{DynamicResource CommonToolTipBackgroundBrush}" CornerRadius="{DynamicResource CommonToolTipCornerRadius}"
+                                    BorderThickness="{DynamicResource CommonToolTipBorderThickness}" Padding="{DynamicResource CommonToolTipPadding}"
+                                    BorderBrush="{DynamicResource CommonToolTipBorderBrush}">
+                                <Expander>
+                                    <Expander.Style>
+                                        <Style TargetType="{x:Type Expander}" BasedOn="{StaticResource {x:Type Expander}}">
+                                            <Setter Property="Background" Value="Transparent" />
+                                        </Style>
+                                    </Expander.Style>
+
+                                    <Expander.Header>
+                                        <DockPanel>
+                                            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                                                <Border Background="#27ae60" CornerRadius="3" Padding="5,2" Margin="3,0">
+                                                    <TextBlock Text="FPS" Foreground="White" FontSize="10" FontWeight="Bold" />
+                                                </Border>
+                                                <Border Background="#e74c3c" CornerRadius="3" Padding="5,2" Margin="3,0">
+                                                    <TextBlock Text="CPU" Foreground="White" FontSize="10" FontWeight="Bold" />
+                                                </Border>
+                                                <Border Background="#3498db" CornerRadius="3" Padding="5,2" Margin="3,0">
+                                                    <TextBlock Text="GPU" Foreground="White" FontSize="10" FontWeight="Bold" />
+                                                </Border>
+                                                <Border Background="#f39c12" CornerRadius="3" Padding="5,2" Margin="3,0">
+                                                    <TextBlock Text="TEMP" Foreground="White" FontSize="10" FontWeight="Bold" />
+                                                </Border>
+                                                <Border Background="#e67e22" CornerRadius="3" Padding="5,2" Margin="3,0">
+                                                    <TextBlock Text="PWR" Foreground="White" FontSize="10" FontWeight="Bold" />
+                                                </Border>
+                                                <TextBlock Foreground="#3498db" FontWeight="Bold" Margin="10,0,0,0" VerticalAlignment="Center">
+                                                    <Run Text="ℹ " />
+                                                    <Run Text="{DynamicResource LOCGameActivityExternalApp}" />
+                                                </TextBlock>
+                                            </StackPanel>
+
+                                            <CheckBox DockPanel.Dock="Left" IsChecked="{Binding Settings.UseHWiNFOSharedMemory}" 
+                                                      Name="cb_HWiNFOSharedMemory"
+                                                      VerticalAlignment="Center" Margin="0,0,15,0">
+                                                <TextBlock FontWeight="Bold" FontSize="13">
+                                                    <Hyperlink NavigateUri="https://www.hwinfo.com"
+                                                               Command="{x:Static pcmd2:GlobalCommands.NavigateUrlCommand}"
+                                                               CommandParameter="{Binding NavigateUri, RelativeSource={RelativeSource Self}}">
+                                                        <Run Text="HWiNFO (Shared Memory)" />
+                                                    </Hyperlink>
+                                                </TextBlock>
+                                            </CheckBox>
+                                        </DockPanel>
+                                        </Expander.Header>
+
+                                    <Expander.Content>
+                                        <DockPanel Margin="10"
+                                                   IsEnabled="{Binding ElementName=cb_HWiNFOSharedMemory, Path=IsChecked}">
+                                            <DockPanel DockPanel.Dock="Top" HorizontalAlignment="Center">
+                                                <StackPanel DockPanel.Dock="Left" Margin="0,0,5,0">
+                                                    <GroupBox Header="{DynamicResource LOCGameActivityGpuUsage}" Height="100" Width="250">
+                                                        <Grid>
+                                                            <Label Content="{DynamicResource LOCGameActivitySensorsID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,5,0,0" />
+                                                            <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.HWiNFO_gpu_sensorsID}" VerticalAlignment="Top" Width="100" Margin="110,5,0,0" />
+
+                                                            <Label Content="{DynamicResource LOCGameActivityElementID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,35,0,0" />
+                                                            <TextBox HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="{Binding Settings.HWiNFO_gpu_elementID}" VerticalAlignment="Top" Width="100" Margin="110,35,0,0" />
+                                                        </Grid>
+                                                    </GroupBox>
+                                                </StackPanel>
+
+                                                <StackPanel DockPanel.Dock="Right" Margin="5,0,0,0">
+                                                    <GroupBox Header="{DynamicResource LOCGameActivityFps}" Height="100" Width="250">
+                                                        <Grid>
+                                                            <Label Content="{DynamicResource LOCGameActivitySensorsID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,5,0,0" />
+                                                            <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.HWiNFO_fps_sensorsID}" VerticalAlignment="Top" Width="100" Margin="110,5,0,0" />
+
+                                                            <Label Content="{DynamicResource LOCGameActivityElementID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,35,0,0" />
+                                                            <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.HWiNFO_fps_elementID}" VerticalAlignment="Top" Width="100" Margin="110,35,0,0" />
+                                                        </Grid>
+                                                    </GroupBox>
+                                                </StackPanel>
+                                            </DockPanel>
+
+                                            <DockPanel DockPanel.Dock="Top" HorizontalAlignment="Center" Margin="0,10,0,0">
+                                                <StackPanel DockPanel.Dock="Left" Margin="0,0,5,0">
+                                                    <GroupBox Header="{DynamicResource LOCGameActivityGpuTemp}" Height="100" Width="250">
+                                                        <Grid>
+                                                            <Label Content="{DynamicResource LOCGameActivitySensorsID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,5,0,0" />
+                                                            <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.HWiNFO_gpuT_sensorsID}" VerticalAlignment="Top" Width="100" Margin="110,5,0,0" />
+
+                                                            <Label Content="{DynamicResource LOCGameActivityElementID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,35,0,0" />
+                                                            <TextBox HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="{Binding Settings.HWiNFO_gpuT_elementID}" VerticalAlignment="Top" Width="100" Margin="110,35,0,0" />
+                                                        </Grid>
+                                                    </GroupBox>
+                                                </StackPanel>
+
+                                                <StackPanel DockPanel.Dock="Right" Margin="5,0,0,0">
+                                                    <GroupBox Header="{DynamicResource LOCGameActivityCpuTemp}" Height="100" Width="250">
+                                                        <Grid>
+                                                            <Label Content="{DynamicResource LOCGameActivitySensorsID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,5,0,0" />
+                                                            <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.HWiNFO_cpuT_sensorsID}" VerticalAlignment="Top" Width="100" Margin="110,5,0,0" />
+
+                                                            <Label Content="{DynamicResource LOCGameActivityElementID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,35,0,0" />
+                                                            <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.HWiNFO_cpuT_elementID}" VerticalAlignment="Top" Width="100" Margin="110,35,0,0" />
+                                                        </Grid>
+                                                    </GroupBox>
+                                                </StackPanel>
+                                            </DockPanel>
+
+                                            <DockPanel DockPanel.Dock="Top" HorizontalAlignment="Center" Margin="0,10,0,0">
+                                                <StackPanel DockPanel.Dock="Left" Margin="0,0,5,0">
+                                                    <GroupBox Header="{DynamicResource LOCGameActivityGpuPower}" Height="100" Width="250">
+                                                        <Grid>
+                                                            <Label Content="{DynamicResource LOCGameActivitySensorsID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,5,0,0" />
+                                                            <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.HWiNFO_gpuP_sensorsID}" VerticalAlignment="Top" Width="100" Margin="110,5,0,0" />
+
+                                                            <Label Content="{DynamicResource LOCGameActivityElementID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,35,0,0" />
+                                                            <TextBox HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="{Binding Settings.HWiNFO_gpuP_elementID}" VerticalAlignment="Top" Width="100" Margin="110,35,0,0" />
+                                                        </Grid>
+                                                    </GroupBox>
+                                                </StackPanel>
+
+                                                <StackPanel DockPanel.Dock="Right" Margin="5,0,0,0">
+                                                    <GroupBox Header="{DynamicResource LOCGameActivityCpuPower}" Height="100" Width="250">
+                                                        <Grid>
+                                                            <Label Content="{DynamicResource LOCGameActivitySensorsID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,5,0,0" />
+                                                            <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.HWiNFO_cpuP_sensorsID}" VerticalAlignment="Top" Width="100" Margin="110,5,0,0" />
+
+                                                            <Label Content="{DynamicResource LOCGameActivityElementID}" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,35,0,0" />
+                                                            <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.HWiNFO_cpuP_elementID}" VerticalAlignment="Top" Width="100" Margin="110,35,0,0" />
+                                                        </Grid>
+                                                    </GroupBox>
+                                                </StackPanel>
+                                            </DockPanel>
+                                        </DockPanel>
+                                    </Expander.Content>
+                                </Expander>
+                            </Border>
+
+                            <!-- HWiNFO Gadget -->
+                            <Border Margin="0,0,0,10"
+                                    Background="{DynamicResource CommonToolTipBackgroundBrush}" CornerRadius="{DynamicResource CommonToolTipCornerRadius}"
+                                    BorderThickness="{DynamicResource CommonToolTipBorderThickness}" Padding="{DynamicResource CommonToolTipPadding}"
+                                    BorderBrush="{DynamicResource CommonToolTipBorderBrush}">
+                                <Expander>
+                                    <Expander.Style>
+                                        <Style TargetType="{x:Type Expander}" BasedOn="{StaticResource {x:Type Expander}}">
+                                            <Setter Property="Background" Value="Transparent" />
+                                        </Style>
+                                    </Expander.Style>
+
+                                    <Expander.Header>
+                                        <DockPanel>
+                                            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                                                <Border Background="#27ae60" CornerRadius="3" Padding="5,2" Margin="3,0">
+                                                    <TextBlock Text="FPS" Foreground="White" FontSize="10" FontWeight="Bold" />
+                                                </Border>
+                                                <Border Background="#e74c3c" CornerRadius="3" Padding="5,2" Margin="3,0">
+                                                    <TextBlock Text="CPU" Foreground="White" FontSize="10" FontWeight="Bold" />
+                                                </Border>
+                                                <Border Background="#3498db" CornerRadius="3" Padding="5,2" Margin="3,0">
+                                                    <TextBlock Text="GPU" Foreground="White" FontSize="10" FontWeight="Bold" />
+                                                </Border>
+                                                <Border Background="#f39c12" CornerRadius="3" Padding="5,2" Margin="3,0">
+                                                    <TextBlock Text="TEMP" Foreground="White" FontSize="10" FontWeight="Bold" />
+                                                </Border>
+                                                <Border Background="#e67e22" CornerRadius="3" Padding="5,2" Margin="3,0">
+                                                    <TextBlock Text="PWR" Foreground="White" FontSize="10" FontWeight="Bold" />
+                                                </Border>
+                                                <TextBlock Foreground="#3498db" FontWeight="Bold" Margin="10,0,0,0" VerticalAlignment="Center">
+                                                    <Run Text="ℹ " />
+                                                    <Run Text="{DynamicResource LOCGameActivityExternalApp}" />
+                                                </TextBlock>
+                                            </StackPanel>
+
+                                            <CheckBox DockPanel.Dock="Left" IsChecked="{Binding Settings.UseHWiNFOGadget}" 
+                                                      Name="cb_HWiNFOGadget"
+                                                      VerticalAlignment="Center" Margin="0,0,15,0">
+                                                <TextBlock FontWeight="Bold" FontSize="13">
+                                                    <Hyperlink NavigateUri="https://www.hwinfo.com"
+                                                               Command="{x:Static pcmd2:GlobalCommands.NavigateUrlCommand}"
+                                                               CommandParameter="{Binding NavigateUri, RelativeSource={RelativeSource Self}}">
+                                                        <Run Text="HWiNFO (Gadget)" />
+                                                    </Hyperlink>
+                                                </TextBlock>
+                                            </CheckBox>
+                                        </DockPanel>
+                                    </Expander.Header>
+
+                                    <Expander.Content>
+                                        <DockPanel Margin="10" IsEnabled="{Binding ElementName=cb_HWiNFOGadget, Path=IsChecked}">
+                                            <DockPanel DockPanel.Dock="Top" HorizontalAlignment="Center">
+                                                <StackPanel DockPanel.Dock="Left" Margin="0,0,5,0">
+                                                    <GroupBox Header="{DynamicResource LOCGameActivityGpuUsage}" Width="250">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="25" />
+                                                                <ColumnDefinition Width="auto" />
+                                                                <ColumnDefinition Width="10" />
+                                                                <ColumnDefinition Width="50" />
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <Label Grid.Column="1" Content="{DynamicResource LOCGameActivityIndex}" />
+                                                            <playnitecontrols:NumericBox Grid.Column="3" LongValue="{Binding Settings.HWiNFO_gpu_index}" MinLongValue="0" />
+                                                        </Grid>
+                                                    </GroupBox>
+                                                </StackPanel>
+
+                                                <StackPanel DockPanel.Dock="Right" Margin="5,0,0,0">
+                                                    <GroupBox Header="{DynamicResource LOCGameActivityFps}" Width="250">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="25" />
+                                                                <ColumnDefinition Width="auto" />
+                                                                <ColumnDefinition Width="10" />
+                                                                <ColumnDefinition Width="50" />
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <Label Grid.Column="1" Content="{DynamicResource LOCGameActivityIndex}" />
+                                                            <playnitecontrols:NumericBox Grid.Column="3" LongValue="{Binding Settings.HWiNFO_fps_index}" MinLongValue="0" />
+                                                        </Grid>
+                                                    </GroupBox>
+                                                </StackPanel>
+                                            </DockPanel>
+
+                                            <DockPanel DockPanel.Dock="Top" HorizontalAlignment="Center" Margin="0,10,0,0">
+                                                <StackPanel DockPanel.Dock="Left" Margin="0,0,5,0">
+                                                    <GroupBox Header="{DynamicResource LOCGameActivityGpuTemp}" Width="250">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="25" />
+                                                                <ColumnDefinition Width="auto" />
+                                                                <ColumnDefinition Width="10" />
+                                                                <ColumnDefinition Width="50" />
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <Label Grid.Column="1" Content="{DynamicResource LOCGameActivityIndex}" />
+                                                            <playnitecontrols:NumericBox Grid.Column="3" LongValue="{Binding Settings.HWiNFO_gpuT_index}" MinLongValue="0" />
+                                                        </Grid>
+                                                    </GroupBox>
+                                                </StackPanel>
+
+                                                <StackPanel DockPanel.Dock="Right" Margin="5,0,0,0">
+                                                    <GroupBox Header="{DynamicResource LOCGameActivityCpuTemp}" Width="250">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="25" />
+                                                                <ColumnDefinition Width="auto" />
+                                                                <ColumnDefinition Width="10" />
+                                                                <ColumnDefinition Width="50" />
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <Label Grid.Column="1" Content="{DynamicResource LOCGameActivityIndex}" />
+                                                            <playnitecontrols:NumericBox Grid.Column="3" LongValue="{Binding Settings.HWiNFO_cpuT_index}" MinLongValue="0" />
+                                                        </Grid>
+                                                    </GroupBox>
+                                                </StackPanel>
+                                            </DockPanel>
+
+                                            <DockPanel DockPanel.Dock="Top" HorizontalAlignment="Center" Margin="0,10,0,0">
+                                                <StackPanel DockPanel.Dock="Left" Margin="0,0,5,0">
+                                                    <GroupBox Header="{DynamicResource LOCGameActivityGpuPower}" Width="250">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="25" />
+                                                                <ColumnDefinition Width="auto" />
+                                                                <ColumnDefinition Width="10" />
+                                                                <ColumnDefinition Width="50" />
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <Label Grid.Column="1" Content="{DynamicResource LOCGameActivityIndex}" />
+                                                            <playnitecontrols:NumericBox Grid.Column="3" LongValue="{Binding Settings.HWiNFO_gpuP_index}" MinLongValue="0" />
+                                                        </Grid>
+                                                    </GroupBox>
+                                                </StackPanel>
+
+                                                <StackPanel DockPanel.Dock="Right" Margin="5,0,0,0">
+                                                    <GroupBox Header="{DynamicResource LOCGameActivityCpuPower}" Width="250">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="25" />
+                                                                <ColumnDefinition Width="auto" />
+                                                                <ColumnDefinition Width="10" />
+                                                                <ColumnDefinition Width="50" />
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <Label Grid.Column="1" Content="{DynamicResource LOCGameActivityIndex}" />
+                                                            <playnitecontrols:NumericBox Grid.Column="3" LongValue="{Binding Settings.HWiNFO_cpuP_index}" MinLongValue="0" />
+                                                        </Grid>
+                                                    </GroupBox>
+                                                </StackPanel>
+                                            </DockPanel>
+                                        </DockPanel>
+                                    </Expander.Content>
+                                </Expander>
+                            </Border>
+
+                            <!-- WMI Provider -->
+                            <Border Margin="0,0,0,10"
+                                    Background="{DynamicResource CommonToolTipBackgroundBrush}" CornerRadius="{DynamicResource CommonToolTipCornerRadius}"
+                                    BorderThickness="{DynamicResource CommonToolTipBorderThickness}" Padding="{DynamicResource CommonToolTipPadding}"
+                                    BorderBrush="{DynamicResource CommonToolTipBorderBrush}">
+                                <Expander AttachedProperties:ExpanderAttachedProperties.HideExpanderArrow="True">
+                                    <Expander.Style>
+                                        <Style TargetType="{x:Type Expander}" BasedOn="{StaticResource {x:Type Expander}}">
+                                            <Setter Property="Background" Value="Transparent" />
+                                        </Style>
+                                    </Expander.Style>
+
+                                    <Expander.Header>
+                                        <DockPanel>
+                                            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                                                <Border Background="#e74c3c" CornerRadius="3" Padding="5,2" Margin="3,0">
+                                                    <TextBlock Text="CPU" Foreground="White" FontSize="10" FontWeight="Bold" />
+                                                </Border>
+                                                <Border Background="#3498db" CornerRadius="3" Padding="5,2" Margin="3,0">
+                                                    <TextBlock Text="GPU" Foreground="White" FontSize="10" FontWeight="Bold" />
+                                                </Border>
+                                                <Border Background="#9b59b6" CornerRadius="3" Padding="5,2" Margin="3,0">
+                                                    <TextBlock Text="RAM" Foreground="White" FontSize="10" FontWeight="Bold" />
+                                                </Border>
+                                                <TextBlock Foreground="Green" FontWeight="Bold" Margin="10,0,0,0" VerticalAlignment="Center">
+                                                    <Run Text="✓ " />
+                                                    <Run Text="{DynamicResource LOCGameActivityBuiltIn}" />
+                                                </TextBlock>
+                                            </StackPanel>
+                                    
+                                            <CheckBox DockPanel.Dock="Left" Name="cbUseWMI" IsChecked="{Binding Settings.UseWMI}" 
+                                                      VerticalAlignment="Center" Margin="0,0,15,0">
+                                                <TextBlock FontWeight="Bold" FontSize="13">
+                                                    <Run Text="Windows Management Instrumentation (WMI)" />
+                                                </TextBlock>
+                                            </CheckBox>
+                                        </DockPanel>
+                                    </Expander.Header>
+                                </Expander>
+                            </Border>
+
+                            <!-- Performance Counter Provider -->
+                            <Border Margin="0,0,0,0"
+                                    Background="{DynamicResource CommonToolTipBackgroundBrush}" CornerRadius="{DynamicResource CommonToolTipCornerRadius}"
+                                    BorderThickness="{DynamicResource CommonToolTipBorderThickness}" Padding="{DynamicResource CommonToolTipPadding}"
+                                    BorderBrush="{DynamicResource CommonToolTipBorderBrush}">
+                                <Expander AttachedProperties:ExpanderAttachedProperties.HideExpanderArrow="True">
+                                    <Expander.Style>
+                                        <Style TargetType="{x:Type Expander}" BasedOn="{StaticResource {x:Type Expander}}">
+                                            <Setter Property="Background" Value="Transparent" />
+                                        </Style>
+                                    </Expander.Style>
+
+                                    <Expander.Header>
+                                        <DockPanel>
+                                            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                                                <Border Background="#e74c3c" CornerRadius="3" Padding="5,2" Margin="3,0">
+                                                    <TextBlock Text="CPU" Foreground="White" FontSize="10" FontWeight="Bold" />
+                                                </Border>
+                                                <Border Background="#9b59b6" CornerRadius="3" Padding="5,2" Margin="3,0">
+                                                    <TextBlock Text="RAM" Foreground="White" FontSize="10" FontWeight="Bold" />
+                                                </Border>
+                                                <TextBlock Foreground="Green" FontWeight="Bold" Margin="10,0,0,0" VerticalAlignment="Center">
+                                                    <Run Text="✓ " />
+                                                    <Run Text="{DynamicResource LOCGameActivityBuiltIn}" />
+                                                </TextBlock>
+                                            </StackPanel>
+
+                                            <CheckBox DockPanel.Dock="Left" Name="cbUsePerformanceCounter" IsChecked="{Binding Settings.UsePerformanceCounter}" 
+                                                      VerticalAlignment="Center" Margin="0,0,15,0">
+                                                <TextBlock FontWeight="Bold" FontSize="13">
+                                                    <Run Text="Windows Performance Counters" />
+                                                </TextBlock>
+                                            </CheckBox>
+                                        </DockPanel>
+                                    </Expander.Header>
+                                </Expander>
+                            </Border>
+                        </StackPanel>
+                    </ScrollViewer>
+                </DockPanel>
+
+                <!-- Warning Section -->
+                <DockPanel DockPanel.Dock="Bottom" Margin="0,25,0,0">
+                    <StackPanel DockPanel.Dock="Top">
+                        <CheckBox x:Name="cbWarning" IsChecked="{Binding Settings.EnableWarning}">
+                            <CheckBox.ToolTip>
+                                <ToolTip Content="{DynamicResource LOCGameActivityEnableWarningToolTip}"></ToolTip>
+                            </CheckBox.ToolTip>
+                            <Label Content="{DynamicResource LOCGameActivityActiveWarning}" />
+                        </CheckBox>
+                    </StackPanel>
+
+                    <StackPanel DockPanel.Dock="Bottom" Margin="0,10,0,0" Orientation="Horizontal" 
+                           IsEnabled="{Binding ElementName=cbWarning, Path=IsChecked, TargetNullValue=false}">
+
+                        <StackPanel Orientation="Horizontal" Margin="15,0,0,0">
+                            <Label Content="{DynamicResource LOCGameActivityMaxCpuUsage}" Height="23" Width="135" />
+                            <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.MaxCpuUsage}" Width="35" PreviewTextInput="NumberValidationTextBox" MaxLength="3" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="15,0,0,0">
+                            <Label Content="{DynamicResource LOCGameActivityMaxGpuUsage}" Height="23" Width="135" />
+                            <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.MaxGpuUsage}" Width="35" PreviewTextInput="NumberValidationTextBox" MaxLength="3" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="15,0,0,0">
+                            <Label Content="{DynamicResource LOCGameActivityMaxRamUsage}" Height="23" Width="135" />
+                            <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.MaxRamUsage}" Width="35" PreviewTextInput="NumberValidationTextBox" MaxLength="3" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel DockPanel.Dock="Bottom" Margin="0,10,0,0" Orientation="Horizontal" 
+                           IsEnabled="{Binding ElementName=cbWarning, Path=IsChecked, TargetNullValue=false}">
+
+                        <StackPanel Orientation="Horizontal" Margin="15,0,0,0">
+                            <Label Content="{DynamicResource LOCGameActivityMaxCpuTemp}" Height="23" Width="135" />
+                            <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.MaxCpuTemp}" Width="35" PreviewTextInput="NumberValidationTextBox" MaxLength="3" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="15,0,0,0">
+                            <Label Content="{DynamicResource LOCGameActivityMaxGpuTemp}" Height="23" Width="135" />
+                            <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.MaxGpuTemp}" Width="35" PreviewTextInput="NumberValidationTextBox" MaxLength="3" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="15,0,0,0">
+                            <Label Content="{DynamicResource LOCGameActivityMinFps}" Height="23" Width="135" />
+                            <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.MinFps}" Width="35" PreviewTextInput="NumberValidationTextBox" MaxLength="3" />
+                        </StackPanel>
+                    </StackPanel>
+                </DockPanel>
+            </DockPanel>
         </TabItem>
     </TabControl>
 </UserControl>

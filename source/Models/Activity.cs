@@ -4,6 +4,7 @@ using CommonPluginsShared;
 using System;
 using System.Collections.Generic;
 using GameActivity.Services;
+using CommonPluginsShared.SystemInfo;
 
 namespace GameActivity.Models
 {
@@ -89,7 +90,7 @@ namespace GameActivity.Models
 					return new SystemConfiguration();
 				}
 
-				List<SystemConfiguration> configurations = PluginDatabase?.LocalSystem?.GetConfigurations();
+				List<SystemConfiguration> configurations = PluginDatabase?.SystemConfigurationManager?.GetConfigurations();
 
 				// Return default configuration if configurations list is null or index is out of range
 				if (configurations == null || IdConfiguration >= configurations.Count)

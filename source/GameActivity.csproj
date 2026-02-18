@@ -86,12 +86,6 @@
     <Reference Include="MoreLinq, Version=3.3.2.0, Culture=neutral, PublicKeyToken=384d532d7e88985d, processorArchitecture=MSIL">
       <HintPath>packages\morelinq.3.3.2\lib\net451\MoreLinq.dll</HintPath>
     </Reference>
-    <Reference Include="MSIAfterburnerNET.Common, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\MSIAfterburnerNET.Common.1.0.2\lib\net462\MSIAfterburnerNET.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="MSIAfterburnerNET.HM, Version=1.0.7.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\MSIAfterburnerNET.HM.1.0.7\lib\net462\MSIAfterburnerNET.HM.dll</HintPath>
-    </Reference>
     <Reference Include="Playnite.SDK, Version=6.14.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\PlayniteSDK.6.14.0\lib\net462\Playnite.SDK.dll</HintPath>
       <Private>False</Private>
@@ -211,13 +205,25 @@
       <DependentUpon>TransfertData.xaml</DependentUpon>
     </Compile>
     <Compile Include="Services\ActivityDatabase.cs" />
+    <Compile Include="Services\GameActivityMonitoring.cs" />
     <Compile Include="Services\GameActivityStats.cs" />
     <Compile Include="Services\GameActivityTopPanelItem.cs" />
     <Compile Include="Services\GameActivityViewSidebar.cs" />
-    <Compile Include="Services\LibreHardware.cs" />
-    <Compile Include="Services\PerfCounter.cs" />
-    <Compile Include="Services\UpdateVisitorLibreHardware.cs" />
-    <Compile Include="Services\UpdateVisitorOpenHardware.cs" />
+    <Compile Include="Services\HardwareMonitoring\Core\MonitoringConfiguration.cs" />
+    <Compile Include="Services\HardwareMonitoring\Core\HardwareDataAggregator.cs" />
+    <Compile Include="Services\HardwareMonitoring\Core\IHardwareDataProvider.cs" />
+    <Compile Include="Services\HardwareMonitoring\Models\HardwareMetrics.cs" />
+    <Compile Include="Services\HardwareMonitoring\Models\MetricType.cs" />
+    <Compile Include="Services\HardwareMonitoring\Models\ProviderCapabilities.cs" />
+    <Compile Include="Services\HardwareMonitoring\Core\BaseHardwareProvider.cs" />
+    <Compile Include="Services\HardwareMonitoring\Providers\HWiNFOProvider.cs" />
+    <Compile Include="Services\HardwareMonitoring\Providers\LibreHardwareProvider.cs" />
+    <Compile Include="Services\HardwareMonitoring\Providers\PerformanceCounterProvider.cs" />
+    <Compile Include="Services\HardwareMonitoring\Providers\RivaTunerProvider.cs" />
+    <Compile Include="Services\HardwareMonitoring\Providers\WMIProvider.cs" />
+    <Compile Include="Services\HardwareMonitoring\Utilities\MetricsValidator.cs" />
+    <Compile Include="Services\HardwareMonitoring\Utilities\MonitoringDiagnostics.cs" />
+    <Compile Include="Services\HardwareMonitoring\Utilities\ProviderHealthMonitor.cs" />
     <Compile Include="Views\GameActivityAddTime.xaml.cs">
       <DependentUpon>GameActivityAddTime.xaml</DependentUpon>
     </Compile>
@@ -565,9 +571,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\OpenHardwareMonitorLib.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="playnite-plugincommon\CommonPluginsResources\CommonPluginsResources.csproj">
       <Project>{4effe926-9c64-4750-a399-f344710edc09}</Project>
       <Name>CommonPluginsResources</Name>
@@ -586,9 +589,6 @@
     <None Include="Resources\command-line.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\LibreHardwareMonitorLib.dll" />
   </ItemGroup>
   <Import Project="playnite-plugincommon\CommonPluginsShared\CommonPluginsShared.projitems" Label="Shared" />
   <Import Project="playnite-plugincommon\CommonPlayniteShared\CommonPlayniteShared.projitems" Label="Shared" />

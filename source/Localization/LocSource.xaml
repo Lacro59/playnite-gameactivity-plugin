@@ -114,6 +114,9 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivitySetVariatorLog">Set log variator</sys:String>
     <sys:String x:Key="LOCGameActivityRecentActivityWeek">Number of weeks for recent activity</sys:String>
 
+    <sys:String x:Key="LOCGameActivityExternalApp">External App</sys:String>
+    <sys:String x:Key="LOCGameActivityBuiltIn">Built-in</sys:String>
+
     <!-- GameActivityViewSingle -->
 
     <sys:String x:Key="LOCGameActivityRecentActivity">Recent activity</sys:String>
