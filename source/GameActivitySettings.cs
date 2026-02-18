@@ -286,6 +286,7 @@ namespace GameActivity
 			get
 			{
 				return EnableLogging && (
+					UseMsiAfterburner ||
 					UseRivaTuner ||
 					UseLibreHardware ||
 					UseHWiNFOSharedMemory ||
@@ -343,14 +344,6 @@ namespace GameActivity
 			// LoadPluginSettings returns null if not saved data is available.
 			Settings = savedSettings ?? new GameActivitySettings();
 
-			// Migration: Convert old MSI Afterburner setting to RivaTuner
-			if (Settings.UseMsiAfterburner && !Settings.UseRivaTuner)
-			{
-				Settings.UseRivaTuner = true;
-				Settings.UseMsiAfterburner = false;
-				logger.Info("Migrated MSI Afterburner setting to RivaTuner");
-			}
-
 			// Ensure default values for new settings
 			ApplyDefaultsForNewSettings();
 		}
@@ -369,13 +362,6 @@ namespace GameActivity
 			if (Settings.MetricsCacheDurationMs == 0)
 			{
 				Settings.MetricsCacheDurationMs = 500;
-			}
-
-			// Enable RivaTuner by default for new installations if no provider is enabled
-			if (!Settings.HasAnyMonitoringProviderEnabled && Settings.EnableLogging)
-			{
-				Settings.UseRivaTuner = true;
-				logger.Info("Enabled RivaTuner by default for new installation");
 			}
 		}
 

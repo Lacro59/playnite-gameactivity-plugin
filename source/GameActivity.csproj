@@ -218,6 +218,7 @@
     <Compile Include="Services\HardwareMonitoring\Core\BaseHardwareProvider.cs" />
     <Compile Include="Services\HardwareMonitoring\Providers\HWiNFOProvider.cs" />
     <Compile Include="Services\HardwareMonitoring\Providers\LibreHardwareProvider.cs" />
+    <Compile Include="Services\HardwareMonitoring\Providers\MsiAfterburnerProvider.cs" />
     <Compile Include="Services\HardwareMonitoring\Providers\PerformanceCounterProvider.cs" />
     <Compile Include="Services\HardwareMonitoring\Providers\RivaTunerProvider.cs" />
     <Compile Include="Services\HardwareMonitoring\Providers\WMIProvider.cs" />

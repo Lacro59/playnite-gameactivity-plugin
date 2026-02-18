@@ -80,12 +80,14 @@ namespace GameActivity.Services
                         _diagnostics.LogDiagnostics();
 
                         ValidateExternalDependencies();
-                        NotifyFailedProviders();
                     }
                     else
                     {
                         Logger.Warn("No hardware monitoring providers available");
                     }
+
+
+                    NotifyFailedProviders();
                 }
                 catch (Exception ex)
                 {
@@ -118,6 +120,14 @@ namespace GameActivity.Services
                     }
                     return new LibreHardwareProvider(remoteIp);
                 }, "LibreHardware");
+            }
+
+            if (PluginDatabase.PluginSettings.Settings.UseMsiAfterburner)
+            {
+                TryRegisterProvider(() =>
+                {
+					return new MsiAfterburnerProvider();
+				}, "MsiAfterburner");
             }
 
             if (PluginDatabase.PluginSettings.Settings.UseHWiNFOSharedMemory)
@@ -722,18 +732,27 @@ namespace GameActivity.Services
                         return null;
                     }
                     return ResourceProvider.GetString("LOCGameActivityNotificationHWiNFO")
-                           ?? "HWiNFO is not running";
+                           ?? "HWiNFO is not running.";
+
+                case "MsiAfterburner":
+                    if (IsProcessRunning("MSIAfterburner"))
+                    {
+                        return null;
+                    }
+                    return ResourceProvider.GetString("LOCGameActivityNotificationMSIAfterBurner")
+                           ?? "MSI AfterBurner is not running.";
 
                 case "RivaTuner":
                     if (IsProcessRunning("RTSS"))
                     {
                         return null;
                     }
-                    return ResourceProvider.GetString("LOCGameActivityNotificationMSIAfterBurner")
-                           ?? "RivaTuner Statistics Server (RTSS) is not running";
+                    return ResourceProvider.GetString("LOCGameActivityNotificationRivaTuner")
+                           ?? "RivaTuner Statistics Server (RTSS) is not running.";
 
                 case "LibreHardware":
-                    return "LibreHardware Monitor is not accessible";
+                    return ResourceProvider.GetString("LOCGameActivityNotificationLibreHardware")
+                           ?? "LibreHardware Monitor remote server is not accessible.";
 
                 default:
                     return null;
