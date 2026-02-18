@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
@@ -23,6 +21,11 @@ using Playnite.SDK.Plugins;
 
 namespace GameActivity.Services
 {
+    /// <summary>
+    /// Manages the lifecycle of hardware monitoring during game sessions.
+    /// Handles provider registration, per-game timers, metric logging,
+    /// warning detection, session backup, and user notifications.
+    /// </summary>
     public class GameActivityMonitoring
     {
         private static readonly ILogger Logger = LogManager.GetLogger();
@@ -34,100 +37,92 @@ namespace GameActivity.Services
         private ProviderHealthMonitor _healthMonitor;
         private MonitoringDiagnostics _diagnostics;
 
-        private List<RunningActivity> _runningActivities = new List<RunningActivity>();
+        private readonly List<RunningActivity> _runningActivities = new List<RunningActivity>();
 
         public GameActivityMonitoring(GenericPlugin plugin)
         {
             Plugin = plugin;
         }
 
+        #region Initialization
+
         /// <summary>
-        /// Initialize the monitoring system
+        /// Initializes the hardware monitoring system asynchronously to avoid blocking the UI thread.
+        /// Registers configured providers, runs diagnostics, validates external dependencies,
+        /// and notifies the user of any provider that failed to initialize.
         /// </summary>
         public void InitializeMonitoring()
         {
             Logger.Info("Initializing hardware monitoring system...");
 
-            try
+            Task.Run(() =>
             {
-                var config = new MonitoringConfiguration
+                try
                 {
-                    MaxFailuresBeforeFallback = 5,
-                    CacheDurationMs = 500,
-                    EnableAutoFallback = true,
-                };
+                    var config = new MonitoringConfiguration
+                    {
+                        MaxFailuresBeforeFallback = 5,
+                        CacheDurationMs = 500,
+                        EnableAutoFallback = true,
+                    };
 
-                _hardwareMonitor = new HardwareDataAggregator(config);
-                RegisterProviders();
+                    _hardwareMonitor = new HardwareDataAggregator(config);
+                    RegisterProviders();
 
-                if (_hardwareMonitor.Initialize())
-                {
-                    Logger.Info("Hardware monitoring initialized successfully");
+                    if (_hardwareMonitor.Initialize())
+                    {
+                        Logger.Info("Hardware monitoring initialized successfully");
 
-                    _healthMonitor = new ProviderHealthMonitor(_hardwareMonitor);
-                    _diagnostics = new MonitoringDiagnostics(_hardwareMonitor);
+                        _healthMonitor = new ProviderHealthMonitor(_hardwareMonitor);
+                        _diagnostics = new MonitoringDiagnostics(_hardwareMonitor);
 
-                    _diagnostics.LogDiagnostics();
+                        // LogDiagnostics can be slow; already in background thread
+                        _diagnostics.LogDiagnostics();
 
-                    ValidateExternalDependencies();
+                        ValidateExternalDependencies();
+                        NotifyFailedProviders();
+                    }
+                    else
+                    {
+                        Logger.Warn("No hardware monitoring providers available");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    Logger.Warn("No hardware monitoring providers available");
+                    Logger.Error(ex, "Failed to initialize hardware monitoring");
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex, "Failed to initialize hardware monitoring");
-            }
+            });
         }
 
         /// <summary>
-        /// Register all available hardware monitoring providers
+        /// Registers all hardware providers enabled in plugin settings.
+        /// Each provider is registered independently so a failure on one does not block others.
         /// </summary>
         private void RegisterProviders()
         {
             if (PluginDatabase.PluginSettings.Settings.UseRivaTuner)
             {
-                try
-                {
-                    _hardwareMonitor.RegisterProvider(new RivaTunerProvider());
-                    Logger.Info("Registered RivaTuner provider");
-                }
-                catch (Exception ex)
-                {
-                    Logger.Warn(ex, "Failed to register RivaTuner provider");
-                }
+                TryRegisterProvider(() => new RivaTunerProvider(), "RivaTuner");
             }
 
             if (PluginDatabase.PluginSettings.Settings.UseLibreHardware)
             {
-                try
+                TryRegisterProvider(() =>
                 {
                     string remoteIp = null;
-                    if (
-                        PluginDatabase.PluginSettings.Settings.WithRemoteServerWeb
-                        && !string.IsNullOrEmpty(
-                            PluginDatabase.PluginSettings.Settings.IpRemoteServerWeb
-                        )
-                    )
+                    if (PluginDatabase.PluginSettings.Settings.WithRemoteServerWeb
+                        && !string.IsNullOrEmpty(PluginDatabase.PluginSettings.Settings.IpRemoteServerWeb))
                     {
                         remoteIp = PluginDatabase.PluginSettings.Settings.IpRemoteServerWeb;
                         Logger.Info($"Using LibreHardware remote server: {remoteIp}");
                     }
-
-                    _hardwareMonitor.RegisterProvider(new LibreHardwareProvider(remoteIp));
-                    Logger.Info("Registered LibreHardware provider");
-                }
-                catch (Exception ex)
-                {
-                    Logger.Warn(ex, "Failed to register LibreHardware provider");
-                }
+                    return new LibreHardwareProvider(remoteIp);
+                }, "LibreHardware");
             }
 
             if (PluginDatabase.PluginSettings.Settings.UseHWiNFOSharedMemory)
             {
-                try
+                TryRegisterProvider(() =>
                 {
                     var hwinfoConfig = new HWiNFOConfiguration
                     {
@@ -135,75 +130,101 @@ namespace GameActivity.Services
                         FPS_ElementID = PluginDatabase.PluginSettings.Settings.HWiNFO_fps_elementID,
                         GPU_SensorsID = PluginDatabase.PluginSettings.Settings.HWiNFO_gpu_sensorsID,
                         GPU_ElementID = PluginDatabase.PluginSettings.Settings.HWiNFO_gpu_elementID,
-                        GPUT_SensorsID = PluginDatabase
-                            .PluginSettings
-                            .Settings
-                            .HWiNFO_gpuT_sensorsID,
-                        GPUT_ElementID = PluginDatabase
-                            .PluginSettings
-                            .Settings
-                            .HWiNFO_gpuT_elementID,
-                        CPUT_SensorsID = PluginDatabase
-                            .PluginSettings
-                            .Settings
-                            .HWiNFO_cpuT_sensorsID,
-                        CPUT_ElementID = PluginDatabase
-                            .PluginSettings
-                            .Settings
-                            .HWiNFO_cpuT_elementID,
-                        GPUP_SensorsID = PluginDatabase
-                            .PluginSettings
-                            .Settings
-                            .HWiNFO_gpuP_sensorsID,
-                        GPUP_ElementID = PluginDatabase
-                            .PluginSettings
-                            .Settings
-                            .HWiNFO_gpuP_elementID,
-                        CPUP_SensorsID = PluginDatabase
-                            .PluginSettings
-                            .Settings
-                            .HWiNFO_cpuP_sensorsID,
-                        CPUP_ElementID = PluginDatabase
-                            .PluginSettings
-                            .Settings
-                            .HWiNFO_cpuP_elementID,
+                        GPUT_SensorsID = PluginDatabase.PluginSettings.Settings.HWiNFO_gpuT_sensorsID,
+                        GPUT_ElementID = PluginDatabase.PluginSettings.Settings.HWiNFO_gpuT_elementID,
+                        CPUT_SensorsID = PluginDatabase.PluginSettings.Settings.HWiNFO_cpuT_sensorsID,
+                        CPUT_ElementID = PluginDatabase.PluginSettings.Settings.HWiNFO_cpuT_elementID,
+                        GPUP_SensorsID = PluginDatabase.PluginSettings.Settings.HWiNFO_gpuP_sensorsID,
+                        GPUP_ElementID = PluginDatabase.PluginSettings.Settings.HWiNFO_gpuP_elementID,
+                        CPUP_SensorsID = PluginDatabase.PluginSettings.Settings.HWiNFO_cpuP_sensorsID,
+                        CPUP_ElementID = PluginDatabase.PluginSettings.Settings.HWiNFO_cpuP_elementID,
                     };
-
-                    _hardwareMonitor.RegisterProvider(new HWiNFOProvider(hwinfoConfig));
-                    Logger.Info("Registered HWiNFO provider");
-                }
-                catch (Exception ex)
-                {
-                    Logger.Warn(ex, "Failed to register HWiNFO provider");
-                }
+                    return new HWiNFOProvider(hwinfoConfig);
+                }, "HWiNFO");
             }
 
             if (PluginDatabase.PluginSettings.Settings.UseWMI)
             {
-                try
-                {
-                    _hardwareMonitor.RegisterProvider(new WMIProvider());
-                    Logger.Info("Registered WMI provider");
-                }
-                catch (Exception ex)
-                {
-                    Logger.Warn(ex, "Failed to register WMI provider");
-                }
+                TryRegisterProvider(() => new WMIProvider(), "WMI");
             }
 
             if (PluginDatabase.PluginSettings.Settings.UsePerformanceCounter)
             {
-                try
-                {
-                    _hardwareMonitor.RegisterProvider(new PerformanceCounterProvider());
-                    Logger.Info("Registered PerformanceCounter provider");
-                }
-                catch (Exception ex)
-                {
-                    Logger.Warn(ex, "Failed to register PerformanceCounter provider");
-                }
+                TryRegisterProvider(() => new PerformanceCounterProvider(), "PerformanceCounter");
             }
         }
+
+        /// <summary>
+        /// Safely instantiates and registers a provider via a factory delegate.
+        /// Logs a warning if the factory or registration throws.
+        /// </summary>
+        /// <param name="factory">Factory that creates the provider instance.</param>
+        /// <param name="providerLabel">Human-readable name used in log messages.</param>
+        private void TryRegisterProvider(Func<IHardwareDataProvider> factory, string providerLabel)
+        {
+            try
+            {
+                _hardwareMonitor.RegisterProvider(factory());
+                Logger.Info($"Registered {providerLabel} provider");
+            }
+            catch (Exception ex)
+            {
+                Logger.Warn(ex, $"Failed to register {providerLabel} provider");
+            }
+        }
+
+        /// <summary>
+        /// Sends a Playnite error notification for each provider that is unavailable after initialization.
+        /// Clicking the notification opens the plugin settings view.
+        /// Must be called after <see cref="HardwareDataAggregator.Initialize"/>.
+        /// </summary>
+        private void NotifyFailedProviders()
+        {
+            if (_hardwareMonitor == null)
+            {
+                return;
+            }
+
+            var providerStatus = _hardwareMonitor.GetProviderStatus();
+
+            foreach (var kvp in providerStatus)
+            {
+                string providerName = kvp.Key;
+                ProviderStatus status = kvp.Value;
+
+                if (status.IsAvailable)
+                {
+                    continue;
+                }
+
+                string baseMessage = string.Format(
+                    ResourceProvider.GetString("LOCGameActivityProviderError") ?? "{0} provider failed to initialize.",
+                    providerName
+                );
+
+                // Append root cause if available to help the user diagnose the issue
+                string fullMessage = string.IsNullOrEmpty(status.LastErrorMessage)
+                    ? baseMessage
+                    : $"{baseMessage} {status.LastErrorMessage}";
+
+                Logger.Warn($"Provider unavailable: {providerName} — {status.LastErrorMessage}");
+
+                // Dispatch to UI thread; notifications API must be called from the main thread
+                API.Instance.MainView.UIDispatcher.BeginInvoke((Action)delegate
+                {
+                    API.Instance.Notifications.Add(
+                        new NotificationMessage(
+                            $"{PluginDatabase.PluginName}-provider-error-{providerName}",
+                            $"{PluginDatabase.PluginName}{Environment.NewLine}{fullMessage}",
+                            NotificationType.Error,
+                            () => Plugin.OpenSettingsView()
+                        )
+                    );
+                });
+            }
+        }
+
+        #endregion
 
         #region RunningActivity management
 
@@ -227,15 +248,15 @@ namespace GameActivity.Services
         #region Timer functions
 
         /// <summary>
-        /// Start the monitoring timer
+        /// Starts the metric logging timer for a game session.
+        /// The interval is driven by <see cref="PluginSettings.TimeIntervalLogging"/> (in minutes).
         /// </summary>
         public void DataLogging_start(Guid id)
         {
             Logger.Info($"DataLogging_start - {API.Instance.Database.Games.Get(id)?.Name} - {id}");
+
             RunningActivity runningActivity = _runningActivities.Find(x => x.Id == id);
-            runningActivity.Timer = new System.Timers.Timer(
-                PluginDatabase.PluginSettings.Settings.TimeIntervalLogging * 60000
-            )
+            runningActivity.Timer = new Timer(PluginDatabase.PluginSettings.Settings.TimeIntervalLogging * 60000)
             {
                 AutoReset = true,
             };
@@ -244,43 +265,36 @@ namespace GameActivity.Services
         }
 
         /// <summary>
-        /// Stop the monitoring timer
+        /// Stops the metric logging timer and shows any accumulated warnings to the user.
+        /// Also logs provider health recommendations collected during the session.
         /// </summary>
         public void DataLogging_stop(Guid id)
         {
             Logger.Info($"DataLogging_stop - {API.Instance.Database.Games.Get(id)?.Name} - {id}");
+
             RunningActivity runningActivity = _runningActivities.Find(x => x.Id == id);
 
-            if (
-                runningActivity.WarningsMessage.Count != 0
-                && API.Instance.ApplicationInfo.Mode == ApplicationMode.Desktop
-            )
+            if (runningActivity.WarningsMessage.Count != 0
+                && API.Instance.ApplicationInfo.Mode == ApplicationMode.Desktop)
             {
                 try
                 {
-                    API.Instance.MainView.UIDispatcher.BeginInvoke(
-                        (Action)
-                            delegate
-                            {
-                                WarningsDialogs ViewExtension = new WarningsDialogs(
-                                    runningActivity.WarningsMessage
-                                );
-                                Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(
-                                    ResourceProvider.GetString("LOCGameActivityWarningCaption"),
-                                    ViewExtension
-                                );
-                                windowExtension.ShowDialog();
-                            }
-                    );
+                    API.Instance.MainView.UIDispatcher.BeginInvoke((Action)delegate
+                    {
+                        WarningsDialogs viewExtension = new WarningsDialogs(runningActivity.WarningsMessage);
+                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(
+                            ResourceProvider.GetString("LOCGameActivityWarningCaption"),
+                            viewExtension
+                        );
+                        windowExtension.ShowDialog();
+                    });
                 }
                 catch (Exception ex)
                 {
                     Common.LogError(
-                        ex,
-                        false,
+                        ex, false,
                         $"Error on show WarningsMessage - {API.Instance.Database.Games.Get(id)?.Name} - {id}",
-                        true,
-                        PluginDatabase.PluginName
+                        true, PluginDatabase.PluginName
                     );
                 }
             }
@@ -303,7 +317,8 @@ namespace GameActivity.Services
         }
 
         /// <summary>
-        /// Event executed with the timer
+        /// Periodic timer callback: collects hardware metrics, validates them,
+        /// checks warning thresholds, and appends a data point to the session log.
         /// </summary>
         private void OnTimedEvent(object source, ElapsedEventArgs e, Guid id)
         {
@@ -330,16 +345,13 @@ namespace GameActivity.Services
 
                 _healthMonitor?.RecordCycle(metrics);
 
-                Common.LogDebug(
-                    true,
-                    $"Metrics sources - "
-                        + $"FPS:{metrics.Source.FPS} CPU:{metrics.Source.CpuUsage} "
-                        + $"GPU:{metrics.Source.GpuUsage} RAM:{metrics.Source.RamUsage}"
-                );
+                Common.LogDebug(true,
+                    $"Metrics sources - FPS:{metrics.Source.FPS} CPU:{metrics.Source.CpuUsage} " +
+                    $"GPU:{metrics.Source.GpuUsage} RAM:{metrics.Source.RamUsage}");
 
                 CheckAndRecordWarnings(runningActivity, metrics);
 
-                ActivityDetailsData activityDetailsData = new ActivityDetailsData
+                var activityDetailsData = new ActivityDetailsData
                 {
                     Datelog = DateTime.UtcNow,
                     FPS = metrics.FPS ?? 0,
@@ -358,10 +370,7 @@ namespace GameActivity.Services
                     );
                 activitiesDetailsData.Add(activityDetailsData);
 
-                Common.LogDebug(
-                    true,
-                    $"Logged metrics: {Serialization.ToJson(activityDetailsData)}"
-                );
+                Common.LogDebug(true, $"Logged metrics: {Serialization.ToJson(activityDetailsData)}");
             }
             catch (Exception ex)
             {
@@ -370,12 +379,10 @@ namespace GameActivity.Services
         }
 
         /// <summary>
-        /// Check metrics against warning thresholds
+        /// Compares current metrics against user-configured thresholds.
+        /// Appends a <see cref="WarningData"/> entry if any threshold is breached.
         /// </summary>
-        private void CheckAndRecordWarnings(
-            RunningActivity runningActivity,
-            HardwareMetrics metrics
-        )
+        private void CheckAndRecordWarnings(RunningActivity runningActivity, HardwareMetrics metrics)
         {
             if (!PluginDatabase.PluginSettings.Settings.EnableWarning)
             {
@@ -384,109 +391,93 @@ namespace GameActivity.Services
 
             var settings = PluginDatabase.PluginSettings.Settings;
 
-            bool warningMinFps =
-                settings.MinFps != 0 && metrics.FPS.HasValue && settings.MinFps >= metrics.FPS;
-            bool warningMaxCpuTemp =
-                settings.MaxCpuTemp != 0
-                && metrics.CpuTemperature.HasValue
-                && settings.MaxCpuTemp <= metrics.CpuTemperature;
-            bool warningMaxGpuTemp =
-                settings.MaxGpuTemp != 0
-                && metrics.GpuTemperature.HasValue
-                && settings.MaxGpuTemp <= metrics.GpuTemperature;
-            bool warningMaxCpuUsage =
-                settings.MaxCpuUsage != 0
-                && metrics.CpuUsage.HasValue
-                && settings.MaxCpuUsage <= metrics.CpuUsage;
-            bool warningMaxGpuUsage =
-                settings.MaxGpuUsage != 0
-                && metrics.GpuUsage.HasValue
-                && settings.MaxGpuUsage <= metrics.GpuUsage;
-            bool warningMaxRamUsage =
-                settings.MaxRamUsage != 0
-                && metrics.RamUsage.HasValue
-                && settings.MaxRamUsage <= metrics.RamUsage;
+            bool warningMinFps = settings.MinFps != 0 && metrics.FPS.HasValue && settings.MinFps >= metrics.FPS;
+            bool warningMaxCpuTemp = settings.MaxCpuTemp != 0 && metrics.CpuTemperature.HasValue && settings.MaxCpuTemp <= metrics.CpuTemperature;
+            bool warningMaxGpuTemp = settings.MaxGpuTemp != 0 && metrics.GpuTemperature.HasValue && settings.MaxGpuTemp <= metrics.GpuTemperature;
+            bool warningMaxCpuUsage = settings.MaxCpuUsage != 0 && metrics.CpuUsage.HasValue && settings.MaxCpuUsage <= metrics.CpuUsage;
+            bool warningMaxGpuUsage = settings.MaxGpuUsage != 0 && metrics.GpuUsage.HasValue && settings.MaxGpuUsage <= metrics.GpuUsage;
+            bool warningMaxRamUsage = settings.MaxRamUsage != 0 && metrics.RamUsage.HasValue && settings.MaxRamUsage <= metrics.RamUsage;
 
-            if (
-                warningMinFps
-                || warningMaxCpuTemp
-                || warningMaxGpuTemp
-                || warningMaxCpuUsage
-                || warningMaxGpuUsage
-                || warningMaxRamUsage
-            )
+            if (!warningMinFps && !warningMaxCpuTemp && !warningMaxGpuTemp
+                && !warningMaxCpuUsage && !warningMaxGpuUsage && !warningMaxRamUsage)
             {
-                WarningData message = new WarningData
-                {
-                    At =
-                        ResourceProvider.GetString("LOCGameActivityWarningAt")
-                        + " "
-                        + DateTime.Now.ToString("HH:mm"),
-                    FpsData = new Data
-                    {
-                        Name = ResourceProvider.GetString("LOCGameActivityFps"),
-                        Value = metrics.FPS ?? 0,
-                        IsWarm = warningMinFps,
-                    },
-                    CpuTempData = new Data
-                    {
-                        Name = ResourceProvider.GetString("LOCGameActivityCpuTemp"),
-                        Value = metrics.CpuTemperature ?? 0,
-                        IsWarm = warningMaxCpuTemp,
-                    },
-                    GpuTempData = new Data
-                    {
-                        Name = ResourceProvider.GetString("LOCGameActivityGpuTemp"),
-                        Value = metrics.GpuTemperature ?? 0,
-                        IsWarm = warningMaxGpuTemp,
-                    },
-                    CpuUsageData = new Data
-                    {
-                        Name = ResourceProvider.GetString("LOCGameActivityCpuUsage"),
-                        Value = metrics.CpuUsage ?? 0,
-                        IsWarm = warningMaxCpuUsage,
-                    },
-                    GpuUsageData = new Data
-                    {
-                        Name = ResourceProvider.GetString("LOCGameActivityGpuUsage"),
-                        Value = metrics.GpuUsage ?? 0,
-                        IsWarm = warningMaxGpuUsage,
-                    },
-                    RamUsageData = new Data
-                    {
-                        Name = ResourceProvider.GetString("LOCGameActivityRamUsage"),
-                        Value = metrics.RamUsage ?? 0,
-                        IsWarm = warningMaxRamUsage,
-                    },
-                };
-
-                runningActivity.WarningsMessage.Add(message);
+                return;
             }
+
+            var message = new WarningData
+            {
+                At = ResourceProvider.GetString("LOCGameActivityWarningAt") + " " + DateTime.Now.ToString("HH:mm"),
+                FpsData = new Data
+                {
+                    Name = ResourceProvider.GetString("LOCGameActivityFps"),
+                    Value = metrics.FPS ?? 0,
+                    IsWarm = warningMinFps,
+                },
+                CpuTempData = new Data
+                {
+                    Name = ResourceProvider.GetString("LOCGameActivityCpuTemp"),
+                    Value = metrics.CpuTemperature ?? 0,
+                    IsWarm = warningMaxCpuTemp,
+                },
+                GpuTempData = new Data
+                {
+                    Name = ResourceProvider.GetString("LOCGameActivityGpuTemp"),
+                    Value = metrics.GpuTemperature ?? 0,
+                    IsWarm = warningMaxGpuTemp,
+                },
+                CpuUsageData = new Data
+                {
+                    Name = ResourceProvider.GetString("LOCGameActivityCpuUsage"),
+                    Value = metrics.CpuUsage ?? 0,
+                    IsWarm = warningMaxCpuUsage,
+                },
+                GpuUsageData = new Data
+                {
+                    Name = ResourceProvider.GetString("LOCGameActivityGpuUsage"),
+                    Value = metrics.GpuUsage ?? 0,
+                    IsWarm = warningMaxGpuUsage,
+                },
+                RamUsageData = new Data
+                {
+                    Name = ResourceProvider.GetString("LOCGameActivityRamUsage"),
+                    Value = metrics.RamUsage ?? 0,
+                    IsWarm = warningMaxRamUsage,
+                },
+            };
+
+            runningActivity.WarningsMessage.Add(message);
         }
 
         #endregion
 
         #region Backup functions
 
+        /// <summary>
+        /// Starts the session backup timer. The backup fires slightly after the logging timer
+        /// to ensure fresh data is captured (logging interval + 10 s).
+        /// </summary>
         public void DataBackup_start(Guid id)
         {
             RunningActivity runningActivity = _runningActivities.Find(x => x.Id == id);
             if (runningActivity == null)
             {
-                Logger.Warn(
-                    $"No runningActivity find for {API.Instance.Database.Games.Get(id)?.Name} - {id}"
-                );
+                Logger.Warn($"No runningActivity find for {API.Instance.Database.Games.Get(id)?.Name} - {id}");
                 return;
             }
 
-            runningActivity.TimerBackup = new System.Timers.Timer(
+            runningActivity.TimerBackup = new Timer(
                 PluginDatabase.PluginSettings.Settings.TimeIntervalLogging * 60000 + 10000
-            );
-            runningActivity.TimerBackup.AutoReset = true;
+            )
+            {
+                AutoReset = true,
+            };
             runningActivity.TimerBackup.Elapsed += (sender, e) => OnTimedBackupEvent(sender, e, id);
             runningActivity.TimerBackup.Start();
         }
 
+        /// <summary>
+        /// Stops the session backup timer.
+        /// </summary>
         public void DataBackup_stop(Guid id)
         {
             RunningActivity runningActivity = _runningActivities.Find(x => x.Id == id);
@@ -500,14 +491,17 @@ namespace GameActivity.Services
             runningActivity.TimerBackup.Stop();
         }
 
+        /// <summary>
+        /// Periodic backup callback: writes current session state to a JSON file
+        /// so it can be recovered if the application crashes.
+        /// </summary>
         private void OnTimedBackupEvent(object source, ElapsedEventArgs e, Guid id)
         {
             try
             {
                 RunningActivity runningActivity = _runningActivities.Find(x => x.Id == id);
 
-                ulong elapsedSeconds = (ulong)
-                    (DateTime.UtcNow - runningActivity.ActivityBackup.DateSession).TotalSeconds;
+                ulong elapsedSeconds = (ulong)(DateTime.UtcNow - runningActivity.ActivityBackup.DateSession).TotalSeconds;
                 runningActivity.ActivityBackup.ElapsedSeconds = elapsedSeconds;
                 runningActivity.ActivityBackup.ItemsDetailsDatas =
                     runningActivity.GameActivitiesLog.ItemsDetails.Get(
@@ -518,10 +512,7 @@ namespace GameActivity.Services
                     PluginDatabase.Paths.PluginUserDataPath,
                     $"SaveSession_{id}.json"
                 );
-                FileSystem.WriteStringToFileSafe(
-                    pathFileBackup,
-                    Serialization.ToJson(runningActivity.ActivityBackup)
-                );
+                FileSystem.WriteStringToFileSafe(pathFileBackup, Serialization.ToJson(runningActivity.ActivityBackup));
             }
             catch (Exception ex)
             {
@@ -529,102 +520,76 @@ namespace GameActivity.Services
             }
         }
 
+        /// <summary>
+        /// Scans for orphaned backup files (from crashed sessions) and notifies the user
+        /// via Playnite notifications so they can review or discard the data.
+        /// Runs asynchronously to avoid blocking startup.
+        /// </summary>
         public void CheckBackup()
         {
             try
             {
                 Task.Run(() =>
                 {
-                    Parallel.ForEach(
-                        Directory.EnumerateFiles(
-                            PluginDatabase.Paths.PluginUserDataPath,
-                            "SaveSession_*.json"
-                        ),
+                    System.Threading.Tasks.Parallel.ForEach(
+                        Directory.EnumerateFiles(PluginDatabase.Paths.PluginUserDataPath, "SaveSession_*.json"),
                         (objectFile) =>
                         {
-                            SpinWait.SpinUntil(() => PluginDatabase.IsLoaded, -1);
+                            System.Threading.SpinWait.SpinUntil(() => PluginDatabase.IsLoaded, -1);
 
-                            Serialization.TryFromJsonFile(
-                                objectFile,
-                                out ActivityBackup backupData
-                            );
-                            if (backupData != null)
+                            Serialization.TryFromJsonFile(objectFile, out ActivityBackup backupData);
+                            if (backupData == null)
                             {
-                                Game game = API.Instance.Database.Games.Get(backupData.Id);
-                                if (game == null)
-                                {
-                                    try
-                                    {
-                                        FileSystem.DeleteFileSafe(objectFile);
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        Common.LogError(ex, false, true, PluginDatabase.PluginName);
-                                    }
-                                }
-                                else
-                                {
-                                    API.Instance.MainView.UIDispatcher.BeginInvoke(
-                                        (Action)
-                                            delegate
-                                            {
-                                                API.Instance.Notifications.Add(
-                                                    new NotificationMessage(
-                                                        $"{PluginDatabase.PluginName}-backup-{Path.GetFileNameWithoutExtension(objectFile)}",
-                                                        PluginDatabase.PluginName
-                                                            + Environment.NewLine
-                                                            + string.Format(
-                                                                ResourceProvider.GetString(
-                                                                    "LOCGaBackupExist"
-                                                                ),
-                                                                backupData.Name
-                                                            ),
-                                                        NotificationType.Info,
-                                                        () =>
-                                                        {
-                                                            try
-                                                            {
-                                                                WindowOptions windowOptions =
-                                                                    new WindowOptions
-                                                                    {
-                                                                        ShowMinimizeButton = false,
-                                                                        ShowMaximizeButton = false,
-                                                                        ShowCloseButton = true,
-                                                                        CanBeResizable = true,
-                                                                        Height = 350,
-                                                                        Width = 800,
-                                                                    };
-
-                                                                GameActivityBackup ViewExtension =
-                                                                    new GameActivityBackup(
-                                                                        backupData
-                                                                    );
-                                                                Window windowExtension =
-                                                                    PlayniteUiHelper.CreateExtensionWindow(
-                                                                        ResourceProvider.GetString(
-                                                                            "LOCGaBackupDataInfo"
-                                                                        ),
-                                                                        ViewExtension,
-                                                                        windowOptions
-                                                                    );
-                                                                windowExtension.ShowDialog();
-                                                            }
-                                                            catch (Exception ex)
-                                                            {
-                                                                Common.LogError(
-                                                                    ex,
-                                                                    false,
-                                                                    true,
-                                                                    PluginDatabase.PluginName
-                                                                );
-                                                            }
-                                                        }
-                                                    )
-                                                );
-                                            }
-                                    );
-                                }
+                                return;
                             }
+
+                            Game game = API.Instance.Database.Games.Get(backupData.Id);
+                            if (game == null)
+                            {
+                                // Game no longer exists; discard the orphaned backup
+                                try { FileSystem.DeleteFileSafe(objectFile); }
+                                catch (Exception ex) { Common.LogError(ex, false, true, PluginDatabase.PluginName); }
+                                return;
+                            }
+
+                            API.Instance.MainView.UIDispatcher.BeginInvoke((Action)delegate
+                            {
+                                API.Instance.Notifications.Add(
+                                    new NotificationMessage(
+                                        $"{PluginDatabase.PluginName}-backup-{Path.GetFileNameWithoutExtension(objectFile)}",
+                                        PluginDatabase.PluginName + Environment.NewLine +
+                                        string.Format(ResourceProvider.GetString("LOCGaBackupExist"), backupData.Name),
+                                        NotificationType.Info,
+                                        () =>
+                                        {
+                                            try
+                                            {
+                                                WindowOptions windowOptions = new WindowOptions
+                                                {
+                                                    ShowMinimizeButton = false,
+                                                    ShowMaximizeButton = false,
+                                                    ShowCloseButton = true,
+                                                    CanBeResizable = true,
+                                                    Height = 350,
+                                                    Width = 800,
+                                                };
+
+                                                GameActivityBackup viewExtension = new GameActivityBackup(backupData);
+                                                Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(
+                                                    ResourceProvider.GetString("LOCGaBackupDataInfo"),
+                                                    viewExtension,
+                                                    windowOptions
+                                                );
+                                                windowExtension.ShowDialog();
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                Common.LogError(ex, false, true, PluginDatabase.PluginName);
+                                            }
+                                        }
+                                    )
+                                );
+                            });
                         }
                     );
                 });
@@ -637,10 +602,12 @@ namespace GameActivity.Services
 
         #endregion
 
-        #region External Dependencies Validation
+        #region External dependencies validation
 
         /// <summary>
-        /// Validate that required external applications are running
+        /// Checks whether required external applications (e.g. RTSS, HWiNFO) are running
+        /// for providers that depend on them, and logs warnings for any that are missing.
+        /// Only runs when logging is enabled.
         /// </summary>
         private void ValidateExternalDependencies()
         {
@@ -666,15 +633,16 @@ namespace GameActivity.Services
 
             if (missingDependencies.Count > 0)
             {
-                Logger.Warn(
-                    $"Missing external dependencies: {string.Join(", ", missingDependencies)}"
-                );
+                Logger.Warn($"Missing external dependencies: {string.Join(", ", missingDependencies)}");
             }
         }
 
         /// <summary>
-        /// Check if monitoring can proceed and optionally notify user
+        /// Checks whether at least one monitoring provider is operational.
+        /// Optionally notifies the user if none are available.
         /// </summary>
+        /// <param name="withNotification">If true, sends a Playnite notification when no provider is available.</param>
+        /// <returns>True if monitoring can proceed; false otherwise.</returns>
         public bool CheckMonitoringReadiness(bool withNotification = false)
         {
             if (!PluginDatabase.PluginSettings.Settings.EnableLogging)
@@ -689,9 +657,7 @@ namespace GameActivity.Services
             }
 
             var providerStatus = _hardwareMonitor.GetProviderStatus();
-            bool hasAvailableProvider = providerStatus.Any(p =>
-                p.Value.IsAvailable && !p.Value.IsInFallback
-            );
+            bool hasAvailableProvider = providerStatus.Any(p => p.Value.IsAvailable && !p.Value.IsInFallback);
 
             if (!hasAvailableProvider)
             {
@@ -708,7 +674,8 @@ namespace GameActivity.Services
         }
 
         /// <summary>
-        /// Notify user about missing dependencies
+        /// Sends a single aggregated Playnite error notification listing all providers
+        /// that require an external application which is not currently running.
         /// </summary>
         private void NotifyMissingDependencies(Dictionary<string, ProviderStatus> providerStatus)
         {
@@ -731,12 +698,10 @@ namespace GameActivity.Services
                 return;
             }
 
-            string notificationMessage = string.Join(Environment.NewLine, missingDeps);
-
             API.Instance.Notifications.Add(
                 new NotificationMessage(
                     $"{PluginDatabase.PluginName}-monitoring-dependencies",
-                    $"{PluginDatabase.PluginName}{Environment.NewLine}{notificationMessage}",
+                    $"{PluginDatabase.PluginName}{Environment.NewLine}{string.Join(Environment.NewLine, missingDeps)}",
                     NotificationType.Error,
                     () => Plugin.OpenSettingsView()
                 )
@@ -744,7 +709,8 @@ namespace GameActivity.Services
         }
 
         /// <summary>
-        /// Get user-friendly message for missing dependency
+        /// Returns a localised user-facing message when a provider's required external process
+        /// is not detected. Returns null if the process is running or no message applies.
         /// </summary>
         private string GetMissingDependencyMessage(string providerName)
         {
@@ -756,7 +722,7 @@ namespace GameActivity.Services
                         return null;
                     }
                     return ResourceProvider.GetString("LOCGameActivityNotificationHWiNFO")
-                        ?? "HWiNFO is not running";
+                           ?? "HWiNFO is not running";
 
                 case "RivaTuner":
                     if (IsProcessRunning("RTSS"))
@@ -764,7 +730,7 @@ namespace GameActivity.Services
                         return null;
                     }
                     return ResourceProvider.GetString("LOCGameActivityNotificationMSIAfterBurner")
-                        ?? "RivaTuner Statistics Server (RTSS) is not running";
+                           ?? "RivaTuner Statistics Server (RTSS) is not running";
 
                 case "LibreHardware":
                     return "LibreHardware Monitor is not accessible";
@@ -775,14 +741,13 @@ namespace GameActivity.Services
         }
 
         /// <summary>
-        /// Check if a process is running
+        /// Returns true if at least one process with the given name is currently running.
         /// </summary>
         private bool IsProcessRunning(string processName)
         {
             try
             {
-                Process[] processes = Process.GetProcessesByName(processName);
-                return processes.Length > 0;
+                return Process.GetProcessesByName(processName).Length > 0;
             }
             catch (Exception ex)
             {
@@ -793,10 +758,10 @@ namespace GameActivity.Services
 
         #endregion
 
-        #region Additional utility methods
+        #region Diagnostics and utilities
 
         /// <summary>
-        /// Get current monitoring status for UI display
+        /// Returns a brief human-readable summary of active providers for UI display.
         /// </summary>
         public string GetMonitoringStatus()
         {
@@ -813,7 +778,7 @@ namespace GameActivity.Services
         }
 
         /// <summary>
-        /// Manually trigger diagnostics (useful for settings/debug UI)
+        /// Generates a full text diagnostic report. Useful for settings/debug UI.
         /// </summary>
         public string RunDiagnostics()
         {
@@ -826,7 +791,7 @@ namespace GameActivity.Services
         }
 
         /// <summary>
-        /// Reset a specific provider
+        /// Resets a provider by name, clearing its failure and fallback state.
         /// </summary>
         public void ResetProvider(string providerName)
         {
@@ -836,24 +801,11 @@ namespace GameActivity.Services
 
         #endregion
 
-        #region Cleanup
-
-        public void Dispose()
-        {
-            Logger.Info("Disposing monitoring system");
-
-            _hardwareMonitor?.Dispose();
-            _hardwareMonitor = null;
-            _healthMonitor = null;
-            _diagnostics = null;
-        }
-
-        #endregion
-
         #region Tests
 
         /// <summary>
-        /// Test method to retrieve current hardware metrics with detailed diagnostics
+        /// Retrieves current hardware metrics with verbose diagnostic logging.
+        /// Intended for debugging via the settings UI; not called during normal game sessions.
         /// </summary>
         public HardwareMetrics GetCurrentMetrics()
         {
@@ -873,59 +825,59 @@ namespace GameActivity.Services
                 foreach (var status in providerStatus)
                 {
                     Logger.Info(
-                        $"Provider: {status.Key} | Available: {status.Value.IsAvailable} | "
-                            + $"Fallback: {status.Value.IsInFallback} | "
-                            + $"Failures: {status.Value.FailureCount}"
+                        $"Provider: {status.Key} | Available: {status.Value.IsAvailable} | " +
+                        $"Fallback: {status.Value.IsInFallback} | Failures: {status.Value.FailureCount}"
                     );
 
                     var caps = status.Value.Capabilities;
                     Logger.Info(
-                        $"  Capabilities - FPS: {caps.Supports(MetricType.FPS)}, CPU: {caps.Supports(MetricType.CpuUsage)}, "
-                            + $"GPU: {caps.Supports(MetricType.GpuUsage)}, RAM: {caps.Supports(MetricType.RamUsage)}, "
-                            + $"CPU Temps: {caps.Supports(MetricType.CpuTemperature)}, GPU Temps: {caps.Supports(MetricType.GpuTemperature)}, "
-                            + $"CPU Power: {caps.Supports(MetricType.CpuPower)}, GPU Power: {caps.Supports(MetricType.GpuPower)}"
+                        $"  Capabilities - FPS: {caps.Supports(MetricType.FPS)}, CPU: {caps.Supports(MetricType.CpuUsage)}, " +
+                        $"GPU: {caps.Supports(MetricType.GpuUsage)}, RAM: {caps.Supports(MetricType.RamUsage)}, " +
+                        $"CPU Temps: {caps.Supports(MetricType.CpuTemperature)}, GPU Temps: {caps.Supports(MetricType.GpuTemperature)}, " +
+                        $"CPU Power: {caps.Supports(MetricType.CpuPower)}, GPU Power: {caps.Supports(MetricType.GpuPower)}"
                     );
                 }
 
                 Logger.Info("=== Testing Individual Providers ===");
-                foreach (
-                    var provider in _hardwareMonitor
-                        .GetType()
-                        .GetField(
-                            "_providers",
-                            System.Reflection.BindingFlags.NonPublic
-                                | System.Reflection.BindingFlags.Instance
-                        )
-                        ?.GetValue(_hardwareMonitor) as List<IHardwareDataProvider>
-                        ?? new List<IHardwareDataProvider>()
-                )
+
+                // Access internal provider list via reflection for diagnostic purposes only
+                var providers = _hardwareMonitor
+                    .GetType()
+                    .GetField("_providers", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                    ?.GetValue(_hardwareMonitor) as List<IHardwareDataProvider>
+                    ?? new List<IHardwareDataProvider>();
+
+                foreach (var provider in providers)
                 {
-                    if (provider.IsAvailable)
+                    if (!provider.IsAvailable)
                     {
-                        try
+                        continue;
+                    }
+
+                    try
+                    {
+                        Logger.Info($"Testing provider: {provider.ProviderName}");
+                        var testMetrics = provider.GetMetrics();
+                        if (testMetrics != null)
                         {
-                            Logger.Info($"Testing provider: {provider.ProviderName}");
-                            var testMetrics = provider.GetMetrics();
-                            if (testMetrics != null)
-                            {
-                                Logger.Info(
-                                    $"  {provider.ProviderName} returned - FPS:{testMetrics.FPS?.ToString() ?? "NULL"}, "
-                                        + $"CPU:{testMetrics.CpuUsage?.ToString() ?? "NULL"}%, "
-                                        + $"GPU:{testMetrics.GpuUsage?.ToString() ?? "NULL"}%, "
-                                        + $"RAM:{testMetrics.RamUsage?.ToString() ?? "NULL"}%, "
-                                        + $"CPUT:{testMetrics.CpuTemperature?.ToString() ?? "NULL"}°C, "
-                                        + $"GPUT:{testMetrics.GpuTemperature?.ToString() ?? "NULL"}°C"
-                                );
-                            }
-                            else
-                            {
-                                Logger.Warn($"  {provider.ProviderName} returned NULL metrics");
-                            }
+                            Logger.Info(
+                                $"  {provider.ProviderName} returned - " +
+                                $"FPS:{testMetrics.FPS?.ToString() ?? "NULL"}, " +
+                                $"CPU:{testMetrics.CpuUsage?.ToString() ?? "NULL"}%, " +
+                                $"GPU:{testMetrics.GpuUsage?.ToString() ?? "NULL"}%, " +
+                                $"RAM:{testMetrics.RamUsage?.ToString() ?? "NULL"}%, " +
+                                $"CPUT:{testMetrics.CpuTemperature?.ToString() ?? "NULL"}°C, " +
+                                $"GPUT:{testMetrics.GpuTemperature?.ToString() ?? "NULL"}°C"
+                            );
                         }
-                        catch (Exception ex)
+                        else
                         {
-                            Logger.Error(ex, $"  {provider.ProviderName} threw exception");
+                            Logger.Warn($"  {provider.ProviderName} returned NULL metrics");
                         }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Error(ex, $"  {provider.ProviderName} threw exception");
                     }
                 }
 
@@ -973,6 +925,23 @@ namespace GameActivity.Services
                 Logger.Error(ex, "Error retrieving metrics");
                 return new HardwareMetrics();
             }
+        }
+
+        #endregion
+
+        #region Cleanup
+
+        /// <summary>
+        /// Releases all monitoring resources. Should be called when the plugin is unloaded.
+        /// </summary>
+        public void Dispose()
+        {
+            Logger.Info("Disposing monitoring system");
+
+            _hardwareMonitor?.Dispose();
+            _hardwareMonitor = null;
+            _healthMonitor = null;
+            _diagnostics = null;
         }
 
         #endregion
