@@ -274,6 +274,7 @@ namespace GameActivity
                             ShowCloseButton = true,
                             CanBeResizable = true,
                             WidthPercent = 70,
+                            MaxWidth= 1500,
                             Height = 500
                         };
 

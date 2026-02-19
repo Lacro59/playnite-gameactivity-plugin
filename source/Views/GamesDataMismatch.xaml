@@ -257,7 +257,7 @@
                              ════════════════════════════════════════════════════ -->
 
                             <!-- Section label -->
-                            <GridViewColumn Width="80">
+                            <GridViewColumn Width="auto">
                                 <GridViewColumnHeader Content="{DynamicResource LOCGaDataMismatchSectionPlaynite}"
                                                   Style="{StaticResource PlayniteSectionHeaderStyle}"
                                                   Tag="NoSort" />

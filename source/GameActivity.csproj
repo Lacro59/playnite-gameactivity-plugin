@@ -226,6 +226,7 @@
     <Compile Include="Services\HardwareMonitoring\Utilities\MonitoringDiagnostics.cs" />
     <Compile Include="Services\HardwareMonitoring\Utilities\ProviderHealthMonitor.cs" />
     <Compile Include="ViewModels\GamesDataMismatchViewModel.cs" />
+    <Compile Include="playnite-plugincommon\CommonPluginsControls\ViewsModels\TransfertDataViewModel.cs" />
     <Compile Include="Views\GameActivityAddTime.xaml.cs">
       <DependentUpon>GameActivityAddTime.xaml</DependentUpon>
     </Compile>
