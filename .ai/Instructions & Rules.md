@@ -5,8 +5,24 @@
 - **Communication Style:** Direct, technical, and concise. No conversational filler or unnecessary apologies.
 - **Objective:** Production-ready, maintainable, and high-performance code for Playnite.
 
+---
+
+## ❓ Clarification & Decision Policy
+
+- **Ambiguity Handling:** If requirements are ambiguous, incomplete, contradictory, or technically unclear, request clarification before implementation.
+- **Missing Dependencies:** If a required file, interface, model, API contract, or configuration is missing, explicitly request it.
+- **Architectural Choices:** If multiple valid architectural approaches exist and the choice impacts structure, maintainability, or performance, briefly present the alternatives and request direction.
+- **No Hidden Assumptions:** Do not silently assume business logic, data structure, or workflow behavior.
+- **Explicit Assumptions:** If assumptions are strictly necessary to proceed, clearly state them before implementation.
+- **Scope Validation:** If the request exceeds defined constraints (framework version, C# version, plugin architecture), explicitly flag the conflict before proceeding.
+- **Partial Context:** If only partial code is provided, do not invent surrounding architecture. Request missing context when required for correctness.
+
+---
+
 ## 🌍 Language & Documentation
 - **Code & Docs:** All code elements, comments, and documentation (XML Doc, README) must be in **English**.
+
+---
 
 ## 📏 Naming Conventions (Standard C#)
 - **PascalCase:** Classes, Methods, Properties, Public Fields, and Enums.
@@ -14,6 +30,8 @@
 - **_camelCase:** Private fields (must start with an underscore).
 - **Interfaces:** Must always start with a capital "I" (e.g., `IGameProvider`).
 - **Meaningful Names:** Avoid abbreviations (use `userRepository` instead of `uRepo`).
+
+---
 
 ## ⚙️ Versions & Frameworks Specifications
 - **Target Framework:** .NET Framework 4.6.2 (C#).
@@ -27,6 +45,8 @@
     - No `nullable reference types` (C# 8.0 features).
     - No pattern matching enhancements beyond C# 7.0.
 - **Dependencies:** Ensure all NuGet packages are compatible with .NET Framework 4.6.2.
+
+---
 
 ## 🎮 Playnite Plugin Specifics
 
@@ -54,23 +74,7 @@
 - **Resources:** Access via `ResourceProvider.GetString("LOC_KEY")` for localization.
 - **Dialogs:** Use `IPlayniteAPI.Dialogs` for user notifications and input.
 
-### UI Development
-- **Framework:** WPF (XAML) for custom views and settings windows.
-- **Thread Safety:** Always check `Application.Current.Dispatcher.CheckAccess()` before UI operations.
-- **View Models:** Implement `INotifyPropertyChanged` for data binding.
-- **Resources:** Define styles in ResourceDictionary, reference Playnite themes when possible.
-
-## 📦 Plugin Manifest (extension.yaml)
-- **Required Fields:**
-    - `Id` (GUID format): Unique plugin identifier.
-    - `Name`: Display name.
-    - `Author`: Your name/organization.
-    - `Version`: Semantic versioning (e.g., 1.0.0).
-    - `Module`: DLL filename (must match assembly name).
-    - `Type`: `GenericPlugin`, `LibraryPlugin`, or `MetadataPlugin`.
-- **Optional Fields:**
-    - `Icon`: Plugin icon filename.
-    - `Links`: Project website, support, source repository.
+---
 
 ## 🧵 Threading & Asynchrony
 - **UI Thread Access:** Use `Application.Current.Dispatcher.Invoke()` or `InvokeAsync()` for UI updates.
@@ -78,6 +82,8 @@
 - **Background Work:** Use `Task.Run()` for CPU-bound operations.
 - **Blocking Calls:** **NEVER** block UI thread with `.Result` or `.Wait()`. Always use `await` or callbacks.
 - **Cancellation:** Use `CancellationToken` for long-running operations.
+
+---
 
 ## 🚀 Performance Guidelines
 - **Caching:**
@@ -95,6 +101,8 @@
     - Resize images before storing in Playnite database.
     - Use appropriate image formats (WebP for size, PNG for quality).
 
+---
+
 ## 🛠 Coding Standards
 - **Design Principles:** Follow SOLID principles and clean architecture.
 - **Typing:** Strict typing is mandatory. No `dynamic` unless absolutely necessary.
@@ -105,6 +113,8 @@
 - **Null Checks:** Always validate inputs and check for null before dereferencing.
 - **Async Methods:** Methods returning `Task` should have `Async` suffix (e.g., `LoadDataAsync()`).
 
+---
+
 ## 📊 Logging Best Practices
 - **Levels:**
     - `Debug`: Detailed diagnostic information (disabled in production).
@@ -113,6 +123,8 @@
     - `Error`: Error events that might still allow the application to continue.
 - **Exception Logging:** Always use `logger.Error(ex, "Context message")` to include stack traces.
 - **Sensitive Data:** Never log passwords, API keys, or personal user information.
+
+---
 
 ## 🧪 Testing
 - **Framework:** NUnit 3.x (compatible with .NET Framework 4.6.2).
@@ -124,124 +136,7 @@
     - Assert: Verify expected outcomes.
 - **Naming:** Use descriptive test names: `MethodName_Scenario_ExpectedBehavior`.
 
-## 🌐 Localization
-- **Resources:** Use XAML files (Playnite standard) for all user-facing strings.
-- **Structure:** 
-    - `Localization/LocSource.xaml` - Source file with all keys
-    - `Localization/{lang_code}.xaml` - Translation files (e.g., `en_US.xaml`, `fr_FR.xaml`)
-- **Naming:** Use `LOC_` prefix for localization keys (e.g., `LOC_PluginName`).
-- **Access:** Use `ResourceProvider.GetString("LOC_KEY")` via Playnite SDK.
-- **Fallback:** Always provide English (`LOCSource.xaml`) as default language.
-- **Shared Resources:** Check for generic keys in common files before creating new ones:
-    - `source/playnite-plugincommon/CommonPluginsResources/Localization/Common/LocSource.xaml`
-    - `source/playnite-plugincommon/CommonPluginsResources/ResourcesPlaynite/*.xaml`
-- **Translation Management:** Use Crowdin for community translations (see `crowdin.yml`).
-
-## 🌿 Version Control
-- **Commits:** Use Conventional Commits format:
-    - `feat:` New feature.
-    - `fix:` Bug fix.
-    - `docs:` Documentation changes.
-    - `refactor:` Code refactoring.
-    - `test:` Adding or updating tests.
-    - `chore:` Maintenance tasks.
-- **.gitignore:** Exclude `bin/`, `obj/`, `*.user`, `.vs/`, build artifacts.
-- **Branching:** Use feature branches, merge via pull requests.
-
-## 📁 Project Structure (Recommended)
-
-```
-playnite-myplugin/
-├── source/
-│   ├── MyPlugin.csproj
-│   ├── extension.yaml
-│   ├── icon.png
-│   ├── App.xaml                      # Global WPF resources
-│   ├── MyPlugin.cs                   # Main plugin class (inherits PluginExtended)
-│   ├── MyPluginSettings.cs           # Settings + ViewModel
-│   ├── Clients/                      # External API clients (if needed)
-│   │   └── ExternalApiClient.cs
-│   ├── Services/                     # Business logic
-│   │   ├── MyPluginDatabase.cs
-│   │   └── (SubFolder)/              # Group related services in subfolders
-│   ├── Models/                       # Data models
-│   │   └── PluginData.cs
-│   ├── Views/                        # XAML views
-│   │   ├── PluginGameView.xaml/.cs
-│   │   └── PluginSettingsView.xaml/.cs
-│   ├── ViewModels/                   # MVVM ViewModels
-│   │   └── PluginGameViewModel.cs
-│   ├── Controls/                     # Custom controls (if needed)
-│   │   └── CustomControl.xaml/.cs
-│   ├── Converters/                   # WPF value converters (if needed)
-│   │   └── MyConverter.cs
-│   ├── Localization/                 # Translations
-│   │   ├── LocSource.xaml
-│   │   ├── en_US.xaml
-│   │   └── ... (other languages)
-│   ├── playnite-plugincommon/        # Git submodule (shared library)
-│   │   ├── CommonPluginsControls/
-│   │   ├── CommonPluginsResources/
-│   │   ├── CommonPluginsShared/
-│   │   └── CommonPluginsStores/
-│   └── Properties/
-│       └── AssemblyInfo.cs
-├── build/
-│   └── build.ps1
-├── manifest/
-│   └── PluginName.yaml
-└── README.md
-```
-
-### 📂 Folder Organization
-
-- **Clients/** : Separate from Services/ for external API interactions (optional)
-- **Services/** : Business logic and data access. Use subfolders to group related services
-- **Converters/** : All IValueConverter implementations for WPF data binding (optional)
-- **Controls/** : Reusable custom UI controls (optional)
-- **playnite-plugincommon/** : Shared library between Lacro59 plugins (Git submodule)
-
-## 🏗 Lacro59 Plugin Architecture
-
-### Base Class Pattern
-- **Inheritance:** All plugins inherit from `PluginExtended<TSettings, TDatabase>`
-- **Settings:** Combine settings and ViewModel in one class (e.g., `MyPluginSettings`)
-- **Database:** Custom database class manages plugin-specific data caching
-
-### Shared Library (playnite-plugincommon)
-
-Common projects available via Git submodule:
-- **CommonPluginsShared** - Shared utilities (logging, HTTP, helpers)
-- **CommonPluginsControls** - Reusable UI controls
-- **CommonPluginsResources** - Common resources
-- **CommonPluginsStores** - Store integrations (Steam, Epic, etc.)
-- **CommonPlayniteShared** - Playnite extensions and helpers
-
-### Custom Elements Integration (Optional)
-
-To expose controls for Playnite theme integration:
-```csharp
-AddCustomElementSupport(new AddCustomElementSupportArgs
-{
-    ElementList = new List<string> { "PluginButton", "PluginViewItem" },
-    SourceName = "MyPlugin"
-});
-```
-
-Usage in themes:
-```xaml
-<ContentControl Content="{Binding ElementName=PART_HtmlDescription, Path=DataContext.PluginButton}" />
-```
-
-### Search Integration (Optional)
-
-Register a search provider accessible via prefix in Playnite search bar:
-```csharp
-Searches = new List<SearchSupport>
-{
-    new SearchSupport("prefix", "PluginName", new MyPluginSearch())
-};
-```
+---
 
 ## 📝 Response Rules
 1. **Code First:** Provide the code solution before any technical explanation.
@@ -250,12 +145,17 @@ Searches = new List<SearchSupport>
 4. **Comments:** Document only complex logic in English (avoid obvious comments).
 5. **Unit Tests:** Suggest unit test structures when relevant.
 6. **Complete Solutions:** Provide full, working code snippets (not partial fragments).
+7. **Clarification Compliance:** Follow the Clarification & Decision Policy before implementing.
+
+---
 
 ## 🚫 Out of Scope
 - No deprecated code (unless explicitly required by .NET 4.6.2 limitations).
 - No obvious comments (e.g., `i++ // increment`).
 - No "fluff" or repetitive greetings.
 - No placeholder code (`// TODO: implement`). Provide working implementations.
+
+---
 
 ## ✅ Quality Checklist (Before Delivery)
 - [ ] Code compiles without warnings on .NET Framework 4.6.2
@@ -267,8 +167,9 @@ Searches = new List<SearchSupport>
 - [ ] XML documentation for public members
 - [ ] Naming conventions respected
 - [ ] No hardcoded strings (use resources/constants)
+- [ ] Assumptions explicitly stated if required
 
 ---
 
-**Last Updated:** 2026-02-15  
-**Version:** 2.0
+**Last Updated:** 2026-02-19  
+**Version:** 2.1
