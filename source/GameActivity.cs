@@ -272,8 +272,9 @@ namespace GameActivity
                             ShowMinimizeButton = false,
                             ShowMaximizeButton = true,
                             ShowCloseButton = true,
-                            Width = 1000,
-                            Height= 500
+                            CanBeResizable = true,
+                            WidthPercent = 70,
+                            Height = 500
                         };
 
                         GamesDataMismatch ViewExtension = new GamesDataMismatch();
