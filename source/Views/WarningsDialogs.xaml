@@ -1,65 +1,208 @@
 ﻿<UserControl x:Class="GameActivity.Views.WarningsDialogs"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:views="clr-namespace:GameActivity.Views"
-             mc:Ignorable="d" Background="{DynamicResource WindowBackgourndBrush}">
+             xmlns:ui="clr-namespace:CommonPluginsShared.UI"
+             mc:Ignorable="d"
+             MinWidth="480"
+             Background="{DynamicResource WindowBackgourndBrush}">
 
     <UserControl.Resources>
-        <views:SetTextColor x:Key="SetTextColor" />
+
+        <!-- Converter: highlights the value text when the sensor threshold is exceeded -->
+        <views:BoolToWarningBrushConverter x:Key="BoolToWarningBrushConverter" />
+
+        <!-- Converter: hides a sensor chip when the Data object is null or its value is zero -->
+        <views:DataToVisibilityConverter x:Key="DataToVisibilityConverter" />
+
+        <!-- Chip container: a rounded card for a single sensor reading -->
+        <Style x:Key="SensorChipBorder" TargetType="Border">
+            <Setter Property="Background"       Value="{DynamicResource PanelSeparatorBrush}" />
+            <Setter Property="BorderBrush"      Value="{DynamicResource NormalBorderBrush}" />
+            <Setter Property="BorderThickness"  Value="1" />
+            <Setter Property="CornerRadius"     Value="4" />
+            <Setter Property="Padding"          Value="10,6" />
+            <Setter Property="Margin"           Value="0,0,8,8" />
+            <Setter Property="MinWidth"         Value="80" />
+        </Style>
+
+        <!-- Chip label: sensor name (e.g. "CPU usage") -->
+        <Style x:Key="SensorNameText" TargetType="TextBlock"
+               BasedOn="{StaticResource BaseTextBlockStyle}">
+            <Setter Property="FontSize"         Value="{DynamicResource FontSizeSmall}" />
+            <Setter Property="Foreground"       Value="{DynamicResource TextBrushDarker}" />
+            <Setter Property="TextWrapping"     Value="NoWrap" />
+            <Setter Property="Margin"           Value="0,0,0,2" />
+        </Style>
+
+        <!-- Chip value: the numeric reading, coloured when warm -->
+        <Style x:Key="SensorValueText" TargetType="TextBlock"
+               BasedOn="{StaticResource BaseTextBlockStyle}">
+            <Setter Property="FontSize"         Value="{DynamicResource FontSize}" />
+            <Setter Property="FontWeight"       Value="SemiBold" />
+            <Setter Property="TextWrapping"     Value="NoWrap" />
+        </Style>
+
+        <!-- Timestamp label shown at the top of every warning card -->
+        <Style x:Key="WarningTimestampText" TargetType="TextBlock"
+               BasedOn="{StaticResource BaseTextBlockStyle}">
+            <Setter Property="FontSize"         Value="{DynamicResource FontSizeSmall}" />
+            <Setter Property="Foreground"       Value="{DynamicResource TextBrushDarker}" />
+            <Setter Property="Margin"           Value="0,0,0,8" />
+        </Style>
+
     </UserControl.Resources>
 
-    <StackPanel Orientation="Vertical" Name="PART_Contener">
-        <StackPanel Margin="10,10" MinHeight="20">
+    <!-- Root scroll area, so many warning entries stay accessible -->
+    <DockPanel LastChildFill="True">
+
+        <!-- ── OK button ─────────────────────────────────────────────── -->
+        <Border DockPanel.Dock="Bottom"
+                BorderBrush="{DynamicResource NormalBorderBrush}"
+                BorderThickness="0,1,0,0"
+                Padding="16,12">
+            <Button Style="{StaticResource PrimaryButton}"
+                    HorizontalAlignment="Center"
+                    Width="120"
+                    Command="{x:Static ui:CommandsWindows.CloseHostWindow}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=UserControl}}"
+                    Content="{DynamicResource LOCOKLabel}" />
+        </Border>
+
+        <!-- ── Warning entries list ───────────────────────────────────── -->
+        <ScrollViewer VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled"
+                      Padding="16,16,16,0">
             <ItemsControl Name="icData">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Margin="10,10" Orientation="Horizontal">
-                            <Label Content="{Binding At}" />
-                            <Label Content=", " />
 
-                            <Label Content="{Binding FpsData.Name}" />
-                            <Label Content=" = " />
-                            <Label Content="{Binding FpsData.Value}" Foreground="{Binding FpsData.IsWarm, Converter={StaticResource SetTextColor}}" />
-                            <Label Content=", " />
+                        <!-- One card per warning snapshot -->
+                        <Border Style="{StaticResource SectionBorder}">
+                            <StackPanel>
 
-                            <Label Content="{Binding CpuTempData.Name}" />
-                            <Label Content=" = " />
-                            <Label Content="{Binding CpuTempData.Value}" Foreground="{Binding CpuTempData.IsWarm, Converter={StaticResource SetTextColor}}" />
-                            <Label Content="°" Foreground="{Binding CpuTempData.IsWarm, Converter={StaticResource SetTextColor}}" />
-                            <Label Content=", " />
+                                <!-- Timestamp row -->
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                    <TextBlock Style="{StaticResource WarningTimestampText}"
+                                               Text="{DynamicResource LOCGameActivityWarningAt}" />
+                                    <TextBlock Style="{StaticResource WarningTimestampText}"
+                                               Text=" " />
+                                    <TextBlock Style="{StaticResource WarningTimestampText}"
+                                               Foreground="{DynamicResource TextBrush}"
+                                               FontWeight="SemiBold"
+                                               Text="{Binding At}" />
+                                </StackPanel>
 
-                            <Label Content="{Binding CpuUsageData.Name}" />
-                            <Label Content=" = " />
-                            <Label Content="{Binding CpuUsageData.Value}" Foreground="{Binding CpuUsageData.IsWarm, Converter={StaticResource SetTextColor}}" />
-                            <Label Content="%" Foreground="{Binding CpuUsageData.IsWarm, Converter={StaticResource SetTextColor}}" />
-                            <Label Content=", " />
+                                <!-- Sensor chips row (wraps if needed) -->
+                                <WrapPanel Orientation="Horizontal">
 
-                            <Label Content="{Binding RamUsageData.Name}" />
-                            <Label Content=" = " /> 
-                            <Label Content="{Binding RamUsageData.Value}" Foreground="{Binding RamUsageData.IsWarm, Converter={StaticResource SetTextColor}}" />
-                            <Label Content="%" Foreground="{Binding RamUsageData.IsWarm, Converter={StaticResource SetTextColor}}" />
-                            <Label Content=", " />
+                                    <!-- FPS -->
+                                    <Border Style="{StaticResource SensorChipBorder}"
+                                            Visibility="{Binding FpsData, Converter={StaticResource DataToVisibilityConverter}}">
+                                        <StackPanel>
+                                            <TextBlock Style="{StaticResource SensorNameText}"
+                                                       Text="{Binding FpsData.Name}" />
+                                            <TextBlock Style="{StaticResource SensorValueText}"
+                                                       Text="{Binding FpsData.Value}"
+                                                       Foreground="{Binding FpsData.IsWarm, Converter={StaticResource BoolToWarningBrushConverter}}" />
+                                        </StackPanel>
+                                    </Border>
 
-                            <Label Content="{Binding GpuTempData.Name}" />
-                            <Label Content=" = " />
-                            <Label Content="{Binding GpuTempData.Value}" Foreground="{Binding GpuTempData.IsWarm, Converter={StaticResource SetTextColor}}" />
-                            <Label Content="°" Foreground="{Binding GpuTempData.IsWarm, Converter={StaticResource SetTextColor}}" />
-                            <Label Content=", " />
+                                    <!-- CPU temperature -->
+                                    <Border Style="{StaticResource SensorChipBorder}"
+                                            Visibility="{Binding CpuTempData, Converter={StaticResource DataToVisibilityConverter}}">
+                                        <StackPanel>
+                                            <TextBlock Style="{StaticResource SensorNameText}"
+                                                       Text="{Binding CpuTempData.Name}" />
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Style="{StaticResource SensorValueText}"
+                                                           Text="{Binding CpuTempData.Value}"
+                                                           Foreground="{Binding CpuTempData.IsWarm, Converter={StaticResource BoolToWarningBrushConverter}}" />
+                                                <TextBlock Style="{StaticResource SensorValueText}"
+                                                           Text="°"
+                                                           Foreground="{Binding CpuTempData.IsWarm, Converter={StaticResource BoolToWarningBrushConverter}}" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Border>
 
-                            <Label Content="{Binding GpuUsageData.Name}" />
-                            <Label Content=" = " />
-                            <Label Content="{Binding GpuUsageData.Value}" Foreground="{Binding GpuUsageData.IsWarm, Converter={StaticResource SetTextColor}}" />
-                            <Label Content="%" Foreground="{Binding GpuUsageData.IsWarm, Converter={StaticResource SetTextColor}}" />
-                        </StackPanel>
+                                    <!-- CPU usage -->
+                                    <Border Style="{StaticResource SensorChipBorder}"
+                                            Visibility="{Binding CpuUsageData, Converter={StaticResource DataToVisibilityConverter}}">
+                                        <StackPanel>
+                                            <TextBlock Style="{StaticResource SensorNameText}"
+                                                       Text="{Binding CpuUsageData.Name}" />
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Style="{StaticResource SensorValueText}"
+                                                           Text="{Binding CpuUsageData.Value}"
+                                                           Foreground="{Binding CpuUsageData.IsWarm, Converter={StaticResource BoolToWarningBrushConverter}}" />
+                                                <TextBlock Style="{StaticResource SensorValueText}"
+                                                           Text="%"
+                                                           Foreground="{Binding CpuUsageData.IsWarm, Converter={StaticResource BoolToWarningBrushConverter}}" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Border>
+
+                                    <!-- RAM usage -->
+                                    <Border Style="{StaticResource SensorChipBorder}"
+                                            Visibility="{Binding RamUsageData, Converter={StaticResource DataToVisibilityConverter}}">
+                                        <StackPanel>
+                                            <TextBlock Style="{StaticResource SensorNameText}"
+                                                       Text="{Binding RamUsageData.Name}" />
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Style="{StaticResource SensorValueText}"
+                                                           Text="{Binding RamUsageData.Value}"
+                                                           Foreground="{Binding RamUsageData.IsWarm, Converter={StaticResource BoolToWarningBrushConverter}}" />
+                                                <TextBlock Style="{StaticResource SensorValueText}"
+                                                           Text="%"
+                                                           Foreground="{Binding RamUsageData.IsWarm, Converter={StaticResource BoolToWarningBrushConverter}}" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Border>
+
+                                    <!-- GPU temperature -->
+                                    <Border Style="{StaticResource SensorChipBorder}"
+                                            Visibility="{Binding GpuTempData, Converter={StaticResource DataToVisibilityConverter}}">
+                                        <StackPanel>
+                                            <TextBlock Style="{StaticResource SensorNameText}"
+                                                       Text="{Binding GpuTempData.Name}" />
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Style="{StaticResource SensorValueText}"
+                                                           Text="{Binding GpuTempData.Value}"
+                                                           Foreground="{Binding GpuTempData.IsWarm, Converter={StaticResource BoolToWarningBrushConverter}}" />
+                                                <TextBlock Style="{StaticResource SensorValueText}"
+                                                           Text="°"
+                                                           Foreground="{Binding GpuTempData.IsWarm, Converter={StaticResource BoolToWarningBrushConverter}}" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Border>
+
+                                    <!-- GPU usage -->
+                                    <Border Style="{StaticResource SensorChipBorder}"
+                                            Visibility="{Binding GpuUsageData, Converter={StaticResource DataToVisibilityConverter}}">
+                                        <StackPanel>
+                                            <TextBlock Style="{StaticResource SensorNameText}"
+                                                       Text="{Binding GpuUsageData.Name}" />
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Style="{StaticResource SensorValueText}"
+                                                           Text="{Binding GpuUsageData.Value}"
+                                                           Foreground="{Binding GpuUsageData.IsWarm, Converter={StaticResource BoolToWarningBrushConverter}}" />
+                                                <TextBlock Style="{StaticResource SensorValueText}"
+                                                           Text="%"
+                                                           Foreground="{Binding GpuUsageData.IsWarm, Converter={StaticResource BoolToWarningBrushConverter}}" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Border>
+
+                                </WrapPanel>
+                            </StackPanel>
+                        </Border>
+
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-        </StackPanel>
+        </ScrollViewer>
 
-        <StackPanel DockPanel.Dock="Bottom" Margin="10">
-            <Button Width="150" Click="Button_Click" Content="{DynamicResource LOCOKLabel}" />
-        </StackPanel>
-    </StackPanel>
+    </DockPanel>
 </UserControl>

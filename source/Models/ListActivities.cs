@@ -51,7 +51,7 @@ namespace GameActivity.Models
         public string SourceIconText { get; set; }
 
         [DontSerialize]
-        public RelayCommand<Guid> GoToGame => CommandsHelper.GoToGame;
+        public RelayCommand<Guid> GoToGame => CommandsNavigation.GoToGame;
 
         [DontSerialize]
         public bool GameExist => API.Instance.Database.Games.Get(Id) != null;

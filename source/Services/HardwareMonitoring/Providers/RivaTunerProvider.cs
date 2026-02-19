@@ -44,8 +44,8 @@ namespace GameActivity.Services.HardwareMonitoring.Providers
 
 		protected override bool InitializeInternal()
 		{
-			try
-			{
+            try
+            {
 				_memoryMappedFile = MemoryMappedFile.OpenExisting(RTSS_SHARED_MEMORY_NAME, MemoryMappedFileRights.Read);
 				_accessor = _memoryMappedFile.CreateViewAccessor(0, 0, MemoryMappedFileAccess.Read);
 
@@ -54,8 +54,8 @@ namespace GameActivity.Services.HardwareMonitoring.Providers
 				logger.Info($"[{ProviderName}] Successfully connected to RTSS Shared Memory.");
 				return true;
 			}
-			catch (Exception ex)
-			{
+			catch (Exception)
+            {
 				logger.Warn($"[{ProviderName}] RTSS not found or not running.");
 				return false;
 			}

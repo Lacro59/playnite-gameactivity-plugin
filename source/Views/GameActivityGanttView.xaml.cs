@@ -203,7 +203,7 @@ namespace GameActivity.Views
         public List<GanttValue> DateTimes { get; set; }
 
 
-        public RelayCommand<Guid> GoToGame => CommandsHelper.GoToGame;
+        public RelayCommand<Guid> GoToGame => CommandsNavigation.GoToGame;
 
         public bool GameExist => API.Instance.Database.Games.Get(Id) != null;
     }
