@@ -8,152 +8,279 @@ using Playnite.SDK.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
 namespace GameActivity.Views
 {
     /// <summary>
-    /// Logique d'interaction pour GameActivityBackup.xaml
+    /// Code-behind for the GameActivityBackup view.
+    /// UI initialisation and chart wiring only — all business logic lives in
+    /// <see cref="GameActivityBackupViewModel"/>.
     /// </summary>
     public partial class GameActivityBackup : UserControl
     {
         private static ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
-        private ViewDataContext ViewDataContext { get; set; } = new ViewDataContext();
-        private ActivityBackup ActivityBackup { get; set; }
-
-        private Guid Id { get; set; }
-
 
         public GameActivityBackup(ActivityBackup activityBackup)
         {
-            ActivityBackup = activityBackup;
-            Game game = API.Instance.Database.Games.Get(activityBackup.Id);
-            Id = game.Id;
-
             InitializeComponent();
-            DataContext = ViewDataContext;
 
-            ViewDataContext.Name = activityBackup.Name;
-            ViewDataContext.DateSession = activityBackup.DateSession;
-            ViewDataContext.ElapsedSeconds = activityBackup.ElapsedSeconds;
+            Game game = API.Instance.Database.Games.Get(activityBackup.Id);
 
-            if (!game.CoverImage.IsNullOrEmpty())
-            {
-                ViewDataContext.Cover = API.Instance.Database.GetFullFilePath(game.CoverImage);
-            }
-            ViewDataContext.DateLastPlayed = (DateTime)game?.LastActivity;
-            ViewDataContext.Playtime = game.Playtime;
+            // Build the ViewModel and wire close/window access via a factory callback
+            // so the ViewModel does not hold a direct reference to the View (MVVM).
+            var viewModel = new GameActivityBackupViewModel(
+                activityBackup,
+                game,
+                PluginDatabase,
+                closeWindow: () => Window.GetWindow(this)?.Close());
 
+            DataContext = viewModel;
+
+            // Wire chart control (cannot be done in ViewModel — control-specific API)
+            InitializeChart(activityBackup, viewModel);
+        }
+
+        /// <summary>
+        /// Configures the <see cref="PluginChartLog"/> child control.
+        /// Kept in code-behind because the chart uses a control-specific API
+        /// that cannot be bound through standard MVVM bindings.
+        /// </summary>
+        private void InitializeChart(ActivityBackup activityBackup, GameActivityBackupViewModel viewModel)
+        {
             if (activityBackup.ItemsDetailsDatas?.Count == 0)
             {
                 PART_ChartLogContener.Visibility = Visibility.Collapsed;
+                return;
             }
-            else
+
+            PluginChartLog chartLog = (PluginChartLog)PART_ChartLogContener.Children[0];
+            chartLog.SetDefaultDataContext();
+
+            GameActivities pluginData = PluginDatabase.GetDefault(activityBackup.Id);
+            pluginData.Items.Add(new Activity
             {
-                PluginChartLog PART_ChartLog = (PluginChartLog)PART_ChartLogContener.Children[0];
-                PART_ChartLog.SetDefaultDataContext();
+                IdConfiguration = activityBackup.IdConfiguration,
+                GameActionName = activityBackup.GameActionName,
+                DateSession = activityBackup.DateSession,
+                SourceID = activityBackup.SourceID,
+                PlatformIDs = activityBackup.PlatformIDs,
+                ElapsedSeconds = activityBackup.ElapsedSeconds
+            });
+            pluginData.ItemsDetails.Items.TryAdd(activityBackup.DateSession, activityBackup.ItemsDetailsDatas);
 
-                GameActivities pluginData = PluginDatabase.GetDefault(activityBackup.Id);
-                pluginData.Items.Add(new Activity
-                {
-                    IdConfiguration = activityBackup.IdConfiguration,
-                    GameActionName = activityBackup.GameActionName,
-                    DateSession = activityBackup.DateSession,
-                    SourceID = activityBackup.SourceID,
-                    PlatformIDs = activityBackup.PlatformIDs,
-                    ElapsedSeconds = activityBackup.ElapsedSeconds
-                });
-                pluginData.ItemsDetails.Items.TryAdd(activityBackup.DateSession, activityBackup.ItemsDetailsDatas);
-
-                PART_ChartLog.GetActivityForGamesLogGraphics(pluginData, 0, 10, activityBackup.DateSession, "1");
-            }
+            chartLog.GetActivityForGamesLogGraphics(pluginData, 0, 10, activityBackup.DateSession, "1");
         }
 
-
-        private void PART_BtClose_Click(object sender, RoutedEventArgs e)
-        {
-            ((Window)Parent).Close();
-        }
-
-        private void PART_BtAdd_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                Game game = API.Instance.Database.Games.Get(ActivityBackup.Id);
-                GameActivities pluginData = PluginDatabase.Get(ActivityBackup.Id);
-
-                game.Playtime += ActivityBackup.ElapsedSeconds;
-                pluginData.Items.Add(new Activity
-                {
-                    IdConfiguration = ActivityBackup.IdConfiguration,
-                    GameActionName = ActivityBackup.GameActionName,
-                    DateSession = ActivityBackup.DateSession,
-                    SourceID = ActivityBackup.SourceID,
-                    PlatformIDs = ActivityBackup.PlatformIDs,
-                    ElapsedSeconds = ActivityBackup.ElapsedSeconds
-                });
-                _ = pluginData.ItemsDetails.Items.TryAdd(ActivityBackup.DateSession, ActivityBackup.ItemsDetailsDatas);
-
-                API.Instance.Database.Games.Update(game);
-                PluginDatabase.Update(pluginData);
-
-
-                string PathFileBackup = Path.Combine(PluginDatabase.Paths.PluginUserDataPath, $"SaveSession_{this.Id}.json");
-                FileSystem.DeleteFile(PathFileBackup);
-            }
-            catch (Exception ex)
-            {
-                Common.LogError(ex, false, true, PluginDatabase.PluginName);
-            }
-
-            ((Window)Parent).Close();
-        }
-
-        private void PART_BtRemove_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                string PathFileBackup = Path.Combine(PluginDatabase.Paths.PluginUserDataPath, $"SaveSession_{this.Id}.json");
-                FileSystem.DeleteFile(PathFileBackup);
-            }
-            catch (Exception ex)
-            {
-                Common.LogError(ex, false, true, PluginDatabase.PluginName);
-            }
-
-            ((Window)Parent).Close();
-        }
-
+        /// <summary>
+        /// Fires after the layout has rendered so the chart can be sized to its container.
+        /// The Loaded event must stay in code-behind because ActualWidth/Height are only
+        /// available after the visual tree is fully measured.
+        /// </summary>
         private void Grid_Loaded(object sender, RoutedEventArgs e)
         {
-            PluginChartLog PART_ChartLog = (PluginChartLog)PART_ChartLogContener.Children[0];
-            PART_ChartLog.Width = PART_ChartLogContener.ActualWidth;
-            PART_ChartLog.Height = PART_ChartLogContener.ActualHeight;
-            ((PluginChartLogDataContext)PART_ChartLog.DataContext).UseControls = false;
+            if (PART_ChartLogContener.Visibility == Visibility.Collapsed)
+            {
+                return;
+            }
+
+            PluginChartLog chartLog = (PluginChartLog)PART_ChartLogContener.Children[0];
+            chartLog.Width = PART_ChartLogContener.ActualWidth;
+            chartLog.Height = PART_ChartLogContener.ActualHeight;
+            ((PluginChartLogDataContext)chartLog.DataContext).UseControls = false;
         }
     }
 
 
-    public class ViewDataContext : ObservableObject
+    // ═══════════════════════════════════════════════════════════════════════
+    //  VIEW MODEL
+    // ═══════════════════════════════════════════════════════════════════════
+
+    /// <summary>
+    /// ViewModel for <see cref="GameActivityBackup"/>.
+    /// Exposes display data and the three user actions (Add / Close / Remove)
+    /// as <see cref="RelayCommand"/> instances so the view is fully declarative.
+    /// </summary>
+    public class GameActivityBackupViewModel : ObservableObject
     {
+        // ── Dependencies ─────────────────────────────────────────────────────
+        private readonly ActivityBackup _activityBackup;
+        private readonly Game _game;
+        private readonly ActivityDatabase _pluginDatabase;
+        private readonly Action _closeWindow;
+
+        // ── Bindable properties ──────────────────────────────────────────────
+
         private string _name;
-        public string Name { get => _name; set => SetValue(ref _name, value); }
+        /// <summary>Game name shown in the title TextBlock.</summary>
+        public string Name
+        {
+            get => _name;
+            private set => SetValue(ref _name, value);
+        }
 
         private string _cover;
-        public string Cover { get => _cover; set => SetValue(ref _cover, value); }
+        /// <summary>Full file path of the game cover image.</summary>
+        public string Cover
+        {
+            get => _cover;
+            private set => SetValue(ref _cover, value);
+        }
 
         private DateTime? _dateSession;
-        public DateTime? DateSession { get => _dateSession; set => SetValue(ref _dateSession, value); }
+        /// <summary>Date and time when the backup session started.</summary>
+        public DateTime? DateSession
+        {
+            get => _dateSession;
+            private set => SetValue(ref _dateSession, value);
+        }
 
         private ulong _elapsedSeconds;
-        public ulong ElapsedSeconds { get => _elapsedSeconds; set => SetValue(ref _elapsedSeconds, value); }
+        /// <summary>Duration of the backup session in seconds.</summary>
+        public ulong ElapsedSeconds
+        {
+            get => _elapsedSeconds;
+            private set => SetValue(ref _elapsedSeconds, value);
+        }
 
         private DateTime? _dateLastPlayed;
-        public DateTime? DateLastPlayed { get => _dateLastPlayed; set => SetValue(ref _dateLastPlayed, value); }
+        /// <summary>Date the game was last played according to Playnite.</summary>
+        public DateTime? DateLastPlayed
+        {
+            get => _dateLastPlayed;
+            private set => SetValue(ref _dateLastPlayed, value);
+        }
 
         private ulong _playtime;
-        public ulong Playtime { get => _playtime; set => SetValue(ref _playtime, value); }
+        /// <summary>Total recorded playtime in seconds from Playnite.</summary>
+        public ulong Playtime
+        {
+            get => _playtime;
+            private set => SetValue(ref _playtime, value);
+        }
+
+        // ── Commands ─────────────────────────────────────────────────────────
+
+        /// <summary>
+        /// Merges the backup session into Playnite and the plugin database,
+        /// then deletes the backup file.
+        /// </summary>
+        public RelayCommand CmdAdd { get; }
+
+        /// <summary>Closes the host window without making any changes.</summary>
+        public RelayCommand CmdClose { get; }
+
+        /// <summary>Deletes the backup file without importing the session.</summary>
+        public RelayCommand CmdRemove { get; }
+
+        // ── Constructor ──────────────────────────────────────────────────────
+
+        public GameActivityBackupViewModel(
+            ActivityBackup activityBackup,
+            Game game,
+            ActivityDatabase pluginDatabase,
+            Action closeWindow)
+        {
+            _activityBackup = activityBackup;
+            _game = game;
+            _pluginDatabase = pluginDatabase;
+            _closeWindow = closeWindow;
+
+            // Populate display data
+            Name = activityBackup.Name;
+            DateSession = activityBackup.DateSession;
+            ElapsedSeconds = activityBackup.ElapsedSeconds;
+            DateLastPlayed = game?.LastActivity;
+            Playtime = game?.Playtime ?? 0;
+
+            if (!game?.CoverImage.IsNullOrEmpty() == true)
+            {
+                Cover = API.Instance.Database.GetFullFilePath(game.CoverImage);
+            }
+
+            // Wire commands
+            CmdClose = new RelayCommand(ExecuteClose);
+            CmdRemove = new RelayCommand(ExecuteRemove);
+            CmdAdd = new RelayCommand(ExecuteAdd);
+        }
+
+        // ── Command implementations ──────────────────────────────────────────
+
+        /// <summary>Closes the dialog with no side-effects.</summary>
+        private void ExecuteClose()
+        {
+            _closeWindow?.Invoke();
+        }
+
+        /// <summary>
+        /// Persists the backup session into both Playnite and the plugin database,
+        /// then removes the backup file from disk.
+        /// </summary>
+        private void ExecuteAdd()
+        {
+            try
+            {
+                // Update playtime in Playnite
+                _game.Playtime += _activityBackup.ElapsedSeconds;
+
+                // Retrieve existing plugin data and append the recovered session
+                GameActivities pluginData = _pluginDatabase.Get(_activityBackup.Id);
+                pluginData.Items.Add(new Activity
+                {
+                    IdConfiguration = _activityBackup.IdConfiguration,
+                    GameActionName = _activityBackup.GameActionName,
+                    DateSession = _activityBackup.DateSession,
+                    SourceID = _activityBackup.SourceID,
+                    PlatformIDs = _activityBackup.PlatformIDs,
+                    ElapsedSeconds = _activityBackup.ElapsedSeconds
+                });
+                pluginData.ItemsDetails.Items.TryAdd(
+                    _activityBackup.DateSession,
+                    _activityBackup.ItemsDetailsDatas);
+
+                // Persist both changes
+                API.Instance.Database.Games.Update(_game);
+                _pluginDatabase.Update(pluginData);
+
+                // Clean up the backup file
+                DeleteBackupFile();
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex, false, true, _pluginDatabase.PluginName);
+            }
+
+            _closeWindow?.Invoke();
+        }
+
+        /// <summary>
+        /// Discards the backup by deleting its file, without touching Playnite data.
+        /// </summary>
+        private void ExecuteRemove()
+        {
+            try
+            {
+                DeleteBackupFile();
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex, false, true, _pluginDatabase.PluginName);
+            }
+
+            _closeWindow?.Invoke();
+        }
+
+        /// <summary>
+        /// Deletes the JSON backup file for the current game session from disk.
+        /// </summary>
+        private void DeleteBackupFile()
+        {
+            string path = Path.Combine(
+                _pluginDatabase.Paths.PluginUserDataPath,
+                $"SaveSession_{_game.Id}.json");
+
+            FileSystem.DeleteFile(path);
+        }
     }
 }

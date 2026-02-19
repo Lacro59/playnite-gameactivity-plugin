@@ -77,20 +77,7 @@ namespace GameActivity
                 if (ButtonName == "PART_CustomGameActivityButton")
                 {
                     Common.LogDebug(true, $"OnCustomThemeButtonClick()");
-
-                    WindowOptions windowOptions = new WindowOptions
-                    {
-                        ShowMinimizeButton = false,
-                        ShowMaximizeButton = true,
-                        ShowCloseButton = true,
-                        CanBeResizable = true,
-                        Height = 740,
-                        Width = 1280
-                    };
-
-                    GameActivityViewSingle ViewExtension = new GameActivityViewSingle(this, PluginDatabase.GameContext);
-                    Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(ResourceProvider.GetString("LOCGameActivity"), ViewExtension, windowOptions);
-                    _ = windowExtension.ShowDialog();
+                    PluginDatabase.WindowPluginService.ShowPluginGameDataWindow(this, PluginDatabase.GameContext);
                 }
             }
             catch (Exception ex)
@@ -155,19 +142,7 @@ namespace GameActivity
                     Description = ResourceProvider.GetString("LOCGameActivityViewGameActivity"),
                     Action = (gameMenuItem) =>
                     {
-                        WindowOptions windowOptions = new WindowOptions
-                        {
-                            ShowMinimizeButton = false,
-                            ShowMaximizeButton = true,
-                            ShowCloseButton = true,
-                            CanBeResizable = true,
-                            Height = 740,
-                            Width = 1280
-                        };
-
-                        GameActivityViewSingle ViewExtension = new GameActivityViewSingle(this, GameMenu);
-                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(ResourceProvider.GetString("LOCGameActivity"), ViewExtension, windowOptions);
-                        _ = windowExtension.ShowDialog();
+                        PluginDatabase.WindowPluginService.ShowPluginGameDataWindow(this, GameMenu);
                     }
                 }
             };
@@ -205,19 +180,7 @@ namespace GameActivity
                     Description = ResourceProvider.GetString("LOCGameActivityViewGamesActivities"),
                     Action = (mainMenuItem) =>
                     {
-                        WindowOptions windowOptions = new WindowOptions
-                        {
-                            ShowMinimizeButton = false,
-                            ShowMaximizeButton = true,
-                            ShowCloseButton = true,
-                            CanBeResizable = true,
-                            Height = 740,
-                            Width = 1280
-                        };
-
-                        GameActivityView ViewExtension = new GameActivityView(this);
-                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(ResourceProvider.GetString("LOCGamesActivitiesTitle"), ViewExtension, windowOptions);
-                        _ = windowExtension.ShowDialog();
+                        PluginDatabase.WindowPluginService.ShowPluginGameDataWindow(this);
                     }
                 },
 
@@ -267,20 +230,7 @@ namespace GameActivity
                     Description = ResourceProvider.GetString("LOCGaGamesDataMismatch"),
                     Action = (mainMenuItem) =>
                     {
-                        WindowOptions windowOptions = new WindowOptions
-                        {
-                            ShowMinimizeButton = false,
-                            ShowMaximizeButton = true,
-                            ShowCloseButton = true,
-                            CanBeResizable = true,
-                            WidthPercent = 70,
-                            MaxWidth= 1500,
-                            Height = 500
-                        };
-
-                        GamesDataMismatch ViewExtension = new GamesDataMismatch();
-                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(ResourceProvider.GetString("LOCGaGamesDataMismatch"), ViewExtension, windowOptions);
-                        _ = windowExtension.ShowDialog();
+                        PluginDatabase.WindowPluginService.ShowPluginDataMismatch();
                     }
                 },
 
@@ -290,16 +240,7 @@ namespace GameActivity
                     Description = ResourceProvider.GetString("LOCCommonTransferPluginData"),
                     Action = (mainMenuItem) =>
                     {
-                        WindowOptions windowOptions = new WindowOptions
-                        {
-                            ShowMinimizeButton = false,
-                            ShowMaximizeButton = false,
-                            ShowCloseButton = true,
-                        };
-
-                        TransfertData ViewExtension = new TransfertData(PluginDatabase.GetDataGames().ToList(), PluginDatabase);
-                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(ResourceProvider.GetString("LOCCommonSelectTransferData"), ViewExtension, windowOptions);
-                        _ = windowExtension.ShowDialog();
+                        PluginDatabase.WindowPluginService.ShowPluginTransfertData(PluginDatabase.GetDataGames());
                     }
                 },
 
@@ -309,16 +250,7 @@ namespace GameActivity
                     Description = ResourceProvider.GetString("LOCCommonIsolatedPluginData"),
                     Action = (mainMenuItem) =>
                     {
-                        WindowOptions windowOptions = new WindowOptions
-                        {
-                            ShowMinimizeButton = false,
-                            ShowMaximizeButton = false,
-                            ShowCloseButton = true,
-                        };
-
-                        ListDataWithoutGame ViewExtension = new ListDataWithoutGame(PluginDatabase.GetIsolatedDataGames().ToList(), PluginDatabase);
-                        Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(ResourceProvider.GetString("LOCCommonIsolatedPluginData"), ViewExtension, windowOptions);
-                        _ = windowExtension.ShowDialog();
+                        PluginDatabase.WindowPluginService.ShowPluginDataWithoutGame(PluginDatabase.GetIsolatedDataGames());
                     }
                 }
             };

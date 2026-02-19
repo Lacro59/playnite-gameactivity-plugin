@@ -1553,9 +1553,7 @@ namespace GameActivity.Views
 
             Button bt = sender as Button;
             Game game = API.Instance.Database.Games.Get((Guid)bt.Tag);
-            GameActivityViewSingle ViewExtension = new GameActivityViewSingle(Plugin, game);
-            Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(ResourceProvider.GetString("LOCGameActivity"), ViewExtension, windowOptions);
-            _ = windowExtension.ShowDialog();
+            PluginDatabase.WindowPluginService.ShowPluginGameDataWindow(Plugin, game);
         }
     }
 

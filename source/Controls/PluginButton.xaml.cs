@@ -91,20 +91,7 @@ namespace GameActivity.Controls
         #region Events
         private void PART_PluginButton_Click(object sender, RoutedEventArgs e)
         {
-            WindowOptions windowOptions = new WindowOptions
-            {
-                ShowMinimizeButton = false,
-                ShowMaximizeButton = true,
-                ShowCloseButton = true,
-                CanBeResizable = true,
-                Height = 740,
-                Width = 1280
-            };
-
-            GameActivityViewSingle viewExtension = new GameActivityViewSingle(_plugin, PluginDatabase.GameContext);
-            Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(
-                ResourceProvider.GetString("LOCGameActivity"), viewExtension, windowOptions);
-            windowExtension.ShowDialog();
+            PluginDatabase.WindowPluginService.ShowPluginGameDataWindow(_plugin, CurrentGame);
         }
         #endregion
     }

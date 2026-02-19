@@ -579,8 +579,8 @@ namespace GameActivity.Services
                                                     ShowMinimizeButton = false,
                                                     ShowMaximizeButton = false,
                                                     ShowCloseButton = true,
-                                                    CanBeResizable = true,
-                                                    Height = 350,
+                                                    CanBeResizable = false,
+                                                    Height = 380,
                                                     Width = 800,
                                                 };
 

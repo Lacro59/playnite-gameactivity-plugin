@@ -26,19 +26,7 @@ namespace GameActivity.Services
             Title = ResourceProvider.GetString("LOCGameActivityViewGamesActivities");
             Activated = () =>
             {
-                WindowOptions windowOptions = new WindowOptions
-                {
-                    ShowMinimizeButton = false,
-                    ShowMaximizeButton = true,
-                    ShowCloseButton = true,
-                    CanBeResizable = true,
-                    Height = 740,
-                    Width = 1280
-                };
-
-                GameActivityView ViewExtension = new GameActivityView(plugin);
-                Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(ResourceProvider.GetString("LOCGamesActivitiesTitle"), ViewExtension, windowOptions);
-                _ = windowExtension.ShowDialog();
+                GameActivity.PluginDatabase.WindowPluginService.ShowPluginGameDataWindow(plugin);
             };
             Visible = plugin.PluginSettings.Settings.EnableIntegrationButtonHeader;
         }

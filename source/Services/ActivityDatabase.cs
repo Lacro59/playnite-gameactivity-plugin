@@ -35,6 +35,7 @@ namespace GameActivity.Services
 
         public ActivityDatabase(GameActivitySettingsViewModel pluginSettings, string pluginUserDataPath) : base(pluginSettings, "GameActivity", pluginUserDataPath)
         {
+            WindowPluginService = new WindowPluginService(PluginName, this);
         }
 
 
