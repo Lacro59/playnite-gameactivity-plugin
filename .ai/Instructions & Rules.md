@@ -7,6 +7,14 @@
 
 ---
 
+## 📚 Official Playnite Documentation
+
+- **Tutorials:** https://api.playnite.link/docs/tutorials/index.html  
+- **API Reference:** http://api.playnite.link/docs/api/index.html  
+- Always align implementation with official Playnite documentation before applying custom patterns.
+
+---
+
 ## ❓ Clarification & Decision Policy
 
 - **Ambiguity Handling:** If requirements are ambiguous, incomplete, contradictory, or technically unclear, request clarification before implementation.
@@ -117,59 +125,54 @@
 
 ## 📊 Logging Best Practices
 - **Levels:**
-    - `Debug`: Detailed diagnostic information (disabled in production).
-    - `Info`: General informational messages (plugin start, significant events).
-    - `Warn`: Potentially harmful situations (deprecated API usage, fallback logic).
-    - `Error`: Error events that might still allow the application to continue.
-- **Exception Logging:** Always use `logger.Error(ex, "Context message")` to include stack traces.
-- **Sensitive Data:** Never log passwords, API keys, or personal user information.
+    - `Debug`
+    - `Info`
+    - `Warn`
+    - `Error`
+- **Exception Logging:** Always use `logger.Error(ex, "Context message")`.
+- **Sensitive Data:** Never log passwords, API keys, or personal data.
 
 ---
 
 ## 🧪 Testing
-- **Framework:** NUnit 3.x (compatible with .NET Framework 4.6.2).
-- **Mocking:** Use Moq (v4.x) for mocking `IPlayniteAPI` and dependencies.
-- **Coverage:** Aim for >70% code coverage on business logic.
-- **Test Structure:**
-    - Arrange: Set up test data and mocks.
-    - Act: Execute the method under test.
-    - Assert: Verify expected outcomes.
-- **Naming:** Use descriptive test names: `MethodName_Scenario_ExpectedBehavior`.
+- **Framework:** NUnit 3.x (.NET Framework 4.6.2 compatible).
+- **Mocking:** Moq 4.x.
+- **Coverage:** >70% on business logic.
+- **Structure:** Arrange / Act / Assert.
+- **Naming:** `MethodName_Scenario_ExpectedBehavior`.
 
 ---
 
 ## 📝 Response Rules
-1. **Code First:** Provide the code solution before any technical explanation.
-2. **Modular:** Break down logic into small, testable, and reusable methods.
-3. **XML Documentation:** Add XML Doc comments for public APIs.
-4. **Comments:** Document only complex logic in English (avoid obvious comments).
-5. **Unit Tests:** Suggest unit test structures when relevant.
-6. **Complete Solutions:** Provide full, working code snippets (not partial fragments).
-7. **Clarification Compliance:** Follow the Clarification & Decision Policy before implementing.
+1. **Code First**
+2. **Modular**
+3. **XML Documentation**
+4. **Comment complex logic only**
+5. **Complete working solutions**
+6. **Follow Clarification Policy before implementation**
 
 ---
 
 ## 🚫 Out of Scope
-- No deprecated code (unless explicitly required by .NET 4.6.2 limitations).
-- No obvious comments (e.g., `i++ // increment`).
-- No "fluff" or repetitive greetings.
-- No placeholder code (`// TODO: implement`). Provide working implementations.
+- No deprecated code (unless required by 4.6.2).
+- No obvious comments.
+- No filler.
+- No TODO placeholders.
 
 ---
 
-## ✅ Quality Checklist (Before Delivery)
-- [ ] Code compiles without warnings on .NET Framework 4.6.2
-- [ ] No C# 8.0+ features used
-- [ ] All `IDisposable` objects wrapped in `using` with braces
-- [ ] Exception handling implemented for external calls
-- [ ] Logging added for significant operations
-- [ ] UI operations use Dispatcher when needed
-- [ ] XML documentation for public members
+## ✅ Quality Checklist
+- [ ] Compiles on .NET Framework 4.6.2
+- [ ] No C# 8.0+ features
+- [ ] IDisposable wrapped in `using`
+- [ ] External calls protected
+- [ ] Logging implemented
+- [ ] Dispatcher for UI operations
 - [ ] Naming conventions respected
-- [ ] No hardcoded strings (use resources/constants)
-- [ ] Assumptions explicitly stated if required
+- [ ] No hardcoded strings
+- [ ] Assumptions stated if required
 
 ---
 
 **Last Updated:** 2026-02-19  
-**Version:** 2.1
+**Version:** 2.2
