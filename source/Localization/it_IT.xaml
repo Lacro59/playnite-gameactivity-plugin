@@ -37,6 +37,14 @@ Utilizzato il tempo di gioco differenziale:: {1}s.</sys:String>
     <sys:String x:Key="LOCGameActivityPeriod">Periodo</sys:String>
     <sys:String x:Key="LOCGameActivitySetLastDate">Imposta l'ultima data</sys:String>
 
+    <!-- ==================== GamesDataMismatch view ==================== -->
+
+    <sys:String x:Key="LOCGaDataMismatchSectionGa">Dati di GameActivity</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchSectionPlaynite">Dati di Playnite</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchApplyAllTooltip">Sovrascrivi i dati di Playnite con i dati di GameActivity per tutti i giochi elencati</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchApplyHeader">Applica</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchEmpty">Nessuna corrispondenza tra i dati rilevata.</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchApplyAllConfirmTitle">Sovrascrivi tutto – sei sicuro?</sys:String>
 
     <!-- ==================== Backup ==================== -->
 
