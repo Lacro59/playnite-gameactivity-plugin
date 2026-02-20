@@ -50,156 +50,118 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!-- ===== Filter bar ===== -->
+        <!-- ===== Filter bar — CompactCheckBox for minimal vertical footprint ===== -->
         <Border Grid.Row="0"
                 x:Name="PART_FilterBar"
                 Style="{DynamicResource FilterCardBorder}"
-                Margin="0,0,0,8"
+                Margin="0,0,0,6"
                 RenderTransformOrigin="0.5,0"
                 Visibility="{Binding UseControls, Converter={StaticResource BooleanToVisibilityConverter}}">
 
             <Border.RenderTransform>
                 <ScaleTransform ScaleY="1" />
             </Border.RenderTransform>
-
             <Border.Triggers>
                 <EventTrigger RoutedEvent="Border.Loaded">
                     <BeginStoryboard Storyboard="{StaticResource FilterBarShowAnimation}" />
                 </EventTrigger>
             </Border.Triggers>
 
-            <!-- Two rows: Usage group / Temperature-Power group.
-                 A Grid with a fixed-width label column guarantees that checkboxes
-                 in both rows start at exactly the same X offset. -->
+            <!-- Grid: fixed label column (col 0, MinWidth=90) aligns checkboxes
+                 of both rows at the same X offset regardless of label text length. -->
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <!-- Col 0: fixed-width label column — wide enough for the longest label -->
-                    <ColumnDefinition Width="110" />
-                    <!-- Col 1: checkboxes, takes remaining space -->
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
-                    <!-- Thin separator row -->
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <!-- ── Group 1 : Usage (CPU / GPU / RAM / FPS) ── -->
-
-                <!-- Label col 0, row 0 -->
+                <!-- ── Group 1 : Usage ── -->
                 <TextBlock Grid.Column="0" Grid.Row="0"
                            Text="{DynamicResource LOCGameActivityGroupUsage}"
                            Style="{DynamicResource ViewColumnLabelText}"
-                           VerticalAlignment="Center" />
+                           VerticalAlignment="Center"
+                           MinWidth="90" />
 
-                <!-- Checkboxes col 1, row 0 -->
-                <StackPanel Grid.Column="1" Grid.Row="0"
-                            Orientation="Horizontal" Margin="0,0,0,6">
-
-                    <!-- CPU -->
-                    <CheckBox Style="{DynamicResource ModernCheckBox}"
+                <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal">
+                    <CheckBox Style="{DynamicResource CompactCheckBox}"
                               IsChecked="{Binding DisplayCpu, Mode=OneWay}"
-                              Command="{Binding CmdToggleCpu}"
-                              Margin="0,0,8,0">
+                              Command="{Binding CmdToggleCpu}">
                         <TextBlock Text="{DynamicResource LOCGameActivityLabelCpu}"
                                    Style="{DynamicResource BaseTextBlockStyle}" />
                     </CheckBox>
-
-                    <!-- GPU -->
-                    <CheckBox Style="{DynamicResource ModernCheckBox}"
+                    <CheckBox Style="{DynamicResource CompactCheckBox}"
                               IsChecked="{Binding DisplayGpu, Mode=OneWay}"
-                              Command="{Binding CmdToggleGpu}"
-                              Margin="0,0,8,0">
+                              Command="{Binding CmdToggleGpu}">
                         <TextBlock Text="{DynamicResource LOCGameActivityLabelGpu}"
                                    Style="{DynamicResource BaseTextBlockStyle}" />
                     </CheckBox>
-
-                    <!-- RAM -->
-                    <CheckBox Style="{DynamicResource ModernCheckBox}"
+                    <CheckBox Style="{DynamicResource CompactCheckBox}"
                               IsChecked="{Binding DisplayRam, Mode=OneWay}"
-                              Command="{Binding CmdToggleRam}"
-                              Margin="0,0,8,0">
+                              Command="{Binding CmdToggleRam}">
                         <TextBlock Text="{DynamicResource LOCGameActivityLabelRam}"
                                    Style="{DynamicResource BaseTextBlockStyle}" />
                     </CheckBox>
-
-                    <!-- FPS -->
-                    <CheckBox Style="{DynamicResource ModernCheckBox}"
+                    <CheckBox Style="{DynamicResource CompactCheckBox}"
                               IsChecked="{Binding DisplayFps, Mode=OneWay}"
                               Command="{Binding CmdToggleFps}">
                         <TextBlock Text="{DynamicResource LOCGameActivityLabelFps}"
                                    Style="{DynamicResource BaseTextBlockStyle}" />
                     </CheckBox>
-
                 </StackPanel>
 
-                <!-- Thin separator spanning both columns -->
+                <!-- Separator — only shown when DisplayMoreData is true -->
                 <Border Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"
                         Style="{DynamicResource TopSeparatorBorder}"
                         Visibility="{Binding DisplayMoreData, Converter={StaticResource BooleanToVisibilityConverter}}"
-                        Margin="0,0,0,6" />
+                        Margin="0,2,0,2" />
 
-                <!-- ── Group 2 : Temperatures & Power — hidden by default ── -->
-
-                <!-- Label col 0, row 2 -->
+                <!-- ── Group 2 : Temp / Power — hidden by default ── -->
                 <TextBlock Grid.Column="0" Grid.Row="2"
                            Text="{DynamicResource LOCGameActivityGroupTempPower}"
                            Style="{DynamicResource ViewColumnLabelText}"
                            Visibility="{Binding DisplayMoreData, Converter={StaticResource BooleanToVisibilityConverter}}"
-                           VerticalAlignment="Center" />
+                           VerticalAlignment="Center"
+                           MinWidth="90" />
 
-                <!-- Checkboxes col 1, row 2 -->
                 <StackPanel Grid.Column="1" Grid.Row="2"
-                            Visibility="{Binding DisplayMoreData, Converter={StaticResource BooleanToVisibilityConverter}}"
-                            Orientation="Horizontal">
-
-                    <!-- CPU Temperature -->
-                    <CheckBox Style="{DynamicResource ModernCheckBox}"
+                            Orientation="Horizontal"
+                            Visibility="{Binding DisplayMoreData, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <CheckBox Style="{DynamicResource CompactCheckBox}"
                               IsChecked="{Binding DisplayCpuT, Mode=OneWay}"
-                              Command="{Binding CmdToggleCpuT}"
-                              Margin="0,0,8,0">
+                              Command="{Binding CmdToggleCpuT}">
                         <TextBlock Text="{DynamicResource LOCGameActivityCpuTemp}"
                                    Style="{DynamicResource BaseTextBlockStyle}" />
                     </CheckBox>
-
-                    <!-- GPU Temperature -->
-                    <CheckBox Style="{DynamicResource ModernCheckBox}"
+                    <CheckBox Style="{DynamicResource CompactCheckBox}"
                               IsChecked="{Binding DisplayGpuT, Mode=OneWay}"
-                              Command="{Binding CmdToggleGpuT}"
-                              Margin="0,0,8,0">
+                              Command="{Binding CmdToggleGpuT}">
                         <TextBlock Text="{DynamicResource LOCGameActivityGpuTemp}"
                                    Style="{DynamicResource BaseTextBlockStyle}" />
                     </CheckBox>
-
-                    <!-- CPU Power -->
-                    <CheckBox Style="{DynamicResource ModernCheckBox}"
+                    <CheckBox Style="{DynamicResource CompactCheckBox}"
                               IsChecked="{Binding DisplayCpuP, Mode=OneWay}"
-                              Command="{Binding CmdToggleCpuP}"
-                              Margin="0,0,8,0">
+                              Command="{Binding CmdToggleCpuP}">
                         <TextBlock Text="{DynamicResource LOCGameActivityCpuPower}"
                                    Style="{DynamicResource BaseTextBlockStyle}" />
                     </CheckBox>
-
-                    <!-- GPU Power -->
-                    <CheckBox Style="{DynamicResource ModernCheckBox}"
+                    <CheckBox Style="{DynamicResource CompactCheckBox}"
                               IsChecked="{Binding DisplayGpuP, Mode=OneWay}"
                               Command="{Binding CmdToggleGpuP}">
                         <TextBlock Text="{DynamicResource LOCGameActivityGpuPower}"
                                    Style="{DynamicResource BaseTextBlockStyle}" />
                     </CheckBox>
-
                 </StackPanel>
 
             </Grid>
         </Border>
 
-
         <!-- ===== Chart container ===== -->
-        <Border Grid.Row="1"
-                Style="{DynamicResource CardBorder}"
-                Padding="0">
-
+        <Border Grid.Row="1" Style="{DynamicResource CardBorder}" Padding="0">
             <Grid Name="PART_GridContener">
                 <lvc:CartesianChart LegendLocation="Bottom"
                                     Name="PART_ChartLogActivity"
@@ -210,7 +172,7 @@
                                     Height="{Binding ElementName=PART_GridContener, Path=ActualHeight}">
 
                     <lvc:CartesianChart.ChartLegend>
-                        <!-- Hidden: filter bar checkboxes serve as legend -->
+                        <!-- Legend hidden: filter bar checkboxes serve as interactive legend -->
                         <lvc:DefaultLegend Height="2" Visibility="Hidden" />
                     </lvc:CartesianChart.ChartLegend>
 
@@ -223,7 +185,7 @@
                                   ShowLabels="{Binding ChartLogAxis}"
                                   MinValue="0"
                                   LabelsRotation="{Binding LabelsRotationValue}"
-                                  FontSize="{DynamicResource FontSize}"
+                                  FontSize="{DynamicResource FontSizeSmall}"
                                   FontFamily="{DynamicResource FontFamily}">
                             <lvc:Axis.Separator>
                                 <lvc:Separator Step="1" />
@@ -232,24 +194,21 @@
                     </lvc:CartesianChart.AxisX>
 
                     <lvc:CartesianChart.AxisY>
-                        <!-- Y axis 0 (left): CPU / GPU / RAM usage in % -->
+                        <!-- Y0 (left): CPU / GPU / RAM usage in % -->
                         <lvc:Axis Name="PART_ChartLogActivityLabelsY"
                                   ShowLabels="{Binding ChartLogOrdinates}"
                                   MinValue="0"
-                                  FontSize="{DynamicResource FontSize}"
+                                  FontSize="{DynamicResource FontSizeSmall}"
                                   FontFamily="{DynamicResource FontFamily}">
                             <lvc:Axis.Separator>
                                 <lvc:Separator />
                             </lvc:Axis.Separator>
                         </lvc:Axis>
-
-                        <!-- Y axis 1 (right): FPS + Temp (°C) + Power (W)
-                             Non-% values share this axis to avoid a 3rd axis cluttering the chart.
-                             Grid lines are disabled to keep the chart readable. -->
+                        <!-- Y1 (right): FPS + Temp °C + Power W — non-% values share this axis -->
                         <lvc:Axis Name="PART_ChartLogActivityLabelsY_FPS"
                                   ShowLabels="{Binding ChartLogOrdinates}"
                                   MinValue="0"
-                                  FontSize="{DynamicResource FontSize}"
+                                  FontSize="{DynamicResource FontSizeSmall}"
                                   FontFamily="{DynamicResource FontFamily}"
                                   Position="RightTop">
                             <lvc:Axis.Separator>

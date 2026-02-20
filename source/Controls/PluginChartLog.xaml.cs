@@ -35,14 +35,15 @@ namespace GameActivity.Controls
         }
 
         // ── LiveCharts series fields ───────────────────────────────────────────
-        // Usage/FPS group — original
-        private ColumnSeries _cpuSeries;
-        private ColumnSeries _gpuSeries;
-        private ColumnSeries _ramSeries;
+        // All series are LineSeries — continuous time-series data is better
+        // represented as lines than bars (see monitoring tools convention).
+        // Usage group (solid, ScalesYAt=0) / Temp+Power group (dashed, ScalesYAt=1).
+        private LineSeries _cpuSeries;
+        private LineSeries _gpuSeries;
+        private LineSeries _ramSeries;
         private LineSeries _fpsSeries;
 
-        // Temperature/Power group — new, hidden by default
-        // ScalesYAt = 1: shares the right-side axis with FPS (non-% values).
+        // Temperature/Power group — hidden by default
         private LineSeries _cpuTSeries;
         private LineSeries _gpuTSeries;
         private LineSeries _cpuPSeries;
@@ -315,8 +316,10 @@ namespace GameActivity.Controls
         // ──────────────────────────────────────────────────────────────────────
 
         #region Public methods
+
         public void Next(int value = 1) { AxisVariator += value; }
         public void Prev(int value = 1) { AxisVariator -= value; }
+
         #endregion
 
 
@@ -424,95 +427,122 @@ namespace GameActivity.Controls
                     this.Dispatcher.BeginInvoke(DispatcherPriority.Background, new ThreadStart(delegate
                     {
                         // ── Resolve theme-aware brushes on the UI thread ──────────────────
-                        Brush cpuBrush = TryGetThemeBrush("GameActivityCpuBrush", "#FF2195F2");
-                        Brush gpuBrush = TryGetThemeBrush("GameActivityGpuBrush", "#FFF34336");
-                        Brush ramBrush = TryGetThemeBrush("GameActivityRamBrush", "#FFFEC007");
-                        Brush fpsBrush = TryGetThemeBrush("GameActivityFpsBrush", "#FF607D8A");
-                        Brush cpuTBrush = TryGetThemeBrush("GameActivityCpuTBrush", "#FFFF7043");
-                        Brush gpuTBrush = TryGetThemeBrush("GameActivityGpuTBrush", "#FFEF5350");
-                        Brush cpuPBrush = TryGetThemeBrush("GameActivityCpuPBrush", "#FF29B6F6");
-                        Brush gpuPBrush = TryGetThemeBrush("GameActivityGpuPBrush", "#FF26C6DA");
+                        // Palette convention:
+                        //   CPU  → Blue  family  (#2979FF / #82B1FF light / #BBDEFB pale)
+                        //   GPU  → Red   family  (#FF5252 / #FF8A80 light / #FFCDD2 pale)
+                        //   RAM  → Amber family  (#FFD740)
+                        //   FPS  → Green family  (#69F0AE)
+                        // Temp  → same hue as usage, lighter (+opacity) — same teinte, opacité réduite
+                        // Power → same hue as usage, pale   (+more opacity)
+                        Brush cpuBrush = TryGetThemeBrush("GameActivityCpuBrush", "#FF2979FF");
+                        Brush gpuBrush = TryGetThemeBrush("GameActivityGpuBrush", "#FFFF5252");
+                        Brush ramBrush = TryGetThemeBrush("GameActivityRamBrush", "#FFFFD740");
+                        Brush fpsBrush = TryGetThemeBrush("GameActivityFpsBrush", "#FF69F0AE");
+                        Brush cpuTBrush = TryGetThemeBrush("GameActivityCpuTBrush", "#FF82B1FF");
+                        Brush gpuTBrush = TryGetThemeBrush("GameActivityGpuTBrush", "#FFFF8A80");
+                        Brush cpuPBrush = TryGetThemeBrush("GameActivityCpuPBrush", "#FFBBDEFB");
+                        Brush gpuPBrush = TryGetThemeBrush("GameActivityGpuPBrush", "#FFFFCDD2");
 
-                        // ── Original usage series (ScalesYAt=0 — left % axis) ─────────────
-                        _cpuSeries = new ColumnSeries
+                        // ── Usage series — LineSeries for continuous time-series data ──────
+                        // StrokeThickness=2 / PointRadius=3 for a clean readable line.
+                        // Fill = Transparent removes the default area fill under the line.
+                        // ScalesYAt=0 → left % axis.
+                        _cpuSeries = new LineSeries
                         {
                             Title = ResourceProvider.GetString("LOCGameActivityLabelCpu") + " (%)",
-                            Fill = cpuBrush,
+                            Stroke = cpuBrush,
+                            Fill = Brushes.Transparent,
+                            StrokeThickness = 2,
+                            PointGeometrySize = 6,
                             Values = cpuValues,
                             ScalesYAt = 0
                         };
 
-                        _gpuSeries = new ColumnSeries
+                        _gpuSeries = new LineSeries
                         {
                             Title = ResourceProvider.GetString("LOCGameActivityLabelGpu") + " (%)",
-                            Fill = gpuBrush,
+                            Stroke = gpuBrush,
+                            Fill = Brushes.Transparent,
+                            StrokeThickness = 2,
+                            PointGeometrySize = 6,
                             Values = gpuValues,
                             ScalesYAt = 0
                         };
 
-                        _ramSeries = new ColumnSeries
+                        _ramSeries = new LineSeries
                         {
                             Title = ResourceProvider.GetString("LOCGameActivityLabelRam") + " (%)",
-                            Fill = ramBrush,
+                            Stroke = ramBrush,
+                            Fill = Brushes.Transparent,
+                            StrokeThickness = 2,
+                            PointGeometrySize = 6,
                             Values = ramValues,
                             ScalesYAt = 0
                         };
 
-                        // FPS on right axis (ScalesYAt=1) — preserved from original.
+                        // FPS — ScalesYAt=1 (right axis), same line style.
                         _fpsSeries = new LineSeries
                         {
                             Title = ResourceProvider.GetString("LOCGameActivityLabelFps"),
                             Stroke = fpsBrush,
                             Fill = Brushes.Transparent,
+                            StrokeThickness = 2,
+                            PointGeometrySize = 6,
                             Values = fpsValues,
                             ScalesYAt = 1
                         };
 
-                        // ── New temperature/power series (ScalesYAt=1 — right axis) ────────
-                        // Grouped with FPS on the right axis because °C and W are not percentages;
-                        // sharing the same axis as FPS avoids introducing a 3rd axis that would
-                        // make the chart unreadable.
+                        // ── Temp / Power series — ScalesYAt=1, thinner + dashed for distinction ──
+                        // StrokeDashArray makes them visually distinct from the solid usage lines.
+                        // Same hue family as their usage counterpart (see palette above).
                         //
-                        // IMPORTANT: all series are created with Visibility = Visible here.
-                        // Setting Visibility = Collapsed BEFORE the series is attached to a chart
-                        // triggers LiveCharts' Erase() path on an uninitialized ChartValues enumerator,
-                        // causing a NullReferenceException inside GetPoints/MoveNext.
-                        // Visibility is applied only AFTER the SeriesCollection is assigned to the chart
-                        // (see SetChartVisibility() call below), at which point LiveCharts has fully
-                        // registered the series and can iterate its values safely.
+                        // IMPORTANT: all series created Visible here — SetChartVisibility() called
+                        // AFTER Series assignment to avoid LiveCharts Erase() NullRef crash.
 
                         _cpuTSeries = new LineSeries
                         {
-                            Title = ResourceProvider.GetString("LOCGameActivityCpuTemp"),
+                            Title = ResourceProvider.GetString("LOCGameActivityLabelCpuT"),
                             Stroke = cpuTBrush,
                             Fill = Brushes.Transparent,
+                            StrokeThickness = 1.5,
+                            StrokeDashArray = new System.Windows.Media.DoubleCollection { 4, 2 },
+                            PointGeometrySize = 4,
                             Values = cpuTValues,
                             ScalesYAt = 1
                         };
 
                         _gpuTSeries = new LineSeries
                         {
-                            Title = ResourceProvider.GetString("LOCGameActivityGpuTemp"),
+                            Title = ResourceProvider.GetString("LOCGameActivityLabelGpuT"),
                             Stroke = gpuTBrush,
                             Fill = Brushes.Transparent,
+                            StrokeThickness = 1.5,
+                            StrokeDashArray = new System.Windows.Media.DoubleCollection { 4, 2 },
+                            PointGeometrySize = 4,
                             Values = gpuTValues,
                             ScalesYAt = 1
                         };
 
                         _cpuPSeries = new LineSeries
                         {
-                            Title = ResourceProvider.GetString("LOCGameActivityCpuPower"),
+                            Title = ResourceProvider.GetString("LOCGameActivityLabelCpuP"),
                             Stroke = cpuPBrush,
                             Fill = Brushes.Transparent,
+                            StrokeThickness = 1.5,
+                            StrokeDashArray = new System.Windows.Media.DoubleCollection { 2, 2 },
+                            PointGeometrySize = 4,
                             Values = cpuPValues,
                             ScalesYAt = 1
                         };
 
                         _gpuPSeries = new LineSeries
                         {
-                            Title = ResourceProvider.GetString("LOCGameActivityGpuPower"),
+                            Title = ResourceProvider.GetString("LOCGameActivityLabelGpuP"),
                             Stroke = gpuPBrush,
                             Fill = Brushes.Transparent,
+                            StrokeThickness = 1.5,
+                            StrokeDashArray = new System.Windows.Media.DoubleCollection { 2, 2 },
+                            PointGeometrySize = 4,
                             Values = gpuPValues,
                             ScalesYAt = 1
                         };
@@ -528,9 +558,9 @@ namespace GameActivity.Controls
                         {
                             PART_ChartLogActivity.DataTooltip = new DefaultTooltip
                             {
-                                FontSize = 16,
+                                FontSize = 13,
                                 Background = (Brush)ResourceProvider.GetResource("CommonToolTipBackgroundBrush"),
-                                Padding = new Thickness(10),
+                                Padding = new Thickness(8),
                                 BorderThickness = (Thickness)ResourceProvider.GetResource("CommonToolTipBorderThickness"),
                                 BorderBrush = (Brush)ResourceProvider.GetResource("CommonToolTipBorderBrush"),
                                 Foreground = (Brush)ResourceProvider.GetResource("CommonToolTipForeground")
@@ -541,16 +571,13 @@ namespace GameActivity.Controls
                             Common.LogError(ex, false);
                         }
 
-                        // Assign the collection first so LiveCharts fully registers each series
-                        // and initializes its internal chart reference before any Visibility change.
+                        // Assign collection first — LiveCharts registers series before any Visibility write.
                         PART_ChartLogActivity.Series = series;
                         PART_ChartLogActivityLabelsY.MinValue = 0;
                         PART_ChartLogActivityLabelsY.LabelFormatter = value => value.ToString("N0") + "%";
                         PART_ChartLogActivityLabelsX.Labels = activityForGameLogLabels;
 
-                        // Apply visibility AFTER the chart has registered all series.
-                        // This is the only safe moment to call SetChartVisibility() —
-                        // changing Visibility before registration would crash LiveCharts.
+                        // Safe to call SetChartVisibility() now — series fully registered.
                         SetChartVisibility();
                     }));
                 }
@@ -641,7 +668,7 @@ namespace GameActivity.Controls
         private bool _isActivated;
         public bool IsActivated { get => _isActivated; set => SetValue(ref _isActivated, value); }
 
-        // ── Original properties —────────────────────────────────────────────
+        // ── Original properties — preserved exactly ─────────────────────────
 
         private double _chartLogHeight;
         public double ChartLogHeight { get => _chartLogHeight; set => SetValue(ref _chartLogHeight, value); }
@@ -664,7 +691,7 @@ namespace GameActivity.Controls
         private double _labelsRotationValue;
         public double LabelsRotationValue { get => _labelsRotationValue; set => SetValue(ref _labelsRotationValue, value); }
 
-        // Sensor visibility
+        // Original sensor visibility
         private bool _displayCpu;
         public bool DisplayCpu { get => _displayCpu; set => SetValue(ref _displayCpu, value); }
 
@@ -677,6 +704,15 @@ namespace GameActivity.Controls
         private bool _displayFps;
         public bool DisplayFps { get => _displayFps; set => SetValue(ref _displayFps, value); }
 
+        /// <summary>
+        /// True when the loaded session contains non-zero CPUT/GPUT/CPUP/GPUP data.
+        /// Controls visibility of the Temp/Power filter group and its separator.
+        /// Set by the chart construction code after data is loaded — never from settings.
+        /// </summary>
+        private bool _displayMoreData;
+        public bool DisplayMoreData { get => _displayMoreData; set => SetValue(ref _displayMoreData, value); }
+
+        // ── New temperature/power visibility — default false ────────────────
         private bool _displayCpuT;
         public bool DisplayCpuT { get => _displayCpuT; set => SetValue(ref _displayCpuT, value); }
 
@@ -688,9 +724,6 @@ namespace GameActivity.Controls
 
         private bool _displayGpuP;
         public bool DisplayGpuP { get => _displayGpuP; set => SetValue(ref _displayGpuP, value); }
-
-        private bool _displayMoreData;
-        public bool DisplayMoreData { get => _displayMoreData; set => SetValue(ref _displayMoreData, value); }
 
         // ── RelayCommands — original + new ─────────────────────────────────
 
