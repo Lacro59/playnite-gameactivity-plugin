@@ -132,6 +132,9 @@ namespace GameActivity
         /// <summary>Include FPS series in the log chart.</summary>
         public bool DisplayFps { get; set; } = true;
 
+        /// <summary>Include CPU / GPU temp and CPU / GPU power</summary>
+        public bool DisplayMoreData { get; set; } = false;
+
         #endregion
 
         #region Visual Customization

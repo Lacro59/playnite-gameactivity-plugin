@@ -377,6 +377,8 @@
                                                 <RowDefinition Height="auto" />
                                                 <RowDefinition Height="10" />
                                                 <RowDefinition Height="auto" />
+                                                <RowDefinition Height="10" />
+                                                <RowDefinition Height="auto" />
                                             </Grid.RowDefinitions>
 
                                             <DockPanel Grid.Column="0" Grid.Row="0">
@@ -442,6 +444,10 @@
                                                     <Label Content="FPS" />
                                                 </CheckBox>
                                             </Grid>
+
+                                            <CheckBox Grid.Row="10" IsChecked="{Binding Settings.DisplayMoreData}">
+                                                <Label Content="{DynamicResource LOCGameActivityMoreData}" />
+                                            </CheckBox>
                                         </Grid>
                                     </Border>
                                 </Expander.Content>
