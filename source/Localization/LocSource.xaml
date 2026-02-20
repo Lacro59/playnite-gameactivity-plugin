@@ -48,12 +48,14 @@ Used the difference play time: {1}s.</sys:String>
     <sys:String x:Key="LOCGaDataMismatchEmpty">No data mismatch detected.</sys:String>
     <sys:String x:Key="LOCGaDataMismatchApplyAllConfirmTitle">Override all – are you sure?</sys:String>
 
-    <!-- ==================== Backup ==================== -->
 
+    <!-- ==================== GameActivityBackup ================ -->
+
+    <sys:String x:Key="LOCGaBackupDataInfo">Backup session info</sys:String>
+    <sys:String x:Key="LOCGaCurrentGameState">Current game state</sys:String>
     <sys:String x:Key="LOCGaBackupExist" xml:space="preserve">There is backup data for {0}.
 Probably after a Playnite crash.
 Click for more information.</sys:String>
-    <sys:String x:Key="LOCGaBackupDataInfo">Backup data info</sys:String>
     <sys:String x:Key="LOCGaDateSession">Date session</sys:String>
     <sys:String x:Key="LOCGaPlayTimeSession">Play time session</sys:String>
 
@@ -185,6 +187,12 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivityAvgCpuP">Avg CPU P</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpuP">Avg GPU P</sys:String>
 
+    <!-- =================== PluginChartLog filter bar labels === -->
+
+    <sys:String x:Key="LOCGameActivityLabelCpu">CPU</sys:String>
+    <sys:String x:Key="LOCGameActivityLabelGpu">GPU</sys:String>
+    <sys:String x:Key="LOCGameActivityLabelRam">RAM</sys:String>
+    <sys:String x:Key="LOCGameActivityLabelFps">FPS</sys:String>
 
     <!-- ==================== Warning Dialog ==================== -->
 
