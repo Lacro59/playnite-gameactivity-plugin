@@ -2,6 +2,7 @@
 using CommonPluginsShared.Collections;
 using CommonPluginsShared.Interfaces;
 using CommonPluginsShared.Plugins;
+using GameActivity.Models.ExportData;
 using Playnite.SDK;
 using Playnite.SDK.Models;
 using Playnite.SDK.Plugins;
@@ -146,39 +147,11 @@ namespace GameActivity.Services
 				{
 					try
 					{
-						string exportPath = API.Instance.Dialogs.SelectFolder();
-
-						// SelectFolder returns null/empty when the user cancels the dialog.
-						if (!string.IsNullOrEmpty(exportPath) && Directory.Exists(exportPath))
-						{
-							_database.ExtractToCsv(exportPath, true);
-						}
+						_database.ExtractToCsv();
 					}
 					catch (Exception ex)
 					{
 						Common.LogError(ex, false, "[GetMainMenuItems] Failed to export current game to CSV.");
-					}
-				}
-			};
-
-			yield return new MainMenuItem
-			{
-				MenuSection = section,
-				Description = ResourceProvider.GetString("LOCCommonExtractAllToCsv"),
-				Action = (menuArgs) =>
-				{
-					try
-					{
-						string exportPath = API.Instance.Dialogs.SelectFolder();
-
-						if (!string.IsNullOrEmpty(exportPath) && Directory.Exists(exportPath))
-						{
-							_database.ExtractToCsv(exportPath, false);
-						}
-					}
-					catch (Exception ex)
-					{
-						Common.LogError(ex, false, "[GetMainMenuItems] Failed to export all games to CSV.");
 					}
 				}
 			};

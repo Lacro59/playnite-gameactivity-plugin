@@ -55,6 +55,7 @@ namespace GameActivity.Services
 			: base(pluginSettings, "GameActivity", pluginUserDataPath)
 		{
 			PluginWindows = new GameActivityWindows(PluginName, this);
+			PluginExportCsv = new GameActivityExport();
 
 			// Defer file I/O until the manager is actually needed.
 			_systemConfigurationManager = new Lazy<SystemConfigurationManager>(() =>
@@ -238,59 +239,7 @@ namespace GameActivity.Services
 
 		#region Export / CSV
 
-		/// <summary>
-		/// Generates a semicolon-delimited CSV string from the activity database.
-		/// </summary>
-		/// <remarks>
-		/// Two modes are supported:
-		/// <list type="bullet">
-		///   <item>
-		///     <term>minimum (<paramref name="minimum"/> = <c>true</c>)</term>
-		///     <description>One row per game with aggregated averages over the last session.</description>
-		///   </item>
-		///   <item>
-		///     <term>full (<paramref name="minimum"/> = <c>false</c>)</term>
-		///     <description>One row per hardware-log entry across all sessions.</description>
-		///   </item>
-		/// </list>
-		/// </remarks>
-		internal override string GetCsvData(GlobalProgressActionArgs a, bool minimum)
-		{
-			List<string> header = minimum ? BuildMinimumCsvHeader() : BuildFullCsvHeader();
 
-			a.ProgressMaxValue = minimum
-				? Database.Items?.Count(x => x.Value.HasData) ?? 0
-				: Database.Items?.Where(x => x.Value.HasData).Sum(x => x.Value.ItemsDetails.Count) ?? 0;
-
-			List<ExportData> exportDatas = new List<ExportData>();
-			List<ExportDataAll> exportDataAlls = new List<ExportDataAll>();
-
-			IEnumerable<KeyValuePair<Guid, GameActivities>> validItems =
-				Database.Items?.Where(x => x.Value.HasData && x.Value?.Game != null)
-				?? Enumerable.Empty<KeyValuePair<Guid, GameActivities>>();
-
-			foreach (KeyValuePair<Guid, GameActivities> x in validItems)
-			{
-				if (a.CancelToken.IsCancellationRequested)
-				{
-					break;
-				}
-
-				if (minimum)
-				{
-					exportDatas.Add(BuildMinimumExportRow(x.Value, a));
-					a.CurrentProgressValue++;
-				}
-				else
-				{
-					BuildFullExportRows(x.Value, exportDataAlls, a);
-				}
-			}
-
-			return minimum
-				? exportDatas.ToCsv(false, ";", false, header)
-				: exportDataAlls.ToCsv(false, ";", false, header);
-		}
 
 		#endregion
 
@@ -461,7 +410,7 @@ namespace GameActivity.Services
 				? string.Empty
 				: $" ({activities.Game.Source.Name})";
 
-			a.Text = $"{PluginName} - {ResourceProvider.GetString("LOCCommonExtracting")}"
+			a.Text = $"{PluginName} - {ResourceProvider.GetString("LOCCommonProcessingExtraction")}"
 				   + $"\n\n{a.CurrentProgressValue}/{a.ProgressMaxValue}"
 				   + $"\n{activities.Game?.Name}{sourceSuffix}";
 		}
