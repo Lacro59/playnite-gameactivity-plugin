@@ -37,6 +37,14 @@ Oynama farkı süresi kullanıldı:{1}s.</sys:String>
     <sys:String x:Key="LOCGameActivityPeriod">Dönem</sys:String>
     <sys:String x:Key="LOCGameActivitySetLastDate">Son tarihi ayarla</sys:String>
 
+    <!-- ==================== GamesDataMismatch view ==================== -->
+
+    <sys:String x:Key="LOCGaDataMismatchSectionGa">GameActivity data</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchSectionPlaynite">Playnite data</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchApplyAllTooltip">Override Playnite data with GameActivity data for all listed games</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchApplyHeader">Apply</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchEmpty">No data mismatch detected.</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchApplyAllConfirmTitle">Override all – are you sure?</sys:String>
 
     <!-- ==================== Backup ==================== -->
 
