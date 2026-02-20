@@ -1,15 +1,11 @@
-﻿using CommonPluginsControls.Views;
-using CommonPluginsShared;
+﻿using CommonPluginsShared;
 using CommonPluginsShared.Interfaces;
-using CommonPluginsShared.Services;
 using Playnite.SDK;
 using Playnite.SDK.Models;
 using System.Windows;
 using GameActivity.Views;
 using Playnite.SDK.Plugins;
-using System.Collections.Generic;
-using CommonPluginsShared.Models;
-using System.Linq;
+using CommonPluginsShared.Plugins;
 
 namespace GameActivity.Services
 {
