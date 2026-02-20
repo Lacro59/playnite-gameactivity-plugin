@@ -24,7 +24,7 @@ namespace GameActivity.Controls
         // Plugin database wiring
         // ──────────────────────────────────────────────────────────────────────
 
-        private ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
+        private GameActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
         protected override IPluginDatabase pluginDatabase => PluginDatabase;
 
         private PluginChartLogDataContext ControlDataContext = new PluginChartLogDataContext();

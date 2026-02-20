@@ -26,7 +26,7 @@ namespace GameActivity.Services
             Title = ResourceProvider.GetString("LOCGameActivityViewGamesActivities");
             Activated = () =>
             {
-                GameActivity.PluginDatabase.WindowPluginService.ShowPluginGameDataWindow(plugin);
+                GameActivity.PluginDatabase.PluginWindows.ShowPluginGameDataWindow(plugin);
             };
             Visible = plugin.PluginSettings.Settings.EnableIntegrationButtonHeader;
         }

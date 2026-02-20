@@ -19,7 +19,7 @@ namespace GameActivity.Controls
     {
         private GameActivity _plugin;
 
-        private ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
+        private GameActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
         protected override IPluginDatabase pluginDatabase => PluginDatabase;
 
         private PluginButtonDataContext ControlDataContext = new PluginButtonDataContext();
@@ -91,7 +91,7 @@ namespace GameActivity.Controls
         #region Events
         private void PART_PluginButton_Click(object sender, RoutedEventArgs e)
         {
-            PluginDatabase.WindowPluginService.ShowPluginGameDataWindow(_plugin, CurrentGame);
+            PluginDatabase.PluginWindows.ShowPluginGameDataWindow(_plugin, CurrentGame);
         }
         #endregion
     }

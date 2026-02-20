@@ -16,7 +16,7 @@ namespace GameActivity
     {
         private static ILogger Logger => LogManager.GetLogger();
 
-        private ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
+        private GameActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
 
         private StackPanel SpControl { get; set; }
 

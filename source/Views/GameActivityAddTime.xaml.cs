@@ -23,7 +23,7 @@ namespace GameActivity.Views
     /// </summary>
     public partial class GameActivityAddTime : UserControl
     {
-        private static ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
+        private static GameActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
 
         public GameActivity Plugin { get; set; }
         public Activity Activity { get; set; }

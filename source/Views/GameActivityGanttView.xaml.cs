@@ -22,7 +22,7 @@ namespace GameActivity.Views
     /// </summary>
     public partial class GameActivityGanttView : UserControl
     {
-        private ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
+        private GameActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
         private DataContextGanttView DataContextGanttView { get; set; } = new DataContextGanttView();
 
         private GanttControl GanttControl { get; set; }

@@ -14,7 +14,7 @@ namespace GameActivity.Models
 	public class GameActivities : PluginDataBaseGameDetails<Activity, ActivityDetails>
 	{
 		private static ILogger Logger => LogManager.GetLogger();
-		private static ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
+		private static GameActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
 
 		/// <summary>
 		/// Gets the list of activities filtered based on session time settings.

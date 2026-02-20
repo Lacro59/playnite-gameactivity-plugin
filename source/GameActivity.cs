@@ -25,7 +25,7 @@ using System.Windows.Controls;
 
 namespace GameActivity
 {
-    public class GameActivity : PluginExtended<GameActivitySettingsViewModel, ActivityDatabase>
+    public class GameActivity : PluginExtended<GameActivitySettingsViewModel, GameActivityDatabase>
     {
         public override Guid Id { get; } = Guid.Parse("afbb1a0d-04a1-4d0c-9afa-c6e42ca855b4");
 
@@ -83,7 +83,7 @@ namespace GameActivity
                 if (ButtonName == "PART_CustomGameActivityButton")
                 {
                     Common.LogDebug(true, $"OnCustomThemeButtonClick()");
-                    PluginDatabase.WindowPluginService.ShowPluginGameDataWindow(this, PluginDatabase.GameContext);
+                    PluginDatabase.PluginWindows.ShowPluginGameDataWindow(this, PluginDatabase.GameContext);
                 }
             }
             catch (Exception ex)

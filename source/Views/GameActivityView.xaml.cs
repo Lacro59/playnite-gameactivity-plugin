@@ -36,7 +36,7 @@ namespace GameActivity.Views
         private static ILogger Logger => LogManager.GetLogger();
 
         private GameActivity Plugin { get; set; }
-        private ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
+        private GameActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
 
 
         private List<string> ListSources { get; set; }
@@ -1553,7 +1553,7 @@ namespace GameActivity.Views
 
             Button bt = sender as Button;
             Game game = API.Instance.Database.Games.Get((Guid)bt.Tag);
-            PluginDatabase.WindowPluginService.ShowPluginGameDataWindow(Plugin, game);
+            PluginDatabase.PluginWindows.ShowPluginGameDataWindow(Plugin, game);
         }
     }
 

@@ -29,7 +29,7 @@ namespace GameActivity.Services
     public class GameActivityMonitoring
     {
         private static readonly ILogger Logger = LogManager.GetLogger();
-        private ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
+        private GameActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
 
         internal GenericPlugin Plugin { get; set; }
 

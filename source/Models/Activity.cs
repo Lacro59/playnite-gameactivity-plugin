@@ -19,7 +19,7 @@ namespace GameActivity.Models
 		/// <summary>
 		/// Gets the plugin database instance for accessing game activity data.
 		/// </summary>
-		private static ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
+		private static GameActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
 
 		// Serialized fields
 		private string _gameActionName;

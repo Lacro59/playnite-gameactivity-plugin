@@ -28,7 +28,7 @@ namespace GameActivity.Views
     {
         private static ILogger Logger => LogManager.GetLogger();
 
-        private ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
+        private GameActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
 
         private PluginChartTime PART_ChartTime { get; set; }
         private PluginChartLog PART_ChartLog { get; set; }

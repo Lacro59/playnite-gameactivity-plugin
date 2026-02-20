@@ -12,7 +12,7 @@ namespace GameActivity.Services
     public class GameActivityStats
     {
         private static ILogger Logger => LogManager.GetLogger();
-        private static ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
+        private static GameActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
 
 
         public static ulong GetPlayTimeYear(uint year, bool withHidden)

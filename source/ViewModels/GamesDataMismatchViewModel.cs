@@ -21,7 +21,7 @@ namespace GameActivity.ViewModels
     public class GamesDataMismatchViewModel : ObservableObject
     {
         private static ILogger Logger => LogManager.GetLogger();
-        private static ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
+        private static GameActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
 
         // ── Observable list ──────────────────────────────────────────────────────
 

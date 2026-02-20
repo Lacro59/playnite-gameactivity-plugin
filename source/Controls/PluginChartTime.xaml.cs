@@ -28,7 +28,7 @@ namespace GameActivity.Controls
 {
     public partial class PluginChartTime : PluginUserControlExtend
     {
-        private ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
+        private GameActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
         protected override IPluginDatabase pluginDatabase => PluginDatabase;
 
         private PluginChartTimeDataContext ControlDataContext = new PluginChartTimeDataContext();

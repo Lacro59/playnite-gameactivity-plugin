@@ -20,7 +20,7 @@ namespace GameActivity.Views
     {
         private static ILogger Logger => LogManager.GetLogger();
 
-        private static ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
+        private static GameActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
         private Game GameContext { get; set; }
 
 

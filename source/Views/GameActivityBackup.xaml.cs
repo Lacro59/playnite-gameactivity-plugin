@@ -20,7 +20,7 @@ namespace GameActivity.Views
     /// </summary>
     public partial class GameActivityBackup : UserControl
     {
-        private static ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
+        private static GameActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
 
         public GameActivityBackup(ActivityBackup activityBackup)
         {
@@ -107,7 +107,7 @@ namespace GameActivity.Views
         // ── Dependencies ─────────────────────────────────────────────────────
         private readonly ActivityBackup _activityBackup;
         private readonly Game _game;
-        private readonly ActivityDatabase _pluginDatabase;
+        private readonly GameActivityDatabase _pluginDatabase;
         private readonly Action _closeWindow;
 
         // ── Bindable properties ──────────────────────────────────────────────
@@ -179,7 +179,7 @@ namespace GameActivity.Views
         public GameActivityBackupViewModel(
             ActivityBackup activityBackup,
             Game game,
-            ActivityDatabase pluginDatabase,
+            GameActivityDatabase pluginDatabase,
             Action closeWindow)
         {
             _activityBackup = activityBackup;

@@ -85,7 +85,7 @@ namespace GameActivity.Services
 				{
 					try
 					{
-						_database.WindowPluginService.ShowPluginGameDataWindow(_plugin, selectedGame);
+						_database.PluginWindows.ShowPluginGameDataWindow(_plugin, selectedGame);
 					}
 					catch (Exception ex)
 					{
@@ -126,7 +126,7 @@ namespace GameActivity.Services
 				{
 					try
 					{
-						_database.WindowPluginService.ShowPluginGameDataWindow(_plugin);
+						_database.PluginWindows.ShowPluginGameDataWindow(_plugin);
 					}
 					catch (Exception ex)
 					{
@@ -194,7 +194,7 @@ namespace GameActivity.Services
 				{
 					try
 					{
-						_database.WindowPluginService.ShowPluginDataMismatch();
+						_database.PluginWindows.ShowPluginDataMismatch();
 					}
 					catch (Exception ex)
 					{
@@ -211,7 +211,7 @@ namespace GameActivity.Services
 				{
 					try
 					{
-						_database.WindowPluginService.ShowPluginTransfertData(_database.GetDataGames());
+						_database.PluginWindows.ShowPluginTransfertData(_database.GetDataGames());
 					}
 					catch (Exception ex)
 					{
@@ -228,7 +228,7 @@ namespace GameActivity.Services
 				{
 					try
 					{
-						_database.WindowPluginService.ShowPluginDataWithoutGame(_database.GetIsolatedDataGames());
+						_database.PluginWindows.ShowPluginDataWithoutGame(_database.GetIsolatedDataGames());
 					}
 					catch (Exception ex)
 					{
