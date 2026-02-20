@@ -37,6 +37,14 @@
     <sys:String x:Key="LOCGameActivityPeriod">Період</sys:String>
     <sys:String x:Key="LOCGameActivitySetLastDate">Встановити останню дату</sys:String>
 
+    <!-- ==================== GamesDataMismatch view ==================== -->
+
+    <sys:String x:Key="LOCGaDataMismatchSectionGa">GameActivity data</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchSectionPlaynite">Playnite data</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchApplyAllTooltip">Override Playnite data with GameActivity data for all listed games</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchApplyHeader">Apply</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchEmpty">No data mismatch detected.</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchApplyAllConfirmTitle">Override all – are you sure?</sys:String>
 
     <!-- ==================== Backup ==================== -->
 
