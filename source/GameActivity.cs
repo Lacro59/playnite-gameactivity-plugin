@@ -36,6 +36,8 @@ namespace GameActivity
 		// Hardware monitoring system
 		internal GameActivityMonitoring GameActivityMonitoring { get; set; }
 
+		private readonly GameActivityMenus _menus;
+
 		public GameActivity(IPlayniteAPI api) : base(api, "GameActivity")
         {
             // Custom theme button
@@ -64,6 +66,10 @@ namespace GameActivity
 
 			// Create the activity monitoring system
 			GameActivityMonitoring = new GameActivityMonitoring(this);
+
+			// Menus
+			_menus = new GameActivityMenus(PluginSettings.Settings, PluginDatabase);
+            _menus.AddData(this, GameActivityMonitoring);
 		}
 
 
@@ -123,164 +129,24 @@ namespace GameActivity
             return items;
         }
 
-        #endregion
+		#endregion
 
-        #region Menus
+		#region Menus
 
-        // To add new game menu items override GetGameMenuItems
-        public override IEnumerable<GameMenuItem> GetGameMenuItems(GetGameMenuItemsArgs args)
-        {
-            Game GameMenu = args.Games.First();
+		/// <inheritdoc />
+		public override IEnumerable<GameMenuItem> GetGameMenuItems(GetGameMenuItemsArgs args)
+			=> _menus.GetGameMenuItems(args);
 
-            List<GameMenuItem> gameMenuItems = new List<GameMenuItem>
-            {
-                // Show plugin view with all activities for all game in database with data of selected game
-                new GameMenuItem
-                {
-                    //MenuSection = "",
-                    Icon = Path.Combine(PluginFolder, "Resources", "chart-646.png"),
-                    Description = ResourceProvider.GetString("LOCGameActivityViewGameActivity"),
-                    Action = (gameMenuItem) =>
-                    {
-                        PluginDatabase.WindowPluginService.ShowPluginGameDataWindow(this, GameMenu);
-                    }
-                }
-            };
+		/// <inheritdoc />
+		public override IEnumerable<MainMenuItem> GetMainMenuItems(GetMainMenuItemsArgs args)
+			=> _menus.GetMainMenuItems(args);
 
-#if DEBUG
-            gameMenuItems.Add(new GameMenuItem
-            {
-                MenuSection = ResourceProvider.GetString("LOCGameActivity"),
-                Description = "Test",
-                Action = (mainMenuItem) =>
-                {
+		#endregion
 
-                }
-            });
-#endif
 
-            return gameMenuItems;
-        }
+		#region Game event
 
-        // To add new main menu items override GetMainMenuItems
-        public override IEnumerable<MainMenuItem> GetMainMenuItems(GetMainMenuItemsArgs args)
-        {
-            string MenuInExtensions = string.Empty;
-            if (PluginSettings.Settings.MenuInExtensions)
-            {
-                MenuInExtensions = "@";
-            }
-
-            List<MainMenuItem> mainMenuItems = new List<MainMenuItem>
-            {
-                // Show plugin view with all activities for all game in database
-                new MainMenuItem
-                {
-                    MenuSection = MenuInExtensions + ResourceProvider.GetString("LOCGameActivity"),
-                    Description = ResourceProvider.GetString("LOCGameActivityViewGamesActivities"),
-                    Action = (mainMenuItem) =>
-                    {
-                        PluginDatabase.WindowPluginService.ShowPluginGameDataWindow(this);
-                    }
-                },
-
-                new MainMenuItem
-                {
-                    MenuSection = MenuInExtensions + ResourceProvider.GetString("LOCGameActivity"),
-                    Description = "-"
-                },
-
-                new MainMenuItem
-                {
-                    MenuSection = MenuInExtensions + ResourceProvider.GetString("LOCGameActivity"),
-                    Description = ResourceProvider.GetString("LOCCommonExtractToCsv"),
-                    Action = (mainMenuItem) =>
-                    {
-                        string path = API.Instance.Dialogs.SelectFolder();
-                        if (Directory.Exists(path))
-                        {
-                            PluginDatabase.ExtractToCsv(path, true);
-                        }
-                    }
-                },
-                new MainMenuItem
-                {
-                    MenuSection = MenuInExtensions + ResourceProvider.GetString("LOCGameActivity"),
-                    Description = ResourceProvider.GetString("LOCCommonExtractAllToCsv"),
-                    Action = (mainMenuItem) =>
-                    {
-                        string path = API.Instance.Dialogs.SelectFolder();
-                        if (Directory.Exists(path))
-                        {
-                            PluginDatabase.ExtractToCsv(path, false);
-                        }
-                    }
-                },
-
-                // Database management
-                new MainMenuItem
-                {
-                    MenuSection = MenuInExtensions + ResourceProvider.GetString("LOCGameActivity"),
-                    Description = "-"
-                },
-
-                new MainMenuItem
-                {
-                    MenuSection = MenuInExtensions + ResourceProvider.GetString("LOCGameActivity"),
-                    Description = ResourceProvider.GetString("LOCGaGamesDataMismatch"),
-                    Action = (mainMenuItem) =>
-                    {
-                        PluginDatabase.WindowPluginService.ShowPluginDataMismatch();
-                    }
-                },
-
-                new MainMenuItem
-                {
-                    MenuSection = MenuInExtensions + ResourceProvider.GetString("LOCGameActivity"),
-                    Description = ResourceProvider.GetString("LOCCommonTransferPluginData"),
-                    Action = (mainMenuItem) =>
-                    {
-                        PluginDatabase.WindowPluginService.ShowPluginTransfertData(PluginDatabase.GetDataGames());
-                    }
-                },
-
-                new MainMenuItem
-                {
-                    MenuSection = MenuInExtensions + ResourceProvider.GetString("LOCGameActivity"),
-                    Description = ResourceProvider.GetString("LOCCommonIsolatedPluginData"),
-                    Action = (mainMenuItem) =>
-                    {
-                        PluginDatabase.WindowPluginService.ShowPluginDataWithoutGame(PluginDatabase.GetIsolatedDataGames());
-                    }
-                }
-            };
-
-#if DEBUG
-            mainMenuItems.Add(new MainMenuItem
-            {
-                MenuSection = MenuInExtensions + ResourceProvider.GetString("LOCGameActivity"),
-                Description = "-"
-            });
-            mainMenuItems.Add(new MainMenuItem
-            {
-                MenuSection = MenuInExtensions + ResourceProvider.GetString("LOCGameActivity"),
-                Description = "Test",
-                Action = (mainMenuItem) =>
-                {
-					GameActivityMonitoring.GetCurrentMetrics();
-
-				}
-            });
-#endif
-
-            return mainMenuItems;
-        }
-
-        #endregion
-
-        #region Game event
-
-        public override void OnGameSelected(OnGameSelectedEventArgs args)
+		public override void OnGameSelected(OnGameSelectedEventArgs args)
         {
             try
             {
