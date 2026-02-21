@@ -45,12 +45,14 @@
     <sys:String x:Key="LOCGaDataMismatchEmpty">No data mismatch detected.</sys:String>
     <sys:String x:Key="LOCGaDataMismatchApplyAllConfirmTitle">Override all – are you sure?</sys:String>
 
-    <!-- ==================== Backup ==================== -->
 
+    <!-- ==================== GameActivityBackup ================ -->
+
+    <sys:String x:Key="LOCGaBackupDataInfo">Backup session info</sys:String>
+    <sys:String x:Key="LOCGaCurrentGameState">Current game state</sys:String>
     <sys:String x:Key="LOCGaBackupExist" xml:space="preserve">There is backup data for {0}.
 Probably after a Playnite crash.
 Click for more information.</sys:String>
-    <sys:String x:Key="LOCGaBackupDataInfo">Backup data info</sys:String>
     <sys:String x:Key="LOCGaDateSession">Date session</sys:String>
     <sys:String x:Key="LOCGaPlayTimeSession">Play time session</sys:String>
 
@@ -92,10 +94,10 @@ Click for more information.</sys:String>
     <!-- Sensor labels -->
     <sys:String x:Key="LOCGameActivityGpuUsage">GPU 使用率</sys:String>
     <sys:String x:Key="LOCGameActivityFps">FPS</sys:String>
-    <sys:String x:Key="LOCGameActivityGpuTemp">GPU 温度</sys:String>
-    <sys:String x:Key="LOCGameActivityCpuTemp">CPU 温度</sys:String>
-    <sys:String x:Key="LOCGameActivityCpuPower">CPU 電力</sys:String>
-    <sys:String x:Key="LOCGameActivityGpuPower">GPU 電力</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuTemp">GPU T°</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuTemp">CPU T°</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuPower">CPU W</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuPower">GPU W</sys:String>
     <sys:String x:Key="LOCGameActivityCpuUsage">CPU 使用率</sys:String>
     <sys:String x:Key="LOCGameActivityRamUsage">メモリ使用率</sys:String>
 
@@ -103,8 +105,8 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivityActiveWarning">警告を有効にする</sys:String>
     <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Displays a warning message at the end of the game session if defined thresholds are exceeded.</sys:String>
     <sys:String x:Key="LOCGameActivityMinFps">最小 FPS</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxCpuTemp">最大 CPU 温度</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxGpuTemp">最大 GPU 温度</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxCpuTemp">Max CPU T°</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxGpuTemp">Max GPU T°</sys:String>
     <sys:String x:Key="LOCGameActivityMaxCpuUsage">最大 CPU 使用率</sys:String>
     <sys:String x:Key="LOCGameActivityMaxGpuUsage">最大 GPU 使用率</sys:String>
     <sys:String x:Key="LOCGameActivityMaxRamUsage">最大メモリー使用率</sys:String>
@@ -126,6 +128,7 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicLogOptions">Chart options</sys:String>
     <sys:String x:Key="LOCGameActivityUseControls">Use chart controls</sys:String>
     <sys:String x:Key="LOCGameActivitySelectChartSeriesToDisplay">Select the series to display on the chart</sys:String>
+    <sys:String x:Key="LOCGameActivityMoreData">Display more data (temperature and power)</sys:String>
 
     <!-- Variators -->
     <sys:String x:Key="LOCGameActivitySetVariatorTime">Set time variator</sys:String>
@@ -179,9 +182,20 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivityAvgFps">平均 FPS</sys:String>
     <sys:String x:Key="LOCGameActivityAvgCpuT">Avg CPU T°</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpuT">Avg GPU T°</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgCpuP">平均 CPU P</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgGpuP">平均 GPU P</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgCpuP">Avg CPU W</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgGpuP">Avg GPU W</sys:String>
 
+    <!-- =================== PluginChartLog ==================== -->
+
+    <!-- Sensor short labels (filter bar checkboxes) -->
+    <sys:String x:Key="LOCGameActivityLabelCpu">CPU</sys:String>
+    <sys:String x:Key="LOCGameActivityLabelGpu">GPU</sys:String>
+    <sys:String x:Key="LOCGameActivityLabelRam">RAM</sys:String>
+    <sys:String x:Key="LOCGameActivityLabelFps">FPS</sys:String>
+
+    <!-- Group header labels for the two filter bar rows -->
+    <sys:String x:Key="LOCGameActivityGroupUsage">Usage</sys:String>
+    <sys:String x:Key="LOCGameActivityGroupTempPower">Temp / Power</sys:String>
 
     <!-- ==================== Warning Dialog ==================== -->
 
