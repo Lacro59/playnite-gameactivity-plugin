@@ -49,8 +49,8 @@ Usado a diferença de tempo de jogo:{1}s.</sys:String>
 
     <!-- ==================== GameActivityBackup ================ -->
 
-    <sys:String x:Key="LOCGaBackupDataInfo">Backup session info</sys:String>
-    <sys:String x:Key="LOCGaCurrentGameState">Current game state</sys:String>
+    <sys:String x:Key="LOCGaBackupDataInfo">Backup de informações da sessão</sys:String>
+    <sys:String x:Key="LOCGaCurrentGameState">Estado atual do jogo</sys:String>
     <sys:String x:Key="LOCGaBackupExist" xml:space="preserve">There is backup data for {0}.
 Probably after a Playnite crash.
 Click for more information.</sys:String>
@@ -106,8 +106,8 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivityActiveWarning">Ativar alertas</sys:String>
     <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Displays a warning message at the end of the game session if defined thresholds are exceeded.</sys:String>
     <sys:String x:Key="LOCGameActivityMinFps">FPS min</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxCpuTemp">Max CPU T°</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxGpuTemp">Max GPU T°</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxCpuTemp">CPU T° Máxima</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxGpuTemp">GPU T° Máxima</sys:String>
     <sys:String x:Key="LOCGameActivityMaxCpuUsage">Uso máx da CPU</sys:String>
     <sys:String x:Key="LOCGameActivityMaxGpuUsage">Uso máx da GPU</sys:String>
     <sys:String x:Key="LOCGameActivityMaxRamUsage">Uso máx de RAM</sys:String>
@@ -129,7 +129,7 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicLogOptions">Opções de gráficos</sys:String>
     <sys:String x:Key="LOCGameActivityUseControls">Usar controles de gráfico</sys:String>
     <sys:String x:Key="LOCGameActivitySelectChartSeriesToDisplay">Selecione as séries para mostrar no gráfico</sys:String>
-    <sys:String x:Key="LOCGameActivityMoreData">Display more data (temperature and power)</sys:String>
+    <sys:String x:Key="LOCGameActivityMoreData">Exibir mais dados (temperatura e energia)</sys:String>
 
     <!-- Variators -->
     <sys:String x:Key="LOCGameActivitySetVariatorTime">Definir variador de tempo</sys:String>
@@ -183,8 +183,8 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivityAvgFps">FPS Méd</sys:String>
     <sys:String x:Key="LOCGameActivityAvgCpuT">Avg CPU T°</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpuT">Avg GPU T°</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgCpuP">Avg CPU W</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgGpuP">Avg GPU W</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgCpuP">CPU W Média</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgGpuP">GPU W Média</sys:String>
 
     <!-- =================== PluginChartLog ==================== -->
 
@@ -195,8 +195,8 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivityLabelFps">FPS</sys:String>
 
     <!-- Group header labels for the two filter bar rows -->
-    <sys:String x:Key="LOCGameActivityGroupUsage">Usage</sys:String>
-    <sys:String x:Key="LOCGameActivityGroupTempPower">Temp / Power</sys:String>
+    <sys:String x:Key="LOCGameActivityGroupUsage">Utilização</sys:String>
+    <sys:String x:Key="LOCGameActivityGroupTempPower">Temperatura / Energia</sys:String>
 
     <!-- ==================== Warning Dialog ==================== -->
 
