@@ -16,7 +16,7 @@ Oynama farkı süresi kullanıldı:{1}s.</sys:String>
 
     <!-- ==================== Notifications ==================== -->
 
-    <sys:String x:Key="LOCGameActivityNotificationHWiNFO">HWiNFO logging is enabled but the application is not running.</sys:String>
+    <sys:String x:Key="LOCGameActivityNotificationHWiNFO">HW günlük kaydı tutma etkin ancak uygulama çalışmıyor.</sys:String>
     <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">MSI Afterburner logging is enabled but the application is not running.</sys:String>
     <sys:String x:Key="LOCGameActivityNotificationRivaTuner">RivaTuner Statistics Server (RTSS) logging is enabled but the application is not running.</sys:String>
     <sys:String x:Key="LOCGameActivityNotificationLibreHardware">LibreHardware Monitor remote server is not accessible.</sys:String>
