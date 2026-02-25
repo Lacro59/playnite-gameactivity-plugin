@@ -86,11 +86,11 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivityUsedLibreHardware">Use LibreHardware Monitor</sys:String>
     <sys:String x:Key="LOCGameActivityRemoteWebServer">Via remote web server</sys:String>
     <sys:String x:Key="LOCGameActivityUseMsiAfterburner">Usa MSI Afterburner</sys:String>
-    <sys:String x:Key="LOCGameActivityUseHWiNFOSharedMemory">Use HWiNFO shared memory</sys:String>
+    <sys:String x:Key="LOCGameActivityUseHWiNFOSharedMemory">Usa memoria condivisa HWiNFO</sys:String>
     <sys:String x:Key="LOCGameActivityUseHWiNFOGadget">Usa il gadget di HWiNFO per i report</sys:String>
     <sys:String x:Key="LOCGameActivityIndex">Indice</sys:String>
-    <sys:String x:Key="LOCGameActivitySensorsID">Sensor ID</sys:String>
-    <sys:String x:Key="LOCGameActivityElementID">Element ID</sys:String>
+    <sys:String x:Key="LOCGameActivitySensorsID">ID Sensore</sys:String>
+    <sys:String x:Key="LOCGameActivityElementID">ID Elemento</sys:String>
 
     <!-- Sensor labels -->
     <sys:String x:Key="LOCGameActivityGpuUsage">Uso GPU</sys:String>
@@ -142,7 +142,7 @@ Click for more information.</sys:String>
 
     <!-- Misc settings -->
     <sys:String x:Key="LOCGameActivityRecentActivityWeek">Numero di settimane per le attività recenti</sys:String>
-    <sys:String x:Key="LOCGameActivityExternalApp">External app</sys:String>
+    <sys:String x:Key="LOCGameActivityExternalApp">App esterna</sys:String>
     <sys:String x:Key="LOCGameActivityBuiltIn">Built-in</sys:String>
 
 
@@ -195,8 +195,8 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivityLabelFps">FPS</sys:String>
 
     <!-- Group header labels for the two filter bar rows -->
-    <sys:String x:Key="LOCGameActivityGroupUsage">Usage</sys:String>
-    <sys:String x:Key="LOCGameActivityGroupTempPower">Temp / Power</sys:String>
+    <sys:String x:Key="LOCGameActivityGroupUsage">Utilizzo</sys:String>
+    <sys:String x:Key="LOCGameActivityGroupTempPower">Temp / Potenza</sys:String>
 
     <!-- ==================== Warning Dialog ==================== -->
 
@@ -215,8 +215,8 @@ Click for more information.</sys:String>
     <!-- ==================== Add / Edit Session ==================== -->
 
     <sys:String x:Key="LOCGaAddNewGameSession">Aggiungi nuova sessione di gioco</sys:String>
-    <sys:String x:Key="LOCGaDateStart">Start date</sys:String>
-    <sys:String x:Key="LOCGaDateEnd">End date</sys:String>
+    <sys:String x:Key="LOCGaDateStart">Data d'inizio</sys:String>
+    <sys:String x:Key="LOCGaDateEnd">Data di termine</sys:String>
     <sys:String x:Key="LOCGaGameActions">Azioni di gioco</sys:String>
     <sys:String x:Key="LOCGaCustomGameActions">Azioni di gioco personalizzate</sys:String>
 
