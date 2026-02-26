@@ -4,7 +4,7 @@
     <!-- ==================== General ==================== -->
 
     <sys:String x:Key="LOCGameActivity">游戏活动-GameActivity</sys:String>
-    <sys:String x:Key="LOCGameActivityTitle">活</sys:String>
+    <sys:String x:Key="LOCGameActivityTitle">活动记录</sys:String>
 
     <sys:String x:Key="LOCGameActivityNoPlaytime" xml:space="preserve">{0} 没有游玩时间。
 使用了不同的游玩时间：{1} 秒。</sys:String>
@@ -93,24 +93,24 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivityElementID">Element ID</sys:String>
 
     <!-- Sensor labels -->
-    <sys:String x:Key="LOCGameActivityGpuUsage">GPU</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuUsage">GPU占用</sys:String>
     <sys:String x:Key="LOCGameActivityFps">帧数</sys:String>
-    <sys:String x:Key="LOCGameActivityGpuTemp">GPU T°</sys:String>
-    <sys:String x:Key="LOCGameActivityCpuTemp">CPU T°</sys:String>
-    <sys:String x:Key="LOCGameActivityCpuPower">CPU W</sys:String>
-    <sys:String x:Key="LOCGameActivityGpuPower">GPU W</sys:String>
-    <sys:String x:Key="LOCGameActivityCpuUsage">CPU</sys:String>
-    <sys:String x:Key="LOCGameActivityRamUsage">内存</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuTemp">GPU温度</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuTemp">CPU温度</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuPower">CPU功耗</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuPower">GPU功耗</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuUsage">CPU占用</sys:String>
+    <sys:String x:Key="LOCGameActivityRamUsage">内存占用</sys:String>
 
     <!-- Warnings -->
-    <sys:String x:Key="LOCGameActivityActiveWarning">启用警</sys:String>
+    <sys:String x:Key="LOCGameActivityActiveWarning">启用警告</sys:String>
     <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Displays a warning message at the end of the game session if defined thresholds are exceeded.</sys:String>
     <sys:String x:Key="LOCGameActivityMinFps">最小帧数</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxCpuTemp">Max CPU T°</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxGpuTemp">Max GPU T°</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxCpuUsage">最大 CPU</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxGpuUsage">最大 GPU</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxRamUsage">最大内存</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxCpuTemp">最高CPU温度</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxGpuTemp">最高GPU温度</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxCpuUsage">最大CPU占用</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxGpuUsage">最大GPU占用</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxRamUsage">最大内存占用</sys:String>
 
     <!-- Playtime -->
     <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">Merge playtime across sessions on chart</sys:String>
@@ -121,9 +121,9 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivityListGamesFields">要显示的游戏字段</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationChartTime">Display chart with game session times</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationChartLog">Display chart with game session logs</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">在切换按钮中显示详</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">在切换按钮中显示详情</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">Number of data points on horizontal axis</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationChartTimeTruncate">默认地截断时间数据</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationChartTimeTruncate">默认截断时间数据</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabels">在横坐标轴上显示标签</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">在纵坐标轴上显示标签</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicLogOptions">图表选项</sys:String>
@@ -148,8 +148,8 @@ Click for more information.</sys:String>
 
     <!-- ==================== Game Activity View (Single) ==================== -->
 
-    <sys:String x:Key="LOCGameActivityRecentActivity">最近的动态</sys:String>
-    <sys:String x:Key="LOCGameActivityNoRecentActivity">没有最近的活动</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivity">最近活动</sys:String>
+    <sys:String x:Key="LOCGameActivityNoRecentActivity">没有最近活动</sys:String>
     <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} hours over the past {1} week</sys:String>
     <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} hours over the past {1} weeks</sys:String>
     <sys:String x:Key="LOCGameActivityAvgPerDay">日平均时间</sys:String>
@@ -162,61 +162,61 @@ Click for more information.</sys:String>
 
     <sys:String x:Key="LOCGameActivityTotalHours">总小时数</sys:String>
     <sys:String x:Key="LOCGameActivityTotalHoursByWeeks">周小时数</sys:String>
-    <sys:String x:Key="LOCGameActivityWeekLabel">Week</sys:String>
+    <sys:String x:Key="LOCGameActivityWeekLabel">周</sys:String>
     <sys:String x:Key="LOCGameActivityTime">时长</sys:String>
     <sys:String x:Key="LOCGameActivityLog">性能记录</sys:String>
     <sys:String x:Key="LOCGameActivityTimeTitle">日小时数</sys:String>
-    <sys:String x:Key="LOCGameActivityLogTitle">上次会话详</sys:String>
+    <sys:String x:Key="LOCGameActivityLogTitle">上次会话详情</sys:String>
     <sys:String x:Key="LOCGameActivityLogTitleDate">会话详情来自</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesLastActivity">上次会话</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">经过时间</sys:String>
-    <sys:String x:Key="LOCGameActivityTimePlayedInMonth">Time played (month)</sys:String>
-    <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">Time played (period)</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInMonth">游玩时长（月）</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">游玩时长（周期）</sys:String>
     <sys:String x:Key="LOCGameActivityDateSession">Date session</sys:String>
     <sys:String x:Key="LOCGameActivityDateLog">Date log</sys:String>
     <sys:String x:Key="LOCGameActivityPCName">PC 名称</sys:String>
 
     <!-- Average sensor columns -->
-    <sys:String x:Key="LOCGameActivityAvgCpu">平均 CPU</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgGpu">平均 GPU</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgRam">平均内存</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgCpu">平均CPU占用</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgGpu">平均GPU占用</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgRam">平均内存占用</sys:String>
     <sys:String x:Key="LOCGameActivityAvgFps">平均帧</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgCpuT">Avg CPU T°</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgGpuT">Avg GPU T°</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgCpuP">Avg CPU W</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgGpuP">Avg GPU W</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgCpuT">平均CPU温度</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgGpuT">平均GPU温度</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgCpuP">平均CPU功耗</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgGpuP">平均GPU功耗</sys:String>
 
     <!-- =================== PluginChartLog ==================== -->
 
     <!-- Sensor short labels (filter bar checkboxes) -->
     <sys:String x:Key="LOCGameActivityLabelCpu">CPU</sys:String>
     <sys:String x:Key="LOCGameActivityLabelGpu">GPU</sys:String>
-    <sys:String x:Key="LOCGameActivityLabelRam">RAM</sys:String>
+    <sys:String x:Key="LOCGameActivityLabelRam">内存</sys:String>
     <sys:String x:Key="LOCGameActivityLabelFps">FPS</sys:String>
 
     <!-- Group header labels for the two filter bar rows -->
-    <sys:String x:Key="LOCGameActivityGroupUsage">Usage</sys:String>
-    <sys:String x:Key="LOCGameActivityGroupTempPower">Temp / Power</sys:String>
+    <sys:String x:Key="LOCGameActivityGroupUsage">占用率</sys:String>
+    <sys:String x:Key="LOCGameActivityGroupTempPower">温度/功耗</sys:String>
 
     <!-- ==================== Warning Dialog ==================== -->
 
-    <sys:String x:Key="LOCGameActivityWarningCaption">游戏会话时的警</sys:String>
+    <sys:String x:Key="LOCGameActivityWarningCaption">游戏会话时的警告</sys:String>
     <sys:String x:Key="LOCGameActivityWarningAt">于</sys:String>
 
 
     <!-- ==================== Quick Search ==================== -->
 
-    <sys:String x:Key="LOCGaQuickSearchDescription">Search games by GameActivity data</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchDescription">使用GameActivity数据搜索游戏</sys:String>
     <sys:String x:Key="LOCGaQuickSearchByFPS">按帧率查找</sys:String>
-    <sys:String x:Key="LOCGaQuickSearchByTime">Find by session duration</sys:String>
-    <sys:String x:Key="LOCGaQuickSearchByDate">Find by session date</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchByTime">按会话持续时间查找</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchByDate">按会话日期查找</sys:String>
 
 
     <!-- ==================== Add / Edit Session ==================== -->
 
     <sys:String x:Key="LOCGaAddNewGameSession">添加新的游戏会话</sys:String>
-    <sys:String x:Key="LOCGaDateStart">Start date</sys:String>
-    <sys:String x:Key="LOCGaDateEnd">End date</sys:String>
+    <sys:String x:Key="LOCGaDateStart">起始日期</sys:String>
+    <sys:String x:Key="LOCGaDateEnd">结束日期</sys:String>
     <sys:String x:Key="LOCGaGameActions">游戏操作</sys:String>
     <sys:String x:Key="LOCGaCustomGameActions">自定义开关动作</sys:String>
 
