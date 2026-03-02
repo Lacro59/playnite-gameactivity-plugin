@@ -25,16 +25,16 @@ to eliminate UI thread starvation during list scrolling.
 
 ## Step 1 — NuGet
 
-- [ ] Add `LiteDB` **4.x**
-- [ ] Verify no dependency conflict with existing packages
+- [X] Add `LiteDB` **4.x**
+- [X] Verify no dependency conflict with existing packages
 
 ---
 
 ## Step 2 — Shared files (deliver once in `CommonPluginsShared`)
 
-- [ ] `Collections/LiteDbItemCollection.cs` *(new)*
-- [ ] `Collections/PluginDatabaseObject.cs` *(updated — `TDatabase` generic parameter removed)*
-- [ ] `Controls/PluginUserControlExtend.cs` *(updated — synchronous cache lookup, no `Task.Run`)*
+- [X] `Collections/LiteDbItemCollection.cs` *(new)*
+- [X] `Collections/PluginDatabaseObject.cs` *(updated — `TDatabase` generic parameter removed)*
+- [X] `Controls/PluginUserControlExtend.cs` *(updated — synchronous cache lookup, no `Task.Run`)*
 
 ---
 
@@ -42,7 +42,7 @@ to eliminate UI thread starvation during list scrolling.
 
 ### 3.1 — Update class signature
 
-- [ ] Update class signature
+- [X] Update class signature
 
 ```csharp
 // Before
@@ -56,7 +56,7 @@ public class MyPluginDatabase
 
 ### 3.2 — Remove the collection wrapper class
 
-- [ ] Remove the collection wrapper class
+- [X] Remove the collection wrapper class
 
 If the plugin had a dedicated collection class (e.g. `MyCollection`) that only
 existed to hold custom properties, delete it and move those properties directly
@@ -78,7 +78,7 @@ public class MyPluginDatabase : PluginDatabaseObject<MySettings, MyItem, MyItemD
 
 ### 3.3 — Replace `Database.X` accesses
 
-- [ ] Replace `Database.X` accesses
+- [X] Replace `Database.X` accesses
 
 ```csharp
 // Before
@@ -90,7 +90,7 @@ var data = PluginDatabase.CustomProperty;
 
 ### 3.4 — Replace collection enumeration
 
-- [ ] Replace collection enumeration
+- [X] Replace collection enumeration
 
 ```csharp
 // Before
@@ -106,7 +106,7 @@ IEnumerable<MyItem> items = PluginDatabase.GetAllItems().Where(x => x.IsInstalle
 
 ### 4.1 — Update `AttachStaticEvents()`
 
-* [ ] In every control that inherits `PluginUserControlExtend`:
+* [X] In every control that inherits `PluginUserControlExtend`:
 
 ```csharp
 // Before
@@ -128,7 +128,7 @@ No other changes required in controls — handler signatures are unchanged.
 
 ## Step 5 — Notes on `[BsonIgnore]`
 
-* [ ] `[BsonIgnore]`
+* [X] `[BsonIgnore]`
 
 Skipping `[BsonIgnore]` on `[DontSerialize]` properties is acceptable.
 Properties such as `IsDeleted`, `IsSaved`, `HasData`, and `Count` will be serialized
@@ -141,8 +141,8 @@ to BSON but cause no data corruption — they are recalculated or overwritten on
 
 ### Build
 
-- [ ] Compiles on .NET Framework 4.6.2 without errors
-- [ ] No C# 8.0+ features introduced
+- [X] Compiles on .NET Framework 4.6.2 without errors
+- [X] No C# 8.0+ features introduced
 
 ### First launch (JSON migration)
 

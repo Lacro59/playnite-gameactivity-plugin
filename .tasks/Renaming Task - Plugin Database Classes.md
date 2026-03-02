@@ -18,18 +18,18 @@
 Find    : PluginDataBaseGameBase
 Replace : PluginGameEntry
 
-Find    : PluginDataBaseGame<
-Replace : PluginGameCollection<
-
 Find    : PluginDataBaseGameDetails<
 Replace : PluginGameCollectionWithDetails<
+
+Find    : PluginDataBaseGame<
+Replace : PluginGameCollection<
 ```
 
 ---
 
 ## Checklist
 
-- [ ] `PluginGameEntry.cs`
-- [ ] `PluginGameCollection.cs`
-- [ ] `PluginGameCollectionWithDetails.cs`
-- [ ] Build solution
+- [X] `PluginGameEntry.cs`
+- [X] `PluginGameCollection.cs`
+- [X] `PluginGameCollectionWithDetails.cs`
+- [X] Build solution
