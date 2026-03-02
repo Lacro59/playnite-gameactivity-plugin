@@ -1,14 +1,18 @@
-# Core Architecture
+# Roadmap new PluginCommon
 
-* [ ] PluginSettingsViewModel
-* [ ] PluginMenus
-* [ ] PluginWindows
-* [ ] PluginExportCsv
+## Core Architecture
 
-# Controls
+- [X] PluginSettingsViewModel
+- [X] PluginMenus
+- [X] PluginWindows
+- [ ] PluginExportCsv
+- [ ] PluginDatabaseObject<TSettings, TItem, T> where TSettings : PluginSettings
 
-* [ ] PluginViewItem 
-```
+## Controls
+
+- [ ] PluginViewItem
+
+```csharp
 /// <summary>
 /// Only reacts to <see cref="SystemCheckerSettings.EnableIntegrationViewItem"/>.
 /// Ignores theme-bound properties (HasData, IsMinimumOK, etc.) updated by
@@ -17,9 +21,9 @@
 /// </summary>
 protected override void PluginSettings_PropertyChanged(object sender, PropertyChangedEventArgs e)
 {
-	if (e?.PropertyName == nameof(SystemCheckerSettings.EnableIntegrationViewItem))
-	{
-		base.PluginSettings_PropertyChanged(sender, e);
-	}
+    if (e?.PropertyName == nameof(SystemCheckerSettings.EnableIntegrationViewItem))
+    {
+        base.PluginSettings_PropertyChanged(sender, e);
+    }
 }
 ```

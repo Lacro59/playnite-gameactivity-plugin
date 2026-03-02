@@ -2,19 +2,18 @@
 
 ## Renames
 
-
-| Old                               | New                                            |
+| Old                                 | New                                              |
 | ----------------------------------- | ------------------------------------------------ |
-| `PluginDataBaseGameBase`          | `PluginGameEntry`                              |
-| `PluginDataBaseGame<T>`           | `PluginGameCollection<T>`                      |
-| `PluginDataBaseGameDetails<T, Y>` | `PluginGameCollectionWithDetails<T, TDetails>` |
-| Paramètre de type`Y`             | `TDetails`                                     |
+| `PluginDataBaseGameBase`            | `PluginGameEntry`                                |
+| `PluginDataBaseGame<T>`             | `PluginGameCollection<T>`                        |
+| `PluginDataBaseGameDetails<T, Y>`   | `PluginGameCollectionWithDetails<T, TDetails>`   |
+| Paramètre de type`Y`                | `TDetails`                                       |
 
 ---
 
 ## Search & Replace
 
-```
+```text
 Find    : PluginDataBaseGameBase
 Replace : PluginGameEntry
 
