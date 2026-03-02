@@ -208,15 +208,15 @@ namespace GameActivity.Controls
             AttachPluginEvents(PluginDatabase.PluginName, () =>
             {
                 PluginDatabase.PluginSettings.PropertyChanged += CreatePluginSettingsHandler();
-                PluginDatabase.Database.ItemUpdated += CreateDatabaseItemUpdatedHandler<GameActivities>();
-                PluginDatabase.Database.ItemCollectionChanged += CreateDatabaseCollectionChangedHandler<GameActivities>();
-                API.Instance.Database.Games.ItemUpdated += Games_ItemUpdated;
+				PluginDatabase.DatabaseItemUpdated += CreateDatabaseItemUpdatedHandler<GameActivities>();
+				PluginDatabase.DatabaseItemCollectionChanged += CreateDatabaseCollectionChangedHandler<GameActivities>();
+				API.Instance.Database.Games.ItemUpdated += Games_ItemUpdated;
 
                 // Sync original toggle state from settings on first attach.
-                DisplayCpu = PluginDatabase.PluginSettings.Settings.DisplayCpu;
-                DisplayGpu = PluginDatabase.PluginSettings.Settings.DisplayGpu;
-                DisplayRam = PluginDatabase.PluginSettings.Settings.DisplayRam;
-                DisplayFps = PluginDatabase.PluginSettings.Settings.DisplayFps;
+                DisplayCpu = PluginDatabase.PluginSettings.DisplayCpu;
+                DisplayGpu = PluginDatabase.PluginSettings.DisplayGpu;
+                DisplayRam = PluginDatabase.PluginSettings.DisplayRam;
+                DisplayFps = PluginDatabase.PluginSettings.DisplayFps;
 
                 // Temperature/power toggles always start hidden — no setting persisted.
                 DisplayCpuT = false;
@@ -233,12 +233,12 @@ namespace GameActivity.Controls
 
         public override void SetDefaultDataContext()
         {
-            bool isActivated = PluginDatabase.PluginSettings.Settings.EnableIntegrationChartLog;
-            double chartLogHeight = PluginDatabase.PluginSettings.Settings.ChartLogHeight;
-            bool chartLogAxis = PluginDatabase.PluginSettings.Settings.ChartLogAxis;
-            bool chartLogOrdinates = PluginDatabase.PluginSettings.Settings.ChartLogOrdinates;
-            bool useControls = PluginDatabase.PluginSettings.Settings.UseControls;
-            bool displayMoreData = PluginDatabase.PluginSettings.Settings.DisplayMoreData;
+            bool isActivated = PluginDatabase.PluginSettings.EnableIntegrationChartLog;
+            double chartLogHeight = PluginDatabase.PluginSettings.ChartLogHeight;
+            bool chartLogAxis = PluginDatabase.PluginSettings.ChartLogAxis;
+            bool chartLogOrdinates = PluginDatabase.PluginSettings.ChartLogOrdinates;
+            bool useControls = PluginDatabase.PluginSettings.UseControls;
+            bool displayMoreData = PluginDatabase.PluginSettings.DisplayMoreData;
 
             if (IgnoreSettings)
             {
@@ -254,7 +254,7 @@ namespace GameActivity.Controls
             ControlDataContext.ChartLogHeight = chartLogHeight;
             ControlDataContext.ChartLogAxis = chartLogAxis;
             ControlDataContext.ChartLogOrdinates = chartLogOrdinates;
-            ControlDataContext.ChartLogVisibleEmpty = PluginDatabase.PluginSettings.Settings.ChartLogVisibleEmpty;
+            ControlDataContext.ChartLogVisibleEmpty = PluginDatabase.PluginSettings.ChartLogVisibleEmpty;
             ControlDataContext.UseControls = useControls;
             ControlDataContext.DisableAnimations = DisableAnimations;
             ControlDataContext.LabelsRotationValue = LabelsRotation ? 160d : 0d;
@@ -285,7 +285,7 @@ namespace GameActivity.Controls
         /// Captures all UI-thread dependency property values before dispatching to background.
         /// Avoids cross-thread access to DependencyObjects inside the Task.
         /// </summary>
-        public override void SetData(Game newContext, PluginDataBaseGameBase pluginGameData)
+        public override void SetData(Game newContext, PluginGameEntry pluginGameData)
         {
             GameActivities gameActivities = (GameActivities)pluginGameData;
 
@@ -300,7 +300,7 @@ namespace GameActivity.Controls
 
             int limit = AxisLimit != 0
                 ? AxisLimit
-                : PluginDatabase.PluginSettings.Settings.ChartLogCountAbscissa;
+                : PluginDatabase.PluginSettings.ChartLogCountAbscissa;
 
             // Capture all UI-thread DP values before entering background thread.
             int axisVariator = AxisVariator;

@@ -1,17 +1,18 @@
-﻿using Playnite.SDK;
-using CommonPluginsShared.Collections;
+﻿using CommonPluginsShared.Collections;
+using GameActivity.Services;
+using LiteDB;
+using Playnite.SDK;
+using Playnite.SDK.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GameActivity.Services;
-using Playnite.SDK.Data;
 
 namespace GameActivity.Models
 {
 	/// <summary>
 	/// Represents a collection of game activities with performance details and session statistics.
 	/// </summary>
-	public class GameActivities : PluginDataBaseGameDetails<Activity, ActivityDetails>
+	public class GameActivities : PluginGameCollectionWithDetails<Activity, ActivityDetails>
 	{
 		private static ILogger Logger => LogManager.GetLogger();
 		private static GameActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
@@ -25,8 +26,8 @@ namespace GameActivity.Models
 		{
 			get
 			{
-				int timeThreshold = PluginDatabase.PluginSettings.Settings.IgnoreSession
-					? PluginDatabase.PluginSettings.Settings.IgnoreSessionTime
+				int timeThreshold = PluginDatabase.PluginSettings.IgnoreSession
+					? PluginDatabase.PluginSettings.IgnoreSessionTime
 					: 0;
 
 				return Items.Where(x => (int)x.ElapsedSeconds > timeThreshold)
@@ -278,7 +279,7 @@ namespace GameActivity.Models
 		/// <returns>List of activities within the time range.</returns>
 		public List<Activity> GetListActivitiesWeek(int week)
 		{
-			int countDay = PluginDatabase.PluginSettings.Settings.RecentActivityWeek * 7;
+			int countDay = PluginDatabase.PluginSettings.RecentActivityWeek * 7;
 			DateTime dtEnd = DateTime.Now.Date.AddDays(1).AddSeconds(-1); // End of today
 			DateTime dtStart = DateTime.Now.AddDays(-countDay).Date; // Start of day N days ago
 
@@ -295,7 +296,7 @@ namespace GameActivity.Models
 		/// <returns>A localized string describing recent playtime or no activity message.</returns>
 		public string GetRecentActivity()
 		{
-			List<Activity> recentActivities = GetListActivitiesWeek(PluginDatabase.PluginSettings.Settings.RecentActivityWeek);
+			List<Activity> recentActivities = GetListActivitiesWeek(PluginDatabase.PluginSettings.RecentActivityWeek);
 
 			if (recentActivities == null || recentActivities.Count == 0)
 			{
@@ -310,7 +311,7 @@ namespace GameActivity.Models
 				return ResourceProvider.GetString("LOCGameActivityNoRecentActivity");
 			}
 
-			int weeks = PluginDatabase.PluginSettings.Settings.RecentActivityWeek;
+			int weeks = PluginDatabase.PluginSettings.RecentActivityWeek;
 			string resourceKey = weeks == 1
 				? "LOCGameActivityRecentActivitySingular"
 				: "LOCGameActivityRecentActivityPlurial";
@@ -413,8 +414,8 @@ namespace GameActivity.Models
 		/// <returns>The threshold in seconds, or -1 if ignore is disabled.</returns>
 		private int GetTimeIgnoreThreshold()
 		{
-			return PluginDatabase.PluginSettings.Settings.IgnoreSession
-				? PluginDatabase.PluginSettings.Settings.IgnoreSessionTime
+			return PluginDatabase.PluginSettings.IgnoreSession
+				? PluginDatabase.PluginSettings.IgnoreSessionTime
 				: -1;
 		}
 

@@ -45,8 +45,8 @@ namespace GameActivity.Controls
             AttachPluginEvents(PluginDatabase.PluginName, () =>
             {
                 PluginDatabase.PluginSettings.PropertyChanged += CreatePluginSettingsHandler();
-                PluginDatabase.Database.ItemUpdated += CreateDatabaseItemUpdatedHandler<GameActivities>();
-                PluginDatabase.Database.ItemCollectionChanged += CreateDatabaseCollectionChangedHandler<GameActivities>();
+                PluginDatabase.DatabaseItemUpdated += CreateDatabaseItemUpdatedHandler<GameActivities>();
+                PluginDatabase.DatabaseItemCollectionChanged += CreateDatabaseCollectionChangedHandler<GameActivities>();
                 API.Instance.Database.Games.ItemUpdated += Games_ItemUpdated;
             });
         }
@@ -54,8 +54,8 @@ namespace GameActivity.Controls
 
         public override void SetDefaultDataContext()
         {
-            ControlDataContext.IsActivated = PluginDatabase.PluginSettings.Settings.EnableIntegrationButton;
-            ControlDataContext.DisplayDetails = PluginDatabase.PluginSettings.Settings.EnableIntegrationButtonDetails;
+            ControlDataContext.IsActivated = PluginDatabase.PluginSettings.EnableIntegrationButton;
+            ControlDataContext.DisplayDetails = PluginDatabase.PluginSettings.EnableIntegrationButtonDetails;
             ControlDataContext.Text = "\ue97f";
             ControlDataContext.LastActivity = string.Empty;
             ControlDataContext.LastPlaytime = 0;
@@ -67,7 +67,7 @@ namespace GameActivity.Controls
         /// Populates last-session data. DisplayDetails is reset to false when no data exists
         /// so the detail panel collapses without modifying the user's setting.
         /// </summary>
-        public override void SetData(Game newContext, PluginDataBaseGameBase pluginGameData)
+        public override void SetData(Game newContext, PluginGameEntry pluginGameData)
         {
             GameActivities gameActivities = (GameActivities)pluginGameData;
 

@@ -1,12 +1,9 @@
 ﻿using CommonPluginsControls.Controls;
-using GameActivity.Services;
 using Playnite.SDK.Data;
 using Playnite.SDK;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using CommonPluginsShared;
-using CommonPluginsShared.UI;
+using CommonPluginsShared.Commands;
 
 namespace GameActivity.Models
 {

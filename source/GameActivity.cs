@@ -36,8 +36,6 @@ namespace GameActivity
 		// Hardware monitoring system
 		internal GameActivityMonitoring GameActivityMonitoring { get; set; }
 
-		private readonly GameActivityMenus _menus;
-
 		public GameActivity(IPlayniteAPI api) : base(api, "GameActivity")
         {
             // Custom theme button
@@ -54,7 +52,7 @@ namespace GameActivity
             AddSettingsSupport(new AddSettingsSupportArgs
             {
                 SourceName = "GameActivity",
-                SettingsRoot = $"{nameof(PluginSettings)}.{nameof(PluginSettings.Settings)}"
+                SettingsRoot = $"{nameof(PluginSettingsViewModel)}.{nameof(PluginSettingsViewModel.Settings)}"
             });
 
             // Initialize top & side bar
@@ -68,8 +66,8 @@ namespace GameActivity
 			GameActivityMonitoring = new GameActivityMonitoring(this);
 
 			// Menus
-			_menus = new GameActivityMenus(PluginSettings.Settings, PluginDatabase);
-            _menus.AddData(this, GameActivityMonitoring);
+			_menus = new GameActivityMenus(PluginSettingsViewModel.Settings, PluginDatabase);
+            ((GameActivityMenus)_menus).AddData(this, GameActivityMonitoring);
 		}
 
 
@@ -112,7 +110,7 @@ namespace GameActivity
 
             if (args.Name == "PluginChartTime")
             {
-                return new PluginChartTime { DisableAnimations = true, LabelsRotation = true, Truncate = PluginDatabase.PluginSettings.Settings.ChartTimeTruncate };
+                return new PluginChartTime { DisableAnimations = true, LabelsRotation = true, Truncate = PluginDatabase.PluginSettings.ChartTimeTruncate };
             }
 
             if (args.Name == "PluginChartLog")
@@ -210,7 +208,7 @@ namespace GameActivity
 				GameActivityMonitoring.DataBackup_start(args.Game.Id);
 
                 // start timer if log is enable.
-                if (PluginSettings.Settings.EnableLogging)
+                if (PluginDatabase.PluginSettings.EnableLogging)
                 {
 					GameActivityMonitoring.DataLogging_start(args.Game.Id);
                 }
@@ -246,7 +244,7 @@ namespace GameActivity
                 Common.LogError(ex, false, true, PluginDatabase.PluginName);
 
 				GameActivityMonitoring.DataBackup_stop(args.Game.Id);
-                if (PluginSettings.Settings.EnableLogging)
+                if (PluginDatabase.PluginSettings.EnableLogging)
                 {
 					GameActivityMonitoring.DataLogging_stop(args.Game.Id);
                 }
@@ -264,7 +262,7 @@ namespace GameActivity
                     GameActivityMonitoring.DataBackup_stop(args.Game.Id);
 
                     // Stop timer if log is enable.
-                    if (PluginSettings.Settings.EnableLogging)
+                    if (PluginDatabase.PluginSettings.EnableLogging)
                     {
 						GameActivityMonitoring.DataLogging_stop(args.Game.Id);
                     }
@@ -279,7 +277,7 @@ namespace GameActivity
                     {
                         Thread.Sleep(5000);
                         // Temporary workaround for PlayState paused time until Playnite allows to share data among extensions
-                        elapsedSeconds = PluginSettings.Settings.SubstPlayStateTime && ExistsPlayStateInfoFile()
+                        elapsedSeconds = PluginDatabase.PluginSettings.SubstPlayStateTime && ExistsPlayStateInfoFile()
                             ? args.Game.Playtime - runningActivity.PlaytimeOnStarted - GetPlayStatePausedTimeInfo(args.Game)
                             : args.Game.Playtime - runningActivity.PlaytimeOnStarted;
 
@@ -289,7 +287,7 @@ namespace GameActivity
                             NotificationType.Info
                         ));
                     }
-                    else if (PluginSettings.Settings.SubstPlayStateTime && ExistsPlayStateInfoFile()) // Temporary workaround for PlayState paused time until Playnite allows to share data among extensions
+                    else if (PluginDatabase.PluginSettings.SubstPlayStateTime && ExistsPlayStateInfoFile()) // Temporary workaround for PlayState paused time until Playnite allows to share data among extensions
                     {
                         Thread.Sleep(10000); // Necessary since PlayState is executed after GameActivity.
                         elapsedSeconds -= GetPlayStatePausedTimeInfo(args.Game);
@@ -364,7 +362,7 @@ namespace GameActivity
         public override void OnApplicationStarted(OnApplicationStartedEventArgs args)
         {
 			// Initialize hardware monitoring system if logging is enabled
-			if (PluginSettings.Settings.EnableLogging)
+			if (PluginDatabase.PluginSettings.EnableLogging)
 			{
                 GameActivityMonitoring.InitializeMonitoring();
                 GameActivityMonitoring.CheckMonitoringReadiness();
@@ -408,7 +406,7 @@ namespace GameActivity
         
         public override ISettings GetSettings(bool firstRunSettings)
         {
-            return PluginSettings;
+            return PluginSettingsViewModel;
         }
 
         public override UserControl GetSettingsView(bool firstRunSettings)

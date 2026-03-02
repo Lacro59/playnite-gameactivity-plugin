@@ -8,8 +8,8 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
-using CommonPluginsShared.UI;
 using System.Collections.Generic;
+using CommonPluginsShared.Commands;
 
 namespace GameActivity.ViewModels
 {

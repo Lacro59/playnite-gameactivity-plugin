@@ -22,7 +22,7 @@ namespace GameActivity.Services
 	/// Manages <see cref="GameActivities"/> entries, theme-resource binding,
 	/// game-info synchronisation, and CSV export.
 	/// </summary>
-	public class GameActivityDatabase : PluginDatabaseObject<GameActivitySettingsViewModel, GameActivitiesCollection, GameActivities, Activity>
+	public class GameActivityDatabase : PluginDatabaseObject<GameActivitySettings, GameActivities, Activity>
 	{
 		#region Fields
 
@@ -51,7 +51,7 @@ namespace GameActivity.Services
 		/// </summary>
 		/// <param name="pluginSettings">View-model that owns the plugin settings.</param>
 		/// <param name="pluginUserDataPath">Root directory for all user data written by this plugin.</param>
-		public GameActivityDatabase(GameActivitySettingsViewModel pluginSettings, string pluginUserDataPath)
+		public GameActivityDatabase(GameActivitySettings pluginSettings, string pluginUserDataPath)
 			: base(pluginSettings, "GameActivity", pluginUserDataPath)
 		{
 			PluginWindows = new GameActivityWindows(PluginName, this);
@@ -124,16 +124,17 @@ namespace GameActivity.Services
 				gameActivities.GetLastSessionActivity().ElapsedSeconds,
 				null, null, CultureInfo.CurrentCulture);
 
-			PluginSettings.Settings.HasData = gameActivities.HasData;
-			PluginSettings.Settings.HasDataLog = gameActivities.HasDataDetails();
-			PluginSettings.Settings.LastDateSession = lastSession.ToString(Constants.DateUiFormat);
-			PluginSettings.Settings.LastDateTimeSession = lastSession.ToString(Constants.DateUiFormat)
+			PluginSettings.HasData = gameActivities.HasData;
+			PluginSettings.HasDataLog = gameActivities.HasDataDetails();
+			PluginSettings.LastDateSession = lastSession.ToString(Constants.DateUiFormat);
+			PluginSettings.LastDateTimeSession = lastSession.ToString(Constants.DateUiFormat)
 														+ " " + lastSession.ToString(Constants.TimeUiFormat);
-			PluginSettings.Settings.LastPlaytimeSession = playtime;
-			PluginSettings.Settings.AvgFpsAllSession = gameActivities.ItemsDetails.AvgFpsAllSession;
-			PluginSettings.Settings.RecentActivity = gameActivities.GetRecentActivity();
+			PluginSettings.LastPlaytimeSession = playtime;
+			PluginSettings.AvgFpsAllSession = gameActivities.ItemsDetails.AvgFpsAllSession;
+			PluginSettings.RecentActivity = gameActivities.GetRecentActivity();
 		}
 
+		/*
 		/// <summary>
 		/// Handles Playnite's <c>Games.ItemUpdated</c> event.
 		/// Keeps the plugin database in sync with updated game metadata and ensures a default
@@ -149,12 +150,13 @@ namespace GameActivity.Services
 			foreach (ItemUpdateEvent<Game> gameUpdated in e.UpdatedItems)
 			{
 				Guid id = gameUpdated.NewData.Id;
-				Database.SetGameInfoDetails<Activity, ActivityDetails>(gameUpdated.NewData.Id);
+				_database.SetGameInfoDetails<Activity, ActivityDetails>(gameUpdated.NewData.Id);
 
 				// Side-effect: auto-creates a default entry for games with no activity record.
 				Get(id);
 			}
 		}
+		*/
 
 		/// <summary>
 		/// Merges activity sessions and detail logs from <paramref name="fromId"/> into
@@ -167,7 +169,7 @@ namespace GameActivity.Services
 		/// Updated <see cref="GameActivities"/> for <paramref name="toId"/>,
 		/// or <c>null</c> on error.
 		/// </returns>
-		public override PluginDataBaseGameBase MergeData(Guid fromId, Guid toId)
+		public override PluginGameEntry MergeData(Guid fromId, Guid toId)
 		{
 			try
 			{
@@ -205,7 +207,15 @@ namespace GameActivity.Services
 		/// </remarks>
 		public List<GameActivities> GetListGameActivity()
 		{
-			return Database.ToList();
+			LiteDbItemCollection<GameActivities> db = GetDatabaseSafe();
+			if (db == null)
+			{
+				return new List<GameActivities>();
+			}
+
+			List<GameActivities> listGameActivity = db.FindAll()?.ToList() ?? new List<GameActivities>();
+
+			return listGameActivity;
 		}
 
 		/// <summary>
@@ -220,13 +230,19 @@ namespace GameActivity.Services
 		{
 			try
 			{
-				return Database.Items
-					?.Where(x => x.Value.GameExist
-							  && (x.Value.SessionPlaytime != x.Value.Game.Playtime
-								  || x.Value.Game.PlayCount != (ulong)x.Value.Count)
-							  && (!x.Value.Game.Hidden || withHidden))
-					?.Select(x => x.Value)
-					?? Enumerable.Empty<GameActivities>();
+				LiteDbItemCollection<GameActivities> db = GetDatabaseSafe();
+				if (db == null)
+				{
+					return Enumerable.Empty<GameActivities>();
+				}
+
+				IEnumerable<GameActivities> mismatchData = db.FindAll()
+					.Where(x => x.GameExist
+							  && (x.SessionPlaytime != x.Game.Playtime
+								  || x.Game.PlayCount != (ulong)x.Count)
+							  && (!x.Game.Hidden || withHidden)) ?? Enumerable.Empty<GameActivities>();
+
+				return mismatchData;
 			}
 			catch (Exception ex)
 			{
@@ -251,12 +267,12 @@ namespace GameActivity.Services
 		/// </summary>
 		private void ResetThemeResources()
 		{
-			PluginSettings.Settings.HasData = false;
-			PluginSettings.Settings.HasDataLog = false;
-			PluginSettings.Settings.LastDateSession = string.Empty;
-			PluginSettings.Settings.LastDateTimeSession = string.Empty;
-			PluginSettings.Settings.LastPlaytimeSession = string.Empty;
-			PluginSettings.Settings.AvgFpsAllSession = 0;
+			PluginSettings.HasData = false;
+			PluginSettings.HasDataLog = false;
+			PluginSettings.LastDateSession = string.Empty;
+			PluginSettings.LastDateTimeSession = string.Empty;
+			PluginSettings.LastPlaytimeSession = string.Empty;
+			PluginSettings.AvgFpsAllSession = 0;
 		}
 
 		/// <summary>Returns localised column headers for the aggregated (minimum) CSV export.</summary>

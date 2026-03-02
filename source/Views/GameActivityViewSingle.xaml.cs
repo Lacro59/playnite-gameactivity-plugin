@@ -78,18 +78,18 @@ namespace GameActivity.Views
             // Game session time line
             PART_ChartTime = (PluginChartTime)PART_ChartTimeContener.Children[0];
             PART_ChartTime.GameContext = game;
-            PART_ChartTime.Truncate = PluginDatabase.PluginSettings.Settings.ChartTimeTruncate;
-            PART_Truncate.IsChecked = PluginDatabase.PluginSettings.Settings.ChartTimeTruncate;
+            PART_ChartTime.Truncate = PluginDatabase.PluginSettings.ChartTimeTruncate;
+            PART_Truncate.IsChecked = PluginDatabase.PluginSettings.ChartTimeTruncate;
 
 
-            lvSessions.SaveColumn = PluginDatabase.PluginSettings.Settings.SaveColumnOrder;
+            lvSessions.SaveColumn = PluginDatabase.PluginSettings.SaveColumnOrder;
             lvSessions.SaveColumnFilePath = Path.Combine(PluginDatabase.Paths.PluginUserDataPath, "lvSessions.json");
 
             GridView lvView = (GridView)lvSessions.View;
 
             // Game logs
             // Add column if log details enable.
-            if (!PluginDatabase.PluginSettings.Settings.EnableLogging)
+            if (!PluginDatabase.PluginSettings.EnableLogging)
             {
                 lvAvgGpuP.Width = 0;
                 lvAvgGpuPHeader.IsHitTestVisible = false;
@@ -113,59 +113,59 @@ namespace GameActivity.Views
             }
             else
             {
-                if (!PluginDatabase.PluginSettings.Settings.lvAvgGpuP)
+                if (!PluginDatabase.PluginSettings.lvAvgGpuP)
                 {
                     lvAvgGpuP.Width = 0;
                     lvAvgGpuPHeader.IsHitTestVisible = false;
                 }
-                if (!PluginDatabase.PluginSettings.Settings.lvAvgCpuP)
+                if (!PluginDatabase.PluginSettings.lvAvgCpuP)
                 {
                     lvAvgCpuP.Width = 0;
                     lvAvgCpuPHeader.IsHitTestVisible = false;
                 }
-                if (!PluginDatabase.PluginSettings.Settings.lvAvgGpuT)
+                if (!PluginDatabase.PluginSettings.lvAvgGpuT)
                 {
                     lvAvgGpuT.Width = 0;
                     lvAvgGpuTHeader.IsHitTestVisible = false;
                 }
-                if (!PluginDatabase.PluginSettings.Settings.lvAvgCpuT)
+                if (!PluginDatabase.PluginSettings.lvAvgCpuT)
                 {
                     lvAvgCpuT.Width = 0;
                     lvAvgCpuTHeader.IsHitTestVisible = false;
                 }
-                if (!PluginDatabase.PluginSettings.Settings.lvAvgFps)
+                if (!PluginDatabase.PluginSettings.lvAvgFps)
                 {
                     lvAvgFps.Width = 0;
                     lvAvgFpsHeader.IsHitTestVisible = false;
                 }
-                if (!PluginDatabase.PluginSettings.Settings.lvAvgRam)
+                if (!PluginDatabase.PluginSettings.lvAvgRam)
                 {
                     lvAvgRam.Width = 0;
                     lvAvgRamHeader.IsHitTestVisible = false;
                 }
-                if (!PluginDatabase.PluginSettings.Settings.lvAvgGpu)
+                if (!PluginDatabase.PluginSettings.lvAvgGpu)
                 {
                     lvAvgGpu.Width = 0;
                     lvAvgGpuHeader.IsHitTestVisible = false;
                 }
-                if (!PluginDatabase.PluginSettings.Settings.lvAvgCpu)
+                if (!PluginDatabase.PluginSettings.lvAvgCpu)
                 {
                     lvAvgCpu.Width = 0;
                     lvAvgCpuHeader.IsHitTestVisible = false;
                 }
             }
 
-            if (!PluginDatabase.PluginSettings.Settings.lvGamesPcName)
+            if (!PluginDatabase.PluginSettings.lvGamesPcName)
             {
                 lvGamesPcName.Width = 0;
                 lvGamesPcNameHeader.IsHitTestVisible = false;
             }
-            if (!PluginDatabase.PluginSettings.Settings.lvGamesSource)
+            if (!PluginDatabase.PluginSettings.lvGamesSource)
             {
                 lvGamesSource.Width = 0;
                 lvGamesSourceHeader.IsHitTestVisible = false;
             }
-            if (!PluginDatabase.PluginSettings.Settings.lvGamesPlayAction)
+            if (!PluginDatabase.PluginSettings.lvGamesPlayAction)
             {
                 lvGamesPlayAction.Width = 0;
                 lvGamesPlayActionHeader.IsHitTestVisible = false;
@@ -197,12 +197,12 @@ namespace GameActivity.Views
 
         private void Bt_PrevTimePlus(object sender, RoutedEventArgs e)
         {
-            PART_ChartTime.Prev(PluginDatabase.PluginSettings.Settings.VariatorTime);
+            PART_ChartTime.Prev(PluginDatabase.PluginSettings.VariatorTime);
         }
 
         private void Bt_NextTimePlus(object sender, RoutedEventArgs e)
         {
-            PART_ChartTime.Next(PluginDatabase.PluginSettings.Settings.VariatorTime);
+            PART_ChartTime.Next(PluginDatabase.PluginSettings.VariatorTime);
         }
 
         private void Bt_Truncate(object sender, RoutedEventArgs e)
@@ -268,12 +268,12 @@ namespace GameActivity.Views
 
         private void Bt_PrevLogPlus(object sender, RoutedEventArgs e)
         {
-            PART_ChartLog.Prev(PluginDatabase.PluginSettings.Settings.VariatorLog);
+            PART_ChartLog.Prev(PluginDatabase.PluginSettings.VariatorLog);
         }
 
         private void Bt_NextLogPlus(object sender, RoutedEventArgs e)
         {
-            PART_ChartLog.Next(PluginDatabase.PluginSettings.Settings.VariatorLog);
+            PART_ChartLog.Next(PluginDatabase.PluginSettings.VariatorLog);
         }
         #endregion
 
@@ -291,7 +291,7 @@ namespace GameActivity.Views
                         ulong elapsedSeconds = gameActivities.FilterItems[iItem].ElapsedSeconds;
                         DateTime dateSession = Convert.ToDateTime(gameActivities.FilterItems[iItem].DateSession).ToLocalTime();
                         string sourceName = gameActivities.FilterItems[iItem].SourceName;
-                        TextBlockWithIconMode ModeSimple = (PluginDatabase.PluginSettings.Settings.ModeStoreIcon == 1) ? TextBlockWithIconMode.IconTextFirstOnly : TextBlockWithIconMode.IconFirstOnly;
+                        TextBlockWithIconMode ModeSimple = (PluginDatabase.PluginSettings.ModeStoreIcon == 1) ? TextBlockWithIconMode.IconTextFirstOnly : TextBlockWithIconMode.IconFirstOnly;
 
                         activityListByGame.Add(new ListActivities()
                         {
@@ -311,13 +311,13 @@ namespace GameActivity.Views
                             SourceIcon = PlayniteTools.GetPlatformIcon(sourceName),
                             SourceIconText = TransformIcon.Get(sourceName),
 
-                            EnableWarm = PluginDatabase.PluginSettings.Settings.EnableWarning,
-                            MaxCPUT = PluginDatabase.PluginSettings.Settings.MaxCpuTemp.ToString(),
-                            MaxGPUT = PluginDatabase.PluginSettings.Settings.MaxGpuTemp.ToString(),
-                            MinFPS = PluginDatabase.PluginSettings.Settings.MinFps.ToString(),
-                            MaxCPU = PluginDatabase.PluginSettings.Settings.MaxCpuUsage.ToString(),
-                            MaxGPU = PluginDatabase.PluginSettings.Settings.MaxGpuUsage.ToString(),
-                            MaxRAM = PluginDatabase.PluginSettings.Settings.MaxRamUsage.ToString(),
+                            EnableWarm = PluginDatabase.PluginSettings.EnableWarning,
+                            MaxCPUT = PluginDatabase.PluginSettings.MaxCpuTemp.ToString(),
+                            MaxGPUT = PluginDatabase.PluginSettings.MaxGpuTemp.ToString(),
+                            MinFPS = PluginDatabase.PluginSettings.MinFps.ToString(),
+                            MaxCPU = PluginDatabase.PluginSettings.MaxCpuUsage.ToString(),
+                            MaxGPU = PluginDatabase.PluginSettings.MaxGpuUsage.ToString(),
+                            MaxRAM = PluginDatabase.PluginSettings.MaxRamUsage.ToString(),
 
                             PCConfigurationId = gameActivities.FilterItems[iItem].IdConfiguration,
                             PCName = gameActivities.FilterItems[iItem].Configuration.Name,

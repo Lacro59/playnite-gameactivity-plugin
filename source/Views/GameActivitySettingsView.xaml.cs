@@ -87,11 +87,11 @@ namespace GameActivity
                     if (SpControl.Tag != null)
                     {
                         int.TryParse((string)SpControl.Tag, out int index);
-                        PluginDatabase.PluginSettings.Settings.StoreColors[index].Fill = new SolidColorBrush(color);
+                        PluginDatabase.PluginSettings.StoreColors[index].Fill = new SolidColorBrush(color);
                     }
                     else
                     {
-                        PluginDatabase.PluginSettings.Settings.ChartColors = new SolidColorBrush(color);
+                        PluginDatabase.PluginSettings.ChartColors = new SolidColorBrush(color);
                     }
                 }
             }
@@ -139,7 +139,7 @@ namespace GameActivity
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             PART_Color.Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#2195f2");
-            PluginDatabase.PluginSettings.Settings.ChartColors = (SolidColorBrush)new BrushConverter().ConvertFrom("#2195f2");
+            PluginDatabase.PluginSettings.ChartColors = (SolidColorBrush)new BrushConverter().ConvertFrom("#2195f2");
         }
         #endregion
     }

@@ -1,5 +1,6 @@
 ﻿using CommonPluginsShared;
 using CommonPluginsShared.Extensions;
+using CommonPluginsShared.Interfaces;
 using CommonPluginsShared.Plugins;
 using GameActivity.Models;
 using MoreLinq;
@@ -457,8 +458,8 @@ namespace GameActivity
     /// Handles the edit lifecycle (BeginEdit / CancelEdit / EndEdit / VerifySettings)
     /// and orchestrates store-colour initialisation.
     /// </summary>
-    public class GameActivitySettingsViewModel : PluginSettingsViewModel, ISettings
-    { 
+    public class GameActivitySettingsViewModel : PluginSettingsViewModel, IPluginSettingsViewModel
+	{ 
         private readonly GameActivity _plugin;
 
         private GameActivitySettings _editingClone;
@@ -471,11 +472,13 @@ namespace GameActivity
             set => SetValue(ref _settings, value);
         }
 
-        /// <summary>
-        /// Loads persisted settings (or creates defaults) and applies backward-compatibility patches.
-        /// </summary>
-        /// <param name="plugin">The owning plugin instance — required for Save/Load.</param>
-        public GameActivitySettingsViewModel(GameActivity plugin)
+		IPluginSettings IPluginSettingsViewModel.Settings => Settings;
+
+		/// <summary>
+		/// Loads persisted settings (or creates defaults) and applies backward-compatibility patches.
+		/// </summary>
+		/// <param name="plugin">The owning plugin instance — required for Save/Load.</param>
+		public GameActivitySettingsViewModel(GameActivity plugin)
         {
             _plugin = plugin ?? throw new ArgumentNullException("plugin");
             Settings = plugin.LoadPluginSettings<GameActivitySettings>() ?? new GameActivitySettings();
@@ -509,7 +512,7 @@ namespace GameActivity
         public void EndEdit()
         {
             _plugin.SavePluginSettings(Settings);
-            GameActivity.PluginDatabase.PluginSettings = this;
+            GameActivity.PluginDatabase.PluginSettings = this.Settings;
 
             if (API.Instance.ApplicationInfo.Mode == ApplicationMode.Desktop)
             {
@@ -573,7 +576,7 @@ namespace GameActivity
         /// </summary>
         private void UpdateMissingStoreColors()
         {
-            var items = GameActivity.PluginDatabase.Database.Items;
+            var items = GameActivity.PluginDatabase.GetGamesList();
 
             // Build a lookup of already-known names (case-insensitive) for O(1) existence checks.
             // This replaces the repeated All() calls that were O(n) per iteration.
@@ -583,8 +586,8 @@ namespace GameActivity
 
             // ── Missing sources ───────────────────────────────────────────────────
             var missingSources = items
-                .Where(x => !Settings.StoreColors.Any(c => c.Id == x.Value.SourceId))
-                .Select(x => x.Value.SourceId)
+                .Where(x => x != null && !Settings.StoreColors.Any(c => c.Id == x.SourceId))
+                .Select(x => x.SourceId)
                 .Distinct()
                 .ToList();
 
@@ -602,16 +605,15 @@ namespace GameActivity
 
             // ── Missing platforms ─────────────────────────────────────────────────
             var missingPlatforms = items
-                .Where(x => x.Value?.Platforms != null)
-                .SelectMany(x => x.Value.Platforms)
+                .Where(x => x != null && x.Platforms != null)
+                .SelectMany(x => x.Platforms)
                 .Where(p => !Settings.StoreColors.Any(c => c.Id == p.Id))
                 .DistinctBy(p => p.Id)
                 .ToList();
 
             foreach (Platform platform in missingPlatforms)
             {
-                string name = PlayniteTools.GetSourceBySourceIdOrPlatformId(
-                    default, new List<Guid> { platform.Id });
+                string name = PlayniteTools.GetSourceBySourceIdOrPlatformId(default, new List<Guid> { platform.Id });
 
                 if (string.IsNullOrEmpty(name) || existingByName.Contains(name))
                 {
@@ -635,16 +637,16 @@ namespace GameActivity
         /// </summary>
         public static List<StoreColor> GetDefaultStoreColors()
         {
-            var items = GameActivity.PluginDatabase.Database.Items;
+			var items = GameActivity.PluginDatabase.GetGamesList();
 
-            // Use a dict keyed by normalised name to prevent any duplicate, regardless
-            // of whether the collision comes from two sources, two platforms, or a
-            // source/platform pair that resolves to the same display name.
-            var byName = new Dictionary<string, StoreColor>(StringComparer.OrdinalIgnoreCase);
+			// Use a dict keyed by normalised name to prevent any duplicate, regardless
+			// of whether the collision comes from two sources, two platforms, or a
+			// source/platform pair that resolves to the same display name.
+			var byName = new Dictionary<string, StoreColor>(StringComparer.OrdinalIgnoreCase);
 
             // ── Sources ───────────────────────────────────────────────────────────
             var sourceIds = items
-                .Select(x => x.Value.SourceId)
+                .Select(x => x.SourceId)
                 .Distinct()
                 .ToList();
 
@@ -660,15 +662,14 @@ namespace GameActivity
 
             // ── Platforms ─────────────────────────────────────────────────────────
             var platforms = items
-                .Where(x => x.Value?.Platforms != null)
-                .SelectMany(x => x.Value.Platforms)
+                .Where(x => x != null && x.Platforms != null)
+                .SelectMany(x => x.Platforms)
                 .DistinctBy(p => p.Id)
                 .ToList();
 
             foreach (Platform platform in platforms)
             {
-                string name = PlayniteTools.GetSourceBySourceIdOrPlatformId(
-                    default, new List<Guid> { platform.Id });
+                string name = PlayniteTools.GetSourceBySourceIdOrPlatformId(default, new List<Guid> { platform.Id });
 
                 if (string.IsNullOrEmpty(name) || byName.ContainsKey(name))
                 {

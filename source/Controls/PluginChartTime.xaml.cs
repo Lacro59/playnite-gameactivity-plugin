@@ -107,25 +107,25 @@ namespace GameActivity.Controls
             AttachPluginEvents(PluginDatabase.PluginName, () =>
             {
                 PluginDatabase.PluginSettings.PropertyChanged += CreatePluginSettingsHandler();
-                PluginDatabase.Database.ItemUpdated += CreateDatabaseItemUpdatedHandler<GameActivities>();
-                PluginDatabase.Database.ItemCollectionChanged += CreateDatabaseCollectionChangedHandler<GameActivities>();
-                API.Instance.Database.Games.ItemUpdated += Games_ItemUpdated;
+				PluginDatabase.DatabaseItemUpdated += CreateDatabaseItemUpdatedHandler<GameActivities>();
+				PluginDatabase.DatabaseItemCollectionChanged += CreateDatabaseCollectionChangedHandler<GameActivities>();
+				API.Instance.Database.Games.ItemUpdated += Games_ItemUpdated;
             });
         }
 
         protected override void PluginSettings_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            Truncate = PluginDatabase.PluginSettings.Settings.ChartTimeTruncate;
+            Truncate = PluginDatabase.PluginSettings.ChartTimeTruncate;
             GameContextChanged(null, GameContext);
         }
 
 
         public override void SetDefaultDataContext()
         {
-            bool isActivated = PluginDatabase.PluginSettings.Settings.EnableIntegrationChartTime;
-            double chartTimeHeight = PluginDatabase.PluginSettings.Settings.ChartTimeHeight;
-            bool chartTimeAxis = PluginDatabase.PluginSettings.Settings.ChartTimeAxis;
-            bool chartTimeOrdinates = PluginDatabase.PluginSettings.Settings.ChartTimeOrdinates;
+            bool isActivated = PluginDatabase.PluginSettings.EnableIntegrationChartTime;
+            double chartTimeHeight = PluginDatabase.PluginSettings.ChartTimeHeight;
+            bool chartTimeAxis = PluginDatabase.PluginSettings.ChartTimeAxis;
+            bool chartTimeOrdinates = PluginDatabase.PluginSettings.ChartTimeOrdinates;
 
             if (IgnoreSettings)
             {
@@ -139,7 +139,7 @@ namespace GameActivity.Controls
             ControlDataContext.ChartTimeHeight = chartTimeHeight;
             ControlDataContext.ChartTimeAxis = chartTimeAxis;
             ControlDataContext.ChartTimeOrdinates = chartTimeOrdinates;
-            ControlDataContext.ChartTimeVisibleEmpty = PluginDatabase.PluginSettings.Settings.ChartTimeVisibleEmpty;
+            ControlDataContext.ChartTimeVisibleEmpty = PluginDatabase.PluginSettings.ChartTimeVisibleEmpty;
             ControlDataContext.DisableAnimations = DisableAnimations;
             ControlDataContext.LabelsRotationValue = LabelsRotation ? 160d : 0d;
 
@@ -151,7 +151,7 @@ namespace GameActivity.Controls
         /// <summary>
         /// Resolves the display limit once, then delegates to the appropriate chart builder.
         /// </summary>
-        public override void SetData(Game newContext, PluginDataBaseGameBase pluginGameData)
+        public override void SetData(Game newContext, PluginGameEntry pluginGameData)
         {
             GameActivities gameActivities = (GameActivities)pluginGameData;
 
@@ -166,7 +166,7 @@ namespace GameActivity.Controls
 
             int limit = AxisLimit != 0
                 ? AxisLimit
-                : PluginDatabase.PluginSettings.Settings.ChartTimeCountAbscissa;
+                : PluginDatabase.PluginSettings.ChartTimeCountAbscissa;
 
             int axisVariator = AxisVariator;
 
@@ -294,7 +294,7 @@ namespace GameActivity.Controls
                 }
 
                 LocalDateConverter localDateConverter = new LocalDateConverter();
-                bool cumulSessions = PluginDatabase.PluginSettings.Settings.CumulPlaytimeSession;
+                bool cumulSessions = PluginDatabase.PluginSettings.CumulPlaytimeSession;
 
                 int effectiveLimit = limit == (listDate.Length - 1) ? limit : (listDate.Length - 1);
 
@@ -336,7 +336,7 @@ namespace GameActivity.Controls
                 SeriesCollection activityForGameSeries = new SeriesCollection();
                 if (cumulSessions)
                 {
-                    activityForGameSeries.Add(new ColumnSeries { Title = "1", Values = series1, Fill = PluginDatabase.PluginSettings.Settings.ChartColors });
+                    activityForGameSeries.Add(new ColumnSeries { Title = "1", Values = series1, Fill = PluginDatabase.PluginSettings.ChartColors });
                 }
                 else
                 {
@@ -364,8 +364,8 @@ namespace GameActivity.Controls
                 PART_ChartTimeActivity.DataTooltip = cumulSessions
                     ? (System.Windows.Controls.UserControl)new CustomerToolTipForTime
                     {
-                        ShowIcon = PluginDatabase.PluginSettings.Settings.ShowLauncherIcons,
-                        Mode = PluginDatabase.PluginSettings.Settings.ModeStoreIcon == 1
+                        ShowIcon = PluginDatabase.PluginSettings.ShowLauncherIcons,
+                        Mode = PluginDatabase.PluginSettings.ModeStoreIcon == 1
                             ? TextBlockWithIconMode.IconTextFirstWithText
                             : TextBlockWithIconMode.IconFirstWithText
                     }
@@ -434,8 +434,8 @@ namespace GameActivity.Controls
 
                 PART_ChartTimeActivity.DataTooltip = new CustomerToolTipForTime
                 {
-                    ShowIcon = PluginDatabase.PluginSettings.Settings.ShowLauncherIcons,
-                    Mode = PluginDatabase.PluginSettings.Settings.ModeStoreIcon == 1
+                    ShowIcon = PluginDatabase.PluginSettings.ShowLauncherIcons,
+                    Mode = PluginDatabase.PluginSettings.ModeStoreIcon == 1
                         ? TextBlockWithIconMode.IconTextFirstWithText
                         : TextBlockWithIconMode.IconFirstWithText,
                     DatesPeriodes = datesPeriodes,

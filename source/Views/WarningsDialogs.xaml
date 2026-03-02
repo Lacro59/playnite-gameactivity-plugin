@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:views="clr-namespace:GameActivity.Views"
-             xmlns:ui="clr-namespace:CommonPluginsShared.UI"
+             xmlns:commands="clr-namespace:CommonPluginsShared.Commands"
              mc:Ignorable="d"
              MinWidth="480"
              Background="{DynamicResource WindowBackgourndBrush}">
@@ -66,7 +66,7 @@
             <Button Style="{StaticResource PrimaryButton}"
                     HorizontalAlignment="Center"
                     Width="120"
-                    Command="{x:Static ui:CommandsWindows.CloseHostWindow}"
+                    Command="{x:Static commands:CommandsWindows.CloseHostWindow}"
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=UserControl}}"
                     Content="{DynamicResource LOCOKLabel}" />
         </Border>

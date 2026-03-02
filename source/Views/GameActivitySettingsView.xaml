@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:converters="clr-namespace:CommonPlayniteShared.Converters"
              xmlns:AttachedProperties="clr-namespace:CommonPluginsShared.Controls"
-             xmlns:ui="clr-namespace:CommonPluginsShared.UI"
+             xmlns:commands="clr-namespace:CommonPluginsShared.Commands"
              xmlns:pcmd2="clr-namespace:CommonPlayniteShared.Commands"
              xmlns:controls="clr-namespace:CommonPluginsControls.Controls"
              xmlns:convertersshared="clr-namespace:CommonPluginsShared.Converters"
@@ -27,7 +27,7 @@
                 <DockPanel Margin="0,20,0,0">
                     <StackPanel DockPanel.Dock="Top">
                         <CheckBox IsChecked="{Binding Settings.MenuInExtensions}" VerticalAlignment="Center"
-                                  Command="{x:Static ui:CommandsNavigation.RestartRequired}" 
+                                  Command="{x:Static commands:CommandsPlugin.CmdRestartRequired}" 
                                   CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
                             <Label Content="{DynamicResource LOCCommonMenuInExtensions}" />
                         </CheckBox>
@@ -618,7 +618,7 @@
 
                                                 <CheckBox DockPanel.Dock="Left" IsChecked="{Binding Settings.UseLibreHardware}" 
                                                           Name="cb_LibreHardware"
-                                                          Command="{x:Static ui:CommandsNavigation.RestartRequired}" 
+                                                          Command="{x:Static commands:CommandsPlugin.CmdRestartRequired}" 
                                                           CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
                                                           VerticalAlignment="Center" Margin="0,0,15,0">
                                                     <TextBlock FontWeight="Bold" FontSize="13">
@@ -687,7 +687,7 @@
                                                 </StackPanel>
 
                                                 <CheckBox DockPanel.Dock="Left" Name="cbUseRivaTuner" IsChecked="{Binding Settings.UseRivaTuner}" 
-                                                          Command="{x:Static ui:CommandsNavigation.RestartRequired}" 
+                                                          Command="{x:Static commands:CommandsPlugin.CmdRestartRequired}" 
                                                           CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
                                                           VerticalAlignment="Center" Margin="0,0,15,0">
                                                     <TextBlock FontWeight="Bold" FontSize="13">
@@ -740,7 +740,7 @@
                                                 </StackPanel>
 
                                                 <CheckBox DockPanel.Dock="Left" Name="cbUseMsiAfterburner" IsChecked="{Binding Settings.UseMsiAfterburner}" 
-                                                          Command="{x:Static ui:CommandsNavigation.RestartRequired}" 
+                                                          Command="{x:Static commands:CommandsPlugin.CmdRestartRequired}" 
                                                           CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
                                                           VerticalAlignment="Center" Margin="0,0,15,0">
                                                     <TextBlock FontWeight="Bold" FontSize="13">
@@ -794,7 +794,7 @@
 
                                                 <CheckBox DockPanel.Dock="Left" IsChecked="{Binding Settings.UseHWiNFOSharedMemory}" 
                                                           Name="cb_HWiNFOSharedMemory"
-                                                          Command="{x:Static ui:CommandsNavigation.RestartRequired}" 
+                                                          Command="{x:Static commands:CommandsPlugin.CmdRestartRequired}" 
                                                           CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
                                                           VerticalAlignment="Center" Margin="0,0,15,0">
                                                     <TextBlock FontWeight="Bold" FontSize="13">
@@ -931,7 +931,7 @@
 
                                                 <CheckBox DockPanel.Dock="Left" IsChecked="{Binding Settings.UseHWiNFOGadget}" 
                                                           Name="cb_HWiNFOGadget"
-                                                          Command="{x:Static ui:CommandsNavigation.RestartRequired}" 
+                                                          Command="{x:Static commands:CommandsPlugin.CmdRestartRequired}" 
                                                           CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
                                                           VerticalAlignment="Center" Margin="0,0,15,0">
                                                     <TextBlock FontWeight="Bold" FontSize="13">
@@ -1084,7 +1084,7 @@
                                                 </StackPanel>
 
                                                 <CheckBox DockPanel.Dock="Left" Name="cbUseWMI" IsChecked="{Binding Settings.UseWMI}" 
-                                                          Command="{x:Static ui:CommandsNavigation.RestartRequired}" 
+                                                          Command="{x:Static commands:CommandsPlugin.CmdRestartRequired}" 
                                                           CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
                                                           VerticalAlignment="Center" Margin="0,0,15,0">
                                                     <TextBlock FontWeight="Bold" FontSize="13">
@@ -1124,7 +1124,7 @@
                                                 </StackPanel>
 
                                                 <CheckBox DockPanel.Dock="Left" Name="cbUsePerformanceCounter" IsChecked="{Binding Settings.UsePerformanceCounter}" 
-                                                          Command="{x:Static ui:CommandsNavigation.RestartRequired}" 
+                                                          Command="{x:Static commands:CommandsPlugin.CmdRestartRequired}" 
                                                           CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
                                                           VerticalAlignment="Center" Margin="0,0,15,0">
                                                     <TextBlock FontWeight="Bold" FontSize="13">

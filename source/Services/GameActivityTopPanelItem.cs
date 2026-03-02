@@ -28,7 +28,7 @@ namespace GameActivity.Services
             {
                 GameActivity.PluginDatabase.PluginWindows.ShowPluginGameDataWindow(plugin);
             };
-            Visible = plugin.PluginSettings.Settings.EnableIntegrationButtonHeader;
+            Visible = plugin.PluginSettingsViewModel.Settings.EnableIntegrationButtonHeader;
         }
     }
 }

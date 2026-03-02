@@ -8,7 +8,7 @@
              xmlns:controls="clr-namespace:CommonPluginsControls.Controls"
              xmlns:controlsShared="clr-namespace:CommonPluginsShared.Controls"
              xmlns:converters="clr-namespace:CommonPlayniteShared.Converters"
-             xmlns:ui="clr-namespace:CommonPluginsShared.UI"
+             xmlns:commands="clr-namespace:CommonPluginsShared.Commands"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=vm:GamesDataMismatchViewModel}"
              d:DesignHeight="540" d:DesignWidth="1060">
@@ -118,7 +118,7 @@
                         Content="{DynamicResource LOCCloseLabel}"
                         Style="{StaticResource SecondaryButton}"
                         DockPanel.Dock="Right"
-                        Command="{x:Static ui:CommandsWindows.CloseHostWindow}"
+                        Command="{x:Static commands:CommandsWindows.CloseHostWindow}"
                         CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=UserControl}}" />
 
                     <!-- Apply-all button – CanExecute drives IsEnabled automatically -->

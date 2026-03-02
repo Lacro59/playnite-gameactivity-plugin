@@ -85,11 +85,11 @@ namespace GameActivity.Views
             PART_DataBottom.Visibility = Visibility.Hidden;
 
 
-            PART_Truncate.IsChecked = PluginDatabase.PluginSettings.Settings.ChartTimeTruncate;
+            PART_Truncate.IsChecked = PluginDatabase.PluginSettings.ChartTimeTruncate;
             ButtonShowConfig.IsChecked = false;
 
 
-            if (!PluginDatabase.PluginSettings.Settings.EnableLogging)
+            if (!PluginDatabase.PluginSettings.EnableLogging)
             {
                 ToggleButtonTime.Visibility = Visibility.Hidden;
                 ToggleButtonLog.Visibility = Visibility.Hidden;
@@ -98,7 +98,7 @@ namespace GameActivity.Views
 
             PART_GameActivityChartTime = new PluginChartTime
             {
-                Truncate = PluginDatabase.PluginSettings.Settings.ChartTimeTruncate,
+                Truncate = PluginDatabase.PluginSettings.ChartTimeTruncate,
                 IgnoreSettings = true,
                 LabelsRotation = true
             };
@@ -114,13 +114,13 @@ namespace GameActivity.Views
             _ = PART_GameActivityChartLog_Contener.Children.Add(PART_GameActivityChartLog);
 
 
-            lvGames.SaveColumn = PluginDatabase.PluginSettings.Settings.SaveColumnOrder;
+            lvGames.SaveColumn = PluginDatabase.PluginSettings.SaveColumnOrder;
             lvGames.SaveColumnFilePath = Path.Combine(PluginDatabase.Paths.PluginUserDataPath, "lvGames.json");
 
             GridView lvView = (GridView)lvGames.View;
 
             // Add column if log details enable.
-            if (!PluginDatabase.PluginSettings.Settings.EnableLogging)
+            if (!PluginDatabase.PluginSettings.EnableLogging)
             {
                 lvAvgGpuP.Width = 0;
                 lvAvgGpuPHeader.IsHitTestVisible = false;
@@ -141,70 +141,70 @@ namespace GameActivity.Views
             }
             else
             {
-                if (!PluginDatabase.PluginSettings.Settings.lvAvgGpuP)
+                if (!PluginDatabase.PluginSettings.lvAvgGpuP)
                 {
                     lvAvgGpuP.Width = 0;
                     lvAvgGpuPHeader.IsHitTestVisible = false;
                 }
-                if (!PluginDatabase.PluginSettings.Settings.lvAvgCpuP)
+                if (!PluginDatabase.PluginSettings.lvAvgCpuP)
                 {
                     lvAvgCpuP.Width = 0;
                     lvAvgCpuPHeader.IsHitTestVisible = false;
                 }
-                if (!PluginDatabase.PluginSettings.Settings.lvAvgGpuT)
+                if (!PluginDatabase.PluginSettings.lvAvgGpuT)
                 {
                     lvAvgGpuT.Width = 0;
                     lvAvgGpuTHeader.IsHitTestVisible = false;
                 }
-                if (!PluginDatabase.PluginSettings.Settings.lvAvgCpuT)
+                if (!PluginDatabase.PluginSettings.lvAvgCpuT)
                 {
                     lvAvgCpuT.Width = 0;
                     lvAvgCpuTHeader.IsHitTestVisible = false;
                 }
-                if (!PluginDatabase.PluginSettings.Settings.lvAvgFps)
+                if (!PluginDatabase.PluginSettings.lvAvgFps)
                 {
                     lvAvgFps.Width = 0;
                     lvAvgFpsHeader.IsHitTestVisible = false;
                 }
-                if (!PluginDatabase.PluginSettings.Settings.lvAvgRam)
+                if (!PluginDatabase.PluginSettings.lvAvgRam)
                 {
                     lvAvgRam.Width = 0;
                     lvAvgRamHeader.IsHitTestVisible = false;
                 }
-                if (!PluginDatabase.PluginSettings.Settings.lvAvgGpu)
+                if (!PluginDatabase.PluginSettings.lvAvgGpu)
                 {
                     lvAvgGpu.Width = 0;
                     lvAvgGpuHeader.IsHitTestVisible = false;
                 }
-                if (!PluginDatabase.PluginSettings.Settings.lvAvgCpu)
+                if (!PluginDatabase.PluginSettings.lvAvgCpu)
                 {
                     lvAvgCpu.Width = 0;
                     lvAvgCpuHeader.IsHitTestVisible = false;
                 }
             }
 
-            if (!PluginDatabase.PluginSettings.Settings.lvGamesPlayAction)
+            if (!PluginDatabase.PluginSettings.lvGamesPlayAction)
             {
                 lvGamesPlayAction.Width = 0;
                 lvGamesPlayActionHeader.IsHitTestVisible = false;
             }
-            if (!PluginDatabase.PluginSettings.Settings.lvGamesPcName)
+            if (!PluginDatabase.PluginSettings.lvGamesPcName)
             {
                 lvGamesPcName.Width = 0;
                 lvGamesPcNameHeader.IsHitTestVisible = false;
             }
-            if (!PluginDatabase.PluginSettings.Settings.lvGamesSource)
+            if (!PluginDatabase.PluginSettings.lvGamesSource)
             {
                 lvGamesSource.Width = 0;
                 lvGamesSourceHeader.IsHitTestVisible = false;
             }
-            if (!PluginDatabase.PluginSettings.Settings.lvGamesIcon)
+            if (!PluginDatabase.PluginSettings.lvGamesIcon)
             {
                 lvGamesIcon.Width = 0;
                 lvGamesIconHeader.IsHitTestVisible = false;
             }
 
-            if (!PluginDatabase.PluginSettings.Settings.lvGamesIcon)
+            if (!PluginDatabase.PluginSettings.lvGamesIcon)
             {
                 lvGamesIcon.Width = 0;
                 lvGamesIconHeader.IsHitTestVisible = false;
@@ -249,7 +249,7 @@ namespace GameActivity.Views
                     }
                     lvGames.ScrollIntoView(lvGames.SelectedItem);
 
-                    if (PluginDatabase.PluginSettings.Settings.CumulPlaytimeStore)
+                    if (PluginDatabase.PluginSettings.CumulPlaytimeStore)
                     {
                         PART_ChartTotalHoursSource.Visibility = Visibility.Hidden;
                         PART_ChartTotalHoursSource_Label.Visibility = Visibility.Hidden;
@@ -272,9 +272,9 @@ namespace GameActivity.Views
 
 
             // Set Binding data
-            ShowIcon = PluginDatabase.PluginSettings.Settings.ShowLauncherIcons;
-            ModeComplet = (PluginDatabase.PluginSettings.Settings.ModeStoreIcon == 1) ? TextBlockWithIconMode.IconTextFirstWithText : TextBlockWithIconMode.IconFirstWithText;
-            ModeSimple = (PluginDatabase.PluginSettings.Settings.ModeStoreIcon == 1) ? TextBlockWithIconMode.IconTextFirstOnly : TextBlockWithIconMode.IconFirstOnly;
+            ShowIcon = PluginDatabase.PluginSettings.ShowLauncherIcons;
+            ModeComplet = (PluginDatabase.PluginSettings.ModeStoreIcon == 1) ? TextBlockWithIconMode.IconTextFirstWithText : TextBlockWithIconMode.IconFirstWithText;
+            ModeSimple = (PluginDatabase.PluginSettings.ModeStoreIcon == 1) ? TextBlockWithIconMode.IconTextFirstOnly : TextBlockWithIconMode.IconFirstOnly;
 
 
             PART_ChartTotalHoursSource_ToolTip.ShowIcon = ShowIcon;
@@ -340,7 +340,7 @@ namespace GameActivity.Views
             // Total hours by source.
             if (IsMonthSources)
             {
-                if (PluginDatabase.PluginSettings.Settings.ShowLauncherIcons)
+                if (PluginDatabase.PluginSettings.ShowLauncherIcons)
                 {
                     PART_ChartTotalHoursSource_X.LabelsRotation = 0;
                     PART_ChartTotalHoursSource_X.FontSize = 30;
@@ -506,7 +506,7 @@ namespace GameActivity.Views
                     Values = (long)item.Value,
                 });
                 labels[compteur] = item.Key;
-                if (PluginDatabase.PluginSettings.Settings.ShowLauncherIcons)
+                if (PluginDatabase.PluginSettings.ShowLauncherIcons)
                 {
                     labels[compteur] = TransformIcon.Get(labels[compteur]);
                 }
@@ -520,7 +520,7 @@ namespace GameActivity.Views
                 {
                     Title = string.Empty,
                     Values = series,
-                    Fill = PluginDatabase.PluginSettings.Settings.ChartColors
+                    Fill = PluginDatabase.PluginSettings.ChartColors
                 }
             };
             string[] ActivityByMonthLabels = labels;
@@ -537,7 +537,7 @@ namespace GameActivity.Views
 
             if (IsMonthSources)
             {
-                if (PluginDatabase.PluginSettings.Settings.CumulPlaytimeStore)
+                if (PluginDatabase.PluginSettings.CumulPlaytimeStore)
                 {
                     PART_ChartTotalHoursSource.Visibility = Visibility.Hidden;
                     PART_ChartTotalHoursSource_Label.Visibility = Visibility.Hidden;
@@ -554,7 +554,7 @@ namespace GameActivity.Views
             }
             else
             {
-                if (PluginDatabase.PluginSettings.Settings.CumulPlaytimeStore)
+                if (PluginDatabase.PluginSettings.CumulPlaytimeStore)
                 {
                     PART_ChartTotalHoursSource.Visibility = Visibility.Visible;
                     PART_ChartTotalHoursSource_Label.Visibility = Visibility.Visible;
@@ -571,7 +571,7 @@ namespace GameActivity.Views
             PART_ChartTotalHoursSource_Y.LabelFormatter = activityForGameLogFormatter;
             PART_ChartTotalHoursSource.Series = ActivityByMonthSeries;
             PART_ChartTotalHoursSource_Y.MinValue = 0;
-            ((CustomerToolTipForTime)PART_ChartTotalHoursSource.DataTooltip).ShowIcon = PluginDatabase.PluginSettings.Settings.ShowLauncherIcons;
+            ((CustomerToolTipForTime)PART_ChartTotalHoursSource.DataTooltip).ShowIcon = PluginDatabase.PluginSettings.ShowLauncherIcons;
             PART_ChartTotalHoursSource_X.Labels = ActivityByMonthLabels;
 
             PART_ChartTotalHoursSource_X.ShowLabels = true;
@@ -625,7 +625,7 @@ namespace GameActivity.Views
                 {
                     Title = string.Empty,
                     Values = series,
-                    Fill = PluginDatabase.PluginSettings.Settings.ChartColors
+                    Fill = PluginDatabase.PluginSettings.ChartColors
                 });
 
                 //let create a mapper so LiveCharts know how to plot our CustomerViewModel class
@@ -776,18 +776,18 @@ namespace GameActivity.Views
                 for (int iSource = 0; iSource < listNoDelete.Count; iSource++)
                 {
                     labels[iSource] = listNoDelete[iSource];
-                    if (PluginDatabase.PluginSettings.Settings.ShowLauncherIcons)
+                    if (PluginDatabase.PluginSettings.ShowLauncherIcons)
                     {
                         labels[iSource] = TransformIcon.Get(listNoDelete[iSource]);
                     }
 
 
                     Brush Fill = null;
-                    if (PluginDatabase.PluginSettings.Settings.StoreColors.Count == 0)
+                    if (PluginDatabase.PluginSettings.StoreColors.Count == 0)
                     {
-                        PluginDatabase.PluginSettings.Settings.StoreColors = GameActivitySettingsViewModel.GetDefaultStoreColors();
+                        PluginDatabase.PluginSettings.StoreColors = GameActivitySettingsViewModel.GetDefaultStoreColors();
                     }
-                    Fill = PluginDatabase.PluginSettings.Settings.StoreColors
+                    Fill = PluginDatabase.PluginSettings.StoreColors
                                 .Where(x => x.Name.Contains(listNoDelete[iSource], StringComparison.InvariantCultureIgnoreCase))?.FirstOrDefault()?.Fill;
 
 
@@ -842,7 +842,7 @@ namespace GameActivity.Views
             }
 
 
-            if (PluginDatabase.PluginSettings.Settings.CumulPlaytimeStore)
+            if (PluginDatabase.PluginSettings.CumulPlaytimeStore)
             {
                 ChartValues<CustomerForTime> series = new ChartValues<CustomerForTime>();
                 for (int i = 0; i < activityByWeekSeries.Count; i++)
@@ -869,7 +869,7 @@ namespace GameActivity.Views
                 {
                     Title = string.Empty,
                     Values = series,
-                    Fill = PluginDatabase.PluginSettings.Settings.ChartColors
+                    Fill = PluginDatabase.PluginSettings.ChartColors
                 });
 
                 PART_ChartHoursByWeekSource.DataTooltip = new CustomerToolTipForTime
@@ -971,13 +971,13 @@ namespace GameActivity.Views
                             AvgCPUP = listGameActivities[iGame].AvgCPUP(listGameActivities[iGame].GetLastSession()) + "W",
                             AvgGPUP = listGameActivities[iGame].AvgGPUP(listGameActivities[iGame].GetLastSession()) + "W",
 
-                            EnableWarm = PluginDatabase.PluginSettings.Settings.EnableWarning,
-                            MaxCPUT = PluginDatabase.PluginSettings.Settings.MaxCpuTemp.ToString(),
-                            MaxGPUT = PluginDatabase.PluginSettings.Settings.MaxGpuTemp.ToString(),
-                            MinFPS = PluginDatabase.PluginSettings.Settings.MinFps.ToString(),
-                            MaxCPU = PluginDatabase.PluginSettings.Settings.MaxCpuUsage.ToString(),
-                            MaxGPU = PluginDatabase.PluginSettings.Settings.MaxGpuUsage.ToString(),
-                            MaxRAM = PluginDatabase.PluginSettings.Settings.MaxRamUsage.ToString(),
+                            EnableWarm = PluginDatabase.PluginSettings.EnableWarning,
+                            MaxCPUT = PluginDatabase.PluginSettings.MaxCpuTemp.ToString(),
+                            MaxGPUT = PluginDatabase.PluginSettings.MaxGpuTemp.ToString(),
+                            MinFPS = PluginDatabase.PluginSettings.MinFps.ToString(),
+                            MaxCPU = PluginDatabase.PluginSettings.MaxCpuUsage.ToString(),
+                            MaxGPU = PluginDatabase.PluginSettings.MaxGpuUsage.ToString(),
+                            MaxRAM = PluginDatabase.PluginSettings.MaxRamUsage.ToString(),
 
                             PCConfigurationId = listGameActivities[iGame].GetLastSessionActivity()?.IdConfiguration ?? -1,
                             PCName = listGameActivities[iGame].GetLastSessionActivity()?.Configuration.Name,
@@ -1395,14 +1395,14 @@ namespace GameActivity.Views
             if (IsGameTime)
             {
                 PART_GameActivityChartTime.DisableAnimations = true;
-                PART_GameActivityChartTime.Prev(PluginDatabase.PluginSettings.Settings.VariatorTime);
+                PART_GameActivityChartTime.Prev(PluginDatabase.PluginSettings.VariatorTime);
             }
             else
             {
                 PART_GameActivityChartLog.DisableAnimations = true;
                 PART_GameActivityChartLog.DateSelected = LabelDataSelected;
                 PART_GameActivityChartLog.TitleChart = TitleChart;
-                PART_GameActivityChartLog.Prev(PluginDatabase.PluginSettings.Settings.VariatorLog);
+                PART_GameActivityChartLog.Prev(PluginDatabase.PluginSettings.VariatorLog);
             }
         }
 
@@ -1411,14 +1411,14 @@ namespace GameActivity.Views
             if (IsGameTime)
             {
                 PART_GameActivityChartTime.DisableAnimations = true;
-                PART_GameActivityChartTime.Next(PluginDatabase.PluginSettings.Settings.VariatorTime);
+                PART_GameActivityChartTime.Next(PluginDatabase.PluginSettings.VariatorTime);
             }
             else
             {
                 PART_GameActivityChartLog.DisableAnimations = true;
                 PART_GameActivityChartLog.DateSelected = LabelDataSelected;
                 PART_GameActivityChartLog.TitleChart = TitleChart;
-                PART_GameActivityChartLog.Next(PluginDatabase.PluginSettings.Settings.VariatorLog);
+                PART_GameActivityChartLog.Next(PluginDatabase.PluginSettings.VariatorLog);
             }
         }
         #endregion
@@ -1428,7 +1428,7 @@ namespace GameActivity.Views
         // TODO Select details data
         private void GameSeries_DataClick(object sender, ChartPoint chartPoint)
         {
-            if (PluginDatabase.PluginSettings.Settings.EnableLogging)
+            if (PluginDatabase.PluginSettings.EnableLogging)
             {
                 int index = (int)chartPoint.X;
                 TitleChart = chartPoint.SeriesView.Title;
@@ -1489,7 +1489,7 @@ namespace GameActivity.Views
             List<ListActivities> filteredData = ActivityListByGame.FindAll(x => x.DateActivity.Contains($"{YearCurrent}-{MonthCurrent:D2}"));
             foreach (ListActivities activity in filteredData)
             {
-                List<Activity> activities = PluginDatabase.Database.Get(activity.Id)?.GetActivities(YearCurrent, MonthCurrent);
+                List<Activity> activities = PluginDatabase.Get(activity.Id)?.GetActivities(YearCurrent, MonthCurrent);
                 if (activities != null)
                 {
                     activities?.ForEach(y =>

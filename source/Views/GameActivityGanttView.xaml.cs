@@ -1,4 +1,5 @@
 ﻿using CommonPluginsShared;
+using CommonPluginsShared.Commands;
 using CommonPluginsShared.Converters;
 using CommonPluginsShared.UI;
 using GameActivity.Controls;
@@ -64,7 +65,7 @@ namespace GameActivity.Views
         private void GetData()
         {
             List<GanttData> ganttDatas = new List<GanttData>();
-            foreach (GameActivities gameActivities in PluginDatabase.Database.Where(x => x.LastActivity != null))
+            foreach (GameActivities gameActivities in PluginDatabase.GetListGameActivity().Where(x => x.LastActivity != null))
             {
                 try
                 {

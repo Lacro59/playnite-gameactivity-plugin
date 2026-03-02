@@ -149,20 +149,20 @@ namespace GameActivity.Models
             }
 
             return 0;
-        } 
-
-        private List<KeyValuePair<Guid, GameActivities>> GetDb(ConcurrentDictionary<Guid, GameActivities> db)
-        {
-            return db.Where(x => API.Instance.Database.Games.Get(x.Key) != null).ToList();
         }
 
+		private List<GameActivities> GetDb(List<GameActivities> items)
+		{
+			return items.Where(x => API.Instance.Database.Games.Get(x.Id) != null).ToList();
+		}
 
-        private Task<IEnumerable<ISearchItem<string>>> SearchByFps(string query)
+
+		private Task<IEnumerable<ISearchItem<string>>> SearchByFps(string query)
         {
-            var parameters = GetParameters(query);
-            var db = GetDb(PluginDatabase.Database.Items).Where(x => x.Value.ItemsDetails.AvgFpsAllSession != 0).ToList();
+			var parameters = GetParameters(query);
+			var db = GetDb(PluginDatabase.GetListGameActivity()).Where(x => x.ItemsDetails.AvgFpsAllSession != 0).ToList();
 
-            if (parameters.Count == 3)
+			if (parameters.Count == 3)
             {
                 return Task.Run(() =>
                 {
@@ -175,9 +175,9 @@ namespace GameActivity.Models
                                 double fps = double.Parse(parameters[2]);
                                 foreach (var data in db)
                                 {
-                                    if (data.Value.ItemsDetails.AvgFpsAllSession >= fps)
+                                    if (data.ItemsDetails.AvgFpsAllSession >= fps)
                                     {
-                                        search.Add(GetCommandItem(data.Value, query));
+                                        search.Add(GetCommandItem(data, query));
                                     }
                                 }
                             }
@@ -191,9 +191,9 @@ namespace GameActivity.Models
                                 double fps = double.Parse(parameters[2]);
                                 foreach (var data in db)
                                 {
-                                    if (data.Value.ItemsDetails.AvgFpsAllSession <= fps)
+                                    if (data.ItemsDetails.AvgFpsAllSession <= fps)
                                     {
-                                        search.Add(GetCommandItem(data.Value, query));
+                                        search.Add(GetCommandItem(data, query));
                                     }
                                 }
                             }
@@ -219,9 +219,9 @@ namespace GameActivity.Models
                                 double fpsMax = double.Parse(parameters[3]);
                                 foreach (var data in db)
                                 {
-                                    if (data.Value.ItemsDetails.AvgFpsAllSession >= fpsMin && data.Value.ItemsDetails.AvgFpsAllSession <= fpsMax)
+                                    if (data.ItemsDetails.AvgFpsAllSession >= fpsMin && data.ItemsDetails.AvgFpsAllSession <= fpsMax)
                                     {
-                                        search.Add(GetCommandItem(data.Value, query));
+                                        search.Add(GetCommandItem(data, query));
                                     }
                                 }
                             }
@@ -239,9 +239,9 @@ namespace GameActivity.Models
         private Task<IEnumerable<ISearchItem<string>>> SearchByTime(string query)
         {
             var parameters = GetParameters(query);
-            var db = GetDb(PluginDatabase.Database.Items);
+			var db = GetDb(PluginDatabase.GetListGameActivity()).Where(x => x.ItemsDetails.AvgFpsAllSession != 0).ToList();
 
-            if (parameters.Count == 4)
+			if (parameters.Count == 4)
             {
                 return Task.Run(() =>
                 {
@@ -255,9 +255,9 @@ namespace GameActivity.Models
                                 double s = GetElapsedSeconde(parameters[2], parameters[3]);
                                 foreach (var data in db)
                                 {
-                                    if (data.Value.Items.Where(x => x.ElapsedSeconds >= s).Count() > 0)
+                                    if (data.Items.Where(x => x.ElapsedSeconds >= s).Count() > 0)
                                     {
-                                        search.Add(GetCommandItem(data.Value, query));
+                                        search.Add(GetCommandItem(data, query));
                                     }
                                 }
                             }
@@ -271,9 +271,9 @@ namespace GameActivity.Models
                                 double s = GetElapsedSeconde(parameters[2], parameters[3]);
                                 foreach (var data in db)
                                 {
-                                    if (data.Value.Items.Where(x => x.ElapsedSeconds <= s).Count() > 0)
+                                    if (data.Items.Where(x => x.ElapsedSeconds <= s).Count() > 0)
                                     {
-                                        search.Add(GetCommandItem(data.Value, query));
+                                        search.Add(GetCommandItem(data, query));
                                     }
                                 }
                             }
@@ -299,9 +299,9 @@ namespace GameActivity.Models
                                 double sMax = GetElapsedSeconde(parameters[4], parameters[5]);
                                 foreach (var data in db)
                                 {
-                                    if (data.Value.Items.Where(x => x.ElapsedSeconds >= sMin && x.ElapsedSeconds <= sMax).Count() > 0)
+                                    if (data.Items.Where(x => x.ElapsedSeconds >= sMin && x.ElapsedSeconds <= sMax).Count() > 0)
                                     {
-                                        search.Add(GetCommandItem(data.Value, query));
+                                        search.Add(GetCommandItem(data, query));
                                     }
                                 }
                             }
@@ -319,9 +319,9 @@ namespace GameActivity.Models
         private Task<IEnumerable<ISearchItem<string>>> SearchByDate(string query)
         {
             var parameters = GetParameters(query);
-            var db = GetDb(PluginDatabase.Database.Items);
+			var db = GetDb(PluginDatabase.GetListGameActivity()).Where(x => x.ItemsDetails.AvgFpsAllSession != 0).ToList();
 
-            if (parameters.Count == 3)
+			if (parameters.Count == 3)
             {
                 return Task.Run(() =>
                 {
@@ -334,9 +334,9 @@ namespace GameActivity.Models
                                 DateTime date = DateTime.Parse(parameters[2] + " 00:00:00");
                                 foreach (var data in db)
                                 {
-                                    if (data.Value.Items.Where(x => x.DateSession >= date).Count() > 0)
+                                    if (data.Items.Where(x => x.DateSession >= date).Count() > 0)
                                     {
-                                        search.Add(GetCommandItem(data.Value, query));
+                                        search.Add(GetCommandItem(data, query));
                                     }
                                 }
                             }
@@ -350,9 +350,9 @@ namespace GameActivity.Models
                                 DateTime date = DateTime.Parse(parameters[2] + " 23:59:59");
                                 foreach (var data in db)
                                 {
-                                    if (data.Value.Items.Where(x => x.DateSession <= date).Count() > 0)
+                                    if (data.Items.Where(x => x.DateSession <= date).Count() > 0)
                                     {
-                                        search.Add(GetCommandItem(data.Value, query));
+                                        search.Add(GetCommandItem(data, query));
                                     }
                                 }
                             }
@@ -378,9 +378,9 @@ namespace GameActivity.Models
                                 DateTime dateMax = DateTime.Parse(parameters[3] + " 23:59:59");
                                 foreach (var data in db)
                                 {
-                                    if (data.Value.Items.Where(x => x.DateSession >= dateMin && x.DateSession <= dateMax).Count() > 0)
+                                    if (data.Items.Where(x => x.DateSession >= dateMin && x.DateSession <= dateMax).Count() > 0)
                                     {
-                                        search.Add(GetCommandItem(data.Value, query));
+                                        search.Add(GetCommandItem(data, query));
                                     }
                                 }
                             }

@@ -67,7 +67,7 @@ namespace GameActivity.Services
 		///     An enumerable of <see cref="GameMenuItem"/> instances injected into the game
 		///     right-click menu.
 		/// </returns>
-		public IEnumerable<GameMenuItem> GetGameMenuItems(GetGameMenuItemsArgs args)
+		public override IEnumerable<GameMenuItem> GetGameMenuItems(GetGameMenuItemsArgs args)
 		{
 			// Guard: nothing to show if no game is selected.
 			if (args?.Games == null || !args.Games.Any())
@@ -113,7 +113,7 @@ namespace GameActivity.Services
 		/// <returns>
 		///     An enumerable of <see cref="MainMenuItem"/> instances injected into the main menu.
 		/// </returns>
-		public IEnumerable<MainMenuItem> GetMainMenuItems(GetMainMenuItemsArgs args)
+		public override IEnumerable<MainMenuItem> GetMainMenuItems(GetMainMenuItemsArgs args)
 		{
 			// Compute once: avoids redundant string allocations across every yielded item.
 			string section = MenuSection;

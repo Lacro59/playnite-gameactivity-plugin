@@ -1,4 +1,5 @@
-﻿using Playnite.SDK.Data;
+﻿using LiteDB;
+using Playnite.SDK.Data;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -20,6 +21,7 @@ namespace GameActivity.Models
 		/// Gets the number of session dates in the collection.
 		/// </summary>
 		[DontSerialize]
+		[BsonIgnore]
 		public int Count => Items.Count;
 
 		/// <summary>
@@ -28,6 +30,7 @@ namespace GameActivity.Models
 		/// <param name="dateSession">The session date to retrieve.</param>
 		/// <returns>List of activity details for the specified date, or an empty list if not found.</returns>
 		[DontSerialize]
+		[BsonIgnore]
 		public List<ActivityDetailsData> this[DateTime dateSession] => Get(dateSession);
 
 		/// <summary>
@@ -35,6 +38,7 @@ namespace GameActivity.Models
 		/// Returns 0 if no FPS data is available.
 		/// </summary>
 		[DontSerialize]
+		[BsonIgnore]
 		public int AvgFpsAllSession => GetAvgFpsAllSession();
 
 		/// <summary>

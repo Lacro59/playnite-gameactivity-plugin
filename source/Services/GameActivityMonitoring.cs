@@ -102,27 +102,27 @@ namespace GameActivity.Services
         /// </summary>
         private void RegisterProviders()
         {
-            if (PluginDatabase.PluginSettings.Settings.UseRivaTuner)
+            if (PluginDatabase.PluginSettings.UseRivaTuner)
             {
                 TryRegisterProvider(() => new RivaTunerProvider(), "RivaTuner");
             }
 
-            if (PluginDatabase.PluginSettings.Settings.UseLibreHardware)
+            if (PluginDatabase.PluginSettings.UseLibreHardware)
             {
                 TryRegisterProvider(() =>
                 {
                     string remoteIp = null;
-                    if (PluginDatabase.PluginSettings.Settings.WithRemoteServerWeb
-                        && !string.IsNullOrEmpty(PluginDatabase.PluginSettings.Settings.IpRemoteServerWeb))
+                    if (PluginDatabase.PluginSettings.WithRemoteServerWeb
+                        && !string.IsNullOrEmpty(PluginDatabase.PluginSettings.IpRemoteServerWeb))
                     {
-                        remoteIp = PluginDatabase.PluginSettings.Settings.IpRemoteServerWeb;
+                        remoteIp = PluginDatabase.PluginSettings.IpRemoteServerWeb;
                         Logger.Info($"Using LibreHardware remote server: {remoteIp}");
                     }
                     return new LibreHardwareProvider(remoteIp);
                 }, "LibreHardware");
             }
 
-            if (PluginDatabase.PluginSettings.Settings.UseMsiAfterburner)
+            if (PluginDatabase.PluginSettings.UseMsiAfterburner)
             {
                 TryRegisterProvider(() =>
                 {
@@ -130,35 +130,35 @@ namespace GameActivity.Services
 				}, "MsiAfterburner");
             }
 
-            if (PluginDatabase.PluginSettings.Settings.UseHWiNFOSharedMemory)
+            if (PluginDatabase.PluginSettings.UseHWiNFOSharedMemory)
             {
                 TryRegisterProvider(() =>
                 {
                     var hwinfoConfig = new HWiNFOConfiguration
                     {
-                        FPS_SensorsID = PluginDatabase.PluginSettings.Settings.HWiNFO_fps_sensorsID,
-                        FPS_ElementID = PluginDatabase.PluginSettings.Settings.HWiNFO_fps_elementID,
-                        GPU_SensorsID = PluginDatabase.PluginSettings.Settings.HWiNFO_gpu_sensorsID,
-                        GPU_ElementID = PluginDatabase.PluginSettings.Settings.HWiNFO_gpu_elementID,
-                        GPUT_SensorsID = PluginDatabase.PluginSettings.Settings.HWiNFO_gpuT_sensorsID,
-                        GPUT_ElementID = PluginDatabase.PluginSettings.Settings.HWiNFO_gpuT_elementID,
-                        CPUT_SensorsID = PluginDatabase.PluginSettings.Settings.HWiNFO_cpuT_sensorsID,
-                        CPUT_ElementID = PluginDatabase.PluginSettings.Settings.HWiNFO_cpuT_elementID,
-                        GPUP_SensorsID = PluginDatabase.PluginSettings.Settings.HWiNFO_gpuP_sensorsID,
-                        GPUP_ElementID = PluginDatabase.PluginSettings.Settings.HWiNFO_gpuP_elementID,
-                        CPUP_SensorsID = PluginDatabase.PluginSettings.Settings.HWiNFO_cpuP_sensorsID,
-                        CPUP_ElementID = PluginDatabase.PluginSettings.Settings.HWiNFO_cpuP_elementID,
+                        FPS_SensorsID = PluginDatabase.PluginSettings.HWiNFO_fps_sensorsID,
+                        FPS_ElementID = PluginDatabase.PluginSettings.HWiNFO_fps_elementID,
+                        GPU_SensorsID = PluginDatabase.PluginSettings.HWiNFO_gpu_sensorsID,
+                        GPU_ElementID = PluginDatabase.PluginSettings.HWiNFO_gpu_elementID,
+                        GPUT_SensorsID = PluginDatabase.PluginSettings.HWiNFO_gpuT_sensorsID,
+                        GPUT_ElementID = PluginDatabase.PluginSettings.HWiNFO_gpuT_elementID,
+                        CPUT_SensorsID = PluginDatabase.PluginSettings.HWiNFO_cpuT_sensorsID,
+                        CPUT_ElementID = PluginDatabase.PluginSettings.HWiNFO_cpuT_elementID,
+                        GPUP_SensorsID = PluginDatabase.PluginSettings.HWiNFO_gpuP_sensorsID,
+                        GPUP_ElementID = PluginDatabase.PluginSettings.HWiNFO_gpuP_elementID,
+                        CPUP_SensorsID = PluginDatabase.PluginSettings.HWiNFO_cpuP_sensorsID,
+                        CPUP_ElementID = PluginDatabase.PluginSettings.HWiNFO_cpuP_elementID,
                     };
                     return new HWiNFOProvider(hwinfoConfig);
                 }, "HWiNFO");
             }
 
-            if (PluginDatabase.PluginSettings.Settings.UseWMI)
+            if (PluginDatabase.PluginSettings.UseWMI)
             {
                 TryRegisterProvider(() => new WMIProvider(), "WMI");
             }
 
-            if (PluginDatabase.PluginSettings.Settings.UsePerformanceCounter)
+            if (PluginDatabase.PluginSettings.UsePerformanceCounter)
             {
                 TryRegisterProvider(() => new PerformanceCounterProvider(), "PerformanceCounter");
             }
@@ -266,7 +266,7 @@ namespace GameActivity.Services
             Logger.Info($"DataLogging_start - {API.Instance.Database.Games.Get(id)?.Name} - {id}");
 
             RunningActivity runningActivity = _runningActivities.Find(x => x.Id == id);
-            runningActivity.Timer = new Timer(PluginDatabase.PluginSettings.Settings.TimeIntervalLogging * 60000)
+            runningActivity.Timer = new Timer(PluginDatabase.PluginSettings.TimeIntervalLogging * 60000)
             {
                 AutoReset = true,
             };
@@ -394,12 +394,12 @@ namespace GameActivity.Services
         /// </summary>
         private void CheckAndRecordWarnings(RunningActivity runningActivity, HardwareMetrics metrics)
         {
-            if (!PluginDatabase.PluginSettings.Settings.EnableWarning)
+            if (!PluginDatabase.PluginSettings.EnableWarning)
             {
                 return;
             }
 
-            var settings = PluginDatabase.PluginSettings.Settings;
+            var settings = PluginDatabase.PluginSettings;
 
             bool warningMinFps = settings.MinFps != 0 && metrics.FPS.HasValue && settings.MinFps >= metrics.FPS;
             bool warningMaxCpuTemp = settings.MaxCpuTemp != 0 && metrics.CpuTemperature.HasValue && settings.MaxCpuTemp <= metrics.CpuTemperature;
@@ -476,7 +476,7 @@ namespace GameActivity.Services
             }
 
             runningActivity.TimerBackup = new Timer(
-                PluginDatabase.PluginSettings.Settings.TimeIntervalLogging * 60000 + 10000
+                PluginDatabase.PluginSettings.TimeIntervalLogging * 60000 + 10000
             )
             {
                 AutoReset = true,
@@ -621,7 +621,7 @@ namespace GameActivity.Services
         /// </summary>
         private void ValidateExternalDependencies()
         {
-            if (!PluginDatabase.PluginSettings.Settings.EnableLogging)
+            if (!PluginDatabase.PluginSettings.EnableLogging)
             {
                 return;
             }
@@ -655,7 +655,7 @@ namespace GameActivity.Services
         /// <returns>True if monitoring can proceed; false otherwise.</returns>
         public bool CheckMonitoringReadiness(bool withNotification = false)
         {
-            if (!PluginDatabase.PluginSettings.Settings.EnableLogging)
+            if (!PluginDatabase.PluginSettings.EnableLogging)
             {
                 return false;
             }
