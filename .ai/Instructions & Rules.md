@@ -1,9 +1,10 @@
-# 🤖 AI Coding Instructions & Rules: Playnite Plugin Development
+# 🤖 Playnite Plugin Development
 
 ## 👤 User Context
 - **Profile:** Experienced developer.
 - **Communication Style:** Direct, technical, and concise. No conversational filler or unnecessary apologies.
 - **Objective:** Production-ready, maintainable, and high-performance code for Playnite.
+- **Role:** Help **improve existing code** (refactors, bug fixes, UX) and **apply coding best practices and clean code** in every change. When writing or reviewing code, enforce these standards and suggest concrete improvements when the current code diverges from them.
 
 ---
 
@@ -29,6 +30,8 @@
 
 ## 🌍 Language & Documentation
 - **Code & Docs:** All code elements, comments, and documentation (XML Doc, README) must be in **English**.
+- **Always document:** Create documentation (XML Doc on public API, README when relevant) for any new or modified code; do not leave public types or members undocumented.
+- **Relevant comments:** Add comments where they add value: non-obvious logic, business rules, workarounds, non-trivial algorithms, or non-obvious "why" (not redundant "what"). Avoid comments that merely repeat the code.
 
 ---
 
@@ -53,6 +56,29 @@
     - No `nullable reference types` (C# 8.0 features).
     - No pattern matching enhancements beyond C# 7.0.
 - **Dependencies:** Ensure all NuGet packages are compatible with .NET Framework 4.6.2.
+
+---
+
+## 📐 Pattern & Dependency Priority
+
+When creating or reusing patterns, follow this **strict priority order**:
+
+1. **`source/playnite-plugincommon/` (first)**  
+   - Use or extend existing code in the project's common plugin library.  
+   - Prefer improving shared utilities, helpers, and UI components there rather than duplicating logic in the plugin.
+
+2. **Playnite SDK**  
+   - Use types, APIs, and patterns from `Playnite.SDK` (logging, serialization, dialogs, database, etc.) before writing custom equivalents.
+
+3. **Native .NET / BCL**  
+   - Use .NET Framework BCL or simple, well-known patterns (e.g. `HttpClient`, `MemoryCache`, `Task`, standard collections) when the above do not cover the need.
+
+4. **NuGet library**  
+   - Propose a NuGet package only when native code would be significantly more complex, error-prone, or hard to maintain.  
+   - When suggesting a library: **explicitly state pros and cons vs. native code** for the given use case (e.g. maintenance, surface area, compatibility with .NET 4.6.2, licensing, bundle size).  
+   - Do not add a dependency without this comparison.
+
+**Summary:** Prefer `playnite-plugincommon` → Playnite SDK → native/BCL → NuGet (with pros/cons vs native).
 
 ---
 
@@ -81,6 +107,9 @@
 - **Serialization:** Use `Playnite.SDK.Data.Serialization` for JSON operations.
 - **Resources:** Access via `ResourceProvider.GetString("LOC_KEY")` for localization.
 - **Dialogs:** Use `IPlayniteAPI.Dialogs` for user notifications and input.
+
+### UI / XAML
+- For views, controls, styling, and localization: follow **`.ai/Playnite UI Modernization, Localization & Common Styling.md`** (theme variables in `ResourcesPlaynite/Constants.xaml`, styles in `ResourcesPlaynite/Common.xaml` and `Resources/Common.xaml`, LocSource, MVVM).
 
 ---
 
@@ -113,6 +142,9 @@
 
 ## 🛠 Coding Standards
 - **Design Principles:** Follow SOLID principles and clean architecture.
+- **Clean Code (mandatory):** Apply clean code philosophy in all new or modified code: small, single-responsibility functions; meaningful names; minimal nesting and early returns; avoid duplication (DRY); keep methods and classes focused and readable. Prefer clarity over cleverness.
+- **Improve existing code:** When touching existing code, bring it in line with these standards: refactor when it improves readability or maintainability, add guard clauses, extract methods, reduce complexity. Do not leave clearly improvable code as-is without at least proposing the improvement.
+- **Suggest improvements:** When reviewing or analyzing code, identify and propose **concrete** improvements so the code better respects clean code (e.g. extracting methods, renaming, reducing complexity, removing duplication). Do not limit to describing issues—suggest the change or show the refactor when relevant.
 - **Typing:** Strict typing is mandatory. No `dynamic` unless absolutely necessary.
 - **Error Handling:**
     - Use robust try-catch blocks around external API calls.
@@ -146,10 +178,11 @@
 ## 📝 Response Rules
 1. **Code First**
 2. **Modular**
-3. **XML Documentation**
-4. **Comment complex logic only**
+3. **XML Documentation** — Document public API; create or update README when relevant.
+4. **Relevant comments** — Comment non-obvious logic, business rules, workarounds, and non-trivial "why"; avoid redundant or filler comments.
 5. **Complete working solutions**
 6. **Follow Clarification Policy before implementation**
+7. **Best practices & clean code** — Apply and enforce coding best practices and clean code in every proposal; when improving existing code, suggest or apply concrete refactors that align with these rules.
 
 ---
 
@@ -170,9 +203,18 @@
 - [ ] Dispatcher for UI operations
 - [ ] Naming conventions respected
 - [ ] No hardcoded strings
+- [ ] Documentation and relevant comments in place (XML Doc, README when needed)
+- [ ] Clean code principles applied (small functions, clear names, low complexity)
 - [ ] Assumptions stated if required
 
 ---
 
-**Last Updated:** 2026-02-19  
-**Version:** 2.2
+## 📋 Consistency Notes (project vs rules)
+- **Plugin type:** This project uses `PluginExtended` from `playnite-plugincommon` (extends `GenericPlugin`). Base is in `source/playnite-plugincommon/`.
+- **Tests:** No test project in repo yet; Testing section is the target when tests are added.
+- **UI:** XAML and localization must follow `.ai/Playnite UI Modernization, Localization & Common Styling.md`. Theme variables: `CommonPluginsResources/ResourcesPlaynite/Constants.xaml`. Base styles: `ResourcesPlaynite/Common.xaml` (e.g. `BaseTextBlockStyle`). Derived styles: `CommonPluginsResources/Resources/Common.xaml`. Plugin loads `Resources\Common.xaml` at runtime.
+
+---
+
+**Last Updated:** 2026-02-28  
+**Version:** 2.7
