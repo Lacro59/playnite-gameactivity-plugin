@@ -4,8 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GameActivity.Views"
-             xmlns:temperaturemeasurementtool="clr-namespace:TemperatureMeasurementTool"
-             xmlns:pbeh="clr-namespace:CommonPlayniteShared.Behaviors"
+             xmlns:pbeh="clr-namespace:CommonPlayniteShared.Behaviors" 
+             xmlns:controls="clr-namespace:CommonPluginsControls.Controls"
              mc:Ignorable="d" 
              Height="350" Width="500">
 
@@ -29,11 +29,11 @@
 
         <Label Content="{DynamicResource LOCGaDateStart}" Grid.Column="0" Grid.Row="0" />
         <DatePicker Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Name="PART_DateStart" SelectedDateChanged="PART_SelectedDateChanged" />
-        <temperaturemeasurementtool:TimePicker Grid.Column="3" Grid.Row="0" x:Name="PART_TimeStart" TimeChanged="PART_TimeChanged" />
+        <controls:TimePicker Grid.Column="3" Grid.Row="0" x:Name="PART_TimeStart" TimeChanged="PART_TimeChanged" />
 
         <Label Content="{DynamicResource LOCGaDateEnd}" Grid.Column="0" Grid.Row="2" />
         <DatePicker Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Name="PART_DateEnd" SelectedDateChanged="PART_SelectedDateChanged" />
-        <temperaturemeasurementtool:TimePicker Grid.Column="3" Grid.Row="2" x:Name="PART_TimeEnd" TimeChanged="PART_TimeChanged" />
+        <controls:TimePicker Grid.Column="3" Grid.Row="2" x:Name="PART_TimeEnd" TimeChanged="PART_TimeChanged" />
 
         <Label Content="{DynamicResource LOCIsPlayAction}" Grid.Column="0" Grid.Row="4" />
         <Grid Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="3">
