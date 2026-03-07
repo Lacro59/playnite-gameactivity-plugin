@@ -185,6 +185,7 @@ namespace GameActivity.Views
         
 
         #region Time navigation 
+
         private void Bt_PrevTime(object sender, RoutedEventArgs e)
         {
             PART_ChartTime.Prev();
@@ -216,10 +217,11 @@ namespace GameActivity.Views
             PART_ChartTime.ShowByWeeks = (bool)tb.IsChecked;
             PART_ChartTime.AxisVariator = 0;
         }
+
         #endregion
 
-
         #region Log navigation
+
         private void LvSessions_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (lvSessions.SelectedItem == null)
@@ -275,6 +277,7 @@ namespace GameActivity.Views
         {
             PART_ChartLog.Next(PluginDatabase.PluginSettings.VariatorLog);
         }
+
         #endregion
 
 
@@ -346,6 +349,7 @@ namespace GameActivity.Views
 
 
         #region Data actions
+
         private void PART_Delete_Click(object sender, RoutedEventArgs e)
         {
             MessageBoxResult result = API.Instance.Dialogs.ShowMessage(ResourceProvider.GetString("LOCConfirumationAskGeneric"), PluginDatabase.PluginName, MessageBoxButton.YesNo);
@@ -401,7 +405,9 @@ namespace GameActivity.Views
             {
                 ShowMinimizeButton = false,
                 ShowMaximizeButton = false,
-                ShowCloseButton = true
+                ShowCloseButton = true,
+                MinHeight = 450,
+                Width = 500
             };
 
             try
@@ -447,7 +453,9 @@ namespace GameActivity.Views
                 {
                     ShowMinimizeButton = false,
                     ShowMaximizeButton = false,
-                    ShowCloseButton = true
+                    ShowCloseButton = true,
+                    MinHeight = 450,
+                    Width = 500
                 };
 
                 GameActivityAddTime ViewExtension = new GameActivityAddTime(Plugin, GameContext, activity);
@@ -497,6 +505,7 @@ namespace GameActivity.Views
                 Common.LogError(ex, false, true, PluginDatabase.PluginName);
             }
         }
+
         #endregion
     }
 }
