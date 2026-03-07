@@ -48,9 +48,8 @@ namespace GameActivity.Models
 		/// <returns>List of activity details for the specified date, or an empty list if not found.</returns>
 		public List<ActivityDetailsData> Get(DateTime dateSession)
 		{
-			return Items.TryGetValue(dateSession, out List<ActivityDetailsData> item)
-				? item
-				: new List<ActivityDetailsData>();
+			List<ActivityDetailsData> result = Items.FirstOrDefault(x => x.Key.ToString("yyyy-MM-dd HH:mm:ss") == dateSession.ToString("yyyy-MM-dd HH:mm:ss")).Value;
+			return result ?? new List<ActivityDetailsData>();
 		}
 
 		/// <summary>
