@@ -16,30 +16,30 @@
     <controls:PluginUserControlExtend.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 
-        <!-- Slide-down animation for the filter bar -->
+        <!--
+            Storyboard targets are resolved at Begin(target) call time from code-behind.
+            TargetName is intentionally absent — Style.Triggers does not support it;
+            only ControlTemplate.Triggers does.
+        -->
         <Storyboard x:Key="FilterBarShowAnimation">
-            <DoubleAnimation Storyboard.TargetName="PART_FilterBar"
-                             Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
+            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
                              From="0" To="1" Duration="0:0:0.18">
                 <DoubleAnimation.EasingFunction>
                     <CubicEase EasingMode="EaseOut" />
                 </DoubleAnimation.EasingFunction>
             </DoubleAnimation>
-            <DoubleAnimation Storyboard.TargetName="PART_FilterBar"
-                             Storyboard.TargetProperty="Opacity"
+            <DoubleAnimation Storyboard.TargetProperty="Opacity"
                              From="0" To="1" Duration="0:0:0.18" />
         </Storyboard>
 
         <Storyboard x:Key="FilterBarHideAnimation">
-            <DoubleAnimation Storyboard.TargetName="PART_FilterBar"
-                             Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
+            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
                              From="1" To="0" Duration="0:0:0.15">
                 <DoubleAnimation.EasingFunction>
                     <CubicEase EasingMode="EaseIn" />
                 </DoubleAnimation.EasingFunction>
             </DoubleAnimation>
-            <DoubleAnimation Storyboard.TargetName="PART_FilterBar"
-                             Storyboard.TargetProperty="Opacity"
+            <DoubleAnimation Storyboard.TargetProperty="Opacity"
                              From="1" To="0" Duration="0:0:0.15" />
         </Storyboard>
     </controls:PluginUserControlExtend.Resources>
@@ -61,11 +61,6 @@
             <Border.RenderTransform>
                 <ScaleTransform ScaleY="1" />
             </Border.RenderTransform>
-            <Border.Triggers>
-                <EventTrigger RoutedEvent="Border.Loaded">
-                    <BeginStoryboard Storyboard="{StaticResource FilterBarShowAnimation}" />
-                </EventTrigger>
-            </Border.Triggers>
 
             <!-- Grid: fixed label column (col 0, MinWidth=90) aligns checkboxes
                  of both rows at the same X offset regardless of label text length. -->
@@ -222,21 +217,5 @@
         </Border>
 
     </Grid>
-
-    <!-- DataTriggers: animate filter bar show/hide on UseControls change -->
-    <controls:PluginUserControlExtend.Style>
-        <Style TargetType="controls:PluginUserControlExtend">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding UseControls}" Value="False">
-                    <DataTrigger.EnterActions>
-                        <BeginStoryboard Storyboard="{StaticResource FilterBarHideAnimation}" />
-                    </DataTrigger.EnterActions>
-                    <DataTrigger.ExitActions>
-                        <BeginStoryboard Storyboard="{StaticResource FilterBarShowAnimation}" />
-                    </DataTrigger.ExitActions>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-    </controls:PluginUserControlExtend.Style>
 
 </controls:PluginUserControlExtend>

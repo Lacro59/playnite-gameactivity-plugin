@@ -109,7 +109,8 @@ namespace GameActivity.Controls
                 PluginDatabase.PluginSettings.PropertyChanged += CreatePluginSettingsHandler();
 				PluginDatabase.DatabaseItemUpdated += CreateDatabaseItemUpdatedHandler<GameActivities>();
 				PluginDatabase.DatabaseItemCollectionChanged += CreateDatabaseCollectionChangedHandler<GameActivities>();
-				API.Instance.Database.Games.ItemUpdated += Games_ItemUpdated;
+                // NOTE: Games.ItemUpdated intentionally absent — handled by base via OnStaticGamesItemUpdated.
+                // API.Instance.Database.Games.ItemUpdated += Games_ItemUpdated;
             });
         }
 

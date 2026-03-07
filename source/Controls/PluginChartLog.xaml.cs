@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Threading;
 
 namespace GameActivity.Controls
@@ -189,13 +190,13 @@ namespace GameActivity.Controls
         {
             AlwaysShow = true;
             InitializeComponent();
-            // Give DataContext a back-reference so RelayCommands can write back
-            // to this control's DependencyProperties (single source of truth).
             ControlDataContext.SetControl(this);
             DataContext = ControlDataContext;
             Loaded += OnLoaded;
-        }
 
+            // Animate filter bar when UseControls changes.
+            ControlDataContext.PropertyChanged += OnDataContextPropertyChanged;
+        }
 
         // ──────────────────────────────────────────────────────────────────────
         // Static event registration
@@ -208,17 +209,16 @@ namespace GameActivity.Controls
             AttachPluginEvents(PluginDatabase.PluginName, () =>
             {
                 PluginDatabase.PluginSettings.PropertyChanged += CreatePluginSettingsHandler();
-				PluginDatabase.DatabaseItemUpdated += CreateDatabaseItemUpdatedHandler<GameActivities>();
-				PluginDatabase.DatabaseItemCollectionChanged += CreateDatabaseCollectionChangedHandler<GameActivities>();
-				API.Instance.Database.Games.ItemUpdated += Games_ItemUpdated;
+                PluginDatabase.DatabaseItemUpdated += CreateDatabaseItemUpdatedHandler<GameActivities>();
+                PluginDatabase.DatabaseItemCollectionChanged += CreateDatabaseCollectionChangedHandler<GameActivities>();
+                // NOTE: Games.ItemUpdated intentionally absent — handled by base via OnStaticGamesItemUpdated.
+                // API.Instance.Database.Games.ItemUpdated += Games_ItemUpdated;
 
-                // Sync original toggle state from settings on first attach.
                 DisplayCpu = PluginDatabase.PluginSettings.DisplayCpu;
                 DisplayGpu = PluginDatabase.PluginSettings.DisplayGpu;
                 DisplayRam = PluginDatabase.PluginSettings.DisplayRam;
                 DisplayFps = PluginDatabase.PluginSettings.DisplayFps;
 
-                // Temperature/power toggles always start hidden — no setting persisted.
                 DisplayCpuT = false;
                 DisplayGpuT = false;
                 DisplayCpuP = false;
@@ -226,6 +226,26 @@ namespace GameActivity.Controls
             });
         }
 
+        /// <summary>
+        /// Plays the appropriate filter bar animation when <see cref="PluginChartLogDataContext.UseControls"/> changes.
+        /// Must run on the UI thread — PropertyChanged is raised on the UI thread by <see cref="ObservableObject"/>.
+        /// </summary>
+        private void OnDataContextPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName != nameof(PluginChartLogDataContext.UseControls))
+            {
+                return;
+            }
+
+            string storyboardKey = ControlDataContext.UseControls
+                ? "FilterBarShowAnimation"
+                : "FilterBarHideAnimation";
+
+            if (Resources[storyboardKey] is Storyboard storyboard)
+            {
+                storyboard.Begin(PART_FilterBar);
+            }
+        }
 
         // ──────────────────────────────────────────────────────────────────────
         // Default DataContext initialisation
