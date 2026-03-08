@@ -27,3 +27,5 @@ protected override void PluginSettings_PropertyChanged(object sender, PropertyCh
     }
 }
 ```
+
+- [X] Games.ItemUpdated intentionally absent — handled by base via OnStaticGamesItemUpdated.
