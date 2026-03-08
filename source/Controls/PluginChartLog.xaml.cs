@@ -267,7 +267,7 @@ namespace GameActivity.Controls
                 chartLogAxis = true;
                 chartLogOrdinates = true;
                 useControls = true;
-                displayMoreData = false;
+                displayMoreData = true;
             }
 
             ControlDataContext.IsActivated = isActivated;
