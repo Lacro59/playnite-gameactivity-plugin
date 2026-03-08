@@ -8,7 +8,7 @@
 
 ### Views
 
-- [ ] GameActivityAddTime
+- [X] GameActivityAddTime
 - [ ] GameActivityBackup
 - [ ] GameActivityGanttView
 - [ ] GameActivityMergeTime
@@ -21,7 +21,7 @@
 ### Components
 
 - [ ] GanttControl
-- [ ] PluginButton
+- [X] PluginButton
 - [ ] PluginChartLog
 - [ ] PluginChartTime
 - [ ] TimePicker
