@@ -7,8 +7,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:GameActivity.Controls"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
-        xmlns:livechartscommon="clr-namespace:CommonPluginsControls.LiveChartsCommon"
-        mc:Ignorable="d" 
+        xmlns:livechartscommon="clr-namespace:CommonPluginsControls.LiveChartsCommon" 
+        xmlns:controls1="clr-namespace:CommonPluginsControls.Controls"
+        mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=local:PluginChartLogDataContext}"
         MinHeight="{Binding RelativeSource={RelativeSource AncestorType=ContentControl}, Path=MinHeight}"
         Height="{Binding ChartLogHeight}"
@@ -45,14 +46,44 @@
         </Storyboard>
     </controls:PluginUserControlExtend.Resources>
 
+    <!--
+        Layout: 3 rows.
+          Row 0 — navigation bar  (Auto, collapses to 0 when ShowNavBar=False)
+          Row 1 — filter bar      (Auto, unchanged from original)
+          Row 2 — chart           (* , unchanged from original)
+    -->
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*"    />
         </Grid.RowDefinitions>
 
-        <!-- ===== Filter bar — CompactCheckBox for minimal vertical footprint ===== -->
-        <Border Grid.Row="0"
+        <!-- ===== Row 0 — Navigation bar ===== -->
+        <!--
+            ShowNavBar DP controls visibility.
+            ShowAllData is two-way: the nav bar toggles it and PluginChartLog.cs
+            mirrors the change back into its own DP via NavBar_ShowAllToggled.
+            NavLabel is empty for ChartLog (no week/period concept).
+        -->
+        <controls1:PluginChartNavBar
+            x:Name="PART_NavBar"
+            Grid.Row="0"
+            Margin="0,0,0,4"
+            ShowNavBar="{Binding ShowNavBar}"
+            ShowAllData="{Binding ShowAllData}"
+            NavLabel="{Binding NavLabel}"
+            PageSize="{Binding PageSize}"
+            FirstClicked="NavBar_FirstClicked"
+            PagePrevClicked="NavBar_PagePrevClicked"
+            PrevClicked="NavBar_PrevClicked"
+            ShowAllToggled="NavBar_ShowAllToggled"
+            NextClicked="NavBar_NextClicked"
+            PageNextClicked="NavBar_PageNextClicked"
+            LastClicked="NavBar_LastClicked" />
+
+        <!-- ===== Row 1 — Filter bar (CompactCheckBox for minimal vertical footprint) ===== -->
+        <Border Grid.Row="1"
                 x:Name="PART_FilterBar"
                 Style="{DynamicResource FilterCardBorder}"
                 Margin="0,0,0,6"
@@ -156,8 +187,8 @@
             </Grid>
         </Border>
 
-        <!-- ===== Chart container ===== -->
-        <Border Grid.Row="1" Style="{DynamicResource CardBorder}" Padding="0">
+        <!-- ===== Row 2 — Chart container ===== -->
+        <Border Grid.Row="2" Style="{DynamicResource CardBorder}" Padding="0">
             <Grid Name="PART_GridContener">
                 <lvc:CartesianChart LegendLocation="Bottom"
                                     Name="PART_ChartLogActivity"
@@ -184,7 +215,7 @@
                                   FontSize="{DynamicResource FontSizeSmall}"
                                   FontFamily="{DynamicResource FontFamily}">
                             <lvc:Axis.Separator>
-                                <lvc:Separator Step="1" />
+                                <lvc:Separator Step="1" IsEnabled="False" />
                             </lvc:Axis.Separator>
                         </lvc:Axis>
                     </lvc:CartesianChart.AxisX>

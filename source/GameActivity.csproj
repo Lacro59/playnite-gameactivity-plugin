@@ -169,6 +169,9 @@
     <Compile Include="playnite-plugincommon\CommonPluginsControls\Controls\ControlPickerGradient.xaml.cs">
       <DependentUpon>ControlPickerGradient.xaml</DependentUpon>
     </Compile>
+    <Compile Include="playnite-plugincommon\CommonPluginsControls\Controls\PluginChartNavBar.xaml.cs">
+      <DependentUpon>PluginChartNavBar.xaml</DependentUpon>
+    </Compile>
     <Compile Include="playnite-plugincommon\CommonPluginsControls\Controls\TextBlockTrimmed.xaml.cs">
       <DependentUpon>TextBlockTrimmed.xaml</DependentUpon>
     </Compile>
@@ -503,6 +506,10 @@
     <Page Include="playnite-plugincommon\CommonPluginsControls\Controls\ControlPickerGradient.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="playnite-plugincommon\CommonPluginsControls\Controls\PluginChartNavBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="playnite-plugincommon\CommonPluginsControls\Controls\TextBlockTrimmed.xaml">
       <Generator>MSBuild:Compile</Generator>

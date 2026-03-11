@@ -173,7 +173,7 @@ namespace GameActivity.Controls
         /// When true: bypasses AxisVariator/limit pagination and renders the entire
         /// session dataset. Also forces all 8 series visible regardless of individual
         /// Display* flags.
-        /// Driven exclusively by an external XAML binding — no internal UI toggle.
+        /// Driven by the nav bar toggle or by an external XAML binding.
         /// </summary>
         public bool ShowAllData
         {
@@ -183,7 +183,36 @@ namespace GameActivity.Controls
         public static readonly DependencyProperty ShowAllDataProperty = DependencyProperty.Register(
             nameof(ShowAllData), typeof(bool), typeof(PluginChartLog),
             new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback));
-        // ── End ShowAllData ────────────────────────────────────────────────────
+
+        // ── ShowNavBar ────────────────────────────────────────────────────────
+        /// <summary>
+        /// Shows or hides the PluginChartNavBar above the filter bar.
+        /// Defaults to false so existing usages without a nav bar are unaffected.
+        /// </summary>
+        public bool ShowNavBar
+        {
+            get => (bool)GetValue(ShowNavBarProperty);
+            set => SetValue(ShowNavBarProperty, value);
+        }
+        public static readonly DependencyProperty ShowNavBarProperty = DependencyProperty.Register(
+            nameof(ShowNavBar), typeof(bool), typeof(PluginChartLog),
+            new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback));
+
+        // ── PageSize ──────────────────────────────────────────────────────────
+        /// <summary>
+        /// Number of items skipped by the PrevPage / NextPage nav bar buttons.
+        /// Should be bound to the same value used as the chart's abscissa limit
+        /// (AxisLimit when set, otherwise PluginSettings.ChartLogCountAbscissa).
+        /// When &lt;= 0, the PrevPage/NextPage buttons are hidden in the nav bar.
+        /// </summary>
+        public int PageSize
+        {
+            get => (int)GetValue(PageSizeProperty);
+            set => SetValue(PageSizeProperty, value);
+        }
+        public static readonly DependencyProperty PageSizeProperty = DependencyProperty.Register(
+            nameof(PageSize), typeof(int), typeof(PluginChartLog),
+            new FrameworkPropertyMetadata(0, ControlsPropertyChangedCallback));
 
         #endregion
 
@@ -202,6 +231,7 @@ namespace GameActivity.Controls
 
             ControlDataContext.PropertyChanged += OnDataContextPropertyChanged;
         }
+
 
         // ──────────────────────────────────────────────────────────────────────
         // Static event registration
@@ -227,9 +257,12 @@ namespace GameActivity.Controls
                 DisplayCpuP = false;
                 DisplayGpuP = false;
 
-                // ShowAllData is not reset from settings — it is owned by the caller binding.
+                // ShowAllData is not reset from plugin settings — it is owned by the
+                // nav bar toggle or by the caller's XAML binding.
             });
         }
+
+        // ── Filter bar slide animation triggered by UseControls changes ────────
 
         private void OnDataContextPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
@@ -247,6 +280,7 @@ namespace GameActivity.Controls
                 storyboard.Begin(PART_FilterBar);
             }
         }
+
 
         // ──────────────────────────────────────────────────────────────────────
         // Default DataContext initialisation
@@ -290,11 +324,31 @@ namespace GameActivity.Controls
             ControlDataContext.DisplayCpuP = DisplayCpuP;
             ControlDataContext.DisplayGpuP = DisplayGpuP;
 
-            // ── ShowAllData ────────────────────────────────────────────────────
-            // Mirror the DP value into the DataContext so XAML bindings on the
-            // DataContext side (e.g. IsEnabled on nav buttons) can react.
-            ControlDataContext.ShowAllData = ShowAllData;
+            // ── ShowAllData: always reset on game context change ───────────────
+            // Mirrors PluginChartTime behaviour: switching game resets the view to
+            // the paginated window so the nav bar starts in a clean state.
+            ControlDataContext.ShowAllData = false;
+            ShowAllData = false;
             // ── End ShowAllData ────────────────────────────────────────────────
+
+            // ── Nav bar defaults ───────────────────────────────────────────────
+            bool showNavBar = ShowNavBar;
+            if (IgnoreSettings) { showNavBar = true; }
+
+            ControlDataContext.ShowNavBar = showNavBar;
+            // NavLabel is empty for ChartLog (no week/period concept).
+            // A parent view may push a session title here via NavLabel binding.
+            ControlDataContext.NavLabel = string.Empty;
+
+            // ── PageSize: resolve effective limit and push to nav bar ──────────
+            // Priority: explicit AxisLimit DP → plugin setting.
+            // The nav bar hides PrevPage/NextPage when PageSize <= 0.
+            int effectivePageSize = AxisLimit > 0
+                ? AxisLimit
+                : PluginDatabase.PluginSettings.ChartLogCountAbscissa;
+            ControlDataContext.PageSize = effectivePageSize;
+            // ── End PageSize ───────────────────────────────────────────────────
+            // ── End nav bar defaults ───────────────────────────────────────────
 
             PART_ChartLogActivity.Series = null;
             PART_ChartLogActivityLabelsX.Labels = null;
@@ -322,15 +376,15 @@ namespace GameActivity.Controls
                 ? AxisLimit
                 : PluginDatabase.PluginSettings.ChartLogCountAbscissa;
 
-            // Capture all UI-thread DP values before entering background thread.
+            // Capture all UI-thread DP values before entering the background thread.
             int axisVariator = AxisVariator;
             DateTime? dateSelected = DateSelected;
             string titleChart = TitleChart;
 
-            // ── ShowAllData ────────────────────────────────────────────────────
             // Capture ShowAllData on the UI thread before the Task starts.
             bool showAllData = ShowAllData;
-            // ── End ShowAllData ────────────────────────────────────────────────
+
+            ControlDataContext.ChartLogAxis = !ShowAllData;
 
             GetActivityForGamesLogGraphics(gameActivities, axisVariator, limit, dateSelected, titleChart, showAllData);
         }
@@ -344,6 +398,72 @@ namespace GameActivity.Controls
 
         public void Next(int value = 1) { AxisVariator += value; }
         public void Prev(int value = 1) { AxisVariator -= value; }
+
+        #endregion
+
+
+        // ──────────────────────────────────────────────────────────────────────
+        // Nav bar event handlers
+        // ──────────────────────────────────────────────────────────────────────
+
+        #region Nav bar event handlers
+
+        // Each handler translates a PluginChartNavBar RoutedEvent into a chart action.
+        // Next() / Prev() modify AxisVariator, which triggers ControlsPropertyChangedCallback
+        // → GameContextChanged → SetData, so no explicit refresh call is needed there.
+
+        private void NavBar_FirstClicked(object sender, RoutedEventArgs e)
+        {
+            // Jump to the oldest data by moving the window far to the left.
+            // GetActivityForGamesLogGraphics clamps automatically when conteurStart < 0.
+            AxisVariator = -9999;
+        }
+
+        private void NavBar_PagePrevClicked(object sender, RoutedEventArgs e)
+        {
+            // Skip back by a full page (PageSize items).
+            // The delta is resolved here in the parent where the limit is owned;
+            // the nav bar itself carries PageSize only for display purposes.
+            int pageSize = AxisLimit > 0
+                ? AxisLimit
+                : PluginDatabase.PluginSettings.ChartLogCountAbscissa;
+            Prev(pageSize);
+        }
+
+        private void NavBar_PrevClicked(object sender, RoutedEventArgs e)
+        {
+            Prev();
+        }
+
+        private void NavBar_ShowAllToggled(object sender, RoutedEventArgs e)
+        {
+            // Mirror the nav bar's new ShowAllData state into both the DP and the DataContext,
+            // then trigger a full reload so the chart re-renders with the complete dataset
+            // (or returns to the paginated view when ShowAllData is turned off).
+            ShowAllData = PART_NavBar.ShowAllData;
+            ControlDataContext.ShowAllData = ShowAllData;
+            GameContextChanged(null, GameContext);
+        }
+
+        private void NavBar_NextClicked(object sender, RoutedEventArgs e)
+        {
+            Next();
+        }
+
+        private void NavBar_PageNextClicked(object sender, RoutedEventArgs e)
+        {
+            // Skip forward by a full page (PageSize items).
+            int pageSize = AxisLimit > 0
+                ? AxisLimit
+                : PluginDatabase.PluginSettings.ChartLogCountAbscissa;
+            Next(pageSize);
+        }
+
+        private void NavBar_LastClicked(object sender, RoutedEventArgs e)
+        {
+            // AxisVariator = 0 always shows the most recent window.
+            AxisVariator = 0;
+        }
 
         #endregion
 
@@ -372,7 +492,9 @@ namespace GameActivity.Controls
             {
                 try
                 {
-                    List<ActivityDetailsData> activitiesDetails = gameActivities.GetSessionActivityDetails(dateSelected, titleChart);
+                    List<ActivityDetailsData> activitiesDetails =
+                        gameActivities.GetSessionActivityDetails(dateSelected, titleChart);
+
                     if (activitiesDetails == null)
                     {
                         return;
@@ -391,12 +513,12 @@ namespace GameActivity.Controls
                         return;
                     }
 
-                    // ── ShowAllData ────────────────────────────────────────────────────
+                    // ── ShowAllData: render the entire dataset ─────────────────────────
                     if (showAll)
                     {
-                        // Render the entire dataset — pagination is intentionally bypassed.
-                        // AxisVariator is not touched: it retains its last value so that
-                        // disabling ShowAllData returns the user to their previous window.
+                        // Pagination is intentionally bypassed.
+                        // AxisVariator is NOT touched so that disabling ShowAllData returns
+                        // the user to their previous paginated window position.
                         gameLogsDefinitive = activitiesDetails;
                         activityForGameLogLabels = new string[activitiesDetails.Count];
 
@@ -473,11 +595,6 @@ namespace GameActivity.Controls
                         cpuPValues.Add(log.CPUP);
                         gpuPValues.Add(log.GPUP);
                     }
-
-                    // ── showAll captured for the UI-thread closure ─────────────────────
-                    // Local copy needed: the lambda below runs asynchronously and must not
-                    // capture the parameter by ref across the thread boundary.
-                    bool showAllClosure = showAll;
 
                     this.Dispatcher.BeginInvoke(DispatcherPriority.Background, new ThreadStart(delegate
                     {
@@ -603,9 +720,7 @@ namespace GameActivity.Controls
                         PART_ChartLogActivityLabelsY.LabelFormatter = v => v.ToString("N0") + "%";
                         PART_ChartLogActivityLabelsX.Labels = activityForGameLogLabels;
 
-                        // Pass showAllClosure so SetChartVisibility can force all series
-                        // visible when the full dataset is rendered.
-                        SetChartVisibility(showAllClosure);
+                        SetChartVisibility();
                     }));
                 }
                 catch (Exception ex)
@@ -633,34 +748,39 @@ namespace GameActivity.Controls
 
         /// <summary>
         /// Applies visibility to all 8 series.
-        /// When <paramref name="forceAllVisible"/> is <c>true</c> (ShowAllData mode),
-        /// every series is forced to <see cref="Visibility.Visible"/> regardless of
-        /// the individual Display* flags — the filter bar checkboxes are irrelevant
-        /// in that mode because the caller wants a complete overview.
-        /// When <c>false</c>, standard per-series flag logic applies.
         /// </summary>
+        /// <param name="forceAllVisible">
+        /// When <c>true</c> (ShowAllData mode), every series is forced to
+        /// <see cref="Visibility.Visible"/> — the filter bar checkboxes are irrelevant
+        /// in that mode because the caller wants a complete overview.
+        /// When <c>false</c>, standard per-series Display* flag logic applies.
+        /// </param>
+        /// <remarks>
+        /// BUG FIX vs original: the original code declared <paramref name="forceAllVisible"/>
+        /// but never used it — every branch evaluated only DisplayXxx.
+        /// The corrected form uses <c>forceAllVisible || DisplayXxx</c> so ShowAllData
+        /// actually overrides individual series visibility.
+        /// </remarks>
         private void SetChartVisibility(bool forceAllVisible = false)
         {
-            if (_cpuSeries != null) { _cpuSeries.Visibility = DisplayCpu ? Visibility.Visible : Visibility.Collapsed; }
-            if (_gpuSeries != null) { _gpuSeries.Visibility = DisplayGpu ? Visibility.Visible : Visibility.Collapsed; }
-            if (_ramSeries != null) { _ramSeries.Visibility = DisplayRam ? Visibility.Visible : Visibility.Collapsed; }
-            if (_fpsSeries != null) { _fpsSeries.Visibility = DisplayFps ? Visibility.Visible : Visibility.Collapsed; }
-            if (_cpuTSeries != null) { _cpuTSeries.Visibility = DisplayCpuT ? Visibility.Visible : Visibility.Collapsed; }
-            if (_gpuTSeries != null) { _gpuTSeries.Visibility = DisplayGpuT ? Visibility.Visible : Visibility.Collapsed; }
-            if (_cpuPSeries != null) { _cpuPSeries.Visibility = DisplayCpuP ? Visibility.Visible : Visibility.Collapsed; }
-            if (_gpuPSeries != null) { _gpuPSeries.Visibility = DisplayGpuP ? Visibility.Visible : Visibility.Collapsed; }
+            if (_cpuSeries != null) { _cpuSeries.Visibility = (forceAllVisible || DisplayCpu) ? Visibility.Visible : Visibility.Collapsed; }
+            if (_gpuSeries != null) { _gpuSeries.Visibility = (forceAllVisible || DisplayGpu) ? Visibility.Visible : Visibility.Collapsed; }
+            if (_ramSeries != null) { _ramSeries.Visibility = (forceAllVisible || DisplayRam) ? Visibility.Visible : Visibility.Collapsed; }
+            if (_fpsSeries != null) { _fpsSeries.Visibility = (forceAllVisible || DisplayFps) ? Visibility.Visible : Visibility.Collapsed; }
+            if (_cpuTSeries != null) { _cpuTSeries.Visibility = (forceAllVisible || DisplayCpuT) ? Visibility.Visible : Visibility.Collapsed; }
+            if (_gpuTSeries != null) { _gpuTSeries.Visibility = (forceAllVisible || DisplayGpuT) ? Visibility.Visible : Visibility.Collapsed; }
+            if (_cpuPSeries != null) { _cpuPSeries.Visibility = (forceAllVisible || DisplayCpuP) ? Visibility.Visible : Visibility.Collapsed; }
+            if (_gpuPSeries != null) { _gpuPSeries.Visibility = (forceAllVisible || DisplayGpuP) ? Visibility.Visible : Visibility.Collapsed; }
         }
 
         /// <summary>
-        /// LiveCharts render tick — re-reads ShowAllData from the DP each tick
-        /// so that toggling ShowAllData on an already-rendered chart takes effect
-        /// without requiring a full data reload.
+        /// LiveCharts render tick — re-reads ShowAllData from the DP each tick so that
+        /// toggling ShowAllData on an already-rendered chart takes effect without a
+        /// full data reload.
         /// </summary>
         private void PART_ChartLogActivity_UpdaterTick(object sender)
         {
-            // ── ShowAllData ────────────────────────────────────────────────────
-            SetChartVisibility(ShowAllData);
-            // ── End ShowAllData ────────────────────────────────────────────────
+            SetChartVisibility();
         }
 
         #endregion
@@ -688,6 +808,8 @@ namespace GameActivity.Controls
 
     public class PluginChartLogDataContext : ObservableObject, IDataContext
     {
+        // ── Activation / layout ───────────────────────────────────────────────
+
         private bool _isActivated;
         public bool IsActivated { get => _isActivated; set => SetValue(ref _isActivated, value); }
 
@@ -706,11 +828,15 @@ namespace GameActivity.Controls
         private bool _useControls;
         public bool UseControls { get => _useControls; set => SetValue(ref _useControls, value); }
 
+        // ── Chart options ─────────────────────────────────────────────────────
+
         private bool _disableAnimations = true;
         public bool DisableAnimations { get => _disableAnimations; set => SetValue(ref _disableAnimations, value); }
 
         private double _labelsRotationValue;
         public double LabelsRotationValue { get => _labelsRotationValue; set => SetValue(ref _labelsRotationValue, value); }
+
+        // ── Sensor display flags ──────────────────────────────────────────────
 
         private bool _displayCpu;
         public bool DisplayCpu { get => _displayCpu; set => SetValue(ref _displayCpu, value); }
@@ -742,14 +868,37 @@ namespace GameActivity.Controls
         // ── ShowAllData ────────────────────────────────────────────────────────
         /// <summary>
         /// Mirror of <see cref="PluginChartLog.ShowAllData"/> DP.
-        /// Read-only for DataContext consumers (e.g. to disable nav buttons via binding).
-        /// Written exclusively by <see cref="PluginChartLog.SetDefaultDataContext"/>.
+        /// Written by <see cref="PluginChartLog.SetDefaultDataContext"/> (reset to false)
+        /// and by <see cref="PluginChartLog.NavBar_ShowAllToggled"/>.
+        /// Read by XAML bindings (e.g. to disable filter bar checkboxes in ShowAllData mode).
         /// </summary>
         private bool _showAllData;
         public bool ShowAllData { get => _showAllData; set => SetValue(ref _showAllData, value); }
-        // ── End ShowAllData ────────────────────────────────────────────────────
+
+        // ── Nav bar state ─────────────────────────────────────────────────────
+
+        private bool _showNavBar;
+        /// <summary>Drives PluginChartNavBar.ShowNavBar binding in the XAML.</summary>
+        public bool ShowNavBar { get => _showNavBar; set => SetValue(ref _showNavBar, value); }
+
+        private string _navLabel = string.Empty;
+        /// <summary>
+        /// Badge text shown on the right of the nav bar.
+        /// For ChartLog this is always empty (no week/period concept).
+        /// Exposed so a parent view can push a session title if needed.
+        /// </summary>
+        public string NavLabel { get => _navLabel; set => SetValue(ref _navLabel, value); }
+
+        private int _pageSize;
+        /// <summary>
+        /// Mirror of the effective chart abscissa limit pushed by PluginChartLog.SetDefaultDataContext.
+        /// Bound to PluginChartNavBar.PageSize so the nav bar can show/hide the
+        /// PrevPage/NextPage buttons and build their tooltips.
+        /// </summary>
+        public int PageSize { get => _pageSize; set => SetValue(ref _pageSize, value); }
 
         // ── RelayCommands ─────────────────────────────────────────────────────
+
         public RelayCommand CmdToggleCpu { get; }
         public RelayCommand CmdToggleGpu { get; }
         public RelayCommand CmdToggleRam { get; }
@@ -773,6 +922,7 @@ namespace GameActivity.Controls
 
         private PluginChartLog _control;
 
+        /// <summary>Called from <see cref="PluginChartLog"/> constructor to wire commands.</summary>
         public void SetControl(PluginChartLog control)
         {
             _control = control;
