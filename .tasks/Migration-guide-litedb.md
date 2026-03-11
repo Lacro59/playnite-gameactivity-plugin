@@ -14,11 +14,12 @@ to eliminate UI thread starvation during list scrolling.
 
 ### Performance gains
 
-| Metric                       | Before                    | After                          |
+
+| Metric                     | Before                  | After                        |
 | ---------------------------- | ------------------------- | ------------------------------ |
-| `UpdateDataAsync` per game   | 180–1400 ms               | 3–6 ms                         |
-| `SetData` per game           | 127–413 ms                | 1–2 ms                         |
-| Cache disk write             | Every`CheckConfig` call   | Once, 2 s after scroll stops   |
+| `UpdateDataAsync` per game | 180–1400 ms            | 3–6 ms                      |
+| `SetData` per game         | 127–413 ms             | 1–2 ms                      |
+| Cache disk write           | Every`CheckConfig` call | Once, 2 s after scroll stops |
 
 ---
 
@@ -141,32 +142,33 @@ to BSON but cause no data corruption — they are recalculated or overwritten on
 
 ### First launch (JSON migration)
 
-- [ ] Migration progress dialog appears
-- [ ] Log shows: `MigrateJsonToLiteDb — completed: N migrated, 0 failed`
-- [ ] All `.json` files removed from `PluginDatabasePath` after migration
-- [ ] Log shows: `PreWarm — N items cached in Xms`
+- [X] Migration progress dialog appears
+- [X] Log shows: `MigrateJsonToLiteDb — completed: N migrated, 0 failed`
+- [X] All `.json` files removed from `PluginDatabasePath` after migration
+- [X] Log shows: `PreWarm — N items cached in Xms`
 
 ### Runtime performance
 
-- [ ] Scrolling the game list: `UpdateDataAsync end [<10ms]` for every game
-- [ ] No `Task.Run` starvation (no batch of `DB fetch done [>100ms]` entries)
+- [X] Scrolling the game list: `UpdateDataAsync end [<10ms]` for every game
+- [X] No `Task.Run` starvation (no batch of `DB fetch done [>100ms]` entries)
 
 ### Functional tests
 
-- [ ] `ClearHardwareCache()` invalidates and reloads correctly
-- [ ] `ClearDatabase()` removes all LiteDB entries and associated tags
-- [ ] Games added after migration appear correctly (no missing data)
-- [ ] Games deleted from Playnite are removed from LiteDB on next startup (`DeleteDataWithDeletedGame`)
+- [ ] ~~`ClearHardwareCache()` invalidates and reloads correctly~~
+- [ ] ~~`ClearDatabase()` removes all LiteDB entries and associated tags~~
+- [X] Games added after migration appear correctly (no missing data)
+- [X] Games deleted from Playnite are removed from LiteDB on next startup (`DeleteDataWithDeletedGame`)
 
 ---
 
 ## Troubleshooting
 
-| Symptom                                          | Likely cause                                      | Fix                                                          |
+
+| Symptom                                        | Likely cause                                    | Fix                                                        |
 | ------------------------------------------------ | ------------------------------------------------- | ------------------------------------------------------------ |
-| `UpdateDataAsync end [>100ms]` after migration   | `PreWarm()` not called in `LoadDatabase()`        | Ensure`_database.PreWarm()` is called before `return true`   |
-| `DB fetch done [>100ms]` in batches              | `Task.Run()` still present in `UpdateDataAsync`   | Replace with synchronous`GetOnlyCache()` call                |
-| `Cache saved to disk` on every scroll event      | `SaveCacheToDisk()` still called directly         | Replace all call sites with`ScheduleCacheSave()`             |
-| Migration dialog never appears                   | `PluginDatabasePath` points to wrong folder       | Verify`Paths.PluginDatabasePath` in constructor              |
-| `MigrateJsonToLiteDb — failed on 'file.json'`    | Corrupted or incompatible JSON file               | Check file manually; delete if unrecoverable                 |
-| LiteDB file locked on second Playnite instance   | LiteDB 4.x single-writer limitation               | Expected behavior — only one Playnite instance supported     |
+| `UpdateDataAsync end [>100ms]` after migration | `PreWarm()` not called in `LoadDatabase()`      | Ensure`_database.PreWarm()` is called before `return true` |
+| `DB fetch done [>100ms]` in batches            | `Task.Run()` still present in `UpdateDataAsync` | Replace with synchronous`GetOnlyCache()` call              |
+| `Cache saved to disk` on every scroll event    | `SaveCacheToDisk()` still called directly       | Replace all call sites with`ScheduleCacheSave()`           |
+| Migration dialog never appears                 | `PluginDatabasePath` points to wrong folder     | Verify`Paths.PluginDatabasePath` in constructor            |
+| `MigrateJsonToLiteDb — failed on 'file.json'` | Corrupted or incompatible JSON file             | Check file manually; delete if unrecoverable               |
+| LiteDB file locked on second Playnite instance | LiteDB 4.x single-writer limitation             | Expected behavior — only one Playnite instance supported  |

@@ -6,11 +6,11 @@
 - [X] PluginMenus
 - [X] PluginWindows
 - [ ] PluginExportCsv
-- [ ] PluginDatabaseObject<TSettings, TItem, T> where TSettings : PluginSettings
+- [x] PluginDatabaseObject<TSettings, TItem, T> where TSettings : PluginSettings
 
 ## Controls
 
-- [ ] PluginViewItem
+- [ ] ~~PluginViewItem~~
 
 ```csharp
 /// <summary>

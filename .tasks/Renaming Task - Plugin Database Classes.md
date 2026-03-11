@@ -2,12 +2,12 @@
 
 ## Renames
 
-| Old                                 | New                                              |
-| ----------------------------------- | ------------------------------------------------ |
-| `PluginDataBaseGameBase`            | `PluginGameEntry`                                |
-| `PluginDataBaseGame<T>`             | `PluginGameCollection<T>`                        |
-| `PluginDataBaseGameDetails<T, Y>`   | `PluginGameCollectionWithDetails<T, TDetails>`   |
-| Paramètre de type`Y`                | `TDetails`                                       |
+| Old                               | New                                            |
+| --------------------------------- | ---------------------------------------------- |
+| `PluginDataBaseGameBase`          | `PluginGameEntry`                              |
+| `PluginDataBaseGame<T>`           | `PluginGameCollection<T>`                      |
+| `PluginDataBaseGameDetails<T, Y>` | `PluginGameCollectionWithDetails<T, TDetails>` |
+| Paramètre de type`Y`              | `TDetails`                                     |
 
 ---
 
