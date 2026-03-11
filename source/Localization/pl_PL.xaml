@@ -193,6 +193,8 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivityLabelGpu">GPU</sys:String>
     <sys:String x:Key="LOCGameActivityLabelRam">RAM</sys:String>
     <sys:String x:Key="LOCGameActivityLabelFps">FPS</sys:String>
+    
+    <sys:String x:Key="LOCGameActivityShowAllData">Show all data</sys:String>
 
     <!-- Group header labels for the two filter bar rows -->
     <sys:String x:Key="LOCGameActivityGroupUsage">Usage</sys:String>
