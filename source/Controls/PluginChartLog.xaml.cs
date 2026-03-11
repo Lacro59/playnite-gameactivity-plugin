@@ -36,15 +36,10 @@ namespace GameActivity.Controls
         }
 
         // ── LiveCharts series fields ───────────────────────────────────────────
-        // All series are LineSeries — continuous time-series data is better
-        // represented as lines than bars (see monitoring tools convention).
-        // Usage group (solid, ScalesYAt=0) / Temp+Power group (dashed, ScalesYAt=1).
         private LineSeries _cpuSeries;
         private LineSeries _gpuSeries;
         private LineSeries _ramSeries;
         private LineSeries _fpsSeries;
-
-        // Temperature/Power group — hidden by default
         private LineSeries _cpuTSeries;
         private LineSeries _gpuTSeries;
         private LineSeries _cpuPSeries;
@@ -52,7 +47,7 @@ namespace GameActivity.Controls
 
 
         // ──────────────────────────────────────────────────────────────────────
-        // Dependency properties — original preserved + 4 new for temp/power
+        // Dependency properties
         // ──────────────────────────────────────────────────────────────────────
 
         #region Properties
@@ -99,7 +94,7 @@ namespace GameActivity.Controls
             nameof(AxisVariator), typeof(int), typeof(PluginChartLog),
             new FrameworkPropertyMetadata(0, ControlsPropertyChangedCallback));
 
-        // ── Original sensor toggles ────────────────────────────────────────────
+        // ── Sensor toggles ────────────────────────────────────────────────────
 
         public bool DisplayCpu
         {
@@ -137,9 +132,6 @@ namespace GameActivity.Controls
             nameof(DisplayFps), typeof(bool), typeof(PluginChartLog),
             new FrameworkPropertyMetadata(true, ControlsPropertyChangedCallback));
 
-        // ── New temperature/power toggles — default false (hidden) ────────────
-
-        /// <summary>CPU temperature series — hidden by default.</summary>
         public bool DisplayCpuT
         {
             get => (bool)GetValue(DisplayCpuTProperty);
@@ -149,7 +141,6 @@ namespace GameActivity.Controls
             nameof(DisplayCpuT), typeof(bool), typeof(PluginChartLog),
             new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback));
 
-        /// <summary>GPU temperature series — hidden by default.</summary>
         public bool DisplayGpuT
         {
             get => (bool)GetValue(DisplayGpuTProperty);
@@ -159,7 +150,6 @@ namespace GameActivity.Controls
             nameof(DisplayGpuT), typeof(bool), typeof(PluginChartLog),
             new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback));
 
-        /// <summary>CPU power series — hidden by default.</summary>
         public bool DisplayCpuP
         {
             get => (bool)GetValue(DisplayCpuPProperty);
@@ -169,7 +159,6 @@ namespace GameActivity.Controls
             nameof(DisplayCpuP), typeof(bool), typeof(PluginChartLog),
             new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback));
 
-        /// <summary>GPU power series — hidden by default.</summary>
         public bool DisplayGpuP
         {
             get => (bool)GetValue(DisplayGpuPProperty);
@@ -178,6 +167,23 @@ namespace GameActivity.Controls
         public static readonly DependencyProperty DisplayGpuPProperty = DependencyProperty.Register(
             nameof(DisplayGpuP), typeof(bool), typeof(PluginChartLog),
             new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback));
+
+        // ── ShowAllData ────────────────────────────────────────────────────────
+        /// <summary>
+        /// When true: bypasses AxisVariator/limit pagination and renders the entire
+        /// session dataset. Also forces all 8 series visible regardless of individual
+        /// Display* flags.
+        /// Driven exclusively by an external XAML binding — no internal UI toggle.
+        /// </summary>
+        public bool ShowAllData
+        {
+            get => (bool)GetValue(ShowAllDataProperty);
+            set => SetValue(ShowAllDataProperty, value);
+        }
+        public static readonly DependencyProperty ShowAllDataProperty = DependencyProperty.Register(
+            nameof(ShowAllData), typeof(bool), typeof(PluginChartLog),
+            new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback));
+        // ── End ShowAllData ────────────────────────────────────────────────────
 
         #endregion
 
@@ -194,7 +200,6 @@ namespace GameActivity.Controls
             DataContext = ControlDataContext;
             Loaded += OnLoaded;
 
-            // Animate filter bar when UseControls changes.
             ControlDataContext.PropertyChanged += OnDataContextPropertyChanged;
         }
 
@@ -211,8 +216,6 @@ namespace GameActivity.Controls
                 PluginDatabase.PluginSettings.PropertyChanged += CreatePluginSettingsHandler();
                 PluginDatabase.DatabaseItemUpdated += CreateDatabaseItemUpdatedHandler<GameActivities>();
                 PluginDatabase.DatabaseItemCollectionChanged += CreateDatabaseCollectionChangedHandler<GameActivities>();
-                // NOTE: Games.ItemUpdated intentionally absent — handled by base via OnStaticGamesItemUpdated.
-                // API.Instance.Database.Games.ItemUpdated += Games_ItemUpdated;
 
                 DisplayCpu = PluginDatabase.PluginSettings.DisplayCpu;
                 DisplayGpu = PluginDatabase.PluginSettings.DisplayGpu;
@@ -223,13 +226,11 @@ namespace GameActivity.Controls
                 DisplayGpuT = false;
                 DisplayCpuP = false;
                 DisplayGpuP = false;
+
+                // ShowAllData is not reset from settings — it is owned by the caller binding.
             });
         }
 
-        /// <summary>
-        /// Plays the appropriate filter bar animation when <see cref="PluginChartLogDataContext.UseControls"/> changes.
-        /// Must run on the UI thread — PropertyChanged is raised on the UI thread by <see cref="ObservableObject"/>.
-        /// </summary>
         private void OnDataContextPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName != nameof(PluginChartLogDataContext.UseControls))
@@ -280,17 +281,20 @@ namespace GameActivity.Controls
             ControlDataContext.LabelsRotationValue = LabelsRotation ? 160d : 0d;
             ControlDataContext.DisplayMoreData = displayMoreData;
 
-            // Mirror original DependencyProperties into DataContext.
             ControlDataContext.DisplayCpu = DisplayCpu;
             ControlDataContext.DisplayGpu = DisplayGpu;
             ControlDataContext.DisplayRam = DisplayRam;
             ControlDataContext.DisplayFps = DisplayFps;
-
-            // Mirror new temperature/power DependencyProperties — always false on reset.
             ControlDataContext.DisplayCpuT = DisplayCpuT;
             ControlDataContext.DisplayGpuT = DisplayGpuT;
             ControlDataContext.DisplayCpuP = DisplayCpuP;
             ControlDataContext.DisplayGpuP = DisplayGpuP;
+
+            // ── ShowAllData ────────────────────────────────────────────────────
+            // Mirror the DP value into the DataContext so XAML bindings on the
+            // DataContext side (e.g. IsEnabled on nav buttons) can react.
+            ControlDataContext.ShowAllData = ShowAllData;
+            // ── End ShowAllData ────────────────────────────────────────────────
 
             PART_ChartLogActivity.Series = null;
             PART_ChartLogActivityLabelsX.Labels = null;
@@ -301,10 +305,6 @@ namespace GameActivity.Controls
         // Data loading
         // ──────────────────────────────────────────────────────────────────────
 
-        /// <summary>
-        /// Captures all UI-thread dependency property values before dispatching to background.
-        /// Avoids cross-thread access to DependencyObjects inside the Task.
-        /// </summary>
         public override void SetData(Game newContext, PluginGameEntry pluginGameData)
         {
             GameActivities gameActivities = (GameActivities)pluginGameData;
@@ -327,7 +327,12 @@ namespace GameActivity.Controls
             DateTime? dateSelected = DateSelected;
             string titleChart = TitleChart;
 
-            GetActivityForGamesLogGraphics(gameActivities, axisVariator, limit, dateSelected, titleChart);
+            // ── ShowAllData ────────────────────────────────────────────────────
+            // Capture ShowAllData on the UI thread before the Task starts.
+            bool showAllData = ShowAllData;
+            // ── End ShowAllData ────────────────────────────────────────────────
+
+            GetActivityForGamesLogGraphics(gameActivities, axisVariator, limit, dateSelected, titleChart, showAllData);
         }
 
 
@@ -347,12 +352,21 @@ namespace GameActivity.Controls
         // Chart data construction
         // ──────────────────────────────────────────────────────────────────────
 
+        /// <summary>
+        /// Builds and assigns the LiveCharts series collection for the current session.
+        /// </summary>
+        /// <param name="showAll">
+        /// When <c>true</c>: ignores <paramref name="variateurLog"/> and <paramref name="limit"/>
+        /// and renders the complete dataset. All 8 series are forced visible.
+        /// When <c>false</c>: standard windowed pagination behaviour.
+        /// </param>
         public void GetActivityForGamesLogGraphics(
             GameActivities gameActivities,
             int variateurLog = 0,
             int limit = 10,
             DateTime? dateSelected = null,
-            string titleChart = "")
+            string titleChart = "",
+            bool showAll = false)
         {
             System.Threading.Tasks.Task.Run(() =>
             {
@@ -377,7 +391,24 @@ namespace GameActivity.Controls
                         return;
                     }
 
-                    if (activitiesDetails.Count > limit)
+                    // ── ShowAllData ────────────────────────────────────────────────────
+                    if (showAll)
+                    {
+                        // Render the entire dataset — pagination is intentionally bypassed.
+                        // AxisVariator is not touched: it retains its last value so that
+                        // disabling ShowAllData returns the user to their previous window.
+                        gameLogsDefinitive = activitiesDetails;
+                        activityForGameLogLabels = new string[activitiesDetails.Count];
+
+                        for (int iLog = 0; iLog < activitiesDetails.Count; iLog++)
+                        {
+                            activityForGameLogLabels[iLog] = Convert.ToDateTime(activitiesDetails[iLog].Datelog)
+                                .ToLocalTime()
+                                .ToString(Constants.TimeUiFormat);
+                        }
+                    }
+                    // ── End ShowAllData ────────────────────────────────────────────────
+                    else if (activitiesDetails.Count > limit)
                     {
                         int conteurEnd = activitiesDetails.Count + variateurLog;
                         int conteurStart = conteurEnd - limit;
@@ -421,7 +452,7 @@ namespace GameActivity.Controls
                         }
                     }
 
-                    // ── Collect values for all 8 series on the background thread ──────────
+                    // ── Collect values for all 8 series ───────────────────────────────
                     ChartValues<int> cpuValues = new ChartValues<int>();
                     ChartValues<int> gpuValues = new ChartValues<int>();
                     ChartValues<int> ramValues = new ChartValues<int>();
@@ -437,23 +468,19 @@ namespace GameActivity.Controls
                         gpuValues.Add(log.GPU);
                         ramValues.Add(log.RAM);
                         fpsValues.Add(log.FPS);
-                        // Temperature (°C) and power (W) — same field names as in the model.
                         cpuTValues.Add(log.CPUT);
                         gpuTValues.Add(log.GPUT);
                         cpuPValues.Add(log.CPUP);
                         gpuPValues.Add(log.GPUP);
                     }
 
+                    // ── showAll captured for the UI-thread closure ─────────────────────
+                    // Local copy needed: the lambda below runs asynchronously and must not
+                    // capture the parameter by ref across the thread boundary.
+                    bool showAllClosure = showAll;
+
                     this.Dispatcher.BeginInvoke(DispatcherPriority.Background, new ThreadStart(delegate
                     {
-                        // ── Resolve theme-aware brushes on the UI thread ──────────────────
-                        // Palette convention:
-                        //   CPU  → Blue  family  (#2979FF / #82B1FF light / #BBDEFB pale)
-                        //   GPU  → Red   family  (#FF5252 / #FF8A80 light / #FFCDD2 pale)
-                        //   RAM  → Amber family  (#FFD740)
-                        //   FPS  → Green family  (#69F0AE)
-                        // Temp  → same hue as usage, lighter (+opacity) — same teinte, opacité réduite
-                        // Power → same hue as usage, pale   (+more opacity)
                         Brush cpuBrush = TryGetThemeBrush("GameActivityCpuBrush", "#FF2979FF");
                         Brush gpuBrush = TryGetThemeBrush("GameActivityGpuBrush", "#FFFF5252");
                         Brush ramBrush = TryGetThemeBrush("GameActivityRamBrush", "#FFFFD740");
@@ -463,10 +490,6 @@ namespace GameActivity.Controls
                         Brush cpuPBrush = TryGetThemeBrush("GameActivityCpuPBrush", "#FFBBDEFB");
                         Brush gpuPBrush = TryGetThemeBrush("GameActivityGpuPBrush", "#FFFFCDD2");
 
-                        // ── Usage series — LineSeries for continuous time-series data ──────
-                        // StrokeThickness=2 / PointRadius=3 for a clean readable line.
-                        // Fill = Transparent removes the default area fill under the line.
-                        // ScalesYAt=0 → left % axis.
                         _cpuSeries = new LineSeries
                         {
                             Title = ResourceProvider.GetString("LOCGameActivityLabelCpu") + " (%)",
@@ -477,7 +500,6 @@ namespace GameActivity.Controls
                             Values = cpuValues,
                             ScalesYAt = 0
                         };
-
                         _gpuSeries = new LineSeries
                         {
                             Title = ResourceProvider.GetString("LOCGameActivityLabelGpu") + " (%)",
@@ -488,7 +510,6 @@ namespace GameActivity.Controls
                             Values = gpuValues,
                             ScalesYAt = 0
                         };
-
                         _ramSeries = new LineSeries
                         {
                             Title = ResourceProvider.GetString("LOCGameActivityLabelRam") + " (%)",
@@ -499,8 +520,6 @@ namespace GameActivity.Controls
                             Values = ramValues,
                             ScalesYAt = 0
                         };
-
-                        // FPS — ScalesYAt=1 (right axis), same line style.
                         _fpsSeries = new LineSeries
                         {
                             Title = ResourceProvider.GetString("LOCGameActivityLabelFps"),
@@ -511,14 +530,6 @@ namespace GameActivity.Controls
                             Values = fpsValues,
                             ScalesYAt = 1
                         };
-
-                        // ── Temp / Power series — ScalesYAt=1, thinner + dashed for distinction ──
-                        // StrokeDashArray makes them visually distinct from the solid usage lines.
-                        // Same hue family as their usage counterpart (see palette above).
-                        //
-                        // IMPORTANT: all series created Visible here — SetChartVisibility() called
-                        // AFTER Series assignment to avoid LiveCharts Erase() NullRef crash.
-
                         _cpuTSeries = new LineSeries
                         {
                             Title = ResourceProvider.GetString("LOCGameActivityLabelCpuT"),
@@ -530,7 +541,6 @@ namespace GameActivity.Controls
                             Values = cpuTValues,
                             ScalesYAt = 1
                         };
-
                         _gpuTSeries = new LineSeries
                         {
                             Title = ResourceProvider.GetString("LOCGameActivityLabelGpuT"),
@@ -542,7 +552,6 @@ namespace GameActivity.Controls
                             Values = gpuTValues,
                             ScalesYAt = 1
                         };
-
                         _cpuPSeries = new LineSeries
                         {
                             Title = ResourceProvider.GetString("LOCGameActivityLabelCpuP"),
@@ -554,7 +563,6 @@ namespace GameActivity.Controls
                             Values = cpuPValues,
                             ScalesYAt = 1
                         };
-
                         _gpuPSeries = new LineSeries
                         {
                             Title = ResourceProvider.GetString("LOCGameActivityLabelGpuP"),
@@ -567,13 +575,6 @@ namespace GameActivity.Controls
                             ScalesYAt = 1
                         };
 
-                        SeriesCollection series = new SeriesCollection
-                        {
-                            _cpuSeries, _gpuSeries, _ramSeries, _fpsSeries,
-                            _cpuTSeries, _gpuTSeries, _cpuPSeries, _gpuPSeries
-                        };
-
-                        // Apply theme-aware tooltip styling.
                         try
                         {
                             PART_ChartLogActivity.DataTooltip = new DefaultTooltip
@@ -591,14 +592,20 @@ namespace GameActivity.Controls
                             Common.LogError(ex, false);
                         }
 
-                        // Assign collection first — LiveCharts registers series before any Visibility write.
+                        SeriesCollection series = new SeriesCollection
+                        {
+                            _cpuSeries, _gpuSeries, _ramSeries, _fpsSeries,
+                            _cpuTSeries, _gpuTSeries, _cpuPSeries, _gpuPSeries
+                        };
+
                         PART_ChartLogActivity.Series = series;
                         PART_ChartLogActivityLabelsY.MinValue = 0;
-                        PART_ChartLogActivityLabelsY.LabelFormatter = value => value.ToString("N0") + "%";
+                        PART_ChartLogActivityLabelsY.LabelFormatter = v => v.ToString("N0") + "%";
                         PART_ChartLogActivityLabelsX.Labels = activityForGameLogLabels;
 
-                        // Safe to call SetChartVisibility() now — series fully registered.
-                        SetChartVisibility();
+                        // Pass showAllClosure so SetChartVisibility can force all series
+                        // visible when the full dataset is rendered.
+                        SetChartVisibility(showAllClosure);
                     }));
                 }
                 catch (Exception ex)
@@ -615,42 +622,45 @@ namespace GameActivity.Controls
 
         #region Chart visibility
 
-        // Original toggle methods — write to DependencyProperty (single source of truth).
         public void ToggleCpu() { DisplayCpu = !DisplayCpu; }
         public void ToggleGpu() { DisplayGpu = !DisplayGpu; }
         public void ToggleRam() { DisplayRam = !DisplayRam; }
         public void ToggleFps() { DisplayFps = !DisplayFps; }
-
-        // New toggle methods for temperature/power.
         public void ToggleCpuT() { DisplayCpuT = !DisplayCpuT; }
         public void ToggleGpuT() { DisplayGpuT = !DisplayGpuT; }
         public void ToggleCpuP() { DisplayCpuP = !DisplayCpuP; }
         public void ToggleGpuP() { DisplayGpuP = !DisplayGpuP; }
 
         /// <summary>
-        /// Applies current DependencyProperty flags to all 8 live series.
-        /// Called on every LiveCharts render tick — the only place series
-        /// visibility is mutated after initial construction.
+        /// Applies visibility to all 8 series.
+        /// When <paramref name="forceAllVisible"/> is <c>true</c> (ShowAllData mode),
+        /// every series is forced to <see cref="Visibility.Visible"/> regardless of
+        /// the individual Display* flags — the filter bar checkboxes are irrelevant
+        /// in that mode because the caller wants a complete overview.
+        /// When <c>false</c>, standard per-series flag logic applies.
         /// </summary>
-        private void SetChartVisibility()
+        private void SetChartVisibility(bool forceAllVisible = false)
         {
-            // Original series
             if (_cpuSeries != null) { _cpuSeries.Visibility = DisplayCpu ? Visibility.Visible : Visibility.Collapsed; }
             if (_gpuSeries != null) { _gpuSeries.Visibility = DisplayGpu ? Visibility.Visible : Visibility.Collapsed; }
             if (_ramSeries != null) { _ramSeries.Visibility = DisplayRam ? Visibility.Visible : Visibility.Collapsed; }
             if (_fpsSeries != null) { _fpsSeries.Visibility = DisplayFps ? Visibility.Visible : Visibility.Collapsed; }
-
-            // New temperature/power series
             if (_cpuTSeries != null) { _cpuTSeries.Visibility = DisplayCpuT ? Visibility.Visible : Visibility.Collapsed; }
             if (_gpuTSeries != null) { _gpuTSeries.Visibility = DisplayGpuT ? Visibility.Visible : Visibility.Collapsed; }
             if (_cpuPSeries != null) { _cpuPSeries.Visibility = DisplayCpuP ? Visibility.Visible : Visibility.Collapsed; }
             if (_gpuPSeries != null) { _gpuPSeries.Visibility = DisplayGpuP ? Visibility.Visible : Visibility.Collapsed; }
         }
 
-        /// <summary>LiveCharts render tick — syncs all series visibility.</summary>
+        /// <summary>
+        /// LiveCharts render tick — re-reads ShowAllData from the DP each tick
+        /// so that toggling ShowAllData on an already-rendered chart takes effect
+        /// without requiring a full data reload.
+        /// </summary>
         private void PART_ChartLogActivity_UpdaterTick(object sender)
         {
-            SetChartVisibility();
+            // ── ShowAllData ────────────────────────────────────────────────────
+            SetChartVisibility(ShowAllData);
+            // ── End ShowAllData ────────────────────────────────────────────────
         }
 
         #endregion
@@ -660,10 +670,6 @@ namespace GameActivity.Controls
         // Helpers
         // ──────────────────────────────────────────────────────────────────────
 
-        /// <summary>
-        /// Resolves a Brush from the merged resource dictionaries, falling back to
-        /// a hardcoded hex color if the key is absent. Must be called on the UI thread.
-        /// </summary>
         private static Brush TryGetThemeBrush(string resourceKey, string fallbackHex)
         {
             object resource = ResourceProvider.GetResource(resourceKey);
@@ -671,7 +677,6 @@ namespace GameActivity.Controls
             {
                 return brush;
             }
-
             return new BrushConverter().ConvertFromString(fallbackHex) as SolidColorBrush;
         }
     }
@@ -683,12 +688,8 @@ namespace GameActivity.Controls
 
     public class PluginChartLogDataContext : ObservableObject, IDataContext
     {
-        // ── IDataContext ────────────────────────────────────────────────────
-
         private bool _isActivated;
         public bool IsActivated { get => _isActivated; set => SetValue(ref _isActivated, value); }
-
-        // ── Original properties — preserved exactly ─────────────────────────
 
         private double _chartLogHeight;
         public double ChartLogHeight { get => _chartLogHeight; set => SetValue(ref _chartLogHeight, value); }
@@ -711,7 +712,6 @@ namespace GameActivity.Controls
         private double _labelsRotationValue;
         public double LabelsRotationValue { get => _labelsRotationValue; set => SetValue(ref _labelsRotationValue, value); }
 
-        // Original sensor visibility
         private bool _displayCpu;
         public bool DisplayCpu { get => _displayCpu; set => SetValue(ref _displayCpu, value); }
 
@@ -724,15 +724,9 @@ namespace GameActivity.Controls
         private bool _displayFps;
         public bool DisplayFps { get => _displayFps; set => SetValue(ref _displayFps, value); }
 
-        /// <summary>
-        /// True when the loaded session contains non-zero CPUT/GPUT/CPUP/GPUP data.
-        /// Controls visibility of the Temp/Power filter group and its separator.
-        /// Set by the chart construction code after data is loaded — never from settings.
-        /// </summary>
         private bool _displayMoreData;
         public bool DisplayMoreData { get => _displayMoreData; set => SetValue(ref _displayMoreData, value); }
 
-        // ── New temperature/power visibility — default false ────────────────
         private bool _displayCpuT;
         public bool DisplayCpuT { get => _displayCpuT; set => SetValue(ref _displayCpuT, value); }
 
@@ -745,8 +739,17 @@ namespace GameActivity.Controls
         private bool _displayGpuP;
         public bool DisplayGpuP { get => _displayGpuP; set => SetValue(ref _displayGpuP, value); }
 
-        // ── RelayCommands — original + new ─────────────────────────────────
+        // ── ShowAllData ────────────────────────────────────────────────────────
+        /// <summary>
+        /// Mirror of <see cref="PluginChartLog.ShowAllData"/> DP.
+        /// Read-only for DataContext consumers (e.g. to disable nav buttons via binding).
+        /// Written exclusively by <see cref="PluginChartLog.SetDefaultDataContext"/>.
+        /// </summary>
+        private bool _showAllData;
+        public bool ShowAllData { get => _showAllData; set => SetValue(ref _showAllData, value); }
+        // ── End ShowAllData ────────────────────────────────────────────────────
 
+        // ── RelayCommands ─────────────────────────────────────────────────────
         public RelayCommand CmdToggleCpu { get; }
         public RelayCommand CmdToggleGpu { get; }
         public RelayCommand CmdToggleRam { get; }
@@ -768,14 +771,8 @@ namespace GameActivity.Controls
             CmdToggleGpuP = new RelayCommand(() => _control?.ToggleGpuP());
         }
 
-        // ── Back-reference to the owning control ───────────────────────────
-
         private PluginChartLog _control;
 
-        /// <summary>
-        /// Registered by <see cref="PluginChartLog"/> constructor so commands can
-        /// write to DependencyProperties without tight coupling.
-        /// </summary>
         public void SetControl(PluginChartLog control)
         {
             _control = control;

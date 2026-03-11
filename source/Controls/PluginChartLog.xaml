@@ -9,7 +9,7 @@
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:livechartscommon="clr-namespace:CommonPluginsControls.LiveChartsCommon"
         mc:Ignorable="d" 
-        d:DataContext="{d:DesignInstance Type=local:PluginChartLogDataContext, IsDesignTimeCreatable=True}"
+        d:DataContext="{d:DesignInstance Type=local:PluginChartLogDataContext}"
         MinHeight="{Binding RelativeSource={RelativeSource AncestorType=ContentControl}, Path=MinHeight}"
         Height="{Binding ChartLogHeight}"
         MaxHeight="{Binding RelativeSource={RelativeSource AncestorType=ContentControl}, Path=MaxHeight}">

@@ -181,6 +181,8 @@ namespace GameActivity.Views
                 GameDisplayName = game.Name,
                 Settings = PluginDatabase.PluginSettings
             };
+
+            PART_BtShowAll_Click(null, null);
         }
         
 
@@ -504,6 +506,13 @@ namespace GameActivity.Views
             {
                 Common.LogError(ex, false, true, PluginDatabase.PluginName);
             }
+        }
+
+        private void PART_BtShowAll_Click(object sender, RoutedEventArgs e)
+        {
+            bool isChecked = PART_BtShowAll.IsChecked ?? false;
+            PART_BtShowAll.Content = isChecked ? "\ue9b0" : "\ue9a8";
+            PART_ChartLog.ShowAllData = isChecked;
         }
 
         #endregion
