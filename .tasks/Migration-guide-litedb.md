@@ -25,16 +25,16 @@ to eliminate UI thread starvation during list scrolling.
 
 ## Step 1 — NuGet
 
-- [X] Add `LiteDB` **4.x**
-- [X] Verify no dependency conflict with existing packages
+- [x] Add `LiteDB` **4.x**
+- [x] Verify no dependency conflict with existing packages
 
 ---
 
 ## Step 2 — Shared files (deliver once in `CommonPluginsShared`)
 
-- [X] `Collections/LiteDbItemCollection.cs` *(new)*
-- [X] `Collections/PluginDatabaseObject.cs` *(updated — `TDatabase` generic parameter removed)*
-- [X] `Controls/PluginUserControlExtend.cs` *(updated — synchronous cache lookup, no `Task.Run`)*
+- [x] `Collections/LiteDbItemCollection.cs` *(new)*
+- [x] `Collections/PluginDatabaseObject.cs` *(updated — `TDatabase` generic parameter removed)*
+- [x] `Controls/PluginUserControlExtend.cs` *(updated — synchronous cache lookup, no `Task.Run`)*
 
 ---
 
@@ -42,7 +42,7 @@ to eliminate UI thread starvation during list scrolling.
 
 ### 3.1 — Update class signature
 
-- [X] Update class signature
+- [x] Update class signature
 
 ```csharp
 // Before
@@ -56,7 +56,7 @@ public class MyPluginDatabase
 
 ### 3.2 — Remove the collection wrapper class
 
-- [X] Remove the collection wrapper class
+- [x] Remove the collection wrapper class
 
 If the plugin had a dedicated collection class (e.g. `MyCollection`) that only
 existed to hold custom properties, delete it and move those properties directly
@@ -78,7 +78,7 @@ public class MyPluginDatabase : PluginDatabaseObject<MySettings, MyItem, MyItemD
 
 ### 3.3 — Replace `Database.X` accesses
 
-- [X] Replace `Database.X` accesses
+- [x] Replace `Database.X` accesses
 
 ```csharp
 // Before
@@ -90,7 +90,7 @@ var data = PluginDatabase.CustomProperty;
 
 ### 3.4 — Replace collection enumeration
 
-- [X] Replace collection enumeration
+- [x] Replace collection enumeration
 
 ```csharp
 // Before
@@ -106,7 +106,7 @@ IEnumerable<MyItem> items = PluginDatabase.GetAllItems().Where(x => x.IsInstalle
 
 ### 4.1 — Update `AttachStaticEvents()`
 
-- [X] In every control that inherits `PluginUserControlExtend`:
+- [x] In every control that inherits `PluginUserControlExtend`:
 
 ```csharp
 // Before
@@ -124,7 +124,7 @@ No other changes required in controls — handler signatures are unchanged.
 
 ## Step 5 — Notes on `[BsonIgnore]`
 
-- [X] `[BsonIgnore]`
+- [x] `[BsonIgnore]`
 
 Skipping `[BsonIgnore]` on `[DontSerialize]` properties is acceptable.
 Properties such as `IsDeleted`, `IsSaved`, `HasData`, and `Count` will be serialized
@@ -137,27 +137,27 @@ to BSON but cause no data corruption — they are recalculated or overwritten on
 
 ### Build
 
-- [X] Compiles on .NET Framework 4.6.2 without errors
-- [X] No C# 8.0+ features introduced
+- [x] Compiles on .NET Framework 4.6.2 without errors
+- [x] No C# 8.0+ features introduced
 
 ### First launch (JSON migration)
 
-- [X] Migration progress dialog appears
-- [X] Log shows: `MigrateJsonToLiteDb — completed: N migrated, 0 failed`
-- [X] All `.json` files removed from `PluginDatabasePath` after migration
-- [X] Log shows: `PreWarm — N items cached in Xms`
+- [x] Migration progress dialog appears
+- [x] Log shows: `MigrateJsonToLiteDb — completed: N migrated, 0 failed`
+- [x] All `.json` files removed from `PluginDatabasePath` after migration
+- [x] Log shows: `PreWarm — N items cached in Xms`
 
 ### Runtime performance
 
-- [X] Scrolling the game list: `UpdateDataAsync end [<10ms]` for every game
-- [X] No `Task.Run` starvation (no batch of `DB fetch done [>100ms]` entries)
+- [x] Scrolling the game list: `UpdateDataAsync end [<10ms]` for every game
+- [x] No `Task.Run` starvation (no batch of `DB fetch done [>100ms]` entries)
 
 ### Functional tests
 
 - [ ] ~~`ClearHardwareCache()` invalidates and reloads correctly~~
 - [ ] ~~`ClearDatabase()` removes all LiteDB entries and associated tags~~
-- [X] Games added after migration appear correctly (no missing data)
-- [X] Games deleted from Playnite are removed from LiteDB on next startup (`DeleteDataWithDeletedGame`)
+- [x] Games added after migration appear correctly (no missing data)
+- [x] Games deleted from Playnite are removed from LiteDB on next startup (`DeleteDataWithDeletedGame`)
 
 ---
 

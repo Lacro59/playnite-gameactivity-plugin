@@ -2,9 +2,9 @@
 
 ## Core Architecture
 
-- [X] PluginSettingsViewModel
-- [X] PluginMenus
-- [X] PluginWindows
+- [x] PluginSettingsViewModel
+- [x] PluginMenus
+- [x] PluginWindows
 - [ ] PluginExportCsv
 - [x] PluginDatabaseObject<TSettings, TItem, T> where TSettings : PluginSettings
 
@@ -28,4 +28,4 @@ protected override void PluginSettings_PropertyChanged(object sender, PropertyCh
 }
 ```
 
-- [X] Games.ItemUpdated intentionally absent — handled by base via OnStaticGamesItemUpdated.
+- [x] Games.ItemUpdated intentionally absent — handled by base via OnStaticGamesItemUpdated.

@@ -28,7 +28,7 @@ Replace : PluginGameCollection<
 
 ## Checklist
 
-- [X] `PluginGameEntry.cs`
-- [X] `PluginGameCollection.cs`
-- [X] `PluginGameCollectionWithDetails.cs`
-- [X] Build solution
+- [x] `PluginGameEntry.cs`
+- [x] `PluginGameCollection.cs`
+- [x] `PluginGameCollectionWithDetails.cs`
+- [x] Build solution
