@@ -12,6 +12,7 @@ using Playnite.SDK;
 using Playnite.SDK.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading;
 using System.Windows;
 using System.Windows.Media;
@@ -46,13 +47,13 @@ namespace GameActivity.Controls
         private LineSeries _cpuPSeries;
         private LineSeries _gpuPSeries;
 
-
         // ──────────────────────────────────────────────────────────────────────
         // Dependency properties
         // ──────────────────────────────────────────────────────────────────────
 
         #region Properties
 
+        /// <summary>When true, disables LiveCharts entry animations.</summary>
         public bool DisableAnimations
         {
             get => (bool)GetValue(DisableAnimationsProperty);
@@ -62,6 +63,7 @@ namespace GameActivity.Controls
             nameof(DisableAnimations), typeof(bool), typeof(PluginChartLog),
             new FrameworkPropertyMetadata(true, ControlsPropertyChangedCallback));
 
+        /// <summary>When true, X-axis labels are rotated 160° to avoid overlap on dense charts.</summary>
         public bool LabelsRotation
         {
             get => (bool)GetValue(LabelsRotationProperty);
@@ -71,9 +73,22 @@ namespace GameActivity.Controls
             nameof(LabelsRotation), typeof(bool), typeof(PluginChartLog),
             new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback));
 
-        public static readonly DependencyProperty AxisLimitProperty;
-        public int AxisLimit { get; set; }
+        /// <summary>
+        /// Maximum number of X-axis log entries rendered in one page.
+        /// When 0, falls back to <c>PluginSettings.ChartLogCountAbscissa</c>.
+        /// Registered as a real DP so that external XAML bindings and
+        /// <see cref="ControlsPropertyChangedCallback"/> react to changes correctly.
+        /// </summary>
+        public int AxisLimit
+        {
+            get => (int)GetValue(AxisLimitProperty);
+            set => SetValue(AxisLimitProperty, value);
+        }
+        public static readonly DependencyProperty AxisLimitProperty = DependencyProperty.Register(
+            nameof(AxisLimit), typeof(int), typeof(PluginChartLog),
+            new FrameworkPropertyMetadata(0, ControlsPropertyChangedCallback));
 
+        /// <summary>Selected session date used to filter the log data shown by the chart.</summary>
         public DateTime? DateSelected
         {
             get => (DateTime?)GetValue(DateSelectedProperty);
@@ -83,9 +98,21 @@ namespace GameActivity.Controls
             nameof(DateSelected), typeof(DateTime?), typeof(PluginChartLog),
             new FrameworkPropertyMetadata(null, ControlsPropertyChangedCallback));
 
-        public static readonly DependencyProperty TitleChartProperty;
-        public string TitleChart { get; set; } = string.Empty;
+        /// <summary>Optional title injected into the chart header / tooltip.</summary>
+        public string TitleChart
+        {
+            get => (string)GetValue(TitleChartProperty);
+            set => SetValue(TitleChartProperty, value);
+        }
+        public static readonly DependencyProperty TitleChartProperty = DependencyProperty.Register(
+            nameof(TitleChart), typeof(string), typeof(PluginChartLog),
+            new FrameworkPropertyMetadata(string.Empty, ControlsPropertyChangedCallback));
 
+        /// <summary>
+        /// Signed offset applied to the session window anchor.
+        /// Negative values scroll toward older entries; 0 shows the most recent page.
+        /// Modified by the nav bar buttons.
+        /// </summary>
         public int AxisVariator
         {
             get => (int)GetValue(AxisVariatoryProperty);
@@ -97,6 +124,7 @@ namespace GameActivity.Controls
 
         // ── Sensor toggles ────────────────────────────────────────────────────
 
+        /// <summary>Controls visibility of the CPU usage series.</summary>
         public bool DisplayCpu
         {
             get => (bool)GetValue(DisplayCpuProperty);
@@ -106,6 +134,7 @@ namespace GameActivity.Controls
             nameof(DisplayCpu), typeof(bool), typeof(PluginChartLog),
             new FrameworkPropertyMetadata(true, ControlsPropertyChangedCallback));
 
+        /// <summary>Controls visibility of the GPU usage series.</summary>
         public bool DisplayGpu
         {
             get => (bool)GetValue(DisplayGpuProperty);
@@ -115,6 +144,7 @@ namespace GameActivity.Controls
             nameof(DisplayGpu), typeof(bool), typeof(PluginChartLog),
             new FrameworkPropertyMetadata(true, ControlsPropertyChangedCallback));
 
+        /// <summary>Controls visibility of the RAM usage series.</summary>
         public bool DisplayRam
         {
             get => (bool)GetValue(DisplayRamProperty);
@@ -124,6 +154,7 @@ namespace GameActivity.Controls
             nameof(DisplayRam), typeof(bool), typeof(PluginChartLog),
             new FrameworkPropertyMetadata(true, ControlsPropertyChangedCallback));
 
+        /// <summary>Controls visibility of the FPS series.</summary>
         public bool DisplayFps
         {
             get => (bool)GetValue(DisplayFpsProperty);
@@ -133,6 +164,7 @@ namespace GameActivity.Controls
             nameof(DisplayFps), typeof(bool), typeof(PluginChartLog),
             new FrameworkPropertyMetadata(true, ControlsPropertyChangedCallback));
 
+        /// <summary>Controls visibility of the CPU temperature series.</summary>
         public bool DisplayCpuT
         {
             get => (bool)GetValue(DisplayCpuTProperty);
@@ -142,6 +174,7 @@ namespace GameActivity.Controls
             nameof(DisplayCpuT), typeof(bool), typeof(PluginChartLog),
             new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback));
 
+        /// <summary>Controls visibility of the GPU temperature series.</summary>
         public bool DisplayGpuT
         {
             get => (bool)GetValue(DisplayGpuTProperty);
@@ -151,6 +184,7 @@ namespace GameActivity.Controls
             nameof(DisplayGpuT), typeof(bool), typeof(PluginChartLog),
             new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback));
 
+        /// <summary>Controls visibility of the CPU power series.</summary>
         public bool DisplayCpuP
         {
             get => (bool)GetValue(DisplayCpuPProperty);
@@ -160,6 +194,7 @@ namespace GameActivity.Controls
             nameof(DisplayCpuP), typeof(bool), typeof(PluginChartLog),
             new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback));
 
+        /// <summary>Controls visibility of the GPU power series.</summary>
         public bool DisplayGpuP
         {
             get => (bool)GetValue(DisplayGpuPProperty);
@@ -169,12 +204,10 @@ namespace GameActivity.Controls
             nameof(DisplayGpuP), typeof(bool), typeof(PluginChartLog),
             new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback));
 
-        // ── ShowAllData ────────────────────────────────────────────────────────
         /// <summary>
         /// When true: bypasses AxisVariator/limit pagination and renders the entire
         /// session dataset. Also forces all 8 series visible regardless of individual
-        /// Display* flags.
-        /// Driven by the nav bar toggle or by an external XAML binding.
+        /// Display* flags. Driven by the nav bar toggle or by an external XAML binding.
         /// </summary>
         public bool ShowAllData
         {
@@ -185,9 +218,8 @@ namespace GameActivity.Controls
             nameof(ShowAllData), typeof(bool), typeof(PluginChartLog),
             new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback));
 
-        // ── ShowNavBar ────────────────────────────────────────────────────────
         /// <summary>
-        /// Shows or hides the PluginChartNavBar above the filter bar.
+        /// Shows or hides the <see cref="PluginChartNavBar"/> above the filter bar.
         /// Defaults to false so existing usages without a nav bar are unaffected.
         /// </summary>
         public bool ShowNavBar
@@ -199,12 +231,11 @@ namespace GameActivity.Controls
             nameof(ShowNavBar), typeof(bool), typeof(PluginChartLog),
             new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback));
 
-        // ── PageSize ──────────────────────────────────────────────────────────
         /// <summary>
         /// Number of items skipped by the PrevPage / NextPage nav bar buttons.
-        /// Should be bound to the same value used as the chart's abscissa limit
-        /// (AxisLimit when set, otherwise PluginSettings.ChartLogCountAbscissa).
-        /// When &lt;= 0, the PrevPage/NextPage buttons are hidden in the nav bar.
+        /// Should match the effective abscissa limit (<see cref="AxisLimit"/> when set,
+        /// otherwise <c>PluginSettings.ChartLogCountAbscissa</c>).
+        /// When &lt;= 0, PrevPage/NextPage buttons are hidden in the nav bar.
         /// </summary>
         public int PageSize
         {
@@ -217,7 +248,6 @@ namespace GameActivity.Controls
 
         #endregion
 
-
         // ──────────────────────────────────────────────────────────────────────
         // Constructor
         // ──────────────────────────────────────────────────────────────────────
@@ -229,10 +259,36 @@ namespace GameActivity.Controls
             ControlDataContext.SetControl(this);
             DataContext = ControlDataContext;
             Loaded += OnLoaded;
+            Unloaded += OnUnloaded;
 
             ControlDataContext.PropertyChanged += OnDataContextPropertyChanged;
+
+            if (PART_NavBar != null)
+            {
+                // Observe AxisLimit on the nav bar directly — more reliable than RoutedEvents
+                // because no XAML event wiring is required in the consumer's template.
+                DependencyPropertyDescriptor
+                    .FromProperty(PluginChartNavBar.AxisLimitProperty, typeof(PluginChartNavBar))
+                    .AddValueChanged(PART_NavBar, OnNavBarAxisLimitChanged);
+            }
         }
 
+        private void OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            if (PART_NavBar != null)
+            {
+                // Unsubscribe to prevent the descriptor from keeping a reference to this
+                // control alive after it has been removed from the visual tree.
+                DependencyPropertyDescriptor
+                    .FromProperty(PluginChartNavBar.AxisLimitProperty, typeof(PluginChartNavBar))
+                    .RemoveValueChanged(PART_NavBar, OnNavBarAxisLimitChanged);
+            }
+        }
+
+        private void OnNavBarAxisLimitChanged(object sender, EventArgs e)
+        {
+            ApplyAxisLimitFromNavBar();
+        }
 
         // ──────────────────────────────────────────────────────────────────────
         // Static event registration
@@ -282,7 +338,6 @@ namespace GameActivity.Controls
             }
         }
 
-
         // ──────────────────────────────────────────────────────────────────────
         // Default DataContext initialisation
         // ──────────────────────────────────────────────────────────────────────
@@ -325,36 +380,40 @@ namespace GameActivity.Controls
             ControlDataContext.DisplayCpuP = DisplayCpuP;
             ControlDataContext.DisplayGpuP = DisplayGpuP;
 
-            // ── ShowAllData: always reset on game context change ───────────────
-            // Mirrors PluginChartTime behaviour: switching game resets the view to
-            // the paginated window so the nav bar starts in a clean state.
+            // Always reset ShowAllData on game context change so the nav bar
+            // starts in a clean paginated state for the new game.
             ControlDataContext.ShowAllData = false;
             ShowAllData = false;
-            // ── End ShowAllData ────────────────────────────────────────────────
 
-            // ── Nav bar defaults ───────────────────────────────────────────────
+            // ── Nav bar defaults ───────────────────────────────────────────
             bool showNavBar = ShowNavBar;
             if (IgnoreSettings) { showNavBar = true; }
 
             ControlDataContext.ShowNavBar = showNavBar;
-            // NavLabel is empty for ChartLog (no week/period concept).
-            // A parent view may push a session title here via NavLabel binding.
+            // NavLabel has no period concept for ChartLog (labels are timestamps).
+            // The builder will push "first – last" timestamps after each render.
             ControlDataContext.NavLabel = string.Empty;
 
-            // ── PageSize: resolve effective limit and push to nav bar ──────────
+            // ── Resolve effective abscissa limit and push to nav bar ───────
             // Priority: explicit AxisLimit DP → plugin setting.
-            // The nav bar hides PrevPage/NextPage when PageSize <= 0.
             int effectivePageSize = AxisLimit > 0
                 ? AxisLimit
                 : PluginDatabase.PluginSettings.ChartLogCountAbscissa;
+
             ControlDataContext.PageSize = effectivePageSize;
-            // ── End PageSize ───────────────────────────────────────────────────
-            // ── End nav bar defaults ───────────────────────────────────────────
+            ControlDataContext.AxisLimit = AxisLimit;
+
+            // Seed the nav bar AxisLimit so its AxisLimitDecrease button starts
+            // with the correct floor check and tooltip text.
+            if (PART_NavBar != null)
+            {
+                PART_NavBar.AxisLimit = AxisLimit;
+            }
+            // ── End nav bar defaults ───────────────────────────────────────
 
             PART_ChartLogActivity.Series = null;
             PART_ChartLogActivityLabelsX.Labels = null;
         }
-
 
         // ──────────────────────────────────────────────────────────────────────
         // Data loading
@@ -368,10 +427,7 @@ namespace GameActivity.Controls
                 ? gameActivities.HasDataDetails()
                 : true;
 
-            if (!MustDisplay)
-            {
-                return;
-            }
+            if (!MustDisplay) { return; }
 
             int limit = AxisLimit != 0
                 ? AxisLimit
@@ -381,8 +437,6 @@ namespace GameActivity.Controls
             int axisVariator = AxisVariator;
             DateTime? dateSelected = DateSelected;
             string titleChart = TitleChart;
-
-            // Capture ShowAllData on the UI thread before the Task starts.
             bool showAllData = ShowAllData;
 
             ControlDataContext.ChartLogAxis = !ShowAllData;
@@ -390,18 +444,19 @@ namespace GameActivity.Controls
             GetActivityForGamesLogGraphics(gameActivities, axisVariator, limit, dateSelected, titleChart, showAllData);
         }
 
-
         // ──────────────────────────────────────────────────────────────────────
         // Public navigation helpers
         // ──────────────────────────────────────────────────────────────────────
 
         #region Public methods
 
+        /// <summary>Advances the session window forward by <paramref name="value"/> steps.</summary>
         public void Next(int value = 1) { AxisVariator += value; }
+
+        /// <summary>Moves the session window backward by <paramref name="value"/> steps.</summary>
         public void Prev(int value = 1) { AxisVariator -= value; }
 
         #endregion
-
 
         // ──────────────────────────────────────────────────────────────────────
         // Nav bar event handlers
@@ -411,7 +466,7 @@ namespace GameActivity.Controls
 
         // Each handler translates a PluginChartNavBar RoutedEvent into a chart action.
         // Next() / Prev() modify AxisVariator, which triggers ControlsPropertyChangedCallback
-        // → GameContextChanged → SetData, so no explicit refresh call is needed there.
+        // → GameContextChanged → SetData — no explicit refresh call is needed there.
 
         private void NavBar_FirstClicked(object sender, RoutedEventArgs e)
         {
@@ -422,9 +477,8 @@ namespace GameActivity.Controls
 
         private void NavBar_PagePrevClicked(object sender, RoutedEventArgs e)
         {
-            // Skip back by a full page (PageSize items).
-            // The delta is resolved here in the parent where the limit is owned;
-            // the nav bar itself carries PageSize only for display purposes.
+            // Skip back by a full page. Delta resolved here — the nav bar carries
+            // PageSize only for display/tooltip purposes.
             int pageSize = AxisLimit > 0
                 ? AxisLimit
                 : PluginDatabase.PluginSettings.ChartLogCountAbscissa;
@@ -453,7 +507,7 @@ namespace GameActivity.Controls
 
         private void NavBar_PageNextClicked(object sender, RoutedEventArgs e)
         {
-            // Skip forward by a full page (PageSize items).
+            // Skip forward by a full page.
             int pageSize = AxisLimit > 0
                 ? AxisLimit
                 : PluginDatabase.PluginSettings.ChartLogCountAbscissa;
@@ -466,8 +520,41 @@ namespace GameActivity.Controls
             AxisVariator = 0;
         }
 
-        #endregion
+        /// <summary>
+        /// Reads the updated <see cref="PluginChartNavBar.AxisLimit"/> from the nav bar,
+        /// pushes it into the control's own <see cref="AxisLimit"/> DP and refreshes
+        /// <see cref="ControlDataContext.PageSize"/> so the nav bar tooltip stays accurate.
+        /// </summary>
+        /// <remarks>
+        /// We cannot rely on ControlsPropertyChangedCallback to trigger the refresh here:
+        /// if the nav bar AxisLimit and the local AxisLimit DP already hold the same integer
+        /// value (e.g. both 0→1→1), WPF considers the DP unchanged and skips the callback.
+        /// GameContextChanged is therefore called explicitly after every limit mutation.
+        /// </remarks>
+        private void ApplyAxisLimitFromNavBar()
+        {
+            int newLimit = PART_NavBar.AxisLimit;
 
+            // Resolve effective page size before touching the DP so we can compare.
+            int effectivePageSize = newLimit > 0
+                ? newLimit
+                : PluginDatabase.PluginSettings.ChartTimeCountAbscissa; // ChartLogCountAbscissa pour ChartLog
+
+            // Update DataContext and nav bar PageSize regardless of whether AxisLimit changed.
+            ControlDataContext.PageSize = effectivePageSize;
+            ControlDataContext.AxisLimit = newLimit;
+            PART_NavBar.PageSize = effectivePageSize;
+
+            // Assign the DP. If the value is genuinely new this also fires
+            // ControlsPropertyChangedCallback, but we call GameContextChanged
+            // unconditionally below to handle the equal-value edge case.
+            AxisLimit = newLimit;
+
+            // Force chart refresh — SetData will pick up the new AxisLimit from the DP.
+            GameContextChanged(null, GameContext);
+        }
+
+        #endregion
 
         // ──────────────────────────────────────────────────────────────────────
         // Chart data construction
@@ -475,9 +562,10 @@ namespace GameActivity.Controls
 
         /// <summary>
         /// Builds and assigns the LiveCharts series collection for the current session window.
+        /// Runs on a background thread; all chart assignments are marshalled via Dispatcher.
         /// </summary>
         /// <param name="showAll">
-        /// When true: bypasses <paramref name="variateurLog"/> and <paramref name="limit"/>
+        /// When true: bypasses <see cref="AxisVariator"/> and <see cref="AxisLimit"/>
         /// and renders the complete dataset. All 8 series are forced visible.
         /// </param>
         public void GetActivityForGamesLogGraphics(
@@ -535,14 +623,12 @@ namespace GameActivity.Controls
                         // → GameContextChanged → infinite render loop (visible as UI flickering).
                         if (conteurEnd > activitiesDetails.Count)
                         {
-                            // Variator pushed past the right edge: pin to the most recent window.
                             conteurEnd = activitiesDetails.Count;
                             conteurStart = conteurEnd - limit;
                         }
 
                         if (conteurStart < 0)
                         {
-                            // Variator pushed past the left edge: pin to the oldest window.
                             conteurStart = 0;
                             conteurEnd = limit;
                         }
@@ -710,8 +796,8 @@ namespace GameActivity.Controls
                             _cpuTSeries, _gpuTSeries, _cpuPSeries, _gpuPSeries
                         };
 
-                        // Update the nav bar with the visible X-axis time range.
-                        // activityForGameLogLabels is already localised via Constants.TimeUiFormat.
+                        // Update the nav bar range badge with the visible time window.
+                        // Labels are already localised via Constants.TimeUiFormat.
                         ControlDataContext.NavLabel = PluginChartNavBar.BuildRangeLabel(activityForGameLogLabels);
 
                         PART_ChartLogActivity.Series = series;
@@ -729,37 +815,36 @@ namespace GameActivity.Controls
             });
         }
 
-
         // ──────────────────────────────────────────────────────────────────────
         // Chart series visibility
         // ──────────────────────────────────────────────────────────────────────
 
         #region Chart visibility
 
+        /// <summary>Toggles CPU series visibility.</summary>
         public void ToggleCpu() { DisplayCpu = !DisplayCpu; }
+        /// <summary>Toggles GPU series visibility.</summary>
         public void ToggleGpu() { DisplayGpu = !DisplayGpu; }
+        /// <summary>Toggles RAM series visibility.</summary>
         public void ToggleRam() { DisplayRam = !DisplayRam; }
+        /// <summary>Toggles FPS series visibility.</summary>
         public void ToggleFps() { DisplayFps = !DisplayFps; }
+        /// <summary>Toggles CPU temperature series visibility.</summary>
         public void ToggleCpuT() { DisplayCpuT = !DisplayCpuT; }
+        /// <summary>Toggles GPU temperature series visibility.</summary>
         public void ToggleGpuT() { DisplayGpuT = !DisplayGpuT; }
+        /// <summary>Toggles CPU power series visibility.</summary>
         public void ToggleCpuP() { DisplayCpuP = !DisplayCpuP; }
+        /// <summary>Toggles GPU power series visibility.</summary>
         public void ToggleGpuP() { DisplayGpuP = !DisplayGpuP; }
 
         /// <summary>
-        /// Applies visibility to all 8 series.
+        /// Applies visibility to all 8 series according to Display* flags.
         /// </summary>
         /// <param name="forceAllVisible">
-        /// When <c>true</c> (ShowAllData mode), every series is forced to
-        /// <see cref="Visibility.Visible"/> — the filter bar checkboxes are irrelevant
-        /// in that mode because the caller wants a complete overview.
-        /// When <c>false</c>, standard per-series Display* flag logic applies.
+        /// When true (ShowAllData mode), every series is forced to <see cref="Visibility.Visible"/> —
+        /// the filter bar checkboxes are irrelevant because the caller wants a complete overview.
         /// </param>
-        /// <remarks>
-        /// BUG FIX vs original: the original code declared <paramref name="forceAllVisible"/>
-        /// but never used it — every branch evaluated only DisplayXxx.
-        /// The corrected form uses <c>forceAllVisible || DisplayXxx</c> so ShowAllData
-        /// actually overrides individual series visibility.
-        /// </remarks>
         private void SetChartVisibility(bool forceAllVisible = false)
         {
             if (_cpuSeries != null) { _cpuSeries.Visibility = (forceAllVisible || DisplayCpu) ? Visibility.Visible : Visibility.Collapsed; }
@@ -773,9 +858,8 @@ namespace GameActivity.Controls
         }
 
         /// <summary>
-        /// LiveCharts render tick — re-reads ShowAllData from the DP each tick so that
-        /// toggling ShowAllData on an already-rendered chart takes effect without a
-        /// full data reload.
+        /// LiveCharts render tick — re-reads Display* flags each tick so that toggling a series
+        /// on an already-rendered chart takes effect without a full data reload.
         /// </summary>
         private void PART_ChartLogActivity_UpdaterTick(object sender)
         {
@@ -784,11 +868,14 @@ namespace GameActivity.Controls
 
         #endregion
 
-
         // ──────────────────────────────────────────────────────────────────────
         // Helpers
         // ──────────────────────────────────────────────────────────────────────
 
+        /// <summary>
+        /// Returns the theme brush identified by <paramref name="resourceKey"/>,
+        /// or a fallback solid colour brush when the resource is absent or of the wrong type.
+        /// </summary>
         private static Brush TryGetThemeBrush(string resourceKey, string fallbackHex)
         {
             object resource = ResourceProvider.GetResource(resourceKey);
@@ -800,117 +887,157 @@ namespace GameActivity.Controls
         }
     }
 
-
     // ──────────────────────────────────────────────────────────────────────────
     // DataContext
     // ──────────────────────────────────────────────────────────────────────────
 
+    /// <summary>
+    /// Observable ViewModel backing <see cref="PluginChartLog"/>.
+    /// Commands are wired in <see cref="PluginChartLogDataContext()"/> via
+    /// <see cref="SetControl"/>.
+    /// </summary>
     public class PluginChartLogDataContext : ObservableObject, IDataContext
     {
         // ── Activation / layout ───────────────────────────────────────────────
 
         private bool _isActivated;
+        /// <summary>Controls whether the chart control is visible.</summary>
         public bool IsActivated { get => _isActivated; set => SetValue(ref _isActivated, value); }
 
         private double _chartLogHeight;
+        /// <summary>Explicit pixel height of the chart; <see cref="double.NaN"/> for auto-size.</summary>
         public double ChartLogHeight { get => _chartLogHeight; set => SetValue(ref _chartLogHeight, value); }
 
         private bool _chartLogAxis;
+        /// <summary>When true, the X-axis labels strip is visible.</summary>
         public bool ChartLogAxis { get => _chartLogAxis; set => SetValue(ref _chartLogAxis, value); }
 
         private bool _chartLogOrdinates;
+        /// <summary>When true, the Y-axis labels strip is visible.</summary>
         public bool ChartLogOrdinates { get => _chartLogOrdinates; set => SetValue(ref _chartLogOrdinates, value); }
 
         private bool _chartLogVisibleEmpty;
+        /// <summary>When true, the chart placeholder is shown even when there is no data.</summary>
         public bool ChartLogVisibleEmpty { get => _chartLogVisibleEmpty; set => SetValue(ref _chartLogVisibleEmpty, value); }
 
         private bool _useControls;
+        /// <summary>When true, the filter bar is expanded (slide animation triggered on change).</summary>
         public bool UseControls { get => _useControls; set => SetValue(ref _useControls, value); }
 
         // ── Chart options ─────────────────────────────────────────────────────
 
         private bool _disableAnimations = true;
+        /// <summary>Mirrors <see cref="PluginChartLog.DisableAnimations"/>.</summary>
         public bool DisableAnimations { get => _disableAnimations; set => SetValue(ref _disableAnimations, value); }
 
         private double _labelsRotationValue;
+        /// <summary>Rotation angle applied to X-axis labels (0 or 160 degrees).</summary>
         public double LabelsRotationValue { get => _labelsRotationValue; set => SetValue(ref _labelsRotationValue, value); }
 
         // ── Sensor display flags ──────────────────────────────────────────────
 
         private bool _displayCpu;
+        /// <summary>Mirror of <see cref="PluginChartLog.DisplayCpu"/> — drives CPU series Visibility.</summary>
         public bool DisplayCpu { get => _displayCpu; set => SetValue(ref _displayCpu, value); }
 
         private bool _displayGpu;
+        /// <summary>Mirror of <see cref="PluginChartLog.DisplayGpu"/> — drives GPU series Visibility.</summary>
         public bool DisplayGpu { get => _displayGpu; set => SetValue(ref _displayGpu, value); }
 
         private bool _displayRam;
+        /// <summary>Mirror of <see cref="PluginChartLog.DisplayRam"/> — drives RAM series Visibility.</summary>
         public bool DisplayRam { get => _displayRam; set => SetValue(ref _displayRam, value); }
 
         private bool _displayFps;
+        /// <summary>Mirror of <see cref="PluginChartLog.DisplayFps"/> — drives FPS series Visibility.</summary>
         public bool DisplayFps { get => _displayFps; set => SetValue(ref _displayFps, value); }
 
         private bool _displayMoreData;
+        /// <summary>When true, the extended sensor group (CpuT, GpuT, CpuP, GpuP) toggle buttons are shown.</summary>
         public bool DisplayMoreData { get => _displayMoreData; set => SetValue(ref _displayMoreData, value); }
 
         private bool _displayCpuT;
+        /// <summary>Mirror of <see cref="PluginChartLog.DisplayCpuT"/>.</summary>
         public bool DisplayCpuT { get => _displayCpuT; set => SetValue(ref _displayCpuT, value); }
 
         private bool _displayGpuT;
+        /// <summary>Mirror of <see cref="PluginChartLog.DisplayGpuT"/>.</summary>
         public bool DisplayGpuT { get => _displayGpuT; set => SetValue(ref _displayGpuT, value); }
 
         private bool _displayCpuP;
+        /// <summary>Mirror of <see cref="PluginChartLog.DisplayCpuP"/>.</summary>
         public bool DisplayCpuP { get => _displayCpuP; set => SetValue(ref _displayCpuP, value); }
 
         private bool _displayGpuP;
+        /// <summary>Mirror of <see cref="PluginChartLog.DisplayGpuP"/>.</summary>
         public bool DisplayGpuP { get => _displayGpuP; set => SetValue(ref _displayGpuP, value); }
 
         // ── ShowAllData ────────────────────────────────────────────────────────
+
+        private bool _showAllData;
         /// <summary>
         /// Mirror of <see cref="PluginChartLog.ShowAllData"/> DP.
         /// Written by <see cref="PluginChartLog.SetDefaultDataContext"/> (reset to false)
         /// and by <see cref="PluginChartLog.NavBar_ShowAllToggled"/>.
         /// Read by XAML bindings (e.g. to disable filter bar checkboxes in ShowAllData mode).
         /// </summary>
-        private bool _showAllData;
         public bool ShowAllData { get => _showAllData; set => SetValue(ref _showAllData, value); }
 
         // ── Nav bar state ─────────────────────────────────────────────────────
 
         private bool _showNavBar;
-        /// <summary>Drives PluginChartNavBar.ShowNavBar binding in the XAML.</summary>
+        /// <summary>Drives <see cref="PluginChartNavBar.ShowNavBar"/> binding in XAML.</summary>
         public bool ShowNavBar { get => _showNavBar; set => SetValue(ref _showNavBar, value); }
 
         private string _navLabel = string.Empty;
         /// <summary>
         /// Badge text shown on the right of the nav bar representing the visible X-axis time range.
-        /// Format: <c>"first – last"</c> using the current UI culture.
-        /// Example: <c>"14:00 – 17:30"</c> for a session window.
+        /// Format: "first – last" using the current UI culture (e.g. "14:00 – 17:30").
         /// Reset to <see cref="string.Empty"/> on every game context change.
         /// </summary>
         public string NavLabel { get => _navLabel; set => SetValue(ref _navLabel, value); }
 
-
         private int _pageSize;
         /// <summary>
-        /// Mirror of the effective chart abscissa limit pushed by PluginChartLog.SetDefaultDataContext.
-        /// Bound to PluginChartNavBar.PageSize so the nav bar can show/hide the
+        /// Mirror of the effective chart abscissa limit pushed by <see cref="PluginChartLog.SetDefaultDataContext"/>.
+        /// Bound to <see cref="PluginChartNavBar.PageSize"/> so the nav bar can show/hide
         /// PrevPage/NextPage buttons and build their tooltips.
         /// </summary>
         public int PageSize { get => _pageSize; set => SetValue(ref _pageSize, value); }
 
+        private int _axisLimit;
+        /// <summary>
+        /// Mirror of <see cref="PluginChartLog.AxisLimit"/>.
+        /// Kept in sync by <see cref="PluginChartLog.SetDefaultDataContext"/> and
+        /// <see cref="PluginChartLog.ApplyAxisLimitFromNavBar"/> so XAML bindings can
+        /// display or react to the current limit.
+        /// </summary>
+        public int AxisLimit { get => _axisLimit; set => SetValue(ref _axisLimit, value); }
+
         // ── RelayCommands ─────────────────────────────────────────────────────
 
+        /// <summary>Bound to the CPU toggle button in the filter bar.</summary>
         public RelayCommand CmdToggleCpu { get; }
+        /// <summary>Bound to the GPU toggle button in the filter bar.</summary>
         public RelayCommand CmdToggleGpu { get; }
+        /// <summary>Bound to the RAM toggle button in the filter bar.</summary>
         public RelayCommand CmdToggleRam { get; }
+        /// <summary>Bound to the FPS toggle button in the filter bar.</summary>
         public RelayCommand CmdToggleFps { get; }
+        /// <summary>Bound to the CPU temperature toggle button in the filter bar.</summary>
         public RelayCommand CmdToggleCpuT { get; }
+        /// <summary>Bound to the GPU temperature toggle button in the filter bar.</summary>
         public RelayCommand CmdToggleGpuT { get; }
+        /// <summary>Bound to the CPU power toggle button in the filter bar.</summary>
         public RelayCommand CmdToggleCpuP { get; }
+        /// <summary>Bound to the GPU power toggle button in the filter bar.</summary>
         public RelayCommand CmdToggleGpuP { get; }
 
         public PluginChartLogDataContext()
         {
+            // Commands delegate to the control instance set via SetControl.
+            // Using null-conditional on _control guards against designer-time instantiation
+            // where SetControl is never called.
             CmdToggleCpu = new RelayCommand(() => _control?.ToggleCpu());
             CmdToggleGpu = new RelayCommand(() => _control?.ToggleGpu());
             CmdToggleRam = new RelayCommand(() => _control?.ToggleRam());
@@ -923,7 +1050,10 @@ namespace GameActivity.Controls
 
         private PluginChartLog _control;
 
-        /// <summary>Called from <see cref="PluginChartLog"/> constructor to wire commands.</summary>
+        /// <summary>
+        /// Wires command delegates to the owning <see cref="PluginChartLog"/> instance.
+        /// Must be called from <see cref="PluginChartLog"/>'s constructor before any command fires.
+        /// </summary>
         public void SetControl(PluginChartLog control)
         {
             _control = control;

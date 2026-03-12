@@ -95,14 +95,22 @@ namespace GameActivity.Controls
         /// <summary>
         /// Maximum number of X-axis items (days or weeks) rendered in one page.
         /// When 0, falls back to <c>PluginSettings.ChartTimeCountAbscissa</c>.
+        /// Registered as a real DP (not a plain property) so that external XAML bindings
+        /// and <see cref="ControlsPropertyChangedCallback"/> react to changes correctly.
         /// </summary>
-        public static readonly DependencyProperty AxisLimitProperty;
-        public int AxisLimit { get; set; }
+        public int AxisLimit
+        {
+            get => (int)GetValue(AxisLimitProperty);
+            set => SetValue(AxisLimitProperty, value);
+        }
+        public static readonly DependencyProperty AxisLimitProperty = DependencyProperty.Register(
+            nameof(AxisLimit), typeof(int), typeof(PluginChartTime),
+            new FrameworkPropertyMetadata(0, ControlsPropertyChangedCallback));
 
         /// <summary>
         /// Signed offset applied to the most-recent-window anchor.
         /// Negative values scroll the view toward older data; 0 always shows the most recent page.
-        /// Modified by <see cref="Next"/> / <see cref="Prev"/> and by the nav bar buttons.
+        /// Modified by mouse-wheel and by the nav bar buttons.
         /// </summary>
         public int AxisVariator
         {
@@ -115,7 +123,7 @@ namespace GameActivity.Controls
 
         /// <summary>
         /// Shows or hides the <see cref="PluginChartNavBar"/> above the chart.
-        /// Default is <c>false</c> so that existing usages without a nav bar are unaffected.
+        /// Default is false so that existing usages without a nav bar are unaffected.
         /// </summary>
         public bool ShowNavBar
         {
@@ -153,6 +161,33 @@ namespace GameActivity.Controls
             InitializeComponent();
             DataContext = ControlDataContext;
             Loaded += OnLoaded;
+            Unloaded += OnUnloaded;
+
+            if (PART_NavBar != null)
+            {
+                // Observe AxisLimit on the nav bar directly — more reliable than RoutedEvents
+                // because no XAML event wiring is required in the consumer's template.
+                DependencyPropertyDescriptor
+                    .FromProperty(PluginChartNavBar.AxisLimitProperty, typeof(PluginChartNavBar))
+                    .AddValueChanged(PART_NavBar, OnNavBarAxisLimitChanged);
+            }
+        }
+
+        private void OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            if (PART_NavBar != null)
+            {
+                // Unsubscribe to prevent the descriptor from keeping a reference to this
+                // control alive after it has been removed from the visual tree.
+                DependencyPropertyDescriptor
+                    .FromProperty(PluginChartNavBar.AxisLimitProperty, typeof(PluginChartNavBar))
+                    .RemoveValueChanged(PART_NavBar, OnNavBarAxisLimitChanged);
+            }
+        }
+
+        private void OnNavBarAxisLimitChanged(object sender, EventArgs e)
+        {
+            ApplyAxisLimitFromNavBar();
         }
 
         // ────────────────────────────────────────────────────────────────────
@@ -206,22 +241,28 @@ namespace GameActivity.Controls
             ControlDataContext.LabelsRotationValue = LabelsRotation ? 160d : 0d;
 
             // ── Nav bar defaults ───────────────────────────────────────────
-            // ShowNavBar DP defaults to false; IgnoreSettings forces it on
-            // (e.g. standalone view or settings preview).
             bool showNavBar = ShowNavBar;
             if (IgnoreSettings) { showNavBar = true; }
 
             ControlDataContext.ShowNavBar = showNavBar;
-            ControlDataContext.ShowAllData = false;      // Always reset on context change.
+            ControlDataContext.ShowAllData = false; // Always reset on context change.
             ControlDataContext.NavLabel = string.Empty;
 
-            // ── PageSize: resolve effective limit and push to nav bar ──────
+            // ── Resolve effective abscissa limit ───────────────────────────
             // Priority: explicit AxisLimit DP → plugin setting.
-            // The nav bar hides PrevPage/NextPage when PageSize <= 0.
             int effectivePageSize = AxisLimit > 0
                 ? AxisLimit
                 : PluginDatabase.PluginSettings.ChartTimeCountAbscissa;
+
             ControlDataContext.PageSize = effectivePageSize;
+            ControlDataContext.AxisLimit = AxisLimit;
+
+            // Push the current AxisLimit into the nav bar so its AxisLimitDecrease
+            // button starts with the correct floor check and tooltip.
+            if (PART_NavBar != null)
+            {
+                PART_NavBar.AxisLimit = AxisLimit;
+            }
             // ── End nav bar defaults ───────────────────────────────────────
 
             PART_ChartTimeActivity.Series = null;
@@ -254,9 +295,14 @@ namespace GameActivity.Controls
             if (ControlDataContext.ShowAllData)
             {
                 if (ShowByWeeks)
+                {
                     GetActivityForGamesChartByWeek(gameActivities, 0, Convert.ToInt32(gameActivities.Count));
+                }
                 else
+                {
                     GetActivityForGamesTimeGraphics(gameActivities, 0, Convert.ToInt32(gameActivities.Count));
+                }
+
                 return;
             }
             // ── End ShowAllData ────────────────────────────────────────────
@@ -303,9 +349,8 @@ namespace GameActivity.Controls
 
         private void NavBar_PagePrevClicked(object sender, RoutedEventArgs e)
         {
-            // Skip back by a full page (PageSize items).
-            // The delta is resolved here in the parent where the limit is owned;
-            // the nav bar carries PageSize only for display/tooltip purposes.
+            // Skip back by a full page. Delta resolved here — the nav bar carries
+            // PageSize only for display/tooltip purposes.
             int pageSize = AxisLimit > 0
                 ? AxisLimit
                 : PluginDatabase.PluginSettings.ChartTimeCountAbscissa;
@@ -333,7 +378,7 @@ namespace GameActivity.Controls
 
         private void NavBar_PageNextClicked(object sender, RoutedEventArgs e)
         {
-            // Skip forward by a full page (PageSize items).
+            // Skip forward by a full page.
             int pageSize = AxisLimit > 0
                 ? AxisLimit
                 : PluginDatabase.PluginSettings.ChartTimeCountAbscissa;
@@ -344,6 +389,40 @@ namespace GameActivity.Controls
         {
             // AxisVariator = 0 always shows the most recent window.
             AxisVariator = 0;
+        }
+
+        /// <summary>
+        /// Reads the updated <see cref="PluginChartNavBar.AxisLimit"/> from the nav bar,
+        /// pushes it into the control's own <see cref="AxisLimit"/> DP and refreshes
+        /// <see cref="ControlDataContext.PageSize"/> so the nav bar tooltip stays accurate.
+        /// </summary>
+        /// <remarks>
+        /// We cannot rely on ControlsPropertyChangedCallback to trigger the refresh here:
+        /// if the nav bar AxisLimit and the local AxisLimit DP already hold the same integer
+        /// value (e.g. both 0→1→1), WPF considers the DP unchanged and skips the callback.
+        /// GameContextChanged is therefore called explicitly after every limit mutation.
+        /// </remarks>
+        private void ApplyAxisLimitFromNavBar()
+        {
+            int newLimit = PART_NavBar.AxisLimit;
+
+            // Resolve effective page size before touching the DP so we can compare.
+            int effectivePageSize = newLimit > 0
+                ? newLimit
+                : PluginDatabase.PluginSettings.ChartTimeCountAbscissa; // ChartLogCountAbscissa pour ChartLog
+
+            // Update DataContext and nav bar PageSize regardless of whether AxisLimit changed.
+            ControlDataContext.PageSize = effectivePageSize;
+            ControlDataContext.AxisLimit = newLimit;
+            PART_NavBar.PageSize = effectivePageSize;
+
+            // Assign the DP. If the value is genuinely new this also fires
+            // ControlsPropertyChangedCallback, but we call GameContextChanged
+            // unconditionally below to handle the equal-value edge case.
+            AxisLimit = newLimit;
+
+            // Force chart refresh — SetData will pick up the new AxisLimit from the DP.
+            GameContextChanged(null, GameContext);
         }
 
         #endregion
@@ -392,7 +471,6 @@ namespace GameActivity.Controls
                         }
                         else if (dtList.Count + variateurTime - limit <= 0)
                         {
-                            // Clamp locally: variator past the left edge → pin to oldest page.
                             variateurTime = limit - dtList.Count;
                             while (dtList.Count > limit)
                             {
@@ -437,8 +515,7 @@ namespace GameActivity.Controls
                     }
                     dateStart = dateStart.AddDays(variateurTime);
 
-                    // ShowAllData passes limit = Count (large value): span the entire date range
-                    // from the earliest to the latest session, ignoring variateurTime.
+                    // ShowAllData passes limit = Count (large value): span the entire date range.
                     if (limit == int.MaxValue || limit >= activities.Count)
                     {
                         DateTime dateMin = activities
@@ -544,8 +621,6 @@ namespace GameActivity.Controls
                 if (hasData5) { activityForGameSeries.Add(new ColumnSeries { Title = "5", Values = series5 }); }
 
                 // Convert ISO internal dates to localised short date strings for the X-axis.
-                // CultureInfo.CurrentCulture is applied by Constants.DateUiFormat so the output
-                // already matches the user's locale — no further formatting is needed here.
                 for (int iDay = 0; iDay < listDate.Length; iDay++)
                 {
                     listDate[iDay] = Convert.ToDateTime(listDate[iDay]).ToString(Constants.DateUiFormat);
@@ -574,8 +649,7 @@ namespace GameActivity.Controls
                 PART_ChartTimeActivity.Series = activityForGameSeries;
                 PART_ChartTimeActivityLabelsX.Labels = listDate;
 
-                // Update the nav bar with the visible X-axis range.
-                // listDate is already localised at this point (Constants.DateUiFormat applied above).
+                // Update the nav bar range badge with the now-localised X-axis labels.
                 ControlDataContext.NavLabel = PluginChartNavBar.BuildRangeLabel(listDate);
             }
             catch (Exception ex)
@@ -613,9 +687,8 @@ namespace GameActivity.Controls
                 {
                     resolvedLimit = limit;
 
-                    // Clamp variateurTime locally so it never overshoots in either direction.
-                    // Writing back to AxisVariator from inside a builder would re-fire
-                    // ControlsPropertyChangedCallback → GameContextChanged → infinite loop.
+                    // Clamp variateurTime locally — writing back to AxisVariator from inside
+                    // a builder would re-fire ControlsPropertyChangedCallback → infinite loop.
                     int minVariator = -resolvedLimit;
                     int maxVariator = 0;
                     variateurTime = Math.Max(minVariator, Math.Min(maxVariator, variateurTime));
@@ -680,7 +753,7 @@ namespace GameActivity.Controls
                 PART_ChartTimeActivity.Series = activityForGameSeries;
                 PART_ChartTimeActivityLabelsX.Labels = labels;
 
-                // Update the nav bar with the visible X-axis range (first week – last week).
+                // Update the nav bar range badge (first week – last week).
                 ControlDataContext.NavLabel = PluginChartNavBar.BuildRangeLabel(labels.ToArray());
             }
             catch (Exception ex)
@@ -688,7 +761,6 @@ namespace GameActivity.Controls
                 Common.LogError(ex, false, true, PluginDatabase.PluginName);
             }
         }
-
 
         // ────────────────────────────────────────────────────────────────────
         // Chart events
@@ -708,6 +780,9 @@ namespace GameActivity.Controls
     // DataContext
     // ────────────────────────────────────────────────────────────────────────
 
+    /// <summary>
+    /// Observable ViewModel backing <see cref="PluginChartTime"/>.
+    /// </summary>
     public class PluginChartTimeDataContext : ObservableObject, IDataContext
     {
         // ── Activation / layout ───────────────────────────────────────────────
@@ -745,33 +820,40 @@ namespace GameActivity.Controls
         // ── Nav bar state ─────────────────────────────────────────────────────
 
         private bool _showNavBar;
-        /// <summary>Drives <c>PluginChartNavBar.ShowNavBar</c> binding in the XAML.</summary>
+        /// <summary>Drives <see cref="PluginChartNavBar.ShowNavBar"/> binding in XAML.</summary>
         public bool ShowNavBar { get => _showNavBar; set => SetValue(ref _showNavBar, value); }
 
         private bool _showAllData;
         /// <summary>
-        /// Mirrored into <c>PluginChartNavBar.ShowAllData</c>.
-        /// When <c>true</c>, the chart bypasses the axis window and renders the full dataset.
-        /// Reset to <c>false</c> on every game context change.
+        /// Mirrored into <see cref="PluginChartNavBar.ShowAllData"/>.
+        /// When true, the chart bypasses the axis window and renders the full dataset.
+        /// Reset to false on every game context change.
         /// </summary>
         public bool ShowAllData { get => _showAllData; set => SetValue(ref _showAllData, value); }
 
         private string _navLabel = string.Empty;
         /// <summary>
         /// Badge text shown on the right of the nav bar representing the visible X-axis period.
-        /// Format: <c>"first – last"</c> using the current UI culture.
-        /// In day mode: localised short dates (e.g. <c>"01/01/2025 – 31/01/2025"</c>).
-        /// In week mode: week labels (e.g. <c>"Week 1 – Week 9"</c>).
+        /// In day mode: localised short dates. In week mode: week labels.
         /// Reset to <see cref="string.Empty"/> on every game context change.
         /// </summary>
         public string NavLabel { get => _navLabel; set => SetValue(ref _navLabel, value); }
 
         private int _pageSize;
         /// <summary>
-        /// Mirror of the effective chart abscissa limit pushed by <see cref="PluginChartTime.SetDefaultDataContext"/>.
-        /// Bound to <c>PluginChartNavBar.PageSize</c> so the nav bar can show/hide the
+        /// Mirror of the effective chart abscissa limit.
+        /// Bound to <see cref="PluginChartNavBar.PageSize"/> so the nav bar can show/hide
         /// PrevPage/NextPage buttons and build their tooltips.
         /// </summary>
         public int PageSize { get => _pageSize; set => SetValue(ref _pageSize, value); }
+
+        private int _axisLimit;
+        /// <summary>
+        /// Mirror of <see cref="PluginChartTime.AxisLimit"/>.
+        /// Kept in sync by <see cref="PluginChartTime.SetDefaultDataContext"/> and
+        /// <see cref="PluginChartTime.ApplyAxisLimitFromNavBar"/> so XAML bindings can
+        /// display or react to the current limit.
+        /// </summary>
+        public int AxisLimit { get => _axisLimit; set => SetValue(ref _axisLimit, value); }
     }
 }
