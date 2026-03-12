@@ -506,7 +506,7 @@ namespace GameActivity.Controls
                 }
                 else
                 {
-                    // Find the most recent session date, then offset it by variateurTime days.
+                    // Find the most recent session date, then offset by variateurTime days.
                     DateTime dateStart = new DateTime(1982, 12, 15, 0, 0, 0);
                     foreach (Activity activity in activities)
                     {
@@ -515,7 +515,8 @@ namespace GameActivity.Controls
                     }
                     dateStart = dateStart.AddDays(variateurTime);
 
-                    // ShowAllData passes limit = Count (large value): span the entire date range.
+                    // ShowAllData passes limit = Count (large value): span the full date range
+                    // from earliest to latest session, ignoring variateurTime.
                     if (limit == int.MaxValue || limit >= activities.Count)
                     {
                         DateTime dateMin = activities
@@ -621,6 +622,8 @@ namespace GameActivity.Controls
                 if (hasData5) { activityForGameSeries.Add(new ColumnSeries { Title = "5", Values = series5 }); }
 
                 // Convert ISO internal dates to localised short date strings for the X-axis.
+                // The total number of unique session days is the natural AxisLimit ceiling.
+                int totalDataPoints = listDate.Length;
                 for (int iDay = 0; iDay < listDate.Length; iDay++)
                 {
                     listDate[iDay] = Convert.ToDateTime(listDate[iDay]).ToString(Constants.DateUiFormat);
@@ -649,7 +652,15 @@ namespace GameActivity.Controls
                 PART_ChartTimeActivity.Series = activityForGameSeries;
                 PART_ChartTimeActivityLabelsX.Labels = listDate;
 
-                // Update the nav bar range badge with the now-localised X-axis labels.
+                // Cap the + button to the actual number of data points so the user
+                // cannot request a window larger than what exists in the dataset.
+                if (PART_NavBar != null)
+                {
+                    PART_NavBar.AxisLimitMaximum = totalDataPoints;
+                }
+
+                // Update the nav bar range badge with the visible X-axis window.
+                // listDate is already localised at this point (Constants.DateUiFormat applied above).
                 ControlDataContext.NavLabel = PluginChartNavBar.BuildRangeLabel(listDate);
             }
             catch (Exception ex)
@@ -687,8 +698,9 @@ namespace GameActivity.Controls
                 {
                     resolvedLimit = limit;
 
-                    // Clamp variateurTime locally — writing back to AxisVariator from inside
-                    // a builder would re-fire ControlsPropertyChangedCallback → infinite loop.
+                    // Clamp variateurTime locally so it never overshoots in either direction.
+                    // Writing back to AxisVariator from inside a builder would re-fire
+                    // ControlsPropertyChangedCallback → GameContextChanged → infinite loop.
                     int minVariator = -resolvedLimit;
                     int maxVariator = 0;
                     variateurTime = Math.Max(minVariator, Math.Min(maxVariator, variateurTime));
@@ -718,6 +730,9 @@ namespace GameActivity.Controls
                     });
                     seriesData.Add(new CustomerForTime { Name = dataTitleInfo, Values = 0, HideIsZero = true });
                 }
+
+                // The total number of rendered weeks is the natural AxisLimit ceiling.
+                int totalDataPoints = labels.Count;
 
                 activities.ForEach(x =>
                 {
@@ -752,6 +767,12 @@ namespace GameActivity.Controls
                 PART_ChartTimeActivityLabelsY.MinValue = 0;
                 PART_ChartTimeActivity.Series = activityForGameSeries;
                 PART_ChartTimeActivityLabelsX.Labels = labels;
+
+                // Cap the + button to the actual number of weeks in the dataset.
+                if (PART_NavBar != null)
+                {
+                    PART_NavBar.AxisLimitMaximum = totalDataPoints;
+                }
 
                 // Update the nav bar range badge (first week – last week).
                 ControlDataContext.NavLabel = PluginChartNavBar.BuildRangeLabel(labels.ToArray());

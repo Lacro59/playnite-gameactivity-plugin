@@ -595,6 +595,9 @@ namespace GameActivity.Controls
                         return;
                     }
 
+                    // Total available data points — used to cap AxisLimitMaximum after render.
+                    int totalDataPoints = activitiesDetails.Count;
+
                     string[] activityForGameLogLabels;
                     List<ActivityDetailsData> gameLogsDefinitive;
 
@@ -791,13 +794,19 @@ namespace GameActivity.Controls
                         catch (Exception ex) { Common.LogError(ex, false); }
 
                         SeriesCollection series = new SeriesCollection
+                {
+                    _cpuSeries, _gpuSeries, _ramSeries, _fpsSeries,
+                    _cpuTSeries, _gpuTSeries, _cpuPSeries, _gpuPSeries
+                };
+
+                        // Cap the + button to the actual number of log entries so the user
+                        // cannot request a window larger than what the session recorded.
+                        if (PART_NavBar != null)
                         {
-                            _cpuSeries, _gpuSeries, _ramSeries, _fpsSeries,
-                            _cpuTSeries, _gpuTSeries, _cpuPSeries, _gpuPSeries
-                        };
+                            PART_NavBar.AxisLimitMaximum = totalDataPoints;
+                        }
 
                         // Update the nav bar range badge with the visible time window.
-                        // Labels are already localised via Constants.TimeUiFormat.
                         ControlDataContext.NavLabel = PluginChartNavBar.BuildRangeLabel(activityForGameLogLabels);
 
                         PART_ChartLogActivity.Series = series;
