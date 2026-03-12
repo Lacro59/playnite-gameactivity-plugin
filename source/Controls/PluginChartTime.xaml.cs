@@ -297,10 +297,9 @@ namespace GameActivity.Controls
 
         private void NavBar_FirstClicked(object sender, RoutedEventArgs e)
         {
-            // Jump to the oldest data by moving the window far to the left.
-            // GetActivityForGamesTimeGraphics clamps automatically when the requested
-            // window would extend past the first available date.
-            AxisVariator = -9999;
+            // Use a large negative value; the builder clamps it locally to the actual
+            // leftmost valid position without writing back to AxisVariator.
+            AxisVariator = int.MinValue / 2;
         }
 
         private void NavBar_PagePrevClicked(object sender, RoutedEventArgs e)
@@ -359,12 +358,9 @@ namespace GameActivity.Controls
         {
             try
             {
-                if (gameActivities?.FilterItems == null)
-                {
-                    return;
-                }
+                if (gameActivities?.FilterItems == null) { return; }
 
-                string[] listDate = new string[limit + 1];
+                string[] listDate;
                 ChartValues<CustomerForTime> series1 = new ChartValues<CustomerForTime>();
                 ChartValues<CustomerForTime> series2 = new ChartValues<CustomerForTime>();
                 ChartValues<CustomerForTime> series3 = new ChartValues<CustomerForTime>();
@@ -381,6 +377,7 @@ namespace GameActivity.Controls
                 if (Truncate)
                 {
                     activities = activities.OrderBy(x => x.DateSession).ToList();
+
                     List<string> dtList = activities
                         .Where(x => x.DateSession != null)
                         .Select(x => ((DateTime)x.DateSession).ToLocalTime().ToString("yyyy-MM-dd"))
@@ -391,28 +388,27 @@ namespace GameActivity.Controls
                     {
                         if (variateurTime > 0)
                         {
-                            AxisVariator = 0;
+                            // Clamp locally: variator past the right edge → pin to most recent page.
+                            // Do NOT write back to AxisVariator — that would re-trigger GameContextChanged.
+                            variateurTime = 0;
                         }
                         else if (dtList.Count + variateurTime - limit <= 0)
                         {
-                            AxisVariator++;
-                            for (int idx = dtList.Count - 1; idx > limit; idx--)
+                            // Clamp locally: variator past the left edge → pin to oldest page.
+                            // Trim the list to the first `limit` distinct dates.
+                            variateurTime = limit - dtList.Count; // effective left-edge offset
+                            while (dtList.Count > limit)
                             {
-                                if (dtList.Count > limit)
-                                {
-                                    dtList.RemoveAt(idx);
-                                }
+                                dtList.RemoveAt(dtList.Count - 1);
                             }
                         }
                         else
                         {
-                            int min = dtList.Count + variateurTime - 1;
-                            for (int idx = dtList.Count - 1; idx > min; idx--)
+                            // Variator is within valid range: trim the right side of the date list.
+                            int max = dtList.Count + variateurTime - 1;
+                            while (dtList.Count - 1 > max)
                             {
-                                if (dtList.Count > limit)
-                                {
-                                    dtList.RemoveAt(idx);
-                                }
+                                dtList.RemoveAt(dtList.Count - 1);
                             }
                         }
                     }
@@ -436,27 +432,29 @@ namespace GameActivity.Controls
                 }
                 else
                 {
+                    // Find the most recent session date, then offset it by variateurTime days.
                     DateTime dateStart = new DateTime(1982, 12, 15, 0, 0, 0);
                     foreach (Activity activity in activities)
                     {
                         DateTime dateSession = Convert.ToDateTime(activity.DateSession?.ToLocalTime());
-                        if (dateSession > dateStart)
-                        {
-                            dateStart = dateSession;
-                        }
+                        if (dateSession > dateStart) { dateStart = dateSession; }
                     }
                     dateStart = dateStart.AddDays(variateurTime);
 
-                    // When limit = int.MaxValue (ShowAllData), compute the real span
-                    // from the earliest to the latest session instead of counting backwards.
-                    if (limit == int.MaxValue)
+                    // ShowAllData passes limit = Count (large value): span the entire date range
+                    // from the earliest to the latest session, ignoring variateurTime.
+                    if (limit == int.MaxValue || limit >= activities.Count)
                     {
                         DateTime dateMin = activities
                             .Where(x => x.DateSession != null)
                             .Min(x => Convert.ToDateTime(x.DateSession).ToLocalTime())
                             .Date;
 
-                        DateTime dateMax = dateStart.Date;
+                        DateTime dateMax = activities
+                            .Where(x => x.DateSession != null)
+                            .Max(x => Convert.ToDateTime(x.DateSession).ToLocalTime())
+                            .Date;
+
                         int totalDays = (int)(dateMax - dateMin).TotalDays + 1;
                         totalDays = totalDays < 1 ? 1 : totalDays;
 
@@ -475,6 +473,7 @@ namespace GameActivity.Controls
                     }
                     else
                     {
+                        listDate = new string[limit + 1];
                         for (int i = limit; i >= 0; i--)
                         {
                             string dateStr = dateStart.AddDays(-i).ToString("yyyy-MM-dd");
@@ -492,21 +491,17 @@ namespace GameActivity.Controls
 
                 LocalDateConverter localDateConverter = new LocalDateConverter();
                 bool cumulSessions = PluginDatabase.PluginSettings.CumulPlaytimeSession;
-
-                int effectiveLimit = limit == (listDate.Length - 1) ? limit : (listDate.Length - 1);
+                int effectiveLimit = listDate.Length - 1;
 
                 for (int iActivity = 0; iActivity < activities.Count; iActivity++)
                 {
                     ulong elapsedSeconds = activities[iActivity].ElapsedSeconds;
                     string dateSession = Convert.ToDateTime(activities[iActivity].DateSession)
-                                               .ToLocalTime().ToString("yyyy-MM-dd");
+                        .ToLocalTime().ToString("yyyy-MM-dd");
 
                     for (int iDay = effectiveLimit; iDay >= 0; iDay--)
                     {
-                        if (listDate[iDay] != dateSession)
-                        {
-                            continue;
-                        }
+                        if (listDate[iDay] != dateSession) { continue; }
 
                         string displayName = series1[iDay].Name;
                         try
@@ -519,11 +514,7 @@ namespace GameActivity.Controls
 
                         if (cumulSessions)
                         {
-                            series1[iDay] = new CustomerForTime
-                            {
-                                Name = displayName,
-                                Values = series1[iDay].Values + (long)elapsedSeconds
-                            };
+                            series1[iDay] = new CustomerForTime { Name = displayName, Values = series1[iDay].Values + (long)elapsedSeconds };
                             continue;
                         }
 
@@ -556,7 +547,7 @@ namespace GameActivity.Controls
                 if (hasData4) { activityForGameSeries.Add(new ColumnSeries { Title = "4", Values = series4 }); }
                 if (hasData5) { activityForGameSeries.Add(new ColumnSeries { Title = "5", Values = series5 }); }
 
-                // Format the X-axis labels as localised short dates.
+                // Format ISO dates into localised short date strings for the X-axis.
                 for (int iDay = 0; iDay < listDate.Length; iDay++)
                 {
                     listDate[iDay] = Convert.ToDateTime(listDate[iDay]).ToString(Constants.DateUiFormat);
@@ -598,25 +589,35 @@ namespace GameActivity.Controls
                 List<Activity> activities = Serialization.GetClone(gameActivities.FilterItems);
 
                 DateTime dtLastActivity = activities
+                    .Where(x => x.DateSession != null)
                     .Select(x => (DateTime)x.DateSession?.ToLocalTime())
                     .Max();
 
-                // In ShowAllData mode (limit = int.MaxValue) the week range spans from
-                // the earliest session to the latest; variateurTime is intentionally ignored.
                 int resolvedLimit;
-                if (limit == int.MaxValue)
+
+                // ShowAllData passes limit = Count: span every week from first to last session.
+                if (limit == int.MaxValue || limit >= activities.Count)
                 {
                     DateTime dtFirstActivity = activities
+                        .Where(x => x.DateSession != null)
                         .Select(x => (DateTime)x.DateSession?.ToLocalTime())
                         .Min();
 
                     resolvedLimit = (int)Math.Ceiling((dtLastActivity - dtFirstActivity).TotalDays / 7.0);
                     resolvedLimit = resolvedLimit < 1 ? 1 : resolvedLimit;
-                    // dtLastActivity stays as-is (no variator offset in ShowAllData mode).
+                    // variateurTime intentionally ignored in ShowAllData mode.
                 }
                 else
                 {
                     resolvedLimit = limit;
+
+                    // Clamp variateurTime locally so it never overshoots in either direction.
+                    // Writing back to AxisVariator from inside a builder would re-fire
+                    // ControlsPropertyChangedCallback → GameContextChanged → infinite loop.
+                    int minVariator = -resolvedLimit; // can't go further left than week 0
+                    int maxVariator = 0;              // 0 = most recent window
+                    variateurTime = Math.Max(minVariator, Math.Min(maxVariator, variateurTime));
+
                     dtLastActivity = dtLastActivity.AddDays(7 * variateurTime);
                 }
 
@@ -630,7 +631,6 @@ namespace GameActivity.Controls
                     int weekNumber = UtilityTools.WeekOfYearISO8601(dt);
                     DateTime first = dt.StartOfWeek(DayOfWeek.Monday);
 
-                    // Week label shown on X axis and in the nav bar badge.
                     string dataTitleInfo = string.Format("{0} {1}",
                         ResourceProvider.GetString("LOCGameActivityWeekLabel"),
                         weekNumber);
@@ -648,10 +648,7 @@ namespace GameActivity.Controls
                 {
                     DateTime sessionTime = ((DateTime)x.DateSession).ToLocalTime();
                     int idx = datesPeriodes.FindIndex(y => y.Monday <= sessionTime && y.Sunday >= sessionTime);
-                    if (idx > -1)
-                    {
-                        seriesData[idx].Values += (long)x.ElapsedSeconds;
-                    }
+                    if (idx > -1) { seriesData[idx].Values += (long)x.ElapsedSeconds; }
                 });
 
                 SeriesCollection activityForGameSeries = new SeriesCollection();
@@ -677,7 +674,7 @@ namespace GameActivity.Controls
                     ShowTitle = true
                 };
 
-                // Update the nav bar badge with the current week label (last item = most recent).
+                // Update the nav bar badge with the most recent week label (last in the list).
                 if (labels.Count > 0 && ControlDataContext.ShowNavBar)
                 {
                     ControlDataContext.NavLabel = labels[labels.Count - 1];

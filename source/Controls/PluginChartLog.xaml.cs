@@ -414,9 +414,9 @@ namespace GameActivity.Controls
 
         private void NavBar_FirstClicked(object sender, RoutedEventArgs e)
         {
-            // Jump to the oldest data by moving the window far to the left.
-            // GetActivityForGamesLogGraphics clamps automatically when conteurStart < 0.
-            AxisVariator = -9999;
+            // Large negative value; the builder clamps it locally to the actual
+            // leftmost valid position without writing back to AxisVariator.
+            AxisVariator = int.MinValue / 2;
         }
 
         private void NavBar_PagePrevClicked(object sender, RoutedEventArgs e)
@@ -473,12 +473,11 @@ namespace GameActivity.Controls
         // ──────────────────────────────────────────────────────────────────────
 
         /// <summary>
-        /// Builds and assigns the LiveCharts series collection for the current session.
+        /// Builds and assigns the LiveCharts series collection for the current session window.
         /// </summary>
         /// <param name="showAll">
-        /// When <c>true</c>: ignores <paramref name="variateurLog"/> and <paramref name="limit"/>
+        /// When true: bypasses <paramref name="variateurLog"/> and <paramref name="limit"/>
         /// and renders the complete dataset. All 8 series are forced visible.
-        /// When <c>false</c>: standard windowed pagination behaviour.
         /// </param>
         public void GetActivityForGamesLogGraphics(
             GameActivities gameActivities,
@@ -495,13 +494,7 @@ namespace GameActivity.Controls
                     List<ActivityDetailsData> activitiesDetails =
                         gameActivities.GetSessionActivityDetails(dateSelected, titleChart);
 
-                    if (activitiesDetails == null)
-                    {
-                        return;
-                    }
-
-                    string[] activityForGameLogLabels;
-                    List<ActivityDetailsData> gameLogsDefinitive;
+                    if (activitiesDetails == null) { return; }
 
                     if (activitiesDetails.Count == 0)
                     {
@@ -513,12 +506,14 @@ namespace GameActivity.Controls
                         return;
                     }
 
-                    // ── ShowAllData: render the entire dataset ─────────────────────────
+                    string[] activityForGameLogLabels;
+                    List<ActivityDetailsData> gameLogsDefinitive;
+
                     if (showAll)
                     {
-                        // Pagination is intentionally bypassed.
-                        // AxisVariator is NOT touched so that disabling ShowAllData returns
-                        // the user to their previous paginated window position.
+                        // Pagination bypassed — render the entire dataset.
+                        // AxisVariator is NOT touched so disabling ShowAllData restores
+                        // the previous paginated window position.
                         gameLogsDefinitive = activitiesDetails;
                         activityForGameLogLabels = new string[activitiesDetails.Count];
 
@@ -529,24 +524,26 @@ namespace GameActivity.Controls
                                 .ToString(Constants.TimeUiFormat);
                         }
                     }
-                    // ── End ShowAllData ────────────────────────────────────────────────
                     else if (activitiesDetails.Count > limit)
                     {
                         int conteurEnd = activitiesDetails.Count + variateurLog;
                         int conteurStart = conteurEnd - limit;
 
+                        // Clamp locally — never write back to AxisVariator from a builder.
+                        // Writing to a DP from inside SetData re-fires ControlsPropertyChangedCallback
+                        // → GameContextChanged → infinite render loop (visible as UI flickering).
                         if (conteurEnd > activitiesDetails.Count)
                         {
+                            // Variator pushed past the right edge: pin to the most recent window.
                             conteurEnd = activitiesDetails.Count;
                             conteurStart = conteurEnd - limit;
-                            this.Dispatcher.BeginInvoke((Action)delegate { AxisVariator--; });
                         }
 
                         if (conteurStart < 0)
                         {
+                            // Variator pushed past the left edge: pin to the oldest window.
                             conteurStart = 0;
                             conteurEnd = limit;
-                            this.Dispatcher.BeginInvoke((Action)delegate { AxisVariator++; });
                         }
 
                         activityForGameLogLabels = new string[limit];
@@ -575,14 +572,14 @@ namespace GameActivity.Controls
                     }
 
                     // ── Collect values for all 8 series ───────────────────────────────
-                    ChartValues<int> cpuValues = new ChartValues<int>();
-                    ChartValues<int> gpuValues = new ChartValues<int>();
-                    ChartValues<int> ramValues = new ChartValues<int>();
-                    ChartValues<int> fpsValues = new ChartValues<int>();
-                    ChartValues<int> cpuTValues = new ChartValues<int>();
-                    ChartValues<int> gpuTValues = new ChartValues<int>();
-                    ChartValues<int> cpuPValues = new ChartValues<int>();
-                    ChartValues<int> gpuPValues = new ChartValues<int>();
+                    ChartValues<double> cpuValues = new ChartValues<double>();
+                    ChartValues<double> gpuValues = new ChartValues<double>();
+                    ChartValues<double> ramValues = new ChartValues<double>();
+                    ChartValues<double> fpsValues = new ChartValues<double>();
+                    ChartValues<double> cpuTValues = new ChartValues<double>();
+                    ChartValues<double> gpuTValues = new ChartValues<double>();
+                    ChartValues<double> cpuPValues = new ChartValues<double>();
+                    ChartValues<double> gpuPValues = new ChartValues<double>();
 
                     foreach (ActivityDetailsData log in gameLogsDefinitive)
                     {
@@ -704,16 +701,13 @@ namespace GameActivity.Controls
                                 Foreground = (Brush)ResourceProvider.GetResource("CommonToolTipForeground")
                             };
                         }
-                        catch (Exception ex)
-                        {
-                            Common.LogError(ex, false);
-                        }
+                        catch (Exception ex) { Common.LogError(ex, false); }
 
                         SeriesCollection series = new SeriesCollection
-                        {
-                            _cpuSeries, _gpuSeries, _ramSeries, _fpsSeries,
-                            _cpuTSeries, _gpuTSeries, _cpuPSeries, _gpuPSeries
-                        };
+                {
+                    _cpuSeries, _gpuSeries, _ramSeries, _fpsSeries,
+                    _cpuTSeries, _gpuTSeries, _cpuPSeries, _gpuPSeries
+                };
 
                         PART_ChartLogActivity.Series = series;
                         PART_ChartLogActivityLabelsY.MinValue = 0;
