@@ -1,4 +1,5 @@
 ﻿using CommonPlayniteShared.Common;
+using CommonPluginsControls.Controls;
 using CommonPluginsShared;
 using CommonPluginsShared.Collections;
 using CommonPluginsShared.Controls;
@@ -704,10 +705,14 @@ namespace GameActivity.Controls
                         catch (Exception ex) { Common.LogError(ex, false); }
 
                         SeriesCollection series = new SeriesCollection
-                {
-                    _cpuSeries, _gpuSeries, _ramSeries, _fpsSeries,
-                    _cpuTSeries, _gpuTSeries, _cpuPSeries, _gpuPSeries
-                };
+                        {
+                            _cpuSeries, _gpuSeries, _ramSeries, _fpsSeries,
+                            _cpuTSeries, _gpuTSeries, _cpuPSeries, _gpuPSeries
+                        };
+
+                        // Update the nav bar with the visible X-axis time range.
+                        // activityForGameLogLabels is already localised via Constants.TimeUiFormat.
+                        ControlDataContext.NavLabel = PluginChartNavBar.BuildRangeLabel(activityForGameLogLabels);
 
                         PART_ChartLogActivity.Series = series;
                         PART_ChartLogActivityLabelsY.MinValue = 0;
@@ -877,11 +882,13 @@ namespace GameActivity.Controls
 
         private string _navLabel = string.Empty;
         /// <summary>
-        /// Badge text shown on the right of the nav bar.
-        /// For ChartLog this is always empty (no week/period concept).
-        /// Exposed so a parent view can push a session title if needed.
+        /// Badge text shown on the right of the nav bar representing the visible X-axis time range.
+        /// Format: <c>"first – last"</c> using the current UI culture.
+        /// Example: <c>"14:00 – 17:30"</c> for a session window.
+        /// Reset to <see cref="string.Empty"/> on every game context change.
         /// </summary>
         public string NavLabel { get => _navLabel; set => SetValue(ref _navLabel, value); }
+
 
         private int _pageSize;
         /// <summary>
