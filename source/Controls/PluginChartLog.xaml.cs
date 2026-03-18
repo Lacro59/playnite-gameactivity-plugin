@@ -1,4 +1,4 @@
-﻿using CommonPlayniteShared.Common;
+using CommonPlayniteShared.Common;
 using CommonPluginsControls.Controls;
 using CommonPluginsShared;
 using CommonPluginsShared.Collections;
@@ -21,6 +21,10 @@ using System.Windows.Threading;
 
 namespace GameActivity.Controls
 {
+    /// <summary>
+    /// User control providing charting functionality to visualize game activity logs,
+    /// including CPU, GPU, RAM, FPS, temperatures, and power usage over time.
+    /// </summary>
     public partial class PluginChartLog : PluginUserControlExtend
     {
         // ──────────────────────────────────────────────────────────────────────
@@ -36,6 +40,19 @@ namespace GameActivity.Controls
             get => ControlDataContext;
             set => ControlDataContext = (PluginChartLogDataContext)value;
         }
+
+        /// <summary>
+        /// Total log entries available for the current session, updated after each render.
+        /// Used by Next()/Prev() to clamp AxisVariator and by the nav bar to reflect boundary states.
+        /// </summary>
+        private int _totalDataPoints;
+
+        /// <summary>
+        /// Effective number of log entries rendered in the last chart build.
+        /// Updated after each render to align Prev() clamping and NavBar_FirstClicked
+        /// with the actual window slice size.
+        /// </summary>
+        private int _lastWindowSize;
 
         // ── LiveCharts series fields ───────────────────────────────────────────
         private LineSeries _cpuSeries;
@@ -252,6 +269,10 @@ namespace GameActivity.Controls
         // Constructor
         // ──────────────────────────────────────────────────────────────────────
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PluginChartLog"/> class.
+        /// Sets up the data context and event handlers, including tracking nav bar limit changes.
+        /// </summary>
         public PluginChartLog()
         {
             AlwaysShow = true;
@@ -270,9 +291,17 @@ namespace GameActivity.Controls
                 DependencyPropertyDescriptor
                     .FromProperty(PluginChartNavBar.AxisLimitProperty, typeof(PluginChartNavBar))
                     .AddValueChanged(PART_NavBar, OnNavBarAxisLimitChanged);
+
+                PART_NavBar.AxisLimitReset += NavBar_AxisLimitReset;
             }
         }
 
+        /// <summary>
+        /// Called when the control is unloaded from the visual tree.
+        /// Detaches dependency property value changed listeners to prevent memory leaks.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
             if (PART_NavBar != null)
@@ -285,6 +314,21 @@ namespace GameActivity.Controls
             }
         }
 
+        /// <summary>
+        /// Handles the reset event from the navigation bar's axis limit.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
+        private void NavBar_AxisLimitReset(object sender, RoutedEventArgs e)
+        {
+            ApplyAxisLimitFromNavBar();
+        }
+
+        /// <summary>
+        /// Handles changes to the navigation bar's axis limit dependency property.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
         private void OnNavBarAxisLimitChanged(object sender, EventArgs e)
         {
             ApplyAxisLimitFromNavBar();
@@ -294,6 +338,10 @@ namespace GameActivity.Controls
         // Static event registration
         // ──────────────────────────────────────────────────────────────────────
 
+        /// <summary>
+        /// Attaches static plugin events for handling plugin settings and database item updates.
+        /// Also loads the initial visibility state of sensor series.
+        /// </summary>
         protected override void AttachStaticEvents()
         {
             base.AttachStaticEvents();
@@ -321,6 +369,12 @@ namespace GameActivity.Controls
 
         // ── Filter bar slide animation triggered by UseControls changes ────────
 
+        /// <summary>
+        /// Animates the appearance or disappearance of the filter bar when the user toggles
+        /// the UseControls setting.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The property changed event data.</param>
         private void OnDataContextPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName != nameof(PluginChartLogDataContext.UseControls))
@@ -342,6 +396,10 @@ namespace GameActivity.Controls
         // Default DataContext initialisation
         // ──────────────────────────────────────────────────────────────────────
 
+        /// <summary>
+        /// Sets the default data context for the chart, including axis visibility, controls,
+        /// and series visibility flags based on plugin settings.
+        /// </summary>
         public override void SetDefaultDataContext()
         {
             bool isActivated = PluginDatabase.PluginSettings.EnableIntegrationChartLog;
@@ -390,8 +448,6 @@ namespace GameActivity.Controls
             if (IgnoreSettings) { showNavBar = true; }
 
             ControlDataContext.ShowNavBar = showNavBar;
-            // NavLabel has no period concept for ChartLog (labels are timestamps).
-            // The builder will push "first – last" timestamps after each render.
             ControlDataContext.NavLabel = string.Empty;
 
             // ── Resolve effective abscissa limit and push to nav bar ───────
@@ -405,20 +461,32 @@ namespace GameActivity.Controls
 
             // Seed the nav bar AxisLimit so its AxisLimitDecrease button starts
             // with the correct floor check and tooltip text.
-            if (PART_NavBar != null)
-            {
-                PART_NavBar.AxisLimit = AxisLimit;
-            }
+if (PART_NavBar != null)
+{
+    int defaultLimit = AxisLimit > 0
+        ? AxisLimit
+        : PluginDatabase.PluginSettings.ChartLogCountAbscissa;
+
+    PART_NavBar.AxisLimitDefault = defaultLimit;
+    PART_NavBar.AxisLimit = AxisLimit;
+}
             // ── End nav bar defaults ───────────────────────────────────────
 
             PART_ChartLogActivity.Series = null;
             PART_ChartLogActivityLabelsX.Labels = null;
+            _totalDataPoints = 0;
+            _lastWindowSize = 0;
         }
 
         // ──────────────────────────────────────────────────────────────────────
         // Data loading
         // ──────────────────────────────────────────────────────────────────────
 
+        /// <summary>
+        /// Invoked when the control receives new data context. Initiates async rendering of chart graphics.
+        /// </summary>
+        /// <param name="newContext">The newly selected game.</param>
+        /// <param name="pluginGameData">The associated game activity data.</param>
         public override void SetData(Game newContext, PluginGameEntry pluginGameData)
         {
             GameActivities gameActivities = (GameActivities)pluginGameData;
@@ -450,11 +518,25 @@ namespace GameActivity.Controls
 
         #region Public methods
 
-        /// <summary>Advances the session window forward by <paramref name="value"/> steps.</summary>
-        public void Next(int value = 1) { AxisVariator += value; }
+        /// <summary>Advances the session window forward by <paramref name="value"/> steps, clamped to 0.</summary>
+        public void Next(int value = 1)
+        {
+            AxisVariator = Math.Min(0, AxisVariator + value);
+        }
 
-        /// <summary>Moves the session window backward by <paramref name="value"/> steps.</summary>
-        public void Prev(int value = 1) { AxisVariator -= value; }
+        /// <summary>
+        /// Moves the session window backward by <paramref name="value"/> steps,
+        /// clamped so the window never starts before the first log entry.
+        /// </summary>
+        public void Prev(int value = 1)
+        {
+            // _lastWindowSize reflects the actual rendered slice size.
+            // Falls back to limit before the first render.
+            int limit = AxisLimit > 0 ? AxisLimit : PluginDatabase.PluginSettings.ChartLogCountAbscissa;
+            int windowSize = _lastWindowSize > 0 ? _lastWindowSize : limit;
+            int minVariator = _totalDataPoints > windowSize ? -(_totalDataPoints - windowSize) : 0;
+            AxisVariator = Math.Max(minVariator, AxisVariator - value);
+        }
 
         #endregion
 
@@ -468,13 +550,26 @@ namespace GameActivity.Controls
         // Next() / Prev() modify AxisVariator, which triggers ControlsPropertyChangedCallback
         // → GameContextChanged → SetData — no explicit refresh call is needed there.
 
+        /// <summary>
+        /// Jumps to the first page (oldest possible window entries) by modifying the axis variator.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
         private void NavBar_FirstClicked(object sender, RoutedEventArgs e)
         {
-            // Large negative value; the builder clamps it locally to the actual
-            // leftmost valid position without writing back to AxisVariator.
-            AxisVariator = int.MinValue / 2;
+            // Jump directly to the leftmost valid position using the last known window size,
+            // so AxisVariator is never left at an arbitrary large negative value.
+            int limit = AxisLimit > 0 ? AxisLimit : PluginDatabase.PluginSettings.ChartLogCountAbscissa;
+            int windowSize = _lastWindowSize > 0 ? _lastWindowSize : limit;
+            int minVariator = _totalDataPoints > windowSize ? -(_totalDataPoints - windowSize) : 0;
+            AxisVariator = minVariator;
         }
 
+        /// <summary>
+        /// Moves the session window backward by a full page.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
         private void NavBar_PagePrevClicked(object sender, RoutedEventArgs e)
         {
             // Skip back by a full page. Delta resolved here — the nav bar carries
@@ -485,11 +580,21 @@ namespace GameActivity.Controls
             Prev(pageSize);
         }
 
+        /// <summary>
+        /// Moves the session window backward by a single step.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
         private void NavBar_PrevClicked(object sender, RoutedEventArgs e)
         {
             Prev();
         }
 
+        /// <summary>
+        /// Toggles between the paginated view and showing the entire session dataset.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
         private void NavBar_ShowAllToggled(object sender, RoutedEventArgs e)
         {
             // Mirror the nav bar's new ShowAllData state into both the DP and the DataContext,
@@ -500,11 +605,21 @@ namespace GameActivity.Controls
             GameContextChanged(null, GameContext);
         }
 
+        /// <summary>
+        /// Moves the session window forward by a single step.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
         private void NavBar_NextClicked(object sender, RoutedEventArgs e)
         {
             Next();
         }
 
+        /// <summary>
+        /// Moves the session window forward by a full page.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
         private void NavBar_PageNextClicked(object sender, RoutedEventArgs e)
         {
             // Skip forward by a full page.
@@ -514,6 +629,11 @@ namespace GameActivity.Controls
             Next(pageSize);
         }
 
+        /// <summary>
+        /// Jumps to the most recent window entries by setting the axis variator to 0.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
         private void NavBar_LastClicked(object sender, RoutedEventArgs e)
         {
             // AxisVariator = 0 always shows the most recent window.
@@ -538,7 +658,7 @@ namespace GameActivity.Controls
             // Resolve effective page size before touching the DP so we can compare.
             int effectivePageSize = newLimit > 0
                 ? newLimit
-                : PluginDatabase.PluginSettings.ChartTimeCountAbscissa; // ChartLogCountAbscissa pour ChartLog
+                : PluginDatabase.PluginSettings.ChartLogCountAbscissa;
 
             // Update DataContext and nav bar PageSize regardless of whether AxisLimit changed.
             ControlDataContext.PageSize = effectivePageSize;
@@ -564,6 +684,11 @@ namespace GameActivity.Controls
         /// Builds and assigns the LiveCharts series collection for the current session window.
         /// Runs on a background thread; all chart assignments are marshalled via Dispatcher.
         /// </summary>
+        /// <param name="gameActivities">The game activities data object containing session logs.</param>
+        /// <param name="variateurLog">The signed offset applied to the session window anchor.</param>
+        /// <param name="limit">The maximum number of logs to render in one page.</param>
+        /// <param name="dateSelected">The selected session date to filter by, if any.</param>
+        /// <param name="titleChart">An optional title for the chart.</param>
         /// <param name="showAll">
         /// When true: bypasses <see cref="AxisVariator"/> and <see cref="AxisLimit"/>
         /// and renders the complete dataset. All 8 series are forced visible.
@@ -595,8 +720,8 @@ namespace GameActivity.Controls
                         return;
                     }
 
-                    // Total available data points — used to cap AxisLimitMaximum after render.
                     int totalDataPoints = activitiesDetails.Count;
+                    _totalDataPoints = totalDataPoints;
 
                     string[] activityForGameLogLabels;
                     List<ActivityDetailsData> gameLogsDefinitive;
@@ -661,7 +786,6 @@ namespace GameActivity.Controls
                         }
                     }
 
-                    // ── Collect values for all 8 series ───────────────────────────────
                     ChartValues<double> cpuValues = new ChartValues<double>();
                     ChartValues<double> gpuValues = new ChartValues<double>();
                     ChartValues<double> ramValues = new ChartValues<double>();
@@ -794,19 +918,26 @@ namespace GameActivity.Controls
                         catch (Exception ex) { Common.LogError(ex, false); }
 
                         SeriesCollection series = new SeriesCollection
-                {
-                    _cpuSeries, _gpuSeries, _ramSeries, _fpsSeries,
-                    _cpuTSeries, _gpuTSeries, _cpuPSeries, _gpuPSeries
-                };
+                        {
+                            _cpuSeries, _gpuSeries, _ramSeries, _fpsSeries,
+                            _cpuTSeries, _gpuTSeries, _cpuPSeries, _gpuPSeries
+                        };
 
-                        // Cap the + button to the actual number of log entries so the user
-                        // cannot request a window larger than what the session recorded.
+                        // Persist the effective window size for Prev() and NavBar_FirstClicked clamping.
+                        _lastWindowSize = activityForGameLogLabels.Length;
+
                         if (PART_NavBar != null)
                         {
+                            // windowSize = effective number of log entries rendered in the current page.
+                            // CanGoPrev is true as long as there are entries to the left of the current window.
+                            int windowSize = _lastWindowSize;
+                            int minVariator = _totalDataPoints > windowSize ? -(_totalDataPoints - windowSize) : 0;
+
                             PART_NavBar.AxisLimitMaximum = totalDataPoints;
+                            PART_NavBar.CanGoNext = AxisVariator < 0;
+                            PART_NavBar.CanGoPrev = AxisVariator > minVariator;
                         }
 
-                        // Update the nav bar range badge with the visible time window.
                         ControlDataContext.NavLabel = PluginChartNavBar.BuildRangeLabel(activityForGameLogLabels);
 
                         PART_ChartLogActivity.Series = series;
@@ -870,6 +1001,11 @@ namespace GameActivity.Controls
         /// LiveCharts render tick — re-reads Display* flags each tick so that toggling a series
         /// on an already-rendered chart takes effect without a full data reload.
         /// </summary>
+        /// <summary>
+        /// LiveCharts render tick — re-reads Display* flags each tick so that toggling a series
+        /// on an already-rendered chart takes effect without a full data reload.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
         private void PART_ChartLogActivity_UpdaterTick(object sender)
         {
             SetChartVisibility();
@@ -885,6 +1021,13 @@ namespace GameActivity.Controls
         /// Returns the theme brush identified by <paramref name="resourceKey"/>,
         /// or a fallback solid colour brush when the resource is absent or of the wrong type.
         /// </summary>
+        /// <summary>
+        /// Returns the theme brush identified by <paramref name="resourceKey"/>,
+        /// or a fallback solid colour brush when the resource is absent or of the wrong type.
+        /// </summary>
+        /// <param name="resourceKey">The key of the resource to lookup.</param>
+        /// <param name="fallbackHex">The fallback colour hex string if the resource is missing.</param>
+        /// <returns>A brush matching the specified resource or the fallback color.</returns>
         private static Brush TryGetThemeBrush(string resourceKey, string fallbackHex)
         {
             object resource = ResourceProvider.GetResource(resourceKey);
@@ -1042,6 +1185,10 @@ namespace GameActivity.Controls
         /// <summary>Bound to the GPU power toggle button in the filter bar.</summary>
         public RelayCommand CmdToggleGpuP { get; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PluginChartLogDataContext"/> class.
+        /// Wires up commands for toggling sensor series visibility.
+        /// </summary>
         public PluginChartLogDataContext()
         {
             // Commands delegate to the control instance set via SetControl.
@@ -1063,6 +1210,11 @@ namespace GameActivity.Controls
         /// Wires command delegates to the owning <see cref="PluginChartLog"/> instance.
         /// Must be called from <see cref="PluginChartLog"/>'s constructor before any command fires.
         /// </summary>
+        /// <summary>
+        /// Wires command delegates to the owning <see cref="PluginChartLog"/> instance.
+        /// Must be called from <see cref="PluginChartLog"/>'s constructor before any command fires.
+        /// </summary>
+        /// <param name="control">The plugin chart log control instance.</param>
         public void SetControl(PluginChartLog control)
         {
             _control = control;

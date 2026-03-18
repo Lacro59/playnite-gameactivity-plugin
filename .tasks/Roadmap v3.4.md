@@ -22,6 +22,6 @@
 
 - [ ] GanttControl
 - [x] PluginButton
-- [ ] PluginChartLog
-- [ ] PluginChartTime
+- [x] PluginChartLog
+- [x] PluginChartTime
 - [x] TimePicker
