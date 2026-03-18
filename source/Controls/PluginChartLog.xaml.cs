@@ -1,3 +1,11 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Threading;
+using System.Windows;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Threading;
 using CommonPlayniteShared.Common;
 using CommonPluginsControls.Controls;
 using CommonPluginsShared;
@@ -10,14 +18,6 @@ using LiveCharts;
 using LiveCharts.Wpf;
 using Playnite.SDK;
 using Playnite.SDK.Models;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Threading;
-using System.Windows;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Threading;
 
 namespace GameActivity.Controls
 {
@@ -76,9 +76,13 @@ namespace GameActivity.Controls
             get => (bool)GetValue(DisableAnimationsProperty);
             set => SetValue(DisableAnimationsProperty, value);
         }
-        public static readonly DependencyProperty DisableAnimationsProperty = DependencyProperty.Register(
-            nameof(DisableAnimations), typeof(bool), typeof(PluginChartLog),
-            new FrameworkPropertyMetadata(true, ControlsPropertyChangedCallback));
+        public static readonly DependencyProperty DisableAnimationsProperty =
+            DependencyProperty.Register(
+                nameof(DisableAnimations),
+                typeof(bool),
+                typeof(PluginChartLog),
+                new FrameworkPropertyMetadata(true, ControlsPropertyChangedCallback)
+            );
 
         /// <summary>When true, X-axis labels are rotated 160° to avoid overlap on dense charts.</summary>
         public bool LabelsRotation
@@ -86,9 +90,13 @@ namespace GameActivity.Controls
             get => (bool)GetValue(LabelsRotationProperty);
             set => SetValue(LabelsRotationProperty, value);
         }
-        public static readonly DependencyProperty LabelsRotationProperty = DependencyProperty.Register(
-            nameof(LabelsRotation), typeof(bool), typeof(PluginChartLog),
-            new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback));
+        public static readonly DependencyProperty LabelsRotationProperty =
+            DependencyProperty.Register(
+                nameof(LabelsRotation),
+                typeof(bool),
+                typeof(PluginChartLog),
+                new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback)
+            );
 
         /// <summary>
         /// Maximum number of X-axis log entries rendered in one page.
@@ -102,8 +110,11 @@ namespace GameActivity.Controls
             set => SetValue(AxisLimitProperty, value);
         }
         public static readonly DependencyProperty AxisLimitProperty = DependencyProperty.Register(
-            nameof(AxisLimit), typeof(int), typeof(PluginChartLog),
-            new FrameworkPropertyMetadata(0, ControlsPropertyChangedCallback));
+            nameof(AxisLimit),
+            typeof(int),
+            typeof(PluginChartLog),
+            new FrameworkPropertyMetadata(0, ControlsPropertyChangedCallback)
+        );
 
         /// <summary>Selected session date used to filter the log data shown by the chart.</summary>
         public DateTime? DateSelected
@@ -111,9 +122,13 @@ namespace GameActivity.Controls
             get => (DateTime?)GetValue(DateSelectedProperty);
             set => SetValue(DateSelectedProperty, value);
         }
-        public static readonly DependencyProperty DateSelectedProperty = DependencyProperty.Register(
-            nameof(DateSelected), typeof(DateTime?), typeof(PluginChartLog),
-            new FrameworkPropertyMetadata(null, ControlsPropertyChangedCallback));
+        public static readonly DependencyProperty DateSelectedProperty =
+            DependencyProperty.Register(
+                nameof(DateSelected),
+                typeof(DateTime?),
+                typeof(PluginChartLog),
+                new FrameworkPropertyMetadata(null, ControlsPropertyChangedCallback)
+            );
 
         /// <summary>Optional title injected into the chart header / tooltip.</summary>
         public string TitleChart
@@ -122,8 +137,11 @@ namespace GameActivity.Controls
             set => SetValue(TitleChartProperty, value);
         }
         public static readonly DependencyProperty TitleChartProperty = DependencyProperty.Register(
-            nameof(TitleChart), typeof(string), typeof(PluginChartLog),
-            new FrameworkPropertyMetadata(string.Empty, ControlsPropertyChangedCallback));
+            nameof(TitleChart),
+            typeof(string),
+            typeof(PluginChartLog),
+            new FrameworkPropertyMetadata(string.Empty, ControlsPropertyChangedCallback)
+        );
 
         /// <summary>
         /// Signed offset applied to the session window anchor.
@@ -135,9 +153,13 @@ namespace GameActivity.Controls
             get => (int)GetValue(AxisVariatoryProperty);
             set => SetValue(AxisVariatoryProperty, value);
         }
-        public static readonly DependencyProperty AxisVariatoryProperty = DependencyProperty.Register(
-            nameof(AxisVariator), typeof(int), typeof(PluginChartLog),
-            new FrameworkPropertyMetadata(0, ControlsPropertyChangedCallback));
+        public static readonly DependencyProperty AxisVariatoryProperty =
+            DependencyProperty.Register(
+                nameof(AxisVariator),
+                typeof(int),
+                typeof(PluginChartLog),
+                new FrameworkPropertyMetadata(0, ControlsPropertyChangedCallback)
+            );
 
         // ── Sensor toggles ────────────────────────────────────────────────────
 
@@ -148,8 +170,11 @@ namespace GameActivity.Controls
             set => SetValue(DisplayCpuProperty, value);
         }
         public static readonly DependencyProperty DisplayCpuProperty = DependencyProperty.Register(
-            nameof(DisplayCpu), typeof(bool), typeof(PluginChartLog),
-            new FrameworkPropertyMetadata(true, ControlsPropertyChangedCallback));
+            nameof(DisplayCpu),
+            typeof(bool),
+            typeof(PluginChartLog),
+            new FrameworkPropertyMetadata(true, ControlsPropertyChangedCallback)
+        );
 
         /// <summary>Controls visibility of the GPU usage series.</summary>
         public bool DisplayGpu
@@ -158,8 +183,11 @@ namespace GameActivity.Controls
             set => SetValue(DisplayGpuProperty, value);
         }
         public static readonly DependencyProperty DisplayGpuProperty = DependencyProperty.Register(
-            nameof(DisplayGpu), typeof(bool), typeof(PluginChartLog),
-            new FrameworkPropertyMetadata(true, ControlsPropertyChangedCallback));
+            nameof(DisplayGpu),
+            typeof(bool),
+            typeof(PluginChartLog),
+            new FrameworkPropertyMetadata(true, ControlsPropertyChangedCallback)
+        );
 
         /// <summary>Controls visibility of the RAM usage series.</summary>
         public bool DisplayRam
@@ -168,8 +196,11 @@ namespace GameActivity.Controls
             set => SetValue(DisplayRamProperty, value);
         }
         public static readonly DependencyProperty DisplayRamProperty = DependencyProperty.Register(
-            nameof(DisplayRam), typeof(bool), typeof(PluginChartLog),
-            new FrameworkPropertyMetadata(true, ControlsPropertyChangedCallback));
+            nameof(DisplayRam),
+            typeof(bool),
+            typeof(PluginChartLog),
+            new FrameworkPropertyMetadata(true, ControlsPropertyChangedCallback)
+        );
 
         /// <summary>Controls visibility of the FPS series.</summary>
         public bool DisplayFps
@@ -178,8 +209,11 @@ namespace GameActivity.Controls
             set => SetValue(DisplayFpsProperty, value);
         }
         public static readonly DependencyProperty DisplayFpsProperty = DependencyProperty.Register(
-            nameof(DisplayFps), typeof(bool), typeof(PluginChartLog),
-            new FrameworkPropertyMetadata(true, ControlsPropertyChangedCallback));
+            nameof(DisplayFps),
+            typeof(bool),
+            typeof(PluginChartLog),
+            new FrameworkPropertyMetadata(true, ControlsPropertyChangedCallback)
+        );
 
         /// <summary>Controls visibility of the CPU temperature series.</summary>
         public bool DisplayCpuT
@@ -188,8 +222,11 @@ namespace GameActivity.Controls
             set => SetValue(DisplayCpuTProperty, value);
         }
         public static readonly DependencyProperty DisplayCpuTProperty = DependencyProperty.Register(
-            nameof(DisplayCpuT), typeof(bool), typeof(PluginChartLog),
-            new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback));
+            nameof(DisplayCpuT),
+            typeof(bool),
+            typeof(PluginChartLog),
+            new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback)
+        );
 
         /// <summary>Controls visibility of the GPU temperature series.</summary>
         public bool DisplayGpuT
@@ -198,8 +235,11 @@ namespace GameActivity.Controls
             set => SetValue(DisplayGpuTProperty, value);
         }
         public static readonly DependencyProperty DisplayGpuTProperty = DependencyProperty.Register(
-            nameof(DisplayGpuT), typeof(bool), typeof(PluginChartLog),
-            new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback));
+            nameof(DisplayGpuT),
+            typeof(bool),
+            typeof(PluginChartLog),
+            new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback)
+        );
 
         /// <summary>Controls visibility of the CPU power series.</summary>
         public bool DisplayCpuP
@@ -208,8 +248,11 @@ namespace GameActivity.Controls
             set => SetValue(DisplayCpuPProperty, value);
         }
         public static readonly DependencyProperty DisplayCpuPProperty = DependencyProperty.Register(
-            nameof(DisplayCpuP), typeof(bool), typeof(PluginChartLog),
-            new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback));
+            nameof(DisplayCpuP),
+            typeof(bool),
+            typeof(PluginChartLog),
+            new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback)
+        );
 
         /// <summary>Controls visibility of the GPU power series.</summary>
         public bool DisplayGpuP
@@ -218,8 +261,11 @@ namespace GameActivity.Controls
             set => SetValue(DisplayGpuPProperty, value);
         }
         public static readonly DependencyProperty DisplayGpuPProperty = DependencyProperty.Register(
-            nameof(DisplayGpuP), typeof(bool), typeof(PluginChartLog),
-            new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback));
+            nameof(DisplayGpuP),
+            typeof(bool),
+            typeof(PluginChartLog),
+            new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback)
+        );
 
         /// <summary>
         /// When true: bypasses AxisVariator/limit pagination and renders the entire
@@ -232,8 +278,11 @@ namespace GameActivity.Controls
             set => SetValue(ShowAllDataProperty, value);
         }
         public static readonly DependencyProperty ShowAllDataProperty = DependencyProperty.Register(
-            nameof(ShowAllData), typeof(bool), typeof(PluginChartLog),
-            new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback));
+            nameof(ShowAllData),
+            typeof(bool),
+            typeof(PluginChartLog),
+            new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback)
+        );
 
         /// <summary>
         /// Shows or hides the <see cref="PluginChartNavBar"/> above the filter bar.
@@ -245,8 +294,11 @@ namespace GameActivity.Controls
             set => SetValue(ShowNavBarProperty, value);
         }
         public static readonly DependencyProperty ShowNavBarProperty = DependencyProperty.Register(
-            nameof(ShowNavBar), typeof(bool), typeof(PluginChartLog),
-            new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback));
+            nameof(ShowNavBar),
+            typeof(bool),
+            typeof(PluginChartLog),
+            new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback)
+        );
 
         /// <summary>
         /// Number of items skipped by the PrevPage / NextPage nav bar buttons.
@@ -260,8 +312,11 @@ namespace GameActivity.Controls
             set => SetValue(PageSizeProperty, value);
         }
         public static readonly DependencyProperty PageSizeProperty = DependencyProperty.Register(
-            nameof(PageSize), typeof(int), typeof(PluginChartLog),
-            new FrameworkPropertyMetadata(0, ControlsPropertyChangedCallback));
+            nameof(PageSize),
+            typeof(int),
+            typeof(PluginChartLog),
+            new FrameworkPropertyMetadata(0, ControlsPropertyChangedCallback)
+        );
 
         #endregion
 
@@ -346,25 +401,30 @@ namespace GameActivity.Controls
         {
             base.AttachStaticEvents();
 
-            AttachPluginEvents(PluginDatabase.PluginName, () =>
-            {
-                PluginDatabase.PluginSettings.PropertyChanged += CreatePluginSettingsHandler();
-                PluginDatabase.DatabaseItemUpdated += CreateDatabaseItemUpdatedHandler<GameActivities>();
-                PluginDatabase.DatabaseItemCollectionChanged += CreateDatabaseCollectionChangedHandler<GameActivities>();
+            AttachPluginEvents(
+                PluginDatabase.PluginName,
+                () =>
+                {
+                    PluginDatabase.PluginSettings.PropertyChanged += CreatePluginSettingsHandler();
+                    PluginDatabase.DatabaseItemUpdated +=
+                        CreateDatabaseItemUpdatedHandler<GameActivities>();
+                    PluginDatabase.DatabaseItemCollectionChanged +=
+                        CreateDatabaseCollectionChangedHandler<GameActivities>();
 
-                DisplayCpu = PluginDatabase.PluginSettings.DisplayCpu;
-                DisplayGpu = PluginDatabase.PluginSettings.DisplayGpu;
-                DisplayRam = PluginDatabase.PluginSettings.DisplayRam;
-                DisplayFps = PluginDatabase.PluginSettings.DisplayFps;
+                    DisplayCpu = PluginDatabase.PluginSettings.DisplayCpu;
+                    DisplayGpu = PluginDatabase.PluginSettings.DisplayGpu;
+                    DisplayRam = PluginDatabase.PluginSettings.DisplayRam;
+                    DisplayFps = PluginDatabase.PluginSettings.DisplayFps;
 
-                DisplayCpuT = false;
-                DisplayGpuT = false;
-                DisplayCpuP = false;
-                DisplayGpuP = false;
+                    DisplayCpuT = false;
+                    DisplayGpuT = false;
+                    DisplayCpuP = false;
+                    DisplayGpuP = false;
 
-                // ShowAllData is not reset from plugin settings — it is owned by the
-                // nav bar toggle or by the caller's XAML binding.
-            });
+                    // ShowAllData is not reset from plugin settings — it is owned by the
+                    // nav bar toggle or by the caller's XAML binding.
+                }
+            );
         }
 
         // ── Filter bar slide animation triggered by UseControls changes ────────
@@ -375,7 +435,10 @@ namespace GameActivity.Controls
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The property changed event data.</param>
-        private void OnDataContextPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void OnDataContextPropertyChanged(
+            object sender,
+            System.ComponentModel.PropertyChangedEventArgs e
+        )
         {
             if (e.PropertyName != nameof(PluginChartLogDataContext.UseControls))
             {
@@ -423,7 +486,9 @@ namespace GameActivity.Controls
             ControlDataContext.ChartLogHeight = chartLogHeight;
             ControlDataContext.ChartLogAxis = chartLogAxis;
             ControlDataContext.ChartLogOrdinates = chartLogOrdinates;
-            ControlDataContext.ChartLogVisibleEmpty = PluginDatabase.PluginSettings.ChartLogVisibleEmpty;
+            ControlDataContext.ChartLogVisibleEmpty = PluginDatabase
+                .PluginSettings
+                .ChartLogVisibleEmpty;
             ControlDataContext.UseControls = useControls;
             ControlDataContext.DisableAnimations = DisableAnimations;
             ControlDataContext.LabelsRotationValue = LabelsRotation ? 160d : 0d;
@@ -445,31 +510,32 @@ namespace GameActivity.Controls
 
             // ── Nav bar defaults ───────────────────────────────────────────
             bool showNavBar = ShowNavBar;
-            if (IgnoreSettings) { showNavBar = true; }
+            if (IgnoreSettings)
+            {
+                showNavBar = true;
+            }
 
             ControlDataContext.ShowNavBar = showNavBar;
             ControlDataContext.NavLabel = string.Empty;
 
             // ── Resolve effective abscissa limit and push to nav bar ───────
             // Priority: explicit AxisLimit DP → plugin setting.
-            int effectivePageSize = AxisLimit > 0
-                ? AxisLimit
-                : PluginDatabase.PluginSettings.ChartLogCountAbscissa;
+            int effectivePageSize =
+                AxisLimit > 0 ? AxisLimit : PluginDatabase.PluginSettings.ChartLogCountAbscissa;
 
             ControlDataContext.PageSize = effectivePageSize;
             ControlDataContext.AxisLimit = AxisLimit;
 
             // Seed the nav bar AxisLimit so its AxisLimitDecrease button starts
             // with the correct floor check and tooltip text.
-if (PART_NavBar != null)
-{
-    int defaultLimit = AxisLimit > 0
-        ? AxisLimit
-        : PluginDatabase.PluginSettings.ChartLogCountAbscissa;
+            if (PART_NavBar != null)
+            {
+                int defaultLimit =
+                    AxisLimit > 0 ? AxisLimit : PluginDatabase.PluginSettings.ChartLogCountAbscissa;
 
-    PART_NavBar.AxisLimitDefault = defaultLimit;
-    PART_NavBar.AxisLimit = AxisLimit;
-}
+                PART_NavBar.AxisLimitDefault = defaultLimit;
+                PART_NavBar.AxisLimit = AxisLimit;
+            }
             // ── End nav bar defaults ───────────────────────────────────────
 
             PART_ChartLogActivity.Series = null;
@@ -491,15 +557,18 @@ if (PART_NavBar != null)
         {
             GameActivities gameActivities = (GameActivities)pluginGameData;
 
-            MustDisplay = !IgnoreSettings && !ControlDataContext.ChartLogVisibleEmpty
-                ? gameActivities.HasDataDetails()
-                : true;
+            MustDisplay =
+                !IgnoreSettings && !ControlDataContext.ChartLogVisibleEmpty
+                    ? gameActivities.HasDataDetails()
+                    : true;
 
-            if (!MustDisplay) { return; }
+            if (!MustDisplay)
+            {
+                return;
+            }
 
-            int limit = AxisLimit != 0
-                ? AxisLimit
-                : PluginDatabase.PluginSettings.ChartLogCountAbscissa;
+            int limit =
+                AxisLimit != 0 ? AxisLimit : PluginDatabase.PluginSettings.ChartLogCountAbscissa;
 
             // Capture all UI-thread DP values before entering the background thread.
             int axisVariator = AxisVariator;
@@ -509,7 +578,14 @@ if (PART_NavBar != null)
 
             ControlDataContext.ChartLogAxis = !ShowAllData;
 
-            GetActivityForGamesLogGraphics(gameActivities, axisVariator, limit, dateSelected, titleChart, showAllData);
+            GetActivityForGamesLogGraphics(
+                gameActivities,
+                axisVariator,
+                limit,
+                dateSelected,
+                titleChart,
+                showAllData
+            );
         }
 
         // ──────────────────────────────────────────────────────────────────────
@@ -532,7 +608,8 @@ if (PART_NavBar != null)
         {
             // _lastWindowSize reflects the actual rendered slice size.
             // Falls back to limit before the first render.
-            int limit = AxisLimit > 0 ? AxisLimit : PluginDatabase.PluginSettings.ChartLogCountAbscissa;
+            int limit =
+                AxisLimit > 0 ? AxisLimit : PluginDatabase.PluginSettings.ChartLogCountAbscissa;
             int windowSize = _lastWindowSize > 0 ? _lastWindowSize : limit;
             int minVariator = _totalDataPoints > windowSize ? -(_totalDataPoints - windowSize) : 0;
             AxisVariator = Math.Max(minVariator, AxisVariator - value);
@@ -559,7 +636,8 @@ if (PART_NavBar != null)
         {
             // Jump directly to the leftmost valid position using the last known window size,
             // so AxisVariator is never left at an arbitrary large negative value.
-            int limit = AxisLimit > 0 ? AxisLimit : PluginDatabase.PluginSettings.ChartLogCountAbscissa;
+            int limit =
+                AxisLimit > 0 ? AxisLimit : PluginDatabase.PluginSettings.ChartLogCountAbscissa;
             int windowSize = _lastWindowSize > 0 ? _lastWindowSize : limit;
             int minVariator = _totalDataPoints > windowSize ? -(_totalDataPoints - windowSize) : 0;
             AxisVariator = minVariator;
@@ -574,9 +652,8 @@ if (PART_NavBar != null)
         {
             // Skip back by a full page. Delta resolved here — the nav bar carries
             // PageSize only for display/tooltip purposes.
-            int pageSize = AxisLimit > 0
-                ? AxisLimit
-                : PluginDatabase.PluginSettings.ChartLogCountAbscissa;
+            int pageSize =
+                AxisLimit > 0 ? AxisLimit : PluginDatabase.PluginSettings.ChartLogCountAbscissa;
             Prev(pageSize);
         }
 
@@ -623,9 +700,8 @@ if (PART_NavBar != null)
         private void NavBar_PageNextClicked(object sender, RoutedEventArgs e)
         {
             // Skip forward by a full page.
-            int pageSize = AxisLimit > 0
-                ? AxisLimit
-                : PluginDatabase.PluginSettings.ChartLogCountAbscissa;
+            int pageSize =
+                AxisLimit > 0 ? AxisLimit : PluginDatabase.PluginSettings.ChartLogCountAbscissa;
             Next(pageSize);
         }
 
@@ -656,9 +732,8 @@ if (PART_NavBar != null)
             int newLimit = PART_NavBar.AxisLimit;
 
             // Resolve effective page size before touching the DP so we can compare.
-            int effectivePageSize = newLimit > 0
-                ? newLimit
-                : PluginDatabase.PluginSettings.ChartLogCountAbscissa;
+            int effectivePageSize =
+                newLimit > 0 ? newLimit : PluginDatabase.PluginSettings.ChartLogCountAbscissa;
 
             // Update DataContext and nav bar PageSize regardless of whether AxisLimit changed.
             ControlDataContext.PageSize = effectivePageSize;
@@ -699,7 +774,8 @@ if (PART_NavBar != null)
             int limit = 10,
             DateTime? dateSelected = null,
             string titleChart = "",
-            bool showAll = false)
+            bool showAll = false
+        )
         {
             System.Threading.Tasks.Task.Run(() =>
             {
@@ -708,15 +784,23 @@ if (PART_NavBar != null)
                     List<ActivityDetailsData> activitiesDetails =
                         gameActivities.GetSessionActivityDetails(dateSelected, titleChart);
 
-                    if (activitiesDetails == null) { return; }
+                    if (activitiesDetails == null)
+                    {
+                        return;
+                    }
 
                     if (activitiesDetails.Count == 0)
                     {
-                        this.Dispatcher.BeginInvoke(DispatcherPriority.Background, new ThreadStart(delegate
-                        {
-                            PART_ChartLogActivity.Series = null;
-                            PART_ChartLogActivityLabelsX.Labels = null;
-                        }));
+                        this.Dispatcher.BeginInvoke(
+                            DispatcherPriority.Background,
+                            new ThreadStart(
+                                delegate
+                                {
+                                    PART_ChartLogActivity.Series = null;
+                                    PART_ChartLogActivityLabelsX.Labels = null;
+                                }
+                            )
+                        );
                         return;
                     }
 
@@ -736,7 +820,8 @@ if (PART_NavBar != null)
 
                         for (int iLog = 0; iLog < activitiesDetails.Count; iLog++)
                         {
-                            activityForGameLogLabels[iLog] = Convert.ToDateTime(activitiesDetails[iLog].Datelog)
+                            activityForGameLogLabels[iLog] = Convert
+                                .ToDateTime(activitiesDetails[iLog].Datelog)
                                 .ToLocalTime()
                                 .ToString(Constants.TimeUiFormat);
                         }
@@ -768,7 +853,8 @@ if (PART_NavBar != null)
                         for (int iLog = conteurStart; iLog < conteurEnd; iLog++)
                         {
                             gameLogsDefinitive.Add(activitiesDetails[iLog]);
-                            activityForGameLogLabels[labelIndex++] = Convert.ToDateTime(activitiesDetails[iLog].Datelog)
+                            activityForGameLogLabels[labelIndex++] = Convert
+                                .ToDateTime(activitiesDetails[iLog].Datelog)
                                 .ToLocalTime()
                                 .ToString(Constants.TimeUiFormat);
                         }
@@ -780,7 +866,8 @@ if (PART_NavBar != null)
 
                         for (int iLog = 0; iLog < activitiesDetails.Count; iLog++)
                         {
-                            activityForGameLogLabels[iLog] = Convert.ToDateTime(activitiesDetails[iLog].Datelog)
+                            activityForGameLogLabels[iLog] = Convert
+                                .ToDateTime(activitiesDetails[iLog].Datelog)
                                 .ToLocalTime()
                                 .ToString(Constants.TimeUiFormat);
                         }
@@ -807,146 +894,222 @@ if (PART_NavBar != null)
                         gpuPValues.Add(log.GPUP);
                     }
 
-                    this.Dispatcher.BeginInvoke(DispatcherPriority.Background, new ThreadStart(delegate
-                    {
-                        Brush cpuBrush = TryGetThemeBrush("GameActivityCpuBrush", "#FF2979FF");
-                        Brush gpuBrush = TryGetThemeBrush("GameActivityGpuBrush", "#FFFF5252");
-                        Brush ramBrush = TryGetThemeBrush("GameActivityRamBrush", "#FFFFD740");
-                        Brush fpsBrush = TryGetThemeBrush("GameActivityFpsBrush", "#FF69F0AE");
-                        Brush cpuTBrush = TryGetThemeBrush("GameActivityCpuTBrush", "#FF82B1FF");
-                        Brush gpuTBrush = TryGetThemeBrush("GameActivityGpuTBrush", "#FFFF8A80");
-                        Brush cpuPBrush = TryGetThemeBrush("GameActivityCpuPBrush", "#FFBBDEFB");
-                        Brush gpuPBrush = TryGetThemeBrush("GameActivityGpuPBrush", "#FFFFCDD2");
-
-                        _cpuSeries = new LineSeries
-                        {
-                            Title = ResourceProvider.GetString("LOCGameActivityLabelCpu") + " (%)",
-                            Stroke = cpuBrush,
-                            Fill = Brushes.Transparent,
-                            StrokeThickness = 2,
-                            PointGeometrySize = 6,
-                            Values = cpuValues,
-                            ScalesYAt = 0
-                        };
-                        _gpuSeries = new LineSeries
-                        {
-                            Title = ResourceProvider.GetString("LOCGameActivityLabelGpu") + " (%)",
-                            Stroke = gpuBrush,
-                            Fill = Brushes.Transparent,
-                            StrokeThickness = 2,
-                            PointGeometrySize = 6,
-                            Values = gpuValues,
-                            ScalesYAt = 0
-                        };
-                        _ramSeries = new LineSeries
-                        {
-                            Title = ResourceProvider.GetString("LOCGameActivityLabelRam") + " (%)",
-                            Stroke = ramBrush,
-                            Fill = Brushes.Transparent,
-                            StrokeThickness = 2,
-                            PointGeometrySize = 6,
-                            Values = ramValues,
-                            ScalesYAt = 0
-                        };
-                        _fpsSeries = new LineSeries
-                        {
-                            Title = ResourceProvider.GetString("LOCGameActivityLabelFps"),
-                            Stroke = fpsBrush,
-                            Fill = Brushes.Transparent,
-                            StrokeThickness = 2,
-                            PointGeometrySize = 6,
-                            Values = fpsValues,
-                            ScalesYAt = 1
-                        };
-                        _cpuTSeries = new LineSeries
-                        {
-                            Title = ResourceProvider.GetString("LOCGameActivityLabelCpuT"),
-                            Stroke = cpuTBrush,
-                            Fill = Brushes.Transparent,
-                            StrokeThickness = 1.5,
-                            StrokeDashArray = new System.Windows.Media.DoubleCollection { 4, 2 },
-                            PointGeometrySize = 4,
-                            Values = cpuTValues,
-                            ScalesYAt = 1
-                        };
-                        _gpuTSeries = new LineSeries
-                        {
-                            Title = ResourceProvider.GetString("LOCGameActivityLabelGpuT"),
-                            Stroke = gpuTBrush,
-                            Fill = Brushes.Transparent,
-                            StrokeThickness = 1.5,
-                            StrokeDashArray = new System.Windows.Media.DoubleCollection { 4, 2 },
-                            PointGeometrySize = 4,
-                            Values = gpuTValues,
-                            ScalesYAt = 1
-                        };
-                        _cpuPSeries = new LineSeries
-                        {
-                            Title = ResourceProvider.GetString("LOCGameActivityLabelCpuP"),
-                            Stroke = cpuPBrush,
-                            Fill = Brushes.Transparent,
-                            StrokeThickness = 1.5,
-                            StrokeDashArray = new System.Windows.Media.DoubleCollection { 2, 2 },
-                            PointGeometrySize = 4,
-                            Values = cpuPValues,
-                            ScalesYAt = 1
-                        };
-                        _gpuPSeries = new LineSeries
-                        {
-                            Title = ResourceProvider.GetString("LOCGameActivityLabelGpuP"),
-                            Stroke = gpuPBrush,
-                            Fill = Brushes.Transparent,
-                            StrokeThickness = 1.5,
-                            StrokeDashArray = new System.Windows.Media.DoubleCollection { 2, 2 },
-                            PointGeometrySize = 4,
-                            Values = gpuPValues,
-                            ScalesYAt = 1
-                        };
-
-                        try
-                        {
-                            PART_ChartLogActivity.DataTooltip = new DefaultTooltip
+                    this.Dispatcher.BeginInvoke(
+                        DispatcherPriority.Background,
+                        new ThreadStart(
+                            delegate
                             {
-                                FontSize = 13,
-                                Background = (Brush)ResourceProvider.GetResource("CommonToolTipBackgroundBrush"),
-                                Padding = new Thickness(8),
-                                BorderThickness = (Thickness)ResourceProvider.GetResource("CommonToolTipBorderThickness"),
-                                BorderBrush = (Brush)ResourceProvider.GetResource("CommonToolTipBorderBrush"),
-                                Foreground = (Brush)ResourceProvider.GetResource("CommonToolTipForeground")
-                            };
-                        }
-                        catch (Exception ex) { Common.LogError(ex, false); }
+                                Brush cpuBrush = TryGetThemeBrush(
+                                    "GameActivityCpuBrush",
+                                    "#FF2979FF"
+                                );
+                                Brush gpuBrush = TryGetThemeBrush(
+                                    "GameActivityGpuBrush",
+                                    "#FFFF5252"
+                                );
+                                Brush ramBrush = TryGetThemeBrush(
+                                    "GameActivityRamBrush",
+                                    "#FFFFD740"
+                                );
+                                Brush fpsBrush = TryGetThemeBrush(
+                                    "GameActivityFpsBrush",
+                                    "#FF69F0AE"
+                                );
+                                Brush cpuTBrush = TryGetThemeBrush(
+                                    "GameActivityCpuTBrush",
+                                    "#FF82B1FF"
+                                );
+                                Brush gpuTBrush = TryGetThemeBrush(
+                                    "GameActivityGpuTBrush",
+                                    "#FFFF8A80"
+                                );
+                                Brush cpuPBrush = TryGetThemeBrush(
+                                    "GameActivityCpuPBrush",
+                                    "#FFBBDEFB"
+                                );
+                                Brush gpuPBrush = TryGetThemeBrush(
+                                    "GameActivityGpuPBrush",
+                                    "#FFFFCDD2"
+                                );
 
-                        SeriesCollection series = new SeriesCollection
-                        {
-                            _cpuSeries, _gpuSeries, _ramSeries, _fpsSeries,
-                            _cpuTSeries, _gpuTSeries, _cpuPSeries, _gpuPSeries
-                        };
+                                _cpuSeries = new LineSeries
+                                {
+                                    Title =
+                                        ResourceProvider.GetString("LOCGameActivityLabelCpu")
+                                        + " (%)",
+                                    Stroke = cpuBrush,
+                                    Fill = Brushes.Transparent,
+                                    StrokeThickness = 2,
+                                    PointGeometrySize = 6,
+                                    Values = cpuValues,
+                                    ScalesYAt = 0,
+                                };
+                                _gpuSeries = new LineSeries
+                                {
+                                    Title =
+                                        ResourceProvider.GetString("LOCGameActivityLabelGpu")
+                                        + " (%)",
+                                    Stroke = gpuBrush,
+                                    Fill = Brushes.Transparent,
+                                    StrokeThickness = 2,
+                                    PointGeometrySize = 6,
+                                    Values = gpuValues,
+                                    ScalesYAt = 0,
+                                };
+                                _ramSeries = new LineSeries
+                                {
+                                    Title =
+                                        ResourceProvider.GetString("LOCGameActivityLabelRam")
+                                        + " (%)",
+                                    Stroke = ramBrush,
+                                    Fill = Brushes.Transparent,
+                                    StrokeThickness = 2,
+                                    PointGeometrySize = 6,
+                                    Values = ramValues,
+                                    ScalesYAt = 0,
+                                };
+                                _fpsSeries = new LineSeries
+                                {
+                                    Title = ResourceProvider.GetString("LOCGameActivityLabelFps"),
+                                    Stroke = fpsBrush,
+                                    Fill = Brushes.Transparent,
+                                    StrokeThickness = 2,
+                                    PointGeometrySize = 6,
+                                    Values = fpsValues,
+                                    ScalesYAt = 1,
+                                };
+                                _cpuTSeries = new LineSeries
+                                {
+                                    Title = ResourceProvider.GetString("LOCGameActivityLabelCpuT"),
+                                    Stroke = cpuTBrush,
+                                    Fill = Brushes.Transparent,
+                                    StrokeThickness = 1.5,
+                                    StrokeDashArray = new System.Windows.Media.DoubleCollection
+                                    {
+                                        4,
+                                        2,
+                                    },
+                                    PointGeometrySize = 4,
+                                    Values = cpuTValues,
+                                    ScalesYAt = 1,
+                                };
+                                _gpuTSeries = new LineSeries
+                                {
+                                    Title = ResourceProvider.GetString("LOCGameActivityLabelGpuT"),
+                                    Stroke = gpuTBrush,
+                                    Fill = Brushes.Transparent,
+                                    StrokeThickness = 1.5,
+                                    StrokeDashArray = new System.Windows.Media.DoubleCollection
+                                    {
+                                        4,
+                                        2,
+                                    },
+                                    PointGeometrySize = 4,
+                                    Values = gpuTValues,
+                                    ScalesYAt = 1,
+                                };
+                                _cpuPSeries = new LineSeries
+                                {
+                                    Title = ResourceProvider.GetString("LOCGameActivityLabelCpuP"),
+                                    Stroke = cpuPBrush,
+                                    Fill = Brushes.Transparent,
+                                    StrokeThickness = 1.5,
+                                    StrokeDashArray = new System.Windows.Media.DoubleCollection
+                                    {
+                                        2,
+                                        2,
+                                    },
+                                    PointGeometrySize = 4,
+                                    Values = cpuPValues,
+                                    ScalesYAt = 1,
+                                };
+                                _gpuPSeries = new LineSeries
+                                {
+                                    Title = ResourceProvider.GetString("LOCGameActivityLabelGpuP"),
+                                    Stroke = gpuPBrush,
+                                    Fill = Brushes.Transparent,
+                                    StrokeThickness = 1.5,
+                                    StrokeDashArray = new System.Windows.Media.DoubleCollection
+                                    {
+                                        2,
+                                        2,
+                                    },
+                                    PointGeometrySize = 4,
+                                    Values = gpuPValues,
+                                    ScalesYAt = 1,
+                                };
 
-                        // Persist the effective window size for Prev() and NavBar_FirstClicked clamping.
-                        _lastWindowSize = activityForGameLogLabels.Length;
+                                try
+                                {
+                                    PART_ChartLogActivity.DataTooltip = new DefaultTooltip
+                                    {
+                                        FontSize = 13,
+                                        Background = (Brush)
+                                            ResourceProvider.GetResource(
+                                                "CommonToolTipBackgroundBrush"
+                                            ),
+                                        Padding = new Thickness(8),
+                                        BorderThickness = (Thickness)
+                                            ResourceProvider.GetResource(
+                                                "CommonToolTipBorderThickness"
+                                            ),
+                                        BorderBrush = (Brush)
+                                            ResourceProvider.GetResource(
+                                                "CommonToolTipBorderBrush"
+                                            ),
+                                        Foreground = (Brush)
+                                            ResourceProvider.GetResource("CommonToolTipForeground"),
+                                    };
+                                }
+                                catch (Exception ex)
+                                {
+                                    Common.LogError(ex, false);
+                                }
 
-                        if (PART_NavBar != null)
-                        {
-                            // windowSize = effective number of log entries rendered in the current page.
-                            // CanGoPrev is true as long as there are entries to the left of the current window.
-                            int windowSize = _lastWindowSize;
-                            int minVariator = _totalDataPoints > windowSize ? -(_totalDataPoints - windowSize) : 0;
+                                SeriesCollection series = new SeriesCollection
+                                {
+                                    _cpuSeries,
+                                    _gpuSeries,
+                                    _ramSeries,
+                                    _fpsSeries,
+                                    _cpuTSeries,
+                                    _gpuTSeries,
+                                    _cpuPSeries,
+                                    _gpuPSeries,
+                                };
 
-                            PART_NavBar.AxisLimitMaximum = totalDataPoints;
-                            PART_NavBar.CanGoNext = AxisVariator < 0;
-                            PART_NavBar.CanGoPrev = AxisVariator > minVariator;
-                        }
+                                // Persist the effective window size for Prev() and NavBar_FirstClicked clamping.
+                                _lastWindowSize = activityForGameLogLabels.Length;
 
-                        ControlDataContext.NavLabel = PluginChartNavBar.BuildRangeLabel(activityForGameLogLabels);
+                                if (PART_NavBar != null)
+                                {
+                                    // windowSize = effective number of log entries rendered in the current page.
+                                    // CanGoPrev is true as long as there are entries to the left of the current window.
+                                    int windowSize = _lastWindowSize;
+                                    int minVariator =
+                                        _totalDataPoints > windowSize
+                                            ? -(_totalDataPoints - windowSize)
+                                            : 0;
 
-                        PART_ChartLogActivity.Series = series;
-                        PART_ChartLogActivityLabelsY.MinValue = 0;
-                        PART_ChartLogActivityLabelsY.LabelFormatter = v => v.ToString("N0") + "%";
-                        PART_ChartLogActivityLabelsX.Labels = activityForGameLogLabels;
+                                    PART_NavBar.AxisLimitMaximum = totalDataPoints;
+                                    PART_NavBar.CanGoNext = AxisVariator < 0;
+                                    PART_NavBar.CanGoPrev = AxisVariator > minVariator;
+                                }
 
-                        SetChartVisibility();
-                    }));
+                                ControlDataContext.NavLabel = PluginChartNavBar.BuildRangeLabel(
+                                    activityForGameLogLabels
+                                );
+
+                                PART_ChartLogActivity.Series = series;
+                                PART_ChartLogActivityLabelsY.MinValue = 0;
+                                PART_ChartLogActivityLabelsY.LabelFormatter = v =>
+                                    v.ToString("N0") + "%";
+                                PART_ChartLogActivityLabelsX.Labels = activityForGameLogLabels;
+
+                                SetChartVisibility();
+                            }
+                        )
+                    );
                 }
                 catch (Exception ex)
                 {
@@ -962,21 +1125,52 @@ if (PART_NavBar != null)
         #region Chart visibility
 
         /// <summary>Toggles CPU series visibility.</summary>
-        public void ToggleCpu() { DisplayCpu = !DisplayCpu; }
+        public void ToggleCpu()
+        {
+            DisplayCpu = !DisplayCpu;
+        }
+
         /// <summary>Toggles GPU series visibility.</summary>
-        public void ToggleGpu() { DisplayGpu = !DisplayGpu; }
+        public void ToggleGpu()
+        {
+            DisplayGpu = !DisplayGpu;
+        }
+
         /// <summary>Toggles RAM series visibility.</summary>
-        public void ToggleRam() { DisplayRam = !DisplayRam; }
+        public void ToggleRam()
+        {
+            DisplayRam = !DisplayRam;
+        }
+
         /// <summary>Toggles FPS series visibility.</summary>
-        public void ToggleFps() { DisplayFps = !DisplayFps; }
+        public void ToggleFps()
+        {
+            DisplayFps = !DisplayFps;
+        }
+
         /// <summary>Toggles CPU temperature series visibility.</summary>
-        public void ToggleCpuT() { DisplayCpuT = !DisplayCpuT; }
+        public void ToggleCpuT()
+        {
+            DisplayCpuT = !DisplayCpuT;
+        }
+
         /// <summary>Toggles GPU temperature series visibility.</summary>
-        public void ToggleGpuT() { DisplayGpuT = !DisplayGpuT; }
+        public void ToggleGpuT()
+        {
+            DisplayGpuT = !DisplayGpuT;
+        }
+
         /// <summary>Toggles CPU power series visibility.</summary>
-        public void ToggleCpuP() { DisplayCpuP = !DisplayCpuP; }
+        public void ToggleCpuP()
+        {
+            DisplayCpuP = !DisplayCpuP;
+        }
+
         /// <summary>Toggles GPU power series visibility.</summary>
-        public void ToggleGpuP() { DisplayGpuP = !DisplayGpuP; }
+        public void ToggleGpuP()
+        {
+            DisplayGpuP = !DisplayGpuP;
+        }
 
         /// <summary>
         /// Applies visibility to all 8 series according to Display* flags.
@@ -987,14 +1181,46 @@ if (PART_NavBar != null)
         /// </param>
         private void SetChartVisibility(bool forceAllVisible = false)
         {
-            if (_cpuSeries != null) { _cpuSeries.Visibility = (forceAllVisible || DisplayCpu) ? Visibility.Visible : Visibility.Collapsed; }
-            if (_gpuSeries != null) { _gpuSeries.Visibility = (forceAllVisible || DisplayGpu) ? Visibility.Visible : Visibility.Collapsed; }
-            if (_ramSeries != null) { _ramSeries.Visibility = (forceAllVisible || DisplayRam) ? Visibility.Visible : Visibility.Collapsed; }
-            if (_fpsSeries != null) { _fpsSeries.Visibility = (forceAllVisible || DisplayFps) ? Visibility.Visible : Visibility.Collapsed; }
-            if (_cpuTSeries != null) { _cpuTSeries.Visibility = (forceAllVisible || DisplayCpuT) ? Visibility.Visible : Visibility.Collapsed; }
-            if (_gpuTSeries != null) { _gpuTSeries.Visibility = (forceAllVisible || DisplayGpuT) ? Visibility.Visible : Visibility.Collapsed; }
-            if (_cpuPSeries != null) { _cpuPSeries.Visibility = (forceAllVisible || DisplayCpuP) ? Visibility.Visible : Visibility.Collapsed; }
-            if (_gpuPSeries != null) { _gpuPSeries.Visibility = (forceAllVisible || DisplayGpuP) ? Visibility.Visible : Visibility.Collapsed; }
+            if (_cpuSeries != null)
+            {
+                _cpuSeries.Visibility =
+                    (forceAllVisible || DisplayCpu) ? Visibility.Visible : Visibility.Collapsed;
+            }
+            if (_gpuSeries != null)
+            {
+                _gpuSeries.Visibility =
+                    (forceAllVisible || DisplayGpu) ? Visibility.Visible : Visibility.Collapsed;
+            }
+            if (_ramSeries != null)
+            {
+                _ramSeries.Visibility =
+                    (forceAllVisible || DisplayRam) ? Visibility.Visible : Visibility.Collapsed;
+            }
+            if (_fpsSeries != null)
+            {
+                _fpsSeries.Visibility =
+                    (forceAllVisible || DisplayFps) ? Visibility.Visible : Visibility.Collapsed;
+            }
+            if (_cpuTSeries != null)
+            {
+                _cpuTSeries.Visibility =
+                    (forceAllVisible || DisplayCpuT) ? Visibility.Visible : Visibility.Collapsed;
+            }
+            if (_gpuTSeries != null)
+            {
+                _gpuTSeries.Visibility =
+                    (forceAllVisible || DisplayGpuT) ? Visibility.Visible : Visibility.Collapsed;
+            }
+            if (_cpuPSeries != null)
+            {
+                _cpuPSeries.Visibility =
+                    (forceAllVisible || DisplayCpuP) ? Visibility.Visible : Visibility.Collapsed;
+            }
+            if (_gpuPSeries != null)
+            {
+                _gpuPSeries.Visibility =
+                    (forceAllVisible || DisplayGpuP) ? Visibility.Visible : Visibility.Collapsed;
+            }
         }
 
         /// <summary>
@@ -1053,135 +1279,252 @@ if (PART_NavBar != null)
         // ── Activation / layout ───────────────────────────────────────────────
 
         private bool _isActivated;
+
         /// <summary>Controls whether the chart control is visible.</summary>
-        public bool IsActivated { get => _isActivated; set => SetValue(ref _isActivated, value); }
+        public bool IsActivated
+        {
+            get => _isActivated;
+            set => SetValue(ref _isActivated, value);
+        }
 
         private double _chartLogHeight;
+
         /// <summary>Explicit pixel height of the chart; <see cref="double.NaN"/> for auto-size.</summary>
-        public double ChartLogHeight { get => _chartLogHeight; set => SetValue(ref _chartLogHeight, value); }
+        public double ChartLogHeight
+        {
+            get => _chartLogHeight;
+            set => SetValue(ref _chartLogHeight, value);
+        }
 
         private bool _chartLogAxis;
+
         /// <summary>When true, the X-axis labels strip is visible.</summary>
-        public bool ChartLogAxis { get => _chartLogAxis; set => SetValue(ref _chartLogAxis, value); }
+        public bool ChartLogAxis
+        {
+            get => _chartLogAxis;
+            set => SetValue(ref _chartLogAxis, value);
+        }
 
         private bool _chartLogOrdinates;
+
         /// <summary>When true, the Y-axis labels strip is visible.</summary>
-        public bool ChartLogOrdinates { get => _chartLogOrdinates; set => SetValue(ref _chartLogOrdinates, value); }
+        public bool ChartLogOrdinates
+        {
+            get => _chartLogOrdinates;
+            set => SetValue(ref _chartLogOrdinates, value);
+        }
 
         private bool _chartLogVisibleEmpty;
+
         /// <summary>When true, the chart placeholder is shown even when there is no data.</summary>
-        public bool ChartLogVisibleEmpty { get => _chartLogVisibleEmpty; set => SetValue(ref _chartLogVisibleEmpty, value); }
+        public bool ChartLogVisibleEmpty
+        {
+            get => _chartLogVisibleEmpty;
+            set => SetValue(ref _chartLogVisibleEmpty, value);
+        }
 
         private bool _useControls;
+
         /// <summary>When true, the filter bar is expanded (slide animation triggered on change).</summary>
-        public bool UseControls { get => _useControls; set => SetValue(ref _useControls, value); }
+        public bool UseControls
+        {
+            get => _useControls;
+            set => SetValue(ref _useControls, value);
+        }
 
         // ── Chart options ─────────────────────────────────────────────────────
 
         private bool _disableAnimations = true;
+
         /// <summary>Mirrors <see cref="PluginChartLog.DisableAnimations"/>.</summary>
-        public bool DisableAnimations { get => _disableAnimations; set => SetValue(ref _disableAnimations, value); }
+        public bool DisableAnimations
+        {
+            get => _disableAnimations;
+            set => SetValue(ref _disableAnimations, value);
+        }
 
         private double _labelsRotationValue;
+
         /// <summary>Rotation angle applied to X-axis labels (0 or 160 degrees).</summary>
-        public double LabelsRotationValue { get => _labelsRotationValue; set => SetValue(ref _labelsRotationValue, value); }
+        public double LabelsRotationValue
+        {
+            get => _labelsRotationValue;
+            set => SetValue(ref _labelsRotationValue, value);
+        }
 
         // ── Sensor display flags ──────────────────────────────────────────────
 
         private bool _displayCpu;
+
         /// <summary>Mirror of <see cref="PluginChartLog.DisplayCpu"/> — drives CPU series Visibility.</summary>
-        public bool DisplayCpu { get => _displayCpu; set => SetValue(ref _displayCpu, value); }
+        public bool DisplayCpu
+        {
+            get => _displayCpu;
+            set => SetValue(ref _displayCpu, value);
+        }
 
         private bool _displayGpu;
+
         /// <summary>Mirror of <see cref="PluginChartLog.DisplayGpu"/> — drives GPU series Visibility.</summary>
-        public bool DisplayGpu { get => _displayGpu; set => SetValue(ref _displayGpu, value); }
+        public bool DisplayGpu
+        {
+            get => _displayGpu;
+            set => SetValue(ref _displayGpu, value);
+        }
 
         private bool _displayRam;
+
         /// <summary>Mirror of <see cref="PluginChartLog.DisplayRam"/> — drives RAM series Visibility.</summary>
-        public bool DisplayRam { get => _displayRam; set => SetValue(ref _displayRam, value); }
+        public bool DisplayRam
+        {
+            get => _displayRam;
+            set => SetValue(ref _displayRam, value);
+        }
 
         private bool _displayFps;
+
         /// <summary>Mirror of <see cref="PluginChartLog.DisplayFps"/> — drives FPS series Visibility.</summary>
-        public bool DisplayFps { get => _displayFps; set => SetValue(ref _displayFps, value); }
+        public bool DisplayFps
+        {
+            get => _displayFps;
+            set => SetValue(ref _displayFps, value);
+        }
 
         private bool _displayMoreData;
+
         /// <summary>When true, the extended sensor group (CpuT, GpuT, CpuP, GpuP) toggle buttons are shown.</summary>
-        public bool DisplayMoreData { get => _displayMoreData; set => SetValue(ref _displayMoreData, value); }
+        public bool DisplayMoreData
+        {
+            get => _displayMoreData;
+            set => SetValue(ref _displayMoreData, value);
+        }
 
         private bool _displayCpuT;
+
         /// <summary>Mirror of <see cref="PluginChartLog.DisplayCpuT"/>.</summary>
-        public bool DisplayCpuT { get => _displayCpuT; set => SetValue(ref _displayCpuT, value); }
+        public bool DisplayCpuT
+        {
+            get => _displayCpuT;
+            set => SetValue(ref _displayCpuT, value);
+        }
 
         private bool _displayGpuT;
+
         /// <summary>Mirror of <see cref="PluginChartLog.DisplayGpuT"/>.</summary>
-        public bool DisplayGpuT { get => _displayGpuT; set => SetValue(ref _displayGpuT, value); }
+        public bool DisplayGpuT
+        {
+            get => _displayGpuT;
+            set => SetValue(ref _displayGpuT, value);
+        }
 
         private bool _displayCpuP;
+
         /// <summary>Mirror of <see cref="PluginChartLog.DisplayCpuP"/>.</summary>
-        public bool DisplayCpuP { get => _displayCpuP; set => SetValue(ref _displayCpuP, value); }
+        public bool DisplayCpuP
+        {
+            get => _displayCpuP;
+            set => SetValue(ref _displayCpuP, value);
+        }
 
         private bool _displayGpuP;
+
         /// <summary>Mirror of <see cref="PluginChartLog.DisplayGpuP"/>.</summary>
-        public bool DisplayGpuP { get => _displayGpuP; set => SetValue(ref _displayGpuP, value); }
+        public bool DisplayGpuP
+        {
+            get => _displayGpuP;
+            set => SetValue(ref _displayGpuP, value);
+        }
 
         // ── ShowAllData ────────────────────────────────────────────────────────
 
         private bool _showAllData;
+
         /// <summary>
         /// Mirror of <see cref="PluginChartLog.ShowAllData"/> DP.
         /// Written by <see cref="PluginChartLog.SetDefaultDataContext"/> (reset to false)
         /// and by <see cref="PluginChartLog.NavBar_ShowAllToggled"/>.
         /// Read by XAML bindings (e.g. to disable filter bar checkboxes in ShowAllData mode).
         /// </summary>
-        public bool ShowAllData { get => _showAllData; set => SetValue(ref _showAllData, value); }
+        public bool ShowAllData
+        {
+            get => _showAllData;
+            set => SetValue(ref _showAllData, value);
+        }
 
         // ── Nav bar state ─────────────────────────────────────────────────────
 
         private bool _showNavBar;
+
         /// <summary>Drives <see cref="PluginChartNavBar.ShowNavBar"/> binding in XAML.</summary>
-        public bool ShowNavBar { get => _showNavBar; set => SetValue(ref _showNavBar, value); }
+        public bool ShowNavBar
+        {
+            get => _showNavBar;
+            set => SetValue(ref _showNavBar, value);
+        }
 
         private string _navLabel = string.Empty;
+
         /// <summary>
         /// Badge text shown on the right of the nav bar representing the visible X-axis time range.
         /// Format: "first – last" using the current UI culture (e.g. "14:00 – 17:30").
         /// Reset to <see cref="string.Empty"/> on every game context change.
         /// </summary>
-        public string NavLabel { get => _navLabel; set => SetValue(ref _navLabel, value); }
+        public string NavLabel
+        {
+            get => _navLabel;
+            set => SetValue(ref _navLabel, value);
+        }
 
         private int _pageSize;
+
         /// <summary>
         /// Mirror of the effective chart abscissa limit pushed by <see cref="PluginChartLog.SetDefaultDataContext"/>.
         /// Bound to <see cref="PluginChartNavBar.PageSize"/> so the nav bar can show/hide
         /// PrevPage/NextPage buttons and build their tooltips.
         /// </summary>
-        public int PageSize { get => _pageSize; set => SetValue(ref _pageSize, value); }
+        public int PageSize
+        {
+            get => _pageSize;
+            set => SetValue(ref _pageSize, value);
+        }
 
         private int _axisLimit;
+
         /// <summary>
         /// Mirror of <see cref="PluginChartLog.AxisLimit"/>.
         /// Kept in sync by <see cref="PluginChartLog.SetDefaultDataContext"/> and
         /// <see cref="PluginChartLog.ApplyAxisLimitFromNavBar"/> so XAML bindings can
         /// display or react to the current limit.
         /// </summary>
-        public int AxisLimit { get => _axisLimit; set => SetValue(ref _axisLimit, value); }
+        public int AxisLimit
+        {
+            get => _axisLimit;
+            set => SetValue(ref _axisLimit, value);
+        }
 
         // ── RelayCommands ─────────────────────────────────────────────────────
 
         /// <summary>Bound to the CPU toggle button in the filter bar.</summary>
         public RelayCommand CmdToggleCpu { get; }
+
         /// <summary>Bound to the GPU toggle button in the filter bar.</summary>
         public RelayCommand CmdToggleGpu { get; }
+
         /// <summary>Bound to the RAM toggle button in the filter bar.</summary>
         public RelayCommand CmdToggleRam { get; }
+
         /// <summary>Bound to the FPS toggle button in the filter bar.</summary>
         public RelayCommand CmdToggleFps { get; }
+
         /// <summary>Bound to the CPU temperature toggle button in the filter bar.</summary>
         public RelayCommand CmdToggleCpuT { get; }
+
         /// <summary>Bound to the GPU temperature toggle button in the filter bar.</summary>
         public RelayCommand CmdToggleGpuT { get; }
+
         /// <summary>Bound to the CPU power toggle button in the filter bar.</summary>
         public RelayCommand CmdToggleCpuP { get; }
+
         /// <summary>Bound to the GPU power toggle button in the filter bar.</summary>
         public RelayCommand CmdToggleGpuP { get; }
 

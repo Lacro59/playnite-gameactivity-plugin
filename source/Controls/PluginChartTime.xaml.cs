@@ -1,3 +1,9 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
+using System.Linq;
+using System.Windows;
 using CommonPlayniteShared.Common;
 using CommonPluginsControls.Controls;
 using CommonPluginsControls.LiveChartsCommon;
@@ -17,12 +23,6 @@ using LiveCharts.Wpf;
 using Playnite.SDK;
 using Playnite.SDK.Data;
 using Playnite.SDK.Models;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Globalization;
-using System.Linq;
-using System.Windows;
 
 namespace GameActivity.Controls
 {
@@ -73,9 +73,13 @@ namespace GameActivity.Controls
             get => (bool)GetValue(DisableAnimationsProperty);
             set => SetValue(DisableAnimationsProperty, value);
         }
-        public static readonly DependencyProperty DisableAnimationsProperty = DependencyProperty.Register(
-            nameof(DisableAnimations), typeof(bool), typeof(PluginChartTime),
-            new FrameworkPropertyMetadata(true, ControlsPropertyChangedCallback));
+        public static readonly DependencyProperty DisableAnimationsProperty =
+            DependencyProperty.Register(
+                nameof(DisableAnimations),
+                typeof(bool),
+                typeof(PluginChartTime),
+                new FrameworkPropertyMetadata(true, ControlsPropertyChangedCallback)
+            );
 
         /// <summary>When true, data is aggregated and displayed by calendar week instead of by day.</summary>
         public bool ShowByWeeks
@@ -84,8 +88,11 @@ namespace GameActivity.Controls
             set => SetValue(ShowByWeeksProperty, value);
         }
         public static readonly DependencyProperty ShowByWeeksProperty = DependencyProperty.Register(
-            nameof(ShowByWeeks), typeof(bool), typeof(PluginChartTime),
-            new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback));
+            nameof(ShowByWeeks),
+            typeof(bool),
+            typeof(PluginChartTime),
+            new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback)
+        );
 
         /// <summary>
         /// When true, the X-axis is built from the distinct session dates that actually have data,
@@ -97,8 +104,11 @@ namespace GameActivity.Controls
             set => SetValue(TruncateProperty, value);
         }
         public static readonly DependencyProperty TruncateProperty = DependencyProperty.Register(
-            nameof(Truncate), typeof(bool), typeof(PluginChartTime),
-            new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback));
+            nameof(Truncate),
+            typeof(bool),
+            typeof(PluginChartTime),
+            new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback)
+        );
 
         /// <summary>When true, X-axis labels are rotated 160° to avoid overlap on dense charts.</summary>
         public bool LabelsRotation
@@ -106,9 +116,13 @@ namespace GameActivity.Controls
             get => (bool)GetValue(LabelsRotationProperty);
             set => SetValue(LabelsRotationProperty, value);
         }
-        public static readonly DependencyProperty LabelsRotationProperty = DependencyProperty.Register(
-            nameof(LabelsRotation), typeof(bool), typeof(PluginChartTime),
-            new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback));
+        public static readonly DependencyProperty LabelsRotationProperty =
+            DependencyProperty.Register(
+                nameof(LabelsRotation),
+                typeof(bool),
+                typeof(PluginChartTime),
+                new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback)
+            );
 
         /// <summary>
         /// Maximum number of X-axis items (days or weeks) rendered in one page.
@@ -120,8 +134,11 @@ namespace GameActivity.Controls
             set => SetValue(AxisLimitProperty, value);
         }
         public static readonly DependencyProperty AxisLimitProperty = DependencyProperty.Register(
-            nameof(AxisLimit), typeof(int), typeof(PluginChartTime),
-            new FrameworkPropertyMetadata(0, ControlsPropertyChangedCallback));
+            nameof(AxisLimit),
+            typeof(int),
+            typeof(PluginChartTime),
+            new FrameworkPropertyMetadata(0, ControlsPropertyChangedCallback)
+        );
 
         /// <summary>
         /// Signed offset applied to the most-recent-window anchor.
@@ -132,9 +149,13 @@ namespace GameActivity.Controls
             get => (int)GetValue(AxisVariatoryProperty);
             set => SetValue(AxisVariatoryProperty, value);
         }
-        public static readonly DependencyProperty AxisVariatoryProperty = DependencyProperty.Register(
-            nameof(AxisVariator), typeof(int), typeof(PluginChartTime),
-            new FrameworkPropertyMetadata(0, ControlsPropertyChangedCallback));
+        public static readonly DependencyProperty AxisVariatoryProperty =
+            DependencyProperty.Register(
+                nameof(AxisVariator),
+                typeof(int),
+                typeof(PluginChartTime),
+                new FrameworkPropertyMetadata(0, ControlsPropertyChangedCallback)
+            );
 
         /// <summary>
         /// Shows or hides the <see cref="PluginChartNavBar"/> above the chart.
@@ -146,8 +167,11 @@ namespace GameActivity.Controls
             set => SetValue(ShowNavBarProperty, value);
         }
         public static readonly DependencyProperty ShowNavBarProperty = DependencyProperty.Register(
-            nameof(ShowNavBar), typeof(bool), typeof(PluginChartTime),
-            new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback));
+            nameof(ShowNavBar),
+            typeof(bool),
+            typeof(PluginChartTime),
+            new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback)
+        );
 
         /// <summary>
         /// Number of items skipped by the PrevPage / NextPage nav bar buttons.
@@ -159,8 +183,11 @@ namespace GameActivity.Controls
             set => SetValue(PageSizeProperty, value);
         }
         public static readonly DependencyProperty PageSizeProperty = DependencyProperty.Register(
-            nameof(PageSize), typeof(int), typeof(PluginChartTime),
-            new FrameworkPropertyMetadata(0, ControlsPropertyChangedCallback));
+            nameof(PageSize),
+            typeof(int),
+            typeof(PluginChartTime),
+            new FrameworkPropertyMetadata(0, ControlsPropertyChangedCallback)
+        );
 
         #endregion
 
@@ -237,12 +264,17 @@ namespace GameActivity.Controls
         {
             base.AttachStaticEvents();
 
-            AttachPluginEvents(PluginDatabase.PluginName, () =>
-            {
-                PluginDatabase.PluginSettings.PropertyChanged += CreatePluginSettingsHandler();
-                PluginDatabase.DatabaseItemUpdated += CreateDatabaseItemUpdatedHandler<GameActivities>();
-                PluginDatabase.DatabaseItemCollectionChanged += CreateDatabaseCollectionChangedHandler<GameActivities>();
-            });
+            AttachPluginEvents(
+                PluginDatabase.PluginName,
+                () =>
+                {
+                    PluginDatabase.PluginSettings.PropertyChanged += CreatePluginSettingsHandler();
+                    PluginDatabase.DatabaseItemUpdated +=
+                        CreateDatabaseItemUpdatedHandler<GameActivities>();
+                    PluginDatabase.DatabaseItemCollectionChanged +=
+                        CreateDatabaseCollectionChangedHandler<GameActivities>();
+                }
+            );
         }
 
         /// <summary>
@@ -250,7 +282,10 @@ namespace GameActivity.Controls
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The property changed event data.</param>
-        protected override void PluginSettings_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        protected override void PluginSettings_PropertyChanged(
+            object sender,
+            PropertyChangedEventArgs e
+        )
         {
             Truncate = PluginDatabase.PluginSettings.ChartTimeTruncate;
             GameContextChanged(null, GameContext);
@@ -282,29 +317,34 @@ namespace GameActivity.Controls
             ControlDataContext.ChartTimeHeight = chartTimeHeight;
             ControlDataContext.ChartTimeAxis = chartTimeAxis;
             ControlDataContext.ChartTimeOrdinates = chartTimeOrdinates;
-            ControlDataContext.ChartTimeVisibleEmpty = PluginDatabase.PluginSettings.ChartTimeVisibleEmpty;
+            ControlDataContext.ChartTimeVisibleEmpty = PluginDatabase
+                .PluginSettings
+                .ChartTimeVisibleEmpty;
             ControlDataContext.DisableAnimations = DisableAnimations;
             ControlDataContext.LabelsRotationValue = LabelsRotation ? 160d : 0d;
 
             bool showNavBar = ShowNavBar;
-            if (IgnoreSettings) { showNavBar = true; }
+            if (IgnoreSettings)
+            {
+                showNavBar = true;
+            }
 
             ControlDataContext.ShowNavBar = showNavBar;
             ControlDataContext.ShowAllData = false;
             ControlDataContext.NavLabel = string.Empty;
 
-            int effectivePageSize = AxisLimit > 0
-                ? AxisLimit
-                : PluginDatabase.PluginSettings.ChartTimeCountAbscissa;
+            int effectivePageSize =
+                AxisLimit > 0 ? AxisLimit : PluginDatabase.PluginSettings.ChartTimeCountAbscissa;
 
             ControlDataContext.PageSize = effectivePageSize;
             ControlDataContext.AxisLimit = AxisLimit;
 
             if (PART_NavBar != null)
             {
-                int defaultLimit = AxisLimit > 0
-                    ? AxisLimit
-                    : PluginDatabase.PluginSettings.ChartTimeCountAbscissa;
+                int defaultLimit =
+                    AxisLimit > 0
+                        ? AxisLimit
+                        : PluginDatabase.PluginSettings.ChartTimeCountAbscissa;
 
                 PART_NavBar.AxisLimitDefault = defaultLimit;
                 PART_NavBar.AxisLimit = AxisLimit;
@@ -329,11 +369,15 @@ namespace GameActivity.Controls
         {
             GameActivities gameActivities = (GameActivities)pluginGameData;
 
-            MustDisplay = !IgnoreSettings && !ControlDataContext.ChartTimeVisibleEmpty
-                ? gameActivities.HasData
-                : true;
+            MustDisplay =
+                !IgnoreSettings && !ControlDataContext.ChartTimeVisibleEmpty
+                    ? gameActivities.HasData
+                    : true;
 
-            if (!MustDisplay) { return; }
+            if (!MustDisplay)
+            {
+                return;
+            }
 
             ControlDataContext.ChartTimeAxis = !ControlDataContext.ShowAllData;
 
@@ -341,17 +385,26 @@ namespace GameActivity.Controls
             {
                 if (ShowByWeeks)
                 {
-                    GetActivityForGamesChartByWeek(gameActivities, 0, Convert.ToInt32(gameActivities.Count));
+                    GetActivityForGamesChartByWeek(
+                        gameActivities,
+                        0,
+                        Convert.ToInt32(gameActivities.Count)
+                    );
                 }
                 else
                 {
-                    GetActivityForGamesTimeGraphics(gameActivities, 0, Convert.ToInt32(gameActivities.Count));
+                    GetActivityForGamesTimeGraphics(
+                        gameActivities,
+                        0,
+                        Convert.ToInt32(gameActivities.Count)
+                    );
                 }
 
                 return;
             }
 
-            int limit = AxisLimit != 0 ? AxisLimit : PluginDatabase.PluginSettings.ChartTimeCountAbscissa;
+            int limit =
+                AxisLimit != 0 ? AxisLimit : PluginDatabase.PluginSettings.ChartTimeCountAbscissa;
             int axisVariator = AxisVariator;
 
             if (ShowByWeeks)
@@ -385,7 +438,8 @@ namespace GameActivity.Controls
             // _lastWindowSize reflects the actual rendered window size, which differs between
             // Truncate mode (≤ limit entries) and normal mode (limit + 1 entries).
             // Falls back to limit + 1 before the first render.
-            int limit = AxisLimit > 0 ? AxisLimit : PluginDatabase.PluginSettings.ChartTimeCountAbscissa;
+            int limit =
+                AxisLimit > 0 ? AxisLimit : PluginDatabase.PluginSettings.ChartTimeCountAbscissa;
             int windowSize = _lastWindowSize > 0 ? _lastWindowSize : limit + 1;
             int minVariator = _totalDataPoints > windowSize ? -(_totalDataPoints - windowSize) : 0;
             AxisVariator = Math.Max(minVariator, AxisVariator - value);
@@ -408,7 +462,8 @@ namespace GameActivity.Controls
         {
             // Jump directly to the leftmost valid position using the last known window size,
             // so AxisVariator is never left at an arbitrary large negative value.
-            int limit = AxisLimit > 0 ? AxisLimit : PluginDatabase.PluginSettings.ChartTimeCountAbscissa;
+            int limit =
+                AxisLimit > 0 ? AxisLimit : PluginDatabase.PluginSettings.ChartTimeCountAbscissa;
             int windowSize = _lastWindowSize > 0 ? _lastWindowSize : limit + 1;
             int minVariator = _totalDataPoints > windowSize ? -(_totalDataPoints - windowSize) : 0;
             AxisVariator = minVariator;
@@ -421,9 +476,8 @@ namespace GameActivity.Controls
         /// <param name="e">The event data.</param>
         private void NavBar_PagePrevClicked(object sender, RoutedEventArgs e)
         {
-            int pageSize = AxisLimit > 0
-                ? AxisLimit
-                : PluginDatabase.PluginSettings.ChartTimeCountAbscissa;
+            int pageSize =
+                AxisLimit > 0 ? AxisLimit : PluginDatabase.PluginSettings.ChartTimeCountAbscissa;
             Prev(pageSize);
         }
 
@@ -465,9 +519,8 @@ namespace GameActivity.Controls
         /// <param name="e">The event data.</param>
         private void NavBar_PageNextClicked(object sender, RoutedEventArgs e)
         {
-            int pageSize = AxisLimit > 0
-                ? AxisLimit
-                : PluginDatabase.PluginSettings.ChartTimeCountAbscissa;
+            int pageSize =
+                AxisLimit > 0 ? AxisLimit : PluginDatabase.PluginSettings.ChartTimeCountAbscissa;
             Next(pageSize);
         }
 
@@ -494,9 +547,8 @@ namespace GameActivity.Controls
         {
             int newLimit = PART_NavBar.AxisLimit;
 
-            int effectivePageSize = newLimit > 0
-                ? newLimit
-                : PluginDatabase.PluginSettings.ChartTimeCountAbscissa;
+            int effectivePageSize =
+                newLimit > 0 ? newLimit : PluginDatabase.PluginSettings.ChartTimeCountAbscissa;
 
             ControlDataContext.PageSize = effectivePageSize;
             ControlDataContext.AxisLimit = newLimit;
@@ -519,11 +571,18 @@ namespace GameActivity.Controls
         /// <param name="gameActivities">The game activities data object containing session logs.</param>
         /// <param name="variateurTime">The signed offset applied to the session window anchor.</param>
         /// <param name="limit">The maximum number of days to render in one page.</param>
-        private void GetActivityForGamesTimeGraphics(GameActivities gameActivities, int variateurTime = 0, int limit = 9)
+        private void GetActivityForGamesTimeGraphics(
+            GameActivities gameActivities,
+            int variateurTime = 0,
+            int limit = 9
+        )
         {
             try
             {
-                if (gameActivities?.FilterItems == null) { return; }
+                if (gameActivities?.FilterItems == null)
+                {
+                    return;
+                }
 
                 string[] listDate;
                 ChartValues<CustomerForTime> series1 = new ChartValues<CustomerForTime>();
@@ -577,7 +636,8 @@ namespace GameActivity.Controls
                     }
 
                     int countActivities = dtList.Count;
-                    int newLimit = (countActivities - limit - 1) >= 0 ? countActivities - limit - 1 : 0;
+                    int newLimit =
+                        (countActivities - limit - 1) >= 0 ? countActivities - limit - 1 : 0;
                     listDate = new string[countActivities - newLimit];
 
                     for (int i = newLimit; i < countActivities; i++)
@@ -585,7 +645,12 @@ namespace GameActivity.Controls
                         string dt = dtList[i];
                         listDate[i - newLimit] = dt;
 
-                        CustomerForTime placeholder = new CustomerForTime { Name = dt, Values = 0, HideIsZero = true };
+                        CustomerForTime placeholder = new CustomerForTime
+                        {
+                            Name = dt,
+                            Values = 0,
+                            HideIsZero = true,
+                        };
                         series1.Add(placeholder);
                         series2.Add(placeholder);
                         series3.Add(placeholder);
@@ -601,8 +666,13 @@ namespace GameActivity.Controls
                     DateTime dateStart = new DateTime(1982, 12, 15, 0, 0, 0);
                     foreach (Activity activity in activities)
                     {
-                        DateTime dateSession = Convert.ToDateTime(activity.DateSession?.ToLocalTime());
-                        if (dateSession > dateStart) { dateStart = dateSession; }
+                        DateTime dateSession = Convert.ToDateTime(
+                            activity.DateSession?.ToLocalTime()
+                        );
+                        if (dateSession > dateStart)
+                        {
+                            dateStart = dateSession;
+                        }
                     }
                     dateStart = dateStart.AddDays(variateurTime);
 
@@ -627,7 +697,12 @@ namespace GameActivity.Controls
                         {
                             string dateStr = dateMin.AddDays(i).ToString("yyyy-MM-dd");
                             listDate[i] = dateStr;
-                            CustomerForTime placeholder = new CustomerForTime { Name = dateStr, Values = 0, HideIsZero = true };
+                            CustomerForTime placeholder = new CustomerForTime
+                            {
+                                Name = dateStr,
+                                Values = 0,
+                                HideIsZero = true,
+                            };
                             series1.Add(placeholder);
                             series2.Add(placeholder);
                             series3.Add(placeholder);
@@ -660,7 +735,12 @@ namespace GameActivity.Controls
                             string dateStr = dateStart.AddDays(-i).ToString("yyyy-MM-dd");
                             listDate[limit - i] = dateStr;
 
-                            CustomerForTime placeholder = new CustomerForTime { Name = dateStr, Values = 0, HideIsZero = true };
+                            CustomerForTime placeholder = new CustomerForTime
+                            {
+                                Name = dateStr,
+                                Values = 0,
+                                HideIsZero = true,
+                            };
                             series1.Add(placeholder);
                             series2.Add(placeholder);
                             series3.Add(placeholder);
@@ -680,33 +760,92 @@ namespace GameActivity.Controls
                 for (int iActivity = 0; iActivity < activities.Count; iActivity++)
                 {
                     ulong elapsedSeconds = activities[iActivity].ElapsedSeconds;
-                    string dateSession = Convert.ToDateTime(activities[iActivity].DateSession)
-                        .ToLocalTime().ToString("yyyy-MM-dd");
+                    string dateSession = Convert
+                        .ToDateTime(activities[iActivity].DateSession)
+                        .ToLocalTime()
+                        .ToString("yyyy-MM-dd");
 
                     for (int iDay = effectiveLimit; iDay >= 0; iDay--)
                     {
-                        if (listDate[iDay] != dateSession) { continue; }
+                        if (listDate[iDay] != dateSession)
+                        {
+                            continue;
+                        }
 
                         string displayName = series1[iDay].Name;
                         try
                         {
-                            displayName = (string)localDateConverter.Convert(
-                                DateTime.ParseExact(series1[iDay].Name, "yyyy-MM-dd", null).ToLocalTime(),
-                                null, null, CultureInfo.CurrentCulture);
+                            displayName = (string)
+                                localDateConverter.Convert(
+                                    DateTime
+                                        .ParseExact(series1[iDay].Name, "yyyy-MM-dd", null)
+                                        .ToLocalTime(),
+                                    null,
+                                    null,
+                                    CultureInfo.CurrentCulture
+                                );
                         }
                         catch { }
 
                         if (cumulSessions)
                         {
-                            series1[iDay] = new CustomerForTime { Name = displayName, Values = series1[iDay].Values + (long)elapsedSeconds };
+                            series1[iDay] = new CustomerForTime
+                            {
+                                Name = displayName,
+                                Values = series1[iDay].Values + (long)elapsedSeconds,
+                            };
                             continue;
                         }
 
-                        if (series1[iDay].Values == 0) { series1[iDay] = new CustomerForTime { Name = displayName, Values = (long)elapsedSeconds }; continue; }
-                        if (series2[iDay].Values == 0) { hasData2 = true; series2[iDay] = new CustomerForTime { Name = displayName, Values = (long)elapsedSeconds }; continue; }
-                        if (series3[iDay].Values == 0) { hasData3 = true; series3[iDay] = new CustomerForTime { Name = displayName, Values = (long)elapsedSeconds }; continue; }
-                        if (series4[iDay].Values == 0) { hasData4 = true; series4[iDay] = new CustomerForTime { Name = displayName, Values = (long)elapsedSeconds }; continue; }
-                        if (series5[iDay].Values == 0) { hasData5 = true; series5[iDay] = new CustomerForTime { Name = displayName, Values = (long)elapsedSeconds }; continue; }
+                        if (series1[iDay].Values == 0)
+                        {
+                            series1[iDay] = new CustomerForTime
+                            {
+                                Name = displayName,
+                                Values = (long)elapsedSeconds,
+                            };
+                            continue;
+                        }
+                        if (series2[iDay].Values == 0)
+                        {
+                            hasData2 = true;
+                            series2[iDay] = new CustomerForTime
+                            {
+                                Name = displayName,
+                                Values = (long)elapsedSeconds,
+                            };
+                            continue;
+                        }
+                        if (series3[iDay].Values == 0)
+                        {
+                            hasData3 = true;
+                            series3[iDay] = new CustomerForTime
+                            {
+                                Name = displayName,
+                                Values = (long)elapsedSeconds,
+                            };
+                            continue;
+                        }
+                        if (series4[iDay].Values == 0)
+                        {
+                            hasData4 = true;
+                            series4[iDay] = new CustomerForTime
+                            {
+                                Name = displayName,
+                                Values = (long)elapsedSeconds,
+                            };
+                            continue;
+                        }
+                        if (series5[iDay].Values == 0)
+                        {
+                            hasData5 = true;
+                            series5[iDay] = new CustomerForTime
+                            {
+                                Name = displayName,
+                                Values = (long)elapsedSeconds,
+                            };
+                            continue;
+                        }
                     }
                 }
 
@@ -714,45 +853,65 @@ namespace GameActivity.Controls
 
                 if (cumulSessions)
                 {
-                    activityForGameSeries.Add(new ColumnSeries
-                    {
-                        Title = "1",
-                        Values = series1,
-                        Fill = PluginDatabase.PluginSettings.ChartColors
-                    });
+                    activityForGameSeries.Add(
+                        new ColumnSeries
+                        {
+                            Title = "1",
+                            Values = series1,
+                            Fill = PluginDatabase.PluginSettings.ChartColors,
+                        }
+                    );
                 }
                 else
                 {
                     activityForGameSeries.Add(new ColumnSeries { Title = "1", Values = series1 });
                 }
 
-                if (hasData2) { activityForGameSeries.Add(new ColumnSeries { Title = "2", Values = series2 }); }
-                if (hasData3) { activityForGameSeries.Add(new ColumnSeries { Title = "3", Values = series3 }); }
-                if (hasData4) { activityForGameSeries.Add(new ColumnSeries { Title = "4", Values = series4 }); }
-                if (hasData5) { activityForGameSeries.Add(new ColumnSeries { Title = "5", Values = series5 }); }
+                if (hasData2)
+                {
+                    activityForGameSeries.Add(new ColumnSeries { Title = "2", Values = series2 });
+                }
+                if (hasData3)
+                {
+                    activityForGameSeries.Add(new ColumnSeries { Title = "3", Values = series3 });
+                }
+                if (hasData4)
+                {
+                    activityForGameSeries.Add(new ColumnSeries { Title = "4", Values = series4 });
+                }
+                if (hasData5)
+                {
+                    activityForGameSeries.Add(new ColumnSeries { Title = "5", Values = series5 });
+                }
 
                 for (int iDay = 0; iDay < listDate.Length; iDay++)
                 {
-                    listDate[iDay] = Convert.ToDateTime(listDate[iDay]).ToString(Constants.DateUiFormat);
+                    listDate[iDay] = Convert
+                        .ToDateTime(listDate[iDay])
+                        .ToString(Constants.DateUiFormat);
                 }
 
-                CartesianMapper<CustomerForTime> customerVmMapper = Mappers.Xy<CustomerForTime>()
+                CartesianMapper<CustomerForTime> customerVmMapper = Mappers
+                    .Xy<CustomerForTime>()
                     .X((value, index) => index)
                     .Y(value => value.Values);
                 Charting.For<CustomerForTime>(customerVmMapper);
 
-                PlayTimeToStringConverterWithZero converter = new PlayTimeToStringConverterWithZero();
-                PART_ChartTimeActivityLabelsY.LabelFormatter =
-                    value => (string)converter.Convert((ulong)value, null, null, CultureInfo.CurrentCulture);
+                PlayTimeToStringConverterWithZero converter =
+                    new PlayTimeToStringConverterWithZero();
+                PART_ChartTimeActivityLabelsY.LabelFormatter = value =>
+                    (string)converter.Convert((ulong)value, null, null, CultureInfo.CurrentCulture);
 
                 PART_ChartTimeActivity.DataTooltip = cumulSessions
-                    ? (System.Windows.Controls.UserControl)new CustomerToolTipForTime
-                    {
-                        ShowIcon = PluginDatabase.PluginSettings.ShowLauncherIcons,
-                        Mode = PluginDatabase.PluginSettings.ModeStoreIcon == 1
-                            ? TextBlockWithIconMode.IconTextFirstWithText
-                            : TextBlockWithIconMode.IconFirstWithText
-                    }
+                    ? (System.Windows.Controls.UserControl)
+                        new CustomerToolTipForTime
+                        {
+                            ShowIcon = PluginDatabase.PluginSettings.ShowLauncherIcons,
+                            Mode =
+                                PluginDatabase.PluginSettings.ModeStoreIcon == 1
+                                    ? TextBlockWithIconMode.IconTextFirstWithText
+                                    : TextBlockWithIconMode.IconFirstWithText,
+                        }
                     : new CustomerToolTipForMultipleTime { ShowTitle = false };
 
                 PART_ChartTimeActivityLabelsY.MinValue = 0;
@@ -762,7 +921,8 @@ namespace GameActivity.Controls
                 if (PART_NavBar != null)
                 {
                     int windowSize = _lastWindowSize;
-                    int minVariator = _totalDataPoints > windowSize ? -(_totalDataPoints - windowSize) : 0;
+                    int minVariator =
+                        _totalDataPoints > windowSize ? -(_totalDataPoints - windowSize) : 0;
 
                     PART_NavBar.AxisLimitMaximum = _totalDataPoints;
                     PART_NavBar.CanGoNext = AxisVariator < 0;
@@ -783,7 +943,11 @@ namespace GameActivity.Controls
         /// <param name="gameActivities">The game activities data object containing session logs.</param>
         /// <param name="variateurTime">The signed offset applied to the session window anchor (in weeks).</param>
         /// <param name="limit">The maximum number of weeks to render in one page.</param>
-        private void GetActivityForGamesChartByWeek(GameActivities gameActivities, int variateurTime = 0, int limit = 9)
+        private void GetActivityForGamesChartByWeek(
+            GameActivities gameActivities,
+            int variateurTime = 0,
+            int limit = 9
+        )
         {
             try
             {
@@ -837,16 +1001,31 @@ namespace GameActivity.Controls
                 {
                     // Each step is exactly one week back from the pivot Monday.
                     DateTime weekMonday = pivotMonday.AddDays(-7 * i);
-                    DateTime weekSunday = weekMonday.AddDays(6).AddHours(23).AddMinutes(59).AddSeconds(59);
+                    DateTime weekSunday = weekMonday
+                        .AddDays(6)
+                        .AddHours(23)
+                        .AddMinutes(59)
+                        .AddSeconds(59);
                     int weekNumber = UtilityTools.WeekOfYearISO8601(weekMonday);
 
-                    string label = string.Format("{0} {1}",
+                    string label = string.Format(
+                        "{0} {1}",
                         ResourceProvider.GetString("LOCGameActivityWeekLabel"),
-                        weekNumber);
+                        weekNumber
+                    );
 
                     labels.Add(label);
-                    datesPeriodes.Add(new WeekStartEnd { Monday = weekMonday, Sunday = weekSunday });
-                    seriesData.Add(new CustomerForTime { Name = label, Values = 0, HideIsZero = true });
+                    datesPeriodes.Add(
+                        new WeekStartEnd { Monday = weekMonday, Sunday = weekSunday }
+                    );
+                    seriesData.Add(
+                        new CustomerForTime
+                        {
+                            Name = label,
+                            Values = 0,
+                            HideIsZero = true,
+                        }
+                    );
                 }
 
                 // _totalDataPoints = navigable week count across the full dataset.
@@ -857,31 +1036,39 @@ namespace GameActivity.Controls
                 activities.ForEach(x =>
                 {
                     DateTime sessionTime = ((DateTime)x.DateSession).ToLocalTime();
-                    int idx = datesPeriodes.FindIndex(y => y.Monday <= sessionTime && y.Sunday >= sessionTime);
-                    if (idx > -1) { seriesData[idx].Values += (long)x.ElapsedSeconds; }
+                    int idx = datesPeriodes.FindIndex(y =>
+                        y.Monday <= sessionTime && y.Sunday >= sessionTime
+                    );
+                    if (idx > -1)
+                    {
+                        seriesData[idx].Values += (long)x.ElapsedSeconds;
+                    }
                 });
 
                 SeriesCollection activityForGameSeries = new SeriesCollection();
                 activityForGameSeries.Add(new ColumnSeries { Title = "1", Values = seriesData });
 
-                CartesianMapper<CustomerForTime> customerVmMapper = Mappers.Xy<CustomerForTime>()
+                CartesianMapper<CustomerForTime> customerVmMapper = Mappers
+                    .Xy<CustomerForTime>()
                     .X((value, index) => index)
                     .Y(value => value.Values);
                 Charting.For<CustomerForTime>(customerVmMapper);
 
-                PlayTimeToStringConverterWithZero converter = new PlayTimeToStringConverterWithZero();
-                PART_ChartTimeActivityLabelsY.LabelFormatter =
-                    value => (string)converter.Convert((ulong)value, null, null, CultureInfo.CurrentCulture);
+                PlayTimeToStringConverterWithZero converter =
+                    new PlayTimeToStringConverterWithZero();
+                PART_ChartTimeActivityLabelsY.LabelFormatter = value =>
+                    (string)converter.Convert((ulong)value, null, null, CultureInfo.CurrentCulture);
 
                 PART_ChartTimeActivity.DataTooltip = new CustomerToolTipForTime
                 {
                     ShowIcon = PluginDatabase.PluginSettings.ShowLauncherIcons,
-                    Mode = PluginDatabase.PluginSettings.ModeStoreIcon == 1
-                        ? TextBlockWithIconMode.IconTextFirstWithText
-                        : TextBlockWithIconMode.IconFirstWithText,
+                    Mode =
+                        PluginDatabase.PluginSettings.ModeStoreIcon == 1
+                            ? TextBlockWithIconMode.IconTextFirstWithText
+                            : TextBlockWithIconMode.IconFirstWithText,
                     DatesPeriodes = datesPeriodes,
                     ShowWeekPeriode = true,
-                    ShowTitle = true
+                    ShowTitle = true,
                 };
 
                 PART_ChartTimeActivityLabelsY.MinValue = 0;
@@ -891,7 +1078,8 @@ namespace GameActivity.Controls
                 if (PART_NavBar != null)
                 {
                     int windowSize = _lastWindowSize;
-                    int minVariator = _totalDataPoints > windowSize ? -(_totalDataPoints - windowSize) : 0;
+                    int minVariator =
+                        _totalDataPoints > windowSize ? -(_totalDataPoints - windowSize) : 0;
 
                     PART_NavBar.AxisLimitMaximum = _totalDataPoints;
                     PART_NavBar.CanGoNext = AxisVariator < 0;
@@ -935,66 +1123,126 @@ namespace GameActivity.Controls
     public class PluginChartTimeDataContext : ObservableObject, IDataContext
     {
         private bool _isActivated;
+
         /// <summary>Controls whether the chart control is visible.</summary>
-        public bool IsActivated { get => _isActivated; set => SetValue(ref _isActivated, value); }
+        public bool IsActivated
+        {
+            get => _isActivated;
+            set => SetValue(ref _isActivated, value);
+        }
 
         private double _chartTimeHeight;
+
         /// <summary>Explicit pixel height of the chart; <see cref="double.NaN"/> for auto-size.</summary>
-        public double ChartTimeHeight { get => _chartTimeHeight; set => SetValue(ref _chartTimeHeight, value); }
+        public double ChartTimeHeight
+        {
+            get => _chartTimeHeight;
+            set => SetValue(ref _chartTimeHeight, value);
+        }
 
         private bool _chartTimeAxis;
+
         /// <summary>When true, the X-axis labels strip is visible.</summary>
-        public bool ChartTimeAxis { get => _chartTimeAxis; set => SetValue(ref _chartTimeAxis, value); }
+        public bool ChartTimeAxis
+        {
+            get => _chartTimeAxis;
+            set => SetValue(ref _chartTimeAxis, value);
+        }
 
         private bool _chartTimeOrdinates;
+
         /// <summary>When true, the Y-axis labels strip is visible.</summary>
-        public bool ChartTimeOrdinates { get => _chartTimeOrdinates; set => SetValue(ref _chartTimeOrdinates, value); }
+        public bool ChartTimeOrdinates
+        {
+            get => _chartTimeOrdinates;
+            set => SetValue(ref _chartTimeOrdinates, value);
+        }
 
         private bool _chartTimeVisibleEmpty;
+
         /// <summary>When true, the chart placeholder is shown even when there is no data.</summary>
-        public bool ChartTimeVisibleEmpty { get => _chartTimeVisibleEmpty; set => SetValue(ref _chartTimeVisibleEmpty, value); }
+        public bool ChartTimeVisibleEmpty
+        {
+            get => _chartTimeVisibleEmpty;
+            set => SetValue(ref _chartTimeVisibleEmpty, value);
+        }
 
         private bool _disableAnimations = true;
+
         /// <summary>Mirrors <see cref="PluginChartTime.DisableAnimations"/>.</summary>
-        public bool DisableAnimations { get => _disableAnimations; set => SetValue(ref _disableAnimations, value); }
+        public bool DisableAnimations
+        {
+            get => _disableAnimations;
+            set => SetValue(ref _disableAnimations, value);
+        }
 
         private double _labelsRotationValue;
+
         /// <summary>Rotation angle applied to X-axis labels (0 or 160 degrees).</summary>
-        public double LabelsRotationValue { get => _labelsRotationValue; set => SetValue(ref _labelsRotationValue, value); }
+        public double LabelsRotationValue
+        {
+            get => _labelsRotationValue;
+            set => SetValue(ref _labelsRotationValue, value);
+        }
 
         private bool _showNavBar;
+
         /// <summary>Drives <see cref="PluginChartNavBar.ShowNavBar"/> binding in XAML.</summary>
-        public bool ShowNavBar { get => _showNavBar; set => SetValue(ref _showNavBar, value); }
+        public bool ShowNavBar
+        {
+            get => _showNavBar;
+            set => SetValue(ref _showNavBar, value);
+        }
 
         private bool _showAllData;
+
         /// <summary>
         /// Mirrored into <see cref="PluginChartNavBar.ShowAllData"/>.
         /// When true, the chart bypasses the axis window and renders the full dataset.
         /// Reset to false on every game context change.
         /// </summary>
-        public bool ShowAllData { get => _showAllData; set => SetValue(ref _showAllData, value); }
+        public bool ShowAllData
+        {
+            get => _showAllData;
+            set => SetValue(ref _showAllData, value);
+        }
 
         private string _navLabel = string.Empty;
+
         /// <summary>
         /// Badge text shown on the right of the nav bar representing the visible X-axis period.
         /// Reset to <see cref="string.Empty"/> on every game context change.
         /// </summary>
-        public string NavLabel { get => _navLabel; set => SetValue(ref _navLabel, value); }
+        public string NavLabel
+        {
+            get => _navLabel;
+            set => SetValue(ref _navLabel, value);
+        }
 
         private int _pageSize;
+
         /// <summary>
         /// Mirror of the effective chart abscissa limit.
         /// Bound to <see cref="PluginChartNavBar.PageSize"/> so the nav bar can show/hide
         /// PrevPage/NextPage buttons and build their tooltips.
         /// </summary>
-        public int PageSize { get => _pageSize; set => SetValue(ref _pageSize, value); }
+        public int PageSize
+        {
+            get => _pageSize;
+            set => SetValue(ref _pageSize, value);
+        }
 
         private int _axisLimit;
+
         /// <summary>
         /// Mirror of <see cref="PluginChartTime.AxisLimit"/>.
         /// Kept in sync by <see cref="PluginChartTime.SetDefaultDataContext"/> and
         /// <see cref="PluginChartTime.ApplyAxisLimitFromNavBar"/>.
         /// </summary>
-        public int AxisLimit { get => _axisLimit; set => SetValue(ref _axisLimit, value); }
+        public int AxisLimit
+        {
+            get => _axisLimit;
+            set => SetValue(ref _axisLimit, value);
+        }
     }
 }
