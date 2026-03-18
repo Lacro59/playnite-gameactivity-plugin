@@ -14,11 +14,10 @@ to eliminate UI thread starvation during list scrolling.
 
 ### Performance gains
 
-
 | Metric                     | Before                  | After                        |
-| ---------------------------- | ------------------------- | ------------------------------ |
-| `UpdateDataAsync` per game | 180–1400 ms            | 3–6 ms                      |
-| `SetData` per game         | 127–413 ms             | 1–2 ms                      |
+| -------------------------- | ----------------------- | ---------------------------- |
+| `UpdateDataAsync` per game | 180–1400 ms             | 3–6 ms                       |
+| `SetData` per game         | 127–413 ms              | 1–2 ms                       |
 | Cache disk write           | Every`CheckConfig` call | Once, 2 s after scroll stops |
 
 ---
@@ -165,10 +164,10 @@ to BSON but cause no data corruption — they are recalculated or overwritten on
 
 
 | Symptom                                        | Likely cause                                    | Fix                                                        |
-| ------------------------------------------------ | ------------------------------------------------- | ------------------------------------------------------------ |
+| ---------------------------------------------- | ----------------------------------------------- | ---------------------------------------------------------- |
 | `UpdateDataAsync end [>100ms]` after migration | `PreWarm()` not called in `LoadDatabase()`      | Ensure`_database.PreWarm()` is called before `return true` |
 | `DB fetch done [>100ms]` in batches            | `Task.Run()` still present in `UpdateDataAsync` | Replace with synchronous`GetOnlyCache()` call              |
 | `Cache saved to disk` on every scroll event    | `SaveCacheToDisk()` still called directly       | Replace all call sites with`ScheduleCacheSave()`           |
 | Migration dialog never appears                 | `PluginDatabasePath` points to wrong folder     | Verify`Paths.PluginDatabasePath` in constructor            |
-| `MigrateJsonToLiteDb — failed on 'file.json'` | Corrupted or incompatible JSON file             | Check file manually; delete if unrecoverable               |
-| LiteDB file locked on second Playnite instance | LiteDB 4.x single-writer limitation             | Expected behavior — only one Playnite instance supported  |
+| `MigrateJsonToLiteDb — failed on 'file.json'`  | Corrupted or incompatible JSON file             | Check file manually; delete if unrecoverable               |
+| LiteDB file locked on second Playnite instance | LiteDB 4.x single-writer limitation             | Expected behavior — only one Playnite instance supported   |
