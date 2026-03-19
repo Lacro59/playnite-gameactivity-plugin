@@ -90,8 +90,8 @@
     <Reference Include="MoreLinq, Version=3.3.2.0, Culture=neutral, PublicKeyToken=384d532d7e88985d, processorArchitecture=MSIL">
       <HintPath>packages\morelinq.3.3.2\lib\net451\MoreLinq.dll</HintPath>
     </Reference>
-    <Reference Include="Playnite.SDK, Version=6.14.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\PlayniteSDK.6.14.0\lib\net462\Playnite.SDK.dll</HintPath>
+    <Reference Include="Playnite.SDK, Version=6.15.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\PlayniteSDK.6.15.0\lib\net462\Playnite.SDK.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="PresentationCore" />
@@ -249,6 +249,7 @@
     <Compile Include="Services\HardwareMonitoring\Utilities\ProviderHealthMonitor.cs" />
     <Compile Include="Services\GameActivityWindows.cs" />
     <Compile Include="ViewModels\GameActivityAddTimeViewModel.cs" />
+    <Compile Include="ViewModels\GameActivityViewSingleViewModel.cs" />
     <Compile Include="ViewModels\GamesDataMismatchViewModel.cs" />
     <Compile Include="playnite-plugincommon\CommonPluginsControls\ViewsModels\TransfertDataViewModel.cs" />
     <Compile Include="Views\GameActivityAddTime.xaml.cs">
