@@ -680,6 +680,7 @@ namespace GameActivity.Controls
                         CustomerForTime placeholder = new CustomerForTime
                         {
                             Name = dt,
+                            SecondaryName = GetRelativeDateString(DateTime.ParseExact(dt, "yyyy-MM-dd", null).ToLocalTime()),
                             Values = 0,
                             HideIsZero = true,
                         };
@@ -732,6 +733,7 @@ namespace GameActivity.Controls
                             CustomerForTime placeholder = new CustomerForTime
                             {
                                 Name = dateStr,
+                                SecondaryName = GetRelativeDateString(dateMin.AddDays(i)),
                                 Values = 0,
                                 HideIsZero = true,
                             };
@@ -770,6 +772,7 @@ namespace GameActivity.Controls
                             CustomerForTime placeholder = new CustomerForTime
                             {
                                 Name = dateStr,
+                                SecondaryName = GetRelativeDateString(dateStart.AddDays(-i)),
                                 Values = 0,
                                 HideIsZero = true,
                             };
@@ -819,11 +822,14 @@ namespace GameActivity.Controls
                         }
                         catch { }
 
+                        string secName = series1[iDay].SecondaryName;
+
                         if (cumulSessions)
                         {
                             series1[iDay] = new CustomerForTime
                             {
                                 Name = displayName,
+                                SecondaryName = secName,
                                 Values = series1[iDay].Values + (long)elapsedSeconds,
                             };
                             continue;
@@ -834,6 +840,7 @@ namespace GameActivity.Controls
                             series1[iDay] = new CustomerForTime
                             {
                                 Name = displayName,
+                                SecondaryName = secName,
                                 Values = (long)elapsedSeconds,
                             };
                             continue;
@@ -844,6 +851,7 @@ namespace GameActivity.Controls
                             series2[iDay] = new CustomerForTime
                             {
                                 Name = displayName,
+                                SecondaryName = secName,
                                 Values = (long)elapsedSeconds,
                             };
                             continue;
@@ -854,6 +862,7 @@ namespace GameActivity.Controls
                             series3[iDay] = new CustomerForTime
                             {
                                 Name = displayName,
+                                SecondaryName = secName,
                                 Values = (long)elapsedSeconds,
                             };
                             continue;
@@ -864,6 +873,7 @@ namespace GameActivity.Controls
                             series4[iDay] = new CustomerForTime
                             {
                                 Name = displayName,
+                                SecondaryName = secName,
                                 Values = (long)elapsedSeconds,
                             };
                             continue;
@@ -874,6 +884,7 @@ namespace GameActivity.Controls
                             series5[iDay] = new CustomerForTime
                             {
                                 Name = displayName,
+                                SecondaryName = secName,
                                 Values = (long)elapsedSeconds,
                             };
                             continue;
@@ -929,10 +940,8 @@ namespace GameActivity.Controls
                     .Y(value => value.Values);
                 Charting.For<CustomerForTime>(customerVmMapper);
 
-                PlayTimeToStringConverterWithZero converter =
-                    new PlayTimeToStringConverterWithZero();
-                PART_ChartTimeActivityLabelsY.LabelFormatter = value =>
-                    (string)converter.Convert((ulong)value, null, null, CultureInfo.CurrentCulture);
+                PlayTimeToStringConverterWithZero converter = new PlayTimeToStringConverterWithZero();
+                PART_ChartTimeActivityLabelsY.LabelFormatter = value => (string)converter.Convert((ulong)value, null, null, CultureInfo.CurrentCulture);
 
                 PART_ChartTimeActivity.DataTooltip = cumulSessions
                     ? (System.Windows.Controls.UserControl)
@@ -1099,6 +1108,28 @@ namespace GameActivity.Controls
             {
                 Common.LogError(ex, false, true, PluginDatabase.PluginName);
             }
+        }
+
+        /// <summary>
+        /// Converts a date to a relative string representation (e.g. "2d ago").
+        /// </summary>
+        private string GetRelativeDateString(DateTime sessionDate)
+        {
+            int days = (int)(DateTime.Now.Date - sessionDate.Date).TotalDays;
+            if (days == 0) return ResourceProvider.GetString("LOCCommonToday") ?? "Today";
+            if (days == 1) return string.Format(ResourceProvider.GetString("LOCCommonDayAgo") ?? "{0}d ago", days);
+            if (days > 1 && days < 30) return string.Format(ResourceProvider.GetString("LOCCommonDaysAgo") ?? "{0}d ago", days);
+            if (days >= 30 && days < 365)
+            {
+                int months = days / 30;
+                return string.Format(ResourceProvider.GetString(months == 1 ? "LOCCommonMonthAgo" : "LOCCommonMonthsAgo") ?? "{0}mo ago", months);
+            }
+            if (days >= 365)
+            {
+                int years = days / 365;
+                return string.Format(ResourceProvider.GetString(years == 1 ? "LOCCommonYearAgo" : "LOCCommonYearsAgo") ?? "{0}y ago", years);
+            }
+            return string.Empty;
         }
 
         /// <summary>

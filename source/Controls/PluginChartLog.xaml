@@ -1,4 +1,4 @@
-﻿<controls:PluginUserControlExtend
+<controls:PluginUserControlExtend
         xmlns:controls="clr-namespace:CommonPluginsShared.Controls"
         x:Class="GameActivity.Controls.PluginChartLog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -204,7 +204,7 @@
                     </lvc:CartesianChart.ChartLegend>
 
                     <lvc:CartesianChart.DataTooltip>
-                        <livechartscommon:CustomerToolTipForMultipleTime />
+                        <livechartscommon:CustomerToolTipForLog />
                     </lvc:CartesianChart.DataTooltip>
 
                     <lvc:CartesianChart.AxisX>

@@ -1034,33 +1034,6 @@ namespace GameActivity.Controls
                                     ScalesYAt = 1,
                                 };
 
-                                try
-                                {
-                                    PART_ChartLogActivity.DataTooltip = new DefaultTooltip
-                                    {
-                                        FontSize = 13,
-                                        Background = (Brush)
-                                            ResourceProvider.GetResource(
-                                                "CommonToolTipBackgroundBrush"
-                                            ),
-                                        Padding = new Thickness(8),
-                                        BorderThickness = (Thickness)
-                                            ResourceProvider.GetResource(
-                                                "CommonToolTipBorderThickness"
-                                            ),
-                                        BorderBrush = (Brush)
-                                            ResourceProvider.GetResource(
-                                                "CommonToolTipBorderBrush"
-                                            ),
-                                        Foreground = (Brush)
-                                            ResourceProvider.GetResource("CommonToolTipForeground"),
-                                    };
-                                }
-                                catch (Exception ex)
-                                {
-                                    Common.LogError(ex, false);
-                                }
-
                                 SeriesCollection series = new SeriesCollection
                                 {
                                     _cpuSeries,
