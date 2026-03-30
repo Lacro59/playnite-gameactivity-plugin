@@ -1227,10 +1227,6 @@ namespace GameActivity.Controls
         /// LiveCharts render tick — re-reads Display* flags each tick so that toggling a series
         /// on an already-rendered chart takes effect without a full data reload.
         /// </summary>
-        /// <summary>
-        /// LiveCharts render tick — re-reads Display* flags each tick so that toggling a series
-        /// on an already-rendered chart takes effect without a full data reload.
-        /// </summary>
         /// <param name="sender">The source of the event.</param>
         private void PART_ChartLogActivity_UpdaterTick(object sender)
         {
@@ -1243,10 +1239,6 @@ namespace GameActivity.Controls
         // Helpers
         // ──────────────────────────────────────────────────────────────────────
 
-        /// <summary>
-        /// Returns the theme brush identified by <paramref name="resourceKey"/>,
-        /// or a fallback solid colour brush when the resource is absent or of the wrong type.
-        /// </summary>
         /// <summary>
         /// Returns the theme brush identified by <paramref name="resourceKey"/>,
         /// or a fallback solid colour brush when the resource is absent or of the wrong type.
@@ -1549,10 +1541,6 @@ namespace GameActivity.Controls
 
         private PluginChartLog _control;
 
-        /// <summary>
-        /// Wires command delegates to the owning <see cref="PluginChartLog"/> instance.
-        /// Must be called from <see cref="PluginChartLog"/>'s constructor before any command fires.
-        /// </summary>
         /// <summary>
         /// Wires command delegates to the owning <see cref="PluginChartLog"/> instance.
         /// Must be called from <see cref="PluginChartLog"/>'s constructor before any command fires.

@@ -213,7 +213,8 @@ namespace GameActivity.Controls
                     .FromProperty(PluginChartNavBar.AxisLimitProperty, typeof(PluginChartNavBar))
                     .AddValueChanged(PART_NavBar, OnNavBarAxisLimitChanged);
 
-                PART_NavBar.AxisLimitReset += NavBar_AxisLimitReset;
+                PART_NavBar.AxisLimitReset += NavBar_AxisLimitReset; 
+                PART_NavBar.CustomToggled += NavBar_ShowByWeeksToggled;
             }
         }
 
@@ -230,6 +231,8 @@ namespace GameActivity.Controls
                 DependencyPropertyDescriptor
                     .FromProperty(PluginChartNavBar.AxisLimitProperty, typeof(PluginChartNavBar))
                     .RemoveValueChanged(PART_NavBar, OnNavBarAxisLimitChanged);
+                
+                PART_NavBar.CustomToggled -= NavBar_ShowByWeeksToggled;
             }
         }
 
@@ -251,6 +254,15 @@ namespace GameActivity.Controls
         private void OnNavBarAxisLimitChanged(object sender, EventArgs e)
         {
             ApplyAxisLimitFromNavBar();
+        }
+
+        /// <summary>
+        /// Syncs the NavBar custom toggle state back to the <see cref="ShowByWeeks"/> dependency property.
+        /// </summary>
+        private void NavBar_ShowByWeeksToggled(object sender, RoutedEventArgs e)
+        {
+            ShowByWeeks = PART_NavBar.CustomToggle;
+            GameContextChanged(null, GameContext);
         }
 
         // ────────────────────────────────────────────────────────────────────
@@ -348,6 +360,13 @@ namespace GameActivity.Controls
 
                 PART_NavBar.AxisLimitDefault = defaultLimit;
                 PART_NavBar.AxisLimit = AxisLimit;
+
+                PART_NavBar.CustomToggleVisible = true;
+                PART_NavBar.CustomToggleInactiveIcon = "\uEC45";
+                PART_NavBar.CustomToggleActiveIcon = "\uEC45";
+                PART_NavBar.CustomToggleInactiveToolTip = ResourceProvider.GetString("LOCCommonNavShowByWeeks");
+                PART_NavBar.CustomToggleActiveToolTip = ResourceProvider.GetString("LOCCommonNavShowByWeeksDisable");
+                PART_NavBar.CustomToggle = ShowByWeeks;
             }
 
             PART_ChartTimeActivity.Series = null;

@@ -1,520 +1,165 @@
 ﻿using CommonPluginsControls.Controls;
-using CommonPlayniteShared.Converters;
-using CommonPluginsShared;
-using CommonPluginsShared.Converters;
 using GameActivity.Controls;
 using GameActivity.Models;
 using GameActivity.Services;
+using GameActivity.ViewModels;
 using Playnite.SDK;
 using Playnite.SDK.Models;
 using System;
-using System.Collections.Generic;
-using System.Drawing.Imaging;
-using System.Globalization;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using System.IO;
 using System.Windows.Controls.Primitives;
+using System.Windows.Data;
 
 namespace GameActivity.Views
 {
     /// <summary>
-    /// Logique d'interaction pour GameActivityViewSingle.xaml
+    /// Code-behind for GameActivityViewSingle.
+    /// Responsibility is limited to:
+    ///   1. Constructing and assigning the ViewModel.
+    ///   2. Wiring chart controls that cannot be bound via XAML (PluginChartTime / PluginChartLog).
+    ///   3. Configuring ListView column visibility from plugin settings.
+    ///   4. Relaying UI-only events (navigation buttons, selection) to the chart controls.
+    /// All data logic and commands live in GameActivityViewSingleViewModel.
     /// </summary>
     public partial class GameActivityViewSingle : UserControl
     {
         private static ILogger Logger => LogManager.GetLogger();
-
         private GameActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
 
-        private PluginChartTime PART_ChartTime { get; set; }
-        private PluginChartLog PART_ChartLog { get; set; }
+        // Chart control references resolved after InitializeComponent.
+        private PluginChartTime _chartTime;
+        private PluginChartLog _chartLog;
 
-        private GameActivities gameActivities { get; set; }
-        private Game GameContext { get; set; }
-        private GameActivity Plugin { get; set; }
+        private GameActivityViewSingleViewModel ViewModel => DataContext as GameActivityViewSingleViewModel;
 
+        // ─── Constructor ──────────────────────────────────────────────────────────────
 
         public GameActivityViewSingle(GameActivity plugin, Game game)
         {
-            GameContext = game;
-            Plugin = plugin;
-
             InitializeComponent();
 
-            ButtonShowConfig.IsChecked = false;
+            // Assign ViewModel — all bindings resolve from this point.
+            DataContext = new GameActivityViewSingleViewModel(plugin, game);
 
+            // Resolve chart controls injected via ContentControl children in XAML.
+            _chartTime = (PluginChartTime)PART_ChartTimeContainer.Children[0];
+            _chartTime.GameContext = game;
+            _chartTime.Truncate = PluginDatabase.PluginSettings.ChartTimeTruncate;
 
-            // Cover
-            if (!game.CoverImage.IsNullOrEmpty())
-            {
-                string coverImage = API.Instance.Database.GetFullFilePath(game.CoverImage);
-                PART_ImageCover.Source = BitmapExtensions.BitmapFromFile(coverImage);
-            }
+            _chartLog = (PluginChartLog)PART_LogSection.Child;
+            _chartLog.GameContext = game;
 
-            // Game sessions infos
-            gameActivities = PluginDatabase.Get(game);
+            // Configure ListView column visibility.
+            ConfigureListViewColumns();
 
-            PlayTimeToStringConverter longToTimePlayedConverter = new PlayTimeToStringConverter();
-            PART_TimeAvg.Text = (string)longToTimePlayedConverter.Convert(gameActivities.AvgPlayTime(), null, null, CultureInfo.CurrentCulture);
-
-
-            PART_RecentActivity.Text = gameActivities.GetRecentActivity();
-
-
-            LocalDateConverter localDateConverter = new LocalDateConverter();
-            PlayTimeToStringConverter converter = new PlayTimeToStringConverter();
-
-            PART_FirstSession.Text = (string)localDateConverter.Convert(gameActivities.GetFirstSession(), null, null, CultureInfo.CurrentCulture);
-            PART_FirstSessionElapsedTime.Text = (string)converter.Convert(gameActivities.GetFirstSessionActivity().ElapsedSeconds, null, null, CultureInfo.CurrentCulture);
-
-            PART_LastSession.Text = (string)localDateConverter.Convert(gameActivities.GetLastSession(), null, null, CultureInfo.CurrentCulture);
-            PART_LastSessionElapsedTime.Text = (string)converter.Convert(gameActivities.GetLastSessionActivity().ElapsedSeconds, null, null, CultureInfo.CurrentCulture);
-
-
-            // Game session time line
-            PART_ChartTime = (PluginChartTime)PART_ChartTimeContener.Children[0];
-            PART_ChartTime.GameContext = game;
-            PART_ChartTime.Truncate = PluginDatabase.PluginSettings.ChartTimeTruncate;
-            PART_Truncate.IsChecked = PluginDatabase.PluginSettings.ChartTimeTruncate;
-
-
+            // ListView persistence.
             lvSessions.SaveColumn = PluginDatabase.PluginSettings.SaveColumnOrder;
             lvSessions.SaveColumnFilePath = Path.Combine(PluginDatabase.Paths.PluginUserDataPath, "lvSessions.json");
+        }
 
-            GridView lvView = (GridView)lvSessions.View;
+        // ─── Column Configuration ─────────────────────────────────────────────────────
 
-            // Game logs
-            // Add column if log details enable.
+        /// <summary>
+        /// Hides ListView columns according to plugin settings.
+        /// Width=0 + IsHitTestVisible=false is the established pattern in this project.
+        /// </summary>
+        private void ConfigureListViewColumns()
+        {
             if (!PluginDatabase.PluginSettings.EnableLogging)
             {
-                lvAvgGpuP.Width = 0;
-                lvAvgGpuPHeader.IsHitTestVisible = false;
-                lvAvgCpuP.Width = 0;
-                lvAvgCpuPHeader.IsHitTestVisible = false;
-                lvAvgGpuT.Width = 0;
-                lvAvgGpuTHeader.IsHitTestVisible = false;
-                lvAvgCpuT.Width = 0;
-                lvAvgCpuTHeader.IsHitTestVisible = false;
-                lvAvgFps.Width = 0;
-                lvAvgFpsHeader.IsHitTestVisible = false;
-                lvAvgRam.Width = 0;
-                lvAvgRamHeader.IsHitTestVisible = false;
-                lvAvgGpu.Width = 0;
-                lvAvgGpuHeader.IsHitTestVisible = false;
-                lvAvgCpu.Width = 0;
-                lvAvgCpuHeader.IsHitTestVisible = false;
+                // Hide all hardware-monitoring columns when logging is disabled.
+                HideColumn(lvAvgGpuP, lvAvgGpuPHeader);
+                HideColumn(lvAvgCpuP, lvAvgCpuPHeader);
+                HideColumn(lvAvgGpuT, lvAvgGpuTHeader);
+                HideColumn(lvAvgCpuT, lvAvgCpuTHeader);
+                HideColumn(lvAvgFps, lvAvgFpsHeader);
+                HideColumn(lvAvgRam, lvAvgRamHeader);
+                HideColumn(lvAvgGpu, lvAvgGpuHeader);
+                HideColumn(lvAvgCpu, lvAvgCpuHeader);
 
-                PART_BtLogContener.Visibility = Visibility.Collapsed;
-                PART_ChartLogContener.Visibility = Visibility.Collapsed;
+                RowLogSection.Height = new GridLength(0);
+                PART_LogSection.Visibility = Visibility.Collapsed;
             }
             else
             {
-                if (!PluginDatabase.PluginSettings.lvAvgGpuP)
-                {
-                    lvAvgGpuP.Width = 0;
-                    lvAvgGpuPHeader.IsHitTestVisible = false;
-                }
-                if (!PluginDatabase.PluginSettings.lvAvgCpuP)
-                {
-                    lvAvgCpuP.Width = 0;
-                    lvAvgCpuPHeader.IsHitTestVisible = false;
-                }
-                if (!PluginDatabase.PluginSettings.lvAvgGpuT)
-                {
-                    lvAvgGpuT.Width = 0;
-                    lvAvgGpuTHeader.IsHitTestVisible = false;
-                }
-                if (!PluginDatabase.PluginSettings.lvAvgCpuT)
-                {
-                    lvAvgCpuT.Width = 0;
-                    lvAvgCpuTHeader.IsHitTestVisible = false;
-                }
-                if (!PluginDatabase.PluginSettings.lvAvgFps)
-                {
-                    lvAvgFps.Width = 0;
-                    lvAvgFpsHeader.IsHitTestVisible = false;
-                }
-                if (!PluginDatabase.PluginSettings.lvAvgRam)
-                {
-                    lvAvgRam.Width = 0;
-                    lvAvgRamHeader.IsHitTestVisible = false;
-                }
-                if (!PluginDatabase.PluginSettings.lvAvgGpu)
-                {
-                    lvAvgGpu.Width = 0;
-                    lvAvgGpuHeader.IsHitTestVisible = false;
-                }
-                if (!PluginDatabase.PluginSettings.lvAvgCpu)
-                {
-                    lvAvgCpu.Width = 0;
-                    lvAvgCpuHeader.IsHitTestVisible = false;
-                }
+                // Individual per-column overrides when logging is enabled.
+                if (!PluginDatabase.PluginSettings.lvAvgGpuP) HideColumn(lvAvgGpuP, lvAvgGpuPHeader);
+                if (!PluginDatabase.PluginSettings.lvAvgCpuP) HideColumn(lvAvgCpuP, lvAvgCpuPHeader);
+                if (!PluginDatabase.PluginSettings.lvAvgGpuT) HideColumn(lvAvgGpuT, lvAvgGpuTHeader);
+                if (!PluginDatabase.PluginSettings.lvAvgCpuT) HideColumn(lvAvgCpuT, lvAvgCpuTHeader);
+                if (!PluginDatabase.PluginSettings.lvAvgFps) HideColumn(lvAvgFps, lvAvgFpsHeader);
+                if (!PluginDatabase.PluginSettings.lvAvgRam) HideColumn(lvAvgRam, lvAvgRamHeader);
+                if (!PluginDatabase.PluginSettings.lvAvgGpu) HideColumn(lvAvgGpu, lvAvgGpuHeader);
+                if (!PluginDatabase.PluginSettings.lvAvgCpu) HideColumn(lvAvgCpu, lvAvgCpuHeader);
             }
 
-            if (!PluginDatabase.PluginSettings.lvGamesPcName)
-            {
-                lvGamesPcName.Width = 0;
-                lvGamesPcNameHeader.IsHitTestVisible = false;
-            }
-            if (!PluginDatabase.PluginSettings.lvGamesSource)
-            {
-                lvGamesSource.Width = 0;
-                lvGamesSourceHeader.IsHitTestVisible = false;
-            }
-            if (!PluginDatabase.PluginSettings.lvGamesPlayAction)
-            {
-                lvGamesPlayAction.Width = 0;
-                lvGamesPlayActionHeader.IsHitTestVisible = false;
-            }
-
-            getActivityByListGame(gameActivities);
-
-            PART_ChartLog = (PluginChartLog)PART_ChartLogContener.Children[0];
-            PART_ChartLog.GameContext = game;
-
-            DataContext = new
-            {
-                GameDisplayName = game.Name,
-                Settings = PluginDatabase.PluginSettings
-            };
-
-            PART_BtShowAll_Click(null, null);
+            if (!PluginDatabase.PluginSettings.lvGamesPcName) HideColumn(lvGamesPcName, lvGamesPcNameHeader);
+            if (!PluginDatabase.PluginSettings.lvGamesSource) HideColumn(lvGamesSource, lvGamesSourceHeader);
+            if (!PluginDatabase.PluginSettings.lvGamesPlayAction) HideColumn(lvGamesPlayAction, lvGamesPlayActionHeader);
         }
-        
 
-        #region Time navigation 
-
-        private void Bt_PrevTime(object sender, RoutedEventArgs e)
+        /// <summary>Hides a GridViewColumn by zeroing its width and disabling hit-testing on its header.</summary>
+        private static void HideColumn(GridViewColumn column, GridViewColumnHeader header)
         {
-            PART_ChartTime.Prev();
+            column.Width = 0;
+            header.IsHitTestVisible = false;
         }
 
-        private void Bt_NextTime(object sender, RoutedEventArgs e)
-        {
-            PART_ChartTime.Next();
-        }
-
-        private void Bt_PrevTimePlus(object sender, RoutedEventArgs e)
-        {
-            PART_ChartTime.Prev(PluginDatabase.PluginSettings.VariatorTime);
-        }
-
-        private void Bt_NextTimePlus(object sender, RoutedEventArgs e)
-        {
-            PART_ChartTime.Next(PluginDatabase.PluginSettings.VariatorTime);
-        }
-
-        private void Bt_Truncate(object sender, RoutedEventArgs e)
-        {
-            PART_ChartTime.Truncate = (bool)((ToggleButton)sender).IsChecked;
-            PART_ChartTime.AxisVariator = 0;
-        }
-        private void ToggleButton_Click(object sender, RoutedEventArgs e)
-        {
-            ToggleButton tb = sender as ToggleButton;
-            PART_ChartTime.ShowByWeeks = (bool)tb.IsChecked;
-            PART_ChartTime.AxisVariator = 0;
-        }
-
-        #endregion
-
-        #region Log navigation
+        // ─── ListView Events ──────────────────────────────────────────────────────────
 
         private void LvSessions_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (lvSessions.SelectedItem == null)
+            // AddedItems is always reliable — populated before SelectedItem is committed.
+            if (e.AddedItems == null || e.AddedItems.Count == 0)
             {
                 return;
             }
 
-            string titleChart = "1";
-            DateTime dateSelected = ((ListActivities)lvSessions.SelectedItem).GameLastActivity;
-            
-            PART_ChartLog.DateSelected = dateSelected;
-            PART_ChartLog.TitleChart = titleChart;
-            PART_ChartLog.AxisVariator = 0;
-
-
-            int index = ((ListActivities)lvSessions.SelectedItem).PCConfigurationId;
-            if (index != -1 && index < PluginDatabase.SystemConfigurationManager.GetConfigurations().Count)
+            ListActivities selected = e.AddedItems[0] as ListActivities;
+            if (selected == null)
             {
-                var Configuration = PluginDatabase.SystemConfigurationManager.GetConfigurations()[index];
-
-                PART_PcName.Content = Configuration.Name;
-                PART_Os.Content = Configuration.Os;
-                PART_CpuName.Content = Configuration.Cpu;
-                PART_GpuName.Content = Configuration.GpuName;
-                PART_Ram.Content = Configuration.RamUsage;
+                return;
             }
-            else
-            {
-                PART_PcName.Content = string.Empty;
-                PART_Os.Content = string.Empty;
-                PART_CpuName.Content = string.Empty;
-                PART_GpuName.Content = string.Empty;
-                PART_Ram.Content = string.Empty;
-            }
+
+            DateTime dateSelected = selected.GameLastActivity;
+
+            _chartLog.DateSelected = dateSelected;
+            _chartLog.TitleChart = "1";
+            _chartLog.AxisVariator = 0;
+
+            ViewModel?.UpdatePcConfiguration(selected.PCConfigurationId);
         }
 
-        private void Bt_PrevLog(object sender, RoutedEventArgs e)
+
+        // ─── Chart Time Navigation ────────────────────────────────────────────────────
+
+        private void Bt_PrevTime(object sender, RoutedEventArgs e) => _chartTime.Prev();
+        private void Bt_NextTime(object sender, RoutedEventArgs e) => _chartTime.Next();
+        private void Bt_PrevTimePlus(object sender, RoutedEventArgs e) => _chartTime.Prev(PluginDatabase.PluginSettings.VariatorTime);
+        private void Bt_NextTimePlus(object sender, RoutedEventArgs e) => _chartTime.Next(PluginDatabase.PluginSettings.VariatorTime);
+
+        private void Bt_Truncate(object sender, RoutedEventArgs e)
         {
-            PART_ChartLog.Prev();
+            _chartTime.Truncate = (bool)((ToggleButton)sender).IsChecked;
+            _chartTime.AxisVariator = 0;
         }
 
-        private void Bt_NextLog(object sender, RoutedEventArgs e)
+        private void ToggleButton_Click(object sender, RoutedEventArgs e)
         {
-            PART_ChartLog.Next();
+            _chartTime.ShowByWeeks = (bool)((ToggleButton)sender).IsChecked;
+            _chartTime.AxisVariator = 0;
         }
 
-        private void Bt_PrevLogPlus(object sender, RoutedEventArgs e)
-        {
-            PART_ChartLog.Prev(PluginDatabase.PluginSettings.VariatorLog);
-        }
+        // ─── Chart Log Navigation ─────────────────────────────────────────────────────
 
-        private void Bt_NextLogPlus(object sender, RoutedEventArgs e)
-        {
-            PART_ChartLog.Next(PluginDatabase.PluginSettings.VariatorLog);
-        }
-
-        #endregion
-
-
-        public void getActivityByListGame(GameActivities gameActivities)
-        {
-            _ = Task.Run(() => 
-            { 
-                ObservableCollection<ListActivities> activityListByGame = new ObservableCollection<ListActivities>();
-
-                for (int iItem = 0; iItem < gameActivities.FilterItems.Count; iItem++)
-                {
-                    try
-                    {
-                        ulong elapsedSeconds = gameActivities.FilterItems[iItem].ElapsedSeconds;
-                        DateTime dateSession = Convert.ToDateTime(gameActivities.FilterItems[iItem].DateSession).ToLocalTime();
-                        string sourceName = gameActivities.FilterItems[iItem].SourceName;
-                        TextBlockWithIconMode ModeSimple = (PluginDatabase.PluginSettings.ModeStoreIcon == 1) ? TextBlockWithIconMode.IconTextFirstOnly : TextBlockWithIconMode.IconFirstOnly;
-
-                        activityListByGame.Add(new ListActivities()
-                        {
-                            GameLastActivity = dateSession,
-                            GameElapsedSeconds = elapsedSeconds,
-                            AvgCPU = gameActivities.AvgCPU(dateSession.ToUniversalTime()) + "%",
-                            AvgGPU = gameActivities.AvgGPU(dateSession.ToUniversalTime()) + "%",
-                            AvgRAM = gameActivities.AvgRAM(dateSession.ToUniversalTime()) + "%",
-                            AvgFPS = gameActivities.AvgFPS(dateSession.ToUniversalTime()) + "",
-                            AvgCPUT = gameActivities.AvgCPUT(dateSession.ToUniversalTime()) + "°",
-                            AvgGPUT = gameActivities.AvgGPUT(dateSession.ToUniversalTime()) + "°",
-                            AvgCPUP = gameActivities.AvgCPUP(dateSession.ToUniversalTime()) + "W",
-                            AvgGPUP = gameActivities.AvgGPUP(dateSession.ToUniversalTime()) + "W",
-
-                            GameSourceName = sourceName,
-                            TypeStoreIcon = ModeSimple,
-                            SourceIcon = PlayniteTools.GetPlatformIcon(sourceName),
-                            SourceIconText = TransformIcon.Get(sourceName),
-
-                            EnableWarm = PluginDatabase.PluginSettings.EnableWarning,
-                            MaxCPUT = PluginDatabase.PluginSettings.MaxCpuTemp.ToString(),
-                            MaxGPUT = PluginDatabase.PluginSettings.MaxGpuTemp.ToString(),
-                            MinFPS = PluginDatabase.PluginSettings.MinFps.ToString(),
-                            MaxCPU = PluginDatabase.PluginSettings.MaxCpuUsage.ToString(),
-                            MaxGPU = PluginDatabase.PluginSettings.MaxGpuUsage.ToString(),
-                            MaxRAM = PluginDatabase.PluginSettings.MaxRamUsage.ToString(),
-
-                            PCConfigurationId = gameActivities.FilterItems[iItem].IdConfiguration,
-                            PCName = gameActivities.FilterItems[iItem].Configuration.Name,
-
-                            GameActionName = gameActivities.FilterItems[iItem].GameActionName
-                        });
-                    }
-                    catch (Exception ex)
-                    {
-                        Common.LogError(ex, false, $"Failed to load GameActivities for {gameActivities.Name}", true, PluginDatabase.PluginName);
-                    }
-                }
-
-                this.Dispatcher.BeginInvoke((Action)delegate
-                {
-                    lvSessions.ItemsSource = activityListByGame;
-                    lvSessions.Sorting();
-                
-                    if (((ObservableCollection<ListActivities>)lvSessions.ItemsSource).Count > 0)
-                    {
-                        lvSessions.SelectedItem = ((ObservableCollection<ListActivities>)lvSessions.ItemsSource).OrderByDescending(x => x.DateActivity).LastOrDefault();
-                    }
-                });
-            });
-        }
-
-
-        #region Data actions
-
-        private void PART_Delete_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBoxResult result = API.Instance.Dialogs.ShowMessage(ResourceProvider.GetString("LOCConfirumationAskGeneric"), PluginDatabase.PluginName, MessageBoxButton.YesNo);
-            if (result == MessageBoxResult.Yes)
-            {
-                try
-                {
-                    object GameLastActivity = ((FrameworkElement)sender).Tag;
-                    ListActivities activity = ((ObservableCollection<ListActivities>)lvSessions.ItemsSource).FirstOrDefault(x => x.GameLastActivity == (DateTime)GameLastActivity);
-
-                    // Delete playtime
-                    if (activity.GameElapsedSeconds != 0)
-                    {
-                        if ((long)(GameContext.Playtime - activity.GameElapsedSeconds) >= 0)
-                        {
-                            GameContext.Playtime -= activity.GameElapsedSeconds;
-                            if (GameContext.PlayCount != 0)
-                            {
-                                GameContext.PlayCount--;
-                            }
-                            else
-                            {
-                                Logger.Warn($"Play count is already at 0 for {GameContext.Name}");
-                            }
-                        }
-                        else
-                        {
-                            Logger.Warn($"Impossible to remove GameElapsedSeconds ({activity.GameElapsedSeconds}) in Playtime ({GameContext.Playtime}) of {GameContext.Name}");
-                        }
-                    }
-
-                    gameActivities.DeleteActivity(activity.GameLastActivity);
-
-                    // Set last played date
-                    GameContext.LastActivity = gameActivities?.Items?.Max(x => x.DateSession) ?? null;
-
-                    API.Instance.Database.Games.Update(GameContext);
-                    PluginDatabase.Update(gameActivities);
-
-                    lvSessions.SelectedIndex = -1;
-                    _ = ((ObservableCollection<ListActivities>)lvSessions.ItemsSource).Remove(activity);
-                }
-                catch (Exception ex)
-                {
-                    Common.LogError(ex, false, true, PluginDatabase.PluginName);
-                }
-            }
-        }
-
-        private void PART_BtAdd_Click(object sender, RoutedEventArgs e)
-        {
-            WindowOptions windowOptions = new WindowOptions
-            {
-                ShowMinimizeButton = false,
-                ShowMaximizeButton = false,
-                ShowCloseButton = true,
-                MinHeight = 450,
-                Width = 500
-            };
-
-            try
-            {
-                GameActivityAddTime ViewExtension = new GameActivityAddTime(Plugin, GameContext, null);
-                Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(ResourceProvider.GetString("LOCGaAddNewGameSession"), ViewExtension, windowOptions);
-                _ = windowExtension.ShowDialog();
-
-                if (ViewExtension.Activity != null)
-                {
-                    gameActivities.Items.Add(ViewExtension.Activity);
-                    getActivityByListGame(gameActivities);
-
-                    if (ViewExtension.Activity.ElapsedSeconds >= 0)
-                    {
-                        GameContext.Playtime += ViewExtension.Activity.ElapsedSeconds;
-                        GameContext.PlayCount++;
-                    }
-
-                    // Set last played date
-                    GameContext.LastActivity = (DateTime)gameActivities.Items.Max(x => x.DateSession);
-
-                    API.Instance.Database.Games.Update(GameContext);
-                    PluginDatabase.Update(gameActivities);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.LogError(ex, false, true, PluginDatabase.PluginName);
-            }
-        }
-
-        private void PART_BtEdit_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                object GameLastActivity = ((FrameworkElement)sender).Tag;
-                int index = gameActivities.Items.FindIndex(x => x.DateSession == ((DateTime)GameLastActivity).ToUniversalTime());
-                Activity activity = gameActivities.Items[index];
-                ulong ElapsedSeconds = activity.ElapsedSeconds;
-
-                WindowOptions windowOptions = new WindowOptions
-                {
-                    ShowMinimizeButton = false,
-                    ShowMaximizeButton = false,
-                    ShowCloseButton = true,
-                    MinHeight = 450,
-                    Width = 500
-                };
-
-                GameActivityAddTime ViewExtension = new GameActivityAddTime(Plugin, GameContext, activity);
-                Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(ResourceProvider.GetString("LOCGaAddNewGameSession"), ViewExtension, windowOptions);
-                _ = windowExtension.ShowDialog();
-
-                if (ViewExtension.Activity != null)
-                {
-                    gameActivities.Items[index] = ViewExtension.Activity;
-                    getActivityByListGame(gameActivities);
-
-                    if (ViewExtension.Activity.ElapsedSeconds >= 0)
-                    {
-                        GameContext.Playtime += ViewExtension.Activity.ElapsedSeconds - ElapsedSeconds;
-                    }
-
-                    // Set last played date
-                    GameContext.LastActivity = (DateTime)gameActivities.Items.Max(x => x.DateSession);
-
-                    API.Instance.Database.Games.Update(GameContext);
-                    PluginDatabase.Update(gameActivities);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.LogError(ex, false, true, PluginDatabase.PluginName);
-            }
-        }
-
-        private void PART_BtMerged_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                WindowOptions windowOptions = new WindowOptions
-                {
-                    ShowMinimizeButton = false,
-                    ShowMaximizeButton = false,
-                    ShowCloseButton = true
-                };
-
-                GameActivityMergeTime ViewExtension = new GameActivityMergeTime(GameContext);
-                Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(ResourceProvider.GetString("LOCGaMergeSession"), ViewExtension, windowOptions);
-                _ = windowExtension.ShowDialog();
-            }
-            catch (Exception ex)
-            {
-                Common.LogError(ex, false, true, PluginDatabase.PluginName);
-            }
-        }
-
-        private void PART_BtShowAll_Click(object sender, RoutedEventArgs e)
-        {
-            bool isChecked = PART_BtShowAll.IsChecked ?? false;
-            PART_BtShowAll.Content = isChecked ? "\ue9b0" : "\ue9a8";
-            PART_ChartLog.ShowAllData = isChecked;
-        }
-
-        #endregion
+        private void Bt_PrevLog(object sender, RoutedEventArgs e) => _chartLog.Prev();
+        private void Bt_NextLog(object sender, RoutedEventArgs e) => _chartLog.Next();
+        private void Bt_PrevLogPlus(object sender, RoutedEventArgs e) => _chartLog.Prev(PluginDatabase.PluginSettings.VariatorLog);
+        private void Bt_NextLogPlus(object sender, RoutedEventArgs e) => _chartLog.Next(PluginDatabase.PluginSettings.VariatorLog);
     }
 }
