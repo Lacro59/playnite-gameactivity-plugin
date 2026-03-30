@@ -169,6 +169,7 @@
     <Compile Include="playnite-plugincommon\CommonPluginsControls\Controls\ControlPickerGradient.xaml.cs">
       <DependentUpon>ControlPickerGradient.xaml</DependentUpon>
     </Compile>
+    <Compile Include="playnite-plugincommon\CommonPluginsControls\Controls\NavBarToogle.cs" />
     <Compile Include="playnite-plugincommon\CommonPluginsControls\Controls\PluginChartNavBar.xaml.cs">
       <DependentUpon>PluginChartNavBar.xaml</DependentUpon>
     </Compile>

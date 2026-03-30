@@ -44,17 +44,27 @@ namespace GameActivity.Controls
             set => ControlDataContext = (PluginChartTimeDataContext)value;
         }
 
+        // ── Toggle ids ───────────────────────────────────────────────────────
+
+        /// <summary>Nav bar toggle id for the ShowByWeeks feature.</summary>
+        private const string ToggleIdShowByWeeks = "showByWeeks";
+
+        /// <summary>Nav bar toggle id for the Truncate feature.</summary>
+        private const string ToggleIdTruncate = "truncate";
+
+        // ── Window tracking ──────────────────────────────────────────────────
+
         /// <summary>
         /// Total data points (days or weeks) available in the full dataset for the current game.
         /// Distinct from <see cref="_lastWindowSize"/>: this is the complete span, not the current page.
-        /// Used by Prev() and the nav bar to determine whether earlier data exists.
+        /// Used by <see cref="Prev"/> and the nav bar to determine whether earlier data exists.
         /// </summary>
         private int _totalDataPoints;
 
         /// <summary>
         /// Effective number of columns rendered in the last chart build (current page size).
         /// Differs from <see cref="_totalDataPoints"/> when the dataset is larger than one page.
-        /// Used by Prev() and NavBar_FirstClicked to compute the leftmost valid AxisVariator.
+        /// Used by <see cref="Prev"/> and <see cref="NavBar_FirstClicked"/> to compute the leftmost valid AxisVariator.
         /// </summary>
         private int _lastWindowSize;
 
@@ -213,17 +223,19 @@ namespace GameActivity.Controls
                     .FromProperty(PluginChartNavBar.AxisLimitProperty, typeof(PluginChartNavBar))
                     .AddValueChanged(PART_NavBar, OnNavBarAxisLimitChanged);
 
-                PART_NavBar.AxisLimitReset += NavBar_AxisLimitReset; 
-                PART_NavBar.CustomToggled += NavBar_ShowByWeeksToggled;
+                PART_NavBar.AxisLimitReset += NavBar_AxisLimitReset;
+                PART_NavBar.NavBarToggleChanged += NavBar_ToggleChanged;
             }
         }
 
+        // ────────────────────────────────────────────────────────────────────
+        // Lifecycle
+        // ────────────────────────────────────────────────────────────────────
+
         /// <summary>
         /// Called when the control is unloaded from the visual tree.
-        /// Detaches dependency property value changed listeners to prevent memory references.
+        /// Detaches dependency property value changed listeners to prevent memory leaks.
         /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The event data.</param>
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
             if (PART_NavBar != null)
@@ -231,38 +243,10 @@ namespace GameActivity.Controls
                 DependencyPropertyDescriptor
                     .FromProperty(PluginChartNavBar.AxisLimitProperty, typeof(PluginChartNavBar))
                     .RemoveValueChanged(PART_NavBar, OnNavBarAxisLimitChanged);
-                
-                PART_NavBar.CustomToggled -= NavBar_ShowByWeeksToggled;
+
+                PART_NavBar.AxisLimitReset -= NavBar_AxisLimitReset;
+                PART_NavBar.NavBarToggleChanged -= NavBar_ToggleChanged;
             }
-        }
-
-        /// <summary>
-        /// Handles the reset event from the navigation bar's axis limit.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The event data.</param>
-        private void NavBar_AxisLimitReset(object sender, RoutedEventArgs e)
-        {
-            ApplyAxisLimitFromNavBar();
-        }
-
-        /// <summary>
-        /// Handles changes to the navigation bar's axis limit dependency property.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The event data.</param>
-        private void OnNavBarAxisLimitChanged(object sender, EventArgs e)
-        {
-            ApplyAxisLimitFromNavBar();
-        }
-
-        /// <summary>
-        /// Syncs the NavBar custom toggle state back to the <see cref="ShowByWeeks"/> dependency property.
-        /// </summary>
-        private void NavBar_ShowByWeeksToggled(object sender, RoutedEventArgs e)
-        {
-            ShowByWeeks = PART_NavBar.CustomToggle;
-            GameContextChanged(null, GameContext);
         }
 
         // ────────────────────────────────────────────────────────────────────
@@ -292,8 +276,6 @@ namespace GameActivity.Controls
         /// <summary>
         /// Handles changes to the plugin settings and refreshes the chart context.
         /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The property changed event data.</param>
         protected override void PluginSettings_PropertyChanged(
             object sender,
             PropertyChangedEventArgs e
@@ -335,12 +317,7 @@ namespace GameActivity.Controls
             ControlDataContext.DisableAnimations = DisableAnimations;
             ControlDataContext.LabelsRotationValue = LabelsRotation ? 160d : 0d;
 
-            bool showNavBar = ShowNavBar;
-            if (IgnoreSettings)
-            {
-                showNavBar = true;
-            }
-
+            bool showNavBar = IgnoreSettings ? true : ShowNavBar;
             ControlDataContext.ShowNavBar = showNavBar;
             ControlDataContext.ShowAllData = false;
             ControlDataContext.NavLabel = string.Empty;
@@ -361,18 +338,44 @@ namespace GameActivity.Controls
                 PART_NavBar.AxisLimitDefault = defaultLimit;
                 PART_NavBar.AxisLimit = AxisLimit;
 
-                PART_NavBar.CustomToggleVisible = true;
-                PART_NavBar.CustomToggleInactiveIcon = "\uEC45";
-                PART_NavBar.CustomToggleActiveIcon = "\uEC45";
-                PART_NavBar.CustomToggleInactiveToolTip = ResourceProvider.GetString("LOCCommonNavShowByWeeks");
-                PART_NavBar.CustomToggleActiveToolTip = ResourceProvider.GetString("LOCCommonNavShowByWeeksDisable");
-                PART_NavBar.CustomToggle = ShowByWeeks;
+                RegisterNavBarToggles();
             }
 
             PART_ChartTimeActivity.Series = null;
             PART_ChartTimeActivityLabelsX.Labels = null;
             _totalDataPoints = 0;
             _lastWindowSize = 0;
+        }
+
+        /// <summary>
+        /// Registers the ShowByWeeks and Truncate toggles on the nav bar.
+        /// Removes any previously registered instances first so this method is safe
+        /// to call on every <see cref="SetDefaultDataContext"/> invocation.
+        /// </summary>
+        private void RegisterNavBarToggles()
+        {
+            // Remove before re-adding — SetDefaultDataContext can be called multiple times.
+            PART_NavBar.RemoveToggle(ToggleIdShowByWeeks);
+            PART_NavBar.RemoveToggle(ToggleIdTruncate);
+
+            var toggleWeeks = new NavBarToggle(ToggleIdShowByWeeks, "\uEC45")
+            {
+                InactiveToolTip = ResourceProvider.GetString("LOCCommonNavShowByWeeks"),
+                ActiveToolTip = ResourceProvider.GetString("LOCCommonNavShowByWeeksDisable"),
+            };
+            PART_NavBar.AddToggle(toggleWeeks);
+
+            // Initialise state silently — must not fire NavBarToggleChanged during setup.
+            PART_NavBar.SetToggleState(ToggleIdShowByWeeks, ShowByWeeks);
+
+            var toggleTruncate = new NavBarToggle(ToggleIdTruncate, "\uEF29")
+            {
+                InactiveToolTip = ResourceProvider.GetString("LOCCommonNavTruncate"),
+                ActiveToolTip = ResourceProvider.GetString("LOCCommonNavTruncateDisable"),
+            };
+            PART_NavBar.AddToggle(toggleTruncate);
+
+            PART_NavBar.SetToggleState(ToggleIdTruncate, Truncate);
         }
 
         // ────────────────────────────────────────────────────────────────────
@@ -473,14 +476,11 @@ namespace GameActivity.Controls
         #region Nav bar event handlers
 
         /// <summary>
-        /// Jumps to the first page (oldest possible window entries) by modifying the axis variator.
+        /// Jumps to the first page (oldest possible window entries) by computing
+        /// the leftmost valid AxisVariator from the last known window size.
         /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The event data.</param>
         private void NavBar_FirstClicked(object sender, RoutedEventArgs e)
         {
-            // Jump directly to the leftmost valid position using the last known window size,
-            // so AxisVariator is never left at an arbitrary large negative value.
             int limit =
                 AxisLimit > 0 ? AxisLimit : PluginDatabase.PluginSettings.ChartTimeCountAbscissa;
             int windowSize = _lastWindowSize > 0 ? _lastWindowSize : limit + 1;
@@ -488,11 +488,7 @@ namespace GameActivity.Controls
             AxisVariator = minVariator;
         }
 
-        /// <summary>
-        /// Moves the session window backward by a full page.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The event data.</param>
+        /// <summary>Moves the session window backward by a full page.</summary>
         private void NavBar_PagePrevClicked(object sender, RoutedEventArgs e)
         {
             int pageSize =
@@ -500,11 +496,7 @@ namespace GameActivity.Controls
             Prev(pageSize);
         }
 
-        /// <summary>
-        /// Moves the session window backward by a single step.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The event data.</param>
+        /// <summary>Moves the session window backward by a single step.</summary>
         private void NavBar_PrevClicked(object sender, RoutedEventArgs e)
         {
             Prev();
@@ -513,29 +505,19 @@ namespace GameActivity.Controls
         /// <summary>
         /// Toggles between the paginated view and showing the entire session dataset.
         /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The event data.</param>
         private void NavBar_ShowAllToggled(object sender, RoutedEventArgs e)
         {
             ControlDataContext.ShowAllData = PART_NavBar.ShowAllData;
             GameContextChanged(null, GameContext);
         }
 
-        /// <summary>
-        /// Moves the session window forward by a single step.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The event data.</param>
+        /// <summary>Moves the session window forward by a single step.</summary>
         private void NavBar_NextClicked(object sender, RoutedEventArgs e)
         {
             Next();
         }
 
-        /// <summary>
-        /// Moves the session window forward by a full page.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The event data.</param>
+        /// <summary>Moves the session window forward by a full page.</summary>
         private void NavBar_PageNextClicked(object sender, RoutedEventArgs e)
         {
             int pageSize =
@@ -543,14 +525,46 @@ namespace GameActivity.Controls
             Next(pageSize);
         }
 
-        /// <summary>
-        /// Jumps to the most recent window entries by setting the axis variator to 0.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The event data.</param>
+        /// <summary>Jumps to the most recent window by resetting AxisVariator to 0.</summary>
         private void NavBar_LastClicked(object sender, RoutedEventArgs e)
         {
             AxisVariator = 0;
+        }
+
+        /// <summary>
+        /// Handles the reset event from the navigation bar's axis limit.
+        /// </summary>
+        private void NavBar_AxisLimitReset(object sender, RoutedEventArgs e)
+        {
+            ApplyAxisLimitFromNavBar();
+        }
+
+        /// <summary>
+        /// Handles changes to the navigation bar's axis limit dependency property.
+        /// </summary>
+        private void OnNavBarAxisLimitChanged(object sender, EventArgs e)
+        {
+            ApplyAxisLimitFromNavBar();
+        }
+
+        /// <summary>
+        /// Dispatches nav bar toggle state changes to the appropriate control property.
+        /// A single handler for all toggles — identified by <see cref="NavBarToggleChangedEventArgs.ToggleId"/>.
+        /// </summary>
+        private void NavBar_ToggleChanged(object sender, NavBarToggleChangedEventArgs e)
+        {
+            switch (e.ToggleId)
+            {
+                case ToggleIdShowByWeeks:
+                    ShowByWeeks = e.IsActive;
+                    GameContextChanged(null, GameContext);
+                    break;
+
+                case ToggleIdTruncate:
+                    Truncate = e.IsActive;
+                    GameContextChanged(null, GameContext);
+                    break;
+            }
         }
 
         /// <summary>
@@ -559,20 +573,18 @@ namespace GameActivity.Controls
         /// <see cref="ControlDataContext.PageSize"/> so the nav bar tooltip stays accurate.
         /// </summary>
         /// <remarks>
-        /// GameContextChanged is called explicitly because WPF skips ControlsPropertyChangedCallback
-        /// when the DP value does not change (equal-value edge case).
+        /// <see cref="GameContextChanged"/> is called explicitly because WPF skips
+        /// <c>ControlsPropertyChangedCallback</c> when the DP value does not change (equal-value edge case).
         /// </remarks>
         private void ApplyAxisLimitFromNavBar()
         {
             int newLimit = PART_NavBar.AxisLimit;
-
             int effectivePageSize =
                 newLimit > 0 ? newLimit : PluginDatabase.PluginSettings.ChartTimeCountAbscissa;
 
             ControlDataContext.PageSize = effectivePageSize;
             ControlDataContext.AxisLimit = newLimit;
             PART_NavBar.PageSize = effectivePageSize;
-
             AxisLimit = newLimit;
 
             GameContextChanged(null, GameContext);
@@ -937,16 +949,7 @@ namespace GameActivity.Controls
                 PART_ChartTimeActivity.Series = activityForGameSeries;
                 PART_ChartTimeActivityLabelsX.Labels = listDate;
 
-                if (PART_NavBar != null)
-                {
-                    int windowSize = _lastWindowSize;
-                    int minVariator =
-                        _totalDataPoints > windowSize ? -(_totalDataPoints - windowSize) : 0;
-
-                    PART_NavBar.AxisLimitMaximum = _totalDataPoints;
-                    PART_NavBar.CanGoNext = AxisVariator < 0;
-                    PART_NavBar.CanGoPrev = AxisVariator > minVariator;
-                }
+                UpdateNavBarBounds();
 
                 ControlDataContext.NavLabel = PluginChartNavBar.BuildRangeLabel(listDate);
             }
@@ -1094,16 +1097,7 @@ namespace GameActivity.Controls
                 PART_ChartTimeActivity.Series = activityForGameSeries;
                 PART_ChartTimeActivityLabelsX.Labels = labels;
 
-                if (PART_NavBar != null)
-                {
-                    int windowSize = _lastWindowSize;
-                    int minVariator =
-                        _totalDataPoints > windowSize ? -(_totalDataPoints - windowSize) : 0;
-
-                    PART_NavBar.AxisLimitMaximum = _totalDataPoints;
-                    PART_NavBar.CanGoNext = AxisVariator < 0;
-                    PART_NavBar.CanGoPrev = AxisVariator > minVariator;
-                }
+                UpdateNavBarBounds();
 
                 ControlDataContext.NavLabel = PluginChartNavBar.BuildRangeLabel(labels.ToArray());
             }
@@ -1111,6 +1105,25 @@ namespace GameActivity.Controls
             {
                 Common.LogError(ex, false, true, PluginDatabase.PluginName);
             }
+        }
+
+        /// <summary>
+        /// Pushes the current navigation bounds into the nav bar after a chart rebuild.
+        /// Extracted to avoid duplicating the same three lines in both chart builders.
+        /// </summary>
+        private void UpdateNavBarBounds()
+        {
+            if (PART_NavBar == null)
+            {
+                return;
+            }
+
+            int windowSize = _lastWindowSize;
+            int minVariator = _totalDataPoints > windowSize ? -(_totalDataPoints - windowSize) : 0;
+
+            PART_NavBar.AxisLimitMaximum = _totalDataPoints;
+            PART_NavBar.CanGoNext = AxisVariator < 0;
+            PART_NavBar.CanGoPrev = AxisVariator > minVariator;
         }
 
         // ────────────────────────────────────────────────────────────────────
@@ -1122,8 +1135,6 @@ namespace GameActivity.Controls
         /// <summary>
         /// Invokes the <see cref="GameSeriesDataClick"/> event when a chart data point is clicked.
         /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="chartPoint">The clicked chart point.</param>
         private void PART_ChartTimeActivity_DataClick(object sender, ChartPoint chartPoint)
         {
             GameSeriesDataClick?.Invoke(this, chartPoint);
