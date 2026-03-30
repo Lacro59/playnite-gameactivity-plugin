@@ -24,8 +24,8 @@ namespace GameActivity.Services
 				ShowCloseButton = true,
 				CanBeResizable = true,
 				Height = 740,
-				Width = 1280,
-				WidthPercent = 80
+				MinWidth = 1280,
+				WidthPercent = 90
 			};
 
 			var viewExtension = new GameActivityViewSingle((GameActivity)plugin, gameContext);
