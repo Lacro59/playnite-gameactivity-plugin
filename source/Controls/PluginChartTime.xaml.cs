@@ -961,133 +961,125 @@ namespace GameActivity.Controls
 
         /// <summary>
         /// Builds and assigns the LiveCharts series collection for the weekly aggregated session window.
+        /// Supports a truncated view to skip weeks with zero activity.
         /// </summary>
         /// <param name="gameActivities">The game activities data object containing session logs.</param>
         /// <param name="variateurTime">The signed offset applied to the session window anchor (in weeks).</param>
         /// <param name="limit">The maximum number of weeks to render in one page.</param>
-        private void GetActivityForGamesChartByWeek(
-            GameActivities gameActivities,
-            int variateurTime = 0,
-            int limit = 9
-        )
+        private void GetActivityForGamesChartByWeek(GameActivities gameActivities, int variateurTime = 0, int limit = 9)
         {
             try
             {
                 List<Activity> activities = Serialization.GetClone(gameActivities.FilterItems);
+                if (activities.Count == 0) return;
 
-                DateTime dtFirstActivity = activities
-                    .Where(x => x.DateSession != null)
-                    .Select(x => (DateTime)x.DateSession?.ToLocalTime())
-                    .Min();
+                // Group all activities by their Monday to identify active weeks
+                var activeWeeks = activities
+                    .GroupBy(x => ((DateTime)x.DateSession).ToLocalTime().StartOfWeek(DayOfWeek.Monday))
+                    .Select(g => new {
+                        Monday = g.Key,
+                        TotalSeconds = g.Sum(x => (long)x.ElapsedSeconds)
+                    })
+                    .OrderBy(x => x.Monday)
+                    .ToList();
 
-                DateTime dtLastActivity = activities
-                    .Where(x => x.DateSession != null)
-                    .Select(x => (DateTime)x.DateSession?.ToLocalTime())
-                    .Max();
+                List<WeekStartEnd> allPossiblePeriods = new List<WeekStartEnd>();
 
-                // Anchor both extremes to their Monday so week boundaries are consistent
-                // regardless of the day-of-week of the first/last session.
-                DateTime firstMonday = dtFirstActivity.StartOfWeek(DayOfWeek.Monday);
-                DateTime lastMonday = dtLastActivity.StartOfWeek(DayOfWeek.Monday);
-
-                // Total weeks = number of distinct Monday-anchored weeks between first and last session.
-                int totalWeeks = (int)Math.Round((lastMonday - firstMonday).TotalDays / 7.0) + 1;
-                totalWeeks = totalWeeks < 1 ? 1 : totalWeeks;
-
-                int resolvedLimit;
-                DateTime pivotMonday;
-
-                // ShowAllData passes limit = Count: span every week from first to last session.
-                if (limit == int.MaxValue || limit >= activities.Count)
+                if (Truncate)
                 {
-                    resolvedLimit = totalWeeks - 1; // loop goes from resolvedLimit down to 0 → resolvedLimit+1 labels
-                    pivotMonday = lastMonday;
-                    // variateurTime intentionally ignored in ShowAllData mode.
+                    // MODE: TRUNCATE - Only periods with actual data are considered
+                    foreach (var week in activeWeeks)
+                    {
+                        allPossiblePeriods.Add(new WeekStartEnd
+                        {
+                            Monday = week.Monday,
+                            Sunday = week.Monday.AddDays(6).AddHours(23).AddMinutes(59).AddSeconds(59)
+                        });
+                    }
                 }
                 else
                 {
-                    resolvedLimit = limit;
+                    // MODE: CONTINUOUS - Fill all weeks between first and last activity
+                    DateTime firstMonday = activeWeeks.First().Monday;
+                    DateTime lastMonday = activeWeeks.Last().Monday;
 
-                    // Clamp only the positive side — the negative side is handled by Prev() via _totalDataPoints.
-                    variateurTime = Math.Min(0, variateurTime);
-
-                    // Shift the pivot week by variateurTime weeks (negative = older).
-                    pivotMonday = lastMonday.AddDays(7 * variateurTime);
+                    for (DateTime dt = firstMonday; dt <= lastMonday; dt = dt.AddDays(7))
+                    {
+                        allPossiblePeriods.Add(new WeekStartEnd
+                        {
+                            Monday = dt,
+                            Sunday = dt.AddDays(6).AddHours(23).AddMinutes(59).AddSeconds(59)
+                        });
+                    }
                 }
 
+                // --- Paging Logic ---
+                _totalDataPoints = allPossiblePeriods.Count;
+                int resolvedLimit = (limit == int.MaxValue || limit >= _totalDataPoints) ? _totalDataPoints : limit;
+
+                // Calculate the window of periods to display based on variateurTime
+                // Logic: display from the end, shifted by variateurTime
+                int endOffset = _totalDataPoints + variateurTime;
+                int startIndex = Math.Max(0, endOffset - resolvedLimit);
+                int count = Math.Min(resolvedLimit, endOffset - startIndex);
+
+                if (count <= 0 && _totalDataPoints > 0) // Guard for out of bounds
+                {
+                    startIndex = Math.Max(0, _totalDataPoints - resolvedLimit);
+                    count = Math.Min(resolvedLimit, _totalDataPoints);
+                }
+
+                var visiblePeriods = allPossiblePeriods.Skip(startIndex).Take(count).ToList();
+
+                // --- Prepare Chart Data ---
                 List<string> labels = new List<string>();
                 ChartValues<CustomerForTime> seriesData = new ChartValues<CustomerForTime>();
                 List<WeekStartEnd> datesPeriodes = new List<WeekStartEnd>();
 
-                for (int i = resolvedLimit; i >= 0; i--)
+                foreach (var period in visiblePeriods)
                 {
-                    // Each step is exactly one week back from the pivot Monday.
-                    DateTime weekMonday = pivotMonday.AddDays(-7 * i);
-                    DateTime weekSunday = weekMonday
-                        .AddDays(6)
-                        .AddHours(23)
-                        .AddMinutes(59)
-                        .AddSeconds(59);
-                    int weekNumber = UtilityTools.WeekOfYearISO8601(weekMonday);
-
-                    string label = string.Format(
-                        "{0} {1}",
+                    int weekNumber = UtilityTools.WeekOfYearISO8601(period.Monday);
+                    string label = string.Format("{0} {1}",
                         ResourceProvider.GetString("LOCGameActivityWeekLabel"),
-                        weekNumber
-                    );
+                        weekNumber);
 
                     labels.Add(label);
-                    datesPeriodes.Add(
-                        new WeekStartEnd { Monday = weekMonday, Sunday = weekSunday }
-                    );
-                    seriesData.Add(
-                        new CustomerForTime
-                        {
-                            Name = label,
-                            Values = 0,
-                            HideIsZero = true,
-                        }
-                    );
+                    datesPeriodes.Add(period);
+
+                    // Find activity for this specific week
+                    long weekValue = activeWeeks.FirstOrDefault(w => w.Monday == period.Monday)?.TotalSeconds ?? 0;
+
+                    seriesData.Add(new CustomerForTime
+                    {
+                        Name = label,
+                        Values = weekValue,
+                        HideIsZero = true
+                    });
                 }
 
-                // _totalDataPoints = navigable week count across the full dataset.
-                // _lastWindowSize  = columns in the current page.
-                _totalDataPoints = totalWeeks;
                 _lastWindowSize = labels.Count;
 
-                activities.ForEach(x =>
+                // --- LiveCharts Configuration ---
+                SeriesCollection activityForGameSeries = new SeriesCollection
                 {
-                    DateTime sessionTime = ((DateTime)x.DateSession).ToLocalTime();
-                    int idx = datesPeriodes.FindIndex(y =>
-                        y.Monday <= sessionTime && y.Sunday >= sessionTime
-                    );
-                    if (idx > -1)
-                    {
-                        seriesData[idx].Values += (long)x.ElapsedSeconds;
-                    }
-                });
+                    new ColumnSeries { Title = "1", Values = seriesData }
+                };
 
-                SeriesCollection activityForGameSeries = new SeriesCollection();
-                activityForGameSeries.Add(new ColumnSeries { Title = "1", Values = seriesData });
-
-                CartesianMapper<CustomerForTime> customerVmMapper = Mappers
-                    .Xy<CustomerForTime>()
+                CartesianMapper<CustomerForTime> customerVmMapper = Mappers.Xy<CustomerForTime>()
                     .X((value, index) => index)
                     .Y(value => value.Values);
                 Charting.For<CustomerForTime>(customerVmMapper);
 
-                PlayTimeToStringConverterWithZero converter =
-                    new PlayTimeToStringConverterWithZero();
+                PlayTimeToStringConverterWithZero converter = new PlayTimeToStringConverterWithZero();
                 PART_ChartTimeActivityLabelsY.LabelFormatter = value =>
                     (string)converter.Convert((ulong)value, null, null, CultureInfo.CurrentCulture);
 
                 PART_ChartTimeActivity.DataTooltip = new CustomerToolTipForTime
                 {
                     ShowIcon = PluginDatabase.PluginSettings.ShowLauncherIcons,
-                    Mode =
-                        PluginDatabase.PluginSettings.ModeStoreIcon == 1
-                            ? TextBlockWithIconMode.IconTextFirstWithText
-                            : TextBlockWithIconMode.IconFirstWithText,
+                    Mode = PluginDatabase.PluginSettings.ModeStoreIcon == 1
+                        ? TextBlockWithIconMode.IconTextFirstWithText
+                        : TextBlockWithIconMode.IconFirstWithText,
                     DatesPeriodes = datesPeriodes,
                     ShowWeekPeriode = true,
                     ShowTitle = true,
@@ -1097,8 +1089,9 @@ namespace GameActivity.Controls
                 PART_ChartTimeActivity.Series = activityForGameSeries;
                 PART_ChartTimeActivityLabelsX.Labels = labels;
 
+                // Update Nav Bar UI
                 UpdateNavBarBounds();
-
+                ControlDataContext.PageSize = _totalDataPoints; // Sync with DataContext for NavButtons
                 ControlDataContext.NavLabel = PluginChartNavBar.BuildRangeLabel(labels.ToArray());
             }
             catch (Exception ex)
