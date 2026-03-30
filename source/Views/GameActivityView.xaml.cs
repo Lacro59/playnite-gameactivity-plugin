@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using Playnite.SDK;
@@ -20,7 +20,6 @@ using GameActivity.Services;
 using GameActivity.Controls;
 using CommonPluginsControls.Controls;
 using System.Windows.Media;
-using System.IO;
 using CommonPluginsShared.Extensions;
 using Playnite.SDK.Data;
 using CommonPluginsShared.SystemInfo;
@@ -114,100 +113,81 @@ namespace GameActivity.Views
             _ = PART_GameActivityChartLog_Contener.Children.Add(PART_GameActivityChartLog);
 
 
-            lvGames.SaveColumn = PluginDatabase.PluginSettings.SaveColumnOrder;
-            lvGames.SaveColumnFilePath = Path.Combine(PluginDatabase.Paths.PluginUserDataPath, "lvGames.json");
+            lvGames.EnableColumnPersistence = PluginDatabase.PluginSettings.SaveColumnOrder;
+            lvGames.ColumnConfigurationFilePath = System.IO.Path.Combine(PluginDatabase.Paths.PluginUserDataPath, "ListViewColumns.json");
+            lvGames.ColumnConfigurationScope = CommonPluginsShared.Controls.ColumnConfigurationScope.Custom;
+            lvGames.ColumnConfigurationKey = "GameActivityView.lvGames";
 
             GridView lvView = (GridView)lvGames.View;
 
             // Add column if log details enable.
             if (!PluginDatabase.PluginSettings.EnableLogging)
             {
-                lvAvgGpuP.Width = 0;
-                lvAvgGpuPHeader.IsHitTestVisible = false;
-                lvAvgCpuP.Width = 0;
-                lvAvgCpuPHeader.IsHitTestVisible = false;
-                lvAvgGpuT.Width = 0;
-                lvAvgGpuTHeader.IsHitTestVisible = false;
-                lvAvgCpuT.Width = 0;
-                lvAvgCpuTHeader.IsHitTestVisible = false;
-                lvAvgFps.Width = 0;
-                lvAvgFpsHeader.IsHitTestVisible = false;
-                lvAvgRam.Width = 0;
-                lvAvgRamHeader.IsHitTestVisible = false;
-                lvAvgGpu.Width = 0;
-                lvAvgGpuHeader.IsHitTestVisible = false;
-                lvAvgCpu.Width = 0;
-                lvAvgCpuHeader.IsHitTestVisible = false;
+                HideColumn(lvAvgGpuP, lvAvgGpuPHeader, true);
+                HideColumn(lvAvgCpuP, lvAvgCpuPHeader, true);
+                HideColumn(lvAvgGpuT, lvAvgGpuTHeader, true);
+                HideColumn(lvAvgCpuT, lvAvgCpuTHeader, true);
+                HideColumn(lvAvgFps, lvAvgFpsHeader, true);
+                HideColumn(lvAvgRam, lvAvgRamHeader, true);
+                HideColumn(lvAvgGpu, lvAvgGpuHeader, true);
+                HideColumn(lvAvgCpu, lvAvgCpuHeader, true);
             }
             else
             {
                 if (!PluginDatabase.PluginSettings.lvAvgGpuP)
                 {
-                    lvAvgGpuP.Width = 0;
-                    lvAvgGpuPHeader.IsHitTestVisible = false;
+                    HideColumn(lvAvgGpuP, lvAvgGpuPHeader);
                 }
                 if (!PluginDatabase.PluginSettings.lvAvgCpuP)
                 {
-                    lvAvgCpuP.Width = 0;
-                    lvAvgCpuPHeader.IsHitTestVisible = false;
+                    HideColumn(lvAvgCpuP, lvAvgCpuPHeader);
                 }
                 if (!PluginDatabase.PluginSettings.lvAvgGpuT)
                 {
-                    lvAvgGpuT.Width = 0;
-                    lvAvgGpuTHeader.IsHitTestVisible = false;
+                    HideColumn(lvAvgGpuT, lvAvgGpuTHeader);
                 }
                 if (!PluginDatabase.PluginSettings.lvAvgCpuT)
                 {
-                    lvAvgCpuT.Width = 0;
-                    lvAvgCpuTHeader.IsHitTestVisible = false;
+                    HideColumn(lvAvgCpuT, lvAvgCpuTHeader);
                 }
                 if (!PluginDatabase.PluginSettings.lvAvgFps)
                 {
-                    lvAvgFps.Width = 0;
-                    lvAvgFpsHeader.IsHitTestVisible = false;
+                    HideColumn(lvAvgFps, lvAvgFpsHeader);
                 }
                 if (!PluginDatabase.PluginSettings.lvAvgRam)
                 {
-                    lvAvgRam.Width = 0;
-                    lvAvgRamHeader.IsHitTestVisible = false;
+                    HideColumn(lvAvgRam, lvAvgRamHeader);
                 }
                 if (!PluginDatabase.PluginSettings.lvAvgGpu)
                 {
-                    lvAvgGpu.Width = 0;
-                    lvAvgGpuHeader.IsHitTestVisible = false;
+                    HideColumn(lvAvgGpu, lvAvgGpuHeader);
                 }
                 if (!PluginDatabase.PluginSettings.lvAvgCpu)
                 {
-                    lvAvgCpu.Width = 0;
-                    lvAvgCpuHeader.IsHitTestVisible = false;
+                    HideColumn(lvAvgCpu, lvAvgCpuHeader);
                 }
             }
 
             if (!PluginDatabase.PluginSettings.lvGamesPlayAction)
             {
-                lvGamesPlayAction.Width = 0;
-                lvGamesPlayActionHeader.IsHitTestVisible = false;
+                HideColumn(lvGamesPlayAction, lvGamesPlayActionHeader);
             }
             if (!PluginDatabase.PluginSettings.lvGamesPcName)
             {
-                lvGamesPcName.Width = 0;
-                lvGamesPcNameHeader.IsHitTestVisible = false;
+                HideColumn(lvGamesPcName, lvGamesPcNameHeader);
             }
             if (!PluginDatabase.PluginSettings.lvGamesSource)
             {
-                lvGamesSource.Width = 0;
-                lvGamesSourceHeader.IsHitTestVisible = false;
+                HideColumn(lvGamesSource, lvGamesSourceHeader);
             }
             if (!PluginDatabase.PluginSettings.lvGamesIcon)
             {
-                lvGamesIcon.Width = 0;
-                lvGamesIconHeader.IsHitTestVisible = false;
+                HideColumn(lvGamesIcon, lvGamesIconHeader);
             }
 
             if (!PluginDatabase.PluginSettings.lvGamesIcon)
             {
-                lvGamesIcon.Width = 0;
-                lvGamesIconHeader.IsHitTestVisible = false;
+                HideColumn(lvGamesIcon, lvGamesIconHeader);
             }
 
             // Graphics game details activities.
@@ -289,6 +269,21 @@ namespace GameActivity.Views
 
 
             DataContext = this;
+        }
+
+        /// <summary>
+        /// Hides a GridView column and optionally forces it to remain hidden in ListViewExtend management.
+        /// </summary>
+        private static void HideColumn(GridViewColumn column, GridViewColumnHeader header, bool forceHidden = false)
+        {
+            if (column == null || header == null)
+            {
+                return;
+            }
+
+            column.Width = 0;
+            header.IsHitTestVisible = false;
+            CommonPluginsShared.Controls.ListViewColumnOptions.SetForceHidden(column, forceHidden);
         }
 
 

@@ -1,4 +1,4 @@
-﻿using CommonPluginsControls.Controls;
+using CommonPluginsControls.Controls;
 using GameActivity.Controls;
 using GameActivity.Models;
 using GameActivity.Services;
@@ -8,7 +8,6 @@ using Playnite.SDK.Models;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -58,8 +57,10 @@ namespace GameActivity.Views
             ConfigureListViewColumns();
 
             // ListView persistence.
-            lvSessions.SaveColumn = PluginDatabase.PluginSettings.SaveColumnOrder;
-            lvSessions.SaveColumnFilePath = Path.Combine(PluginDatabase.Paths.PluginUserDataPath, "lvSessions.json");
+            lvSessions.EnableColumnPersistence = PluginDatabase.PluginSettings.SaveColumnOrder;
+            lvSessions.ColumnConfigurationFilePath = System.IO.Path.Combine(PluginDatabase.Paths.PluginUserDataPath, "ListViewColumns.json");
+            lvSessions.ColumnConfigurationScope = CommonPluginsShared.Controls.ColumnConfigurationScope.Custom;
+            lvSessions.ColumnConfigurationKey = "GameActivityViewSingle.lvSessions";
         }
 
         // ─── Column Configuration ─────────────────────────────────────────────────────
@@ -73,14 +74,14 @@ namespace GameActivity.Views
             if (!PluginDatabase.PluginSettings.EnableLogging)
             {
                 // Hide all hardware-monitoring columns when logging is disabled.
-                HideColumn(lvAvgGpuP, lvAvgGpuPHeader);
-                HideColumn(lvAvgCpuP, lvAvgCpuPHeader);
-                HideColumn(lvAvgGpuT, lvAvgGpuTHeader);
-                HideColumn(lvAvgCpuT, lvAvgCpuTHeader);
-                HideColumn(lvAvgFps, lvAvgFpsHeader);
-                HideColumn(lvAvgRam, lvAvgRamHeader);
-                HideColumn(lvAvgGpu, lvAvgGpuHeader);
-                HideColumn(lvAvgCpu, lvAvgCpuHeader);
+                HideColumn(lvAvgGpuP, lvAvgGpuPHeader, true);
+                HideColumn(lvAvgCpuP, lvAvgCpuPHeader, true);
+                HideColumn(lvAvgGpuT, lvAvgGpuTHeader, true);
+                HideColumn(lvAvgCpuT, lvAvgCpuTHeader, true);
+                HideColumn(lvAvgFps, lvAvgFpsHeader, true);
+                HideColumn(lvAvgRam, lvAvgRamHeader, true);
+                HideColumn(lvAvgGpu, lvAvgGpuHeader, true);
+                HideColumn(lvAvgCpu, lvAvgCpuHeader, true);
 
                 RowLogSection.Height = new GridLength(0);
                 PART_LogSection.Visibility = Visibility.Collapsed;
@@ -104,10 +105,11 @@ namespace GameActivity.Views
         }
 
         /// <summary>Hides a GridViewColumn by zeroing its width and disabling hit-testing on its header.</summary>
-        private static void HideColumn(GridViewColumn column, GridViewColumnHeader header)
+        private static void HideColumn(GridViewColumn column, GridViewColumnHeader header, bool forceHidden = false)
         {
             column.Width = 0;
             header.IsHitTestVisible = false;
+            CommonPluginsShared.Controls.ListViewColumnOptions.SetForceHidden(column, forceHidden);
         }
 
         // ─── ListView Events ──────────────────────────────────────────────────────────

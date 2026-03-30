@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="GameActivity.Views.GameActivityViewSingle"
+<UserControl x:Class="GameActivity.Views.GameActivityViewSingle"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -220,15 +220,10 @@
                                 <GridViewColumnHeader Content="{DynamicResource LOCGameActivityLvGamesLastActivity}" />
                             </GridViewColumn>
 
-                            <!-- Raw seconds (hidden sort key) -->
-                            <GridViewColumn Width="0" DisplayMemberBinding="{Binding GameElapsedSeconds}">
-                                <GridViewColumnHeader IsHitTestVisible="False" />
-                            </GridViewColumn>
-
                             <!-- Duration (human-readable) -->
-                            <GridViewColumn Width="130">
-                                <GridViewColumnHeader Content="{DynamicResource LOCGameActivityLvGamesElapsedSeconds}"
-                                                      Tag="GameElapsedSeconds" />
+                            <GridViewColumn Width="130"
+                                            controlsShared:ListViewColumnOptions.SortMemberPath="GameElapsedSeconds">
+                                <GridViewColumnHeader Content="{DynamicResource LOCGameActivityLvGamesElapsedSeconds}" />
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <Label Content="{Binding GameElapsedSeconds, Mode=OneWay,

@@ -1,4 +1,4 @@
-﻿using GameActivity.Models;
+using GameActivity.Models;
 using GameActivity.Models.ExportData;
 using CommonPlayniteShared.Common;
 using CommonPlayniteShared.Converters;
