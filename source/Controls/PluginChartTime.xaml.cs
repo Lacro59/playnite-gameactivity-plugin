@@ -298,6 +298,7 @@ namespace GameActivity.Controls
             double chartTimeHeight = PluginDatabase.PluginSettings.ChartTimeHeight;
             bool chartTimeAxis = PluginDatabase.PluginSettings.ChartTimeAxis;
             bool chartTimeOrdinates = PluginDatabase.PluginSettings.ChartTimeOrdinates;
+            bool chartTimeShowAllData = PluginDatabase.PluginSettings.ChartTimeShowAllData;
 
             if (IgnoreSettings)
             {
@@ -319,7 +320,7 @@ namespace GameActivity.Controls
 
             bool showNavBar = IgnoreSettings ? true : ShowNavBar;
             ControlDataContext.ShowNavBar = showNavBar;
-            ControlDataContext.ShowAllData = false;
+            ControlDataContext.ShowAllData = chartTimeShowAllData;
             ControlDataContext.NavLabel = string.Empty;
 
             int effectivePageSize =

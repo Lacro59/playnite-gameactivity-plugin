@@ -471,6 +471,7 @@ namespace GameActivity.Controls
             bool chartLogOrdinates = PluginDatabase.PluginSettings.ChartLogOrdinates;
             bool useControls = PluginDatabase.PluginSettings.UseControls;
             bool displayMoreData = PluginDatabase.PluginSettings.DisplayMoreData;
+            bool chartLogShowAllData = PluginDatabase.PluginSettings.ChartLogShowAllData;
 
             if (IgnoreSettings)
             {
@@ -483,12 +484,11 @@ namespace GameActivity.Controls
             }
 
             ControlDataContext.IsActivated = isActivated;
+            ControlDataContext.ShowAllData = chartLogShowAllData;
             ControlDataContext.ChartLogHeight = chartLogHeight;
             ControlDataContext.ChartLogAxis = chartLogAxis;
             ControlDataContext.ChartLogOrdinates = chartLogOrdinates;
-            ControlDataContext.ChartLogVisibleEmpty = PluginDatabase
-                .PluginSettings
-                .ChartLogVisibleEmpty;
+            ControlDataContext.ChartLogVisibleEmpty = PluginDatabase.PluginSettings.ChartLogVisibleEmpty;
             ControlDataContext.UseControls = useControls;
             ControlDataContext.DisableAnimations = DisableAnimations;
             ControlDataContext.LabelsRotationValue = LabelsRotation ? 160d : 0d;
@@ -502,11 +502,6 @@ namespace GameActivity.Controls
             ControlDataContext.DisplayGpuT = DisplayGpuT;
             ControlDataContext.DisplayCpuP = DisplayCpuP;
             ControlDataContext.DisplayGpuP = DisplayGpuP;
-
-            // Always reset ShowAllData on game context change so the nav bar
-            // starts in a clean paginated state for the new game.
-            ControlDataContext.ShowAllData = false;
-            ShowAllData = false;
 
             // ── Nav bar defaults ───────────────────────────────────────────
             bool showNavBar = ShowNavBar;

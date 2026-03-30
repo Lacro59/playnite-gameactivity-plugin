@@ -304,6 +304,8 @@
                                                 <RowDefinition Height="auto" />
                                                 <RowDefinition Height="10" />
                                                 <RowDefinition Height="auto" />
+                                                <RowDefinition Height="10" />
+                                                <RowDefinition Height="auto" />
                                             </Grid.RowDefinitions>
 
                                             <DockPanel Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">
@@ -337,7 +339,11 @@
                                                 <Label Grid.Column="2" Content="{Binding ElementName=sCountAbscissa, Path=Value}" HorizontalAlignment="Center" />
                                             </Grid>
 
-                                            <CheckBox Grid.Column="0" Grid.Row="6" IsChecked="{Binding Settings.ChartTimeTruncate}">
+                                            <CheckBox Grid.Column="0" Grid.Row="6" IsChecked="{Binding Settings.ChartTimeShowAllData}">
+                                                <Label Content="{DynamicResource LOCGameActivityShowAllData}" />
+                                            </CheckBox>
+
+                                            <CheckBox Grid.Column="0" Grid.Row="8" IsChecked="{Binding Settings.ChartTimeTruncate}">
                                                 <Label Content="{DynamicResource LOCGameActivityIntegrationChartTimeTruncate}" />
                                             </CheckBox>
                                         </Grid>
@@ -369,6 +375,8 @@
                                                 <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
                                             <Grid.RowDefinitions>
+                                                <RowDefinition Height="auto" />
+                                                <RowDefinition Height="10" />
                                                 <RowDefinition Height="auto" />
                                                 <RowDefinition Height="10" />
                                                 <RowDefinition Height="auto" />
@@ -448,6 +456,10 @@
 
                                             <CheckBox Grid.Row="10" IsChecked="{Binding Settings.DisplayMoreData}">
                                                 <Label Content="{DynamicResource LOCGameActivityMoreData}" />
+                                            </CheckBox>
+
+                                            <CheckBox Grid.Column="0" Grid.Row="12" IsChecked="{Binding Settings.ChartLogShowAllData}">
+                                                <Label Content="{DynamicResource LOCGameActivityShowAllData}" />
                                             </CheckBox>
                                         </Grid>
                                     </Border>

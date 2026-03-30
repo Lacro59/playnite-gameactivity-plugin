@@ -80,6 +80,8 @@ namespace GameActivity
         /// <summary>Truncate long session labels on the time axis.</summary>
         public bool ChartTimeTruncate { get; set; } = true;
 
+        public bool ChartTimeShowAllData { get; set; } = false;
+
         /// <summary>Show the time chart even when there is no session data.</summary>
         public bool ChartTimeVisibleEmpty { get; set; } = true;
 
@@ -105,6 +107,8 @@ namespace GameActivity
 
         /// <summary>Show the log chart even when there is no data.</summary>
         public bool ChartLogVisibleEmpty { get; set; } = true;
+
+        public bool ChartLogShowAllData { get; set; } = true;
 
         /// <summary>Height in pixels of the log chart.</summary>
         public double ChartLogHeight { get; set; } = 120;
