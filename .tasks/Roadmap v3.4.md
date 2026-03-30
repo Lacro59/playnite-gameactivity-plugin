@@ -13,7 +13,7 @@
 - [ ] GameActivityGanttView
 - [ ] GameActivityMergeTime
 - [ ] GameActivitySettingsView
-- [ ] GameActivityView
+- [x] GameActivityView
 - [ ] GameActivityViewSingle
 - [ ] GamesDataMismatch
 - [ ] WarningsDialogs
