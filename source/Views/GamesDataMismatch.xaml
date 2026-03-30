@@ -11,7 +11,8 @@
              xmlns:commands="clr-namespace:CommonPluginsShared.Commands"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=vm:GamesDataMismatchViewModel}"
-             d:DesignHeight="540" d:DesignWidth="1060">
+             d:DesignHeight="540" d:DesignWidth="1060"
+             Background="{DynamicResource WindowBackgourndBrush}">
 
     <UserControl.Resources>
 

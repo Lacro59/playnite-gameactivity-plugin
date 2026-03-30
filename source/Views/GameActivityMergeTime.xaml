@@ -7,7 +7,8 @@
              xmlns:commonpluginsshared="clr-namespace:CommonPluginsShared.Converters"
              xmlns:converters="clr-namespace:CommonPlayniteShared.Converters"
              mc:Ignorable="d" 
-             Height="120" Width="900">
+             Height="120" Width="900"
+             Background="{DynamicResource WindowBackgourndBrush}">
 
     <UserControl.Resources>
         <commonpluginsshared:LocalDateTimeConverter x:Key="LocalDateTimeConverter" />

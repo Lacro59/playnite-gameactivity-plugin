@@ -7,7 +7,8 @@
              xmlns:converters="clr-namespace:CommonPluginsShared.Converters"
              xmlns:converters1="clr-namespace:CommonPlayniteShared.Converters"
              xmlns:controls="clr-namespace:GameActivity.Controls"
-             mc:Ignorable="d" d:DesignHeight="420" d:DesignWidth="820">
+             mc:Ignorable="d" d:DesignHeight="420" d:DesignWidth="820"
+             Background="{DynamicResource WindowBackgourndBrush}">
 
     <UserControl.Resources>
         <converters:LocalDateConverter x:Key="LocalDateConverter" />

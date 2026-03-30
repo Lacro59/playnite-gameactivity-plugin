@@ -10,7 +10,8 @@
              xmlns:controls="clr-namespace:GameActivity.Controls"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" d:DesignHeight="700" d:DesignWidth="1280"
-             d:DataContext="{d:DesignInstance Type=local:DataContextGanttView,IsDesignTimeCreatable=True}">
+             d:DataContext="{d:DesignInstance Type=local:DataContextGanttView,IsDesignTimeCreatable=True}"
+             Background="{DynamicResource WindowBackgourndBrush}">
 
     <UserControl.Resources>
         <converters:PlayTimeToStringConverter x:Key="PlayTimeToStringConverter" />

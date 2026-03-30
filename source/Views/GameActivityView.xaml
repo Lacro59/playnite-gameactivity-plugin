@@ -13,7 +13,8 @@
              xmlns:commonpluginsshared="clr-namespace:CommonPluginsShared.Converters"
              xmlns:Commonpluginsbehaviors="clr-namespace:CommonPluginsShared.Behaviors"
              mc:Ignorable="d" d:DesignHeight="740" d:DesignWidth="1280"
-             d:DataContext="{d:DesignInstance Type=local:GameActivityView}">
+             d:DataContext="{d:DesignInstance Type=local:GameActivityView}"
+             Background="{DynamicResource WindowBackgourndBrush}">
 
     <UserControl.Resources>
         <converters:PlayTimeToStringConverter x:Key="PlayTimeToStringConverter" />

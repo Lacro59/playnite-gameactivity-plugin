@@ -10,7 +10,8 @@
              xmlns:commonpluginscontrols="clr-namespace:CommonPluginsControls.Controls"
              xmlns:viewmodels="clr-namespace:GameActivity.ViewModels"
              d:DataContext="{d:DesignInstance Type=viewmodels:GameActivityViewSingleViewModel}"
-             mc:Ignorable="d" d:DesignHeight="760" d:DesignWidth="1400">
+             mc:Ignorable="d" d:DesignHeight="760" d:DesignWidth="1400"
+             Background="{DynamicResource WindowBackgourndBrush}">
 
     <!--
         All converters needed by this view.

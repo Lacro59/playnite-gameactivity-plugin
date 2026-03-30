@@ -12,7 +12,8 @@
              xmlns:playnitecontrols="clr-namespace:CommonPluginsControls.PlayniteControls"
              xmlns:GameActivity="clr-namespace:GameActivity"
              mc:Ignorable="d" d:DesignWidth="650"
-             d:DataContext="{d:DesignInstance GameActivity:GameActivitySettingsViewModel}">
+             d:DataContext="{d:DesignInstance GameActivity:GameActivitySettingsViewModel}"
+             Background="{DynamicResource WindowBackgourndBrush}">
 
     <UserControl.Resources>
         <converters:NegateConverter x:Key="NegateConverter" />
