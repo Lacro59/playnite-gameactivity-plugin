@@ -1,4 +1,4 @@
-﻿using CommonPluginsShared;
+using CommonPluginsShared;
 using CommonPluginsShared.Collections;
 using CommonPluginsShared.Interfaces;
 using CommonPluginsShared.Plugins;
@@ -206,6 +206,23 @@ namespace GameActivity.Services
 					catch (Exception ex)
 					{
 						Common.LogError(ex, false, "[GetMainMenuItems] Failed to open isolated data window.");
+					}
+				}
+			};
+
+			yield return new MainMenuItem
+			{
+				MenuSection = section,
+				Description = ResourceProvider.GetString("LOCCommonDatabaseMaintenance"),
+				Action = (menuArgs) =>
+				{
+					try
+					{
+						_database.PluginWindows.ShowDatabaseMaintenance();
+					}
+					catch (Exception ex)
+					{
+						Common.LogError(ex, false, "[GetMainMenuItems] Failed to open database maintenance window.");
 					}
 				}
 			};

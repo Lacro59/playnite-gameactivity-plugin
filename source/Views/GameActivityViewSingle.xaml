@@ -214,14 +214,13 @@
                         <GridView>
 
                             <!-- Date -->
-                            <GridViewColumn Width="150"
-                                            DisplayMemberBinding="{Binding GameLastActivity,
-                                                Converter={StaticResource LocalDateTimeConverter}}">
+                            <GridViewColumn Width="auto" 
+                                            DisplayMemberBinding="{Binding GameLastActivity, Converter={StaticResource LocalDateTimeConverter}}">
                                 <GridViewColumnHeader Content="{DynamicResource LOCGameActivityLvGamesLastActivity}" />
                             </GridViewColumn>
 
                             <!-- Duration (human-readable) -->
-                            <GridViewColumn Width="130"
+                            <GridViewColumn Width="auto"
                                             controlsShared:ListViewColumnOptions.SortMemberPath="GameElapsedSeconds">
                                 <GridViewColumnHeader Content="{DynamicResource LOCGameActivityLvGamesElapsedSeconds}" />
                                 <GridViewColumn.CellTemplate>
@@ -236,7 +235,7 @@
                             </GridViewColumn>
 
                             <!-- PC Name -->
-                            <GridViewColumn Width="130" x:Name="lvGamesPcName">
+                            <GridViewColumn Width="auto" x:Name="lvGamesPcName">
                                 <GridViewColumnHeader Content="{DynamicResource LOCGameActivityPCName}"
                                                       Name="lvGamesPcNameHeader" />
                                 <GridViewColumn.CellTemplate>
@@ -249,7 +248,7 @@
                             </GridViewColumn>
 
                             <!-- Play action -->
-                            <GridViewColumn Width="130" x:Name="lvGamesPlayAction">
+                            <GridViewColumn Width="auto" x:Name="lvGamesPlayAction">
                                 <GridViewColumnHeader Content="{DynamicResource LOCIsPlayAction}"
                                                       Name="lvGamesPlayActionHeader" />
                                 <GridViewColumn.CellTemplate>
@@ -262,7 +261,7 @@
                             </GridViewColumn>
 
                             <!-- Source icon -->
-                            <GridViewColumn Width="75" x:Name="lvGamesSource">
+                            <GridViewColumn Width="auto" x:Name="lvGamesSource">
                                 <GridViewColumnHeader Content="{DynamicResource LOCSourceLabel}"
                                                       Tag="listGameSourceName"
                                                       Name="lvGamesSourceHeader" />
@@ -285,7 +284,7 @@
                             <!-- ── Hardware monitoring columns ── -->
 
                             <!-- CPU % -->
-                            <GridViewColumn x:Name="lvAvgCpu">
+                            <GridViewColumn x:Name="lvAvgCpu" Width="auto">
                                 <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgCpu}"
                                                       Name="lvAvgCpuHeader" />
                                 <GridViewColumn.CellTemplate>
@@ -316,7 +315,7 @@
                             </GridViewColumn>
 
                             <!-- GPU % -->
-                            <GridViewColumn x:Name="lvAvgGpu">
+                            <GridViewColumn x:Name="lvAvgGpu" Width="auto">
                                 <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgGpu}"
                                                       Name="lvAvgGpuHeader" />
                                 <GridViewColumn.CellTemplate>
@@ -347,7 +346,7 @@
                             </GridViewColumn>
 
                             <!-- RAM % -->
-                            <GridViewColumn x:Name="lvAvgRam">
+                            <GridViewColumn x:Name="lvAvgRam" Width="auto">
                                 <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgRam}"
                                                       Name="lvAvgRamHeader" />
                                 <GridViewColumn.CellTemplate>
@@ -378,7 +377,7 @@
                             </GridViewColumn>
 
                             <!-- FPS — ConverterParameter=0 means warn when BELOW threshold -->
-                            <GridViewColumn x:Name="lvAvgFps">
+                            <GridViewColumn x:Name="lvAvgFps" Width="auto">
                                 <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgFps}"
                                                       Name="lvAvgFpsHeader" />
                                 <GridViewColumn.CellTemplate>
@@ -409,7 +408,7 @@
                             </GridViewColumn>
 
                             <!-- CPU temp -->
-                            <GridViewColumn x:Name="lvAvgCpuT">
+                            <GridViewColumn x:Name="lvAvgCpuT" Width="auto">
                                 <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgCpuT}"
                                                       Name="lvAvgCpuTHeader" />
                                 <GridViewColumn.CellTemplate>
@@ -440,7 +439,7 @@
                             </GridViewColumn>
 
                             <!-- GPU temp -->
-                            <GridViewColumn x:Name="lvAvgGpuT">
+                            <GridViewColumn x:Name="lvAvgGpuT" Width="auto">
                                 <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgGpuT}"
                                                       Name="lvAvgGpuTHeader" />
                                 <GridViewColumn.CellTemplate>
@@ -471,7 +470,7 @@
                             </GridViewColumn>
 
                             <!-- CPU power -->
-                            <GridViewColumn x:Name="lvAvgCpuP">
+                            <GridViewColumn x:Name="lvAvgCpuP" Width="auto">
                                 <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgCpuP}"
                                                       Name="lvAvgCpuPHeader" />
                                 <GridViewColumn.CellTemplate>
@@ -502,7 +501,7 @@
                             </GridViewColumn>
 
                             <!-- GPU power -->
-                            <GridViewColumn x:Name="lvAvgGpuP">
+                            <GridViewColumn x:Name="lvAvgGpuP" Width="auto">
                                 <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgGpuP}"
                                                       Name="lvAvgGpuPHeader" />
                                 <GridViewColumn.CellTemplate>
@@ -533,7 +532,7 @@
                             </GridViewColumn>
 
                             <!-- Action buttons (delete / edit) -->
-                            <GridViewColumn>
+                            <GridViewColumn Width="auto">
                                 <GridViewColumnHeader Content="{DynamicResource LOCActionsLabel}" />
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
