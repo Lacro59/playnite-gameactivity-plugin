@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="GameActivity.Views.GameActivityGanttView"
+<UserControl x:Class="GameActivity.Views.GameActivityGanttView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -84,12 +84,14 @@
                                            SortingSortDirection="Descending"
                                            ItemsSource="{Binding GanttDatas}"
                                            Height="{Binding ElementName=PART_GridContener, Path=ActualHeight}"
+                                           ColumnManagementMenuEnable="False"
                                            SortingEnable="True" SortingDefaultDataName="LastActivity">
 
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Width="50">
-                            <GridViewColumnHeader Content="{DynamicResource LOCGameIconTitle}" Tag="NoSort" />
+                        <GridViewColumn Width="50"
+                                        controlsShared:ListViewColumnOptions.DisableSorting="True">
+                            <GridViewColumnHeader Content="{DynamicResource LOCGameIconTitle}" />
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Image HorizontalAlignment="Center" Height="32" VerticalAlignment="Center" Width="32" 
@@ -98,11 +100,9 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
 
-                        <GridViewColumn Width="0" DisplayMemberBinding="{Binding Name}">
-                            <GridViewColumnHeader IsHitTestVisible="False" />
-                        </GridViewColumn>
-                        <GridViewColumn Width="250">
-                            <GridViewColumnHeader Content="{DynamicResource LOCGameNameTitle}" Tag="GameTitle" />
+                        <GridViewColumn Width="250"
+                                        controlsShared:ListViewColumnOptions.SortMemberPath="Name">
+                            <GridViewColumnHeader Content="{DynamicResource LOCGameNameTitle}" />
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel>
@@ -131,8 +131,9 @@
                             <GridViewColumnHeader Content="{DynamicResource LOCGameActivityLvGamesLastActivity}" />
                         </GridViewColumn>
 
-                        <GridViewColumn Width="{Binding HeaderWidth, Mode=TwoWay}">
-                            <GridViewColumnHeader Tag="NoSort" Name="PART_GanttHeader" SizeChanged="PART_GanttHeader_SizeChanged">
+                        <GridViewColumn Width="{Binding HeaderWidth, Mode=TwoWay}"
+                                        controlsShared:ListViewColumnOptions.DisableSorting="True">
+                            <GridViewColumnHeader Name="PART_GanttHeader" SizeChanged="PART_GanttHeader_SizeChanged">
                                 <!--controls:GanttControl ColumnCount="{Binding ElementName=PART_ColumnCount, Path=Value}"
                                                        LastDate="{Binding DataContext.LastDate, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                        OnlyDate="True" Height="80" HorizontalAlignment="Center">

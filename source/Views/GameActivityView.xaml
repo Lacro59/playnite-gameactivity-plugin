@@ -270,8 +270,9 @@
                                                    SortingEnable="True" SortingDefaultDataName="GameLastActivity">
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn Width="70">
-                                            <GridViewColumnHeader Content="{DynamicResource LOCActionsLabel}" Tag="NoSort" />
+                                        <GridViewColumn Width="70"
+                                                        controlsShared:ListViewColumnOptions.DisableSorting="True">
+                                            <GridViewColumnHeader Content="{DynamicResource LOCActionsLabel}" />
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <Button FontFamily="{DynamicResource CommonFont}" Content="&#xe90f;"
@@ -280,8 +281,9 @@
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
 
-                                        <GridViewColumn Width="50" x:Name="lvGamesIcon">
-                                            <GridViewColumnHeader Name="lvGamesIconHeader" Content="{DynamicResource LOCGameIconTitle}" Tag="NoSort" />
+                                        <GridViewColumn Width="50" x:Name="lvGamesIcon"
+                                                        controlsShared:ListViewColumnOptions.DisableSorting="True">
+                                            <GridViewColumnHeader Name="lvGamesIconHeader" Content="{DynamicResource LOCGameIconTitle}" />
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <Image HorizontalAlignment="Center" Height="32" VerticalAlignment="Center" Width="32" 

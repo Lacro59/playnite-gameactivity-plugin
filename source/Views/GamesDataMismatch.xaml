@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="GameActivity.Views.GamesDataMismatch"
+<UserControl x:Class="GameActivity.Views.GamesDataMismatch"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -114,20 +114,11 @@
 
                 <DockPanel LastChildFill="False" Margin="0,6,0,0">
 
-                    <!-- Close button (right-anchored first so it stays outermost) -->
-                    <Button x:Name="PART_BtClose"
-                        Content="{DynamicResource LOCCloseLabel}"
-                        Style="{StaticResource SecondaryButton}"
-                        DockPanel.Dock="Right"
-                        Command="{x:Static commands:CommandsWindows.CloseHostWindow}"
-                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=UserControl}}" />
-
                     <!-- Apply-all button – CanExecute drives IsEnabled automatically -->
                     <Button DockPanel.Dock="Right"
-                        Margin="0,0,8,0"
-                        Style="{StaticResource PrimaryButton}"
-                        Command="{Binding ApplyAllCommand}"
-                        ToolTip="{DynamicResource LOCGaDataMismatchApplyAllTooltip}">
+                            Style="{StaticResource PrimaryButton}"
+                            Command="{Binding ApplyAllCommand}"
+                            ToolTip="{DynamicResource LOCGaDataMismatchApplyAllTooltip}">
                         <StackPanel Orientation="Horizontal">
                             <!-- Icon from CommonFont + label -->
                             <TextBlock FontFamily="{DynamicResource CommonFont}"
@@ -141,6 +132,15 @@
                         </StackPanel>
                     </Button>
 
+                    <!-- Close button (right-anchored first so it stays outermost) -->
+                    <Button x:Name="PART_BtClose"
+                            Content="{DynamicResource LOCCloseLabel}"
+                            Style="{StaticResource SecondaryButton}"
+                            DockPanel.Dock="Right"
+                            Margin="0,0,8,0"
+                            Command="{x:Static commands:CommandsWindows.CloseHostWindow}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                    
                 </DockPanel>
             </Border>
 
@@ -156,6 +156,7 @@
                                            Style="{StaticResource {x:Type ListView}}"
                                            ItemsSource="{Binding Items}"
                                            FontSize="13"
+                                           ColumnManagementMenuEnable="False"
                                            SortingEnable="True"
                                            SortingDefaultDataName="Name"
                                            SortingSortDirection="Ascending">
@@ -163,28 +164,24 @@
                         <GridView>
 
                             <!-- ═══ Column: Apply (single game) ══════════════════ -->
-                            <GridViewColumn Width="Auto">
-                                <GridViewColumnHeader Content="{DynamicResource LOCGaDataMismatchApplyHeader}" Tag="NoSort" />
+                            <GridViewColumn Width="Auto"
+                                            controlsShared:ListViewColumnOptions.DisableSorting="True">
+                                <GridViewColumnHeader Content="{DynamicResource LOCGaDataMismatchApplyHeader}" />
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Style="{StaticResource ApplyIconButton}"
-                                            Command="{Binding DataContext.ApplySingleCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}"
-                                            CommandParameter="{Binding Id}"
-                                            FontFamily="{DynamicResource CommonFont}"
-                                            Content="&#xe90F;&#xe924;&#xe905;" />
+                                                Command="{Binding DataContext.ApplySingleCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}"
+                                                CommandParameter="{Binding Id}"
+                                                FontFamily="{DynamicResource CommonFont}"
+                                                Content="&#xe90F;&#xe924;&#xe905;" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
 
-                            <!-- ═══ Column: Game name (hidden sort key) ══════════ -->
-                            <GridViewColumn Width="0" DisplayMemberBinding="{Binding Name}">
-                                <GridViewColumnHeader IsHitTestVisible="False" />
-                            </GridViewColumn>
-
                             <!-- ═══ Column: Game name (visible) ══════════════════ -->
-                            <GridViewColumn Width="240">
-                                <GridViewColumnHeader Content="{DynamicResource LOCGameNameTitle}"
-                                                  Tag="Name" />
+                            <GridViewColumn Width="240"
+                                            controlsShared:ListViewColumnOptions.SortMemberPath="Name">
+                                <GridViewColumnHeader Content="{DynamicResource LOCGameNameTitle}" />
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel>
@@ -213,10 +210,10 @@
                              ════════════════════════════════════════════════════ -->
 
                             <!-- Section label -->
-                            <GridViewColumn Width="auto">
+                            <GridViewColumn Width="auto"
+                                            controlsShared:ListViewColumnOptions.DisableSorting="True">
                                 <GridViewColumnHeader Content="{DynamicResource LOCGaDataMismatchSectionGa}"
-                                                  Style="{StaticResource GaSectionHeaderStyle}"
-                                                  Tag="NoSort" />
+                                                  Style="{StaticResource GaSectionHeaderStyle}" />
                                 <GridViewColumn.CellTemplate>
                                     <!-- Intentionally empty – visual separator only -->
                                     <DataTemplate>
@@ -258,10 +255,10 @@
                              ════════════════════════════════════════════════════ -->
 
                             <!-- Section label -->
-                            <GridViewColumn Width="auto">
+                            <GridViewColumn Width="auto"
+                                            controlsShared:ListViewColumnOptions.DisableSorting="True">
                                 <GridViewColumnHeader Content="{DynamicResource LOCGaDataMismatchSectionPlaynite}"
-                                                  Style="{StaticResource PlayniteSectionHeaderStyle}"
-                                                  Tag="NoSort" />
+                                                  Style="{StaticResource PlayniteSectionHeaderStyle}" />
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Style="{DynamicResource BaseTextBlockStyle}" />
