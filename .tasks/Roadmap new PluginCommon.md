@@ -7,6 +7,8 @@
 - [x] PluginWindows
 - [ ] PluginExportCsv
 - [x] PluginDatabaseObject<TSettings, TItem, T> where TSettings : PluginSettings
+- [ ] ListViewExtend
+- [ ] PluginDatabase.PersistSettingsAction
 
 ## Controls
 
