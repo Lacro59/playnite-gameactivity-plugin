@@ -193,6 +193,10 @@ Cliquez pour plus d'informations.</sys:String>
     <sys:String x:Key="LOCGameActivityLabelGpu">GPU</sys:String>
     <sys:String x:Key="LOCGameActivityLabelRam">RAM</sys:String>
     <sys:String x:Key="LOCGameActivityLabelFps">FPS</sys:String>
+    <sys:String x:Key="LOCGameActivityLabelCpuT">CPU T°</sys:String>
+    <sys:String x:Key="LOCGameActivityLabelGpuT">GPU T°</sys:String>
+    <sys:String x:Key="LOCGameActivityLabelCpuP">CPU W</sys:String>
+    <sys:String x:Key="LOCGameActivityLabelGpuP">GPU W</sys:String>
     
     <sys:String x:Key="LOCGameActivityShowAllData">Show all data</sys:String>
 
