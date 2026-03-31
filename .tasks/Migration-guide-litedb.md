@@ -162,7 +162,6 @@ to BSON but cause no data corruption — they are recalculated or overwritten on
 
 ## Troubleshooting
 
-
 | Symptom                                        | Likely cause                                    | Fix                                                        |
 | ---------------------------------------------- | ----------------------------------------------- | ---------------------------------------------------------- |
 | `UpdateDataAsync end [>100ms]` after migration | `PreWarm()` not called in `LoadDatabase()`      | Ensure`_database.PreWarm()` is called before `return true` |
