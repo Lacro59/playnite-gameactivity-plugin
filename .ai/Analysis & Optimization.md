@@ -15,7 +15,7 @@ Analyze the following project structure and source code, strictly adhering to th
 ## Analysis Objectives
 
 1. **SDK compliance:** Evaluate the usage of `IPlayniteAPI`, `LogManager`, and native `Playnite.SDK.Data.Serialization`. Are they utilized optimally?
-2. **Architecture audit:** Assess Separation of Concerns (SoC). Does the code follow SOLID principles? Is the business logic decoupled from the main Plugin class?
+2. **Architecture audit:** Assess Separation of Concerns (SoC) and Clean Code principles (DRY, KISS, YAGNI, SOLID). Is the business logic decoupled from the main Plugin class?
 3. **Performance and resources:** Identify potential memory leaks (missing `using` blocks for `IDisposable`) and blocking calls on the UI thread.
 4. **Maintenance:** Flag naming convention violations and lack of interfaces for dependency injection.
 

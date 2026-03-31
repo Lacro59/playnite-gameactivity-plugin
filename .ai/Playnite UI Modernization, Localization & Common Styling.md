@@ -78,6 +78,7 @@ Prefer reusing an existing key from step 1 or step 2 before adding a new one in 
 - `source/playnite-plugincommon/CommonPluginsResources/Localization/Common` for new entries when the string is general and easily reusable across plugins (for example, common actions, generic labels, shared UI terms).
 - `source/Localization` for new entries when the string is specific to this plugin (feature names, plugin-specific messages, domain wording).
 - In case of doubt whether a string is common or plugin-specific, ask for confirmation before choosing the location.
+- Add or modify localization entries only in the corresponding `LocSource.xaml` file for the chosen scope. Do not add localization keys in C#, XAML views, or other resource files.
 
 ---
 

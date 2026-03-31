@@ -113,6 +113,7 @@ When creating or reusing patterns, follow this strict priority order:
 ### UI and XAML
 
 For views, controls, styling, and localization, follow `.ai/Playnite UI Modernization, Localization and Common Styling.md` (theme variables in `ResourcesPlaynite/Constants.xaml`, styles in `ResourcesPlaynite/Common.xaml` and `Resources/Common.xaml`, LocSource, MVVM).
+When adding new localization keys, update only the corresponding `LocSource.xaml` file (common or plugin-specific). Do not add user-facing localized strings in any other file type.
 
 ---
 
@@ -148,7 +149,7 @@ For views, controls, styling, and localization, follow `.ai/Playnite UI Moderniz
 ## Coding Standards
 
 - **Design Principles:** Follow SOLID principles and clean architecture.
-- **Clean Code (mandatory):** Apply clean code philosophy in all new or modified code: small, single-responsibility functions; meaningful names; minimal nesting and early returns; avoid duplication (DRY); keep methods and classes focused and readable. Prefer clarity over cleverness.
+- **Clean Code (mandatory):** Apply clean code philosophy (DRY, KISS, YAGNI, SOLID) in all new or modified code: small, single-responsibility functions; meaningful names; minimal nesting and early returns; avoid duplication; keep methods and classes focused and readable. Prefer clarity over cleverness.
 - **Improve existing code:** When touching existing code, bring it in line with these standards: refactor when it improves readability or maintainability, add guard clauses, extract methods, reduce complexity. Do not leave clearly improvable code as-is without at least proposing the improvement.
 - **Suggest improvements:** When reviewing or analyzing code, identify and propose concrete improvements so the code better respects clean code (for example, extracting methods, renaming, reducing complexity, removing duplication). Do not limit to describing issues—suggest the change or show the refactor when relevant.
 - **Typing:** Strict typing is mandatory. No `dynamic` unless absolutely necessary.
@@ -203,22 +204,6 @@ For views, controls, styling, and localization, follow `.ai/Playnite UI Moderniz
 - No obvious comments.
 - No filler.
 - No TODO placeholders.
-
----
-
-## Quality Checklist
-
-- [ ] Compiles on .NET Framework 4.6.2
-- [ ] No C# 8.0 or later features
-- [ ] IDisposable wrapped in `using`
-- [ ] External calls protected
-- [ ] Logging implemented
-- [ ] Dispatcher for UI operations
-- [ ] Naming conventions respected
-- [ ] No hardcoded strings
-- [ ] Documentation and relevant comments in place (XML doc, README when needed)
-- [ ] Clean code principles applied (small functions, clear names, low complexity)
-- [ ] Assumptions stated if required
 
 ---
 
