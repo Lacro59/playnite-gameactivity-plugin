@@ -545,13 +545,14 @@
                                                                       Path=DataContext.DeleteActivityCommand}"
                                                     CommandParameter="{Binding GameLastActivity}"
                                                     ToolTip="{DynamicResource LOCRemoveTitle}" />
+                                            
                                             <!-- Edit activity -->
                                             <Button Content="&#xef10;"
                                                     Style="{DynamicResource NavIconButton}"
                                                     FontFamily="{DynamicResource FontIcoFont}"
                                                     Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl},
                                                                       Path=DataContext.EditActivityCommand}"
-                                                    CommandParameter="{Binding GameLastActivity}"
+                                                    CommandParameter="{Binding}"
                                                     ToolTip="{DynamicResource LOCEditGame}" />
                                         </StackPanel>
                                     </DataTemplate>

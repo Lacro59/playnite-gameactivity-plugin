@@ -1,4 +1,4 @@
-﻿using CommonPluginsShared;
+using CommonPluginsShared;
 using CommonPluginsShared.Converters;
 using CommonPlayniteShared.Converters;
 using GameActivity.Models;
@@ -184,8 +184,8 @@ namespace GameActivity.ViewModels
         /// <summary>Opens the "Add session" window.</summary>
         public RelayCommand AddActivityCommand { get; private set; }
 
-        /// <summary>Opens the "Edit session" window for the activity identified by its DateTime tag.</summary>
-        public RelayCommand<DateTime> EditActivityCommand { get; private set; }
+        /// <summary>Opens the "Edit session" window for the selected session row.</summary>
+        public RelayCommand<ListActivities> EditActivityCommand { get; private set; }
 
         /// <summary>Opens the "Merge sessions" window.</summary>
         public RelayCommand MergeActivityCommand { get; private set; }
@@ -293,13 +293,14 @@ namespace GameActivity.ViewModels
             });
 
             // Edit command: opens the add-time window pre-populated with the chosen activity.
-            EditActivityCommand = new RelayCommand<DateTime>((dateTag) =>
+            EditActivityCommand = new RelayCommand<ListActivities>((sessionRow) =>
             {
                 try
                 {
-                    int index = _gameActivities.Items.FindIndex(x => x.DateSession == dateTag.ToUniversalTime());
+                    int index = FindActivityIndex(sessionRow);
                     if (index < 0)
                     {
+                        Logger.Warn($"Unable to find matching activity to edit for {_gameContext.Name}");
                         return;
                     }
 
@@ -363,6 +364,50 @@ namespace GameActivity.ViewModels
                     Common.LogError(ex, false, true, PluginDatabase.PluginName);
                 }
             });
+        }
+
+        /// <summary>
+        /// Finds the activity index from a list row using robust matching.
+        /// Handles local/UTC conversions and uses action/configuration/elapsed as tie-breakers.
+        /// </summary>
+        /// <param name="sessionRow">Session row selected in the list.</param>
+        /// <returns>Index of the matching activity in <see cref="_gameActivities.Items"/>; -1 if not found.</returns>
+        private int FindActivityIndex(ListActivities sessionRow)
+        {
+            if (sessionRow == null || _gameActivities == null || _gameActivities.Items == null || _gameActivities.Items.Count == 0)
+            {
+                return -1;
+            }
+
+            DateTime localDate = sessionRow.GameLastActivity;
+            DateTime utcDate = localDate.ToUniversalTime();
+
+            int exactUtcIndex = _gameActivities.Items.FindIndex(x =>
+                x.DateSession.HasValue &&
+                x.DateSession.Value == utcDate &&
+                x.ElapsedSeconds == sessionRow.GameElapsedSeconds &&
+                x.IdConfiguration == sessionRow.PCConfigurationId &&
+                string.Equals(x.GameActionName, sessionRow.GameActionName, StringComparison.Ordinal));
+            if (exactUtcIndex >= 0)
+            {
+                return exactUtcIndex;
+            }
+
+            int exactLocalIndex = _gameActivities.Items.FindIndex(x =>
+                x.DateSession.HasValue &&
+                x.DateSession.Value.ToLocalTime() == localDate &&
+                x.ElapsedSeconds == sessionRow.GameElapsedSeconds &&
+                x.IdConfiguration == sessionRow.PCConfigurationId &&
+                string.Equals(x.GameActionName, sessionRow.GameActionName, StringComparison.Ordinal));
+            if (exactLocalIndex >= 0)
+            {
+                return exactLocalIndex;
+            }
+
+            // Fallback: date-only match if one of the optional fields changed since list generation.
+            return _gameActivities.Items.FindIndex(x =>
+                x.DateSession.HasValue &&
+                x.DateSession.Value.ToLocalTime() == localDate);
         }
 
         // ─── Data Loading ─────────────────────────────────────────────────────────────
