@@ -484,6 +484,10 @@ namespace GameActivity.Controls
             }
 
             ControlDataContext.IsActivated = isActivated;
+            // Keep DP and DataContext in sync so first render respects plugin setting.
+            // Without this, SetData reads ShowAllData=false from DP and paginates,
+            // while DataContext/toolbar already says "show all".
+            ShowAllData = chartLogShowAllData;
             ControlDataContext.ShowAllData = chartLogShowAllData;
             ControlDataContext.ChartLogHeight = chartLogHeight;
             ControlDataContext.ChartLogAxis = chartLogAxis;
