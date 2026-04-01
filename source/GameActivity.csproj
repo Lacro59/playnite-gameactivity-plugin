@@ -257,6 +257,7 @@
     <Compile Include="Services\HardwareMonitoring\Utilities\ProviderHealthMonitor.cs" />
     <Compile Include="Services\GameActivityWindows.cs" />
     <Compile Include="ViewModels\GameActivityAddTimeViewModel.cs" />
+    <Compile Include="ViewModels\GameActivityMergeTimeViewModel.cs" />
     <Compile Include="ViewModels\GameActivityViewSingleViewModel.cs" />
     <Compile Include="ViewModels\GamesDataMismatchViewModel.cs" />
     <Compile Include="playnite-plugincommon\CommonPluginsControls\ViewsModels\TransfertDataViewModel.cs" />

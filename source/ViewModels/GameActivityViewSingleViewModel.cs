@@ -351,13 +351,19 @@ namespace GameActivity.ViewModels
                     {
                         ShowMinimizeButton = false,
                         ShowMaximizeButton = false,
-                        ShowCloseButton = true
+                        ShowCloseButton = true,
+                        Width = 800,
+                        MinHeight = 100
                     };
 
                     GameActivityMergeTime viewExtension = new GameActivityMergeTime(_gameContext);
                     Window window = PlayniteUiHelper.CreateExtensionWindow(
                         ResourceProvider.GetString("LOCGaMergeSession"), viewExtension, windowOptions);
                     _ = window.ShowDialog();
+
+                    // Reload data from database because merge is done in another view-model instance.
+                    _gameActivities = PluginDatabase.Get(_gameContext);
+                    LoadSessionsAsync();
                 }
                 catch (Exception ex)
                 {
