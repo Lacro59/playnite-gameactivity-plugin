@@ -196,23 +196,6 @@ namespace GameActivity.Services
 			yield return new MainMenuItem
 			{
 				MenuSection = section,
-				Description = ResourceProvider.GetString("LOCCommonIsolatedPluginData"),
-				Action = (menuArgs) =>
-				{
-					try
-					{
-						_database.PluginWindows.ShowPluginDataWithoutGame(_database.GetIsolatedDataGames());
-					}
-					catch (Exception ex)
-					{
-						Common.LogError(ex, false, "[GetMainMenuItems] Failed to open isolated data window.");
-					}
-				}
-			};
-
-			yield return new MainMenuItem
-			{
-				MenuSection = section,
 				Description = ResourceProvider.GetString("LOCCommonDatabaseMaintenance"),
 				Action = (menuArgs) =>
 				{
