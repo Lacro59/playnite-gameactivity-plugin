@@ -11,10 +11,10 @@
 - [x] GameActivityAddTime
 - [ ] GameActivityBackup
 - [ ] GameActivityGanttView
-- [ ] GameActivityMergeTime
-- [ ] GameActivitySettingsView
-- [x] GameActivityView
-- [ ] GameActivityViewSingle
+- [x] GameActivityMergeTime
+- [x] GameActivitySettingsView
+- [ ] GameActivityView
+- [x] GameActivityViewSingle
 - [ ] GamesDataMismatch
 - [ ] WarningsDialogs
 
