@@ -699,9 +699,7 @@ namespace GameActivity.Controls
                     DateTime dateStart = new DateTime(1982, 12, 15, 0, 0, 0);
                     foreach (Activity activity in activities)
                     {
-                        DateTime dateSession = Convert.ToDateTime(
-                            activity.DateSession?.ToLocalTime()
-                        );
+                        DateTime dateSession = Convert.ToDateTime(activity.DateSession.ToLocalTime());
                         if (dateSession > dateStart)
                         {
                             dateStart = dateSession;

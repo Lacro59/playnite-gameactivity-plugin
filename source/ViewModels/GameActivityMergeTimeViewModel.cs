@@ -133,49 +133,17 @@ namespace GameActivity.ViewModels
                 }
 
                 rootActivity.ElapsedSeconds += time.ElapsedSeconds;
-
-                if (timeRoot.DateSession.HasValue && time.DateSession.HasValue)
+                if (rootActivity.Details == null)
                 {
-                    DateTime rootKey = timeRoot.DateSession.Value;
-                    DateTime mergeKey = time.DateSession.Value;
-                    var detailsMap = pluginDataRoot.ItemsDetails.Items;
+                    rootActivity.Details = new List<ActivityDetailsData>();
+                }
 
-                    DateTime? resolvedRootKey = ResolveDetailsKey(detailsMap, rootKey);
-                    DateTime? resolvedMergeKey = ResolveDetailsKey(detailsMap, mergeKey);
-                    bool hasRootKey = resolvedRootKey.HasValue;
-                    bool hasMergeKey = resolvedMergeKey.HasValue;
-                    if (!hasRootKey || !hasMergeKey)
-                    {
-                        string availableKeys = string.Join(
-                            ", ",
-                            detailsMap.Keys
-                                .OrderBy(x => x)
-                                .Select(x => string.Format(
-                                    "{0:yyyy-MM-dd HH:mm:ss.fff} [{1}] Ticks={2}",
-                                    x, x.Kind, x.Ticks)));
-
-                        Common.LogDebug(true, string.Format(
-                            "Merge details keys mismatch for {0}. RootKey={1:yyyy-MM-dd HH:mm:ss.fff} [{2}] Ticks={3} Found={4}; MergeKey={5:yyyy-MM-dd HH:mm:ss.fff} [{6}] Ticks={7} Found={8}; AvailableKeys=({9})",
-                            _gameContext.Name,
-                            rootKey, rootKey.Kind, rootKey.Ticks, hasRootKey,
-                            mergeKey, mergeKey.Kind, mergeKey.Ticks, hasMergeKey,
-                            availableKeys));
-                    }
-
-                    if (hasRootKey && hasMergeKey)
-                    {
-                        detailsMap[resolvedRootKey.Value].AddRange(detailsMap[resolvedMergeKey.Value]);
-                    }
+                if (time.Details != null && time.Details.Count > 0)
+                {
+                    rootActivity.Details.AddRange(time.Details);
                 }
 
                 pluginDataRoot.Items.Remove(time);
-                if (time.DateSession.HasValue)
-                {
-                    DateTime keyToRemove = time.DateSession.Value;
-                    DateTime? resolvedRemoveKey = ResolveDetailsKey(pluginDataRoot.ItemsDetails.Items, keyToRemove);
-                    List<ActivityDetailsData> deleted;
-                    pluginDataRoot.ItemsDetails.Items.TryRemove(resolvedRemoveKey ?? keyToRemove, out deleted);
-                }
 
                 _gameContext.LastActivity = pluginDataRoot.Items.Max(x => x.DateSession);
 
@@ -199,31 +167,5 @@ namespace GameActivity.ViewModels
             CloseRequested?.Invoke(this, EventArgs.Empty);
         }
 
-        /// <summary>
-        /// Resolves a key from ItemsDetails by exact key first, then by the same
-        /// second-level date string used in ActivityDetails.Get().
-        /// </summary>
-        private static DateTime? ResolveDetailsKey(
-            System.Collections.Concurrent.ConcurrentDictionary<DateTime, List<ActivityDetailsData>> detailsMap,
-            DateTime lookupKey)
-        {
-            if (detailsMap.ContainsKey(lookupKey))
-            {
-                return lookupKey;
-            }
-
-            const string dateFormat = "yyyy-MM-dd HH:mm:ss";
-            string lookup = lookupKey.ToUniversalTime().ToString(dateFormat);
-
-            KeyValuePair<DateTime, List<ActivityDetailsData>> matched =
-                detailsMap.FirstOrDefault(x => x.Key.ToString(dateFormat) == lookup);
-
-            if (!matched.Equals(default(KeyValuePair<DateTime, List<ActivityDetailsData>>)))
-            {
-                return matched.Key;
-            }
-
-            return null;
-        }
     }
 }

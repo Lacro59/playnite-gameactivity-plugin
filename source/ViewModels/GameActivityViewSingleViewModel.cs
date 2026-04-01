@@ -389,8 +389,6 @@ namespace GameActivity.ViewModels
             DateTime utcDate = localDate.ToUniversalTime();
 
             int exactUtcIndex = _gameActivities.Items.FindIndex(x =>
-                x.DateSession.HasValue &&
-                x.DateSession.Value == utcDate &&
                 x.ElapsedSeconds == sessionRow.GameElapsedSeconds &&
                 x.IdConfiguration == sessionRow.PCConfigurationId &&
                 string.Equals(x.GameActionName, sessionRow.GameActionName, StringComparison.Ordinal));
@@ -400,8 +398,6 @@ namespace GameActivity.ViewModels
             }
 
             int exactLocalIndex = _gameActivities.Items.FindIndex(x =>
-                x.DateSession.HasValue &&
-                x.DateSession.Value.ToLocalTime() == localDate &&
                 x.ElapsedSeconds == sessionRow.GameElapsedSeconds &&
                 x.IdConfiguration == sessionRow.PCConfigurationId &&
                 string.Equals(x.GameActionName, sessionRow.GameActionName, StringComparison.Ordinal));
@@ -411,9 +407,7 @@ namespace GameActivity.ViewModels
             }
 
             // Fallback: date-only match if one of the optional fields changed since list generation.
-            return _gameActivities.Items.FindIndex(x =>
-                x.DateSession.HasValue &&
-                x.DateSession.Value.ToLocalTime() == localDate);
+            return _gameActivities.Items.FindIndex(x => x.DateSession.ToLocalTime() == localDate);
         }
 
         // ─── Data Loading ─────────────────────────────────────────────────────────────

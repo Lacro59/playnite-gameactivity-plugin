@@ -63,7 +63,7 @@ namespace GameActivity.Services
 			{
 				{ "GameName", game.Name },
 				{ "Source", game.Game?.Source?.Name ?? "Playnite" },
-				{ "DateSession", session.DateSession?.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss") },
+				{ "DateSession", session.DateSession.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss") },
 				{ "DateLog", log?.Datelog?.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss") ?? string.Empty },
 				{ "PlaytimeSeconds", session.ElapsedSeconds.ToString() },
 				{ "PlaytimeFormatted", FormatTimeSpan(TimeSpan.FromSeconds(session.ElapsedSeconds)) },

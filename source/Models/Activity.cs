@@ -1,4 +1,4 @@
-﻿using CommonPluginsShared;
+using CommonPluginsShared;
 using CommonPluginsShared.SystemInfo;
 using GameActivity.Services;
 using LiteDB;
@@ -58,13 +58,18 @@ namespace GameActivity.Models
 		/// Gets or sets the date and time when this activity session occurred.
 		/// Null indicates the session date is not set or unknown.
 		/// </summary>
-		public DateTime? DateSession { get; set; }
+		public DateTime DateSession { get; set; }
 
 		/// <summary>
 		/// Gets or sets the elapsed time of the activity session in seconds.
 		/// Defaults to 0 if not explicitly set.
 		/// </summary>
 		public ulong ElapsedSeconds { get; set; }
+
+		/// <summary>
+		/// Gets or sets hardware monitoring details associated with this session.
+		/// </summary>
+		public List<ActivityDetailsData> Details { get; set; } = new List<ActivityDetailsData>();
 
 		// Computed properties (not serialized)
 

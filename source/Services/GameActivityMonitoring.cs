@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -374,11 +374,13 @@ namespace GameActivity.Services
                     RAM = metrics.RamUsage ?? 0,
                 };
 
-                List<ActivityDetailsData> activitiesDetailsData =
-                    runningActivity.GameActivitiesLog.ItemsDetails.Get(
-                        runningActivity.ActivityBackup.DateSession
-                    );
-                activitiesDetailsData.Add(activityDetailsData);
+                Activity currentActivity = runningActivity.GameActivitiesLog.GetLastSessionActivity(false);
+                if (currentActivity.Details == null)
+                {
+                    currentActivity.Details = new List<ActivityDetailsData>();
+                }
+
+                currentActivity.Details.Add(activityDetailsData);
 
                 Common.LogDebug(true, $"Logged metrics: {Serialization.ToJson(activityDetailsData)}");
             }
@@ -513,10 +515,8 @@ namespace GameActivity.Services
 
                 ulong elapsedSeconds = (ulong)(DateTime.UtcNow - runningActivity.ActivityBackup.DateSession).TotalSeconds;
                 runningActivity.ActivityBackup.ElapsedSeconds = elapsedSeconds;
-                runningActivity.ActivityBackup.ItemsDetailsDatas =
-                    runningActivity.GameActivitiesLog.ItemsDetails.Get(
-                        runningActivity.ActivityBackup.DateSession
-                    );
+                Activity currentActivity = runningActivity.GameActivitiesLog.GetLastSessionActivity(false);
+                runningActivity.ActivityBackup.ItemsDetailsDatas = currentActivity.Details ?? new List<ActivityDetailsData>();
 
                 string pathFileBackup = Path.Combine(
                     PluginDatabase.Paths.PluginUserDataPath,

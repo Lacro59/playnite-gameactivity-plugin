@@ -218,9 +218,9 @@ namespace GameActivity
                     GameActionName = args.SourceAction?.Name ?? ResourceProvider.GetString("LOCGameActivityDefaultAction"),
                     DateSession = DateSession,
                     SourceID = args.Game.SourceId == null ? default : args.Game.SourceId,
-                    PlatformIDs = args.Game.PlatformIds ?? new List<Guid>()
+                    PlatformIDs = args.Game.PlatformIds ?? new List<Guid>(),
+                    Details = new List<ActivityDetailsData>()
                 });
-                _ = runningActivity.GameActivitiesLog.ItemsDetails.Items.TryAdd(DateSession, new List<ActivityDetailsData>());
 
                 runningActivity.ActivityBackup = new ActivityBackup
                 {

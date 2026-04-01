@@ -1,37 +1,27 @@
-﻿using LiteDB;
+using LiteDB;
 using Playnite.SDK.Data;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace GameActivity.Models
 {
 	/// <summary>
-	/// Represents a collection of activity details grouped by session date.
+	/// Represents details values for a single activity session.
 	/// </summary>
 	public class ActivityDetails : ObservableObject
 	{
 		/// <summary>
-		/// Gets or sets the dictionary of activity details indexed by session date.
+		/// Gets or sets the details entries of one session.
 		/// </summary>
-		public ConcurrentDictionary<DateTime, List<ActivityDetailsData>> Items { get; set; } = new ConcurrentDictionary<DateTime, List<ActivityDetailsData>>();
+		public List<ActivityDetailsData> Items { get; set; } = new List<ActivityDetailsData>();
 
 		/// <summary>
-		/// Gets the number of session dates in the collection.
+		/// Gets the number of detail entries in the session.
 		/// </summary>
 		[DontSerialize]
 		[BsonIgnore]
-		public int Count => Items.Count;
-
-		/// <summary>
-		/// Gets the activity details for a specific session date.
-		/// </summary>
-		/// <param name="dateSession">The session date to retrieve.</param>
-		/// <returns>List of activity details for the specified date, or an empty list if not found.</returns>
-		[DontSerialize]
-		[BsonIgnore]
-		public List<ActivityDetailsData> this[DateTime dateSession] => Get(dateSession);
+		public int Count => Items?.Count ?? 0;
 
 		/// <summary>
 		/// Gets the average FPS across all sessions.
@@ -42,17 +32,6 @@ namespace GameActivity.Models
 		public int AvgFpsAllSession => GetAvgFpsAllSession();
 
 		/// <summary>
-		/// Retrieves the activity details for a specific session date.
-		/// </summary>
-		/// <param name="dateSession">The session date to retrieve.</param>
-		/// <returns>List of activity details for the specified date, or an empty list if not found.</returns>
-		public List<ActivityDetailsData> Get(DateTime dateSession)
-		{
-			List<ActivityDetailsData> result = Items.FirstOrDefault(x => x.Key.ToString("yyyy-MM-dd HH:mm:ss") == dateSession.ToString("yyyy-MM-dd HH:mm:ss")).Value;
-			return result ?? new List<ActivityDetailsData>();
-		}
-
-		/// <summary>
 		/// Calculates the average FPS across all sessions.
 		/// </summary>
 		/// <returns>The average FPS value, or 0 if no valid FPS data exists.</returns>
@@ -61,15 +40,12 @@ namespace GameActivity.Models
 			int totalFps = 0;
 			int count = 0;
 
-			foreach (KeyValuePair<DateTime, List<ActivityDetailsData>> item in Items)
+			foreach (ActivityDetailsData data in Items ?? Enumerable.Empty<ActivityDetailsData>())
 			{
-				foreach (ActivityDetailsData data in item.Value)
+				if (data.FPS > 0)
 				{
-					if (data.FPS > 0)
-					{
-						totalFps += data.FPS;
-						count++;
-					}
+					totalFps += data.FPS;
+					count++;
 				}
 			}
 

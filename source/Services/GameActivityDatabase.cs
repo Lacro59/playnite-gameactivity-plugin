@@ -62,6 +62,7 @@ namespace GameActivity.Services
 				new SystemConfigurationManager(
 					Path.Combine(Paths.PluginUserDataPath, "Configurations.json"),
 					false));
+
 		}
 
 		#endregion
@@ -130,7 +131,7 @@ namespace GameActivity.Services
 			PluginSettings.LastDateTimeSession = lastSession.ToString(Constants.DateUiFormat)
 														+ " " + lastSession.ToString(Constants.TimeUiFormat);
 			PluginSettings.LastPlaytimeSession = playtime;
-			PluginSettings.AvgFpsAllSession = gameActivities.ItemsDetails.AvgFpsAllSession;
+			PluginSettings.AvgFpsAllSession = gameActivities.AvgFpsAllSession;
 			PluginSettings.RecentActivity = gameActivities.GetRecentActivity();
 		}
 
@@ -178,12 +179,6 @@ namespace GameActivity.Services
 
 				// Merge flat session list.
 				toData.Items.AddRange(fromData.Items);
-
-				// Merge detail-log dictionary; existing keys are preserved.
-				foreach (var entry in fromData.ItemsDetails.Items)
-				{
-					toData.ItemsDetails.Items.TryAdd(entry.Key, entry.Value);
-				}
 
 				return toData;
 			}
@@ -375,7 +370,7 @@ namespace GameActivity.Services
 				UpdateProgressText(a, activities);
 
 				TimeSpan ts = TimeSpan.FromSeconds((int)session.ElapsedSeconds);
-				List<ActivityDetailsData> details = activities.ItemsDetails.Get((DateTime)session.DateSession);
+				List<ActivityDetailsData> details = session.Details ?? new List<ActivityDetailsData>();
 
 				foreach (ActivityDetailsData z in details)
 				{
@@ -429,6 +424,72 @@ namespace GameActivity.Services
 			a.Text = $"{PluginName} - {ResourceProvider.GetString("LOCCommonProcessingExtraction")}"
 				   + $"\n\n{a.CurrentProgressValue}/{a.ProgressMaxValue}"
 				   + $"\n{activities.Game?.Name}{sourceSuffix}";
+		}
+
+		/// <summary>
+		/// Migrates legacy JSON payload (<c>ItemsDetails.Items[DateSession]</c>) to
+		/// <see cref="Activity.Details"/> during base JSON-to-LiteDB import.
+		/// </summary>
+		protected override void MigrateLegacyJsonItem(GameActivities gameActivities, GlobalProgressActionArgs progressArgs)
+		{
+			try
+			{
+				if (gameActivities?.LegacyItemsDetails?.Items == null || gameActivities.LegacyItemsDetails.Items.Count == 0)
+				{
+					return;
+				}
+
+				foreach (Activity activity in gameActivities.Items ?? Enumerable.Empty<Activity>())
+				{
+					if (activity.Details == null)
+					{
+						activity.Details = new List<ActivityDetailsData>();
+					}
+
+					if (activity.Details.Count > 0)
+					{
+						continue;
+					}
+
+					List<ActivityDetailsData> details = ResolveLegacyDetails(
+						gameActivities.LegacyItemsDetails.Items,
+						activity.DateSession);
+					if (details.Count > 0)
+					{
+						activity.Details = details;
+					}
+				}
+
+				// Clear transitional payload so only new model is persisted.
+				gameActivities.LegacyItemsDetails = null;
+			}
+			catch (Exception ex)
+			{
+				Logger.Error(ex, "Failed to migrate legacy details in JSON import.");
+			}
+		}
+
+		private static List<ActivityDetailsData> ResolveLegacyDetails(
+			Dictionary<DateTime, List<ActivityDetailsData>> legacyItems,
+			DateTime sessionDate)
+		{
+			if (legacyItems == null || legacyItems.Count == 0)
+			{
+				return new List<ActivityDetailsData>();
+			}
+
+			List<ActivityDetailsData> exactMatch;
+			if (legacyItems.TryGetValue(sessionDate, out exactMatch))
+			{
+				return exactMatch ?? new List<ActivityDetailsData>();
+			}
+
+			const string dateFormat = "yyyy-MM-dd HH:mm:ss";
+			string lookup = sessionDate.ToUniversalTime().ToString(dateFormat);
+			KeyValuePair<DateTime, List<ActivityDetailsData>> matched =
+				legacyItems.FirstOrDefault(x => x.Key.ToString(dateFormat) == lookup);
+
+			return matched.Value ?? new List<ActivityDetailsData>();
 		}
 
 		#endregion

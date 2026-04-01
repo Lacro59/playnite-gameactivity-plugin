@@ -78,7 +78,7 @@ namespace GameActivity.Views
                         Playtime = gameActivities.Game.Playtime
                     };
 
-                    List<GanttValue> data = gameActivities.Items.Select(x => new GanttValue { PlayDate = (DateTime)x.DateSession?.ToLocalTime(), PlayTime = x.ElapsedSeconds }).ToList();
+                    List<GanttValue> data = gameActivities.Items.Select(x => new GanttValue { PlayDate = x.DateSession.ToLocalTime(), PlayTime = x.ElapsedSeconds }).ToList();
                     List<GanttValue> dataFinal = new List<GanttValue>();
 
                     data.ForEach(x =>

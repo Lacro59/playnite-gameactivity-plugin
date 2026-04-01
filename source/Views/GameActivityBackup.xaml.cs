@@ -1,4 +1,4 @@
-﻿using CommonPlayniteShared.Common;
+using CommonPlayniteShared.Common;
 using CommonPluginsShared;
 using GameActivity.Controls;
 using GameActivity.Models;
@@ -66,9 +66,9 @@ namespace GameActivity.Views
                 DateSession = activityBackup.DateSession,
                 SourceID = activityBackup.SourceID,
                 PlatformIDs = activityBackup.PlatformIDs,
-                ElapsedSeconds = activityBackup.ElapsedSeconds
+                ElapsedSeconds = activityBackup.ElapsedSeconds,
+                Details = activityBackup.ItemsDetailsDatas ?? new List<ActivityDetailsData>()
             });
-            pluginData.ItemsDetails.Items.TryAdd(activityBackup.DateSession, activityBackup.ItemsDetailsDatas);
 
             chartLog.GetActivityForGamesLogGraphics(pluginData, 0, 10, activityBackup.DateSession, "1");
         }
@@ -233,11 +233,9 @@ namespace GameActivity.Views
                     DateSession = _activityBackup.DateSession,
                     SourceID = _activityBackup.SourceID,
                     PlatformIDs = _activityBackup.PlatformIDs,
-                    ElapsedSeconds = _activityBackup.ElapsedSeconds
+                    ElapsedSeconds = _activityBackup.ElapsedSeconds,
+                    Details = _activityBackup.ItemsDetailsDatas ?? new List<ActivityDetailsData>()
                 });
-                pluginData.ItemsDetails.Items.TryAdd(
-                    _activityBackup.DateSession,
-                    _activityBackup.ItemsDetailsDatas);
 
                 // Persist both changes
                 API.Instance.Database.Games.Update(_game);

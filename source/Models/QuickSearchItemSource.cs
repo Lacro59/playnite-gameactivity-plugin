@@ -1,4 +1,4 @@
-﻿using CommonPluginsShared;
+using CommonPluginsShared;
 using CommonPluginsShared.Converters;
 using CommonPluginsShared.Extensions;
 using GameActivity.Services;
@@ -111,7 +111,7 @@ namespace GameActivity.Models
             LocalDateTimeConverter localDateTimeConverter = new LocalDateTimeConverter();
 
             var title = data.Name;
-            var AvgFpsAllSession = data.ItemsDetails.AvgFpsAllSession.ToString();
+            var AvgFpsAllSession = data.AvgFpsAllSession.ToString();
             var icon = defaultIconConverter.Convert(data.Icon, null, null, null).ToString();
             var dateSession = localDateTimeConverter.Convert(data.LastActivity, null, null, CultureInfo.CurrentCulture).ToString();
             var LastSession = data.LastActivity == null ? string.Empty : ResourceProvider.GetString("LOCLastPlayedLabel") 
@@ -160,7 +160,7 @@ namespace GameActivity.Models
 		private Task<IEnumerable<ISearchItem<string>>> SearchByFps(string query)
         {
 			var parameters = GetParameters(query);
-			var db = GetDb(PluginDatabase.GetListGameActivity()).Where(x => x.ItemsDetails.AvgFpsAllSession != 0).ToList();
+			var db = GetDb(PluginDatabase.GetListGameActivity()).Where(x => x.AvgFpsAllSession != 0).ToList();
 
 			if (parameters.Count == 3)
             {
@@ -175,7 +175,7 @@ namespace GameActivity.Models
                                 double fps = double.Parse(parameters[2]);
                                 foreach (var data in db)
                                 {
-                                    if (data.ItemsDetails.AvgFpsAllSession >= fps)
+                                    if (data.AvgFpsAllSession >= fps)
                                     {
                                         search.Add(GetCommandItem(data, query));
                                     }
@@ -191,7 +191,7 @@ namespace GameActivity.Models
                                 double fps = double.Parse(parameters[2]);
                                 foreach (var data in db)
                                 {
-                                    if (data.ItemsDetails.AvgFpsAllSession <= fps)
+                                    if (data.AvgFpsAllSession <= fps)
                                     {
                                         search.Add(GetCommandItem(data, query));
                                     }
@@ -219,7 +219,7 @@ namespace GameActivity.Models
                                 double fpsMax = double.Parse(parameters[3]);
                                 foreach (var data in db)
                                 {
-                                    if (data.ItemsDetails.AvgFpsAllSession >= fpsMin && data.ItemsDetails.AvgFpsAllSession <= fpsMax)
+                                    if (data.AvgFpsAllSession >= fpsMin && data.AvgFpsAllSession <= fpsMax)
                                     {
                                         search.Add(GetCommandItem(data, query));
                                     }
@@ -239,7 +239,7 @@ namespace GameActivity.Models
         private Task<IEnumerable<ISearchItem<string>>> SearchByTime(string query)
         {
             var parameters = GetParameters(query);
-			var db = GetDb(PluginDatabase.GetListGameActivity()).Where(x => x.ItemsDetails.AvgFpsAllSession != 0).ToList();
+			var db = GetDb(PluginDatabase.GetListGameActivity()).Where(x => x.AvgFpsAllSession != 0).ToList();
 
 			if (parameters.Count == 4)
             {
@@ -319,7 +319,7 @@ namespace GameActivity.Models
         private Task<IEnumerable<ISearchItem<string>>> SearchByDate(string query)
         {
             var parameters = GetParameters(query);
-			var db = GetDb(PluginDatabase.GetListGameActivity()).Where(x => x.ItemsDetails.AvgFpsAllSession != 0).ToList();
+			var db = GetDb(PluginDatabase.GetListGameActivity()).Where(x => x.AvgFpsAllSession != 0).ToList();
 
 			if (parameters.Count == 3)
             {

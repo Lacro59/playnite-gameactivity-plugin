@@ -1,4 +1,4 @@
-﻿using CommonPluginsShared.Collections;
+using CommonPluginsShared.Collections;
 using GameActivity.Services;
 using LiteDB;
 using Playnite.SDK;
@@ -12,8 +12,14 @@ namespace GameActivity.Models
 	/// <summary>
 	/// Represents a collection of game activities with performance details and session statistics.
 	/// </summary>
-	public class GameActivities : PluginGameCollectionWithDetails<Activity, ActivityDetails>
+	public class GameActivities : PluginGameCollection<Activity>
 	{
+		/// <summary>
+		/// Transitional payload used only for one-shot migration from legacy schema.
+		/// </summary>
+		[SerializationPropertyName("ItemsDetails")]
+		public LegacyActivityDetailsContainer LegacyItemsDetails { get; set; }
+
 		private static ILogger Logger => LogManager.GetLogger();
 		private static GameActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
 
@@ -40,6 +46,31 @@ namespace GameActivity.Models
 		/// Gets the total playtime across all sessions in seconds.
 		/// </summary>
 		public ulong SessionPlaytime => (ulong)(Items?.Sum(x => (long)x.ElapsedSeconds) ?? 0);
+
+		/// <summary>
+		/// Gets the average FPS across all sessions.
+		/// </summary>
+		[DontSerialize]
+		[BsonIgnore]
+		public int AvgFpsAllSession
+		{
+			get
+			{
+				List<int> fpsValues = Items
+					.Where(x => x?.Details != null)
+					.SelectMany(x => x.Details)
+					.Where(x => x != null && x.FPS > 0)
+					.Select(x => x.FPS)
+					.ToList();
+
+				if (fpsValues.Count == 0)
+				{
+					return 0;
+				}
+
+				return (int)Math.Round(fpsValues.Average());
+			}
+		}
 
 		#region Performance Metrics Averages
 
@@ -131,7 +162,7 @@ namespace GameActivity.Models
 		/// <returns>The average value rounded to the nearest integer, or 0 if no data is available.</returns>
 		private int CalculateAverage(DateTime dateSession, Func<ActivityDetailsData, int> selector)
 		{
-			List<ActivityDetailsData> data = ItemsDetails.Get(dateSession);
+			List<ActivityDetailsData> data = GetActivityDetails(dateSession);
 			if (data.Count == 0)
 			{
 				return 0;
@@ -152,7 +183,7 @@ namespace GameActivity.Models
 			int timeIgnore = GetTimeIgnoreThreshold();
 
 			List<Activity> validActivities = Items
-				.Where(x => x.DateSession != null && (int)x.ElapsedSeconds > timeIgnore)
+				.Where(x => (int)x.ElapsedSeconds > timeIgnore)
 				.ToList();
 
 			if (validActivities.Count == 0)
@@ -175,7 +206,7 @@ namespace GameActivity.Models
 			int timeIgnore = GetTimeIgnoreThreshold();
 
 			return Items
-				.Where(x => x.DateSession != null && (int)x.ElapsedSeconds > timeIgnore)
+				.Where(x => (int)x.ElapsedSeconds > timeIgnore)
 				.OrderBy(x => x.DateSession)
 				.FirstOrDefault()?.DateSession ?? DateTime.Now;
 		}
@@ -190,7 +221,7 @@ namespace GameActivity.Models
 			int timeIgnore = GetTimeIgnoreThreshold();
 
 			return Items
-				.Where(x => x.DateSession != null && (int)x.ElapsedSeconds > timeIgnore)
+				.Where(x => (int)x.ElapsedSeconds > timeIgnore)
 				.OrderByDescending(x => x.DateSession)
 				.FirstOrDefault()?.DateSession ?? DateTime.Now;
 		}
@@ -237,7 +268,7 @@ namespace GameActivity.Models
 			int timeIgnore = usedTimeIgnore ? GetTimeIgnoreThreshold() : -1;
 
 			return Items
-				.Where(x => x.DateSession != null && (int)x.ElapsedSeconds > timeIgnore)
+				.Where(x => (int)x.ElapsedSeconds > timeIgnore)
 				.OrderByDescending(x => x.DateSession)
 				.FirstOrDefault() ?? new Activity();
 		}
@@ -251,7 +282,7 @@ namespace GameActivity.Models
 			int timeIgnore = GetTimeIgnoreThreshold();
 
 			return Items
-				.Where(x => x.DateSession != null && (int)x.ElapsedSeconds > timeIgnore)
+				.Where(x => (int)x.ElapsedSeconds > timeIgnore)
 				.OrderBy(x => x.DateSession)
 				.FirstOrDefault() ?? new Activity();
 		}
@@ -265,9 +296,7 @@ namespace GameActivity.Models
 		public List<Activity> GetActivities(int year, int month)
 		{
 			return Items
-				.Where(x => x.DateSession != null)
-				.Where(x => x.DateSession.Value.ToLocalTime().Year == year &&
-						   x.DateSession.Value.ToLocalTime().Month == month)
+				.Where(x => x.DateSession.ToLocalTime().Year == year && x.DateSession.ToLocalTime().Month == month)
 				.OrderBy(x => x.DateSession)
 				.ToList();
 		}
@@ -284,9 +313,7 @@ namespace GameActivity.Models
 			DateTime dtStart = DateTime.Now.AddDays(-countDay).Date; // Start of day N days ago
 
 			return Items
-				.Where(x => x.DateSession != null)
-				.Where(x => x.DateSession.Value.ToLocalTime() >= dtStart &&
-						   x.DateSession.Value.ToLocalTime() <= dtEnd)
+				.Where(x => x.DateSession.ToLocalTime() >= dtStart && x.DateSession.ToLocalTime() <= dtEnd)
 				.ToList();
 		}
 
@@ -328,7 +355,7 @@ namespace GameActivity.Models
 		public List<ActivityDetailsData> GetSessionActivityDetails(DateTime? dateSelected = null, string title = "")
 		{
 			DateTime sessionDate = GetDateSelectedSession(dateSelected, title);
-			return ItemsDetails.Get(sessionDate);
+			return GetActivityDetails(sessionDate);
 		}
 
 		/// <summary>
@@ -342,9 +369,7 @@ namespace GameActivity.Models
 			DateTime startDate = new DateTime(year, month, 1);
 			DateTime endDate = new DateTime(year, month, DateTime.DaysInMonth(year, month));
 
-			return Items.Any(x => x.DateSession != null &&
-								 x.DateSession.Value.ToLocalTime() >= startDate &&
-								 x.DateSession.Value.ToLocalTime() <= endDate);
+			return Items.Any(x => x.DateSession.ToLocalTime() >= startDate && x.DateSession.ToLocalTime() <= endDate);
 		}
 
 		/// <summary>
@@ -356,8 +381,8 @@ namespace GameActivity.Models
 			int timeIgnore = GetTimeIgnoreThreshold();
 
 			return Items
-				.Where(x => x.DateSession != null && (int)x.ElapsedSeconds > timeIgnore)
-				.Select(x => x.DateSession.Value.ToLocalTime().ToString("yyyy-MM"))
+				.Where(x => (int)x.ElapsedSeconds > timeIgnore)
+				.Select(x => x.DateSession.ToLocalTime().ToString("yyyy-MM"))
 				.ToList();
 		}
 
@@ -370,8 +395,8 @@ namespace GameActivity.Models
 			int timeIgnore = GetTimeIgnoreThreshold();
 
 			return Items
-				.Where(x => x.DateSession != null && (int)x.ElapsedSeconds > timeIgnore)
-				.Select(x => x.DateSession.Value.ToLocalTime())
+				.Where(x => (int)x.ElapsedSeconds > timeIgnore)
+				.Select(x => x.DateSession.ToLocalTime())
 				.ToList();
 		}
 
@@ -381,7 +406,7 @@ namespace GameActivity.Models
 		/// <param name="dateSelected">The session date to delete.</param>
 		public void DeleteActivity(DateTime dateSelected)
 		{
-			Activity activity = Items.FirstOrDefault(x => x.DateSession == dateSelected.ToUniversalTime());
+			Activity activity = Items.FirstOrDefault(x => x.DateSession.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss") == dateSelected.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss"));
 
 			if (activity != null)
 			{
@@ -419,6 +444,26 @@ namespace GameActivity.Models
 				: -1;
 		}
 
+		private List<ActivityDetailsData> GetActivityDetails(DateTime dateSession)
+		{
+			Activity activity = Items.FirstOrDefault(x => x.DateSession.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss") == dateSession.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss"));
+
+			if (activity?.Details == null)
+			{
+				return new List<ActivityDetailsData>();
+			}
+
+			return activity.Details;
+		}
+
 		#endregion
+	}
+
+	/// <summary>
+	/// Transitional representation of the previous details schema.
+	/// </summary>
+	public class LegacyActivityDetailsContainer
+	{
+		public Dictionary<DateTime, List<ActivityDetailsData>> Items { get; set; } = new Dictionary<DateTime, List<ActivityDetailsData>>();
 	}
 }
