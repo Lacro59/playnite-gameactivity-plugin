@@ -520,6 +520,7 @@ namespace GameActivity.Controls
 
             ControlDataContext.PageSize = effectivePageSize;
             ControlDataContext.AxisLimit = AxisLimit;
+            ControlDataContext.HasNoData = false;
 
             // Seed the nav bar AxisLimit so its AxisLimitDecrease button starts
             // with the correct floor check and tooltip text.
@@ -781,6 +782,17 @@ namespace GameActivity.Controls
 
                     if (activitiesDetails == null)
                     {
+                        this.Dispatcher.BeginInvoke(
+                            DispatcherPriority.Background,
+                            new ThreadStart(
+                                delegate
+                                {
+                                    ControlDataContext.HasNoData = true;
+                                    PART_ChartLogActivity.Series = null;
+                                    PART_ChartLogActivityLabelsX.Labels = null;
+                                }
+                            )
+                        );
                         return;
                     }
 
@@ -791,6 +803,7 @@ namespace GameActivity.Controls
                             new ThreadStart(
                                 delegate
                                 {
+                                    ControlDataContext.HasNoData = true;
                                     PART_ChartLogActivity.Series = null;
                                     PART_ChartLogActivityLabelsX.Labels = null;
                                 }
@@ -894,6 +907,7 @@ namespace GameActivity.Controls
                         new ThreadStart(
                             delegate
                             {
+                                ControlDataContext.HasNoData = false;
                                 Brush cpuBrush = TryGetThemeBrush(
                                     "GameActivityCpuBrush",
                                     "#FF2979FF"
@@ -1460,6 +1474,18 @@ namespace GameActivity.Controls
         {
             get => _axisLimit;
             set => SetValue(ref _axisLimit, value);
+        }
+
+        private bool _hasNoData;
+
+        /// <summary>
+        /// Indicates whether the current selection has any log data to render.
+        /// Used by XAML to display an empty-state message over the chart area.
+        /// </summary>
+        public bool HasNoData
+        {
+            get => _hasNoData;
+            set => SetValue(ref _hasNoData, value);
         }
 
         // ── RelayCommands ─────────────────────────────────────────────────────

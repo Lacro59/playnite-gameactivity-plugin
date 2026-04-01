@@ -80,15 +80,40 @@
             ShowAllToggled="NavBar_ShowAllToggled"
             NextClicked="NavBar_NextClicked"
             PageNextClicked="NavBar_PageNextClicked"
-            LastClicked="NavBar_LastClicked" />
+            LastClicked="NavBar_LastClicked">
+            <controls1:PluginChartNavBar.Style>
+                <Style TargetType="{x:Type controls1:PluginChartNavBar}">
+                    <Setter Property="Visibility" Value="Visible" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding HasNoData}" Value="True">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </controls1:PluginChartNavBar.Style>
+        </controls1:PluginChartNavBar>
 
         <!-- ===== Row 1 — Filter bar (CompactCheckBox for minimal vertical footprint) ===== -->
         <Border Grid.Row="1"
                 x:Name="PART_FilterBar"
-                Style="{DynamicResource FilterCardBorder}"
                 Margin="0,0,0,6"
-                RenderTransformOrigin="0.5,0"
-                Visibility="{Binding UseControls, Converter={StaticResource BooleanToVisibilityConverter}}">
+                RenderTransformOrigin="0.5,0">
+            <Border.Style>
+                <Style TargetType="{x:Type Border}" BasedOn="{StaticResource FilterCardBorder}">
+                    <Setter Property="Margin" Value="0,0,0,6" />
+                    <Setter Property="RenderTransformOrigin" Value="0.5,0" />
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding UseControls}" Value="True" />
+                                <Condition Binding="{Binding HasNoData}" Value="False" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Visibility" Value="Visible" />
+                        </MultiDataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
 
             <Border.RenderTransform>
                 <ScaleTransform ScaleY="1" />
@@ -188,7 +213,18 @@
         </Border>
 
         <!-- ===== Row 2 — Chart container ===== -->
-        <Border Grid.Row="2" Style="{DynamicResource CardBorder}" Padding="0">
+        <Border Grid.Row="2">
+            <Border.Style>
+                <Style TargetType="{x:Type Border}" BasedOn="{StaticResource CardBorder}">
+                    <Setter Property="Padding" Value="0" />
+                    <Setter Property="Visibility" Value="Visible" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding HasNoData}" Value="True">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
             <Grid Name="PART_GridContener">
                 <lvc:CartesianChart LegendLocation="Bottom"
                                     Name="PART_ChartLogActivity"
@@ -245,8 +281,18 @@
                     </lvc:CartesianChart.AxisY>
 
                 </lvc:CartesianChart>
+
             </Grid>
         </Border>
+
+        <TextBlock Text="{DynamicResource LOCCommonNoDataAvailable}"
+                   Style="{DynamicResource BaseTextBlockStyle}"
+                   Foreground="{DynamicResource TextBrushDarker}"
+                   FontStyle="Italic"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Grid.Row="3"
+                   Visibility="{Binding HasNoData, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
     </Grid>
 
