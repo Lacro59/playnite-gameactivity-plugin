@@ -12,8 +12,9 @@
              xmlns:playnitecontrols="clr-namespace:CommonPluginsControls.PlayniteControls"
              xmlns:commonpluginsshared="clr-namespace:CommonPluginsShared.Converters"
              xmlns:Commonpluginsbehaviors="clr-namespace:CommonPluginsShared.Behaviors"
+             xmlns:viewModels="clr-namespace:GameActivity.ViewModels"
              mc:Ignorable="d" d:DesignHeight="740" d:DesignWidth="1280"
-             d:DataContext="{d:DesignInstance Type=local:GameActivityView}"
+             d:DataContext="{d:DesignInstance Type=viewModels:GameActivityViewModel}"
              Background="{DynamicResource WindowBackgourndBrush}">
 
     <UserControl.Resources>
@@ -74,7 +75,7 @@
                             <ToggleButton Grid.Column="4" x:Name="tbMonthTags" IsChecked='False' Content="{DynamicResource LOCTagsLabel}" FontSize="20" Click="ToggleButtonTags_Checked" />
 
                             <Button Grid.Column="5" Content="" Width="50" FontSize="20" Click="Button_Click_PrevMonth" FontFamily="Wingdings" />
-                            <Label Grid.Column="6" x:Name="activityLabel" Content="month data label" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" FontWeight="Bold" MinWidth="50" />
+                            <Label Grid.Column="6" x:Name="activityLabel" Content="{Binding ActivityLabelText}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" FontWeight="Bold" MinWidth="50" />
                             <Button Grid.Column="7" Content="" Width="50" FontSize="20" Click="Button_Click_NextMonth" FontFamily="Wingdings" />
 
 
@@ -239,10 +240,10 @@
                                 </Grid.ColumnDefinitions>
 
                                 <Label Grid.Column="0" Content="{DynamicResource LOCSearchLabel}" FontSize="16" />
-                                <playnitecontrols:SearchBox Grid.Column="2" x:Name="TextboxSearch" TextChanged="TextboxSearch_TextChanged" />
+                                <playnitecontrols:SearchBox Grid.Column="2" x:Name="TextboxSearch" Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextChanged="TextboxSearch_TextChanged" />
 
                                 <Label Grid.Column="4" Content="{DynamicResource LOCSourceLabel}" FontSize="16" />
-                                <ComboBox Grid.Column="6" x:Name="FilterSource" IsEditable="True" IsReadOnly="True">
+                                <ComboBox Grid.Column="6" x:Name="FilterSource" IsEditable="True" IsReadOnly="True" Text="{Binding FilterSourceText, Mode=TwoWay}">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>
                                             <CheckBox Name="PART_CbSource" Tag="{Binding}"
@@ -267,6 +268,7 @@
                                                    SelectionChanged="LvGames_SelectionChanged" FontSize="24" 
                                                    SortingSortDirection="Descending"
                                                    Height="{Binding ElementName=gridLvGames, Path=ActualHeight}"
+                                                   ItemsSource="{Binding FilteredActivityList}"
                                                    SortingEnable="True" SortingDefaultDataName="GameLastActivity">
                                 <ListView.View>
                                     <GridView>
@@ -347,7 +349,8 @@
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
 
-                                        <GridViewColumn Width="130" x:Name="lvGamesPcName">
+                                        <GridViewColumn Width="130" x:Name="lvGamesPcName"
+                                                        controlsShared:ListViewColumnOptions.SortMemberPath="PCName">
                                             <GridViewColumnHeader Content="{DynamicResource LOCGameActivityPCName}" Name="lvGamesPcNameHeader" />
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
@@ -356,7 +359,8 @@
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
 
-                                        <GridViewColumn Width="130" x:Name="lvGamesPlayAction">
+                                        <GridViewColumn Width="130" x:Name="lvGamesPlayAction"
+                                                        controlsShared:ListViewColumnOptions.SortMemberPath="GameActionName">
                                             <GridViewColumnHeader Content="{DynamicResource LOCIsPlayAction}" Name="lvGamesPlayActionHeader" />
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>

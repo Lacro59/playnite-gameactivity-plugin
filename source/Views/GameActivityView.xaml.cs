@@ -24,6 +24,7 @@ using CommonPluginsShared.Extensions;
 using Playnite.SDK.Data;
 using CommonPluginsShared.SystemInfo;
 using CommonPluginsShared.Utilities;
+using GameActivity.ViewModels;
 
 namespace GameActivity.Views
 {
@@ -36,44 +37,53 @@ namespace GameActivity.Views
 
         private GameActivity Plugin { get; set; }
         private GameActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
+        private GameActivityViewModel ViewModel { get; }
 
 
-        private List<string> ListSources { get; set; }
-        private DateTime LabelDataSelected { get; set; }
+        private List<string> ListSources
+        {
+            get => ViewModel.ListSources;
+            set => ViewModel.ListSources = value;
+        }
+        private DateTime LabelDataSelected
+        {
+            get => ViewModel.LabelDataSelected;
+            set => ViewModel.LabelDataSelected = value;
+        }
 
         private PluginChartTime PART_GameActivityChartTime { get; set; }
         private PluginChartLog PART_GameActivityChartLog { get; set; }
 
         private PlayTimeToStringConverter Converter { get; set; } = new PlayTimeToStringConverter();
 
-        public int YearCurrent { get; set; }
-        public int MonthCurrent { get; set; }
-        public string GameIDCurrent { get; set; }
-        public int VariateurTime { get; set; } = 0;
-        public int VariateurLog { get; set; } = 0;
-        public int VariateurLogTemp { get; set; } = 0;
-        public string TitleChart { get; set; }
+        public int YearCurrent { get => ViewModel.YearCurrent; set => ViewModel.YearCurrent = value; }
+        public int MonthCurrent { get => ViewModel.MonthCurrent; set => ViewModel.MonthCurrent = value; }
+        public string GameIDCurrent { get => ViewModel.GameIDCurrent; set => ViewModel.GameIDCurrent = value; }
+        public int VariateurTime { get => ViewModel.VariateurTime; set => ViewModel.VariateurTime = value; }
+        public int VariateurLog { get => ViewModel.VariateurLog; set => ViewModel.VariateurLog = value; }
+        public int VariateurLogTemp { get => ViewModel.VariateurLogTemp; set => ViewModel.VariateurLogTemp = value; }
+        public string TitleChart { get => ViewModel.TitleChart; set => ViewModel.TitleChart = value; }
 
-        private List<ListSource> FilterSourceItems { get; set; } = new List<ListSource>();
-        private List<string> SearchSources { get; set; } = new List<string>();
-        public List<ListActivities> ActivityListByGame { get; set; }
+        private List<ListSource> FilterSourceItems => ViewModel.FilterSourceItems;
+        private List<string> SearchSources => ViewModel.SearchSources;
+        public List<ListActivities> ActivityListByGame { get => ViewModel.ActivityListByGame; set => ViewModel.ActivityListByGame = value; }
 
-        public bool IsMonthSources { get; set; } = true;
-        public bool IsGenresSources { get; set; } = false;
-        public bool IsGameTime { get; set; } = true;
+        public bool IsMonthSources { get => ViewModel.IsMonthSources; set => ViewModel.IsMonthSources = value; }
+        public bool IsGenresSources { get => ViewModel.IsGenresSources; set => ViewModel.IsGenresSources = value; }
+        public bool IsGameTime { get => ViewModel.IsGameTime; set => ViewModel.IsGameTime = value; }
 
-        public bool ShowIcon { get; set; }
-        public TextBlockWithIconMode ModeComplet { get; set; }
-        public TextBlockWithIconMode ModeSimple { get; set; }
+        public bool ShowIcon { get => ViewModel.ShowIcon; set => ViewModel.ShowIcon = value; }
+        public TextBlockWithIconMode ModeComplet { get => ViewModel.ModeComplet; set => ViewModel.ModeComplet = value; }
+        public TextBlockWithIconMode ModeSimple { get => ViewModel.ModeSimple; set => ViewModel.ModeSimple = value; }
 
 
         public GameActivityView(GameActivity plugin, Game gameContext = null)
         {
             Plugin = plugin;
+            ViewModel = new GameActivityViewModel();
 
             // Set dates variables
-            YearCurrent = DateTime.Now.Year;
-            MonthCurrent = DateTime.Now.Month;
+            ViewModel.InitializeCurrentMonth();
 
             // Initialization components
             InitializeComponent();
@@ -135,10 +145,6 @@ namespace GameActivity.Views
 
             // Graphics game details activities.
             activityForGamesGraphics.Visibility = Visibility.Hidden;
-
-            activityLabel.Content = new DateTime(YearCurrent, MonthCurrent, 1).ToString("MMMM yyyy")
-                + $" ({Converter.Convert(GameActivityStats.GetPlayTimeYearMonth((uint)YearCurrent, (uint)MonthCurrent, false), null, null, CultureInfo.CurrentCulture)})";
-
 
             #region Get & set datas
             ListSources = GetListSourcesName();
@@ -211,7 +217,7 @@ namespace GameActivity.Views
             PART_ChartHoursByWeekSource_ToolTip.ShowWeekPeriode = true;
 
 
-            DataContext = this;
+            DataContext = ViewModel;
         }
 
         /// <summary>
@@ -941,8 +947,7 @@ namespace GameActivity.Views
 
             this.Dispatcher.BeginInvoke((Action)delegate
             {
-                lvGames.ItemsSource = ActivityListByGame;
-
+                ViewModel.ActivityListByGame = ActivityListByGame;
                 lvGames.Sorting();
                 Filter();
             });
@@ -1024,9 +1029,7 @@ namespace GameActivity.Views
         {
             activityForGamesGraphics.Visibility = Visibility.Hidden;
 
-            VariateurTime = 0;
-            VariateurLog = 0;
-            VariateurLogTemp = 0;
+            ViewModel.ResetGameVariators();
 
             if (sender != null)
             {
@@ -1080,36 +1083,24 @@ namespace GameActivity.Views
         #region Butons click event
         private void Button_Click_PrevMonth(object sender, RoutedEventArgs e)
         {
-            DateTime dateNew = new DateTime(YearCurrent, MonthCurrent, 1).AddMonths(-1);
-            YearCurrent = dateNew.Year;
-            MonthCurrent = dateNew.Month;
+            ViewModel.ChangeMonth(-1);
 
             // get data
             GetActivityByMonth(YearCurrent, MonthCurrent);
             GetActivityByWeek(YearCurrent, MonthCurrent);
             GetActivityByDay(YearCurrent, MonthCurrent);
-
-            activityLabel.Content = new DateTime(YearCurrent, MonthCurrent, 1).ToString("MMMM yyyy")
-                + $" ({Converter.Convert(GameActivityStats.GetPlayTimeYearMonth((uint)YearCurrent, (uint)MonthCurrent, false), null, null, CultureInfo.CurrentCulture)})";
-
 
             Filter();
         }
 
         private void Button_Click_NextMonth(object sender, RoutedEventArgs e)
         {
-            DateTime dateNew = new DateTime(YearCurrent, MonthCurrent, 1).AddMonths(1);
-            YearCurrent = dateNew.Year;
-            MonthCurrent = dateNew.Month;
+            ViewModel.ChangeMonth(1);
 
             // get data
             GetActivityByMonth(YearCurrent, MonthCurrent);
             GetActivityByWeek(YearCurrent, MonthCurrent);
             GetActivityByDay(YearCurrent, MonthCurrent);
-
-            activityLabel.Content = new DateTime(YearCurrent, MonthCurrent, 1).ToString("MMMM yyyy")
-                + $" ({Converter.Convert(GameActivityStats.GetPlayTimeYearMonth((uint)YearCurrent, (uint)MonthCurrent, false), null, null, CultureInfo.CurrentCulture)})";
-
 
             Filter();
         }
@@ -1119,17 +1110,12 @@ namespace GameActivity.Views
             DatePicker control = sender as DatePicker;
 
             DateTime dateNew = (DateTime)control.SelectedDate;
-            YearCurrent = dateNew.Year;
-            MonthCurrent = dateNew.Month;
+            ViewModel.SetMonth(dateNew);
 
             // get data
             GetActivityByMonth(YearCurrent, MonthCurrent);
             GetActivityByWeek(YearCurrent, MonthCurrent);
             GetActivityByDay(YearCurrent, MonthCurrent);
-
-            activityLabel.Content = new DateTime(YearCurrent, MonthCurrent, 1).ToString("MMMM yyyy")
-                + $" ({Converter.Convert(GameActivityStats.GetPlayTimeYearMonth((uint)YearCurrent, (uint)MonthCurrent, false), null, null, CultureInfo.CurrentCulture)})";
-
 
             Filter();
         }
@@ -1143,7 +1129,7 @@ namespace GameActivity.Views
                 try
                 {
                     PART_Truncate.Visibility = Visibility.Visible;
-                    IsGameTime = true;
+                    ViewModel.SetGameChartMode(true);
                     ToggleButtonLog.IsChecked = false;
                     GetActivityForGamesTimeGraphics(GameIDCurrent);
                 }
@@ -1172,7 +1158,7 @@ namespace GameActivity.Views
                 try
                 {
                     PART_Truncate.Visibility = Visibility.Collapsed;
-                    IsGameTime = false;
+                    ViewModel.SetGameChartMode(false);
                     ToggleButtonTime.IsChecked = false;
                     GetActivityForGamesLogGraphics(GameIDCurrent);
                 }
@@ -1201,8 +1187,7 @@ namespace GameActivity.Views
             {
                 try
                 {
-                    IsMonthSources = true;
-                    IsGenresSources = false;
+                    ViewModel.SetMonthSourceMode(true, false);
                     tbMonthGenres.IsChecked = false;
                     tbMonthTags.IsChecked = false;
                     GetActivityByMonth(YearCurrent, MonthCurrent);
@@ -1233,8 +1218,7 @@ namespace GameActivity.Views
             {
                 try
                 {
-                    IsMonthSources = false;
-                    IsGenresSources = true;
+                    ViewModel.SetMonthSourceMode(false, true);
                     tbMonthSources.IsChecked = false;
                     tbMonthTags.IsChecked = false;
                     GetActivityByMonth(YearCurrent, MonthCurrent);
@@ -1263,8 +1247,7 @@ namespace GameActivity.Views
             {
                 try
                 {
-                    IsMonthSources = false;
-                    IsGenresSources = false;
+                    ViewModel.SetMonthSourceMode(false, false);
                     tbMonthSources.IsChecked = false;
                     tbMonthGenres.IsChecked = false;
                     GetActivityByMonth(YearCurrent, MonthCurrent);
@@ -1374,7 +1357,7 @@ namespace GameActivity.Views
 
                 LabelDataSelected = Convert.ToDateTime(((CustomerForTime)data[index]).Name);
 
-                IsGameTime = false;
+                ViewModel.SetGameChartMode(false);
                 ToggleButtonTime.IsChecked = false;
                 ToggleButtonLog.IsChecked = true;
 
@@ -1386,62 +1369,13 @@ namespace GameActivity.Views
         #region Filter
         private void TextboxSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
+            ViewModel.SearchText = TextboxSearch.Text;
             Filter();
         }
 
         private void Filter()
         {
-            lvGames.ItemsSource = null;
-
-            if (!TextboxSearch.Text.IsNullOrEmpty() && SearchSources.Count != 0)
-            {
-                lvGames.ItemsSource = ActivityListByGame.FindAll(
-                    x => x.GameTitle.ToLower().IndexOf(TextboxSearch.Text) > -1
-                         && SearchSources.Contains(x.GameSourceName)
-                         && x.DateActivity.Contains(YearCurrent + "-" + ((MonthCurrent > 9) ? MonthCurrent.ToString() : "0" + MonthCurrent))
-                );
-                lvGames.Sorting();
-                return;
-            }
-
-            if (!TextboxSearch.Text.IsNullOrEmpty())
-            {
-                lvGames.ItemsSource = ActivityListByGame.FindAll(
-                    x => x.GameTitle.ToLower().IndexOf(TextboxSearch.Text) > -1
-                         && x.DateActivity.Contains(YearCurrent + "-" + ((MonthCurrent > 9) ? MonthCurrent.ToString() : "0" + MonthCurrent))
-                );
-                lvGames.Sorting();
-                return;
-            }
-
-            if (SearchSources.Count != 0)
-            {
-                lvGames.ItemsSource = ActivityListByGame.FindAll(
-                    x => SearchSources.Contains(x.GameSourceName)
-                         && x.DateActivity.Contains(YearCurrent + "-" + ((MonthCurrent > 9) ? MonthCurrent.ToString() : "0" + MonthCurrent))
-                );
-                lvGames.Sorting();
-                return;
-            }
-
-            List<ListActivities> filteredData = ActivityListByGame.FindAll(x => x.DateActivity.Contains($"{YearCurrent}-{MonthCurrent:D2}"));
-            foreach (ListActivities activity in filteredData)
-            {
-                List<Activity> activities = PluginDatabase.Get(activity.Id)?.GetActivities(YearCurrent, MonthCurrent);
-                if (activities != null)
-                {
-                    activities?.ForEach(y =>
-                    {
-                        activity.TimePlayedInMonth += y.ElapsedSeconds;
-                    });
-                }
-                else
-                {
-                    activity.TimePlayedInMonth = 0;
-                }
-            }
-
-            lvGames.ItemsSource = filteredData;
+            ViewModel.ApplyFilter();
             lvGames.Sorting();
         }
 
@@ -1456,21 +1390,8 @@ namespace GameActivity.Views
         }
         private void FilterCbSource(CheckBox sender)
         {
-            FilterSource.Text = string.Empty;
-
-            if ((bool)sender.IsChecked)
-            {
-                SearchSources.Add(((ListSource)sender.Tag).SourceNameShort);
-            }
-            else
-            {
-                SearchSources.Remove(((ListSource)sender.Tag).SourceNameShort);
-            }
-
-            if (SearchSources.Count != 0)
-            {
-                FilterSource.Text = string.Join(", ", SearchSources);
-            }
+            bool isChecked = sender.IsChecked == true;
+            ViewModel.ToggleSourceFilter(((ListSource)sender.Tag).SourceNameShort, isChecked);
 
             Filter();
         }
