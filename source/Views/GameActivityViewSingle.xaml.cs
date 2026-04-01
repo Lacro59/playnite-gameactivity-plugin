@@ -66,7 +66,7 @@ namespace GameActivity.Views
         // ─── Column Configuration ─────────────────────────────────────────────────────
 
         /// <summary>
-        /// Hides ListView columns according to plugin settings.
+        /// Hides hardware monitoring columns when logging is disabled.
         /// Width=0 + IsHitTestVisible=false is the established pattern in this project.
         /// </summary>
         private void ConfigureListViewColumns()
@@ -93,22 +93,6 @@ namespace GameActivity.Views
                 PART_PcConfigExpander.IsExpanded = true;
                 PART_PcConfigExpander.Collapsed += PcConfigExpander_Collapsed;
             }
-            else
-            {
-                // Individual per-column overrides when logging is enabled.
-                if (!PluginDatabase.PluginSettings.lvAvgGpuP) HideColumn(lvAvgGpuP, lvAvgGpuPHeader);
-                if (!PluginDatabase.PluginSettings.lvAvgCpuP) HideColumn(lvAvgCpuP, lvAvgCpuPHeader);
-                if (!PluginDatabase.PluginSettings.lvAvgGpuT) HideColumn(lvAvgGpuT, lvAvgGpuTHeader);
-                if (!PluginDatabase.PluginSettings.lvAvgCpuT) HideColumn(lvAvgCpuT, lvAvgCpuTHeader);
-                if (!PluginDatabase.PluginSettings.lvAvgFps) HideColumn(lvAvgFps, lvAvgFpsHeader);
-                if (!PluginDatabase.PluginSettings.lvAvgRam) HideColumn(lvAvgRam, lvAvgRamHeader);
-                if (!PluginDatabase.PluginSettings.lvAvgGpu) HideColumn(lvAvgGpu, lvAvgGpuHeader);
-                if (!PluginDatabase.PluginSettings.lvAvgCpu) HideColumn(lvAvgCpu, lvAvgCpuHeader);
-            }
-
-            if (!PluginDatabase.PluginSettings.lvGamesPcName) HideColumn(lvGamesPcName, lvGamesPcNameHeader);
-            if (!PluginDatabase.PluginSettings.lvGamesSource) HideColumn(lvGamesSource, lvGamesSourceHeader);
-            if (!PluginDatabase.PluginSettings.lvGamesPlayAction) HideColumn(lvGamesPlayAction, lvGamesPlayActionHeader);
         }
 
         private void PcConfigExpander_Collapsed(object sender, RoutedEventArgs e)

@@ -20,9 +20,16 @@
         <converters:InvertedBoolenConverter x:Key="InvertedBoolenConverter" />
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <convertersshared:IndexConverter x:Key="IndexConverter" />
+
+        <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource CompactCheckBox}" />
+
+        <Style TargetType="{x:Type Expander}" BasedOn="{StaticResource {x:Type Expander}}">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Margin" Value="0,0,0,10" />
+        </Style>
     </UserControl.Resources>
 
-    <TabControl Margin="20">
+    <TabControl Margin="16">
         <TabItem Header="{DynamicResource LOCGameActivity}">
             <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
                 <DockPanel Margin="0,20,0,0">
@@ -36,7 +43,7 @@
                         <CheckBox IsChecked="{Binding Settings.ShowLauncherIcons}" Margin="0,15,0,0" Name="PART_ShowIcon">
                             <Label Content="{DynamicResource LOCCommonIconStore}" />
                         </CheckBox>
-                        <ComboBox Margin="30,15,0,0" SelectedIndex="{Binding Settings.ModeStoreIcon}" IsEnabled="{Binding ElementName=PART_ShowIcon, Path=IsChecked}">
+                        <ComboBox Margin="50,15,0,0" SelectedIndex="{Binding Settings.ModeStoreIcon}" IsEnabled="{Binding ElementName=PART_ShowIcon, Path=IsChecked}">
                             <ComboBoxItem Content="{DynamicResource LOCGameActivityIconFromLibrary}" />
                             <ComboBoxItem Content="{DynamicResource LOCGameActivityIconFromFont}" />
                         </ComboBox>
@@ -58,70 +65,6 @@
                             <Label Content="{DynamicResource LOCGameActivitySubstPlayStateTime}" />
                         </CheckBox>
 
-                        <Label Margin="0,15,0,0" Content="{DynamicResource LOCGameActivityListGamesFields}" />
-                        <Grid Margin="30,0,0,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="30" />
-                                <RowDefinition Height="30" />
-                                <RowDefinition Height="30" />
-                                <RowDefinition Height="30" />
-                                <RowDefinition Height="30" />
-                            </Grid.RowDefinitions>
-
-                            <CheckBox Grid.Column="0" Grid.Row="0" IsChecked="{Binding Settings.lvGamesIcon}" VerticalAlignment="Center">
-                                <Label Content="{DynamicResource LOCGameIconTitle}" />
-                            </CheckBox>
-                            <CheckBox Grid.Column="1" Grid.Row="0" IsChecked="{Binding Settings.lvGamesPcName}" VerticalAlignment="Center">
-                                <Label Content="{DynamicResource LOCGameActivityPCName}" />
-                            </CheckBox>
-                            <CheckBox Grid.Column="2" Grid.Row="0" IsChecked="{Binding Settings.lvGamesSource}" VerticalAlignment="Center">
-                                <Label Content="{DynamicResource LOCSourceLabel}" />
-                            </CheckBox>
-
-                            <CheckBox Grid.Column="0" Grid.Row="1" IsChecked="{Binding Settings.lvGamesPlayAction}" VerticalAlignment="Center">
-                                <Label Content="{DynamicResource LOCIsPlayAction}" />
-                            </CheckBox>
-
-                            <CheckBox Grid.Column="0" Grid.Row="2" IsChecked="{Binding Settings.lvAvgCpu}" VerticalAlignment="Center"
-                                      IsEnabled="{Binding ElementName=cbLogging, Path=IsChecked}">
-                                <Label Content="{DynamicResource LOCGameActivityAvgCpu}" />
-                            </CheckBox>
-                            <CheckBox Grid.Column="1" Grid.Row="2" IsChecked="{Binding Settings.lvAvgGpu}" VerticalAlignment="Center"
-                                      IsEnabled="{Binding ElementName=cbLogging, Path=IsChecked}">
-                                <Label Content="{DynamicResource LOCGameActivityAvgGpu}" />
-                            </CheckBox>
-                            <CheckBox Grid.Column="2" Grid.Row="2" IsChecked="{Binding Settings.lvAvgRam}" VerticalAlignment="Center"
-                                      IsEnabled="{Binding ElementName=cbLogging, Path=IsChecked}">
-                                <Label Content="{DynamicResource LOCGameActivityAvgRam}" />
-                            </CheckBox>
-
-                            <CheckBox Grid.Column="0" Grid.Row="3" IsChecked="{Binding Settings.lvAvgFps}" VerticalAlignment="Center"
-                                      IsEnabled="{Binding ElementName=cbLogging, Path=IsChecked}">
-                                <Label Content="{DynamicResource LOCGameActivityAvgFps}" />
-                            </CheckBox>
-                            <CheckBox Grid.Column="1" Grid.Row="3" IsChecked="{Binding Settings.lvAvgCpuT}" VerticalAlignment="Center"
-                                      IsEnabled="{Binding ElementName=cbLogging, Path=IsChecked}">
-                                <Label Content="{DynamicResource LOCGameActivityAvgCpuT}" />
-                            </CheckBox>
-                            <CheckBox Grid.Column="2" Grid.Row="3" IsChecked="{Binding Settings.lvAvgGpuT}" VerticalAlignment="Center"
-                                      IsEnabled="{Binding ElementName=cbLogging, Path=IsChecked}">
-                                <Label Content="{DynamicResource LOCGameActivityAvgGpuT}" />
-                            </CheckBox>
-
-                            <CheckBox Grid.Column="0" Grid.Row="4" IsChecked="{Binding Settings.lvAvgCpuP}" VerticalAlignment="Center"
-                                      IsEnabled="{Binding ElementName=cbLogging, Path=IsChecked}">
-                                <Label Content="{DynamicResource LOCGameActivityAvgCpuP}" />
-                            </CheckBox>
-                            <CheckBox Grid.Column="1" Grid.Row="4" IsChecked="{Binding Settings.lvAvgGpuP}" VerticalAlignment="Center"
-                                      IsEnabled="{Binding ElementName=cbLogging, Path=IsChecked}">
-                                <Label Content="{DynamicResource LOCGameActivityAvgGpuP}" />
-                            </CheckBox>
-                        </Grid>
                     </StackPanel>
 
                     <Grid Margin="0,15,0,0">
@@ -147,6 +90,7 @@
                         </CheckBox>
                         <Slider Minimum="0" Maximum="240" Value="{Binding Settings.IgnoreSessionTime, FallbackValue=120}" 
                                 Grid.Row="0" Grid.Column="1" Margin="20,0,0,0"
+                                VerticalAlignment="Center"
                                 IsEnabled="{Binding ElementName=PART_IgnoreSession, Path=IsChecked}"
                                 IsSnapToTickEnabled="True" TickFrequency="1" AutoToolTipPlacement="TopLeft"
                                 ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Value}"
@@ -158,6 +102,7 @@
                                Grid.Row="2" Grid.Column="0" />
                         <Slider Minimum="2" Maximum="20" Value="{Binding Settings.VariatorTime, FallbackValue=7}" 
                                 Grid.Row="2" Grid.Column="1" Margin="20,0,0,0"
+                                VerticalAlignment="Center"
                                 IsSnapToTickEnabled="True" TickFrequency="1" AutoToolTipPlacement="TopLeft"
                                 ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Value}"
                                 Name="PART_SliderVariatorTime" />
@@ -167,6 +112,7 @@
                                Grid.Row="4" Grid.Column="0" />
                         <Slider Minimum="2" Maximum="20" Value="{Binding Settings.VariatorLog, FallbackValue=4}" 
                                 Grid.Row="4" Grid.Column="1" Margin="20,0,0,0"
+                                VerticalAlignment="Center"
                                 IsSnapToTickEnabled="True" TickFrequency="1" AutoToolTipPlacement="TopLeft"
                                 ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Value}"
                                 Name="PART_SliderVariatorLog" />
@@ -176,6 +122,7 @@
                                Grid.Row="6" Grid.Column="0" />
                         <Slider Minimum="2" Maximum="20" Value="{Binding Settings.RecentActivityWeek, FallbackValue=4}" 
                                 Grid.Row="6" Grid.Column="1" Margin="20,0,0,0"
+                                VerticalAlignment="Center"
                                 IsSnapToTickEnabled="True" TickFrequency="1" AutoToolTipPlacement="TopLeft"
                                 ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Value}"
                                 Name="PART_SliderRecentActivityWeek" />
@@ -186,8 +133,8 @@
         </TabItem>
 
         <TabItem Header="{DynamicResource LOCCommonIntegration}">
-            <ScrollViewer>
-                <StackPanel Margin="0,10,0,0">
+            <ScrollViewer Padding="0,8,0,0">
+                <StackPanel>
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto" />
@@ -196,12 +143,6 @@
                         </Grid.RowDefinitions>
 
                         <Expander Grid.Row="0" AttachedProperties:ExpanderAttachedProperties.HideExpanderArrow="True">
-                            <Expander.Style>
-                                <Style TargetType="{x:Type Expander}" BasedOn="{StaticResource {x:Type Expander}}">
-                                    <Setter Property="Background" Value="Transparent" />
-                                </Style>
-                            </Expander.Style>
-
                             <Expander.Header>
                                 <CheckBox IsChecked="{Binding Settings.EnableIntegrationButtonHeader}">
                                     <Label Content="{DynamicResource LOCCommonIntegrationButtonHeader}" />
@@ -210,12 +151,6 @@
                         </Expander>
 
                         <Expander Grid.Row="2" AttachedProperties:ExpanderAttachedProperties.HideExpanderArrow="True">
-                            <Expander.Style>
-                                <Style TargetType="{x:Type Expander}" BasedOn="{StaticResource {x:Type Expander}}">
-                                    <Setter Property="Background" Value="Transparent" />
-                                </Style>
-                            </Expander.Style>
-
                             <Expander.Header>
                                 <CheckBox IsChecked="{Binding Settings.EnableIntegrationButtonSide}">
                                     <Label Content="{DynamicResource LOCCommonIntegrationButtonSide}" />
@@ -225,7 +160,7 @@
                     </Grid>
 
                     <StackPanel Margin="0,30,0,0">
-                        <Label Content="{DynamicResource LOCCommonControlsAvailable}" />
+                        <TextBlock Style="{DynamicResource SectionHeaderText}" Text="{DynamicResource LOCCommonControlsAvailable}" />
                         <Separator Margin="0,0,0,10" />
                         <Grid>
                             <Grid.RowDefinitions>
@@ -238,12 +173,6 @@
                                 <RowDefinition Height="auto" />
                             </Grid.RowDefinitions>
                             <Expander Grid.Row="2">
-                                <Expander.Style>
-                                    <Style TargetType="{x:Type Expander}" BasedOn="{StaticResource {x:Type Expander}}">
-                                        <Setter Property="Background" Value="Transparent" />
-                                    </Style>
-                                </Expander.Style>
-
                                 <Expander.Header>
                                     <CheckBox IsChecked="{Binding Settings.EnableIntegrationButton}" Name="PART_IntegrationButton">
                                         <Label Content="{DynamicResource LOCCommonControlsPluginButtonShow}" />
@@ -252,9 +181,7 @@
 
                                 <Expander.Content>
                                     <Border IsEnabled="{Binding ElementName=PART_IntegrationButton, Path=IsChecked}"
-				                        Margin="5" Padding="10"
-				                        BorderBrush="{DynamicResource PopupBorderBrush}"
-				                        BorderThickness="{DynamicResource PopupBorderThickness}">
+                                            Style="{DynamicResource CardBorder}">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
@@ -274,12 +201,6 @@
                             </Expander>
 
                             <Expander Grid.Row="4">
-                                <Expander.Style>
-                                    <Style TargetType="{x:Type Expander}" BasedOn="{StaticResource {x:Type Expander}}">
-                                        <Setter Property="Background" Value="Transparent" />
-                                    </Style>
-                                </Expander.Style>
-
                                 <Expander.Header>
                                     <CheckBox IsChecked="{Binding Settings.EnableIntegrationChartTime}" Name="PART_IntegrationChartTime">
                                         <Label Content="{DynamicResource LOCGameActivityIntegrationChartTime}" />
@@ -288,9 +209,7 @@
 
                                 <Expander.Content>
                                     <Border IsEnabled="{Binding ElementName=PART_IntegrationChartTime, Path=IsChecked}"
-				                        Margin="5" Padding="10"
-				                        BorderBrush="{DynamicResource PopupBorderBrush}"
-				                        BorderThickness="{DynamicResource PopupBorderThickness}">
+                                            Style="{DynamicResource CardBorder}">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
@@ -313,7 +232,7 @@
                                                 <playnitecontrols:NumericBox DockPanel.Dock="Right" Width="40" TextAlignment="Center"
                                                                          LongValue="{Binding Settings.ChartTimeHeight}" />
                                             </DockPanel>
-                                            <CheckBox Grid.Column="2" Grid.Row="0" IsChecked="{Binding Settings.ChartTimeVisibleEmpty}">
+                                            <CheckBox Grid.Column="1" Grid.Row="0" IsChecked="{Binding Settings.ChartTimeVisibleEmpty}">
                                                 <Label Content="{DynamicResource LOCCommonControlsVisibleNoData}" />
                                             </CheckBox>
 
@@ -333,9 +252,9 @@
 
                                                 <Label Content="{DynamicResource LOCGameActivityIntegrationGraphicOptionsCountAbscissa}" Grid.Column="0" />
                                                 <Slider Minimum="3" Maximum="30" Value="{Binding Settings.ChartTimeCountAbscissa}" 
-                                                    IsSnapToTickEnabled="True" TickFrequency="1" AutoToolTipPlacement="TopLeft"
-                                                    ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Value}"
-                                                    Grid.Column="1" VerticalAlignment="Center" Margin="20,0,5,0" Name="sCountAbscissa" />
+                                                        IsSnapToTickEnabled="True" TickFrequency="1" AutoToolTipPlacement="TopLeft"
+                                                        ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Value}"
+                                                        Grid.Column="1" VerticalAlignment="Center" Margin="20,0,5,0" Name="sCountAbscissa" />
                                                 <Label Grid.Column="2" Content="{Binding ElementName=sCountAbscissa, Path=Value}" HorizontalAlignment="Center" />
                                             </Grid>
 
@@ -352,12 +271,6 @@
                             </Expander>
 
                             <Expander Grid.Row="6">
-                                <Expander.Style>
-                                    <Style TargetType="{x:Type Expander}" BasedOn="{StaticResource {x:Type Expander}}">
-                                        <Setter Property="Background" Value="Transparent" />
-                                    </Style>
-                                </Expander.Style>
-
                                 <Expander.Header>
                                     <CheckBox IsChecked="{Binding Settings.EnableIntegrationChartLog}" Name="PART_IntegrationChartLog">
                                         <Label Content="{DynamicResource LOCGameActivityIntegrationChartLog}" />
@@ -366,9 +279,7 @@
 
                                 <Expander.Content>
                                     <Border IsEnabled="{Binding ElementName=PART_IntegrationChartLog, Path=IsChecked}"
-				                        Margin="5" Padding="10"
-				                        BorderBrush="{DynamicResource PopupBorderBrush}"
-				                        BorderThickness="{DynamicResource PopupBorderThickness}">
+                                            Style="{DynamicResource CardBorder}">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
@@ -395,7 +306,7 @@
                                                 <playnitecontrols:NumericBox DockPanel.Dock="Right" Width="40" TextAlignment="Center"
                                                                          LongValue="{Binding Settings.ChartLogHeight}" />
                                             </DockPanel>
-                                            <CheckBox Grid.Column="2" Grid.Row="0" IsChecked="{Binding Settings.ChartLogVisibleEmpty}">
+                                            <CheckBox Grid.Column="1" Grid.Row="0" IsChecked="{Binding Settings.ChartLogVisibleEmpty}">
                                                 <Label Content="{DynamicResource LOCCommonControlsVisibleNoData}" />
                                             </CheckBox>
 
@@ -414,9 +325,9 @@
                                                 </Grid.ColumnDefinitions>
                                                 <Label Content="{DynamicResource LOCGameActivityIntegrationGraphicOptionsCountAbscissa}" Grid.Column="0" />
                                                 <Slider Minimum="3" Maximum="30" Value="{Binding Settings.ChartLogCountAbscissa}" 
-                                                    IsSnapToTickEnabled="True" TickFrequency="1" AutoToolTipPlacement="TopLeft"
-                                                    ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Value}"
-                                                    Grid.Column="1" VerticalAlignment="Center" Margin="20,0,5,0" Name="sCountAbscissaLog" />
+                                                        IsSnapToTickEnabled="True" TickFrequency="1" AutoToolTipPlacement="TopLeft"
+                                                        ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Value}"
+                                                        Grid.Column="1" VerticalAlignment="Center" Margin="20,0,5,0" Name="sCountAbscissaLog" />
                                                 <Label Grid.Column="2" Content="{Binding ElementName=sCountAbscissaLog, Path=Value}" HorizontalAlignment="Center" />
                                             </Grid>
 
@@ -426,7 +337,7 @@
 
                                             <Label Content="{DynamicResource LOCGameActivitySelectChartSeriesToDisplay}" Grid.Column="0" Grid.Row="8" />
 
-                                            <Grid Grid.Row="8" Grid.Column="2">
+                                            <Grid Grid.Row="8" Grid.Column="1">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="auto" />
                                                     <ColumnDefinition Width="*" />
@@ -472,7 +383,7 @@
         </TabItem>
 
         <TabItem Header="{DynamicResource LOCMenuConfigurationTitle}">
-            <ScrollViewer>
+            <ScrollViewer Padding="0,8,0,0">
                 <Grid Margin="0,10,0,0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto" />
@@ -555,7 +466,7 @@
         </TabItem>
 
         <TabItem Header="{DynamicResource LOCGameActivityLog}">
-            <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
+            <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto" Padding="0,8,0,0">
                 <DockPanel Margin="0,20,0,0">
                     <!-- Enable Logging Section -->
                     <DockPanel DockPanel.Dock="Top">
@@ -570,7 +481,7 @@
                             </CheckBox>
                         </StackPanel>
 
-                        <Grid DockPanel.Dock="Bottom" Margin="0,15,0,0" IsEnabled="{Binding ElementName=cbLogging, Path=IsChecked, TargetNullValue=false}">
+                        <Grid DockPanel.Dock="Bottom" Margin="50,15,0,0" IsEnabled="{Binding ElementName=cbLogging, Path=IsChecked, TargetNullValue=false}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto" />
                                 <ColumnDefinition Width="10" />
@@ -580,30 +491,23 @@
                             </Grid.ColumnDefinitions>
 
                             <Label Content="{DynamicResource LOCGameActivityTimeInterval}" Grid.Column="0" />
-                            <Slider x:Name="hwSlider" Minimum="1" Value="{Binding Settings.TimeIntervalLogging}" ValueChanged="Slider_ValueChanged" Grid.Column="2" />
+                            <Slider x:Name="hwSlider" Minimum="1" Value="{Binding Settings.TimeIntervalLogging}" 
+                                    ValueChanged="Slider_ValueChanged" Grid.Column="2"
+                                    VerticalAlignment="Center" />
                             <Label x:Name="labelIntervalLabel_text" Content="{DynamicResource LOCGameActivityTimeLabel}" Grid.Column="4" />
                         </Grid>
                     </DockPanel>
 
                     <!-- Hardware Monitoring Providers Section -->
                     <DockPanel DockPanel.Dock="Bottom" Margin="0,25,0,0" IsEnabled="{Binding ElementName=cbLogging, Path=IsChecked, TargetNullValue=false}">
-                        <Label DockPanel.Dock="Top" Content="Hardware Monitoring Providers" FontWeight="Bold" FontSize="14" Margin="0,0,0,10" />
+                        <TextBlock DockPanel.Dock="Top" Text="Hardware Monitoring Providers" Style="{DynamicResource SectionHeaderText}" />
 
                         <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
                             <StackPanel DockPanel.Dock="Top">
                                 <!-- LibreHardwareMonitor Provider -->
-                                <Border Margin="0,0,0,10"
-                                        Background="{DynamicResource CommonToolTipBackgroundBrush}" CornerRadius="{DynamicResource CommonToolTipCornerRadius}"
-                                        BorderThickness="{DynamicResource CommonToolTipBorderThickness}" Padding="{DynamicResource CommonToolTipPadding}"
-                                        BorderBrush="{DynamicResource CommonToolTipBorderBrush}">
+                                <Border Style="{DynamicResource CardBorder}">
 
                                     <Expander>
-                                        <Expander.Style>
-                                            <Style TargetType="{x:Type Expander}" BasedOn="{StaticResource {x:Type Expander}}">
-                                                <Setter Property="Background" Value="Transparent" />
-                                            </Style>
-                                        </Expander.Style>
-
                                         <Expander.Header>
                                             <DockPanel>
                                                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" VerticalAlignment="Center">
@@ -676,17 +580,8 @@
                                 </Border>
 
                                 <!-- RivaTuner Provider -->
-                                <Border Margin="0,0,0,10"
-                                        Background="{DynamicResource CommonToolTipBackgroundBrush}" CornerRadius="{DynamicResource CommonToolTipCornerRadius}"
-                                        BorderThickness="{DynamicResource CommonToolTipBorderThickness}" Padding="{DynamicResource CommonToolTipPadding}"
-                                        BorderBrush="{DynamicResource CommonToolTipBorderBrush}">
+                                <Border Style="{DynamicResource CardBorder}">
                                     <Expander AttachedProperties:ExpanderAttachedProperties.HideExpanderArrow="True">
-                                        <Expander.Style>
-                                            <Style TargetType="{x:Type Expander}" BasedOn="{StaticResource {x:Type Expander}}">
-                                                <Setter Property="Background" Value="Transparent" />
-                                            </Style>
-                                        </Expander.Style>
-
                                         <Expander.Header>
                                             <DockPanel>
                                                 <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
@@ -717,17 +612,8 @@
                                 </Border>
 
                                 <!-- MsiAfterburner Provider -->
-                                <Border Margin="0,0,0,10"
-                                        Background="{DynamicResource CommonToolTipBackgroundBrush}" CornerRadius="{DynamicResource CommonToolTipCornerRadius}"
-                                        BorderThickness="{DynamicResource CommonToolTipBorderThickness}" Padding="{DynamicResource CommonToolTipPadding}"
-                                        BorderBrush="{DynamicResource CommonToolTipBorderBrush}">
+                                <Border Style="{DynamicResource CardBorder}">
                                     <Expander AttachedProperties:ExpanderAttachedProperties.HideExpanderArrow="True">
-                                        <Expander.Style>
-                                            <Style TargetType="{x:Type Expander}" BasedOn="{StaticResource {x:Type Expander}}">
-                                                <Setter Property="Background" Value="Transparent" />
-                                            </Style>
-                                        </Expander.Style>
-
                                         <Expander.Header>
                                             <DockPanel>
                                                 <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
@@ -770,17 +656,8 @@
                                 </Border>
 
                                 <!-- HWiNFO Shared Memory -->
-                                <Border Margin="0,0,0,10"
-                                        Background="{DynamicResource CommonToolTipBackgroundBrush}" CornerRadius="{DynamicResource CommonToolTipCornerRadius}"
-                                        BorderThickness="{DynamicResource CommonToolTipBorderThickness}" Padding="{DynamicResource CommonToolTipPadding}"
-                                        BorderBrush="{DynamicResource CommonToolTipBorderBrush}">
+                                <Border Style="{DynamicResource CardBorder}">
                                     <Expander>
-                                        <Expander.Style>
-                                            <Style TargetType="{x:Type Expander}" BasedOn="{StaticResource {x:Type Expander}}">
-                                                <Setter Property="Background" Value="Transparent" />
-                                            </Style>
-                                        </Expander.Style>
-
                                         <Expander.Header>
                                             <DockPanel>
                                                 <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
@@ -907,17 +784,8 @@
                                 </Border>
 
                                 <!-- HWiNFO Gadget -->
-                                <Border Margin="0,0,0,10"
-                                        Background="{DynamicResource CommonToolTipBackgroundBrush}" CornerRadius="{DynamicResource CommonToolTipCornerRadius}"
-                                        BorderThickness="{DynamicResource CommonToolTipBorderThickness}" Padding="{DynamicResource CommonToolTipPadding}"
-                                        BorderBrush="{DynamicResource CommonToolTipBorderBrush}">
+                                <Border Style="{DynamicResource CardBorder}">
                                     <Expander>
-                                        <Expander.Style>
-                                            <Style TargetType="{x:Type Expander}" BasedOn="{StaticResource {x:Type Expander}}">
-                                                <Setter Property="Background" Value="Transparent" />
-                                            </Style>
-                                        </Expander.Style>
-
                                         <Expander.Header>
                                             <DockPanel>
                                                 <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
@@ -1067,17 +935,8 @@
                                 </Border>
 
                                 <!-- WMI Provider -->
-                                <Border Margin="0,0,0,10"
-                                        Background="{DynamicResource CommonToolTipBackgroundBrush}" CornerRadius="{DynamicResource CommonToolTipCornerRadius}"
-                                        BorderThickness="{DynamicResource CommonToolTipBorderThickness}" Padding="{DynamicResource CommonToolTipPadding}"
-                                        BorderBrush="{DynamicResource CommonToolTipBorderBrush}">
+                                <Border Style="{DynamicResource CardBorder}">
                                     <Expander AttachedProperties:ExpanderAttachedProperties.HideExpanderArrow="True">
-                                        <Expander.Style>
-                                            <Style TargetType="{x:Type Expander}" BasedOn="{StaticResource {x:Type Expander}}">
-                                                <Setter Property="Background" Value="Transparent" />
-                                            </Style>
-                                        </Expander.Style>
-
                                         <Expander.Header>
                                             <DockPanel>
                                                 <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
@@ -1110,17 +969,8 @@
                                 </Border>
 
                                 <!-- Performance Counter Provider -->
-                                <Border Margin="0,0,0,0"
-                                        Background="{DynamicResource CommonToolTipBackgroundBrush}" CornerRadius="{DynamicResource CommonToolTipCornerRadius}"
-                                        BorderThickness="{DynamicResource CommonToolTipBorderThickness}" Padding="{DynamicResource CommonToolTipPadding}"
-                                        BorderBrush="{DynamicResource CommonToolTipBorderBrush}">
+                                <Border Style="{DynamicResource CardBorder}" Margin="0">
                                     <Expander AttachedProperties:ExpanderAttachedProperties.HideExpanderArrow="True">
-                                        <Expander.Style>
-                                            <Style TargetType="{x:Type Expander}" BasedOn="{StaticResource {x:Type Expander}}">
-                                                <Setter Property="Background" Value="Transparent" />
-                                            </Style>
-                                        </Expander.Style>
-
                                         <Expander.Header>
                                             <DockPanel>
                                                 <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
@@ -1153,7 +1003,8 @@
                     </DockPanel>
 
                     <!-- Warning Section -->
-                    <DockPanel DockPanel.Dock="Bottom" Margin="0,25,0,0">
+                    <DockPanel DockPanel.Dock="Bottom" Margin="0,25,0,0"
+                               IsEnabled="{Binding ElementName=cbLogging, Path=IsChecked, TargetNullValue=false}">
                         <StackPanel DockPanel.Dock="Top">
                             <CheckBox x:Name="cbWarning" IsChecked="{Binding Settings.EnableWarning}">
                                 <CheckBox.ToolTip>
@@ -1163,7 +1014,7 @@
                             </CheckBox>
                         </StackPanel>
 
-                        <StackPanel DockPanel.Dock="Bottom" Margin="0,10,0,0" Orientation="Horizontal" 
+                        <StackPanel DockPanel.Dock="Bottom" Margin="50,10,0,0" Orientation="Horizontal" 
                                IsEnabled="{Binding ElementName=cbWarning, Path=IsChecked, TargetNullValue=false}">
 
                             <StackPanel Orientation="Horizontal" Margin="15,0,0,0">
@@ -1182,7 +1033,7 @@
                             </StackPanel>
                         </StackPanel>
 
-                        <StackPanel DockPanel.Dock="Bottom" Margin="0,10,0,0" Orientation="Horizontal" 
+                        <StackPanel DockPanel.Dock="Bottom" Margin="50,10,0,0" Orientation="Horizontal" 
                                IsEnabled="{Binding ElementName=cbWarning, Path=IsChecked, TargetNullValue=false}">
 
                             <StackPanel Orientation="Horizontal" Margin="15,0,0,0">

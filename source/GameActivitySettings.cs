@@ -1,4 +1,4 @@
-﻿using CommonPluginsShared;
+using CommonPluginsShared;
 using CommonPluginsShared.Extensions;
 using CommonPluginsShared.Interfaces;
 using CommonPluginsShared.Plugins;
@@ -302,35 +302,6 @@ namespace GameActivity
 
         /// <summary>Warn when RAM usage exceeds this percentage. <c>0</c> = disabled.</summary>
         public int MaxRamUsage { get; set; } = 0;
-
-        #endregion
-
-        #region List View Columns
-
-        /// <summary>Show game icon column.</summary>
-        public bool lvGamesIcon { get; set; } = true;
-        /// <summary>Show PC name column.</summary>
-        public bool lvGamesPcName { get; set; } = true;
-        /// <summary>Show source column.</summary>
-        public bool lvGamesSource { get; set; } = true;
-        /// <summary>Show play action column.</summary>
-        public bool lvGamesPlayAction { get; set; } = true;
-        /// <summary>Show average CPU usage column.</summary>
-        public bool lvAvgCpu { get; set; } = true;
-        /// <summary>Show average GPU usage column.</summary>
-        public bool lvAvgGpu { get; set; } = true;
-        /// <summary>Show average RAM usage column.</summary>
-        public bool lvAvgRam { get; set; } = true;
-        /// <summary>Show average FPS column.</summary>
-        public bool lvAvgFps { get; set; } = true;
-        /// <summary>Show average CPU temperature column.</summary>
-        public bool lvAvgCpuT { get; set; } = true;
-        /// <summary>Show average GPU temperature column.</summary>
-        public bool lvAvgGpuT { get; set; } = true;
-        /// <summary>Show average CPU power column.</summary>
-        public bool lvAvgCpuP { get; set; } = true;
-        /// <summary>Show average GPU power column.</summary>
-        public bool lvAvgGpuP { get; set; } = true;
 
         #endregion
 

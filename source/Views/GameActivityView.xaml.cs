@@ -132,63 +132,6 @@ namespace GameActivity.Views
                 HideColumn(lvAvgGpu, lvAvgGpuHeader, true);
                 HideColumn(lvAvgCpu, lvAvgCpuHeader, true);
             }
-            else
-            {
-                if (!PluginDatabase.PluginSettings.lvAvgGpuP)
-                {
-                    HideColumn(lvAvgGpuP, lvAvgGpuPHeader);
-                }
-                if (!PluginDatabase.PluginSettings.lvAvgCpuP)
-                {
-                    HideColumn(lvAvgCpuP, lvAvgCpuPHeader);
-                }
-                if (!PluginDatabase.PluginSettings.lvAvgGpuT)
-                {
-                    HideColumn(lvAvgGpuT, lvAvgGpuTHeader);
-                }
-                if (!PluginDatabase.PluginSettings.lvAvgCpuT)
-                {
-                    HideColumn(lvAvgCpuT, lvAvgCpuTHeader);
-                }
-                if (!PluginDatabase.PluginSettings.lvAvgFps)
-                {
-                    HideColumn(lvAvgFps, lvAvgFpsHeader);
-                }
-                if (!PluginDatabase.PluginSettings.lvAvgRam)
-                {
-                    HideColumn(lvAvgRam, lvAvgRamHeader);
-                }
-                if (!PluginDatabase.PluginSettings.lvAvgGpu)
-                {
-                    HideColumn(lvAvgGpu, lvAvgGpuHeader);
-                }
-                if (!PluginDatabase.PluginSettings.lvAvgCpu)
-                {
-                    HideColumn(lvAvgCpu, lvAvgCpuHeader);
-                }
-            }
-
-            if (!PluginDatabase.PluginSettings.lvGamesPlayAction)
-            {
-                HideColumn(lvGamesPlayAction, lvGamesPlayActionHeader);
-            }
-            if (!PluginDatabase.PluginSettings.lvGamesPcName)
-            {
-                HideColumn(lvGamesPcName, lvGamesPcNameHeader);
-            }
-            if (!PluginDatabase.PluginSettings.lvGamesSource)
-            {
-                HideColumn(lvGamesSource, lvGamesSourceHeader);
-            }
-            if (!PluginDatabase.PluginSettings.lvGamesIcon)
-            {
-                HideColumn(lvGamesIcon, lvGamesIconHeader);
-            }
-
-            if (!PluginDatabase.PluginSettings.lvGamesIcon)
-            {
-                HideColumn(lvGamesIcon, lvGamesIconHeader);
-            }
 
             // Graphics game details activities.
             activityForGamesGraphics.Visibility = Visibility.Hidden;
