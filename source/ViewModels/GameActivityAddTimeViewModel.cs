@@ -1,4 +1,4 @@
-﻿using CommonPlayniteShared.Converters;
+using CommonPlayniteShared.Converters;
 using CommonPluginsShared;
 using CommonPluginsShared.Extensions;
 using GameActivity.Models;
@@ -68,7 +68,6 @@ namespace GameActivity.ViewModels
 
         #endregion
 
-        private readonly GameActivity _plugin;
         private readonly Game _game;
         private readonly Activity _activityEdit;
         private readonly List<CbListHeader> _cbListHeaders = new List<CbListHeader>();
@@ -82,7 +81,6 @@ namespace GameActivity.ViewModels
 
         public GameActivityAddTimeViewModel(GameActivity plugin, Game game, Activity activityEdit)
         {
-            _plugin = plugin;
             _game = game;
             _activityEdit = activityEdit;
 
@@ -224,7 +222,7 @@ namespace GameActivity.ViewModels
         private void Persist()
         {
             PluginDatabase.PluginSettings.CustomGameActions[_game.Id] = _cbListHeaders.Where(x => x.IsCustom).Select(x => x.Name).ToList();
-            _plugin.SavePluginSettings(PluginDatabase.PluginSettings);
+            PluginDatabase.PersistSettingsAction?.Invoke();
         }
 
         private static DateTime ParseDateTime(DateTime d, string t) => DateTime.Parse(d.ToString("yyyy-MM-dd") + " " + t);
