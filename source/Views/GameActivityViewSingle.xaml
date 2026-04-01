@@ -572,10 +572,10 @@
             <Grid.RowDefinitions>
                 <!-- Time chart: 2/3 of vertical space -->
                 <RowDefinition Height="*" />
-                <RowDefinition Height="8" />
+                <RowDefinition x:Name="RowTimeLogSpacer" Height="8" />
                 <!-- Log chart: 1/3 of vertical space -->
                 <RowDefinition x:Name="RowLogSection" Height="1.2*" />
-                <RowDefinition Height="8" />
+                <RowDefinition x:Name="RowLogExpanderSpacer" Height="8" />
                 <!-- PC config expander -->
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
@@ -608,7 +608,8 @@
                             dynamique (ex. nom du PC sélectionné). Mettre "" pour le masquer.
                  IsExpanded : lié TwoWay au ToggleButton ButtonShowConfig de la toolbar.
                  ──────────────────────────────────────────────────────────────────────── -->
-            <Expander Grid.Row="8"
+            <Expander x:Name="PART_PcConfigExpander"
+                      Grid.Row="4"
                       Style="{DynamicResource ModernExpanderStyle}"
                       Header="{DynamicResource LOCMenuConfigurationTitle}"
                       Tag="{Binding PcSubtitle}"

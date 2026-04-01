@@ -83,8 +83,15 @@ namespace GameActivity.Views
                 HideColumn(lvAvgGpu, lvAvgGpuHeader, true);
                 HideColumn(lvAvgCpu, lvAvgCpuHeader, true);
 
+                // Remove log chart area so time chart can use remaining height.
+                RowTimeLogSpacer.Height = new GridLength(0);
                 RowLogSection.Height = new GridLength(0);
+                RowLogExpanderSpacer.Height = new GridLength(0);
                 PART_LogSection.Visibility = Visibility.Collapsed;
+
+                // Keep PC config always expanded and non-collapsible without logging.
+                PART_PcConfigExpander.IsExpanded = true;
+                PART_PcConfigExpander.Collapsed += PcConfigExpander_Collapsed;
             }
             else
             {
@@ -102,6 +109,14 @@ namespace GameActivity.Views
             if (!PluginDatabase.PluginSettings.lvGamesPcName) HideColumn(lvGamesPcName, lvGamesPcNameHeader);
             if (!PluginDatabase.PluginSettings.lvGamesSource) HideColumn(lvGamesSource, lvGamesSourceHeader);
             if (!PluginDatabase.PluginSettings.lvGamesPlayAction) HideColumn(lvGamesPlayAction, lvGamesPlayActionHeader);
+        }
+
+        private void PcConfigExpander_Collapsed(object sender, RoutedEventArgs e)
+        {
+            if (!PluginDatabase.PluginSettings.EnableLogging)
+            {
+                PART_PcConfigExpander.IsExpanded = true;
+            }
         }
 
         /// <summary>Hides a GridViewColumn by zeroing its width and disabling hit-testing on its header.</summary>
