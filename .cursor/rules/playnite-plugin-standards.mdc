@@ -31,6 +31,7 @@ alwaysApply: true
 - Validate input and null values before use.
 - Async methods returning `Task` must end with `Async`.
 - Avoid `dynamic` unless absolutely necessary.
+- Use `#region`/`#endregion` when it improves readability in larger files, and consistently organize classes with `Properties`, `Commands`, and `Methods` regions where applicable.
 
 ## Playnite-Specific Rules
 
