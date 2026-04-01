@@ -154,7 +154,7 @@ When adding new localization keys, update only the corresponding `LocSource.xaml
 - **Suggest improvements:** When reviewing or analyzing code, identify and propose concrete improvements so the code better respects clean code (for example, extracting methods, renaming, reducing complexity, removing duplication). Do not limit to describing issues—suggest the change or show the refactor when relevant.
 - **Typing:** Strict typing is mandatory. No `dynamic` unless absolutely necessary.
 - **Mandatory Braces:** Always encapsulate the code body of `if`, `for`, `foreach`, `while`, and similar control statements with curly braces, even for single-line bodies.
-- **Code Organization:** Encapsulate related code blocks in `#region`/`#endregion` when it improves readability and structure.
+- **Code Organization:** Use `#region`/`#endregion` when it improves readability and structure (especially in larger files with clear sections), and consistently maintain `Properties`, `Commands`, and `Methods` regions where applicable.
 - **Error Handling:**
   - Use robust try-catch blocks around external API calls.
   - Use guard clauses at method entry points.
