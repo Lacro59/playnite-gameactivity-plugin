@@ -179,7 +179,7 @@
                             </GridViewColumn>
 
                             <!-- ═══ Column: Game name (visible) ══════════════════ -->
-                            <GridViewColumn Width="240"
+                            <GridViewColumn Width="250"
                                             controlsShared:ListViewColumnOptions.SortMemberPath="Name">
                                 <GridViewColumnHeader Content="{DynamicResource LOCGameNameTitle}" />
                                 <GridViewColumn.CellTemplate>
@@ -223,7 +223,7 @@
                             </GridViewColumn>
 
                             <!-- GA: Session count -->
-                            <GridViewColumn Width="110">
+                            <GridViewColumn Width="auto">
                                 <GridViewColumnHeader Content="{DynamicResource LOCGaSessionCount}"
                                                   Style="{StaticResource GaDataHeaderStyle}"
                                                   Tag="Count" />
@@ -237,7 +237,7 @@
                             </GridViewColumn>
 
                             <!-- GA: Total playtime -->
-                            <GridViewColumn Width="120">
+                            <GridViewColumn Width="auto">
                                 <GridViewColumnHeader Content="{DynamicResource LOCGaSessionPlayed}"
                                                   Style="{StaticResource GaDataHeaderStyle}"
                                                   Tag="SessionPlaytime" />
@@ -267,7 +267,7 @@
                             </GridViewColumn>
 
                             <!-- Playnite: Play count -->
-                            <GridViewColumn Width="110">
+                            <GridViewColumn Width="auto">
                                 <GridViewColumnHeader Content="{DynamicResource LOCPlayCountLabel}"
                                                   Style="{StaticResource PlayniteDataHeaderStyle}"
                                                   Tag="PlayCount" />
@@ -281,7 +281,7 @@
                             </GridViewColumn>
 
                             <!-- Playnite: Total playtime -->
-                            <GridViewColumn Width="120">
+                            <GridViewColumn Width="auto">
                                 <GridViewColumnHeader Content="{DynamicResource LOCTimePlayed}"
                                                   Style="{StaticResource PlayniteDataHeaderStyle}"
                                                   Tag="Playtime" />

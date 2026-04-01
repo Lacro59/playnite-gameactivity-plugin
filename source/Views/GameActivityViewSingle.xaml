@@ -213,6 +213,35 @@
                     <ListView.View>
                         <GridView>
 
+                            <!-- Action buttons (delete / edit) -->
+                            <GridViewColumn Width="auto">
+                                <GridViewColumnHeader Content="{DynamicResource LOCActionsLabel}"
+                                                      controlsShared:ListViewColumnOptions.DisableSorting="True" />
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <!-- Delete activity -->
+                                            <Button Content="&#x1f5d9;"
+                                                    Style="{DynamicResource NavIconButton}"
+                                                    FontFamily="{DynamicResource FontIcoFont}"
+                                                    Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl},
+                                                                      Path=DataContext.DeleteActivityCommand}"
+                                                    CommandParameter="{Binding GameLastActivity}"
+                                                    ToolTip="{DynamicResource LOCRemoveTitle}" />
+
+                                            <!-- Edit activity -->
+                                            <Button Content="&#xef10;"
+                                                    Style="{DynamicResource NavIconButton}"
+                                                    FontFamily="{DynamicResource FontIcoFont}"
+                                                    Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl},
+                                                                      Path=DataContext.EditActivityCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    ToolTip="{DynamicResource LOCEditGame}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            
                             <!-- Date -->
                             <GridViewColumn Width="auto" 
                                             DisplayMemberBinding="{Binding GameLastActivity, Converter={StaticResource LocalDateTimeConverter}}">
@@ -235,7 +264,8 @@
                             </GridViewColumn>
 
                             <!-- PC Name -->
-                            <GridViewColumn Width="auto" x:Name="lvGamesPcName">
+                            <GridViewColumn Width="auto" x:Name="lvGamesPcName"
+                                            controlsShared:ListViewColumnOptions.SortMemberPath="PCName">
                                 <GridViewColumnHeader Content="{DynamicResource LOCGameActivityPCName}"
                                                       Name="lvGamesPcNameHeader" />
                                 <GridViewColumn.CellTemplate>
@@ -248,7 +278,8 @@
                             </GridViewColumn>
 
                             <!-- Play action -->
-                            <GridViewColumn Width="auto" x:Name="lvGamesPlayAction">
+                            <GridViewColumn Width="auto" x:Name="lvGamesPlayAction"
+                                            controlsShared:ListViewColumnOptions.SortMemberPath="GameActionName">
                                 <GridViewColumnHeader Content="{DynamicResource LOCIsPlayAction}"
                                                       Name="lvGamesPlayActionHeader" />
                                 <GridViewColumn.CellTemplate>
@@ -261,7 +292,8 @@
                             </GridViewColumn>
 
                             <!-- Source icon -->
-                            <GridViewColumn Width="auto" x:Name="lvGamesSource">
+                            <GridViewColumn Width="auto" x:Name="lvGamesSource"
+                                            controlsShared:ListViewColumnOptions.SortMemberPath="GameSourceName">
                                 <GridViewColumnHeader Content="{DynamicResource LOCSourceLabel}"
                                                       Tag="listGameSourceName"
                                                       Name="lvGamesSourceHeader" />
@@ -286,6 +318,7 @@
                             <!-- CPU % -->
                             <GridViewColumn x:Name="lvAvgCpu" Width="auto">
                                 <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgCpu}"
+                                                      controlsShared:ListViewColumnOptions.DisableSorting="True"
                                                       Name="lvAvgCpuHeader" />
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
@@ -317,6 +350,7 @@
                             <!-- GPU % -->
                             <GridViewColumn x:Name="lvAvgGpu" Width="auto">
                                 <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgGpu}"
+                                                      controlsShared:ListViewColumnOptions.DisableSorting="True"
                                                       Name="lvAvgGpuHeader" />
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
@@ -348,6 +382,7 @@
                             <!-- RAM % -->
                             <GridViewColumn x:Name="lvAvgRam" Width="auto">
                                 <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgRam}"
+                                                      controlsShared:ListViewColumnOptions.DisableSorting="True"
                                                       Name="lvAvgRamHeader" />
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
@@ -379,6 +414,7 @@
                             <!-- FPS — ConverterParameter=0 means warn when BELOW threshold -->
                             <GridViewColumn x:Name="lvAvgFps" Width="auto">
                                 <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgFps}"
+                                                      controlsShared:ListViewColumnOptions.DisableSorting="True"
                                                       Name="lvAvgFpsHeader" />
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
@@ -410,6 +446,7 @@
                             <!-- CPU temp -->
                             <GridViewColumn x:Name="lvAvgCpuT" Width="auto">
                                 <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgCpuT}"
+                                                      controlsShared:ListViewColumnOptions.DisableSorting="True"
                                                       Name="lvAvgCpuTHeader" />
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
@@ -441,6 +478,7 @@
                             <!-- GPU temp -->
                             <GridViewColumn x:Name="lvAvgGpuT" Width="auto">
                                 <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgGpuT}"
+                                                      controlsShared:ListViewColumnOptions.DisableSorting="True"
                                                       Name="lvAvgGpuTHeader" />
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
@@ -472,6 +510,7 @@
                             <!-- CPU power -->
                             <GridViewColumn x:Name="lvAvgCpuP" Width="auto">
                                 <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgCpuP}"
+                                                      controlsShared:ListViewColumnOptions.DisableSorting="True"
                                                       Name="lvAvgCpuPHeader" />
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
@@ -503,6 +542,7 @@
                             <!-- GPU power -->
                             <GridViewColumn x:Name="lvAvgGpuP" Width="auto">
                                 <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgGpuP}"
+                                                      controlsShared:ListViewColumnOptions.DisableSorting="True"
                                                       Name="lvAvgGpuPHeader" />
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
@@ -527,34 +567,6 @@
                                                 </Style>
                                             </Label.Style>
                                         </Label>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-
-                            <!-- Action buttons (delete / edit) -->
-                            <GridViewColumn Width="auto">
-                                <GridViewColumnHeader Content="{DynamicResource LOCActionsLabel}" />
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <!-- Delete activity -->
-                                            <Button Content="&#x1f5d9;"
-                                                    Style="{DynamicResource NavIconButton}"
-                                                    FontFamily="{DynamicResource FontIcoFont}"
-                                                    Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl},
-                                                                      Path=DataContext.DeleteActivityCommand}"
-                                                    CommandParameter="{Binding GameLastActivity}"
-                                                    ToolTip="{DynamicResource LOCRemoveTitle}" />
-                                            
-                                            <!-- Edit activity -->
-                                            <Button Content="&#xef10;"
-                                                    Style="{DynamicResource NavIconButton}"
-                                                    FontFamily="{DynamicResource FontIcoFont}"
-                                                    Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl},
-                                                                      Path=DataContext.EditActivityCommand}"
-                                                    CommandParameter="{Binding}"
-                                                    ToolTip="{DynamicResource LOCEditGame}" />
-                                        </StackPanel>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
