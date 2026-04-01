@@ -43,6 +43,8 @@ alwaysApply: true
 ## UI, XAML, and Threading
 
 - Follow `.ai/Playnite UI Modernization, Localization and Common Styling.md` for UI, styling, and localization.
+- Localization keys and entries must be added or modified only in the appropriate `LocSource.xaml` scope (`source/playnite-plugincommon/CommonPluginsResources/Localization/Common` for shared strings, or `source/Localization` for plugin-specific strings).
+- Do not add user-facing localized strings or localization keys in C# files, XAML views, or any other resource files outside the selected `LocSource.xaml`.
 - Use dispatcher access for UI updates from background work.
 - Never block UI thread with `.Result` or `.Wait()`; prefer `await`.
 
