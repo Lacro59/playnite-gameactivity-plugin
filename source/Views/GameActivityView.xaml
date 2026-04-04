@@ -6,13 +6,13 @@
              xmlns:converters="clr-namespace:CommonPlayniteShared.Converters"
              xmlns:livechartscommon="clr-namespace:CommonPluginsControls.LiveChartsCommon"
              xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
-             xmlns:local="clr-namespace:GameActivity.Views"
              xmlns:controlsShared="clr-namespace:CommonPluginsShared.Controls"
              xmlns:commonpluginscontrols="clr-namespace:CommonPluginsControls.Controls"
              xmlns:playnitecontrols="clr-namespace:CommonPluginsControls.PlayniteControls"
              xmlns:commonpluginsshared="clr-namespace:CommonPluginsShared.Converters"
              xmlns:Commonpluginsbehaviors="clr-namespace:CommonPluginsShared.Behaviors"
-             xmlns:viewModels="clr-namespace:GameActivity.ViewModels"
+             xmlns:viewModels="clr-namespace:GameActivity.ViewModels" 
+             xmlns:local="clr-namespace:GameActivity.Views"
              mc:Ignorable="d" d:DesignHeight="740" d:DesignWidth="1280"
              d:DataContext="{d:DesignInstance Type=viewModels:GameActivityViewModel}"
              Background="{DynamicResource WindowBackgourndBrush}">
@@ -24,15 +24,66 @@
         <commonpluginsshared:LocalDateTimeConverter x:Key="LocalDateTimeConverter" />
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converters:InvertedBooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter" />
+
+        <Style x:Key="NavTextToggleButton" TargetType="ToggleButton" BasedOn="{StaticResource NavToggleButton}">
+            <Setter Property="Width" Value="Auto" />
+            <Setter Property="Height" Value="33" />
+            <Setter Property="Padding" Value="10,4" />
+            <Setter Property="FontFamily" Value="{DynamicResource CommonFont}" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Margin" Value="0" />
+        </Style>
+
+        <Style x:Key="DatePickerIconOnly" TargetType="DatePicker" BasedOn="{StaticResource ModernDatePicker}">
+            <Setter Property="Width" Value="32" />
+            <Setter Property="Height" Value="32" />
+            <Setter Property="MinWidth" Value="32" />
+            <Setter Property="MinHeight" Value="32" />
+            <Setter Property="MaxWidth" Value="32" />
+            <Setter Property="MaxHeight" Value="32" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DatePicker">
+                        <Grid Width="32" Height="32">
+                            <DatePickerTextBox x:Name="PART_TextBox"
+                                               Visibility="Collapsed"
+                                               Width="0"
+                                               Height="0"
+                                               IsHitTestVisible="False"
+                                               Focusable="False" />
+
+                            <Button x:Name="PART_Button" Margin="-5"
+                                    Style="{DynamicResource NavIconButton}"
+                                    Content="&#xEC45;"
+                                    FontFamily="{DynamicResource FontIcoFont}"
+                                    Width="32"
+                                    Height="32"
+                                    Focusable="False" />
+
+                            <Popup x:Name="PART_Popup"
+                                   AllowsTransparency="True"
+                                   Placement="Bottom"
+                                   PlacementTarget="{Binding ElementName=PART_Button}"
+                                   StaysOpen="False" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
 
-    <TabControl Margin="10">
+    <TabControl Margin="12">
         <TabItem Header="{DynamicResource LOCGameActivity}">
-            <Grid>
+            <Grid Margin="5">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="10" />
-                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
 
                 <Grid Name="PART_DataLoad" Grid.RowSpan="3">
@@ -42,9 +93,8 @@
                        HorizontalAlignment="Center" VerticalAlignment="Center" />
                 </Grid>
 
-                <Border Grid.Row="0" Name="PART_DataTop" BorderBrush="{DynamicResource NormalBorderBrush}" 
-                        BorderThickness="{DynamicResource ControlBorderThickness}">
-                    <Grid Margin="10">
+                <Border Grid.Row="0" Name="PART_DataTop" Style="{DynamicResource SectionBorder}" Margin="0">
+                    <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto" />
                             <RowDefinition Height="8" />
@@ -52,35 +102,27 @@
                         </Grid.RowDefinitions>
 
                         <!-- Navigation -->
-                        <Grid Grid.Row="0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto" />
-                                <ColumnDefinition Width="10" />
-                                <ColumnDefinition Width="auto" />
-                                <ColumnDefinition Width="10" />
-                                <ColumnDefinition Width="auto" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="100" />
-                                <ColumnDefinition Width="10" />
-                                <ColumnDefinition Width="100" />
-                            </Grid.ColumnDefinitions>
+                        <Grid Grid.Row="0" Margin="0,0,0,4">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="auto" />
                             </Grid.RowDefinitions>
 
-                            <ToggleButton Grid.Column="0" x:Name="tbMonthSources" IsChecked='True' Content="{DynamicResource LOCSourcesLabel}" FontSize="20" Click="ToggleButtonSources_Checked" />
-                            <ToggleButton Grid.Column="2" x:Name="tbMonthGenres" IsChecked='False' Content="{DynamicResource LOCGenresLabel}" FontSize="20" Click="ToggleButtonGenres_Checked" />
-                            <ToggleButton Grid.Column="4" x:Name="tbMonthTags" IsChecked='False' Content="{DynamicResource LOCTagsLabel}" FontSize="20" Click="ToggleButtonTags_Checked" />
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                <ToggleButton x:Name="tbMonthSources" IsChecked="True" Content="{DynamicResource LOCSourcesLabel}" Style="{StaticResource NavTextToggleButton}" Click="ToggleButtonSources_Checked" />
+                                <ToggleButton x:Name="tbMonthGenres" IsChecked="False" Content="{DynamicResource LOCGenresLabel}" Style="{StaticResource NavTextToggleButton}" Margin="8,0,0,0" Click="ToggleButtonGenres_Checked" />
+                                <ToggleButton x:Name="tbMonthTags" IsChecked="False" Content="{DynamicResource LOCTagsLabel}" Style="{StaticResource NavTextToggleButton}" Margin="8,0,0,0" Click="ToggleButtonTags_Checked" />
+                            </StackPanel>
 
-                            <Button Grid.Column="5" Content="" Width="50" FontSize="20" Click="Button_Click_PrevMonth" FontFamily="Wingdings" />
-                            <Label Grid.Column="6" x:Name="activityLabel" Content="{Binding ActivityLabelText}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" FontWeight="Bold" MinWidth="50" />
-                            <Button Grid.Column="7" Content="" Width="50" FontSize="20" Click="Button_Click_NextMonth" FontFamily="Wingdings" />
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Button Content="&#xe941;" Style="{DynamicResource NavCommonButton}" Click="Button_Click_PrevMonth" />
+                                <Label x:Name="activityLabel" Content="{Binding ActivityLabelText}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" FontWeight="Bold" MinWidth="50" Margin="12,0" />
+                                <Button Content="&#xe942;" Style="{DynamicResource NavCommonButton}" Click="Button_Click_NextMonth" />
+                            </StackPanel>
 
-
-                            <DatePicker Grid.Column="10" HorizontalAlignment="Right" Width="35" SelectedDateChanged="DatePicker_SelectedDateChanged"
-                                Commonpluginsbehaviors:DatePickerCalendar.IsMonthYear="True">
+                            <DatePicker HorizontalAlignment="Right" VerticalAlignment="Center" 
+                                        Style="{StaticResource DatePickerIconOnly}" 
+                                        SelectedDateChanged="DatePicker_SelectedDateChanged"
+                                        Commonpluginsbehaviors:DatePickerCalendar.IsMonthYear="True">
                                 <DatePicker.CalendarStyle>
                                     <Style TargetType="Calendar" BasedOn="{StaticResource {x:Type Calendar}}">
                                         <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -91,11 +133,10 @@
                                             <Setter.Value>
                                                 <ControlTemplate TargetType="{x:Type Calendar}">
                                                     <StackPanel HorizontalAlignment="Center" Name="PART_Root">
-                                                        <CalendarItem Style="{DynamicResource CalendarItemStyle}"
-                                                              Name="PART_CalendarItem" />
+                                                        <CalendarItem Style="{DynamicResource CalendarItemStyle}" Name="PART_CalendarItem" />
                                                         <Button Content="{DynamicResource LOCToday}" 
-                                                        Command="Commonpluginsbehaviors:CalendarCommands.SelectToday" 
-                                                        CommandParameter="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                                                Command="Commonpluginsbehaviors:CalendarCommands.SelectToday" 
+                                                                CommandParameter="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}}" />
                                                     </StackPanel>
                                                 </ControlTemplate>
                                             </Setter.Value>
@@ -109,21 +150,20 @@
                         <Grid Grid.Row="2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="10" />
+                                <ColumnDefinition Width="12" />
                                 <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="10" />
+                                <ColumnDefinition Width="12" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
-                            <Grid x:Name="gridMonth" Grid.Column="0">
+                            <Border Grid.Column="0" Style="{DynamicResource CardBorder}" Padding="8" Margin="0">
+                            <Grid x:Name="gridMonth">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="30" />
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
 
-                                <Label Name="PART_ChartTotalHoursSource_Label" Content="{DynamicResource LOCGameActivityTotalHours}" HorizontalAlignment="Center" 
-                               VerticalAlignment="Top" Height="30" FontSize="20" FontWeight="Bold" MinWidth="50" 
-                               Grid.Column="1" Grid.Row="0" />
+                                <TextBlock Name="PART_ChartTotalHoursSource_Label" Text="{DynamicResource LOCGameActivityTotalHours}" Style="{DynamicResource SectionHeaderText}" HorizontalAlignment="Center" Grid.Column="1" Grid.Row="0" />
 
                                 <lvc:CartesianChart x:Name="PART_ChartTotalHoursSource" LegendLocation="none" Grid.Column="1" Grid.Row="1" 
                                             DisableAnimations="True" AnimationsSpeed="10" FontFamily="{DynamicResource CommonFont}">
@@ -146,16 +186,18 @@
                                     </lvc:CartesianChart.AxisY>
                                 </lvc:CartesianChart>
                             </Grid>
+                            </Border>
 
 
-                            <Grid Name="GridDay" Grid.Column="2">
+                            <Border Grid.Column="2" Style="{DynamicResource CardBorder}" Padding="8" Margin="0">
+                            <Grid Name="GridDay">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="30" />
                                     <RowDefinition Height="*" />
                                     <RowDefinition Height="auto" />
                                 </Grid.RowDefinitions>
 
-                                <Label Grid.Column="1" Grid.Row="0" x:Name="actLabel" Content="{DynamicResource LOCGameActivityTimeTitle}" Height="30" FontSize="20" FontWeight="Bold" MinWidth="50" HorizontalAlignment="Center" />
+                                <TextBlock Grid.Column="1" Grid.Row="0" x:Name="actLabel" Text="{DynamicResource LOCGameActivityTimeTitle}" Style="{DynamicResource SectionHeaderText}" HorizontalAlignment="Center" />
 
                                 <lvc:CartesianChart x:Name="PART_ChartHoursByDaySource" LegendLocation="none" Grid.Column="1" Grid.Row="1"  
                                             DisableAnimations="True" AnimationsSpeed="10"
@@ -179,14 +221,16 @@
 
                                 <Label Grid.Row="3" FontSize="28" Content=" " />
                             </Grid>
+                            </Border>
 
-                            <Grid Name="GridWeek" Grid.Column="4">
+                            <Border Grid.Column="4" Style="{DynamicResource CardBorder}" Padding="8" Margin="0">
+                            <Grid Name="GridWeek">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="30" />
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
 
-                                <Label Grid.Column="1" Grid.Row="0" x:Name="acwLabel" Content="{DynamicResource LOCGameActivityTotalHoursByWeeks}" Height="30" FontSize="20" FontWeight="Bold" MinWidth="50" HorizontalAlignment="Center" />
+                                <TextBlock Grid.Column="1" Grid.Row="0" x:Name="acwLabel" Text="{DynamicResource LOCGameActivityTotalHoursByWeeks}" Style="{DynamicResource SectionHeaderText}" HorizontalAlignment="Center" />
 
                                 <lvc:CartesianChart x:Name="PART_ChartHoursByWeekSource" LegendLocation="none" Grid.Column="1" Grid.Row="1"  
                                                     DisableAnimations="True" AnimationsSpeed="10"
@@ -208,6 +252,7 @@
                                     </lvc:CartesianChart.AxisY>
                                 </lvc:CartesianChart>
                             </Grid>
+                            </Border>
                         </Grid>
                     </Grid>
                 </Border>
@@ -219,495 +264,576 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto" />
-                            <RowDefinition Height="10" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
+                    <DockPanel>
+                        <Border DockPanel.Dock="Top" Style="{DynamicResource FilterCardBorder}" Margin="0,0,0,10">
+                            <DockPanel LastChildFill="True">
+                                <StackPanel DockPanel.Dock="Left"
+                                            Orientation="Horizontal"
+                                            VerticalAlignment="Center"
+                                            Margin="0,0,20,0">
+                                    <TextBlock Text="{DynamicResource LOCSearchLabel}"
+                                               Style="{DynamicResource BaseTextBlockStyle}"
+                                               VerticalAlignment="Center"
+                                               Margin="0,0,6,0" />
 
-                        <Border Grid.Column="0" Grid.Row="0" BorderThickness="{DynamicResource PopupBorderThickness}" 
-                                BorderBrush="{DynamicResource NormalBorderBrush}">
-                            <Grid Margin="10">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto" />
-                                    <ColumnDefinition Width="6" />
-                                    <ColumnDefinition Width="200" />
-                                    <ColumnDefinition Width="20" />
-                                    <ColumnDefinition Width="auto" />
-                                    <ColumnDefinition Width="6" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
+                                    <playnitecontrols:SearchBox x:Name="TextboxSearch"
+                                                                Width="200"
+                                                                Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                                TextChanged="TextboxSearch_TextChanged" />
+                                </StackPanel>
 
-                                <Label Grid.Column="0" Content="{DynamicResource LOCSearchLabel}" FontSize="16" />
-                                <playnitecontrols:SearchBox Grid.Column="2" x:Name="TextboxSearch" Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextChanged="TextboxSearch_TextChanged" />
+                                <DockPanel LastChildFill="True" VerticalAlignment="Center">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="8" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
 
-                                <Label Grid.Column="4" Content="{DynamicResource LOCSourceLabel}" FontSize="16" />
-                                <ComboBox Grid.Column="6" x:Name="FilterSource" IsEditable="True" IsReadOnly="True" Text="{Binding FilterSourceText, Mode=TwoWay}">
-                                    <ComboBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <CheckBox Name="PART_CbSource" Tag="{Binding}"
-                                              VerticalAlignment="Center"
-                                              Checked="PART_CbSource_Checked"
-                                              Unchecked="PART_CbSource_Unchecked"
-                                              IsChecked="{Binding isCheck, Mode=TwoWay}" FontFamily="{DynamicResource CommonFont}">
+                                        <Button Grid.Column="0"
+                                                x:Name="FilterSourceButton"
+                                                Content="{DynamicResource LOCSourceLabel}"
+                                                Style="{DynamicResource SecondaryButton}"
+                                                Padding="10,2"
+                                                Margin="0"
+                                                MinWidth="0"
+                                                Click="FilterSourceButton_Click">
+                                            <Button.ContextMenu>
+                                                <ContextMenu x:Name="FilterSourceMenu"
+                                                             DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}"
+                                                             Placement="Bottom"
+                                                             MinWidth="180"
+                                                             MaxHeight="320">
+                                                    <ContextMenu.ItemsSource>
+                                                        <Binding Path="FilterSourceItems" />
+                                                    </ContextMenu.ItemsSource>
+                                                    <ContextMenu.ItemContainerStyle>
+                                                        <Style TargetType="{x:Type MenuItem}">
+                                                            <Setter Property="Height" Value="30" />
+                                                            <Setter Property="Padding" Value="6,2" />
+                                                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                                            <Setter Property="VerticalContentAlignment" Value="Center" />
+                                                            <Setter Property="StaysOpenOnClick" Value="True" />
+                                                            <Setter Property="IsCheckable" Value="False" />
+                                                            <Setter Property="Tag" Value="{Binding}" />
+                                                            <Setter Property="ToolTip" Value="{Binding SourceName}" />
+                                                            <EventSetter Event="PreviewMouseLeftButtonDown" Handler="FilterSourceMenuItem_PreviewMouseLeftButtonDown" />
+                                                            <Setter Property="HeaderTemplate">
+                                                                <Setter.Value>
+                                                                    <DataTemplate>
+                                                                        <CheckBox Name="PART_CbSource"
+                                                                                  Tag="{Binding}"
+                                                                                  IsChecked="{Binding IsCheck, Mode=TwoWay}"
+                                                                                  Focusable="False"
+                                                                                  BorderThickness="0"
+                                                                                  Background="Transparent"
+                                                                                  HorizontalAlignment="Stretch"
+                                                                                  HorizontalContentAlignment="Left"
+                                                                                  VerticalContentAlignment="Center"
+                                                                                  Padding="0"
+                                                                                  IsHitTestVisible="False"
+                                                                                  Checked="PART_CbSource_Checked"
+                                                                                  Unchecked="PART_CbSource_Unchecked">
+                                                                            <commonpluginscontrols:TextBlockWithIcon Mode="IconTextFirstWithText"
+                                                                                                                     Icon="{Binding ElementName=PART_CbSource, Path=Tag.SourceIcon}"
+                                                                                                                     IconText="{Binding ElementName=PART_CbSource, Path=Tag.SourceIconText}"
+                                                                                                                     Text="{Binding ElementName=PART_CbSource, Path=Tag.SourceName}" />
+                                                                        </CheckBox>
+                                                                    </DataTemplate>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </ContextMenu.ItemContainerStyle>
+                                                </ContextMenu>
+                                            </Button.ContextMenu>
+                                        </Button>
 
-                                                <commonpluginscontrols:TextBlockWithIcon Mode="{Binding ElementName=PART_CbSource, Path=Tag.TypeStoreIcon}" 
-                                                                                 Icon="{Binding ElementName=PART_CbSource, Path=Tag.SourceIcon}"
-                                                                                 IconText="{Binding ElementName=PART_CbSource, Path=Tag.SourceIconText}"
-                                                                                 Text="{Binding ElementName=PART_CbSource, Path=Tag.SourceName}" />
-                                            </CheckBox>
-                                        </DataTemplate>
-                                    </ComboBox.ItemTemplate>
-                                </ComboBox>
-                            </Grid>
+                                        <DockPanel Grid.Column="2" LastChildFill="False" VerticalAlignment="Center">
+                                            <Button Content="{DynamicResource LOCResetLabel}"
+                                                    Style="{DynamicResource SecondaryButton}"
+                                                    Margin="0"
+                                                    Padding="8,2"
+                                                    MinWidth="0"
+                                                    Click="FilterSourceReset_Click" />
+
+                                            <commonpluginscontrols:TextBlockTrimmed Style="{DynamicResource BaseTextBlockStyle}"
+                                                                                    Margin="8,0,0,0"
+                                                                                    VerticalAlignment="Center"
+                                                                                    Text="{Binding FilterSourceText}" />
+                                        </DockPanel>
+                                    </Grid>
+                                </DockPanel>
+                            </DockPanel>
                         </Border>
 
-                        <Grid Name="gridLvGames" Grid.Column="0" Grid.Row="2">
-                            <controlsShared:ListViewExtend x:Name="lvGames" Style="{StaticResource {x:Type ListView}}"
-                                                   SelectionChanged="LvGames_SelectionChanged" FontSize="24" 
-                                                   SortingSortDirection="Descending"
-                                                   Height="{Binding ElementName=gridLvGames, Path=ActualHeight}"
-                                                   ItemsSource="{Binding FilteredActivityList}"
-                                                   SortingEnable="True" SortingDefaultDataName="GameLastActivity">
-                                <ListView.View>
-                                    <GridView>
-                                        <GridViewColumn Width="70"
+                        <controlsShared:ListViewExtend x:Name="lvGames" Style="{StaticResource {x:Type ListView}}"
+                                                       SelectionChanged="LvGames_SelectionChanged" FontSize="24" 
+                                                       SortingSortDirection="Descending"
+                                                       Height="350"
+                                                       ItemsSource="{Binding FilteredActivityList}"
+                                                       SortingEnable="True" SortingDefaultDataName="GameLastActivity">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Width="70"
                                                         controlsShared:ListViewColumnOptions.DisableSorting="True">
-                                            <GridViewColumnHeader Content="{DynamicResource LOCActionsLabel}" />
-                                            <GridViewColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <Button FontFamily="{DynamicResource CommonFont}" Content="&#xe90f;"
+                                        <GridViewColumnHeader Content="{DynamicResource LOCActionsLabel}" />
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button FontFamily="{DynamicResource CommonFont}" Content="&#xe90f;"
                                                             Tag="{Binding Id}"  Click="Button_Click" HorizontalAlignment="Center" />
-                                                </DataTemplate>
-                                            </GridViewColumn.CellTemplate>
-                                        </GridViewColumn>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
 
-                                        <GridViewColumn Width="50" x:Name="lvGamesIcon"
+                                    <GridViewColumn Width="50" x:Name="lvGamesIcon"
                                                         controlsShared:ListViewColumnOptions.DisableSorting="True">
-                                            <GridViewColumnHeader Name="lvGamesIconHeader" Content="{DynamicResource LOCGameIconTitle}" />
-                                            <GridViewColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <Image HorizontalAlignment="Center" Height="32" VerticalAlignment="Center" Width="32" 
+                                        <GridViewColumnHeader Name="lvGamesIconHeader" Content="{DynamicResource LOCGameIconTitle}" />
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Image HorizontalAlignment="Center" Height="32" VerticalAlignment="Center" Width="32" 
                                                            Source="{Binding GameIcon, Converter={StaticResource DefaultIconConverter}}" />
-                                                </DataTemplate>
-                                            </GridViewColumn.CellTemplate>
-                                        </GridViewColumn>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
 
-                                        <GridViewColumn Width="200"
+                                    <GridViewColumn Width="200"
                                                         controlsShared:ListViewColumnOptions.SortMemberPath="GameTitle">
-                                            <GridViewColumnHeader Content="{DynamicResource LOCGameNameTitle}" />
-                                            <GridViewColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <StackPanel>
-                                                        <TextBlock Visibility="{Binding GameExist, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        <GridViewColumnHeader Content="{DynamicResource LOCGameNameTitle}" />
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel>
+                                                    <TextBlock Visibility="{Binding GameExist, Converter={StaticResource BooleanToVisibilityConverter}}">
                                                             <Hyperlink Command="{Binding GoToGame}" CommandParameter="{Binding Id}">
                                                                 <commonpluginscontrols:TextBlockTrimmed Text="{Binding GameTitle}" Style="{DynamicResource ListExtendStyleTextBlock}" />
                                                             </Hyperlink>
-                                                        </TextBlock>
-                                                        <TextBlock Visibility="{Binding GameExist, Converter={StaticResource InvertedBooleanToVisibilityConverter}}">
+                                                    </TextBlock>
+                                                    <TextBlock Visibility="{Binding GameExist, Converter={StaticResource InvertedBooleanToVisibilityConverter}}">
                                                             <commonpluginscontrols:TextBlockTrimmed Text="{Binding GameTitle}" Style="{DynamicResource ListExtendStyleTextBlock}" />
-                                                        </TextBlock>
-                                                    </StackPanel>
-                                                </DataTemplate>
-                                            </GridViewColumn.CellTemplate>
-                                        </GridViewColumn>
+                                                    </TextBlock>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
 
-                                        <GridViewColumn Width="150" DisplayMemberBinding="{Binding TimePlayedInMonth, Converter={StaticResource PlayTimeToStringConverter}}" >
-                                            <GridViewColumnHeader Content="{DynamicResource LOCGameActivityTimePlayedInMonth}" />
-                                        </GridViewColumn>
+                                    <GridViewColumn Width="150" DisplayMemberBinding="{Binding TimePlayedInMonth, Converter={StaticResource PlayTimeToStringConverter}}" >
+                                        <GridViewColumnHeader Content="{DynamicResource LOCGameActivityTimePlayedInMonth}" />
+                                    </GridViewColumn>
 
-                                        <GridViewColumn Width="150" DisplayMemberBinding="{Binding GameLastActivity, Converter={StaticResource LocalDateTimeConverter}}" >
-                                            <GridViewColumnHeader Content="{DynamicResource LOCGameActivityLvGamesLastActivity}" />
-                                        </GridViewColumn>
+                                    <GridViewColumn Width="150" DisplayMemberBinding="{Binding GameLastActivity, Converter={StaticResource LocalDateTimeConverter}}" >
+                                        <GridViewColumnHeader Content="{DynamicResource LOCGameActivityLvGamesLastActivity}" />
+                                    </GridViewColumn>
 
-                                        <GridViewColumn Width="130"
+                                    <GridViewColumn Width="130"
                                                         controlsShared:ListViewColumnOptions.SortMemberPath="GameElapsedSeconds">
-                                            <GridViewColumnHeader Content="{DynamicResource LOCGameActivityLvGamesElapsedSeconds}" />
-                                            <GridViewColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <Label Content="{Binding GameElapsedSeconds, Mode=OneWay, Converter={StaticResource PlayTimeToStringConverter}}"
+                                        <GridViewColumnHeader Content="{DynamicResource LOCGameActivityLvGamesElapsedSeconds}" />
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Label Content="{Binding GameElapsedSeconds, Mode=OneWay, Converter={StaticResource PlayTimeToStringConverter}}"
                                                            HorizontalAlignment="Center" VerticalAlignment="Stretch"
                                                            Style="{DynamicResource ListExtendStyleLabel}" />
-                                                </DataTemplate>
-                                            </GridViewColumn.CellTemplate>
-                                        </GridViewColumn>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
 
-                                        <GridViewColumn Width="75" x:Name="lvGamesSource"
+                                    <GridViewColumn Width="75" x:Name="lvGamesSource"
                                                         controlsShared:ListViewColumnOptions.SortMemberPath="GameSourceName">
-                                            <GridViewColumnHeader Content="{DynamicResource LOCSourceLabel}" Name="lvGamesSourceHeader" />
-                                            <GridViewColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <StackPanel Tag="{Binding}">
-                                                        <commonpluginscontrols:TextBlockWithIcon Mode="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=Tag.TypeStoreIcon}" 
+                                        <GridViewColumnHeader Content="{DynamicResource LOCSourceLabel}" Name="lvGamesSourceHeader" />
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Tag="{Binding}">
+                                                    <commonpluginscontrols:TextBlockWithIcon Mode="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=Tag.TypeStoreIcon}" 
                                                                                                  Icon="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=Tag.SourceIcon}"
                                                                                                  IconText="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=Tag.SourceIconText}"
                                                                                                  Style="{DynamicResource ListExtendStyleTextBlock}"
                                                                                                  HorizontalAlignment="Center" VerticalAlignment="Stretch" FontSize="22" />
-                                                    </StackPanel>
-                                                </DataTemplate>
-                                            </GridViewColumn.CellTemplate>
-                                        </GridViewColumn>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
 
-                                        <GridViewColumn Width="130" x:Name="lvGamesPcName"
+                                    <GridViewColumn Width="130" x:Name="lvGamesPcName"
                                                         controlsShared:ListViewColumnOptions.SortMemberPath="PCName">
-                                            <GridViewColumnHeader Content="{DynamicResource LOCGameActivityPCName}" Name="lvGamesPcNameHeader" />
-                                            <GridViewColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <Label Content="{Binding PCName}" VerticalAlignment="Stretch" Style="{DynamicResource ListExtendStyleLabel}" />
-                                                </DataTemplate>
-                                            </GridViewColumn.CellTemplate>
-                                        </GridViewColumn>
+                                        <GridViewColumnHeader Content="{DynamicResource LOCGameActivityPCName}" Name="lvGamesPcNameHeader" />
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Label Content="{Binding PCName}" VerticalAlignment="Stretch" Style="{DynamicResource ListExtendStyleLabel}" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
 
-                                        <GridViewColumn Width="130" x:Name="lvGamesPlayAction"
+                                    <GridViewColumn Width="130" x:Name="lvGamesPlayAction"
                                                         controlsShared:ListViewColumnOptions.SortMemberPath="GameActionName">
-                                            <GridViewColumnHeader Content="{DynamicResource LOCIsPlayAction}" Name="lvGamesPlayActionHeader" />
-                                            <GridViewColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <Label Content="{Binding GameActionName}" VerticalAlignment="Stretch" Style="{DynamicResource ListExtendStyleLabel}" />
-                                                </DataTemplate>
-                                            </GridViewColumn.CellTemplate>
-                                        </GridViewColumn>
+                                        <GridViewColumnHeader Content="{DynamicResource LOCIsPlayAction}" Name="lvGamesPlayActionHeader" />
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Label Content="{Binding GameActionName}" VerticalAlignment="Stretch" Style="{DynamicResource ListExtendStyleLabel}" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
 
-                                        <GridViewColumn x:Name="lvAvgCpu">
-                                            <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgCpu}" Name="lvAvgCpuHeader" />
-                                            <GridViewColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <Label Content="{Binding AvgCPU}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
-                                                        <Label.Style>
-                                                            <Style TargetType="Label">
-                                                                <Setter Property="Foreground">
-                                                                    <Setter.Value>
-                                                                        <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
-                                                                            <Binding Path="AvgCPU" />
-                                                                            <Binding Path="MaxCPU" />
-                                                                            <Binding Path="EnableWarm" />
-                                                                        </MultiBinding>
-                                                                    </Setter.Value>
-                                                                </Setter>
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=IsSelected}"
+                                    <GridViewColumn x:Name="lvAvgCpu">
+                                        <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgCpu}" Name="lvAvgCpuHeader" />
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Label Content="{Binding AvgCPU}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                                                    <Label.Style>
+                                                        <Style TargetType="Label">
+                                                            <Setter Property="Foreground">
+                                                                <Setter.Value>
+                                                                    <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
+                                                                        <Binding Path="AvgCPU" />
+                                                                        <Binding Path="MaxCPU" />
+                                                                        <Binding Path="EnableWarm" />
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=IsSelected}"
                                                                      Value="True">
-                                                                        <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=Foreground}" />
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </Label.Style>
-                                                    </Label>
-                                                </DataTemplate>
-                                            </GridViewColumn.CellTemplate>
-                                        </GridViewColumn>
+                                                                    <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=Foreground}" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Label.Style>
+                                                </Label>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
 
-                                        <GridViewColumn x:Name="lvAvgGpu">
-                                            <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgGpu}" Name="lvAvgGpuHeader" />
-                                            <GridViewColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <Label Content="{Binding AvgGPU}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
-                                                        <Label.Style>
-                                                            <Style TargetType="Label">
-                                                                <Setter Property="Foreground">
-                                                                    <Setter.Value>
-                                                                        <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
-                                                                            <Binding Path="AvgGPU" />
-                                                                            <Binding Path="MaxGPU" />
-                                                                            <Binding Path="EnableWarm" />
-                                                                        </MultiBinding>
-                                                                    </Setter.Value>
-                                                                </Setter>
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=IsSelected}"
+                                    <GridViewColumn x:Name="lvAvgGpu">
+                                        <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgGpu}" Name="lvAvgGpuHeader" />
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Label Content="{Binding AvgGPU}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                                                    <Label.Style>
+                                                        <Style TargetType="Label">
+                                                            <Setter Property="Foreground">
+                                                                <Setter.Value>
+                                                                    <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
+                                                                        <Binding Path="AvgGPU" />
+                                                                        <Binding Path="MaxGPU" />
+                                                                        <Binding Path="EnableWarm" />
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=IsSelected}"
                                                                      Value="True">
-                                                                        <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=Foreground}" />
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </Label.Style>
-                                                    </Label>
-                                                </DataTemplate>
-                                            </GridViewColumn.CellTemplate>
-                                        </GridViewColumn>
+                                                                    <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=Foreground}" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Label.Style>
+                                                </Label>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
 
-                                        <GridViewColumn x:Name="lvAvgRam">
-                                            <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgRam}" Name="lvAvgRamHeader" />
-                                            <GridViewColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <Label Content="{Binding AvgRAM}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
-                                                        <Label.Style>
-                                                            <Style TargetType="Label">
-                                                                <Setter Property="Foreground">
-                                                                    <Setter.Value>
-                                                                        <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
-                                                                            <Binding Path="AvgRAM" />
-                                                                            <Binding Path="MaxRAM" />
-                                                                            <Binding Path="EnableWarm" />
-                                                                        </MultiBinding>
-                                                                    </Setter.Value>
-                                                                </Setter>
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=IsSelected}"
+                                    <GridViewColumn x:Name="lvAvgRam">
+                                        <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgRam}" Name="lvAvgRamHeader" />
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Label Content="{Binding AvgRAM}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                                                    <Label.Style>
+                                                        <Style TargetType="Label">
+                                                            <Setter Property="Foreground">
+                                                                <Setter.Value>
+                                                                    <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
+                                                                        <Binding Path="AvgRAM" />
+                                                                        <Binding Path="MaxRAM" />
+                                                                        <Binding Path="EnableWarm" />
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=IsSelected}"
                                                                      Value="True">
-                                                                        <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=Foreground}" />
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </Label.Style>
-                                                    </Label>
-                                                </DataTemplate>
-                                            </GridViewColumn.CellTemplate>
-                                        </GridViewColumn>
+                                                                    <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=Foreground}" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Label.Style>
+                                                </Label>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
 
-                                        <GridViewColumn x:Name="lvAvgFps">
-                                            <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgFps}" Name="lvAvgFpsHeader" />
-                                            <GridViewColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <Label Content="{Binding AvgFPS}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
-                                                        <Label.Style>
-                                                            <Style TargetType="Label">
-                                                                <Setter Property="Foreground">
-                                                                    <Setter.Value>
-                                                                        <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="0">
-                                                                            <Binding Path="AvgFPS" />
-                                                                            <Binding Path="MinFPS" />
-                                                                            <Binding Path="EnableWarm" />
-                                                                        </MultiBinding>
-                                                                    </Setter.Value>
-                                                                </Setter>
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=IsSelected}"
+                                    <GridViewColumn x:Name="lvAvgFps">
+                                        <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgFps}" Name="lvAvgFpsHeader" />
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Label Content="{Binding AvgFPS}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                                                    <Label.Style>
+                                                        <Style TargetType="Label">
+                                                            <Setter Property="Foreground">
+                                                                <Setter.Value>
+                                                                    <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="0">
+                                                                        <Binding Path="AvgFPS" />
+                                                                        <Binding Path="MinFPS" />
+                                                                        <Binding Path="EnableWarm" />
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=IsSelected}"
                                                                      Value="True">
-                                                                        <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=Foreground}" />
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </Label.Style>
-                                                    </Label>
-                                                </DataTemplate>
-                                            </GridViewColumn.CellTemplate>
-                                        </GridViewColumn>
+                                                                    <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=Foreground}" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Label.Style>
+                                                </Label>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
 
-                                        <GridViewColumn x:Name="lvAvgCpuT">
-                                            <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgCpuT}" Name="lvAvgCpuTHeader" />
-                                            <GridViewColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <Label Content="{Binding AvgCPUT}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
-                                                        <Label.Style>
-                                                            <Style TargetType="Label">
-                                                                <Setter Property="Foreground">
-                                                                    <Setter.Value>
-                                                                        <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
-                                                                            <Binding Path="AvgCPUT" />
-                                                                            <Binding Path="MaxCPUT" />
-                                                                            <Binding Path="EnableWarm" />
-                                                                        </MultiBinding>
-                                                                    </Setter.Value>
-                                                                </Setter>
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=IsSelected}"
+                                    <GridViewColumn x:Name="lvAvgCpuT">
+                                        <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgCpuT}" Name="lvAvgCpuTHeader" />
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Label Content="{Binding AvgCPUT}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                                                    <Label.Style>
+                                                        <Style TargetType="Label">
+                                                            <Setter Property="Foreground">
+                                                                <Setter.Value>
+                                                                    <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
+                                                                        <Binding Path="AvgCPUT" />
+                                                                        <Binding Path="MaxCPUT" />
+                                                                        <Binding Path="EnableWarm" />
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=IsSelected}"
                                                                      Value="True">
-                                                                        <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=Foreground}" />
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </Label.Style>
-                                                    </Label>
-                                                </DataTemplate>
-                                            </GridViewColumn.CellTemplate>
-                                        </GridViewColumn>
+                                                                    <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=Foreground}" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Label.Style>
+                                                </Label>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
 
-                                        <GridViewColumn x:Name="lvAvgGpuT">
-                                            <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgGpuT}" Name="lvAvgGpuTHeader" />
-                                            <GridViewColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <Label Content="{Binding AvgGPUT}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
-                                                        <Label.Style>
-                                                            <Style TargetType="Label">
-                                                                <Setter Property="Foreground">
-                                                                    <Setter.Value>
-                                                                        <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
-                                                                            <Binding Path="AvgGPUT" />
-                                                                            <Binding Path="MaxGPUT" />
-                                                                            <Binding Path="EnableWarm" />
-                                                                        </MultiBinding>
-                                                                    </Setter.Value>
-                                                                </Setter>
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=IsSelected}"
+                                    <GridViewColumn x:Name="lvAvgGpuT">
+                                        <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgGpuT}" Name="lvAvgGpuTHeader" />
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Label Content="{Binding AvgGPUT}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                                                    <Label.Style>
+                                                        <Style TargetType="Label">
+                                                            <Setter Property="Foreground">
+                                                                <Setter.Value>
+                                                                    <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
+                                                                        <Binding Path="AvgGPUT" />
+                                                                        <Binding Path="MaxGPUT" />
+                                                                        <Binding Path="EnableWarm" />
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=IsSelected}"
                                                                      Value="True">
-                                                                        <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=Foreground}" />
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </Label.Style>
-                                                    </Label>
-                                                </DataTemplate>
-                                            </GridViewColumn.CellTemplate>
-                                        </GridViewColumn>
+                                                                    <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=Foreground}" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Label.Style>
+                                                </Label>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
 
-                                        <GridViewColumn x:Name="lvAvgCpuP">
-                                            <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgCpuP}" Name="lvAvgCpuPHeader" />
-                                            <GridViewColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <Label Content="{Binding AvgCPUP}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
-                                                        <Label.Style>
-                                                            <Style TargetType="Label">
-                                                                <Setter Property="Foreground">
-                                                                    <Setter.Value>
-                                                                        <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
-                                                                            <Binding Path="AvgGPUT" />
-                                                                            <Binding Path="MaxGPUT" />
-                                                                            <Binding Path="EnableWarm" />
-                                                                        </MultiBinding>
-                                                                    </Setter.Value>
-                                                                </Setter>
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=IsSelected}"
+                                    <GridViewColumn x:Name="lvAvgCpuP">
+                                        <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgCpuP}" Name="lvAvgCpuPHeader" />
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Label Content="{Binding AvgCPUP}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                                                    <Label.Style>
+                                                        <Style TargetType="Label">
+                                                            <Setter Property="Foreground">
+                                                                <Setter.Value>
+                                                                    <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
+                                                                        <Binding Path="AvgGPUT" />
+                                                                        <Binding Path="MaxGPUT" />
+                                                                        <Binding Path="EnableWarm" />
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=IsSelected}"
                                                                      Value="True">
-                                                                        <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=Foreground}" />
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </Label.Style>
-                                                    </Label>
-                                                </DataTemplate>
-                                            </GridViewColumn.CellTemplate>
-                                        </GridViewColumn>
+                                                                    <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=Foreground}" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Label.Style>
+                                                </Label>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
 
-                                        <GridViewColumn x:Name="lvAvgGpuP">
-                                            <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgGpuP}" Name="lvAvgGpuPHeader" />
-                                            <GridViewColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <Label Content="{Binding AvgGPUP}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
-                                                        <Label.Style>
-                                                            <Style TargetType="Label">
-                                                                <Setter Property="Foreground">
-                                                                    <Setter.Value>
-                                                                        <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
-                                                                            <Binding Path="AvgGPUT" />
-                                                                            <Binding Path="MaxGPUT" />
-                                                                            <Binding Path="EnableWarm" />
-                                                                        </MultiBinding>
-                                                                    </Setter.Value>
-                                                                </Setter>
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=IsSelected}"
+                                    <GridViewColumn x:Name="lvAvgGpuP">
+                                        <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgGpuP}" Name="lvAvgGpuPHeader" />
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Label Content="{Binding AvgGPUP}" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                                                    <Label.Style>
+                                                        <Style TargetType="Label">
+                                                            <Setter Property="Foreground">
+                                                                <Setter.Value>
+                                                                    <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
+                                                                        <Binding Path="AvgGPUT" />
+                                                                        <Binding Path="MaxGPUT" />
+                                                                        <Binding Path="EnableWarm" />
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=IsSelected}"
                                                                      Value="True">
-                                                                        <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=Foreground}" />
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </Label.Style>
-                                                    </Label>
-                                                </DataTemplate>
-                                            </GridViewColumn.CellTemplate>
-                                        </GridViewColumn>
-                                    </GridView>
-                                </ListView.View>
-                            </controlsShared:ListViewExtend>
-                        </Grid>
-                    </Grid>
+                                                                    <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=Foreground}" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Label.Style>
+                                                </Label>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </controlsShared:ListViewExtend>
+                    </DockPanel>
 
-                    <Grid Name="activityForGamesGraphics" Grid.Column="2" Grid.Row="0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="45" />
-                            <RowDefinition Height="10" />
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="auto" />
-                        </Grid.RowDefinitions>
+                    <Border Grid.Column="2" Grid.Row="0" Style="{DynamicResource SectionBorder}" Margin="0">
+                        <DockPanel Name="activityForGamesGraphics" LastChildFill="True">
+                            <!-- Header -->
+                            <Grid DockPanel.Dock="Top" Height="45" VerticalAlignment="Center">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="10" />
+                                    <ColumnDefinition Width="70" />
+                                    <ColumnDefinition Width="70" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
 
-                        <Grid Grid.Row="0" VerticalAlignment="Center">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto" />
-                                <ColumnDefinition Width="10" />
-                                <ColumnDefinition Width="70" />
-                                <ColumnDefinition Width="70" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="auto" />
-                            </Grid.ColumnDefinitions>
+                                <ToggleButton Grid.Column="2"
+                                              x:Name="ToggleButtonTime"
+                                              IsChecked="True"
+                                              Content="{DynamicResource LOCGameActivityTime}"
+                                              Style="{StaticResource NavTextToggleButton}"
+                                              MinWidth="65"
+                                              Click="ToggleButtonTime_Checked" />
 
-                            <ToggleButton Content="&#xef24;" FontFamily="{StaticResource FontIcoFont}" Name="ButtonShowConfig" 
-                                  Height="33" FontSize="20"
-                                  Grid.Column="0" IsChecked="True" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                <ToggleButton Grid.Column="3"
+                                              x:Name="ToggleButtonLog"
+                                              IsChecked="False"
+                                              Content="{DynamicResource LOCGameActivityLog}"
+                                              Style="{StaticResource NavTextToggleButton}"
+                                              MinWidth="65"
+                                              Click="ToggleButtonLog_Checked" />
 
-                            <ToggleButton Grid.Column="2" x:Name="ToggleButtonTime" IsChecked="True" 
-                                  Content="{DynamicResource LOCGameActivityTime}" Height="33" Width="65" 
-                                  Click="ToggleButtonTime_Checked" />
+                                <Label Grid.Column="0" Grid.ColumnSpan="5"
+                                       x:Name="gameLabel"
+                                       Content="graphics title"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       FontSize="20"
+                                       FontWeight="Bold" />
 
-                            <ToggleButton Grid.Column="3" x:Name="ToggleButtonLog" IsChecked="False" 
-                                  Content="{DynamicResource LOCGameActivityLog}" Height="33" Width="65" 
-                                  Click="ToggleButtonLog_Checked" />
+                            </Grid>
 
-                            <Label Grid.Column="4" x:Name="gameLabel" Content="graphics title" HorizontalAlignment="Center" 
-                           VerticalAlignment="Top" Height="40" FontSize="20" FontWeight="Bold" />
+                            <!-- Bottom config -->
+                            <Expander x:Name="PART_PcConfigExpander"
+                                      DockPanel.Dock="Bottom"
+                                      Margin="0,10,0,0"
+                                      Style="{DynamicResource ModernExpanderStyle}"
+                                      Header="{DynamicResource LOCMenuConfigurationTitle}"
+                                      IsExpanded="False">
+                                <Grid Margin="0,8,0,4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="12" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="24" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="12" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="6" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="6" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
 
-                            <StackPanel Orientation="Horizontal" Grid.Column="5">
-                                <Button Content="&#xe945;" Height="33" FontSize="18" 
-                                Click="Button_Click_prevGamePlus" FontFamily="{DynamicResource CommonFont}" />
-                                <Button Content="&#xe941;" Height="33" FontSize="18" 
-                                Click="Button_Click_prevGame" FontFamily="{DynamicResource CommonFont}" Margin="5,0,0,0" />
+                                    <TextBlock Grid.Row="0"
+                                               Grid.Column="0"
+                                               Style="{DynamicResource ViewColumnLabelText}"
+                                               Text="{DynamicResource LOCGameActivityPCName}" />
+                                    <Label Grid.Row="0"
+                                           Grid.Column="2"
+                                           Style="{DynamicResource ListExtendStyleLabel}"
+                                           Name="PART_PcName" />
 
-                                <ToggleButton Content="&#xe9b0;" Height="33" FontSize="18" Name="PART_Truncate"
-                                      Click="Bt_Truncate" FontFamily="{DynamicResource CommonFont}" Margin="5,0,0,0" />
+                                    <TextBlock Grid.Row="0"
+                                               Grid.Column="4"
+                                               Style="{DynamicResource ViewColumnLabelText}"
+                                               Text="OS" />
+                                    <Label Grid.Row="0"
+                                           Grid.Column="6"
+                                           Style="{DynamicResource ListExtendStyleLabel}"
+                                           Name="PART_Os" />
 
-                                <Button Content="&#xe942;" Height="33" FontSize="18" 
-                                Click="Button_Click_nextGame" FontFamily="{DynamicResource CommonFont}" Margin="5,0,0,0" />
-                                <Button Content="&#xe946;" Height="33" FontSize="18" 
-                                Click="Button_Click_nextGamePlus" FontFamily="{DynamicResource CommonFont}" Margin="5,0,0,0" />
-                            </StackPanel>
-                            <!--Button Grid.Column="5" Content="&#xe941;" Height="33" FontSize="18" 
-                            Click="Button_Click_prevGame" FontFamily="{DynamicResource CommonFont}" />
-                    <Button Grid.Column="6" Content="&#xe942;" Height="33" FontSize="18" 
-                            Click="Button_Click_nextGame" FontFamily="{DynamicResource CommonFont}" /-->
-                        </Grid>
+                                    <TextBlock Grid.Row="2"
+                                               Grid.Column="0"
+                                               Style="{DynamicResource ViewColumnLabelText}"
+                                               Text="CPU" />
+                                    <Label Grid.Row="2"
+                                           Grid.Column="2"
+                                           Grid.ColumnSpan="5"
+                                           Style="{DynamicResource ListExtendStyleLabel}"
+                                           Name="PART_CpuName" />
 
-                        <Grid Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="2" Name="gameSeriesContener">
-                            <Grid Name="PART_GameActivityChartTime_Contener"
-                          Visibility="{Binding ElementName=ToggleButtonTime, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                    <TextBlock Grid.Row="4"
+                                               Grid.Column="0"
+                                               Style="{DynamicResource ViewColumnLabelText}"
+                                               Text="GPU" />
+                                    <Label Grid.Row="4"
+                                           Grid.Column="2"
+                                           Style="{DynamicResource ListExtendStyleLabel}"
+                                           Name="PART_GpuName" />
 
-                            <Grid Name="PART_GameActivityChartLog_Contener"
-                          Visibility="{Binding ElementName=ToggleButtonLog, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                        </Grid>
+                                    <TextBlock Grid.Row="4"
+                                               Grid.Column="4"
+                                               Style="{DynamicResource ViewColumnLabelText}"
+                                               Text="RAM" />
+                                    <Label Grid.Row="4"
+                                           Grid.Column="6"
+                                           Style="{DynamicResource ListExtendStyleLabel}"
+                                           Name="PART_Ram" />
+                                </Grid>
+                            </Expander>
 
-                        <Grid Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" Margin="0,10,0,0"
-                      Visibility="{Binding ElementName=ButtonShowConfig, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto" />
-                                <ColumnDefinition Width="10" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="10" />
-                                <ColumnDefinition Width="auto" />
-                                <ColumnDefinition Width="10" />
-                                <ColumnDefinition Width="auto" />
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="auto" />
-                                <RowDefinition Height="10" />
-                                <RowDefinition Height="auto" />
-                                <RowDefinition Height="10" />
-                                <RowDefinition Height="auto" />
-                            </Grid.RowDefinitions>
+                            <!-- Fill remaining space -->
+                            <Grid Name="gameSeriesContener" Margin="0,10,0,0">
+                                <Grid Name="PART_GameActivityChartTime_Contener"
+                                      Visibility="{Binding ElementName=ToggleButtonTime, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-                            <Label Grid.Column="0" Grid.Row="0" Content="{DynamicResource LOCGameActivityPCName}" FontWeight="Bold" />
-                            <Label Grid.Column="2" Grid.Row="0" Name="PART_PcName" />
-
-                            <Label Grid.Column="4" Grid.Row="0" Content="OS" FontWeight="Bold" />
-                            <Label Grid.Column="6" Grid.Row="0" Name="PART_Os" />
-
-                            <Label Grid.Column="0" Grid.Row="2" Content="CPU" FontWeight="Bold" />
-                            <Label Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="6" Name="PART_CpuName" />
-
-                            <Label Grid.Column="0" Grid.Row="4" Content="GPU" FontWeight="Bold" />
-                            <Label Grid.Column="2" Grid.Row="4" Name="PART_GpuName" />
-
-                            <Label Grid.Column="4" Grid.Row="4" Content="RAM" FontWeight="Bold" />
-                            <Label Grid.Column="6" Grid.Row="4" Name="PART_Ram" />
-                        </Grid>
-                    </Grid>
+                                <Grid Name="PART_GameActivityChartLog_Contener"
+                                      Visibility="{Binding ElementName=ToggleButtonLog, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                            </Grid>
+                        </DockPanel>
+                    </Border>
                 </Grid>
             </Grid>
         </TabItem>
 
         <TabItem Header="{DynamicResource LOCGameActivityGanttView}" Name="PART">
-            <local:GameActivityGanttView />
+            <local:GameActivityGanttView Margin="5" />
         </TabItem>
     </TabControl>
 </UserControl>

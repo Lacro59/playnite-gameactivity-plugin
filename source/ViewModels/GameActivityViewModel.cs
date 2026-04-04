@@ -20,6 +20,9 @@ namespace GameActivity.ViewModels
     {
         private GameActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
         private readonly PlayTimeToStringConverter _converter = new PlayTimeToStringConverter();
+        private readonly Dictionary<Guid, ulong> _monthPlaytimeByGame = new Dictionary<Guid, ulong>();
+        private int _cacheYear = -1;
+        private int _cacheMonth = -1;
 
         private int _yearCurrent;
         public int YearCurrent
@@ -137,7 +140,11 @@ namespace GameActivity.ViewModels
         public List<ListActivities> ActivityListByGame
         {
             get => _activityListByGame;
-            set => SetValue(ref _activityListByGame, value);
+            set
+            {
+                SetValue(ref _activityListByGame, value);
+                InvalidateMonthlyCache();
+            }
         }
 
         private List<ListActivities> _filteredActivityList = new List<ListActivities>();
@@ -164,6 +171,7 @@ namespace GameActivity.ViewModels
             DateTime dateNew = new DateTime(YearCurrent, MonthCurrent, 1).AddMonths(monthOffset);
             YearCurrent = dateNew.Year;
             MonthCurrent = dateNew.Month;
+            InvalidateMonthlyCache();
             UpdateActivityLabel();
         }
 
@@ -171,6 +179,7 @@ namespace GameActivity.ViewModels
         {
             YearCurrent = date.Year;
             MonthCurrent = date.Month;
+            InvalidateMonthlyCache();
             UpdateActivityLabel();
         }
 
@@ -216,8 +225,8 @@ namespace GameActivity.ViewModels
 
             if (!string.IsNullOrEmpty(SearchText))
             {
-                string search = SearchText.ToLowerInvariant();
-                query = query.Where(x => x.GameTitle.ToLowerInvariant().IndexOf(search) > -1);
+                string search = SearchText.Trim();
+                query = query.Where(x => x.GameTitle.IndexOf(search, StringComparison.OrdinalIgnoreCase) >= 0);
             }
 
             if (SearchSources.Count > 0)
@@ -228,15 +237,7 @@ namespace GameActivity.ViewModels
             List<ListActivities> filteredData = query.ToList();
             for (int i = 0; i < filteredData.Count; i++)
             {
-                filteredData[i].TimePlayedInMonth = 0;
-                List<Activity> activities = PluginDatabase.Get(filteredData[i].Id)?.GetActivities(YearCurrent, MonthCurrent);
-                if (activities != null)
-                {
-                    for (int j = 0; j < activities.Count; j++)
-                    {
-                        filteredData[i].TimePlayedInMonth += activities[j].ElapsedSeconds;
-                    }
-                }
+                filteredData[i].TimePlayedInMonth = GetMonthPlaytimeForGame(filteredData[i].Id);
             }
 
             FilteredActivityList = filteredData;
@@ -248,6 +249,49 @@ namespace GameActivity.ViewModels
             ulong monthPlaytime = GameActivityStats.GetPlayTimeYearMonth((uint)YearCurrent, (uint)MonthCurrent, false);
             ActivityLabelText = monthStart.ToString("MMMM yyyy") + " (" +
                 _converter.Convert(monthPlaytime, null, null, CultureInfo.CurrentCulture) + ")";
+        }
+
+        private void EnsureMonthlyPlaytimeCache()
+        {
+            if (_cacheYear == YearCurrent && _cacheMonth == MonthCurrent)
+            {
+                return;
+            }
+
+            // Reset cache only for the requested month; values are computed on-demand.
+            _monthPlaytimeByGame.Clear();
+            _cacheYear = YearCurrent;
+            _cacheMonth = MonthCurrent;
+        }
+
+        private ulong GetMonthPlaytimeForGame(Guid gameId)
+        {
+            EnsureMonthlyPlaytimeCache();
+
+            if (_monthPlaytimeByGame.ContainsKey(gameId))
+            {
+                return _monthPlaytimeByGame[gameId];
+            }
+
+            ulong total = 0;
+            List<Activity> activities = PluginDatabase.Get(gameId)?.GetActivities(YearCurrent, MonthCurrent);
+            if (activities != null)
+            {
+                for (int j = 0; j < activities.Count; j++)
+                {
+                    total += activities[j].ElapsedSeconds;
+                }
+            }
+
+            _monthPlaytimeByGame[gameId] = total;
+            return total;
+        }
+
+        private void InvalidateMonthlyCache()
+        {
+            _cacheYear = -1;
+            _cacheMonth = -1;
+            _monthPlaytimeByGame.Clear();
         }
     }
 }

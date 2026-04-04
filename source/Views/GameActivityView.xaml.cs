@@ -25,6 +25,9 @@ using Playnite.SDK.Data;
 using CommonPluginsShared.SystemInfo;
 using CommonPluginsShared.Utilities;
 using GameActivity.ViewModels;
+using System.Windows.Threading;
+using System.Threading;
+using System.Windows.Input;
 
 namespace GameActivity.Views
 {
@@ -53,8 +56,64 @@ namespace GameActivity.Views
 
         private PluginChartTime PART_GameActivityChartTime { get; set; }
         private PluginChartLog PART_GameActivityChartLog { get; set; }
+        private readonly DispatcherTimer _searchDebounceTimer;
 
         private PlayTimeToStringConverter Converter { get; set; } = new PlayTimeToStringConverter();
+
+        private bool _customerTimeMapperInitialized;
+        private int _monthChartReloadVersion;
+        private int _weekChartReloadVersion;
+        private int _dayChartReloadVersion;
+        private CancellationTokenSource _monthChartReloadCts;
+        private CancellationTokenSource _weekChartReloadCts;
+        private CancellationTokenSource _dayChartReloadCts;
+
+        private int _monthGameActivitiesCacheYear = -1;
+        private int _monthGameActivitiesCacheMonth = -1;
+        private List<GameActivities> _monthGameActivitiesCache;
+        private readonly object _monthGameActivitiesCacheLock = new object();
+
+        private List<GameActivities> GetMonthFilteredGameActivities(int year, int month)
+        {
+            lock (_monthGameActivitiesCacheLock)
+            {
+                if (_monthGameActivitiesCache != null
+                    && _monthGameActivitiesCacheYear == year
+                    && _monthGameActivitiesCacheMonth == month)
+                {
+                    return _monthGameActivitiesCache;
+                }
+
+                DateTime startOfMonth = new DateTime(year, month, 1, 0, 0, 0);
+                DateTime endOfMonth = new DateTime(year, month, DateTime.DaysInMonth(year, month), 23, 59, 59);
+
+                List<GameActivities> listGameActivities = GameActivity.PluginDatabase.GetListGameActivity();
+                listGameActivities = listGameActivities
+                    .Where(x => x.GetListDateTimeActivity().Any(y => y >= startOfMonth && y <= endOfMonth))
+                    .ToList();
+
+                _monthGameActivitiesCache = listGameActivities;
+                _monthGameActivitiesCacheYear = year;
+                _monthGameActivitiesCacheMonth = month;
+
+                return listGameActivities;
+            }
+        }
+
+        private void EnsureCustomerTimeMapper()
+        {
+            if (_customerTimeMapperInitialized)
+            {
+                return;
+            }
+
+            CartesianMapper<CustomerForTime> customerVmMapper = Mappers.Xy<CustomerForTime>()
+                .X((value, index) => index)
+                .Y(value => value.Values);
+
+            Charting.For<CustomerForTime>(customerVmMapper);
+            _customerTimeMapperInitialized = true;
+        }
 
         public int YearCurrent { get => ViewModel.YearCurrent; set => ViewModel.YearCurrent = value; }
         public int MonthCurrent { get => ViewModel.MonthCurrent; set => ViewModel.MonthCurrent = value; }
@@ -79,14 +138,25 @@ namespace GameActivity.Views
 
         public GameActivityView(GameActivity plugin, Game gameContext = null)
         {
+#if DEBUG
+            var timer = new DebugTimer("GameActivityView.ctor");
+#endif
             Plugin = plugin;
             ViewModel = new GameActivityViewModel();
+            _searchDebounceTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(180)
+            };
+            _searchDebounceTimer.Tick += SearchDebounceTimer_Tick;
 
             // Set dates variables
             ViewModel.InitializeCurrentMonth();
 
             // Initialization components
             InitializeComponent();
+#if DEBUG
+            timer.Step("InitializeComponent done");
+#endif
 
 
             PART_DataLoad.Visibility = Visibility.Visible;
@@ -94,8 +164,6 @@ namespace GameActivity.Views
             PART_DataBottom.Visibility = Visibility.Hidden;
 
 
-            PART_Truncate.IsChecked = PluginDatabase.PluginSettings.ChartTimeTruncate;
-            ButtonShowConfig.IsChecked = false;
 
 
             if (!PluginDatabase.PluginSettings.EnableLogging)
@@ -148,19 +216,39 @@ namespace GameActivity.Views
 
             #region Get & set datas
             ListSources = GetListSourcesName();
+#if DEBUG
+            DebugTimer monthWeekTimer = new DebugTimer("GameActivityView.GetActivityByMonthWeek deferred");
+            monthWeekTimer.Step("queue");
+#endif
+            this.Dispatcher.BeginInvoke((Action)delegate
+            {
+#if DEBUG
+                monthWeekTimer.Step("start");
+#endif
+                GetActivityByMonth(YearCurrent, MonthCurrent);
+                GetActivityByWeek(YearCurrent, MonthCurrent);
+#if DEBUG
+                monthWeekTimer.Stop("done");
+#endif
+            });
 
             _ = Task.Run(() => 
             {
-                this.Dispatcher.BeginInvoke((Action)delegate
-                {
-                    GetActivityByMonth(YearCurrent, MonthCurrent);
-                    GetActivityByWeek(YearCurrent, MonthCurrent);
-                }).Wait();
-
-
+#if DEBUG
+                var backgroundTimer = new DebugTimer("GameActivityView.ctor.background");
+#endif
                 GetActivityByDay(YearCurrent, MonthCurrent);
+#if DEBUG
+                backgroundTimer.Step("GetActivityByDay done");
+#endif
                 GetActivityByListGame();
+#if DEBUG
+                backgroundTimer.Step("GetActivityByListGame done");
+#endif
                 SetSourceFilter();
+#if DEBUG
+                backgroundTimer.Step("SetSourceFilter done");
+#endif
 
                 this.Dispatcher.BeginInvoke((Action)delegate
                 {
@@ -186,16 +274,41 @@ namespace GameActivity.Views
                         Grid.SetColumn(GridDay, 0);
                         Grid.SetColumnSpan(GridDay, 3);
                     }
-                }).Wait();
+                });
+#if DEBUG
+                backgroundTimer.Step("UI finalize done");
+#endif
 
             }).ContinueWith(antecedent =>
             {
+#if DEBUG
+                // Hide loading overlay and show bottom panel only once list/day/filter are ready.
+                DebugTimer endTimer = new DebugTimer("GameActivityView.ctor.hideLoad+showBottom");
+                endTimer.Step("start");
+#endif
                 this.Dispatcher.BeginInvoke((Action)delegate
                 {
-                    PART_DataLoad.Visibility = Visibility.Hidden;
+#if DEBUG
+                    DebugTimer sortTimer = new DebugTimer("GameActivityView.ctor.lvGames.Sorting");
+                    sortTimer.Step("start");
+#endif
+                    PART_DataLoad.Visibility = Visibility.Collapsed;
                     PART_DataTop.Visibility = Visibility.Visible;
+                    lvGames.Sorting();
+                    if (lvGames.SelectedItem != null)
+                    {
+                        lvGames.ScrollIntoView(lvGames.SelectedItem);
+                    }
                     PART_DataBottom.Visibility = Visibility.Visible;
+#if DEBUG
+                    sortTimer.Stop();
+#endif
                 });
+
+#if DEBUG
+                endTimer.Stop();
+                timer.Stop();
+#endif
             });
             #endregion
 
@@ -220,6 +333,12 @@ namespace GameActivity.Views
             DataContext = ViewModel;
         }
 
+        private void SearchDebounceTimer_Tick(object sender, EventArgs e)
+        {
+            _searchDebounceTimer.Stop();
+            Filter();
+        }
+
         /// <summary>
         /// Hides a GridView column and optionally forces it to remain hidden in ListViewExtend management.
         /// </summary>
@@ -238,6 +357,7 @@ namespace GameActivity.Views
 
         private void SetSourceFilter()
         {
+            FilterSourceItems.Clear();
             IEnumerable<string> ListSourceName = ActivityListByGame.Select(x => x.GameSourceName).Distinct();
             foreach (string sourcename in ListSourceName)
             {
@@ -246,7 +366,7 @@ namespace GameActivity.Views
 
                 FilterSourceItems.Add(new ListSource
                 {
-                    TypeStoreIcon = ModeComplet,
+                    TypeStoreIcon = ModeSimple,
                     SourceIcon = Icon,
                     SourceIconText = IconText,
                     SourceName = sourcename,
@@ -256,15 +376,362 @@ namespace GameActivity.Views
             }
 
             FilterSourceItems.Sort((x, y) => x.SourceNameShort.CompareTo(y.SourceNameShort));
-
-            this.Dispatcher.BeginInvoke((Action)delegate
-            {
-                FilterSource.ItemsSource = FilterSourceItems;
-            });
+            ViewModel.FilterSourceText = string.Empty;
         }
 
 
         #region Generate graphics and list
+        private void StartReloadMonthChart(int year, int month)
+        {
+            int myVersion = Interlocked.Increment(ref _monthChartReloadVersion);
+            CancellationTokenSource previousCts = Interlocked.Exchange(ref _monthChartReloadCts, new CancellationTokenSource());
+            if (previousCts != null)
+            {
+                previousCts.Cancel();
+                previousCts.Dispose();
+            }
+            CancellationToken token = _monthChartReloadCts.Token;
+
+            bool isMonthSourcesSnapshot = IsMonthSources;
+            bool isGenresSourcesSnapshot = IsGenresSources;
+            bool cumulSnapshot = PluginDatabase.PluginSettings.CumulPlaytimeStore;
+
+            bool showLauncherIcons = PluginDatabase.PluginSettings.ShowLauncherIcons;
+            double labelsRotation = showLauncherIcons ? 0 : 160;
+            double fontSize = showLauncherIcons ? 30 : (double)ResourceProvider.GetResource("FontSize");
+
+            // Tooltip mode only depends on the current aggregation mode.
+            TextBlockWithIconMode tooltipMode = isMonthSourcesSnapshot
+                ? ModeComplet
+                : TextBlockWithIconMode.TextOnly;
+
+            bool showAxisLabels = isMonthSourcesSnapshot || isGenresSourcesSnapshot;
+
+            _ = Task.Run(() =>
+            {
+                if (token.IsCancellationRequested)
+                {
+                    return null;
+                }
+#if DEBUG
+                DebugTimer computeTimer = new DebugTimer(string.Format("GameActivityView.MonthChart compute async ({0},{1})", year, month));
+                computeTimer.Step("start");
+#endif
+                PlayTimeToStringConverter localConverter = new PlayTimeToStringConverter();
+
+                DateTime startOfMonth = new DateTime(year, month, 1, 0, 0, 0);
+                DateTime endOfMonth = new DateTime(year, month, DateTime.DaysInMonth(year, month), 23, 59, 59);
+
+                Dictionary<string, ulong> activityByMonth = new Dictionary<string, ulong>();
+                List<GameActivities> listGameActivities = GetMonthFilteredGameActivities(year, month);
+
+                // Total hours by source/genre/tag (same rules as previous implementation).
+                if (isMonthSourcesSnapshot)
+                {
+                    for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
+                    {
+                        if (token.IsCancellationRequested)
+                        {
+                            return null;
+                        }
+                        try
+                        {
+                            List<Activity> activities = listGameActivities[iGame].FilterItems;
+                            for (int iActivity = 0; iActivity < activities.Count; iActivity++)
+                            {
+                                if (token.IsCancellationRequested)
+                                {
+                                    return null;
+                                }
+                                ulong elapsedSeconds = activities[iActivity].ElapsedSeconds;
+                                DateTime dateSession = Convert.ToDateTime(activities[iActivity].DateSession).ToLocalTime();
+                                if (dateSession < startOfMonth || dateSession > endOfMonth)
+                                {
+                                    continue;
+                                }
+
+                                string sourceName = activities[iActivity].SourceName;
+                                if (activityByMonth.ContainsKey(sourceName))
+                                {
+                                    activityByMonth[sourceName] = activityByMonth[sourceName] + elapsedSeconds;
+                                }
+                                else
+                                {
+                                    activityByMonth.Add(sourceName, elapsedSeconds);
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Common.LogError(ex, false, $"Error in month chart compute ({year}, {month}) with {listGameActivities[iGame].Name}", true, PluginDatabase.PluginName);
+                        }
+                    }
+                }
+                else if (isGenresSourcesSnapshot)
+                {
+                    for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
+                    {
+                        if (token.IsCancellationRequested)
+                        {
+                            return null;
+                        }
+                        try
+                        {
+                            List<Genre> listGameListGenres = listGameActivities[iGame].Genres;
+                            List<Activity> activities = listGameActivities[iGame].FilterItems;
+                            for (int iActivity = 0; iActivity < activities.Count; iActivity++)
+                            {
+                                if (token.IsCancellationRequested)
+                                {
+                                    return null;
+                                }
+                                ulong elapsedSeconds = activities[iActivity].ElapsedSeconds;
+                                DateTime dateSession = Convert.ToDateTime(activities[iActivity].DateSession).AddSeconds(-(double)elapsedSeconds).ToLocalTime();
+                                if (dateSession < startOfMonth || dateSession > endOfMonth)
+                                {
+                                    continue;
+                                }
+
+                                for (int iGenre = 0; iGenre < listGameListGenres?.Count; iGenre++)
+                                {
+                                    string genreName = listGameListGenres[iGenre].Name;
+                                    if (activityByMonth.ContainsKey(genreName))
+                                    {
+                                        activityByMonth[genreName] = activityByMonth[genreName] + elapsedSeconds;
+                                    }
+                                    else
+                                    {
+                                        activityByMonth.Add(genreName, elapsedSeconds);
+                                    }
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Common.LogError(ex, false, $"Error in month chart genres compute ({year}, {month}) with {listGameActivities[iGame].Name}", true, PluginDatabase.PluginName);
+                        }
+                    }
+                }
+                else
+                {
+                    // Tags mode.
+                    for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
+                    {
+                        if (token.IsCancellationRequested)
+                        {
+                            return null;
+                        }
+                        try
+                        {
+                            List<Tag> listGameListTags = listGameActivities[iGame].Tags;
+                            List<Activity> activities = listGameActivities[iGame].FilterItems;
+                            for (int iActivity = 0; iActivity < activities.Count; iActivity++)
+                            {
+                                if (token.IsCancellationRequested)
+                                {
+                                    return null;
+                                }
+                                ulong elapsedSeconds = activities[iActivity].ElapsedSeconds;
+                                DateTime dateSession = Convert.ToDateTime(activities[iActivity].DateSession).AddSeconds(-(double)elapsedSeconds).ToLocalTime();
+                                if (dateSession < startOfMonth || dateSession > endOfMonth)
+                                {
+                                    continue;
+                                }
+
+                                for (int iTag = 0; iTag < listGameListTags?.Count; iTag++)
+                                {
+                                    string tagName = listGameListTags[iTag].Name;
+                                    if (activityByMonth.ContainsKey(tagName))
+                                    {
+                                        activityByMonth[tagName] = activityByMonth[tagName] + elapsedSeconds;
+                                    }
+                                    else
+                                    {
+                                        activityByMonth.Add(tagName, elapsedSeconds);
+                                    }
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Common.LogError(ex, false, $"Error in month chart tags compute ({year}, {month}) with {listGameActivities[iGame].Name}", true, PluginDatabase.PluginName);
+                        }
+                    }
+
+                    // Join same time (keep legacy behavior).
+                    Dictionary<string, ulong> activityTEMP = new Dictionary<string, ulong>();
+                    activityByMonth.ForEach(x =>
+                    {
+                        string val = (string)localConverter.Convert(x.Value, null, null, CultureInfo.CurrentCulture);
+                        IEnumerable<KeyValuePair<string, ulong>> d = activityTEMP.Where(y => ((string)localConverter.Convert(y.Value, null, null, CultureInfo.CurrentCulture)).IsEqual(val));
+                        if (d.Count() != 0)
+                        {
+                            string k = d.First().Key;
+                            ulong v = d.First().Value;
+
+                            _ = activityTEMP.Remove(k);
+                            activityTEMP.Add(k + "\r\n" + x.Key, v);
+                        }
+                        else
+                        {
+                            activityTEMP.Add(x.Key, x.Value);
+                        }
+                    });
+                    activityByMonth = activityTEMP;
+                }
+
+                // Build plain data only (no LiveCharts/WPF types here).
+                List<CustomerForTime> items = new List<CustomerForTime>(activityByMonth.Count);
+                string[] labels = new string[activityByMonth.Count];
+                int compteur = 0;
+                foreach (KeyValuePair<string, ulong> item in activityByMonth)
+                {
+                    items.Add(new CustomerForTime
+                    {
+                        Icon = PlayniteTools.GetPlatformIcon(item.Key),
+                        IconText = TransformIcon.Get(item.Key),
+                        Name = item.Key,
+                        Values = (long)item.Value,
+                    });
+
+                    labels[compteur] = item.Key;
+                    if (showLauncherIcons)
+                    {
+                        labels[compteur] = TransformIcon.Get(labels[compteur]);
+                    }
+
+                    compteur++;
+                }
+
+                bool hideTotalHoursChart = isMonthSourcesSnapshot && cumulSnapshot;
+                bool hideTotalHoursLabel = isMonthSourcesSnapshot && cumulSnapshot;
+                int gridMonthColumnSpan = isMonthSourcesSnapshot ? 1 : 5;
+
+                bool showDayChart = isMonthSourcesSnapshot;
+                bool showWeekChart = isMonthSourcesSnapshot;
+
+                bool showTotalHoursChart = !hideTotalHoursChart;
+                bool showTotalHoursLabel = !hideTotalHoursLabel;
+
+                // In legacy logic, when cumulative is enabled in month sources mode, we also adjust GridDay column.
+                bool adjustGridDay = isMonthSourcesSnapshot && cumulSnapshot;
+
+#if DEBUG
+                computeTimer.Stop(string.Format("labels={0}, items={1}", labels.Length, activityByMonth.Count));
+#endif
+                return new
+                {
+                    myVersion,
+                    items,
+                    labels,
+                    labelsRotation,
+                    fontSize,
+                    showAxisLabels,
+                    tooltipMode,
+                    showTotalHoursChart,
+                    showTotalHoursLabel,
+                    showDayChart,
+                    showWeekChart,
+                    gridMonthColumnSpan,
+                    adjustGridDay
+                };
+            }).ContinueWith(t =>
+            {
+                if (t.IsFaulted)
+                {
+                    return;
+                }
+
+                var result = t.Result;
+                if (result == null)
+                {
+                    return;
+                }
+                if ((int)result.myVersion != _monthChartReloadVersion)
+                {
+                    return;
+                }
+
+                if (token.IsCancellationRequested)
+                {
+                    return;
+                }
+
+                this.Dispatcher.BeginInvoke((Action)delegate
+                {
+                    if (token.IsCancellationRequested)
+                    {
+                        return;
+                    }
+#if DEBUG
+                    DebugTimer uiTimer = new DebugTimer(string.Format("GameActivityView.MonthChart UI ({0},{1})", year, month));
+                    uiTimer.Step("start");
+#endif
+                    EnsureCustomerTimeMapper();
+
+                    PART_ChartTotalHoursSource_X.LabelsRotation = result.labelsRotation;
+                    PART_ChartTotalHoursSource_X.FontSize = result.fontSize;
+
+                    if (result.adjustGridDay)
+                    {
+                        PART_ChartTotalHoursSource.Visibility = Visibility.Hidden;
+                        PART_ChartTotalHoursSource_Label.Visibility = Visibility.Hidden;
+                        Grid.SetColumn(GridDay, 0);
+                        Grid.SetColumnSpan(GridDay, 3);
+                    }
+                    else
+                    {
+                        PART_ChartTotalHoursSource.Visibility = result.showTotalHoursChart ? Visibility.Visible : Visibility.Hidden;
+                        PART_ChartTotalHoursSource_Label.Visibility = result.showTotalHoursLabel ? Visibility.Visible : Visibility.Hidden;
+                    }
+
+                    Grid.SetColumnSpan(gridMonth, result.gridMonthColumnSpan);
+
+                    PART_ChartHoursByDaySource.Visibility = result.showDayChart ? Visibility.Visible : Visibility.Hidden;
+                    actLabel.Visibility = result.showDayChart ? Visibility.Visible : Visibility.Hidden;
+                    PART_ChartHoursByWeekSource.Visibility = result.showWeekChart ? Visibility.Visible : Visibility.Hidden;
+                    acwLabel.Visibility = result.showWeekChart ? Visibility.Visible : Visibility.Hidden;
+
+                    PART_ChartTotalHoursSource_Y.LabelFormatter = value => (string)Converter.Convert((ulong)value, null, null, CultureInfo.CurrentCulture);
+                    PART_ChartTotalHoursSource_Y.MinValue = 0;
+
+                    ChartValues<CustomerForTime> values = new ChartValues<CustomerForTime>();
+                    for (int i = 0; i < result.items.Count; i++)
+                    {
+                        values.Add(result.items[i]);
+                    }
+
+                    SeriesCollection chartSeries = new SeriesCollection
+                    {
+                        new ColumnSeries
+                        {
+                            Title = string.Empty,
+                            Values = values,
+                            Fill = PluginDatabase.PluginSettings.ChartColors
+                        }
+                    };
+
+                    PART_ChartTotalHoursSource.Series = chartSeries;
+
+                    PART_ChartTotalHoursSource.DataTooltip = new CustomerToolTipForTime
+                    {
+                        ShowIcon = PluginDatabase.PluginSettings.ShowLauncherIcons,
+                        Mode = result.tooltipMode
+                    };
+
+                    PART_ChartTotalHoursSource_X.Labels = result.labels;
+                    PART_ChartTotalHoursSource_X.ShowLabels = result.showAxisLabels;
+                    if (!showAxisLabels)
+                    {
+                        PART_ChartTotalHoursSource_X.ShowLabels = false;
+                    }
+#if DEBUG
+                    uiTimer.Stop();
+#endif
+                });
+            });
+        }
+
         /// <summary>
         /// Get data graphic activity by month with time by source or by genre.
         /// </summary>
@@ -272,14 +739,18 @@ namespace GameActivity.Views
         /// <param name="month"></param>
         public void GetActivityByMonth(int year, int month)
         {
+            StartReloadMonthChart(year, month);
+#if false
+#if DEBUG
+            var timer = new DebugTimer(string.Format("GameActivityView.GetActivityByMonth({0},{1})", year, month));
+#endif
             DateTime startOfMonth = new DateTime(year, month, 1, 0, 0, 0);
             DateTime endOfMonth = new DateTime(year, month, DateTime.DaysInMonth(year, month), 23, 59, 59);
 
             Dictionary<string, ulong> activityByMonth = new Dictionary<string, ulong>();
 
-            List<GameActivities> listGameActivities = GameActivity.PluginDatabase.GetListGameActivity();
-            //This gets all activities from Games played in the selected month
-            listGameActivities = listGameActivities.Where(x => x.GetListDateTimeActivity().Any(y => y >= startOfMonth && y <= endOfMonth)).ToList();
+            // Cache DB fetch for month range (used by month/week/day charts).
+            List<GameActivities> listGameActivities = GetMonthFilteredGameActivities(year, month);
 
             // Total hours by source.
             if (IsMonthSources)
@@ -363,13 +834,15 @@ namespace GameActivity.Views
                             }
                         }
 
-                        PART_ChartTotalHoursSource.DataTooltip = new CustomerToolTipForTime { ShowIcon = false, Mode = TextBlockWithIconMode.TextOnly };
+                        // Tooltip set once after the loop: same mode for all genres.
                     }
                     catch (Exception ex)
                     {
                         Common.LogError(ex, false, $"Error in getActivityByMonth({year}, {month}) with {listGameActivities[iGame].Name}", true, PluginDatabase.PluginName);
                     }
                 }
+
+                PART_ChartTotalHoursSource.DataTooltip = new CustomerToolTipForTime { ShowIcon = false, Mode = TextBlockWithIconMode.TextOnly };
             }
             else
             {
@@ -404,13 +877,15 @@ namespace GameActivity.Views
                             }
                         }
 
-                        PART_ChartTotalHoursSource.DataTooltip = new CustomerToolTipForTime { ShowIcon = false, Mode = TextBlockWithIconMode.TextOnly };
+                        // Tooltip set once after the loop: same mode for all tags.
                     }
                     catch (Exception ex)
                     {
                         Common.LogError(ex, false, $"Error in getActivityByMonth({year}, {month}) with {listGameActivities[iGame].Name}", true, PluginDatabase.PluginName);
                     }
                 }
+
+                PART_ChartTotalHoursSource.DataTooltip = new CustomerToolTipForTime { ShowIcon = false, Mode = TextBlockWithIconMode.TextOnly };
 
                 // Join same time
                 Dictionary<string, ulong> activityTEMP = new Dictionary<string, ulong>();
@@ -474,8 +949,12 @@ namespace GameActivity.Views
                 .X((value, index) => index)
                 .Y(value => value.Values);
 
-            //lets save the mapper globally
-            Charting.For<CustomerForTime>(customerVmMapper);
+            //lets save the mapper globally (avoid re-registering on each reload)
+            if (!_customerTimeMapperInitialized)
+            {
+                Charting.For<CustomerForTime>(customerVmMapper);
+                _customerTimeMapperInitialized = true;
+            }
 
             Func<double, string> activityForGameLogFormatter = value => (string)Converter.Convert((ulong)value, null, null, CultureInfo.CurrentCulture);
 
@@ -523,42 +1002,194 @@ namespace GameActivity.Views
             {
                 PART_ChartTotalHoursSource_X.ShowLabels = false;
             }
+#if DEBUG
+            timer.Stop(string.Format("series={0}, labels={1}", PART_ChartTotalHoursSource.Series?.Count ?? 0, PART_ChartTotalHoursSource_X.Labels?.Count ?? 0));
+#endif
+#endif
+        }
+
+        private void StartReloadDayChart(int year, int month)
+        {
+            int myVersion = Interlocked.Increment(ref _dayChartReloadVersion);
+            CancellationTokenSource previousCts = Interlocked.Exchange(ref _dayChartReloadCts, new CancellationTokenSource());
+            if (previousCts != null)
+            {
+                previousCts.Cancel();
+                previousCts.Dispose();
+            }
+            CancellationToken token = _dayChartReloadCts.Token;
+
+#if DEBUG
+            DebugTimer timer = new DebugTimer(string.Format("GameActivityView.GetActivityByDay({0},{1})", year, month));
+#endif
+            _ = Task.Run(() =>
+            {
+                if (token.IsCancellationRequested)
+                {
+                    return null;
+                }
+#if DEBUG
+                timer.Step("start");
+#endif
+                DateTime startDate = new DateTime(year, month, 1, 0, 0, 0);
+                int numberDayInMonth = DateTime.DaysInMonth(year, month);
+                DateTime endDate = new DateTime(year, month, numberDayInMonth, 23, 59, 59);
+
+                string[] activityByDateLabels = new string[numberDayInMonth];
+                long[] dayValues = new long[numberDayInMonth];
+
+                for (int iDay = 0; iDay < numberDayInMonth; iDay++)
+                {
+                    activityByDateLabels[iDay] = startDate.AddDays(iDay).ToString(Constants.DateUiFormat);
+                }
+
+                List<GameActivities> listGameActivities = GetMonthFilteredGameActivities(year, month);
+                for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
+                {
+                    if (token.IsCancellationRequested)
+                    {
+                        return null;
+                    }
+                    List<Activity> activities = listGameActivities[iGame].FilterItems;
+                    for (int iActivity = 0; iActivity < activities.Count; iActivity++)
+                    {
+                        if (token.IsCancellationRequested)
+                        {
+                            return null;
+                        }
+                        ulong elapsedSeconds = activities[iActivity].ElapsedSeconds;
+                        DateTime sessionDate = Convert.ToDateTime(activities[iActivity].DateSession).ToLocalTime();
+                        if (sessionDate < startDate || sessionDate > endDate)
+                        {
+                            continue;
+                        }
+
+                        int dayIndex = sessionDate.Day - 1;
+                        if (dayIndex >= 0 && dayIndex < dayValues.Length)
+                        {
+                            dayValues[dayIndex] = dayValues[dayIndex] + (long)elapsedSeconds;
+                        }
+                    }
+                }
+
+                return new DayChartData
+                {
+                    Labels = activityByDateLabels,
+                    Values = dayValues
+                };
+            }, token).ContinueWith(t =>
+            {
+                if (t.IsCanceled || t.IsFaulted)
+                {
+                    return;
+                }
+
+                if (token.IsCancellationRequested)
+                {
+                    return;
+                }
+
+                if (myVersion != _dayChartReloadVersion)
+                {
+                    return;
+                }
+
+                DayChartData data = t.Result;
+                if (data == null)
+                {
+                    return;
+                }
+                this.Dispatcher.BeginInvoke((Action)delegate
+                {
+                    if (token.IsCancellationRequested)
+                    {
+                        return;
+                    }
+
+                    if (myVersion != _dayChartReloadVersion)
+                    {
+                        return;
+                    }
+
+                    EnsureCustomerTimeMapper();
+
+                    ChartValues<CustomerForTime> series = new ChartValues<CustomerForTime>();
+                    for (int i = 0; i < data.Values.Length; i++)
+                    {
+                        series.Add(new CustomerForTime
+                        {
+                            Name = data.Labels[i],
+                            Values = data.Values[i]
+                        });
+                    }
+
+                    SeriesCollection activityByDaySeries = new SeriesCollection
+                    {
+                        new ColumnSeries
+                        {
+                            Title = string.Empty,
+                            Values = series,
+                            Fill = PluginDatabase.PluginSettings.ChartColors
+                        }
+                    };
+
+                    Func<double, string> activityForGameLogFormatter = value => (string)Converter.Convert((ulong)value, null, null, CultureInfo.CurrentCulture);
+
+                    PART_ChartHoursByDaySource_Y.LabelFormatter = activityForGameLogFormatter;
+                    PART_ChartHoursByDaySource.DataTooltip = new CustomerToolTipForTime { ShowIcon = ShowIcon, Mode = ModeComplet };
+                    PART_ChartHoursByDaySource.Series = activityByDaySeries;
+                    PART_ChartHoursByDaySource_Y.MinValue = 0;
+                    PART_ChartHoursByDaySource_X.Labels = data.Labels;
+                });
+
+#if DEBUG
+                timer.Stop(string.Format("days={0}, seriesPoints={1}", data.Labels?.Length ?? 0, data.Values?.Length ?? 0));
+#endif
+            });
         }
 
         public void GetActivityByDay(int year, int month)
         {
-            DateTime StartDate = new DateTime(year, month, 1, 0, 0, 0);
-            int NumberDayInMonth = DateTime.DaysInMonth(year, month);
-            DateTime EndDate = new DateTime(year, month, NumberDayInMonth, 23, 59, 59);
+            StartReloadDayChart(year, month);
+#if false
+#if DEBUG
+            var timer = new DebugTimer(string.Format("GameActivityView.GetActivityByDay({0},{1})", year, month));
+#endif
+            DateTime startDate = new DateTime(year, month, 1, 0, 0, 0);
+            int numberDayInMonth = DateTime.DaysInMonth(year, month);
+            DateTime endDate = new DateTime(year, month, numberDayInMonth, 23, 59, 59);
 
-            string[] activityByDateLabels = new string[NumberDayInMonth];
+            string[] activityByDateLabels = new string[numberDayInMonth];
             SeriesCollection activityByDaySeries = new SeriesCollection();
             ChartValues<CustomerForTime> series = new ChartValues<CustomerForTime>();
 
-            for (int iDay = 0; iDay < NumberDayInMonth; iDay++)
+            for (int iDay = 0; iDay < numberDayInMonth; iDay++)
             {
-                activityByDateLabels[iDay] = Convert.ToDateTime(StartDate.AddDays(iDay)).ToString(Constants.DateUiFormat);
-
+                activityByDateLabels[iDay] = startDate.AddDays(iDay).ToString(Constants.DateUiFormat);
                 series.Add(new CustomerForTime
                 {
                     Name = activityByDateLabels[iDay],
                     Values = 0
                 });
+            }
 
-                List<GameActivities> listGameActivities = GameActivity.PluginDatabase.GetListGameActivity();
-                listGameActivities = listGameActivities.Where(x => x.GetListDateTimeActivity().Any(y => y >= StartDate && y <= EndDate)).ToList();
-                for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
+            List<GameActivities> listGameActivities = GetMonthFilteredGameActivities(year, month);
+            for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
+            {
+                List<Activity> activities = listGameActivities[iGame].FilterItems;
+                for (int iActivity = 0; iActivity < activities.Count; iActivity++)
                 {
-                    List<Activity> Activities = listGameActivities[iGame].FilterItems;
-                    for (int iActivity = 0; iActivity < Activities.Count; iActivity++)
+                    ulong elapsedSeconds = activities[iActivity].ElapsedSeconds;
+                    DateTime sessionDate = Convert.ToDateTime(activities[iActivity].DateSession).ToLocalTime();
+                    if (sessionDate < startDate || sessionDate > endDate)
                     {
-                        ulong elapsedSeconds = Activities[iActivity].ElapsedSeconds;
-                        string dateSession = Convert.ToDateTime(((DateTime)Activities[iActivity].DateSession).ToLocalTime()).ToString(Constants.DateUiFormat);
+                        continue;
+                    }
 
-                        if (dateSession == activityByDateLabels[iDay])
-                        {
-                            series[iDay].Values += (long)elapsedSeconds;
-                        }
+                    int dayIndex = sessionDate.Day - 1;
+                    if (dayIndex >= 0 && dayIndex < series.Count)
+                    {
+                        series[dayIndex].Values += (long)elapsedSeconds;
                     }
                 }
             }
@@ -577,8 +1208,12 @@ namespace GameActivity.Views
                     .X((value, index) => index)
                     .Y(value => value.Values);
 
-                //lets save the mapper globally
-                Charting.For<CustomerForTime>(customerVmMapper);
+                //lets save the mapper globally (avoid re-registering)
+                if (!_customerTimeMapperInitialized)
+                {
+                    Charting.For<CustomerForTime>(customerVmMapper);
+                    _customerTimeMapperInitialized = true;
+                }
 
                 Func<double, string> activityForGameLogFormatter = value => (string)Converter.Convert((ulong)value, null, null, CultureInfo.CurrentCulture);
 
@@ -587,6 +1222,355 @@ namespace GameActivity.Views
                 PART_ChartHoursByDaySource.Series = activityByDaySeries;
                 PART_ChartHoursByDaySource_Y.MinValue = 0;
                 PART_ChartHoursByDaySource_X.Labels = activityByDateLabels;
+            });
+#if DEBUG
+            timer.Stop(string.Format("days={0}, seriesPoints={1}", numberDayInMonth, series.Count));
+#endif
+#endif
+        }
+
+        private class WeekChartData
+        {
+            public List<WeekStartEnd> DatesPeriodes { get; set; }
+            public string[] WeekLabels { get; set; }
+            public bool UseCumulPlaytimeStore { get; set; }
+            public List<string> SourceNames { get; set; }
+            public List<string> SourceLabels { get; set; }
+            public long[][] ValuesBySource { get; set; }
+            public long[] WeekTotals { get; set; }
+        }
+
+        private class DayChartData
+        {
+            public string[] Labels { get; set; }
+            public long[] Values { get; set; }
+        }
+
+        private void StartReloadWeekChart(int year, int month)
+        {
+            if (!IsMonthSources)
+            {
+                // Month chart hides the week chart when not in "sources" mode.
+                this.Dispatcher.BeginInvoke((Action)delegate
+                {
+                    PART_ChartHoursByWeekSource.Visibility = Visibility.Hidden;
+                    acwLabel.Visibility = Visibility.Hidden;
+                });
+                return;
+            }
+
+            int myVersion = Interlocked.Increment(ref _weekChartReloadVersion);
+            CancellationTokenSource previousCts = Interlocked.Exchange(ref _weekChartReloadCts, new CancellationTokenSource());
+            if (previousCts != null)
+            {
+                previousCts.Cancel();
+                previousCts.Dispose();
+            }
+            CancellationToken token = _weekChartReloadCts.Token;
+
+            bool useCumul = PluginDatabase.PluginSettings.CumulPlaytimeStore;
+            bool showLauncherIcons = PluginDatabase.PluginSettings.ShowLauncherIcons;
+
+#if DEBUG
+            DebugTimer computeTimer = new DebugTimer(string.Format("GameActivityView.WeekChart compute async ({0},{1})", year, month));
+#endif
+
+            _ = Task.Run(() =>
+            {
+                if (token.IsCancellationRequested)
+                {
+                    return null;
+                }
+#if DEBUG
+                computeTimer.Step("start");
+#endif
+
+                DateTime StartDate = new DateTime(year, month, 1, 0, 0, 0);
+                DateTime SeriesEndDate = new DateTime(year, month, DateTime.DaysInMonth(year, month), 23, 59, 59);
+
+                // find first monday
+                DateTime firstMonday = Enumerable.Range(0, 7)
+                    .SkipWhile(x => StartDate.AddDays(x).DayOfWeek != DayOfWeek.Monday)
+                    .Select(x => StartDate.AddDays(x))
+                    .First();
+
+                if (firstMonday > StartDate)
+                {
+                    firstMonday = Enumerable.Range(-6, 7)
+                        .SkipWhile(x => StartDate.AddDays(x).DayOfWeek != DayOfWeek.Monday)
+                        .Select(x => StartDate.AddDays(x))
+                        .First();
+                }
+
+                // create week periods
+                TimeSpan ts = (TimeSpan)(SeriesEndDate - firstMonday);
+                List<WeekStartEnd> datesPeriodes = new List<WeekStartEnd>();
+                int iDays = 0;
+                for (iDays = 0; iDays < ts.Days; iDays += 7)
+                {
+                    datesPeriodes.Add(new WeekStartEnd
+                    {
+                        Monday = firstMonday.AddDays(iDays),
+                        Sunday = firstMonday.AddDays(iDays + 6).AddHours(23).AddMinutes(59).AddSeconds(59)
+                    });
+                }
+
+                if (datesPeriodes.Count > 0 && datesPeriodes[datesPeriodes.Count - 1].Sunday < SeriesEndDate)
+                {
+                    datesPeriodes.Add(new WeekStartEnd
+                    {
+                        Monday = firstMonday.AddDays(iDays),
+                        Sunday = firstMonday.AddDays(iDays + 6).AddHours(23).AddMinutes(59).AddSeconds(59)
+                    });
+                }
+
+                int weekCount = datesPeriodes.Count;
+
+                Dictionary<string, long[]> valuesBySource = new Dictionary<string, long[]>();
+
+                List<string> sourcesSnapshot = ListSources;
+                if (sourcesSnapshot == null)
+                {
+                    sourcesSnapshot = new List<string>();
+                }
+
+                for (int iSource = 0; iSource < sourcesSnapshot.Count; iSource++)
+                {
+                    if (token.IsCancellationRequested)
+                    {
+                        return null;
+                    }
+                    string src = sourcesSnapshot[iSource];
+                    if (!valuesBySource.ContainsKey(src))
+                    {
+                        valuesBySource.Add(src, new long[weekCount]);
+                    }
+                }
+
+                List<GameActivities> listGameActivities = GetMonthFilteredGameActivities(year, month);
+
+                for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
+                {
+                    if (token.IsCancellationRequested)
+                    {
+                        return null;
+                    }
+                    List<Activity> activities = listGameActivities[iGame].FilterItems;
+                    for (int iActivity = 0; iActivity < activities.Count; iActivity++)
+                    {
+                        if (token.IsCancellationRequested)
+                        {
+                            return null;
+                        }
+                        ulong elapsedSeconds = activities[iActivity].ElapsedSeconds;
+                        DateTime dateSession = Convert.ToDateTime(activities[iActivity].DateSession).ToLocalTime();
+                        string sourceName = activities[iActivity].SourceName;
+
+                        int matchedWeek = -1;
+                        for (int iWeek = 0; iWeek < weekCount; iWeek++)
+                        {
+                            if (datesPeriodes[iWeek].Monday <= dateSession && dateSession <= datesPeriodes[iWeek].Sunday)
+                            {
+                                matchedWeek = iWeek;
+                                break;
+                            }
+                        }
+
+                        if (matchedWeek == -1)
+                        {
+                            continue;
+                        }
+
+                        if (!valuesBySource.ContainsKey(sourceName))
+                        {
+                            valuesBySource.Add(sourceName, new long[weekCount]);
+                        }
+
+                        valuesBySource[sourceName][matchedWeek] = valuesBySource[sourceName][matchedWeek] + (long)elapsedSeconds;
+                    }
+                }
+
+                List<string> sourceNamesWithData = new List<string>();
+                foreach (KeyValuePair<string, long[]> kvp in valuesBySource)
+                {
+                    long sum = 0;
+                    for (int w = 0; w < weekCount; w++)
+                    {
+                        sum += kvp.Value[w];
+                    }
+
+                    if (sum != 0)
+                    {
+                        sourceNamesWithData.Add(kvp.Key);
+                    }
+                }
+
+                string[] weekLabels = new string[weekCount];
+                for (int w = 0; w < weekCount; w++)
+                {
+                    weekLabels[w] = ResourceProvider.GetString("LOCGameActivityWeekLabel") + " " + UtilityTools.WeekOfYearISO8601(datesPeriodes[w].Monday);
+                }
+
+                List<string> sourceLabels = new List<string>(sourceNamesWithData.Count);
+                long[][] valuesBySourceArr = new long[sourceNamesWithData.Count][];
+
+                for (int i = 0; i < sourceNamesWithData.Count; i++)
+                {
+                    string src = sourceNamesWithData[i];
+                    sourceLabels.Add(showLauncherIcons ? TransformIcon.Get(src) : src);
+                    valuesBySourceArr[i] = valuesBySource[src];
+                }
+
+                long[] weekTotals = null;
+                if (useCumul)
+                {
+                    weekTotals = new long[weekCount];
+                    for (int iSource = 0; iSource < sourceNamesWithData.Count; iSource++)
+                    {
+                        long[] arr = valuesBySourceArr[iSource];
+                        for (int w = 0; w < weekCount; w++)
+                        {
+                            weekTotals[w] = weekTotals[w] + arr[w];
+                        }
+                    }
+                }
+
+#if DEBUG
+                computeTimer.Stop(string.Format("weekCount={0}, sources={1}", weekCount, sourceNamesWithData.Count));
+#endif
+
+                return new WeekChartData
+                {
+                    DatesPeriodes = datesPeriodes,
+                    WeekLabels = weekLabels,
+                    UseCumulPlaytimeStore = useCumul,
+                    SourceNames = sourceNamesWithData,
+                    SourceLabels = sourceLabels,
+                    ValuesBySource = valuesBySourceArr,
+                    WeekTotals = weekTotals
+                };
+            }, token).ContinueWith(t =>
+            {
+                if (t.IsCanceled || t.IsFaulted)
+                {
+                    return;
+                }
+
+                if (token.IsCancellationRequested)
+                {
+                    return;
+                }
+
+                WeekChartData data = t.Result;
+                if (data == null)
+                {
+                    return;
+                }
+                if (myVersion != _weekChartReloadVersion)
+                {
+                    return;
+                }
+
+                this.Dispatcher.BeginInvoke((Action)delegate
+                {
+                    if (token.IsCancellationRequested)
+                    {
+                        return;
+                    }
+
+                    if (myVersion != _weekChartReloadVersion)
+                    {
+                        return;
+                    }
+
+#if DEBUG
+                    DebugTimer uiTimer = new DebugTimer(string.Format("GameActivityView.WeekChart UI ({0},{1})", year, month));
+                    uiTimer.Step("start");
+#endif
+                    EnsureCustomerTimeMapper();
+
+                    Func<double, string> activityForGameLogFormatter = value => (string)Converter.Convert((ulong)value, null, null, CultureInfo.CurrentCulture);
+                    PART_ChartHoursByWeekSource_Y.LabelFormatter = activityForGameLogFormatter;
+                    PART_ChartHoursByWeekSource_Y.MinValue = 0;
+                    PART_ChartHoursByWeekSource_X.Labels = data.WeekLabels;
+
+                    if (data.UseCumulPlaytimeStore)
+                    {
+                        ChartValues<CustomerForTime> series = new ChartValues<CustomerForTime>();
+                        for (int w = 0; w < data.WeekTotals.Length; w++)
+                        {
+                            series.Add(new CustomerForTime { Name = data.WeekLabels[w], Values = data.WeekTotals[w] });
+                        }
+
+                        PART_ChartHoursByWeekSource.DataTooltip = new CustomerToolTipForTime
+                        {
+                            ShowIcon = ShowIcon,
+                            ShowTitle = true,
+                            Mode = ModeComplet,
+                            ShowWeekPeriode = true,
+                            DatesPeriodes = data.DatesPeriodes
+                        };
+
+                        SeriesCollection activityByWeekSeries = new SeriesCollection();
+                        activityByWeekSeries.Add(new ColumnSeries
+                        {
+                            Title = string.Empty,
+                            Values = series,
+                            Fill = PluginDatabase.PluginSettings.ChartColors
+                        });
+
+                        PART_ChartHoursByWeekSource.Series = activityByWeekSeries;
+                    }
+                    else
+                    {
+                        if (PluginDatabase.PluginSettings.StoreColors.Count == 0)
+                        {
+                            PluginDatabase.PluginSettings.StoreColors = GameActivitySettingsViewModel.GetDefaultStoreColors();
+                        }
+
+                        PART_ChartHoursByWeekSource.DataTooltip = new CustomerToolTipForMultipleTime
+                        {
+                            ShowIcon = ShowIcon,
+                            ShowTitle = true,
+                            Mode = ModeComplet,
+                            ShowWeekPeriode = true,
+                            DatesPeriodes = data.DatesPeriodes
+                        };
+
+                        SeriesCollection activityByWeekSeries = new SeriesCollection();
+                        for (int iSource = 0; iSource < data.SourceNames.Count; iSource++)
+                        {
+                            string sourceName = data.SourceNames[iSource];
+                            string sourceLabel = data.SourceLabels[iSource];
+                            long[] valuesArr = data.ValuesBySource[iSource];
+
+                            ChartValues<CustomerForTime> values = new ChartValues<CustomerForTime>();
+                            for (int w = 0; w < data.DatesPeriodes.Count; w++)
+                            {
+                                values.Add(new CustomerForTime { Name = sourceName, Values = (int)valuesArr[w] });
+                            }
+
+                            Brush fill = PluginDatabase.PluginSettings.StoreColors
+                                .Where(x => x.Name.Contains(sourceName, StringComparison.InvariantCultureIgnoreCase))
+                                .FirstOrDefault()?.Fill;
+
+                            activityByWeekSeries.Add(new StackedColumnSeries
+                            {
+                                Title = sourceLabel,
+                                Values = values,
+                                StackMode = StackMode.Values,
+                                DataLabels = false,
+                                Fill = fill
+                            });
+                        }
+
+                        PART_ChartHoursByWeekSource.Series = activityByWeekSeries;
+                    }
+
+#if DEBUG
+                    uiTimer.Stop();
+#endif
+                });
             });
         }
 
@@ -598,6 +1582,12 @@ namespace GameActivity.Views
         /// <param name="month"></param>        
         public void GetActivityByWeek(int year, int month)
         {
+            StartReloadWeekChart(year, month);
+#if false
+#if DEBUG
+            var timer = new DebugTimer(string.Format("GameActivityView.GetActivityByWeek({0},{1})", year, month));
+#endif
+            // legacy implementation disabled (async reload below)
             //https://www.codeproject.com/Questions/1276907/Get-every-weeks-start-and-end-date-from-series-end
             //usage:
             DateTime StartDate = new DateTime(year, month, 1, 0, 0, 0);
@@ -665,8 +1655,8 @@ namespace GameActivity.Views
                 activityByWeek.Add(activityByWeek6);
 
 
-                List<GameActivities> listGameActivities = GameActivity.PluginDatabase.GetListGameActivity();
-                listGameActivities = listGameActivities.Where(x => x.GetListDateTimeActivity().Any(y => y >= StartDate && y <= SeriesEndDate)).ToList();
+                // Cache DB fetch for month range (used by month/week/day charts).
+                List<GameActivities> listGameActivities = GetMonthFilteredGameActivities(year, month);
 
                 for (int iGame = 0; iGame < listGameActivities.Count; iGame++)
                 {
@@ -717,6 +1707,10 @@ namespace GameActivity.Views
 
                 // Prepare data.
                 string[] labels = new string[listNoDelete.Count];
+                if (PluginDatabase.PluginSettings.StoreColors.Count == 0)
+                {
+                    PluginDatabase.PluginSettings.StoreColors = GameActivitySettingsViewModel.GetDefaultStoreColors();
+                }
                 for (int iSource = 0; iSource < listNoDelete.Count; iSource++)
                 {
                     labels[iSource] = listNoDelete[iSource];
@@ -725,12 +1719,7 @@ namespace GameActivity.Views
                         labels[iSource] = TransformIcon.Get(listNoDelete[iSource]);
                     }
 
-
                     Brush Fill = null;
-                    if (PluginDatabase.PluginSettings.StoreColors.Count == 0)
-                    {
-                        PluginDatabase.PluginSettings.StoreColors = GameActivitySettingsViewModel.GetDefaultStoreColors();
-                    }
                     Fill = PluginDatabase.PluginSettings.StoreColors
                                 .Where(x => x.Name.Contains(listNoDelete[iSource], StringComparison.InvariantCultureIgnoreCase))?.FirstOrDefault()?.Fill;
 
@@ -842,8 +1831,12 @@ namespace GameActivity.Views
                 .X((value, index) => index)
                 .Y(value => value.Values);
 
-            //lets save the mapper globally
-            Charting.For<CustomerForTime>(customerVmMapper);
+            //lets save the mapper globally (avoid re-registering)
+            if (!_customerTimeMapperInitialized)
+            {
+                Charting.For<CustomerForTime>(customerVmMapper);
+                _customerTimeMapperInitialized = true;
+            }
 
             Func<double, string> activityForGameLogFormatter = value => (string)Converter.Convert((ulong)value, null, null, CultureInfo.CurrentCulture);
 
@@ -851,6 +1844,10 @@ namespace GameActivity.Views
             PART_ChartHoursByWeekSource.Series = activityByWeekSeries;
             PART_ChartHoursByWeekSource_Y.MinValue = 0;
             PART_ChartHoursByWeekSource_X.Labels = activityByWeekLabels;
+#if DEBUG
+            timer.Stop(string.Format("weeks={0}, stackedSeries={1}", datesPeriodes.Count, activityByWeekSeries.Count));
+#endif
+#endif
         }
 
 
@@ -859,6 +1856,9 @@ namespace GameActivity.Views
         /// </summary>
         public void GetActivityByListGame()
         {
+#if DEBUG
+            var timer = new DebugTimer("GameActivityView.GetActivityByListGame");
+#endif
             ActivityListByGame = new List<ListActivities>();
 
             List<GameActivities> listGameActivities = GameActivity.PluginDatabase.GetListGameActivity();
@@ -873,20 +1873,59 @@ namespace GameActivity.Views
                     if (!listGameActivities[iGame].Name.IsNullOrEmpty())
                     {
                         string gameTitle = listGameActivities[iGame].Name;
+                        Activity lastSessionActivity = listGameActivities[iGame].GetLastSessionActivity();
                         string sourceName = string.Empty;
                         try
                         {
-                            sourceName = listGameActivities[iGame].GetLastSessionActivity().SourceName;
+                            sourceName = lastSessionActivity.SourceName;
                         }
                         catch (Exception ex)
                         {
                             Common.LogError(ex, false, "Error to get SourceName", true, PluginDatabase.PluginName);
                         }
-
-                        Activity lastSessionActivity = listGameActivities[iGame].GetLastSessionActivity();
                         ulong elapsedSeconds = lastSessionActivity.ElapsedSeconds;
                         DateTime dateSession = Convert.ToDateTime(lastSessionActivity.DateSession).ToLocalTime();
                         ulong timePlayedInMonth = 0;
+
+                        // Compute all average metrics from the same details list in one pass,
+                        // instead of calling AvgCPU/AvgGPU/... methods multiple times.
+                        List<ActivityDetailsData> details = lastSessionActivity.Details;
+                        int detailsCount = details?.Count ?? 0;
+                        long sumFPS = 0;
+                        long sumCPU = 0;
+                        long sumGPU = 0;
+                        long sumRAM = 0;
+                        long sumCPUT = 0;
+                        long sumGPUT = 0;
+                        long sumCPUP = 0;
+                        long sumGPUP = 0;
+
+                        if (detailsCount > 0)
+                        {
+                            for (int i = 0; i < detailsCount; i++)
+                            {
+                                ActivityDetailsData d = details[i];
+                                sumFPS += d.FPS;
+                                sumCPU += d.CPU;
+                                sumGPU += d.GPU;
+                                sumRAM += d.RAM;
+                                sumCPUT += d.CPUT;
+                                sumGPUT += d.GPUT;
+                                sumCPUP += d.CPUP;
+                                sumGPUP += d.GPUP;
+                            }
+                        }
+
+                        int avgFPS = detailsCount > 0 ? (int)Math.Round(sumFPS / (double)detailsCount) : 0;
+                        int avgCPU = detailsCount > 0 ? (int)Math.Round(sumCPU / (double)detailsCount) : 0;
+                        int avgGPU = detailsCount > 0 ? (int)Math.Round(sumGPU / (double)detailsCount) : 0;
+                        int avgRAM = detailsCount > 0 ? (int)Math.Round(sumRAM / (double)detailsCount) : 0;
+                        int avgCPUT = detailsCount > 0 ? (int)Math.Round(sumCPUT / (double)detailsCount) : 0;
+                        int avgGPUT = detailsCount > 0 ? (int)Math.Round(sumGPUT / (double)detailsCount) : 0;
+                        int avgCPUP = detailsCount > 0 ? (int)Math.Round(sumCPUP / (double)detailsCount) : 0;
+                        int avgGPUP = detailsCount > 0 ? (int)Math.Round(sumGPUP / (double)detailsCount) : 0;
+
+                        SystemConfiguration config = lastSessionActivity.Configuration;
 
                         string GameIcon = listGameActivities[iGame].Icon;
                         if (!GameIcon.IsNullOrEmpty())
@@ -906,14 +1945,14 @@ namespace GameActivity.Views
                             GameSourceName = sourceName,
                             GameSourceIcon = TransformIcon.Get(sourceName),
                             DateActivity = listGameActivities[iGame].GetListDateActivity(),
-                            AvgCPU = listGameActivities[iGame].AvgCPU(listGameActivities[iGame].GetLastSession()) + "%",
-                            AvgGPU = listGameActivities[iGame].AvgGPU(listGameActivities[iGame].GetLastSession()) + "%",
-                            AvgRAM = listGameActivities[iGame].AvgRAM(listGameActivities[iGame].GetLastSession()) + "%",
-                            AvgFPS = listGameActivities[iGame].AvgFPS(listGameActivities[iGame].GetLastSession()) + "",
-                            AvgCPUT = listGameActivities[iGame].AvgCPUT(listGameActivities[iGame].GetLastSession()) + "°",
-                            AvgGPUT = listGameActivities[iGame].AvgGPUT(listGameActivities[iGame].GetLastSession()) + "°",
-                            AvgCPUP = listGameActivities[iGame].AvgCPUP(listGameActivities[iGame].GetLastSession()) + "W",
-                            AvgGPUP = listGameActivities[iGame].AvgGPUP(listGameActivities[iGame].GetLastSession()) + "W",
+                            AvgCPU = avgCPU + "%",
+                            AvgGPU = avgGPU + "%",
+                            AvgRAM = avgRAM + "%",
+                            AvgFPS = avgFPS + "",
+                            AvgCPUT = avgCPUT + "°",
+                            AvgGPUT = avgGPUT + "°",
+                            AvgCPUP = avgCPUP + "W",
+                            AvgGPUP = avgGPUP + "W",
 
                             EnableWarm = PluginDatabase.PluginSettings.EnableWarning,
                             MaxCPUT = PluginDatabase.PluginSettings.MaxCpuTemp.ToString(),
@@ -923,14 +1962,14 @@ namespace GameActivity.Views
                             MaxGPU = PluginDatabase.PluginSettings.MaxGpuUsage.ToString(),
                             MaxRAM = PluginDatabase.PluginSettings.MaxRamUsage.ToString(),
 
-                            PCConfigurationId = listGameActivities[iGame].GetLastSessionActivity()?.IdConfiguration ?? -1,
-                            PCName = listGameActivities[iGame].GetLastSessionActivity()?.Configuration.Name,
+                            PCConfigurationId = lastSessionActivity.IdConfiguration,
+                            PCName = config.Name,
 
                             TypeStoreIcon = ModeSimple,
                             SourceIcon = PlayniteTools.GetPlatformIcon(sourceName),
                             SourceIconText = TransformIcon.Get(sourceName),
 
-                            GameActionName = listGameActivities[iGame].GetLastSessionActivity()?.GameActionName
+                            GameActionName = lastSessionActivity.GameActionName
                         });
                     }
                     // Game is deleted
@@ -948,9 +1987,11 @@ namespace GameActivity.Views
             this.Dispatcher.BeginInvoke((Action)delegate
             {
                 ViewModel.ActivityListByGame = ActivityListByGame;
-                lvGames.Sorting();
-                Filter();
+                Filter(false);
             });
+#if DEBUG
+            timer.Stop(string.Format("rows={0}", ActivityListByGame?.Count ?? 0));
+#endif
         }
 
 
@@ -1037,6 +2078,8 @@ namespace GameActivity.Views
                 if (((List<ListActivities>)item.ItemsSource)?.Count > 0)
                 {
                     ListActivities gameItem = (ListActivities)item.SelectedItem;
+                    if (gameItem?.GameId == null) { return; }
+
                     GameIDCurrent = gameItem.GameId;
 
                     if (IsGameTime)
@@ -1067,6 +2110,7 @@ namespace GameActivity.Views
                     PART_CpuName.Content = Configuration.Cpu;
                     PART_GpuName.Content = Configuration.GpuName;
                     PART_Ram.Content = Configuration.RamUsage;
+                    PART_PcConfigExpander.Tag = string.Format("{0} · {1} · {2}", Configuration.Name, Configuration.Cpu, Configuration.GpuName);
                 }
                 else
                 {
@@ -1075,6 +2119,7 @@ namespace GameActivity.Views
                     PART_CpuName.Content = string.Empty;
                     PART_GpuName.Content = string.Empty;
                     PART_Ram.Content = string.Empty;
+                    PART_PcConfigExpander.Tag = string.Empty;
                 }
             }
         }
@@ -1128,7 +2173,6 @@ namespace GameActivity.Views
             {
                 try
                 {
-                    PART_Truncate.Visibility = Visibility.Visible;
                     ViewModel.SetGameChartMode(true);
                     ToggleButtonLog.IsChecked = false;
                     GetActivityForGamesTimeGraphics(GameIDCurrent);
@@ -1157,7 +2201,6 @@ namespace GameActivity.Views
             {
                 try
                 {
-                    PART_Truncate.Visibility = Visibility.Collapsed;
                     ViewModel.SetGameChartMode(false);
                     ToggleButtonTime.IsChecked = false;
                     GetActivityForGamesLogGraphics(GameIDCurrent);
@@ -1370,30 +2413,108 @@ namespace GameActivity.Views
         private void TextboxSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
             ViewModel.SearchText = TextboxSearch.Text;
-            Filter();
+            _searchDebounceTimer.Stop();
+            _searchDebounceTimer.Start();
         }
 
         private void Filter()
         {
+            Filter(true);
+        }
+
+        private void Filter(bool shouldSort)
+        {
+#if DEBUG
+            var timer = new DebugTimer("GameActivityView.Filter");
+#endif
             ViewModel.ApplyFilter();
-            lvGames.Sorting();
+            if (shouldSort)
+            {
+                lvGames.Sorting();
+            }
+#if DEBUG
+            timer.Stop(string.Format("filteredRows={0}", ViewModel.FilteredActivityList?.Count ?? 0));
+#endif
         }
 
 
         private void PART_CbSource_Checked(object sender, RoutedEventArgs e)
         {
-            FilterCbSource((CheckBox)sender);
+            FilterSourceItemSelectionChanged(sender);
         }
         private void PART_CbSource_Unchecked(object sender, RoutedEventArgs e)
         {
-            FilterCbSource((CheckBox)sender);
+            FilterSourceItemSelectionChanged(sender);
         }
-        private void FilterCbSource(CheckBox sender)
+        private void FilterSourceItemSelectionChanged(object sender)
         {
-            bool isChecked = sender.IsChecked == true;
-            ViewModel.ToggleSourceFilter(((ListSource)sender.Tag).SourceNameShort, isChecked);
+            CheckBox checkBox = sender as CheckBox;
+            if (checkBox == null || checkBox.Tag == null)
+            {
+                return;
+            }
+
+            ListSource listSource = checkBox.Tag as ListSource;
+            if (listSource == null)
+            {
+                return;
+            }
+
+            bool isChecked = checkBox.IsChecked == true;
+            ViewModel.ToggleSourceFilter(listSource.SourceNameShort, isChecked);
 
             Filter();
+        }
+
+        private void FilterSourceReset_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.SearchSources.Clear();
+            ViewModel.FilterSourceText = string.Empty;
+
+            for (int i = 0; i < FilterSourceItems.Count; i++)
+            {
+                FilterSourceItems[i].IsCheck = false;
+            }
+
+            Filter();
+        }
+
+        private void FilterSourceButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+            if (button == null || button.ContextMenu == null)
+            {
+                return;
+            }
+
+            button.ContextMenu.PlacementTarget = button;
+            button.ContextMenu.IsOpen = true;
+        }
+
+        private void FilterSourceMenuItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount != 1)
+            {
+                return;
+            }
+
+            MenuItem menuItem = sender as MenuItem;
+            if (menuItem == null)
+            {
+                return;
+            }
+
+            ListSource listSource = menuItem.Tag as ListSource;
+            if (listSource == null)
+            {
+                return;
+            }
+
+            bool newChecked = !listSource.IsCheck;
+            listSource.IsCheck = newChecked;
+            ViewModel.ToggleSourceFilter(listSource.SourceNameShort, newChecked);
+            Filter();
+            e.Handled = true;
         }
         #endregion
 
@@ -1416,7 +2537,7 @@ namespace GameActivity.Views
         }
     }
 
-    public class ListSource
+    public class ListSource : ObservableObject
     {
         public TextBlockWithIconMode TypeStoreIcon { get; set; }
 
@@ -1424,6 +2545,12 @@ namespace GameActivity.Views
         public string SourceIconText { get; set; }
         public string SourceName { get; set; }
         public string SourceNameShort { get; set; }
-        public bool IsCheck { get; set; }
+
+        private bool _isCheck;
+        public bool IsCheck
+        {
+            get => _isCheck;
+            set => SetValue(ref _isCheck, value);
+        }
     }
 }
