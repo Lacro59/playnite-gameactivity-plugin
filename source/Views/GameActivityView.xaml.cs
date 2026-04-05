@@ -406,6 +406,7 @@ namespace GameActivity.Views
                 : TextBlockWithIconMode.TextOnly;
 
             bool showAxisLabels = isMonthSourcesSnapshot || isGenresSourcesSnapshot;
+            bool isTagsMode = !isMonthSourcesSnapshot && !isGenresSourcesSnapshot;
 
             _ = Task.Run(() =>
             {
@@ -627,6 +628,7 @@ namespace GameActivity.Views
                     labelsRotation,
                     fontSize,
                     showAxisLabels,
+                    isTagsMode,
                     tooltipMode,
                     showTotalHoursChart,
                     showTotalHoursLabel,
@@ -725,6 +727,8 @@ namespace GameActivity.Views
                     {
                         PART_ChartTotalHoursSource_X.ShowLabels = false;
                     }
+                    PART_ChartTotalHoursSource_X.Separator = result.isTagsMode ? new LiveCharts.Wpf.Separator { IsEnabled = false } : new LiveCharts.Wpf.Separator { IsEnabled = true };
+
 #if DEBUG
                     uiTimer.Stop();
 #endif
@@ -2236,6 +2240,10 @@ namespace GameActivity.Views
                     GetActivityByMonth(YearCurrent, MonthCurrent);
                     GetActivityByWeek(YearCurrent, MonthCurrent);
                     GetActivityByDay(YearCurrent, MonthCurrent);
+
+                    Col1.Width = new GridLength(1, GridUnitType.Star);
+                    Col2.Width = new GridLength(1, GridUnitType.Star);
+                    Col3.Width = new GridLength(1, GridUnitType.Star);
                 }
                 catch
                 {
@@ -2265,6 +2273,10 @@ namespace GameActivity.Views
                     tbMonthSources.IsChecked = false;
                     tbMonthTags.IsChecked = false;
                     GetActivityByMonth(YearCurrent, MonthCurrent);
+
+                    Col1.Width = new GridLength(1, GridUnitType.Star);
+                    Col2.Width = new GridLength(0);
+                    Col3.Width = new GridLength(0);
                 }
                 catch
                 {
@@ -2294,6 +2306,10 @@ namespace GameActivity.Views
                     tbMonthSources.IsChecked = false;
                     tbMonthGenres.IsChecked = false;
                     GetActivityByMonth(YearCurrent, MonthCurrent);
+
+                    Col1.Width = new GridLength(1, GridUnitType.Star);
+                    Col2.Width = new GridLength(0);
+                    Col3.Width = new GridLength(0);
                 }
                 catch
                 {

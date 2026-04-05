@@ -149,109 +149,106 @@
                         <!-- Graphics week -->
                         <Grid Grid.Row="2">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="12" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="12" />
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" x:Name="Col1" />
+                                <ColumnDefinition Width="*" x:Name="Col2" />
+                                <ColumnDefinition Width="*" x:Name="Col3" />
                             </Grid.ColumnDefinitions>
 
                             <Border Grid.Column="0" Style="{DynamicResource CardBorder}" Padding="8" Margin="0">
-                            <Grid x:Name="gridMonth">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="30" />
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
+                                <Grid x:Name="gridMonth">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="30" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
 
-                                <TextBlock Name="PART_ChartTotalHoursSource_Label" Text="{DynamicResource LOCGameActivityTotalHours}" Style="{DynamicResource SectionHeaderText}" HorizontalAlignment="Center" Grid.Column="1" Grid.Row="0" />
+                                    <TextBlock Name="PART_ChartTotalHoursSource_Label" Text="{DynamicResource LOCGameActivityTotalHours}" Style="{DynamicResource SectionHeaderText}" HorizontalAlignment="Center" Grid.Column="1" Grid.Row="0" />
 
-                                <lvc:CartesianChart x:Name="PART_ChartTotalHoursSource" LegendLocation="none" Grid.Column="1" Grid.Row="1" 
-                                            DisableAnimations="True" AnimationsSpeed="10" FontFamily="{DynamicResource CommonFont}">
-                                    <lvc:CartesianChart.DataTooltip>
-                                        <livechartscommon:CustomerToolTipForTime x:Name="PART_ChartTotalHoursSource_ToolTip" />
-                                    </lvc:CartesianChart.DataTooltip>
+                                    <lvc:CartesianChart x:Name="PART_ChartTotalHoursSource" LegendLocation="none" Grid.Column="1" Grid.Row="1" 
+                                                DisableAnimations="True" AnimationsSpeed="10" FontFamily="{DynamicResource CommonFont}">
+                                        <lvc:CartesianChart.DataTooltip>
+                                            <livechartscommon:CustomerToolTipForTime x:Name="PART_ChartTotalHoursSource_ToolTip" />
+                                        </lvc:CartesianChart.DataTooltip>
 
-                                    <lvc:CartesianChart.AxisX>
-                                        <lvc:Axis x:Name="PART_ChartTotalHoursSource_X" ShowLabels="True" 
-                                          FontSize="{DynamicResource FontSize}" FontFamily="{DynamicResource CommonFont}">
-                                            <lvc:Axis.Separator>
-                                                <lvc:Separator Step="1" />
-                                            </lvc:Axis.Separator>
-                                        </lvc:Axis>
-                                    </lvc:CartesianChart.AxisX>
+                                        <lvc:CartesianChart.AxisX>
+                                            <lvc:Axis x:Name="PART_ChartTotalHoursSource_X" ShowLabels="True" 
+                                                      FontSize="{DynamicResource FontSize}" FontFamily="{DynamicResource CommonFont}">
+                                                <lvc:Axis.Separator>
+                                                    <lvc:Separator Step="10" />
+                                                </lvc:Axis.Separator>
+                                            </lvc:Axis>
+                                        </lvc:CartesianChart.AxisX>
 
-                                    <lvc:CartesianChart.AxisY>
-                                        <lvc:Axis x:Name="PART_ChartTotalHoursSource_Y"
-                                          FontSize="{DynamicResource FontSize}" FontFamily="{DynamicResource FontFamily}" />
-                                    </lvc:CartesianChart.AxisY>
-                                </lvc:CartesianChart>
-                            </Grid>
+                                        <lvc:CartesianChart.AxisY>
+                                            <lvc:Axis x:Name="PART_ChartTotalHoursSource_Y" 
+                                                      FontSize="{DynamicResource FontSize}" FontFamily="{DynamicResource FontFamily}" />
+                                        </lvc:CartesianChart.AxisY>
+                                    </lvc:CartesianChart>
+                                </Grid>
                             </Border>
 
+                            <Border Grid.Column="1" Style="{DynamicResource CardBorder}" Padding="8" Margin="10,0,10,0">
+                                <Grid Name="GridDay">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="30" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Grid.Column="1" Grid.Row="0" x:Name="actLabel" Text="{DynamicResource LOCGameActivityTimeTitle}" Style="{DynamicResource SectionHeaderText}" HorizontalAlignment="Center" />
+
+                                    <lvc:CartesianChart x:Name="PART_ChartHoursByDaySource" LegendLocation="none" Grid.Column="1" Grid.Row="1"  
+                                                DisableAnimations="True" AnimationsSpeed="10"
+                                                FontSize="{DynamicResource FontSize}" FontFamily="{DynamicResource CommonFont}">
+                                        <lvc:CartesianChart.DataTooltip>
+                                            <livechartscommon:CustomerToolTipForMultipleTime x:Name="PART_ChartHoursByDaySource_ToolTip" />
+                                        </lvc:CartesianChart.DataTooltip>
+
+                                        <lvc:CartesianChart.AxisX>
+                                            <lvc:Axis x:Name="PART_ChartHoursByDaySource_X" ShowLabels="False">
+                                                <lvc:Axis.Separator>
+                                                    <lvc:Separator Step="1" />
+                                                </lvc:Axis.Separator>
+                                            </lvc:Axis>
+                                        </lvc:CartesianChart.AxisX>
+                                        <lvc:CartesianChart.AxisY>
+                                            <lvc:Axis x:Name="PART_ChartHoursByDaySource_Y"
+                                              FontSize="{DynamicResource FontSize}" FontFamily="{DynamicResource FontFamily}" />
+                                        </lvc:CartesianChart.AxisY>
+                                    </lvc:CartesianChart>
+
+                                    <Label Grid.Row="3" FontSize="28" Content=" " />
+                                </Grid>
+                            </Border>
 
                             <Border Grid.Column="2" Style="{DynamicResource CardBorder}" Padding="8" Margin="0">
-                            <Grid Name="GridDay">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="30" />
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="auto" />
-                                </Grid.RowDefinitions>
+                                <Grid Name="GridWeek">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="30" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
 
-                                <TextBlock Grid.Column="1" Grid.Row="0" x:Name="actLabel" Text="{DynamicResource LOCGameActivityTimeTitle}" Style="{DynamicResource SectionHeaderText}" HorizontalAlignment="Center" />
+                                    <TextBlock Grid.Column="1" Grid.Row="0" x:Name="acwLabel" Text="{DynamicResource LOCGameActivityTotalHoursByWeeks}" Style="{DynamicResource SectionHeaderText}" HorizontalAlignment="Center" />
 
-                                <lvc:CartesianChart x:Name="PART_ChartHoursByDaySource" LegendLocation="none" Grid.Column="1" Grid.Row="1"  
-                                            DisableAnimations="True" AnimationsSpeed="10"
-                                            FontSize="{DynamicResource FontSize}" FontFamily="{DynamicResource CommonFont}">
-                                    <lvc:CartesianChart.DataTooltip>
-                                        <livechartscommon:CustomerToolTipForMultipleTime x:Name="PART_ChartHoursByDaySource_ToolTip" />
-                                    </lvc:CartesianChart.DataTooltip>
+                                    <lvc:CartesianChart x:Name="PART_ChartHoursByWeekSource" LegendLocation="none" Grid.Column="1" Grid.Row="1"  
+                                                        DisableAnimations="True" AnimationsSpeed="10"
+                                                        FontSize="{DynamicResource FontSize}" FontFamily="{DynamicResource CommonFont}">
+                                        <lvc:CartesianChart.DataTooltip>
+                                            <livechartscommon:CustomerToolTipForMultipleTime x:Name="PART_ChartHoursByWeekSource_ToolTip" />
+                                        </lvc:CartesianChart.DataTooltip>
 
-                                    <lvc:CartesianChart.AxisX>
-                                        <lvc:Axis x:Name="PART_ChartHoursByDaySource_X" ShowLabels="False">
-                                            <lvc:Axis.Separator>
-                                                <lvc:Separator Step="1" />
-                                            </lvc:Axis.Separator>
-                                        </lvc:Axis>
-                                    </lvc:CartesianChart.AxisX>
-                                    <lvc:CartesianChart.AxisY>
-                                        <lvc:Axis x:Name="PART_ChartHoursByDaySource_Y"
-                                          FontSize="{DynamicResource FontSize}" FontFamily="{DynamicResource FontFamily}" />
-                                    </lvc:CartesianChart.AxisY>
-                                </lvc:CartesianChart>
-
-                                <Label Grid.Row="3" FontSize="28" Content=" " />
-                            </Grid>
-                            </Border>
-
-                            <Border Grid.Column="4" Style="{DynamicResource CardBorder}" Padding="8" Margin="0">
-                            <Grid Name="GridWeek">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="30" />
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
-
-                                <TextBlock Grid.Column="1" Grid.Row="0" x:Name="acwLabel" Text="{DynamicResource LOCGameActivityTotalHoursByWeeks}" Style="{DynamicResource SectionHeaderText}" HorizontalAlignment="Center" />
-
-                                <lvc:CartesianChart x:Name="PART_ChartHoursByWeekSource" LegendLocation="none" Grid.Column="1" Grid.Row="1"  
-                                                    DisableAnimations="True" AnimationsSpeed="10"
-                                                    FontSize="{DynamicResource FontSize}" FontFamily="{DynamicResource CommonFont}">
-                                    <lvc:CartesianChart.DataTooltip>
-                                        <livechartscommon:CustomerToolTipForMultipleTime x:Name="PART_ChartHoursByWeekSource_ToolTip" />
-                                    </lvc:CartesianChart.DataTooltip>
-
-                                    <lvc:CartesianChart.AxisX>
-                                        <lvc:Axis x:Name="PART_ChartHoursByWeekSource_X" ShowLabels="True" FontSize="14" LabelsRotation="160">
-                                            <lvc:Axis.Separator>
-                                                <lvc:Separator Step="1" />
-                                            </lvc:Axis.Separator>
-                                        </lvc:Axis>
-                                    </lvc:CartesianChart.AxisX>
-                                    <lvc:CartesianChart.AxisY>
-                                        <lvc:Axis x:Name="PART_ChartHoursByWeekSource_Y"
-                                          FontSize="{DynamicResource FontSize}" FontFamily="{DynamicResource FontFamily}" />
-                                    </lvc:CartesianChart.AxisY>
-                                </lvc:CartesianChart>
-                            </Grid>
+                                        <lvc:CartesianChart.AxisX>
+                                            <lvc:Axis x:Name="PART_ChartHoursByWeekSource_X" ShowLabels="True" FontSize="14" LabelsRotation="160">
+                                                <lvc:Axis.Separator>
+                                                    <lvc:Separator Step="1" />
+                                                </lvc:Axis.Separator>
+                                            </lvc:Axis>
+                                        </lvc:CartesianChart.AxisX>
+                                        <lvc:CartesianChart.AxisY>
+                                            <lvc:Axis x:Name="PART_ChartHoursByWeekSource_Y"
+                                              FontSize="{DynamicResource FontSize}" FontFamily="{DynamicResource FontFamily}" />
+                                        </lvc:CartesianChart.AxisY>
+                                    </lvc:CartesianChart>
+                                </Grid>
                             </Border>
                         </Grid>
                     </Grid>
