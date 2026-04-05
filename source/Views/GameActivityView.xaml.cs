@@ -58,6 +58,12 @@ namespace GameActivity.Views
         private PluginChartLog PART_GameActivityChartLog { get; set; }
         private readonly DispatcherTimer _searchDebounceTimer;
 
+        private Game _pendingInitialGameContext;
+
+#if DEBUG
+        private DebugTimer _ctorDebugTimer;
+#endif
+
         private PlayTimeToStringConverter Converter { get; set; } = new PlayTimeToStringConverter();
 
         private bool _customerTimeMapperInitialized;
@@ -139,7 +145,7 @@ namespace GameActivity.Views
         public GameActivityView(GameActivity plugin, Game gameContext = null)
         {
 #if DEBUG
-            var timer = new DebugTimer("GameActivityView.ctor");
+            _ctorDebugTimer = new DebugTimer("GameActivityView.ctor");
 #endif
             Plugin = plugin;
             ViewModel = new GameActivityViewModel();
@@ -149,29 +155,48 @@ namespace GameActivity.Views
             };
             _searchDebounceTimer.Tick += SearchDebounceTimer_Tick;
 
-            // Set dates variables
             ViewModel.InitializeCurrentMonth();
 
-            // Initialization components
             InitializeComponent();
 #if DEBUG
-            timer.Step("InitializeComponent done");
+            _ctorDebugTimer.Step("InitializeComponent done");
 #endif
-
 
             PART_DataLoad.Visibility = Visibility.Visible;
             PART_DataTop.Visibility = Visibility.Hidden;
             PART_DataBottom.Visibility = Visibility.Hidden;
 
+            _pendingInitialGameContext = gameContext;
+            if (IsLoaded)
+            {
+                Dispatcher.BeginInvoke((Action)BeginDeferredHeavyInitialization, DispatcherPriority.ApplicationIdle);
+            }
+            else
+            {
+                Loaded += GameActivityView_OnFirstLoaded;
+            }
+        }
 
+        private void GameActivityView_OnFirstLoaded(object sender, RoutedEventArgs e)
+        {
+            Loaded -= GameActivityView_OnFirstLoaded;
+            Dispatcher.BeginInvoke((Action)BeginDeferredHeavyInitialization, DispatcherPriority.ApplicationIdle);
+        }
 
+        private void BeginDeferredHeavyInitialization()
+        {
+            Game gameContext = _pendingInitialGameContext;
+            _pendingInitialGameContext = null;
+            ContinueGameActivityViewInitialization(gameContext);
+        }
 
+        private void ContinueGameActivityViewInitialization(Game gameContext)
+        {
             if (!PluginDatabase.PluginSettings.EnableLogging)
             {
                 ToggleButtonTime.Visibility = Visibility.Hidden;
                 ToggleButtonLog.Visibility = Visibility.Hidden;
             }
-
 
             PART_GameActivityChartTime = new PluginChartTime
             {
@@ -182,14 +207,12 @@ namespace GameActivity.Views
             PART_GameActivityChartTime.GameSeriesDataClick += GameSeries_DataClick;
             _ = PART_GameActivityChartTime_Contener.Children.Add(PART_GameActivityChartTime);
 
-
             PART_GameActivityChartLog = new PluginChartLog
             {
                 IgnoreSettings = true,
                 AxisLimit = 10
             };
             _ = PART_GameActivityChartLog_Contener.Children.Add(PART_GameActivityChartLog);
-
 
             lvGames.EnableColumnPersistence = PluginDatabase.PluginSettings.SaveColumnOrder;
             lvGames.ColumnConfigurationFilePath = System.IO.Path.Combine(PluginDatabase.Paths.PluginUserDataPath, "ListViewColumns.json");
@@ -198,7 +221,6 @@ namespace GameActivity.Views
 
             GridView lvView = (GridView)lvGames.View;
 
-            // Add column if log details enable.
             if (!PluginDatabase.PluginSettings.EnableLogging)
             {
                 HideColumn(lvAvgGpuP, lvAvgGpuPHeader, true);
@@ -211,7 +233,6 @@ namespace GameActivity.Views
                 HideColumn(lvAvgCpu, lvAvgCpuHeader, true);
             }
 
-            // Graphics game details activities.
             activityForGamesGraphics.Visibility = Visibility.Hidden;
 
             #region Get & set datas
@@ -232,7 +253,7 @@ namespace GameActivity.Views
 #endif
             });
 
-            _ = Task.Run(() => 
+            _ = Task.Run(() =>
             {
 #if DEBUG
                 var backgroundTimer = new DebugTimer("GameActivityView.ctor.background");
@@ -252,7 +273,6 @@ namespace GameActivity.Views
 
                 this.Dispatcher.BeginInvoke((Action)delegate
                 {
-                    // Set game selected
                     if (gameContext != null)
                     {
                         for (int i = 0; i < lvGames.Items.Count; i++)
@@ -282,7 +302,6 @@ namespace GameActivity.Views
             }).ContinueWith(antecedent =>
             {
 #if DEBUG
-                // Hide loading overlay and show bottom panel only once list/day/filter are ready.
                 DebugTimer endTimer = new DebugTimer("GameActivityView.ctor.hideLoad+showBottom");
                 endTimer.Step("start");
 #endif
@@ -307,17 +326,14 @@ namespace GameActivity.Views
 
 #if DEBUG
                 endTimer.Stop();
-                timer.Stop();
+                _ctorDebugTimer.Stop();
 #endif
             });
             #endregion
 
-
-            // Set Binding data
             ShowIcon = PluginDatabase.PluginSettings.ShowLauncherIcons;
             ModeComplet = (PluginDatabase.PluginSettings.ModeStoreIcon == 1) ? TextBlockWithIconMode.IconTextFirstWithText : TextBlockWithIconMode.IconFirstWithText;
             ModeSimple = (PluginDatabase.PluginSettings.ModeStoreIcon == 1) ? TextBlockWithIconMode.IconTextFirstOnly : TextBlockWithIconMode.IconFirstOnly;
-
 
             PART_ChartTotalHoursSource_ToolTip.ShowIcon = ShowIcon;
             PART_ChartTotalHoursSource_ToolTip.Mode = ModeComplet;
@@ -328,7 +344,6 @@ namespace GameActivity.Views
             PART_ChartHoursByWeekSource_ToolTip.ShowIcon = ShowIcon;
             PART_ChartHoursByWeekSource_ToolTip.Mode = ModeComplet;
             PART_ChartHoursByWeekSource_ToolTip.ShowWeekPeriode = true;
-
 
             DataContext = ViewModel;
         }
