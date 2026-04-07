@@ -1,4 +1,3 @@
-using LiteDB;
 using Playnite.SDK.Data;
 using System;
 using System.Collections.Generic;
@@ -20,7 +19,6 @@ namespace GameActivity.Models
 		/// Gets the number of detail entries in the session.
 		/// </summary>
 		[DontSerialize]
-		[BsonIgnore]
 		public int Count => Items?.Count ?? 0;
 
 		/// <summary>
@@ -28,7 +26,6 @@ namespace GameActivity.Models
 		/// Returns 0 if no FPS data is available.
 		/// </summary>
 		[DontSerialize]
-		[BsonIgnore]
 		public int AvgFpsAllSession => GetAvgFpsAllSession();
 
 		/// <summary>

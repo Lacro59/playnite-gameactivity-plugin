@@ -202,13 +202,13 @@ namespace GameActivity.Services
 		/// </remarks>
 		public List<GameActivities> GetListGameActivity()
 		{
-			LiteDbItemCollection<GameActivities> db = GetDatabaseSafe();
+			PluginItemCollection<GameActivities> db = GetDatabaseSafe();
 			if (db == null)
 			{
 				return new List<GameActivities>();
 			}
 
-			List<GameActivities> listGameActivity = db.FindAll()?.ToList() ?? new List<GameActivities>();
+			List<GameActivities> listGameActivity = db?.ToList() ?? new List<GameActivities>();
 
 			return listGameActivity;
 		}
@@ -225,13 +225,13 @@ namespace GameActivity.Services
 		{
 			try
 			{
-				LiteDbItemCollection<GameActivities> db = GetDatabaseSafe();
+				PluginItemCollection<GameActivities> db = GetDatabaseSafe();
 				if (db == null)
 				{
 					return Enumerable.Empty<GameActivities>();
 				}
 
-				IEnumerable<GameActivities> mismatchData = db.FindAll()
+				IEnumerable<GameActivities> mismatchData = db
 					.Where(x => x.GameExist
 							  && (x.SessionPlaytime != x.Game.Playtime
 								  || x.Game.PlayCount != (ulong)x.Count)
@@ -428,7 +428,7 @@ namespace GameActivity.Services
 
 		/// <summary>
 		/// Migrates legacy JSON payload (<c>ItemsDetails.Items[DateSession]</c>) to
-		/// <see cref="Activity.Details"/> during base JSON-to-LiteDB import.
+		/// <see cref="Activity.Details"/> during base one-shot JSON model migration.
 		/// </summary>
 		protected override void MigrateLegacyJsonItem(GameActivities gameActivities, GlobalProgressActionArgs progressArgs)
 		{

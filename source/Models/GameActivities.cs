@@ -1,6 +1,5 @@
 using CommonPluginsShared.Collections;
 using GameActivity.Services;
-using LiteDB;
 using Playnite.SDK;
 using Playnite.SDK.Data;
 using System;
@@ -51,7 +50,6 @@ namespace GameActivity.Models
 		/// Gets the average FPS across all sessions.
 		/// </summary>
 		[DontSerialize]
-		[BsonIgnore]
 		public int AvgFpsAllSession
 		{
 			get

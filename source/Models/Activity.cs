@@ -1,7 +1,6 @@
 using CommonPluginsShared;
 using CommonPluginsShared.SystemInfo;
 using GameActivity.Services;
-using LiteDB;
 using Playnite.SDK;
 using Playnite.SDK.Data;
 using System;
@@ -78,7 +77,6 @@ namespace GameActivity.Models
 		/// This property is not serialized and is computed on-demand.
 		/// </summary>
 		[DontSerialize]
-		[BsonIgnore]
 		public string SourceName => PlayniteTools.GetSourceBySourceIdOrPlatformId(SourceID, PlatformIDs);
 
 		/// <summary>
@@ -87,7 +85,6 @@ namespace GameActivity.Models
 		/// This property is not serialized and is computed on-demand.
 		/// </summary>
 		[DontSerialize]
-		[BsonIgnore]
 		public SystemConfiguration Configuration
 		{
 			get
