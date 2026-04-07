@@ -693,6 +693,7 @@ namespace GameActivity.Views
                     {
                         PART_ChartTotalHoursSource.Visibility = Visibility.Hidden;
                         PART_ChartTotalHoursSource_Label.Visibility = Visibility.Hidden;
+                        PART_TotalHoursCard.Visibility = Visibility.Collapsed;
                         Grid.SetColumn(GridDay, 0);
                         Grid.SetColumnSpan(GridDay, 3);
                     }
@@ -700,14 +701,17 @@ namespace GameActivity.Views
                     {
                         PART_ChartTotalHoursSource.Visibility = result.showTotalHoursChart ? Visibility.Visible : Visibility.Hidden;
                         PART_ChartTotalHoursSource_Label.Visibility = result.showTotalHoursLabel ? Visibility.Visible : Visibility.Hidden;
+                        PART_TotalHoursCard.Visibility = result.showTotalHoursChart ? Visibility.Visible : Visibility.Collapsed;
                     }
 
                     Grid.SetColumnSpan(gridMonth, result.gridMonthColumnSpan);
 
                     PART_ChartHoursByDaySource.Visibility = result.showDayChart ? Visibility.Visible : Visibility.Hidden;
                     actLabel.Visibility = result.showDayChart ? Visibility.Visible : Visibility.Hidden;
+                    PART_HoursByDayCard.Visibility = result.showDayChart ? Visibility.Visible : Visibility.Collapsed;
                     PART_ChartHoursByWeekSource.Visibility = result.showWeekChart ? Visibility.Visible : Visibility.Hidden;
                     acwLabel.Visibility = result.showWeekChart ? Visibility.Visible : Visibility.Hidden;
+                    PART_HoursByWeekCard.Visibility = result.showWeekChart ? Visibility.Visible : Visibility.Collapsed;
 
                     PART_ChartTotalHoursSource_Y.LabelFormatter = value => (string)Converter.Convert((ulong)value, null, null, CultureInfo.CurrentCulture);
                     PART_ChartTotalHoursSource_Y.MinValue = 0;
@@ -742,7 +746,7 @@ namespace GameActivity.Views
                     {
                         PART_ChartTotalHoursSource_X.ShowLabels = false;
                     }
-                    PART_ChartTotalHoursSource_X.Separator = result.isTagsMode ? new LiveCharts.Wpf.Separator { IsEnabled = false } : new LiveCharts.Wpf.Separator { IsEnabled = true };
+                    PART_ChartTotalHoursSource_X.Separator = result.isTagsMode ? new LiveCharts.Wpf.Separator { Step = 5, IsEnabled = false } : new LiveCharts.Wpf.Separator { Step = 1, IsEnabled = true };
 
 #if DEBUG
                     uiTimer.Stop();
@@ -983,30 +987,45 @@ namespace GameActivity.Views
                 {
                     PART_ChartTotalHoursSource.Visibility = Visibility.Hidden;
                     PART_ChartTotalHoursSource_Label.Visibility = Visibility.Hidden;
+                    PART_TotalHoursCard.Visibility = Visibility.Collapsed;
 
                     Grid.SetColumn(GridDay, 0);
                     Grid.SetColumnSpan(GridDay, 3);
+                }
+                else
+                {
+                    PART_TotalHoursCard.Visibility = Visibility.Visible;
                 }
 
                 Grid.SetColumnSpan(gridMonth, 1);
                 PART_ChartHoursByDaySource.Visibility = Visibility.Visible;
                 actLabel.Visibility = Visibility.Visible;
+                PART_HoursByDayCard.Visibility = Visibility.Visible;
                 PART_ChartHoursByWeekSource.Visibility = Visibility.Visible;
                 acwLabel.Visibility = Visibility.Visible;
+                PART_HoursByWeekCard.Visibility = Visibility.Visible;
+                UpdateMonthChartsLayout(
+                    true,
+                    PART_TotalHoursCard.Visibility == Visibility.Visible,
+                    true);
             }
             else
             {
-                if (PluginDatabase.PluginSettings.CumulPlaytimeStore)
-                {
-                    PART_ChartTotalHoursSource.Visibility = Visibility.Visible;
-                    PART_ChartTotalHoursSource_Label.Visibility = Visibility.Visible;
-                }
+                PART_ChartTotalHoursSource.Visibility = Visibility.Visible;
+                PART_ChartTotalHoursSource_Label.Visibility = Visibility.Visible;
+                PART_TotalHoursCard.Visibility = Visibility.Visible;
 
                 Grid.SetColumnSpan(gridMonth, 5);
                 PART_ChartHoursByDaySource.Visibility = Visibility.Hidden;
                 actLabel.Visibility = Visibility.Hidden;
+                PART_HoursByDayCard.Visibility = Visibility.Collapsed;
                 PART_ChartHoursByWeekSource.Visibility = Visibility.Hidden;
                 acwLabel.Visibility = Visibility.Hidden;
+                PART_HoursByWeekCard.Visibility = Visibility.Collapsed;
+                UpdateMonthChartsLayout(
+                    false,
+                    PART_TotalHoursCard.Visibility == Visibility.Visible,
+                    false);
             }
 
 
@@ -1274,6 +1293,7 @@ namespace GameActivity.Views
                 {
                     PART_ChartHoursByWeekSource.Visibility = Visibility.Hidden;
                     acwLabel.Visibility = Visibility.Hidden;
+                    PART_HoursByWeekCard.Visibility = Visibility.Collapsed;
                 });
                 return;
             }
@@ -2257,8 +2277,9 @@ namespace GameActivity.Views
                     GetActivityByDay(YearCurrent, MonthCurrent);
 
                     Col1.Width = new GridLength(1, GridUnitType.Star);
-                    Col2.Width = new GridLength(1, GridUnitType.Star);
-                    Col3.Width = new GridLength(1, GridUnitType.Star);
+                    Col3.Width = new GridLength(0.7, GridUnitType.Star);
+                    PART_MonthChartsRowSpacer.Height = new GridLength(10, GridUnitType.Pixel);
+                    PART_MonthChartsRowBottom.Height = new GridLength(1, GridUnitType.Star);
                 }
                 catch
                 {
@@ -2289,9 +2310,10 @@ namespace GameActivity.Views
                     tbMonthTags.IsChecked = false;
                     GetActivityByMonth(YearCurrent, MonthCurrent);
 
-                    Col1.Width = new GridLength(1, GridUnitType.Star);
-                    Col2.Width = new GridLength(0);
-                    Col3.Width = new GridLength(0);
+                    Col3.Width = new GridLength(1, GridUnitType.Star);
+                    Col1.Width = new GridLength(0);
+                    PART_MonthChartsRowSpacer.Height = new GridLength(0);
+                    PART_MonthChartsRowBottom.Height = new GridLength(0);
                 }
                 catch
                 {
@@ -2322,9 +2344,10 @@ namespace GameActivity.Views
                     tbMonthGenres.IsChecked = false;
                     GetActivityByMonth(YearCurrent, MonthCurrent);
 
-                    Col1.Width = new GridLength(1, GridUnitType.Star);
-                    Col2.Width = new GridLength(0);
-                    Col3.Width = new GridLength(0);
+                    Col3.Width = new GridLength(1, GridUnitType.Star);
+                    Col1.Width = new GridLength(0);
+                    PART_MonthChartsRowSpacer.Height = new GridLength(0);
+                    PART_MonthChartsRowBottom.Height = new GridLength(0);
                 }
                 catch
                 {
