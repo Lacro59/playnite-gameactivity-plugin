@@ -6,7 +6,6 @@
              xmlns:views="clr-namespace:GameActivity.Views"
              xmlns:commands="clr-namespace:CommonPluginsShared.Commands"
              mc:Ignorable="d"
-             MinWidth="480"
              Background="{DynamicResource WindowBackgourndBrush}">
 
     <UserControl.Resources>

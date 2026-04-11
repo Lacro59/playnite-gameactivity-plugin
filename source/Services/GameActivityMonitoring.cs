@@ -263,10 +263,20 @@ namespace GameActivity.Services
                 {
                     API.Instance.MainView.UIDispatcher.BeginInvoke((Action)delegate
                     {
+                        WindowOptions windowOptions = new WindowOptions
+                        {
+                            ShowMinimizeButton = false,
+                            ShowMaximizeButton = false,
+                            ShowCloseButton = true,
+                            MaxHeight = 450,
+                            MinWidth = 480
+                        };
+
                         WarningsDialogs viewExtension = new WarningsDialogs(runningActivity.WarningsMessage);
                         Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(
                             ResourceProvider.GetString("LOCGameActivityWarningCaption"),
-                            viewExtension
+                            viewExtension,
+                            windowOptions
                         );
                         windowExtension.ShowDialog();
                     });
