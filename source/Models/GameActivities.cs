@@ -341,7 +341,7 @@ namespace GameActivity.Models
 				? "LOCGameActivityRecentActivitySingular"
 				: "LOCGameActivityRecentActivityPlurial";
 
-			return string.Format(ResourceProvider.GetString(resourceKey), totalHours, weeks);
+			return string.Format(ResourceProvider.GetString(resourceKey), totalHours.ToString("F1"), weeks);
 		}
 
 		/// <summary>

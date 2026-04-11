@@ -40,7 +40,7 @@
     <Grid Margin="12">
         <Grid.ColumnDefinitions>
             <!-- Left panel: fixed width to fit ListView columns comfortably -->
-            <ColumnDefinition Width="550" />
+            <ColumnDefinition Width="600" />
             <ColumnDefinition Width="12" />
             <!-- Right panel: takes all remaining space for charts -->
             <ColumnDefinition Width="*" />
@@ -242,8 +242,9 @@
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             
-                            <!-- Date -->
-                            <GridViewColumn Width="auto" 
+                            <!-- Last session -->
+                            <GridViewColumn Width="140"
+                                            controlsShared:ListViewColumnOptions.SortMemberPath="GameLastActivity"
                                             DisplayMemberBinding="{Binding GameLastActivity, Converter={StaticResource LocalDateTimeConverter}}">
                                 <GridViewColumnHeader Content="{DynamicResource LOCGameActivityLvGamesLastActivity}" />
                             </GridViewColumn>
