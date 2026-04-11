@@ -64,6 +64,11 @@ namespace GameActivity.Controls
         private LineSeries _cpuPSeries;
         private LineSeries _gpuPSeries;
 
+        /// <summary>
+        /// Above this many samples in the visible window, line markers are hidden for readability.
+        /// </summary>
+        private const int ChartLogPointMarkerMaxCount = 15;
+
         // ──────────────────────────────────────────────────────────────────────
         // Dependency properties
         // ──────────────────────────────────────────────────────────────────────
@@ -1052,6 +1057,21 @@ namespace GameActivity.Controls
                                     ScalesYAt = 1,
                                 };
 
+                                int visibleSampleCount = gameLogsDefinitive.Count;
+                                if (visibleSampleCount > ChartLogPointMarkerMaxCount)
+                                {
+                                    ClearLineSeriesPointMarkers(
+                                        _cpuSeries,
+                                        _gpuSeries,
+                                        _ramSeries,
+                                        _fpsSeries,
+                                        _cpuTSeries,
+                                        _gpuTSeries,
+                                        _cpuPSeries,
+                                        _gpuPSeries
+                                    );
+                                }
+
                                 SeriesCollection series = new SeriesCollection
                                 {
                                     _cpuSeries,
@@ -1240,6 +1260,26 @@ namespace GameActivity.Controls
                 return brush;
             }
             return new BrushConverter().ConvertFromString(fallbackHex) as SolidColorBrush;
+        }
+
+        /// <summary>
+        /// Removes LiveCharts point geometries so only the stroke remains (denser charts).
+        /// </summary>
+        private static void ClearLineSeriesPointMarkers(params LineSeries[] series)
+        {
+            if (series == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < series.Length; i++)
+            {
+                LineSeries lineSeries = series[i];
+                if (lineSeries != null)
+                {
+                    lineSeries.PointGeometry = null;
+                }
+            }
         }
     }
 
