@@ -8,7 +8,6 @@ using Playnite.SDK.Models;
 using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -190,6 +189,9 @@ namespace GameActivity.ViewModels
         /// <summary>Opens the "Merge sessions" window.</summary>
         public RelayCommand MergeActivityCommand { get; private set; }
 
+        /// <summary>Exports performance detail rows for the selected session to CSV.</summary>
+        public RelayCommand<ListActivities> ExportSessionDetailsCommand { get; private set; }
+
         private void InitCommands()
         {
             // Delete command: removes a session by its exact timestamp.
@@ -364,6 +366,32 @@ namespace GameActivity.ViewModels
                     // Reload data from database because merge is done in another view-model instance.
                     _gameActivities = PluginDatabase.Get(_gameContext);
                     LoadSessionsAsync();
+                }
+                catch (Exception ex)
+                {
+                    Common.LogError(ex, false, true, PluginDatabase.PluginName);
+                }
+            });
+
+            ExportSessionDetailsCommand = new RelayCommand<ListActivities>((sessionRow) =>
+            {
+                try
+                {
+                    if (sessionRow == null || _gameActivities == null)
+                    {
+                        return;
+                    }
+
+                    int index = FindActivityIndex(sessionRow);
+                    if (index < 0)
+                    {
+                        Logger.Warn($"Export session details: no matching activity for {_gameContext?.Name}");
+                        return;
+                    }
+
+                    Activity activity = _gameActivities.Items[index];
+                    var exporter = new GameActivityDetailsExport();
+                    exporter.ExportSessionDetailsToCsv(PluginDatabase.PluginName, _gameActivities, activity.DateSession);
                 }
                 catch (Exception ex)
                 {

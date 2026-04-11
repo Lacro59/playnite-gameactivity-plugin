@@ -224,6 +224,9 @@ Click for more information.</sys:String>
 
     <!-- ==================== Add / Edit Session ==================== -->
 
+    <sys:String x:Key="LOCGameActivitySessionDetailsExportFileTag">Session-performance-log</sys:String>
+    <sys:String x:Key="LOCGameActivityExportSessionDetails">Export this session's performance samples to CSV. The suggested file name includes the game title and session start (local time).</sys:String>
+
     <sys:String x:Key="LOCGaAddNewGameSession">Add new game session</sys:String>
     <sys:String x:Key="LOCGaDateStart">Start date</sys:String>
     <sys:String x:Key="LOCGaDateEnd">End date</sys:String>

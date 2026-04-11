@@ -237,6 +237,15 @@
                                                                       Path=DataContext.EditActivityCommand}"
                                                     CommandParameter="{Binding}"
                                                     ToolTip="{DynamicResource LOCEditGame}" />
+
+                                            <!-- Export session performance details (CSV) -->
+                                            <Button Content="&#xe978;"
+                                                    Style="{DynamicResource NavIconButton}"
+                                                    FontFamily="{DynamicResource FontIcoFont}"
+                                                    Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl},
+                                                                      Path=DataContext.ExportSessionDetailsCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    ToolTip="{DynamicResource LOCGameActivityExportSessionDetails}" />
                                         </StackPanel>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>

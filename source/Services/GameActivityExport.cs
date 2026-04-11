@@ -33,31 +33,50 @@ namespace GameActivity.Services
 		protected override IEnumerable<Dictionary<string, string>> GetRows(GameActivities item)
 		{
 			var rows = new List<Dictionary<string, string>>();
-
-			foreach (var session in item.Items)
+			if (item?.Items == null)
 			{
-				// Retrieve performance details for this specific session
-				var sessionDetails = item.GetSessionActivityDetails(session.DateSession);
+				return rows;
+			}
 
-				// If session has detailed logs, we create one row per log entry
-				if (sessionDetails != null && sessionDetails.Count > 0)
-				{
-					foreach (var log in sessionDetails)
-					{
-						rows.Add(CreateRow(item, session, log));
-					}
-				}
-				else
-				{
-					// If no logs, we create a single row for the session summary
-					rows.Add(CreateRow(item, session, null));
-				}
+			foreach (Activity session in item.Items)
+			{
+				rows.AddRange(GetRowsForSingleSession(item, session));
 			}
 
 			return rows;
 		}
 
-		private Dictionary<string, string> CreateRow(GameActivities game, Activity session, ActivityDetailsData log)
+		/// <summary>
+		/// Builds CSV rows for one session (one row per detail log, or a single summary row when there are no logs).
+		/// </summary>
+		protected List<Dictionary<string, string>> GetRowsForSingleSession(GameActivities item, Activity session)
+		{
+			var rows = new List<Dictionary<string, string>>();
+			if (item == null || session == null)
+			{
+				return rows;
+			}
+
+			List<ActivityDetailsData> sessionDetails = item.GetSessionActivityDetails(session.DateSession);
+			if (sessionDetails != null && sessionDetails.Count > 0)
+			{
+				foreach (ActivityDetailsData log in sessionDetails)
+				{
+					rows.Add(BuildActivityCsvRow(item, session, log));
+				}
+			}
+			else
+			{
+				rows.Add(BuildActivityCsvRow(item, session, null));
+			}
+
+			return rows;
+		}
+
+		/// <summary>
+		/// Builds one CSV row for a session (and optional per-log sample).
+		/// </summary>
+		protected Dictionary<string, string> BuildActivityCsvRow(GameActivities game, Activity session, ActivityDetailsData log)
 		{
 			return new Dictionary<string, string>
 			{
@@ -79,7 +98,7 @@ namespace GameActivity.Services
 			};
 		}
 
-		private string FormatTimeSpan(TimeSpan ts)
+		protected string FormatTimeSpan(TimeSpan ts)
 		{
 			return string.Format("{0:00}:{1:00}:{2:00}", (int)ts.TotalHours, ts.Minutes, ts.Seconds);
 		}

@@ -230,6 +230,7 @@
     </Compile>
     <Compile Include="Services\GameActivityDatabase.cs" />
     <Compile Include="Services\GameActivityExport.cs" />
+    <Compile Include="Services\GameActivityDetailsExport.cs" />
     <Compile Include="Services\GameActivityMenus.cs" />
     <Compile Include="Services\GameActivityMonitoring.cs" />
     <Compile Include="Services\GameActivityStats.cs" />
