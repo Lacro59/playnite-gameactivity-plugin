@@ -400,7 +400,7 @@ namespace GameActivity.Services
 
             var message = new WarningData
             {
-                At = ResourceProvider.GetString("LOCGameActivityWarningAt") + " " + DateTime.Now.ToString("HH:mm"),
+                At = DateTime.Now.ToLocalTime().ToString("HH:mm"),
                 FpsData = new Data
                 {
                     Name = ResourceProvider.GetString("LOCGameActivityFps"),
