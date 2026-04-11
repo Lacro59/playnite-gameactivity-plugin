@@ -2,10 +2,7 @@
 using GameActivity.Services.HardwareMonitoring.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Management;
-using System.Text;
-using System.Threading.Tasks;
 
 // ============================================================================
 // WMIProvider.cs - Provider Windows Management Instrumentation
@@ -46,24 +43,19 @@ namespace GameActivity.Services.HardwareMonitoring.Providers
 		{
 			var metrics = new HardwareMetrics();
 
-			// GPU Usage
+			// GPU Usage — Win32_PerfFormattedData_GPUPerformanceCounters_GPUEngine exposes one row per
+			// process / physical adapter / engine. Summing every row mixes parallel engines and multiple GPUs,
+			// which inflates the percentage. We take 3D engine rows only, aggregate per physical adapter (phys_n),
+			// then use the highest adapter load (similar to "dominant" GPU, capped at 100%).
 			try
 			{
 				using (var searcher = new ManagementObjectSearcher("root\\CIMV2",
-					"SELECT * FROM Win32_PerfFormattedData_GPUPerformanceCounters_GPUEngine"))
+					"SELECT Name, UtilizationPercentage FROM Win32_PerfFormattedData_GPUPerformanceCounters_GPUEngine"))
 				{
-					float totalUsage = 0;
-					foreach (ManagementObject obj in searcher.Get())
+					int? usage = TryGetGpuUsageFromGpuEngineCounters(searcher);
+					if (usage.HasValue)
 					{
-						if (obj["UtilizationPercentage"] != null)
-						{
-							totalUsage += Convert.ToSingle(obj["UtilizationPercentage"]);
-						}
-					}
-
-					if (totalUsage > 0)
-					{
-						metrics.GpuUsage = (int)totalUsage;
+						metrics.GpuUsage = usage.Value;
 					}
 				}
 			}
@@ -125,6 +117,144 @@ namespace GameActivity.Services.HardwareMonitoring.Providers
 			}
 
 			return metrics;
+		}
+
+		/// <summary>
+		/// Derives one GPU usage value from GPUEngine rows: max utilization per physical adapter, then the
+		/// largest across adapters (avoids summing hybrid GPUs and unrelated engine types when 3D data exists).
+		/// </summary>
+		private int? TryGetGpuUsageFromGpuEngineCounters(ManagementObjectSearcher searcher)
+		{
+			if (searcher == null)
+			{
+				return null;
+			}
+
+			var rows = new List<Tuple<string, float>>();
+			foreach (ManagementObject obj in searcher.Get())
+			{
+				string name = null;
+				if (obj["Name"] != null)
+				{
+					name = obj["Name"].ToString();
+				}
+
+				if (obj["UtilizationPercentage"] == null)
+				{
+					continue;
+				}
+
+				float u = Convert.ToSingle(obj["UtilizationPercentage"]);
+				if (u < 0f || float.IsNaN(u) || float.IsInfinity(u))
+				{
+					continue;
+				}
+
+				rows.Add(Tuple.Create(name, u));
+			}
+
+			if (rows.Count == 0)
+			{
+				return null;
+			}
+
+			float value = AggregateGpuLoadByAdapter(rows, threeDEnginesOnly: true);
+			if (value <= 0f)
+			{
+				value = AggregateGpuLoadByAdapter(rows, threeDEnginesOnly: false);
+			}
+
+			if (value <= 0f)
+			{
+				return null;
+			}
+
+			int rounded = (int)Math.Min(100, Math.Round(value, MidpointRounding.AwayFromZero));
+			if (rounded <= 0)
+			{
+				return null;
+			}
+
+			return rounded;
+		}
+
+		private static float AggregateGpuLoadByAdapter(IList<Tuple<string, float>> rows, bool threeDEnginesOnly)
+		{
+			var perPhys = new Dictionary<int, float>();
+			for (int i = 0; i < rows.Count; i++)
+			{
+				string name = rows[i].Item1;
+				if (threeDEnginesOnly && !IsThreeDEngineInstanceName(name))
+				{
+					continue;
+				}
+
+				float u = rows[i].Item2;
+				int phys = ParsePhysIndexFromGpuEngineName(name);
+				if (!perPhys.ContainsKey(phys) || u > perPhys[phys])
+				{
+					perPhys[phys] = u;
+				}
+			}
+
+			if (perPhys.Count == 0)
+			{
+				return 0f;
+			}
+
+			float max = 0f;
+			foreach (float v in perPhys.Values)
+			{
+				if (v > max)
+				{
+					max = v;
+				}
+			}
+
+			return max;
+		}
+
+		private static bool IsThreeDEngineInstanceName(string name)
+		{
+			if (string.IsNullOrEmpty(name))
+			{
+				return false;
+			}
+
+			return name.IndexOf("engtype_3D", StringComparison.OrdinalIgnoreCase) >= 0;
+		}
+
+		private static int ParsePhysIndexFromGpuEngineName(string name)
+		{
+			if (string.IsNullOrEmpty(name))
+			{
+				return 0;
+			}
+
+			int start = name.IndexOf("phys_", StringComparison.OrdinalIgnoreCase);
+			if (start < 0)
+			{
+				return 0;
+			}
+
+			start += 5;
+			int end = start;
+			while (end < name.Length && name[end] >= '0' && name[end] <= '9')
+			{
+				end++;
+			}
+
+			if (end == start)
+			{
+				return 0;
+			}
+
+			if (int.TryParse(name.Substring(start, end - start), out int value))
+			{
+				return value;
+			}
+
+			return 0;
 		}
 	}
 }

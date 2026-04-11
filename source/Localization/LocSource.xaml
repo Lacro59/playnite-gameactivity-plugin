@@ -88,6 +88,8 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivityUsedLibreHardware">Use LibreHardware Monitor</sys:String>
     <sys:String x:Key="LOCGameActivityRemoteWebServer">Via remote web server</sys:String>
     <sys:String x:Key="LOCGameActivityUseMsiAfterburner">Use MSI Afterburner</sys:String>
+    <sys:String x:Key="LOCGameActivityMsiAbSensorHelp">Pick a row after Refresh (Afterburner running). The list shows the MAHM source name, optional GPU adapter from the MAHM GPU table, localized label when useful, and units. Only the source name is stored; leave empty for the default English name.</sys:String>
+    <sys:String x:Key="LOCGameActivityMsiAbRefreshSensors">Refresh sensor list</sys:String>
     <sys:String x:Key="LOCGameActivityUseHWiNFOSharedMemory">Use HWiNFO shared memory</sys:String>
     <sys:String x:Key="LOCGameActivityUseHWiNFOGadget">Use HWiNFO gadget reporting</sys:String>
     <sys:String x:Key="LOCGameActivityIndex">Index</sys:String>

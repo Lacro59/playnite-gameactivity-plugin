@@ -241,6 +241,7 @@
     <Compile Include="Services\HardwareMonitoring\Models\HardwareMetrics.cs" />
     <Compile Include="Services\HardwareMonitoring\Models\MetricType.cs" />
     <Compile Include="Services\HardwareMonitoring\Models\ProviderCapabilities.cs" />
+    <Compile Include="Services\HardwareMonitoring\Models\MahmSensorListEntry.cs" />
     <Compile Include="Services\HardwareMonitoring\Core\BaseHardwareProvider.cs" />
     <Compile Include="Services\HardwareMonitoring\Providers\HWiNFOProvider.cs" />
     <Compile Include="Services\HardwareMonitoring\Providers\LibreHardwareProvider.cs" />

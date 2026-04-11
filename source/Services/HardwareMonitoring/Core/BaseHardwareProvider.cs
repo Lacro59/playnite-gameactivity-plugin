@@ -1,4 +1,6 @@
-﻿using GameActivity.Services.HardwareMonitoring.Models;
+﻿using GameActivity;
+using GameActivity.Services;
+using GameActivity.Services.HardwareMonitoring.Models;
 using Playnite.SDK;
 using System;
 using System.Collections.Generic;
@@ -13,6 +15,23 @@ namespace GameActivity.Services.HardwareMonitoring.Core
 		protected static readonly ILogger logger = LogManager.GetLogger();
 		protected bool _initialized;
 		protected bool _disposed;
+
+		/// <summary>Live plugin database (static singleton). Use for current <see cref="GameActivitySettings"/>.</summary>
+		private GameActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
+
+		/// <summary>Current plugin settings from the database (same reference as persisted after <c>EndEdit</c>).</summary>
+		protected GameActivitySettings LivePluginSettings
+		{
+			get
+			{
+				GameActivityDatabase db = PluginDatabase;
+				if (db == null)
+				{
+					return null;
+				}
+				return db.PluginSettings;
+			}
+		}
 
 		public abstract string ProviderName { get; }
 		public abstract ProviderCapabilities Capabilities { get; }

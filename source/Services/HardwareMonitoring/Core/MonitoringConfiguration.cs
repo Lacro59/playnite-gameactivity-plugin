@@ -28,13 +28,13 @@ namespace GameActivity.Services.HardwareMonitoring.Core
 		{
 			MetricPriorities = new Dictionary<MetricType, List<string>>
 			{
-				{ MetricType.FPS, new List<string> { "RivaTuner", "HWiNFO", "MSIAfterburner" } },
+				{ MetricType.FPS, new List<string> { "RivaTuner", "HWiNFO", "MsiAfterburner" } },
 				{ MetricType.CpuUsage, new List<string> { "LibreHardware", "HWiNFO", "WMI", "PerformanceCounter" } },
-				{ MetricType.CpuTemperature, new List<string> { "LibreHardware", "HWiNFO", "MSIAfterburner" } },
-				{ MetricType.CpuPower, new List<string> { "LibreHardware", "HWiNFO", "MSIAfterburner" } },
-				{ MetricType.GpuUsage, new List<string> { "LibreHardware", "HWiNFO", "MSIAfterburner", "WMI", "PerformanceCounter" } },
-				{ MetricType.GpuTemperature, new List<string> { "LibreHardware", "HWiNFO", "MSIAfterburner" } },
-				{ MetricType.GpuPower, new List<string> { "LibreHardware", "HWiNFO", "MSIAfterburner" } },
+				{ MetricType.CpuTemperature, new List<string> { "LibreHardware", "HWiNFO", "MsiAfterburner" } },
+				{ MetricType.CpuPower, new List<string> { "LibreHardware", "HWiNFO", "MsiAfterburner" } },
+				{ MetricType.GpuUsage, new List<string> { "LibreHardware", "HWiNFO", "MsiAfterburner", "WMI", "PerformanceCounter" } },
+				{ MetricType.GpuTemperature, new List<string> { "LibreHardware", "HWiNFO", "MsiAfterburner" } },
+				{ MetricType.GpuPower, new List<string> { "LibreHardware", "HWiNFO", "MsiAfterburner" } },
 				{ MetricType.RamUsage, new List<string> { "LibreHardware", "WMI", "PerformanceCounter" } }
 			};
 		}

@@ -109,17 +109,7 @@ namespace GameActivity.Services
 
             if (PluginDatabase.PluginSettings.UseLibreHardware)
             {
-                TryRegisterProvider(() =>
-                {
-                    string remoteIp = null;
-                    if (PluginDatabase.PluginSettings.WithRemoteServerWeb
-                        && !string.IsNullOrEmpty(PluginDatabase.PluginSettings.IpRemoteServerWeb))
-                    {
-                        remoteIp = PluginDatabase.PluginSettings.IpRemoteServerWeb;
-                        Logger.Info($"Using LibreHardware remote server: {remoteIp}");
-                    }
-                    return new LibreHardwareProvider(remoteIp);
-                }, "LibreHardware");
+                TryRegisterProvider(() => new LibreHardwareProvider(), "LibreHardware");
             }
 
             if (PluginDatabase.PluginSettings.UseMsiAfterburner)
@@ -132,25 +122,7 @@ namespace GameActivity.Services
 
             if (PluginDatabase.PluginSettings.UseHWiNFOSharedMemory)
             {
-                TryRegisterProvider(() =>
-                {
-                    var hwinfoConfig = new HWiNFOConfiguration
-                    {
-                        FPS_SensorsID = PluginDatabase.PluginSettings.HWiNFO_fps_sensorsID,
-                        FPS_ElementID = PluginDatabase.PluginSettings.HWiNFO_fps_elementID,
-                        GPU_SensorsID = PluginDatabase.PluginSettings.HWiNFO_gpu_sensorsID,
-                        GPU_ElementID = PluginDatabase.PluginSettings.HWiNFO_gpu_elementID,
-                        GPUT_SensorsID = PluginDatabase.PluginSettings.HWiNFO_gpuT_sensorsID,
-                        GPUT_ElementID = PluginDatabase.PluginSettings.HWiNFO_gpuT_elementID,
-                        CPUT_SensorsID = PluginDatabase.PluginSettings.HWiNFO_cpuT_sensorsID,
-                        CPUT_ElementID = PluginDatabase.PluginSettings.HWiNFO_cpuT_elementID,
-                        GPUP_SensorsID = PluginDatabase.PluginSettings.HWiNFO_gpuP_sensorsID,
-                        GPUP_ElementID = PluginDatabase.PluginSettings.HWiNFO_gpuP_elementID,
-                        CPUP_SensorsID = PluginDatabase.PluginSettings.HWiNFO_cpuP_sensorsID,
-                        CPUP_ElementID = PluginDatabase.PluginSettings.HWiNFO_cpuP_elementID,
-                    };
-                    return new HWiNFOProvider(hwinfoConfig);
-                }, "HWiNFO");
+                TryRegisterProvider(() => new HWiNFOProvider(), "HWiNFO");
             }
 
             if (PluginDatabase.PluginSettings.UseWMI)

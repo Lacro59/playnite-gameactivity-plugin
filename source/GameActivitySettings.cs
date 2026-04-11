@@ -3,12 +3,15 @@ using CommonPluginsShared.Extensions;
 using CommonPluginsShared.Interfaces;
 using CommonPluginsShared.Plugins;
 using GameActivity.Models;
+using GameActivity.Services.HardwareMonitoring.Models;
+using GameActivity.Services.HardwareMonitoring.Providers;
 using MoreLinq;
 using Playnite.SDK;
 using Playnite.SDK.Data;
 using Playnite.SDK.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Media;
 
@@ -271,6 +274,23 @@ namespace GameActivity
         /// <summary>Use MSI Afterburner as a data source (legacy — prefer RivaTuner).</summary>
         public bool UseMsiAfterburner { get; set; } = false;
 
+        /// <summary>MAHM <c>szSrcName</c> for FPS. Empty = default <c>Framerate</c>.</summary>
+        public string MsiAfterburnerSensorFramerate { get; set; } = string.Empty;
+        /// <summary>MAHM source name for CPU usage %. Empty = default <c>CPU usage</c>.</summary>
+        public string MsiAfterburnerSensorCpuUsage { get; set; } = string.Empty;
+        /// <summary>MAHM source name for CPU temperature. Empty = default <c>CPU temperature</c>.</summary>
+        public string MsiAfterburnerSensorCpuTemperature { get; set; } = string.Empty;
+        /// <summary>MAHM source name for CPU power. Empty = default <c>CPU power</c>.</summary>
+        public string MsiAfterburnerSensorCpuPower { get; set; } = string.Empty;
+        /// <summary>MAHM source name for GPU usage % (e.g. <c>GPU2 usage</c>). Empty = default <c>GPU usage</c>.</summary>
+        public string MsiAfterburnerSensorGpuUsage { get; set; } = string.Empty;
+        /// <summary>MAHM source name for GPU temperature. Empty = default <c>GPU temperature</c>.</summary>
+        public string MsiAfterburnerSensorGpuTemperature { get; set; } = string.Empty;
+        /// <summary>MAHM source name for GPU power. Empty = default <c>GPU power</c>.</summary>
+        public string MsiAfterburnerSensorGpuPower { get; set; } = string.Empty;
+        /// <summary>MAHM source name for RAM usage. Empty = default <c>RAM usage</c>.</summary>
+        public string MsiAfterburnerSensorRamUsage { get; set; } = string.Empty;
+
         // ── Built-in Windows providers ────────────────────────────────────────
         /// <summary>Use Windows Management Instrumentation for hardware data.</summary>
         public bool UseWMI { get; set; } = true;
@@ -439,6 +459,8 @@ namespace GameActivity
 
         private GameActivitySettings _editingClone;
 
+        private readonly ObservableCollection<MahmSensorListEntry> _msiAfterburnerMahmSensorEntries = new ObservableCollection<MahmSensorListEntry>();
+
         private GameActivitySettings _settings;
         /// <summary>The live settings object bound to the settings UI.</summary>
         public GameActivitySettings Settings
@@ -449,6 +471,15 @@ namespace GameActivity
 
 		IPluginSettings IPluginSettingsViewModel.Settings => Settings;
 
+        /// <summary>MAHM monitoring rows for MSI Afterburner sensor pickers (display line includes hardware / units).</summary>
+        public ObservableCollection<MahmSensorListEntry> MsiAfterburnerMahmSensorEntries
+        {
+            get { return _msiAfterburnerMahmSensorEntries; }
+        }
+
+        /// <summary>Reloads <see cref="MsiAfterburnerMahmSensorEntries"/> from MAHM shared memory.</summary>
+        public RelayCommand RefreshMsiAfterburnerMahmSensorsCommand { get; private set; }
+
 		/// <summary>
 		/// Loads persisted settings (or creates defaults) and applies backward-compatibility patches.
 		/// </summary>
@@ -457,6 +488,17 @@ namespace GameActivity
         {
             _plugin = plugin ?? throw new ArgumentNullException("plugin");
             Settings = plugin.LoadPluginSettings<GameActivitySettings>() ?? new GameActivitySettings();
+            RefreshMsiAfterburnerMahmSensorsCommand = new RelayCommand(RefreshMsiAfterburnerMahmSensors);
+        }
+
+        private void RefreshMsiAfterburnerMahmSensors()
+        {
+            List<MahmSensorListEntry> list = MsiAfterburnerProvider.GetAvailableMahmSensorInfos();
+            _msiAfterburnerMahmSensorEntries.Clear();
+            for (int i = 0; i < list.Count; i++)
+            {
+                _msiAfterburnerMahmSensorEntries.Add(list[i]);
+            }
         }
 
         /// <inheritdoc/>
@@ -475,6 +517,8 @@ namespace GameActivity
             {
                 UpdateMissingStoreColors();
             }
+
+            RefreshMsiAfterburnerMahmSensors();
         }
 
         /// <inheritdoc/>

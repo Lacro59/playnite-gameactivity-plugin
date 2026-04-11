@@ -1,4 +1,5 @@
 ﻿using CommonPluginsShared;
+using GameActivity;
 using GameActivity.Models;
 using GameActivity.Services.HardwareMonitoring.Core;
 using GameActivity.Services.HardwareMonitoring.Models;
@@ -12,8 +13,6 @@ namespace GameActivity.Services.HardwareMonitoring.Providers
 {
 	public class LibreHardwareProvider : BaseHardwareProvider
 	{
-		private readonly string _remoteIp;
-		private readonly bool _useRemote;
 		private static readonly Dictionary<string, SensorPath[]> _sensorPaths = InitializeSensorPaths();
 
 		public override string ProviderName => "LibreHardware";
@@ -28,26 +27,45 @@ namespace GameActivity.Services.HardwareMonitoring.Providers
 			RequiresAdminRights = false
 		};
 
-		public LibreHardwareProvider(string remoteIp = null)
+		public LibreHardwareProvider()
 		{
-			_remoteIp = remoteIp;
-			_useRemote = !string.IsNullOrEmpty(remoteIp);
+		}
+
+		private static bool TryGetLibreHardwareRemoteEndPoint(GameActivitySettings settings, out string remoteIp)
+		{
+			remoteIp = null;
+			if (settings == null)
+			{
+				return false;
+			}
+			if (settings.WithRemoteServerWeb && !string.IsNullOrEmpty(settings.IpRemoteServerWeb))
+			{
+				remoteIp = settings.IpRemoteServerWeb.Trim();
+				return true;
+			}
+			return false;
 		}
 
 		protected override bool InitializeInternal()
 		{
-			if (_useRemote)
+			string remoteIp;
+			if (TryGetLibreHardwareRemoteEndPoint(LivePluginSettings, out remoteIp))
 			{
 				try
 				{
-					var testData = GetRemoteData();
-					return testData != null;
+					var testData = GetRemoteData(remoteIp);
+					if (testData != null)
+					{
+						logger.Info(string.Format("[{0}] Using remote web server: {1}", ProviderName, remoteIp));
+						return true;
+					}
 				}
 				catch
 				{
-					logger.Warn($"[{ProviderName}] Remote server at {_remoteIp} is not accessible");
+					logger.Warn(string.Format("[{0}] Remote server at {1} is not accessible", ProviderName, remoteIp));
 					return false;
 				}
+				return false;
 			}
 
 			return true;
@@ -55,17 +73,18 @@ namespace GameActivity.Services.HardwareMonitoring.Providers
 
 		protected override HardwareMetrics GetMetricsInternal()
 		{
-			if (_useRemote)
+			string remoteIp;
+			if (TryGetLibreHardwareRemoteEndPoint(LivePluginSettings, out remoteIp))
 			{
-				return GetRemoteMetrics();
+				return GetRemoteMetrics(remoteIp);
 			}
 
 			return new HardwareMetrics();
 		}
 
-		private LibreHardwareData GetRemoteData()
+		private LibreHardwareData GetRemoteData(string remoteIp)
 		{
-			string url = $"http://{_remoteIp}/data.json";
+			string url = string.Format("http://{0}/data.json", remoteIp);
 			string webData = Web.DownloadStringData(url).GetAwaiter().GetResult();
 			Serialization.TryFromJson(webData, out LibreHardwareData data);
 			return data;
@@ -133,10 +152,10 @@ namespace GameActivity.Services.HardwareMonitoring.Providers
 			};
 		}
 
-		private HardwareMetrics GetRemoteMetrics()
+		private HardwareMetrics GetRemoteMetrics(string remoteIp)
 		{
 			var metrics = new HardwareMetrics();
-			var data = GetRemoteData();
+			var data = GetRemoteData(remoteIp);
 
 			if (data?.Children == null || data.Children.Count == 0)
 			{

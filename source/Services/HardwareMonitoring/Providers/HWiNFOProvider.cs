@@ -1,4 +1,5 @@
-﻿using GameActivity.Services.HardwareMonitoring.Core;
+﻿using GameActivity;
+using GameActivity.Services.HardwareMonitoring.Core;
 using GameActivity.Services.HardwareMonitoring.Models;
 using Playnite.SDK.Data;
 using System;
@@ -15,7 +16,6 @@ namespace GameActivity.Services.HardwareMonitoring.Providers
 	public class HWiNFOProvider : BaseHardwareProvider
 	{
 		private HWiNFODumper _hwinfo;
-		private readonly HWiNFOConfiguration _config;
 
 		public override string ProviderName => "HWiNFO";
 
@@ -29,9 +29,32 @@ namespace GameActivity.Services.HardwareMonitoring.Providers
 			RequiresAdminRights = false
 		};
 
-		public HWiNFOProvider(HWiNFOConfiguration config)
+		public HWiNFOProvider()
 		{
-			_config = config ?? throw new ArgumentNullException(nameof(config));
+		}
+
+		private HWiNFOConfiguration BuildHwInfoConfigurationFromLiveSettings()
+		{
+			GameActivitySettings s = LivePluginSettings;
+			if (s == null)
+			{
+				return new HWiNFOConfiguration();
+			}
+			return new HWiNFOConfiguration
+			{
+				FPS_SensorsID = s.HWiNFO_fps_sensorsID,
+				FPS_ElementID = s.HWiNFO_fps_elementID,
+				GPU_SensorsID = s.HWiNFO_gpu_sensorsID,
+				GPU_ElementID = s.HWiNFO_gpu_elementID,
+				GPUT_SensorsID = s.HWiNFO_gpuT_sensorsID,
+				GPUT_ElementID = s.HWiNFO_gpuT_elementID,
+				CPUT_SensorsID = s.HWiNFO_cpuT_sensorsID,
+				CPUT_ElementID = s.HWiNFO_cpuT_elementID,
+				GPUP_SensorsID = s.HWiNFO_gpuP_sensorsID,
+				GPUP_ElementID = s.HWiNFO_gpuP_elementID,
+				CPUP_SensorsID = s.HWiNFO_cpuP_sensorsID,
+				CPUP_ElementID = s.HWiNFO_cpuP_elementID
+			};
 		}
 
 		protected override bool InitializeInternal()
@@ -52,6 +75,7 @@ namespace GameActivity.Services.HardwareMonitoring.Providers
 		protected override HardwareMetrics GetMetricsInternal()
 		{
 			var metrics = new HardwareMetrics();
+			HWiNFOConfiguration config = BuildHwInfoConfigurationFromLiveSettings();
 			var data = _hwinfo.ReadMem();
 
 			if (data == null || data.Count == 0)
@@ -65,45 +89,45 @@ namespace GameActivity.Services.HardwareMonitoring.Providers
 				string sensorsID = "0x" + ((uint)sensorObj["szSensorSensorID"]).ToString("X");
 
 				// FPS
-				if (_config.FPS_SensorsID != null &&
-					sensorsID.Equals(_config.FPS_SensorsID, StringComparison.OrdinalIgnoreCase))
+				if (config.FPS_SensorsID != null &&
+					sensorsID.Equals(config.FPS_SensorsID, StringComparison.OrdinalIgnoreCase))
 				{
-					metrics.FPS = GetSensorValue(sensorObj, _config.FPS_ElementID);
+					metrics.FPS = GetSensorValue(sensorObj, config.FPS_ElementID);
 				}
 
 				// GPU Usage
-				if (_config.GPU_SensorsID != null &&
-					sensorsID.Equals(_config.GPU_SensorsID, StringComparison.OrdinalIgnoreCase))
+				if (config.GPU_SensorsID != null &&
+					sensorsID.Equals(config.GPU_SensorsID, StringComparison.OrdinalIgnoreCase))
 				{
-					metrics.GpuUsage = GetSensorValue(sensorObj, _config.GPU_ElementID);
+					metrics.GpuUsage = GetSensorValue(sensorObj, config.GPU_ElementID);
 				}
 
 				// GPU Temperature
-				if (_config.GPUT_SensorsID != null &&
-					sensorsID.Equals(_config.GPUT_SensorsID, StringComparison.OrdinalIgnoreCase))
+				if (config.GPUT_SensorsID != null &&
+					sensorsID.Equals(config.GPUT_SensorsID, StringComparison.OrdinalIgnoreCase))
 				{
-					metrics.GpuTemperature = GetSensorValue(sensorObj, _config.GPUT_ElementID);
+					metrics.GpuTemperature = GetSensorValue(sensorObj, config.GPUT_ElementID);
 				}
 
 				// CPU Temperature
-				if (_config.CPUT_SensorsID != null &&
-					sensorsID.Equals(_config.CPUT_SensorsID, StringComparison.OrdinalIgnoreCase))
+				if (config.CPUT_SensorsID != null &&
+					sensorsID.Equals(config.CPUT_SensorsID, StringComparison.OrdinalIgnoreCase))
 				{
-					metrics.CpuTemperature = GetSensorValue(sensorObj, _config.CPUT_ElementID);
+					metrics.CpuTemperature = GetSensorValue(sensorObj, config.CPUT_ElementID);
 				}
 
 				// GPU Power
-				if (_config.GPUP_SensorsID != null &&
-					sensorsID.Equals(_config.GPUP_SensorsID, StringComparison.OrdinalIgnoreCase))
+				if (config.GPUP_SensorsID != null &&
+					sensorsID.Equals(config.GPUP_SensorsID, StringComparison.OrdinalIgnoreCase))
 				{
-					metrics.GpuPower = GetSensorValue(sensorObj, _config.GPUP_ElementID);
+					metrics.GpuPower = GetSensorValue(sensorObj, config.GPUP_ElementID);
 				}
 
 				// CPU Power
-				if (_config.CPUP_SensorsID != null &&
-					sensorsID.Equals(_config.CPUP_SensorsID, StringComparison.OrdinalIgnoreCase))
+				if (config.CPUP_SensorsID != null &&
+					sensorsID.Equals(config.CPUP_SensorsID, StringComparison.OrdinalIgnoreCase))
 				{
-					metrics.CpuPower = GetSensorValue(sensorObj, _config.CPUP_ElementID);
+					metrics.CpuPower = GetSensorValue(sensorObj, config.CPUP_ElementID);
 				}
 			}
 
