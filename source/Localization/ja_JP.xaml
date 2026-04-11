@@ -169,8 +169,8 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivityLogTitleDate">Session details for</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesLastActivity">最後のプレイ</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">プレイ時間</sys:String>
-    <sys:String x:Key="LOCGameActivityTimePlayedInMonth">Time played (month)</sys:String>
-    <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">Time played (period)</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInMonth">プレイ時間 (月)</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">プレイ時間 (期間)</sys:String>
     <sys:String x:Key="LOCGameActivityDateSession">Date session</sys:String>
     <sys:String x:Key="LOCGameActivityDateLog">Date log</sys:String>
     <sys:String x:Key="LOCGameActivityPCName">デバイス名</sys:String>
