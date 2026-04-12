@@ -500,7 +500,9 @@
 
                     <!-- Hardware Monitoring Providers Section -->
                     <DockPanel DockPanel.Dock="Bottom" Margin="0,25,0,0" IsEnabled="{Binding ElementName=cbLogging, Path=IsChecked, TargetNullValue=false}">
-                        <TextBlock DockPanel.Dock="Top" Text="Hardware Monitoring Providers" Style="{DynamicResource SectionHeaderText}" />
+                        <StackPanel DockPanel.Dock="Top">
+                            <TextBlock Text="{DynamicResource LOCGameActivityHardwareMonitoringProvidersSection}" Style="{DynamicResource SectionHeaderText}" />
+                        </StackPanel>
 
                         <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
                             <StackPanel DockPanel.Dock="Top">
@@ -511,6 +513,11 @@
                                         <Expander.Header>
                                             <DockPanel>
                                                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" VerticalAlignment="Center">
+                                                    <Border CornerRadius="10" Padding="8,2" Margin="0,0,8,0" VerticalAlignment="Center"
+                                                            Background="{Binding LatencyBadgeLibreHardwareBrush}"
+                                                            ToolTip="{Binding LatencyBadgeLibreHardwareToolTip}">
+                                                        <TextBlock Text="{Binding LatencyBadgeLibreHardwareText}" Foreground="White" FontSize="10" FontWeight="Bold" />
+                                                    </Border>
                                                     <Border Background="#e74c3c" CornerRadius="3" Padding="5,2" Margin="3,0">
                                                         <TextBlock Text="CPU" Foreground="White" FontSize="10" FontWeight="Bold" />
                                                     </Border>
@@ -561,7 +568,7 @@
                                                 </Grid.ColumnDefinitions>
 
                                                 <CheckBox IsChecked="{Binding Settings.WithRemoteServerWeb}" Grid.Column="0" VerticalAlignment="Center"
-                                                          IsEnabled="False"
+                                                          IsEnabled="{Binding ElementName=cb_LibreHardware, Path=IsChecked}"
                                                           Content="{DynamicResource LOCGameActivityRemoteWebServer}"/>
 
                                                 <StackPanel Orientation="Horizontal" Grid.Column="2" HorizontalAlignment="Center">
@@ -585,6 +592,11 @@
                                         <Expander.Header>
                                             <DockPanel>
                                                 <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <Border CornerRadius="10" Padding="8,2" Margin="0,0,8,0" VerticalAlignment="Center"
+                                                            Background="{Binding LatencyBadgeRivaTunerBrush}"
+                                                            ToolTip="{Binding LatencyBadgeRivaTunerToolTip}">
+                                                        <TextBlock Text="{Binding LatencyBadgeRivaTunerText}" Foreground="White" FontSize="10" FontWeight="Bold" />
+                                                    </Border>
                                                     <Border Background="#27ae60" CornerRadius="3" Padding="5,2" Margin="3,0">
                                                         <TextBlock Text="FPS" Foreground="White" FontSize="10" FontWeight="Bold" />
                                                     </Border>
@@ -617,6 +629,11 @@
                                         <Expander.Header>
                                             <DockPanel>
                                                 <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <Border CornerRadius="10" Padding="8,2" Margin="0,0,8,0" VerticalAlignment="Center"
+                                                            Background="{Binding LatencyBadgeMsiAfterburnerBrush}"
+                                                            ToolTip="{Binding LatencyBadgeMsiAfterburnerToolTip}">
+                                                        <TextBlock Text="{Binding LatencyBadgeMsiAfterburnerText}" Foreground="White" FontSize="10" FontWeight="Bold" />
+                                                    </Border>
                                                     <Border Background="#27ae60" CornerRadius="3" Padding="5,2" Margin="3,0">
                                                         <TextBlock Text="FPS" Foreground="White" FontSize="10" FontWeight="Bold" />
                                                     </Border>
@@ -745,6 +762,11 @@
                                         <Expander.Header>
                                             <DockPanel>
                                                 <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <Border CornerRadius="10" Padding="8,2" Margin="0,0,8,0" VerticalAlignment="Center"
+                                                            Background="{Binding LatencyBadgeHWiNFOSharedMemoryBrush}"
+                                                            ToolTip="{Binding LatencyBadgeHWiNFOSharedMemoryToolTip}">
+                                                        <TextBlock Text="{Binding LatencyBadgeHWiNFOSharedMemoryText}" Foreground="White" FontSize="10" FontWeight="Bold" />
+                                                    </Border>
                                                     <Border Background="#27ae60" CornerRadius="3" Padding="5,2" Margin="3,0">
                                                         <TextBlock Text="FPS" Foreground="White" FontSize="10" FontWeight="Bold" />
                                                     </Border>
@@ -873,6 +895,11 @@
                                         <Expander.Header>
                                             <DockPanel>
                                                 <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <Border CornerRadius="10" Padding="8,2" Margin="0,0,8,0" VerticalAlignment="Center"
+                                                            Background="{Binding LatencyBadgeHWiNFOGadgetBrush}"
+                                                            ToolTip="{Binding LatencyBadgeHWiNFOGadgetToolTip}">
+                                                        <TextBlock Text="{Binding LatencyBadgeHWiNFOGadgetText}" Foreground="White" FontSize="10" FontWeight="Bold" />
+                                                    </Border>
                                                     <Border Background="#27ae60" CornerRadius="3" Padding="5,2" Margin="3,0">
                                                         <TextBlock Text="FPS" Foreground="White" FontSize="10" FontWeight="Bold" />
                                                     </Border>
@@ -1024,6 +1051,11 @@
                                         <Expander.Header>
                                             <DockPanel>
                                                 <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <Border CornerRadius="10" Padding="8,2" Margin="0,0,8,0" VerticalAlignment="Center"
+                                                            Background="{Binding LatencyBadgeWmiBrush}"
+                                                            ToolTip="{Binding LatencyBadgeWmiToolTip}">
+                                                        <TextBlock Text="{Binding LatencyBadgeWmiText}" Foreground="White" FontSize="10" FontWeight="Bold" />
+                                                    </Border>
                                                     <Border Background="#e74c3c" CornerRadius="3" Padding="5,2" Margin="3,0">
                                                         <TextBlock Text="CPU" Foreground="White" FontSize="10" FontWeight="Bold" />
                                                     </Border>
@@ -1058,6 +1090,11 @@
                                         <Expander.Header>
                                             <DockPanel>
                                                 <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <Border CornerRadius="10" Padding="8,2" Margin="0,0,8,0" VerticalAlignment="Center"
+                                                            Background="{Binding LatencyBadgePerformanceCounterBrush}"
+                                                            ToolTip="{Binding LatencyBadgePerformanceCounterToolTip}">
+                                                        <TextBlock Text="{Binding LatencyBadgePerformanceCounterText}" Foreground="White" FontSize="10" FontWeight="Bold" />
+                                                    </Border>
                                                     <Border Background="#e74c3c" CornerRadius="3" Padding="5,2" Margin="3,0">
                                                         <TextBlock Text="CPU" Foreground="White" FontSize="10" FontWeight="Bold" />
                                                     </Border>

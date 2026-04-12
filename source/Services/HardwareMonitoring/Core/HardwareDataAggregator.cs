@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace GameActivity.Services.HardwareMonitoring.Core
 {
@@ -282,42 +283,81 @@ namespace GameActivity.Services.HardwareMonitoring.Core
         /// aggregation, caching, and fallback logic. Intended for diagnostics and
         /// comparison UIs (e.g. per-provider live charts).
         /// </summary>
+        /// <remarks>
+        /// Calls run in parallel so wall-clock time is close to the slowest provider (e.g. WMI)
+        /// instead of the sum of all provider latencies. Each provider instance is only used
+        /// from one worker thread at a time.
+        /// </remarks>
         /// <returns>Provider name to metrics snapshot; only providers that returned data are included.</returns>
         public Dictionary<string, HardwareMetrics> GetRawMetricsPerProvider()
         {
             var result = new Dictionary<string, HardwareMetrics>(StringComparer.Ordinal);
+            List<IHardwareDataProvider> activeProviders = _providers
+                .Where(p => p != null && p.IsAvailable)
+                .ToList();
 
-            foreach (IHardwareDataProvider provider in _providers)
+            if (activeProviders.Count == 0)
             {
-                if (provider == null || !provider.IsAvailable)
-                {
-                    continue;
-                }
-
-                Stopwatch latencyWatch = Stopwatch.StartNew();
-                try
-                {
-                    HardwareMetrics metrics = provider.GetMetrics();
-                    if (metrics != null)
-                    {
-                        result[provider.ProviderName] = metrics;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Logger.Warn(ex, $"Raw metrics read failed for provider {provider.ProviderName}");
-                }
-                finally
-                {
-                    latencyWatch.Stop();
-                    Common.LogDebug(
-                        true,
-                        string.Format(
-                            "Provider raw metrics read latency — {0}: {1:F3} ms",
-                            provider.ProviderName,
-                            latencyWatch.Elapsed.TotalMilliseconds));
-                }
+                return result;
             }
+
+            var latencySamples = new List<Tuple<string, double>>();
+            object sampleLock = new object();
+            object dictLock = new object();
+            Stopwatch batchWatch = Stopwatch.StartNew();
+
+            Task[] tasks = new Task[activeProviders.Count];
+            for (int i = 0; i < activeProviders.Count; i++)
+            {
+                IHardwareDataProvider provider = activeProviders[i];
+                tasks[i] = Task.Run(() =>
+                {
+                    Stopwatch latencyWatch = Stopwatch.StartNew();
+                    try
+                    {
+                        HardwareMetrics metrics = provider.GetMetrics();
+                        if (metrics != null)
+                        {
+                            lock (dictLock)
+                            {
+                                result[provider.ProviderName] = metrics;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Warn(ex, $"Raw metrics read failed for provider {provider.ProviderName}");
+                    }
+                    finally
+                    {
+                        latencyWatch.Stop();
+                        lock (sampleLock)
+                        {
+                            latencySamples.Add(Tuple.Create(provider.ProviderName, latencyWatch.Elapsed.TotalMilliseconds));
+                        }
+                    }
+                });
+            }
+
+            Task.WaitAll(tasks);
+            batchWatch.Stop();
+
+            latencySamples.Sort((a, b) => a.Item2.CompareTo(b.Item2));
+            foreach (Tuple<string, double> sample in latencySamples)
+            {
+                Common.LogDebug(
+                    true,
+                    string.Format(
+                        "Provider raw metrics read latency (fast→slow) — {0}: {1:F3} ms",
+                        sample.Item1,
+                        sample.Item2));
+            }
+
+            Common.LogDebug(
+                true,
+                string.Format(
+                    "Provider raw metrics read batch wall clock: {0:F3} ms",
+                    batchWatch.Elapsed.TotalMilliseconds));
 
             return result;
         }

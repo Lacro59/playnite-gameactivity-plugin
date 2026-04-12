@@ -12,6 +12,7 @@ using Playnite.SDK.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Media;
 
@@ -32,6 +33,115 @@ namespace GameActivity
                 Cache[hex] = brush;
             }
             return brush;
+        }
+    }
+
+    /// <summary>
+    /// Typical relative cost of a single raw metrics read for settings UI badges (not measured at runtime).
+    /// </summary>
+    internal enum MonitoringProviderReadLatencyTier
+    {
+        Fast,
+        Medium,
+        Slow
+    }
+
+    /// <summary>
+    /// Maps each monitoring provider to a latency tier for the settings view coloured pills.
+    /// </summary>
+    internal static class MonitoringProviderReadLatencyHints
+    {
+        public static MonitoringProviderReadLatencyTier GetTier(string providerKey, GameActivitySettings settings)
+        {
+            if (string.IsNullOrEmpty(providerKey))
+            {
+                return MonitoringProviderReadLatencyTier.Fast;
+            }
+
+            switch (providerKey)
+            {
+                case "WMI":
+                    return MonitoringProviderReadLatencyTier.Slow;
+                case "PerformanceCounter":
+                    return MonitoringProviderReadLatencyTier.Medium;
+                case "LibreHardware":
+                    if (settings != null && settings.WithRemoteServerWeb)
+                    {
+                        return MonitoringProviderReadLatencyTier.Medium;
+                    }
+
+                    return MonitoringProviderReadLatencyTier.Fast;
+                case "HWiNFOSharedMemory":
+                case "HWiNFOGadget":
+                    return MonitoringProviderReadLatencyTier.Medium;
+                case "RivaTuner":
+                case "MsiAfterburner":
+                    return MonitoringProviderReadLatencyTier.Fast;
+                default:
+                    return MonitoringProviderReadLatencyTier.Fast;
+            }
+        }
+
+        public static Brush GetTierBrush(MonitoringProviderReadLatencyTier tier)
+        {
+            switch (tier)
+            {
+                case MonitoringProviderReadLatencyTier.Slow:
+                    return BrushCache.FromHex("#c0392b");
+                case MonitoringProviderReadLatencyTier.Medium:
+                    return BrushCache.FromHex("#f39c12");
+                default:
+                    return BrushCache.FromHex("#27ae60");
+            }
+        }
+
+        public static string GetTierShortLabel(MonitoringProviderReadLatencyTier tier)
+        {
+            switch (tier)
+            {
+                case MonitoringProviderReadLatencyTier.Slow:
+                    return ResourceProvider.GetString("LOCGameActivityProviderLatencySlow") ?? "Slow";
+                case MonitoringProviderReadLatencyTier.Medium:
+                    return ResourceProvider.GetString("LOCGameActivityProviderLatencyMedium") ?? "Medium";
+                default:
+                    return ResourceProvider.GetString("LOCGameActivityProviderLatencyFast") ?? "Fast";
+            }
+        }
+
+        public static string GetToolTip(string providerKey, GameActivitySettings settings)
+        {
+            switch (providerKey)
+            {
+                case "WMI":
+                    return ResourceProvider.GetString("LOCGameActivityProviderLatencyTipWmi")
+                        ?? "WMI queries are typically the slowest (multiple WMI calls).";
+                case "PerformanceCounter":
+                    return ResourceProvider.GetString("LOCGameActivityProviderLatencyTipPerformanceCounter")
+                        ?? "Performance counters use brief multi-sample averaging.";
+                case "LibreHardware":
+                    if (settings != null && settings.WithRemoteServerWeb)
+                    {
+                        return ResourceProvider.GetString("LOCGameActivityProviderLatencyTipLibreRemote")
+                            ?? "Remote LibreHardware web server adds network latency.";
+                    }
+
+                    return ResourceProvider.GetString("LOCGameActivityProviderLatencyTipLibreLocal")
+                        ?? "Local LibreHardware Monitor HTTP is usually fast.";
+                case "HWiNFOSharedMemory":
+                    return ResourceProvider.GetString("LOCGameActivityProviderLatencyTipHwinfoShared")
+                        ?? "HWiNFO shared memory depends on the external app and sensor layout.";
+                case "HWiNFOGadget":
+                    return ResourceProvider.GetString("LOCGameActivityProviderLatencyTipHwinfoGadget")
+                        ?? "HWiNFO gadget index reads depend on the external app.";
+                case "RivaTuner":
+                    return ResourceProvider.GetString("LOCGameActivityProviderLatencyTipRivaTuner")
+                        ?? "RTSS shared memory is typically very fast.";
+                case "MsiAfterburner":
+                    return ResourceProvider.GetString("LOCGameActivityProviderLatencyTipMsiAfterburner")
+                        ?? "MSI Afterburner MAHM shared memory is typically very fast.";
+                default:
+                    return string.Empty;
+            }
         }
     }
 
@@ -213,12 +323,18 @@ namespace GameActivity
         /// <summary>Use LibreHardwareMonitor for comprehensive CPU/GPU/RAM data.</summary>
         public bool UseLibreHardware { get; set; } = false;
 
+        private bool _withRemoteServerWeb = true;
+
         /// <summary>
         /// Connect to a remote LibreHardware web server instead of the local instance.
         /// Not persisted — reset to <c>true</c> on every load.
         /// </summary>
         [DontSerialize]
-        public bool WithRemoteServerWeb { get; set; } = true;
+        public bool WithRemoteServerWeb
+        {
+            get => _withRemoteServerWeb;
+            set => SetValue(ref _withRemoteServerWeb, value);
+        }
 
         /// <summary>IP address (or hostname) of the remote LibreHardware server.</summary>
         public string IpRemoteServerWeb { get; set; } = string.Empty;
@@ -469,11 +585,25 @@ namespace GameActivity
         private readonly ObservableCollection<MahmSensorListEntry> _msiAfterburnerMahmSensorEntries = new ObservableCollection<MahmSensorListEntry>();
 
         private GameActivitySettings _settings;
+
+        private GameActivitySettings _latencySubscriptionTarget;
+
         /// <summary>The live settings object bound to the settings UI.</summary>
         public GameActivitySettings Settings
         {
             get => _settings;
-            set => SetValue(ref _settings, value);
+            set
+            {
+                if (ReferenceEquals(_settings, value))
+                {
+                    return;
+                }
+
+                DetachSettingsLatencyHandler();
+                SetValue(ref _settings, value);
+                AttachSettingsLatencyHandler();
+                NotifyMonitoringProviderLatencyPillProperties();
+            }
         }
 
 		IPluginSettings IPluginSettingsViewModel.Settings => Settings;
@@ -526,6 +656,7 @@ namespace GameActivity
             }
 
             RefreshMsiAfterburnerMahmSensors();
+            NotifyMonitoringProviderLatencyPillProperties();
         }
 
         /// <inheritdoc/>
@@ -592,6 +723,145 @@ namespace GameActivity
 
             return errors.Count == 0;
         }
+
+        #region Monitoring provider read-cost badges (settings UI)
+
+        private void AttachSettingsLatencyHandler()
+        {
+            if (Settings == null || ReferenceEquals(_latencySubscriptionTarget, Settings))
+            {
+                return;
+            }
+
+            DetachSettingsLatencyHandler();
+            Settings.PropertyChanged += OnSettingsPropertyChangedForProviderLatencyPills;
+            _latencySubscriptionTarget = Settings;
+        }
+
+        private void DetachSettingsLatencyHandler()
+        {
+            if (_latencySubscriptionTarget != null)
+            {
+                _latencySubscriptionTarget.PropertyChanged -= OnSettingsPropertyChangedForProviderLatencyPills;
+                _latencySubscriptionTarget = null;
+            }
+        }
+
+        private void OnSettingsPropertyChangedForProviderLatencyPills(object sender, PropertyChangedEventArgs e)
+        {
+            if (e == null)
+            {
+                return;
+            }
+
+            if (string.IsNullOrEmpty(e.PropertyName) ||
+                e.PropertyName == nameof(GameActivitySettings.WithRemoteServerWeb))
+            {
+                NotifyMonitoringProviderLatencyPillProperties();
+            }
+        }
+
+        private static Brush GetMonitoringProviderLatencyBrush(string providerKey, GameActivitySettings settings)
+        {
+            MonitoringProviderReadLatencyTier tier = MonitoringProviderReadLatencyHints.GetTier(providerKey, settings);
+            return MonitoringProviderReadLatencyHints.GetTierBrush(tier);
+        }
+
+        private static string GetMonitoringProviderLatencyLabel(string providerKey, GameActivitySettings settings)
+        {
+            MonitoringProviderReadLatencyTier tier = MonitoringProviderReadLatencyHints.GetTier(providerKey, settings);
+            return MonitoringProviderReadLatencyHints.GetTierShortLabel(tier);
+        }
+
+        private void NotifyMonitoringProviderLatencyPillProperties()
+        {
+            OnPropertyChanged(nameof(LatencyBadgeLibreHardwareBrush));
+            OnPropertyChanged(nameof(LatencyBadgeLibreHardwareText));
+            OnPropertyChanged(nameof(LatencyBadgeLibreHardwareToolTip));
+            OnPropertyChanged(nameof(LatencyBadgeRivaTunerBrush));
+            OnPropertyChanged(nameof(LatencyBadgeRivaTunerText));
+            OnPropertyChanged(nameof(LatencyBadgeRivaTunerToolTip));
+            OnPropertyChanged(nameof(LatencyBadgeMsiAfterburnerBrush));
+            OnPropertyChanged(nameof(LatencyBadgeMsiAfterburnerText));
+            OnPropertyChanged(nameof(LatencyBadgeMsiAfterburnerToolTip));
+            OnPropertyChanged(nameof(LatencyBadgeHWiNFOSharedMemoryBrush));
+            OnPropertyChanged(nameof(LatencyBadgeHWiNFOSharedMemoryText));
+            OnPropertyChanged(nameof(LatencyBadgeHWiNFOSharedMemoryToolTip));
+            OnPropertyChanged(nameof(LatencyBadgeHWiNFOGadgetBrush));
+            OnPropertyChanged(nameof(LatencyBadgeHWiNFOGadgetText));
+            OnPropertyChanged(nameof(LatencyBadgeHWiNFOGadgetToolTip));
+            OnPropertyChanged(nameof(LatencyBadgeWmiBrush));
+            OnPropertyChanged(nameof(LatencyBadgeWmiText));
+            OnPropertyChanged(nameof(LatencyBadgeWmiToolTip));
+            OnPropertyChanged(nameof(LatencyBadgePerformanceCounterBrush));
+            OnPropertyChanged(nameof(LatencyBadgePerformanceCounterText));
+            OnPropertyChanged(nameof(LatencyBadgePerformanceCounterToolTip));
+        }
+
+        /// <summary>Background for the LibreHardware read-cost pill (green / orange / red).</summary>
+        public Brush LatencyBadgeLibreHardwareBrush => GetMonitoringProviderLatencyBrush("LibreHardware", Settings);
+
+        /// <summary>Short label for the LibreHardware read-cost pill.</summary>
+        public string LatencyBadgeLibreHardwareText => GetMonitoringProviderLatencyLabel("LibreHardware", Settings);
+
+        /// <summary>Explains typical read cost for LibreHardware (local vs remote).</summary>
+        public string LatencyBadgeLibreHardwareToolTip => MonitoringProviderReadLatencyHints.GetToolTip("LibreHardware", Settings);
+
+        /// <summary>Background for the RivaTuner read-cost pill.</summary>
+        public Brush LatencyBadgeRivaTunerBrush => GetMonitoringProviderLatencyBrush("RivaTuner", Settings);
+
+        /// <summary>Short label for the RivaTuner read-cost pill.</summary>
+        public string LatencyBadgeRivaTunerText => GetMonitoringProviderLatencyLabel("RivaTuner", Settings);
+
+        /// <summary>Explains typical read cost for RivaTuner.</summary>
+        public string LatencyBadgeRivaTunerToolTip => MonitoringProviderReadLatencyHints.GetToolTip("RivaTuner", Settings);
+
+        /// <summary>Background for the MSI Afterburner read-cost pill.</summary>
+        public Brush LatencyBadgeMsiAfterburnerBrush => GetMonitoringProviderLatencyBrush("MsiAfterburner", Settings);
+
+        /// <summary>Short label for the MSI Afterburner read-cost pill.</summary>
+        public string LatencyBadgeMsiAfterburnerText => GetMonitoringProviderLatencyLabel("MsiAfterburner", Settings);
+
+        /// <summary>Explains typical read cost for MSI Afterburner.</summary>
+        public string LatencyBadgeMsiAfterburnerToolTip => MonitoringProviderReadLatencyHints.GetToolTip("MsiAfterburner", Settings);
+
+        /// <summary>Background for the HWiNFO shared memory read-cost pill.</summary>
+        public Brush LatencyBadgeHWiNFOSharedMemoryBrush => GetMonitoringProviderLatencyBrush("HWiNFOSharedMemory", Settings);
+
+        /// <summary>Short label for the HWiNFO shared memory read-cost pill.</summary>
+        public string LatencyBadgeHWiNFOSharedMemoryText => GetMonitoringProviderLatencyLabel("HWiNFOSharedMemory", Settings);
+
+        /// <summary>Explains typical read cost for HWiNFO shared memory.</summary>
+        public string LatencyBadgeHWiNFOSharedMemoryToolTip => MonitoringProviderReadLatencyHints.GetToolTip("HWiNFOSharedMemory", Settings);
+
+        /// <summary>Background for the HWiNFO gadget read-cost pill.</summary>
+        public Brush LatencyBadgeHWiNFOGadgetBrush => GetMonitoringProviderLatencyBrush("HWiNFOGadget", Settings);
+
+        /// <summary>Short label for the HWiNFO gadget read-cost pill.</summary>
+        public string LatencyBadgeHWiNFOGadgetText => GetMonitoringProviderLatencyLabel("HWiNFOGadget", Settings);
+
+        /// <summary>Explains typical read cost for HWiNFO gadget.</summary>
+        public string LatencyBadgeHWiNFOGadgetToolTip => MonitoringProviderReadLatencyHints.GetToolTip("HWiNFOGadget", Settings);
+
+        /// <summary>Background for the WMI read-cost pill.</summary>
+        public Brush LatencyBadgeWmiBrush => GetMonitoringProviderLatencyBrush("WMI", Settings);
+
+        /// <summary>Short label for the WMI read-cost pill.</summary>
+        public string LatencyBadgeWmiText => GetMonitoringProviderLatencyLabel("WMI", Settings);
+
+        /// <summary>Explains typical read cost for WMI.</summary>
+        public string LatencyBadgeWmiToolTip => MonitoringProviderReadLatencyHints.GetToolTip("WMI", Settings);
+
+        /// <summary>Background for the Performance Counter read-cost pill.</summary>
+        public Brush LatencyBadgePerformanceCounterBrush => GetMonitoringProviderLatencyBrush("PerformanceCounter", Settings);
+
+        /// <summary>Short label for the Performance Counter read-cost pill.</summary>
+        public string LatencyBadgePerformanceCounterText => GetMonitoringProviderLatencyLabel("PerformanceCounter", Settings);
+
+        /// <summary>Explains typical read cost for Performance Counters.</summary>
+        public string LatencyBadgePerformanceCounterToolTip => MonitoringProviderReadLatencyHints.GetToolTip("PerformanceCounter", Settings);
+
+        #endregion
 
         #region Store colours 
 
