@@ -239,7 +239,7 @@
                                                     ToolTip="{DynamicResource LOCEditGame}" />
 
                                             <!-- Export session performance details (CSV) -->
-                                            <Button Content="&#xe978;"
+                                            <Button Content="&#xEF08;"
                                                     Style="{DynamicResource NavIconButton}"
                                                     FontFamily="{DynamicResource FontIcoFont}"
                                                     Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl},
