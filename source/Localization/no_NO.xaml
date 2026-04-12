@@ -86,6 +86,8 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivityUsedLibreHardware">Use LibreHardware Monitor</sys:String>
     <sys:String x:Key="LOCGameActivityRemoteWebServer">Via remote web server</sys:String>
     <sys:String x:Key="LOCGameActivityUseMsiAfterburner">Bruk MSI Afterburner</sys:String>
+    <sys:String x:Key="LOCGameActivityMsiAbSensorHelp">Pick a row after Refresh (Afterburner running). The list shows the MAHM source name, optional GPU adapter from the MAHM GPU table, localized label when useful, and units. Only the source name is stored; leave empty for the default English name.</sys:String>
+    <sys:String x:Key="LOCGameActivityMsiAbRefreshSensors">Refresh sensor list</sys:String>
     <sys:String x:Key="LOCGameActivityUseHWiNFOSharedMemory">Use HWiNFO shared memory</sys:String>
     <sys:String x:Key="LOCGameActivityUseHWiNFOGadget">Use HWiNFO gadget reporting</sys:String>
     <sys:String x:Key="LOCGameActivityIndex">Index</sys:String>
@@ -150,10 +152,10 @@ Click for more information.</sys:String>
 
     <sys:String x:Key="LOCGameActivityRecentActivity">Recent activity</sys:String>
     <sys:String x:Key="LOCGameActivityNoRecentActivity">No recent activity</sys:String>
-    <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} hours over the past {1} week</sys:String>
-    <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} hours over the past {1} weeks</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} h / {1} week</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} h / {1} weeks</sys:String>
     <sys:String x:Key="LOCGameActivityAvgPerDay">Gjennomsnittlig tid per dag</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgPerSession">Average time per session</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgPerSession">Avg. time / session</sys:String>
     <sys:String x:Key="LOCGameActivityFirstSession">Første økt</sys:String>
     <sys:String x:Key="LOCGameActivityLastSession">Siste økt</sys:String>
 
@@ -219,6 +221,9 @@ Click for more information.</sys:String>
 
 
     <!-- ==================== Add / Edit Session ==================== -->
+
+    <sys:String x:Key="LOCGameActivitySessionDetailsExportFileTag">Session-performance-log</sys:String>
+    <sys:String x:Key="LOCGameActivityExportSessionDetails">Export this session's performance samples to CSV. The suggested file name includes the game title and session start (local time).</sys:String>
 
     <sys:String x:Key="LOCGaAddNewGameSession">Add new game session</sys:String>
     <sys:String x:Key="LOCGaDateStart">Start date</sys:String>
