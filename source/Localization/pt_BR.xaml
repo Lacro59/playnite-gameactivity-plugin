@@ -86,6 +86,8 @@ Clique para mais informações.</sys:String>
     <sys:String x:Key="LOCGameActivityUsedLibreHardware">Usar LibreHardware Monitor</sys:String>
     <sys:String x:Key="LOCGameActivityRemoteWebServer">Pelo servidor web remoto</sys:String>
     <sys:String x:Key="LOCGameActivityUseMsiAfterburner">Usar MSI Afterburner</sys:String>
+    <sys:String x:Key="LOCGameActivityMsiAbSensorHelp">Pick a row after Refresh (Afterburner running). The list shows the MAHM source name, optional GPU adapter from the MAHM GPU table, localized label when useful, and units. Only the source name is stored; leave empty for the default English name.</sys:String>
+    <sys:String x:Key="LOCGameActivityMsiAbRefreshSensors">Refresh sensor list</sys:String>
     <sys:String x:Key="LOCGameActivityUseHWiNFOSharedMemory">Usar a memória compartilhada do HWiNFO</sys:String>
     <sys:String x:Key="LOCGameActivityUseHWiNFOGadget">Usar o relatório de dispositivos HWiNFO</sys:String>
     <sys:String x:Key="LOCGameActivityIndex">Índice</sys:String>
@@ -150,10 +152,10 @@ Clique para mais informações.</sys:String>
 
     <sys:String x:Key="LOCGameActivityRecentActivity">Atividade recente</sys:String>
     <sys:String x:Key="LOCGameActivityNoRecentActivity">Nenhuma atividade recente</sys:String>
-    <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} horas na última {1} semana</sys:String>
-    <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} horas nas últimas {1} semanas</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} h / {1} week</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} h / {1} weeks</sys:String>
     <sys:String x:Key="LOCGameActivityAvgPerDay">Tempo médio por dia</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgPerSession">Tempo médio por sessão</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgPerSession">Avg. time / session</sys:String>
     <sys:String x:Key="LOCGameActivityFirstSession">Primeira sessão</sys:String>
     <sys:String x:Key="LOCGameActivityLastSession">Última sessão</sys:String>
 
@@ -219,6 +221,9 @@ Clique para mais informações.</sys:String>
 
 
     <!-- ==================== Add / Edit Session ==================== -->
+
+    <sys:String x:Key="LOCGameActivitySessionDetailsExportFileTag">Session-performance-log</sys:String>
+    <sys:String x:Key="LOCGameActivityExportSessionDetails">Export this session's performance samples to CSV. The suggested file name includes the game title and session start (local time).</sys:String>
 
     <sys:String x:Key="LOCGaAddNewGameSession">Adicionar nova sessão de jogo</sys:String>
     <sys:String x:Key="LOCGaDateStart">Data inicial</sys:String>
