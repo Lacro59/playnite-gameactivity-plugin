@@ -807,6 +807,55 @@ namespace GameActivity.Services
         #region Tests
 
         /// <summary>
+        /// Returns the names of hardware providers registered in the aggregator (settings order).
+        /// </summary>
+        public IReadOnlyList<string> GetRegisteredMonitoringProviderNames()
+        {
+            if (_hardwareMonitor == null)
+            {
+                return new List<string>();
+            }
+
+            return _hardwareMonitor.GetRegisteredProviderNames();
+        }
+
+        /// <summary>
+        /// Returns the aggregated metrics snapshot (same selection as session logging),
+        /// without diagnostic logging. Used by live comparison UI.
+        /// </summary>
+        public HardwareMetrics GetAggregatedMetricsSnapshot()
+        {
+            if (_hardwareMonitor == null)
+            {
+                return new HardwareMetrics();
+            }
+
+            try
+            {
+                HardwareMetrics metrics = _hardwareMonitor.GetMetrics(false);
+                return metrics ?? new HardwareMetrics();
+            }
+            catch (Exception ex)
+            {
+                Logger.Warn(ex, "GetAggregatedMetricsSnapshot failed");
+                return new HardwareMetrics();
+            }
+        }
+
+        /// <summary>
+        /// Reads each provider independently for side-by-side comparison (no aggregation).
+        /// </summary>
+        public Dictionary<string, HardwareMetrics> GetProviderRawMetricsSnapshot()
+        {
+            if (_hardwareMonitor == null)
+            {
+                return new Dictionary<string, HardwareMetrics>();
+            }
+
+            return _hardwareMonitor.GetRawMetricsPerProvider();
+        }
+
+        /// <summary>
         /// Retrieves current hardware metrics with verbose diagnostic logging.
         /// Intended for debugging via the settings UI; not called during normal game sessions.
         /// </summary>

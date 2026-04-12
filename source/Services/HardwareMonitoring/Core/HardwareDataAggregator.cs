@@ -1,7 +1,10 @@
-﻿using GameActivity.Services.HardwareMonitoring.Models;
+﻿using CommonPlayniteShared.Common;
+using CommonPluginsShared;
+using GameActivity.Services.HardwareMonitoring.Models;
 using Playnite.SDK;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 
@@ -264,6 +267,59 @@ namespace GameActivity.Services.HardwareMonitoring.Core
             {
                 _cacheLock.ExitWriteLock();
             }
+        }
+
+        /// <summary>
+        /// Returns the names of all registered providers in registration order.
+        /// </summary>
+        public IReadOnlyList<string> GetRegisteredProviderNames()
+        {
+            return _providers.Select(p => p.ProviderName).ToList();
+        }
+
+        /// <summary>
+        /// Reads metrics directly from each available provider instance, bypassing
+        /// aggregation, caching, and fallback logic. Intended for diagnostics and
+        /// comparison UIs (e.g. per-provider live charts).
+        /// </summary>
+        /// <returns>Provider name to metrics snapshot; only providers that returned data are included.</returns>
+        public Dictionary<string, HardwareMetrics> GetRawMetricsPerProvider()
+        {
+            var result = new Dictionary<string, HardwareMetrics>(StringComparer.Ordinal);
+
+            foreach (IHardwareDataProvider provider in _providers)
+            {
+                if (provider == null || !provider.IsAvailable)
+                {
+                    continue;
+                }
+
+                Stopwatch latencyWatch = Stopwatch.StartNew();
+                try
+                {
+                    HardwareMetrics metrics = provider.GetMetrics();
+                    if (metrics != null)
+                    {
+                        result[provider.ProviderName] = metrics;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.Warn(ex, $"Raw metrics read failed for provider {provider.ProviderName}");
+                }
+                finally
+                {
+                    latencyWatch.Stop();
+                    Common.LogDebug(
+                        true,
+                        string.Format(
+                            "Provider raw metrics read latency — {0}: {1:F3} ms",
+                            provider.ProviderName,
+                            latencyWatch.Elapsed.TotalMilliseconds));
+                }
+            }
+
+            return result;
         }
 
         /// <summary>

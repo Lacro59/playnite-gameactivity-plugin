@@ -258,6 +258,7 @@
     <Compile Include="ViewModels\GameActivityMergeTimeViewModel.cs" />
     <Compile Include="ViewModels\GameActivityViewModel.cs" />
     <Compile Include="ViewModels\GameActivityViewSingleViewModel.cs" />
+    <Compile Include="ViewModels\ProviderPerformanceChartsViewModel.cs" />
     <Compile Include="ViewModels\GamesDataMismatchViewModel.cs" />
     <Compile Include="playnite-plugincommon\CommonPluginsControls\ViewsModels\TransfertDataViewModel.cs" />
     <Compile Include="Views\GameActivityAddTime.xaml.cs">
@@ -283,6 +284,9 @@
     </Compile>
     <Compile Include="Views\GameActivityViewSingle.xaml.cs">
       <DependentUpon>GameActivityViewSingle.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ProviderPerformanceChartsView.xaml.cs">
+      <DependentUpon>ProviderPerformanceChartsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\GamesDataMismatch.xaml.cs">
       <DependentUpon>GamesDataMismatch.xaml</DependentUpon>
@@ -617,6 +621,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\GameActivityViewSingle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ProviderPerformanceChartsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

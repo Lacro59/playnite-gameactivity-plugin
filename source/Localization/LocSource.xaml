@@ -30,6 +30,12 @@ Used the difference play time: {1}s.</sys:String>
     <sys:String x:Key="LOCGameActivitiesTitle">Game activities</sys:String>
     <sys:String x:Key="LOCGameActivityViewGamesActivities">View games activities</sys:String>
     <sys:String x:Key="LOCGameActivityViewGameActivity">View game activity</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderPerfCharts">Provider performance charts</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderPerfChartsTitle">Provider performance (live)</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderPerfChartsHint">When enabled, only the provider actually used for each metric in aggregation is shown (per chart). Otherwise pick providers below. Values refresh every 5 seconds (last 6 minutes shown).</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderPerfChartsNoProviders">No hardware monitoring providers are registered. Enable at least one provider in GameActivity settings.</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderPerfChartsLegend">By provider</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderPerfChartsAggregatorMode">Used values (aggregation)</sys:String>
 
 
     <!-- ==================== Gantt View ==================== -->

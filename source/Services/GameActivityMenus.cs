@@ -3,6 +3,7 @@ using CommonPluginsShared.Collections;
 using CommonPluginsShared.Interfaces;
 using CommonPluginsShared.Plugins;
 using GameActivity.Models.ExportData;
+using GameActivity;
 using Playnite.SDK;
 using Playnite.SDK.Models;
 using Playnite.SDK.Plugins;
@@ -132,6 +133,24 @@ namespace GameActivity.Services
 					catch (Exception ex)
 					{
 						Common.LogError(ex, false, "[GetMainMenuItems] Failed to open games activities window.");
+					}
+				}
+			};
+
+			yield return new MainMenuItem
+			{
+				MenuSection = section,
+				Description = ResourceProvider.GetString("LOCGameActivityProviderPerfCharts"),
+				Action = (menuArgs) =>
+				{
+					try
+					{
+						GameActivityWindows windows = _database.PluginWindows as GameActivityWindows;
+						windows?.ShowProviderPerformanceCharts((GameActivity)_plugin);
+					}
+					catch (Exception ex)
+					{
+						Common.LogError(ex, false, "[GetMainMenuItems] Failed to open provider performance charts.");
 					}
 				}
 			};

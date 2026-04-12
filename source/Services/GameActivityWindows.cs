@@ -1,9 +1,10 @@
 ﻿using CommonPluginsShared;
 using CommonPluginsShared.Interfaces;
+using GameActivity;
+using GameActivity.Views;
 using Playnite.SDK;
 using Playnite.SDK.Models;
 using System.Windows;
-using GameActivity.Views;
 using Playnite.SDK.Plugins;
 using CommonPluginsShared.Plugins;
 
@@ -52,6 +53,35 @@ namespace GameActivity.Services
 			var viewExtension = new GameActivityView((GameActivity)plugin);
 			Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(
 				ResourceProvider.GetString("LOCGamesActivitiesTitle"),
+				viewExtension,
+				windowOptions);
+			windowExtension.ShowDialog();
+		}
+
+		/// <summary>
+		/// Opens the live per-provider hardware metrics chart window.
+		/// </summary>
+		public void ShowProviderPerformanceCharts(GameActivity plugin)
+		{
+			if (plugin == null)
+			{
+				return;
+			}
+
+			WindowOptions windowOptions = new WindowOptions
+			{
+				ShowMinimizeButton = false,
+				ShowMaximizeButton = true,
+				ShowCloseButton = true,
+				CanBeResizable = true,
+				WidthPercent = 88,
+				MinWidth = 720,
+				Height = 760
+			};
+
+			var viewExtension = new ProviderPerformanceChartsView(plugin.GameActivityMonitoring);
+			Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(
+				ResourceProvider.GetString("LOCGameActivityProviderPerfChartsTitle"),
 				viewExtension,
 				windowOptions);
 			windowExtension.ShowDialog();
