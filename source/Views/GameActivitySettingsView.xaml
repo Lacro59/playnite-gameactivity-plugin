@@ -659,10 +659,12 @@
                                                     Command="{Binding RefreshMsiAfterburnerMahmSensorsCommand}"/>
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="140"/>
+                                                    <ColumnDefinition Width="180"/>
                                                     <ColumnDefinition Width="*"/>
                                                 </Grid.ColumnDefinitions>
                                                 <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
                                                     <RowDefinition Height="Auto"/>
                                                     <RowDefinition Height="Auto"/>
                                                     <RowDefinition Height="Auto"/>
@@ -678,44 +680,56 @@
                                                           DisplayMemberPath="DisplayLine"
                                                           SelectedValuePath="SourceName"
                                                           SelectedValue="{Binding Settings.MsiAfterburnerSensorFramerate, UpdateSourceTrigger=PropertyChanged}"/>
-                                                <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,4" Text="{DynamicResource LOCGameActivityCpuUsage}"/>
+                                                <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,4" Text="{DynamicResource LOCGameActivityFps1PercentLow}"/>
                                                 <ComboBox Grid.Row="1" Grid.Column="1" Height="24" Margin="8,4,0,4"
                                                           ItemsSource="{Binding MsiAfterburnerMahmSensorEntries}"
                                                           DisplayMemberPath="DisplayLine"
                                                           SelectedValuePath="SourceName"
-                                                          SelectedValue="{Binding Settings.MsiAfterburnerSensorCpuUsage, UpdateSourceTrigger=PropertyChanged}"/>
-                                                <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,4" Text="{DynamicResource LOCGameActivityCpuTemp}"/>
+                                                          SelectedValue="{Binding Settings.MsiAfterburnerSensorFramerate1PercentLow, UpdateSourceTrigger=PropertyChanged}"/>
+                                                <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,4" Text="{DynamicResource LOCGameActivityFps0Point1PercentLow}"/>
                                                 <ComboBox Grid.Row="2" Grid.Column="1" Height="24" Margin="8,4,0,4"
                                                           ItemsSource="{Binding MsiAfterburnerMahmSensorEntries}"
                                                           DisplayMemberPath="DisplayLine"
                                                           SelectedValuePath="SourceName"
-                                                          SelectedValue="{Binding Settings.MsiAfterburnerSensorCpuTemperature, UpdateSourceTrigger=PropertyChanged}"/>
-                                                <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="0,4" Text="{DynamicResource LOCGameActivityCpuPower}"/>
+                                                          SelectedValue="{Binding Settings.MsiAfterburnerSensorFramerate0Point1PercentLow, UpdateSourceTrigger=PropertyChanged}"/>
+                                                <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="0,4" Text="{DynamicResource LOCGameActivityCpuUsage}"/>
                                                 <ComboBox Grid.Row="3" Grid.Column="1" Height="24" Margin="8,4,0,4"
                                                           ItemsSource="{Binding MsiAfterburnerMahmSensorEntries}"
                                                           DisplayMemberPath="DisplayLine"
                                                           SelectedValuePath="SourceName"
-                                                          SelectedValue="{Binding Settings.MsiAfterburnerSensorCpuPower, UpdateSourceTrigger=PropertyChanged}"/>
-                                                <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="0,4" Text="{DynamicResource LOCGameActivityGpuUsage}"/>
+                                                          SelectedValue="{Binding Settings.MsiAfterburnerSensorCpuUsage, UpdateSourceTrigger=PropertyChanged}"/>
+                                                <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="0,4" Text="{DynamicResource LOCGameActivityCpuTemp}"/>
                                                 <ComboBox Grid.Row="4" Grid.Column="1" Height="24" Margin="8,4,0,4"
                                                           ItemsSource="{Binding MsiAfterburnerMahmSensorEntries}"
                                                           DisplayMemberPath="DisplayLine"
                                                           SelectedValuePath="SourceName"
-                                                          SelectedValue="{Binding Settings.MsiAfterburnerSensorGpuUsage, UpdateSourceTrigger=PropertyChanged}"/>
-                                                <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Margin="0,4" Text="{DynamicResource LOCGameActivityGpuTemp}"/>
+                                                          SelectedValue="{Binding Settings.MsiAfterburnerSensorCpuTemperature, UpdateSourceTrigger=PropertyChanged}"/>
+                                                <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Margin="0,4" Text="{DynamicResource LOCGameActivityCpuPower}"/>
                                                 <ComboBox Grid.Row="5" Grid.Column="1" Height="24" Margin="8,4,0,4"
                                                           ItemsSource="{Binding MsiAfterburnerMahmSensorEntries}"
                                                           DisplayMemberPath="DisplayLine"
                                                           SelectedValuePath="SourceName"
-                                                          SelectedValue="{Binding Settings.MsiAfterburnerSensorGpuTemperature, UpdateSourceTrigger=PropertyChanged}"/>
-                                                <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Margin="0,4" Text="{DynamicResource LOCGameActivityGpuPower}"/>
+                                                          SelectedValue="{Binding Settings.MsiAfterburnerSensorCpuPower, UpdateSourceTrigger=PropertyChanged}"/>
+                                                <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Margin="0,4" Text="{DynamicResource LOCGameActivityGpuUsage}"/>
                                                 <ComboBox Grid.Row="6" Grid.Column="1" Height="24" Margin="8,4,0,4"
                                                           ItemsSource="{Binding MsiAfterburnerMahmSensorEntries}"
                                                           DisplayMemberPath="DisplayLine"
                                                           SelectedValuePath="SourceName"
-                                                          SelectedValue="{Binding Settings.MsiAfterburnerSensorGpuPower, UpdateSourceTrigger=PropertyChanged}"/>
-                                                <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Margin="0,4" Text="{DynamicResource LOCGameActivityRamUsage}"/>
+                                                          SelectedValue="{Binding Settings.MsiAfterburnerSensorGpuUsage, UpdateSourceTrigger=PropertyChanged}"/>
+                                                <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Margin="0,4" Text="{DynamicResource LOCGameActivityGpuTemp}"/>
                                                 <ComboBox Grid.Row="7" Grid.Column="1" Height="24" Margin="8,4,0,4"
+                                                          ItemsSource="{Binding MsiAfterburnerMahmSensorEntries}"
+                                                          DisplayMemberPath="DisplayLine"
+                                                          SelectedValuePath="SourceName"
+                                                          SelectedValue="{Binding Settings.MsiAfterburnerSensorGpuTemperature, UpdateSourceTrigger=PropertyChanged}"/>
+                                                <TextBlock Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" Margin="0,4" Text="{DynamicResource LOCGameActivityGpuPower}"/>
+                                                <ComboBox Grid.Row="8" Grid.Column="1" Height="24" Margin="8,4,0,4"
+                                                          ItemsSource="{Binding MsiAfterburnerMahmSensorEntries}"
+                                                          DisplayMemberPath="DisplayLine"
+                                                          SelectedValuePath="SourceName"
+                                                          SelectedValue="{Binding Settings.MsiAfterburnerSensorGpuPower, UpdateSourceTrigger=PropertyChanged}"/>
+                                                <TextBlock Grid.Row="9" Grid.Column="0" VerticalAlignment="Center" Margin="0,4" Text="{DynamicResource LOCGameActivityRamUsage}"/>
+                                                <ComboBox Grid.Row="9" Grid.Column="1" Height="24" Margin="8,4,0,4"
                                                           ItemsSource="{Binding MsiAfterburnerMahmSensorEntries}"
                                                           DisplayMemberPath="DisplayLine"
                                                           SelectedValuePath="SourceName"

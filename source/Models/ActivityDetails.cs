@@ -69,6 +69,18 @@ namespace GameActivity.Models
 		public int FPS { get; set; }
 
 		/// <summary>
+		/// Gets or sets the Framerate 1% Low value (FPS) when provided by a source such as MSI Afterburner MAHM.
+		/// </summary>
+		[SerializationPropertyName("fps1l")]
+		public int FPS1PercentLow { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Framerate 0.1% Low value (FPS) when provided by a source such as MSI Afterburner MAHM.
+		/// </summary>
+		[SerializationPropertyName("fps01l")]
+		public int FPS0Point1PercentLow { get; set; }
+
+		/// <summary>
 		/// Gets or sets the CPU usage percentage.
 		/// </summary>
 		[SerializationPropertyName("cpu")]

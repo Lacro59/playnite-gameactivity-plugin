@@ -14,6 +14,13 @@ namespace GameActivity.Services.HardwareMonitoring.Models
 		public DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
 		public int? FPS { get; set; }
+
+		/// <summary>Optional Framerate 1% Low (FPS), typically from MSI Afterburner.</summary>
+		public int? FPS1PercentLow { get; set; }
+
+		/// <summary>Optional Framerate 0.1% Low (FPS), typically from MSI Afterburner.</summary>
+		public int? FPS0Point1PercentLow { get; set; }
+
 		public int? CpuUsage { get; set; }
 		public int? CpuTemperature { get; set; }
 		public int? CpuPower { get; set; }
@@ -29,6 +36,8 @@ namespace GameActivity.Services.HardwareMonitoring.Models
 			if (other == null) return;
 
 			FPS = FPS ?? other.FPS;
+			FPS1PercentLow = FPS1PercentLow ?? other.FPS1PercentLow;
+			FPS0Point1PercentLow = FPS0Point1PercentLow ?? other.FPS0Point1PercentLow;
 			CpuUsage = CpuUsage ?? other.CpuUsage;
 			CpuTemperature = CpuTemperature ?? other.CpuTemperature;
 			CpuPower = CpuPower ?? other.CpuPower;

@@ -39,6 +39,18 @@ namespace GameActivity.Models
         /// <summary>Sample standard deviation of FPS from logged samples (display only).</summary>
         public string LoggedFpsStdDev { get; set; }
 
+        /// <summary>Average Framerate 1% Low (FPS) from logged samples (MSI MAHM when configured).</summary>
+        public string LoggedFps1PercentLowAvg { get; set; }
+
+        /// <summary>Minimum Framerate 1% Low (FPS) from logged samples (worst sample).</summary>
+        public string LoggedFps1PercentLowMin { get; set; }
+
+        /// <summary>Average Framerate 0.1% Low (FPS) from logged samples.</summary>
+        public string LoggedFps0Point1PercentLowAvg { get; set; }
+
+        /// <summary>Minimum Framerate 0.1% Low (FPS) from logged samples (worst sample).</summary>
+        public string LoggedFps0Point1PercentLowMin { get; set; }
+
         public string AvgCPUT { get; set; }
         public string AvgGPUT { get; set; }
         public string AvgCPUP { get; set; }

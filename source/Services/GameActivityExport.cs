@@ -26,6 +26,22 @@ namespace GameActivity.Services
 		}
 
 		/// <summary>
+		/// When true, CSV includes session-level avg/min columns for Framerate 1% / 0.1% Low (from logged samples).
+		/// </summary>
+		protected virtual bool IncludeFrameratePercentileSummaryColumns
+		{
+			get { return true; }
+		}
+
+		/// <summary>
+		/// When true, CSV includes per-sample Framerate 1% / 0.1% Low columns (<see cref="GameActivityDetailsExport"/>).
+		/// </summary>
+		protected virtual bool IncludeFrameratePercentileRawColumns
+		{
+			get { return false; }
+		}
+
+		/// <summary>
 		/// When true, CSV headers use Avg* localization keys (session summary export).
 		/// When false, headers use per-sample keys (<see cref="GameActivityDetailsExport"/>).
 		/// </summary>
@@ -57,12 +73,26 @@ namespace GameActivity.Services
 			header.Add("GpuUsage", ResourceProvider.GetString(avgHeaders ? "LOCGameActivityAvgGpu" : "LOCGameActivityGpuUsage"));
 			header.Add("Fps", ResourceProvider.GetString(avgHeaders ? "LOCGameActivityAvgFps" : "LOCGameActivityFps"));
 
+			if (IncludeFrameratePercentileRawColumns)
+			{
+				header.Add("Fps1PercentLow", ResourceProvider.GetString("LOCGameActivityFps1PercentLow"));
+				header.Add("Fps0Point1PercentLow", ResourceProvider.GetString("LOCGameActivityFps0Point1PercentLow"));
+			}
+
 			if (IncludeSessionFpsAggregateColumns)
 			{
 				header.Add("FpsSessionMin", ResourceProvider.GetString("LOCGameActivitySessionFpsMin"));
 				header.Add("FpsSessionMax", ResourceProvider.GetString("LOCGameActivitySessionFpsMax"));
 				header.Add("FpsSessionMedian", ResourceProvider.GetString("LOCGameActivitySessionFpsMedian"));
 				header.Add("FpsSessionStdDev", ResourceProvider.GetString("LOCGameActivitySessionFpsStdDev"));
+			}
+
+			if (IncludeFrameratePercentileSummaryColumns)
+			{
+				header.Add("Fps1PercentLowAvg", ResourceProvider.GetString("LOCGameActivityFps1PercentLowAvg"));
+				header.Add("Fps1PercentLowMin", ResourceProvider.GetString("LOCGameActivityFps1PercentLowMin"));
+				header.Add("Fps0Point1PercentLowAvg", ResourceProvider.GetString("LOCGameActivityFps0Point1PercentLowAvg"));
+				header.Add("Fps0Point1PercentLowMin", ResourceProvider.GetString("LOCGameActivityFps0Point1PercentLowMin"));
 			}
 
 			header.Add("CpuTemp", ResourceProvider.GetString(avgHeaders ? "LOCGameActivityAvgCpuT" : "LOCGameActivityCpuTemp"));
@@ -128,6 +158,14 @@ namespace GameActivity.Services
 				row.Add("FpsSessionMax", fpsSessionMax.ToString());
 				row.Add("FpsSessionMedian", fpsSessionMedian.ToString());
 				row.Add("FpsSessionStdDev", fpsSessionStdDev.ToString());
+			}
+
+			if (IncludeFrameratePercentileSummaryColumns)
+			{
+				row.Add("Fps1PercentLowAvg", game.AvgFPS1PercentLow(sessionKey).ToString());
+				row.Add("Fps1PercentLowMin", game.MinFPS1PercentLow(sessionKey).ToString());
+				row.Add("Fps0Point1PercentLowAvg", game.AvgFPS0Point1PercentLow(sessionKey).ToString());
+				row.Add("Fps0Point1PercentLowMin", game.MinFPS0Point1PercentLow(sessionKey).ToString());
 			}
 
 			row.Add("CpuTemp", game.AvgCPUT(sessionKey).ToString());
@@ -225,6 +263,12 @@ namespace GameActivity.Services
 			row.Add("RamUsage", log?.RAM.ToString() ?? string.Empty);
 			row.Add("GpuUsage", log?.GPU.ToString() ?? string.Empty);
 			row.Add("Fps", log?.FPS.ToString() ?? string.Empty);
+
+			if (IncludeFrameratePercentileRawColumns)
+			{
+				row.Add("Fps1PercentLow", log != null ? log.FPS1PercentLow.ToString() : string.Empty);
+				row.Add("Fps0Point1PercentLow", log != null ? log.FPS0Point1PercentLow.ToString() : string.Empty);
+			}
 
 			if (IncludeSessionFpsAggregateColumns)
 			{

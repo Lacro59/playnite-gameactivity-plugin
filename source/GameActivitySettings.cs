@@ -276,6 +276,13 @@ namespace GameActivity
 
         /// <summary>MAHM <c>szSrcName</c> for FPS. Empty = default <c>Framerate</c>.</summary>
         public string MsiAfterburnerSensorFramerate { get; set; } = string.Empty;
+
+        /// <summary>MAHM source name for Framerate 1% Low. Empty = default English <c>Framerate 1% Low</c>.</summary>
+        public string MsiAfterburnerSensorFramerate1PercentLow { get; set; } = string.Empty;
+
+        /// <summary>MAHM source name for Framerate 0.1% Low. Empty = default English <c>Framerate 0.1% Low</c>.</summary>
+        public string MsiAfterburnerSensorFramerate0Point1PercentLow { get; set; } = string.Empty;
+
         /// <summary>MAHM source name for CPU usage %. Empty = default <c>CPU usage</c>.</summary>
         public string MsiAfterburnerSensorCpuUsage { get; set; } = string.Empty;
         /// <summary>MAHM source name for CPU temperature. Empty = default <c>CPU temperature</c>.</summary>

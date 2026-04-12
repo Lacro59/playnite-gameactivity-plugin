@@ -29,6 +29,18 @@ namespace GameActivity.Services
 		}
 
 		/// <inheritdoc />
+		protected override bool IncludeFrameratePercentileSummaryColumns
+		{
+			get { return false; }
+		}
+
+		/// <inheritdoc />
+		protected override bool IncludeFrameratePercentileRawColumns
+		{
+			get { return true; }
+		}
+
+		/// <inheritdoc />
 		protected override bool UseAverageColumnHeaders
 		{
 			get { return false; }

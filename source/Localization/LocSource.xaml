@@ -189,6 +189,12 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivitySessionFpsMax">Max FPS</sys:String>
     <sys:String x:Key="LOCGameActivitySessionFpsMedian">Median FPS</sys:String>
     <sys:String x:Key="LOCGameActivitySessionFpsStdDev">FPS SD</sys:String>
+    <sys:String x:Key="LOCGameActivityFps1PercentLow">Framerate 1% Low (FPS)</sys:String>
+    <sys:String x:Key="LOCGameActivityFps0Point1PercentLow">Framerate 0.1% Low (FPS)</sys:String>
+    <sys:String x:Key="LOCGameActivityFps1PercentLowAvg">Avg Framerate 1% Low</sys:String>
+    <sys:String x:Key="LOCGameActivityFps1PercentLowMin">Min Framerate 1% Low</sys:String>
+    <sys:String x:Key="LOCGameActivityFps0Point1PercentLowAvg">Avg Framerate 0.1% Low</sys:String>
+    <sys:String x:Key="LOCGameActivityFps0Point1PercentLowMin">Min Framerate 0.1% Low</sys:String>
     <sys:String x:Key="LOCGameActivityAvgCpuT">Avg CPU T°</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpuT">Avg GPU T°</sys:String>
     <sys:String x:Key="LOCGameActivityAvgCpuP">Avg CPU W</sys:String>

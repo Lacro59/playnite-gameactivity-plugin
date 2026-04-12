@@ -24,6 +24,8 @@ namespace GameActivity.Services.HardwareMonitoring.Providers
 		private const int MaxPath = 260;
 
 		private const string DefaultSensorFramerate = "Framerate";
+		private const string DefaultSensorFramerate1PercentLow = "Framerate 1% Low";
+		private const string DefaultSensorFramerate0Point1PercentLow = "Framerate 0.1% Low";
 		private const string DefaultSensorGpuUsage = "GPU usage";
 		private const string DefaultSensorGpuTemperature = "GPU temperature";
 		private const string DefaultSensorGpuPower = "GPU power";
@@ -332,6 +334,8 @@ namespace GameActivity.Services.HardwareMonitoring.Providers
 		private void ApplyConfiguredMahmSensors(HardwareMetrics metrics, List<MahmEntryRow> rows)
 		{
 			TryApplyFps(metrics, rows);
+			TryApplyFps1PercentLow(metrics, rows);
+			TryApplyFps0Point1PercentLow(metrics, rows);
 			TryApplyCpuUsage(metrics, rows);
 			TryApplyCpuTemperature(metrics, rows);
 			TryApplyCpuPower(metrics, rows);
@@ -404,6 +408,42 @@ namespace GameActivity.Services.HardwareMonitoring.Providers
 			if (row.Value >= 0f && row.Value <= 2000f)
 			{
 				metrics.FPS = RoundToInt(row.Value);
+			}
+		}
+
+		private void TryApplyFps1PercentLow(HardwareMetrics metrics, List<MahmEntryRow> rows)
+		{
+			string want = SettingOrDefault(s => s.MsiAfterburnerSensorFramerate1PercentLow, DefaultSensorFramerate1PercentLow);
+			MahmEntryRow row;
+			if (!TryFindMahmRow(rows, want, out row))
+			{
+				return;
+			}
+			if (IsUnavailableMahmValue(row.Value))
+			{
+				return;
+			}
+			if (row.Value >= 0f && row.Value <= 2000f)
+			{
+				metrics.FPS1PercentLow = RoundToInt(row.Value);
+			}
+		}
+
+		private void TryApplyFps0Point1PercentLow(HardwareMetrics metrics, List<MahmEntryRow> rows)
+		{
+			string want = SettingOrDefault(s => s.MsiAfterburnerSensorFramerate0Point1PercentLow, DefaultSensorFramerate0Point1PercentLow);
+			MahmEntryRow row;
+			if (!TryFindMahmRow(rows, want, out row))
+			{
+				return;
+			}
+			if (IsUnavailableMahmValue(row.Value))
+			{
+				return;
+			}
+			if (row.Value >= 0f && row.Value <= 2000f)
+			{
+				metrics.FPS0Point1PercentLow = RoundToInt(row.Value);
 			}
 		}
 

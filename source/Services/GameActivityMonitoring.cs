@@ -347,6 +347,8 @@ namespace GameActivity.Services
                 {
                     Datelog = DateTime.UtcNow,
                     FPS = metrics.FPS ?? 0,
+                    FPS1PercentLow = metrics.FPS1PercentLow ?? 0,
+                    FPS0Point1PercentLow = metrics.FPS0Point1PercentLow ?? 0,
                     CPU = metrics.CpuUsage ?? 0,
                     CPUT = metrics.CpuTemperature ?? 0,
                     CPUP = metrics.CpuPower ?? 0,

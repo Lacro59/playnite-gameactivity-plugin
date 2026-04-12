@@ -219,6 +219,62 @@ namespace GameActivity.Models
 		}
 
 		/// <summary>
+		/// Average Framerate 1% Low (FPS) for the session, using only samples with a value &gt; 0.
+		/// </summary>
+		public int AvgFPS1PercentLow(DateTime dateSession)
+		{
+			List<int> values = GetSessionPositiveIntValues(dateSession, d => d.FPS1PercentLow);
+			if (values.Count == 0)
+			{
+				return 0;
+			}
+
+			return (int)Math.Round(values.Average());
+		}
+
+		/// <summary>
+		/// Minimum Framerate 1% Low (FPS) for the session (worst among samples &gt; 0).
+		/// </summary>
+		public int MinFPS1PercentLow(DateTime dateSession)
+		{
+			List<int> values = GetSessionPositiveIntValues(dateSession, d => d.FPS1PercentLow);
+			if (values.Count == 0)
+			{
+				return 0;
+			}
+
+			return values.Min();
+		}
+
+		/// <summary>
+		/// Average Framerate 0.1% Low (FPS) for the session, using only samples with a value &gt; 0.
+		/// </summary>
+		public int AvgFPS0Point1PercentLow(DateTime dateSession)
+		{
+			List<int> values = GetSessionPositiveIntValues(dateSession, d => d.FPS0Point1PercentLow);
+			if (values.Count == 0)
+			{
+				return 0;
+			}
+
+			return (int)Math.Round(values.Average());
+		}
+
+		/// <summary>
+		/// Minimum Framerate 0.1% Low (FPS) for the session (worst among samples &gt; 0).
+		/// </summary>
+		public int MinFPS0Point1PercentLow(DateTime dateSession)
+		{
+			List<int> values = GetSessionPositiveIntValues(dateSession, d => d.FPS0Point1PercentLow);
+			if (values.Count == 0)
+			{
+				return 0;
+			}
+
+			return values.Min();
+		}
+
+		/// <summary>
 		/// Calculates the average CPU temperature for a specific session.
 		/// </summary>
 		/// <param name="dateSession">The session date to calculate the average for.</param>
@@ -586,6 +642,17 @@ namespace GameActivity.Models
 			return GetActivityDetails(dateSession)
 				.Where(x => x != null && x.FPS > 0)
 				.Select(x => x.FPS)
+				.ToList();
+		}
+
+		/// <summary>
+		/// Collects positive metric samples for a session (values &gt; 0 only).
+		/// </summary>
+		private List<int> GetSessionPositiveIntValues(DateTime dateSession, Func<ActivityDetailsData, int> selector)
+		{
+			return GetActivityDetails(dateSession)
+				.Where(x => x != null && selector(x) > 0)
+				.Select(selector)
 				.ToList();
 		}
 
