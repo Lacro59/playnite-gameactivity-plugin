@@ -412,8 +412,13 @@ namespace GameActivity.Views
             bool cumulSnapshot = PluginDatabase.PluginSettings.CumulPlaytimeStore;
 
             bool showLauncherIcons = PluginDatabase.PluginSettings.ShowLauncherIcons;
-            double labelsRotation = showLauncherIcons ? 0 : 160;
-            double fontSize = showLauncherIcons ? 30 : (double)ResourceProvider.GetResource("FontSize");
+            // Same slant as the "hours by day" chart (PART_ChartHoursByDaySource_X LabelsRotation in GameActivityView.xaml).
+            double labelsRotation = isGenresSourcesSnapshot
+                ? 30
+                : (showLauncherIcons ? 0 : 160);
+            double fontSize = (isMonthSourcesSnapshot && showLauncherIcons)
+                ? 30
+                : (double)ResourceProvider.GetResource("FontSize");
 
             // Tooltip mode only depends on the current aggregation mode.
             TextBlockWithIconMode tooltipMode = isMonthSourcesSnapshot
@@ -611,7 +616,7 @@ namespace GameActivity.Views
                     });
 
                     labels[compteur] = item.Key;
-                    if (showLauncherIcons)
+                    if (showLauncherIcons && isMonthSourcesSnapshot)
                     {
                         labels[compteur] = TransformIcon.Get(labels[compteur]);
                     }

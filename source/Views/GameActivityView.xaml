@@ -217,8 +217,7 @@
                                             </lvc:Axis>
                                         </lvc:CartesianChart.AxisX>
                                         <lvc:CartesianChart.AxisY>
-                                            <lvc:Axis x:Name="PART_ChartHoursByDaySource_Y"
-                                              FontSize="{DynamicResource FontSize}" FontFamily="{DynamicResource FontFamily}" />
+                                            <lvc:Axis x:Name="PART_ChartHoursByDaySource_Y" FontSize="{DynamicResource FontSize}" FontFamily="{DynamicResource FontFamily}" />
                                         </lvc:CartesianChart.AxisY>
                                     </lvc:CartesianChart>
 
