@@ -338,8 +338,8 @@ namespace GameActivity.Services
                 _healthMonitor?.RecordCycle(metrics);
 
                 Common.LogDebug(true,
-                    $"Metrics sources - FPS:{metrics.Source.FPS} CPU:{metrics.Source.CpuUsage} " +
-                    $"GPU:{metrics.Source.GpuUsage} RAM:{metrics.Source.RamUsage}");
+                    $"Metrics sources - FPS:{metrics.Source.FPS} FPS1%:{metrics.Source.FPS1PercentLow} FPS0.1%:{metrics.Source.FPS0Point1PercentLow} " +
+                    $"CPU:{metrics.Source.CpuUsage} GPU:{metrics.Source.GpuUsage} RAM:{metrics.Source.RamUsage}");
 
                 CheckAndRecordWarnings(runningActivity, metrics);
 
@@ -834,8 +834,8 @@ namespace GameActivity.Services
 
                     var caps = status.Value.Capabilities;
                     Logger.Info(
-                        $"  Capabilities - FPS: {caps.Supports(MetricType.FPS)}, CPU: {caps.Supports(MetricType.CpuUsage)}, " +
-                        $"GPU: {caps.Supports(MetricType.GpuUsage)}, RAM: {caps.Supports(MetricType.RamUsage)}, " +
+                        $"  Capabilities - FPS: {caps.Supports(MetricType.FPS)}, FPS1%L: {caps.Supports(MetricType.Framerate1PercentLow)}, FPS0.1%L: {caps.Supports(MetricType.Framerate0Point1PercentLow)}, " +
+                        $"CPU: {caps.Supports(MetricType.CpuUsage)}, GPU: {caps.Supports(MetricType.GpuUsage)}, RAM: {caps.Supports(MetricType.RamUsage)}, " +
                         $"CPU Temps: {caps.Supports(MetricType.CpuTemperature)}, GPU Temps: {caps.Supports(MetricType.GpuTemperature)}, " +
                         $"CPU Power: {caps.Supports(MetricType.CpuPower)}, GPU Power: {caps.Supports(MetricType.GpuPower)}"
                     );
@@ -866,6 +866,8 @@ namespace GameActivity.Services
                             Logger.Info(
                                 $"  {provider.ProviderName} returned - " +
                                 $"FPS:{testMetrics.FPS?.ToString() ?? "NULL"}, " +
+                                $"FPS1%L:{testMetrics.FPS1PercentLow?.ToString() ?? "NULL"}, " +
+                                $"FPS0.1%L:{testMetrics.FPS0Point1PercentLow?.ToString() ?? "NULL"}, " +
                                 $"CPU:{testMetrics.CpuUsage?.ToString() ?? "NULL"}%, " +
                                 $"GPU:{testMetrics.GpuUsage?.ToString() ?? "NULL"}%, " +
                                 $"RAM:{testMetrics.RamUsage?.ToString() ?? "NULL"}%, " +
@@ -888,6 +890,8 @@ namespace GameActivity.Services
 
                 Logger.Info("=== Metrics Sources ===");
                 Logger.Info($"FPS Source: {metrics.Source.FPS ?? "NULL"}");
+                Logger.Info($"FPS 1% Low Source: {metrics.Source.FPS1PercentLow ?? "NULL"}");
+                Logger.Info($"FPS 0.1% Low Source: {metrics.Source.FPS0Point1PercentLow ?? "NULL"}");
                 Logger.Info($"CPU Usage Source: {metrics.Source.CpuUsage ?? "NULL"}");
                 Logger.Info($"GPU Usage Source: {metrics.Source.GpuUsage ?? "NULL"}");
                 Logger.Info($"RAM Usage Source: {metrics.Source.RamUsage ?? "NULL"}");

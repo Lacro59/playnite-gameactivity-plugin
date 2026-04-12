@@ -35,7 +35,9 @@ namespace GameActivity.Services.HardwareMonitoring.Core
 				{ MetricType.GpuUsage, new List<string> { "LibreHardware", "HWiNFO", "MsiAfterburner", "WMI", "PerformanceCounter" } },
 				{ MetricType.GpuTemperature, new List<string> { "LibreHardware", "HWiNFO", "MsiAfterburner" } },
 				{ MetricType.GpuPower, new List<string> { "LibreHardware", "HWiNFO", "MsiAfterburner" } },
-				{ MetricType.RamUsage, new List<string> { "LibreHardware", "WMI", "PerformanceCounter" } }
+				{ MetricType.RamUsage, new List<string> { "LibreHardware", "WMI", "PerformanceCounter" } },
+				{ MetricType.Framerate1PercentLow, new List<string> { "MsiAfterburner" } },
+				{ MetricType.Framerate0Point1PercentLow, new List<string> { "MsiAfterburner" } }
 			};
 		}
 	}

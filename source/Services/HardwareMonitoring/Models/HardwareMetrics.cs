@@ -58,6 +58,8 @@ namespace GameActivity.Services.HardwareMonitoring.Models
 	public class MetricSource
 	{
 		public string FPS { get; set; }
+		public string FPS1PercentLow { get; set; }
+		public string FPS0Point1PercentLow { get; set; }
 		public string CpuUsage { get; set; }
 		public string CpuTemperature { get; set; }
 		public string CpuPower { get; set; }
@@ -69,6 +71,8 @@ namespace GameActivity.Services.HardwareMonitoring.Models
 		public void Merge(MetricSource other)
 		{
 			FPS = FPS ?? other.FPS;
+			FPS1PercentLow = FPS1PercentLow ?? other.FPS1PercentLow;
+			FPS0Point1PercentLow = FPS0Point1PercentLow ?? other.FPS0Point1PercentLow;
 			CpuUsage = CpuUsage ?? other.CpuUsage;
 			CpuTemperature = CpuTemperature ?? other.CpuTemperature;
 			CpuPower = CpuPower ?? other.CpuPower;

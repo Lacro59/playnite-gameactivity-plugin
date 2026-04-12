@@ -217,6 +217,7 @@ namespace GameActivity.Services.HardwareMonitoring.Providers
 		{
 			SupportedMetrics =
 				MetricType.FPS |
+				MetricType.Framerate1PercentLow | MetricType.Framerate0Point1PercentLow |
 				MetricType.CpuUsage | MetricType.CpuTemperature | MetricType.CpuPower |
 				MetricType.GpuUsage | MetricType.GpuTemperature | MetricType.GpuPower |
 				MetricType.RamUsage,

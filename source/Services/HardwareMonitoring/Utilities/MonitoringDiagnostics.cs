@@ -141,6 +141,8 @@ namespace GameActivity.Services.HardwareMonitoring.Utilities
 		{
 			int count = 0;
 			if (metrics.FPS.HasValue && metrics.Source.FPS == providerName) count++;
+			if (metrics.FPS1PercentLow.HasValue && metrics.Source.FPS1PercentLow == providerName) count++;
+			if (metrics.FPS0Point1PercentLow.HasValue && metrics.Source.FPS0Point1PercentLow == providerName) count++;
 			if (metrics.CpuUsage.HasValue && metrics.Source.CpuUsage == providerName) count++;
 			if (metrics.CpuTemperature.HasValue && metrics.Source.CpuTemperature == providerName) count++;
 			if (metrics.CpuPower.HasValue && metrics.Source.CpuPower == providerName) count++;
@@ -156,6 +158,8 @@ namespace GameActivity.Services.HardwareMonitoring.Utilities
 			var list = new List<string>();
 
 			if ((metrics & MetricType.FPS) == MetricType.FPS) list.Add("FPS");
+			if ((metrics & MetricType.Framerate1PercentLow) == MetricType.Framerate1PercentLow) list.Add("FPS 1% Low");
+			if ((metrics & MetricType.Framerate0Point1PercentLow) == MetricType.Framerate0Point1PercentLow) list.Add("FPS 0.1% Low");
 			if ((metrics & MetricType.CpuUsage) == MetricType.CpuUsage) list.Add("CPU");
 			if ((metrics & MetricType.CpuTemperature) == MetricType.CpuTemperature) list.Add("CPU Temp");
 			if ((metrics & MetricType.CpuPower) == MetricType.CpuPower) list.Add("CPU Power");

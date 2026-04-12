@@ -126,18 +126,18 @@ namespace GameActivity.Services.HardwareMonitoring.Core
 
             var metrics = new HardwareMetrics();
 
-            foreach (MetricType metricType in Enum.GetValues(typeof(MetricType)))
-            {
-                if (metricType == MetricType.None || metricType == MetricType.All)
-                {
-                    continue;
-                }
+			foreach (MetricType metricType in Enum.GetValues(typeof(MetricType)))
+			{
+				if (metricType == MetricType.None || metricType == MetricType.All)
+				{
+					continue;
+				}
 
-                TryGetMetric(metrics, metricType, isCheck);
-            }
+				TryGetMetric(metrics, metricType, isCheck);
+			}
 
-            UpdateCache(metrics);
-            return metrics;
+			UpdateCache(metrics);
+			return metrics;
         }
 
         /// <summary>
@@ -218,13 +218,19 @@ namespace GameActivity.Services.HardwareMonitoring.Core
                 case MetricType.RamUsage:
                     if (source.RamUsage.HasValue) { metrics.RamUsage = source.RamUsage; metrics.Source.RamUsage = providerName; return true; }
                     break;
+                case MetricType.Framerate1PercentLow:
+                    if (source.FPS1PercentLow.HasValue) { metrics.FPS1PercentLow = source.FPS1PercentLow; metrics.Source.FPS1PercentLow = providerName; return true; }
+                    break;
+                case MetricType.Framerate0Point1PercentLow:
+                    if (source.FPS0Point1PercentLow.HasValue) { metrics.FPS0Point1PercentLow = source.FPS0Point1PercentLow; metrics.Source.FPS0Point1PercentLow = providerName; return true; }
+                    break;
             }
             return false;
         }
 
-        /// <summary>
-        /// Increments the failure counter for a provider and disables it (fallback)
-        /// if <see cref="MonitoringConfiguration.MaxFailuresBeforeFallback"/> is reached.
+		/// <summary>
+		/// Increments the failure counter for a provider and disables it (fallback)
+		/// if <see cref="MonitoringConfiguration.MaxFailuresBeforeFallback"/> is reached.
         /// Also stores the exception message for status reporting.
         /// </summary>
         private void HandleProviderError(IHardwareDataProvider provider, Exception ex)
