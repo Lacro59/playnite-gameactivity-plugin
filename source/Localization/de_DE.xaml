@@ -86,6 +86,8 @@ Klicken Sie für weitere Informationen.</sys:String>
     <sys:String x:Key="LOCGameActivityUsedLibreHardware">LibreHardware Monitor verwenden</sys:String>
     <sys:String x:Key="LOCGameActivityRemoteWebServer">Über Remote-Webserver</sys:String>
     <sys:String x:Key="LOCGameActivityUseMsiAfterburner">MSI Afterburner verwenden</sys:String>
+    <sys:String x:Key="LOCGameActivityMsiAbSensorHelp">Pick a row after Refresh (Afterburner running). The list shows the MAHM source name, optional GPU adapter from the MAHM GPU table, localized label when useful, and units. Only the source name is stored; leave empty for the default English name.</sys:String>
+    <sys:String x:Key="LOCGameActivityMsiAbRefreshSensors">Refresh sensor list</sys:String>
     <sys:String x:Key="LOCGameActivityUseHWiNFOSharedMemory">HWiNFO SharedMemory verwenden</sys:String>
     <sys:String x:Key="LOCGameActivityUseHWiNFOGadget">HWiNFO Gadget Berichterstattung verwenden</sys:String>
     <sys:String x:Key="LOCGameActivityIndex">Index</sys:String>
@@ -150,10 +152,10 @@ Klicken Sie für weitere Informationen.</sys:String>
 
     <sys:String x:Key="LOCGameActivityRecentActivity">Letzte Aktivitäten</sys:String>
     <sys:String x:Key="LOCGameActivityNoRecentActivity">Keine aktuelle Aktivität</sys:String>
-    <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} Stunden in der vergangenen {1} Woche</sys:String>
-    <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} Stunden in den vergangenen {1} Wochen</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} h / {1} week</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} h / {1} weeks</sys:String>
     <sys:String x:Key="LOCGameActivityAvgPerDay">Durchschnittliche Spielzeit pro Tag</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgPerSession">Durchschnittliche Zeit pro Sitzung</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgPerSession">Avg. time / session</sys:String>
     <sys:String x:Key="LOCGameActivityFirstSession">Erste Session</sys:String>
     <sys:String x:Key="LOCGameActivityLastSession">Letzte Session</sys:String>
 
@@ -219,6 +221,9 @@ Klicken Sie für weitere Informationen.</sys:String>
 
 
     <!-- ==================== Add / Edit Session ==================== -->
+
+    <sys:String x:Key="LOCGameActivitySessionDetailsExportFileTag">Session-performance-log</sys:String>
+    <sys:String x:Key="LOCGameActivityExportSessionDetails">Export this session's performance samples to CSV. The suggested file name includes the game title and session start (local time).</sys:String>
 
     <sys:String x:Key="LOCGaAddNewGameSession">Neue Spielsitzung hinzufügen</sys:String>
     <sys:String x:Key="LOCGaDateStart">Anfangsdatum</sys:String>
