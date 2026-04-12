@@ -233,12 +233,15 @@ green = faster</sys:String>
     <sys:String x:Key="LOCGameActivityLabelGpuT">GPU T°</sys:String>
     <sys:String x:Key="LOCGameActivityLabelCpuP">CPU W</sys:String>
     <sys:String x:Key="LOCGameActivityLabelGpuP">GPU W</sys:String>
-    
+    <sys:String x:Key="LOCGameActivityLabelFps1PercentLowShort">1% Low</sys:String>
+    <sys:String x:Key="LOCGameActivityLabelFps0Point1PercentLowShort">0.1% Low</sys:String>
+
     <sys:String x:Key="LOCGameActivityShowAllData">Show all data</sys:String>
 
     <!-- Group header labels for the two filter bar rows -->
     <sys:String x:Key="LOCGameActivityGroupUsage">Usage</sys:String>
     <sys:String x:Key="LOCGameActivityGroupTempPower">Temp / Power</sys:String>
+    <sys:String x:Key="LOCGameActivityGroupLogSensors">Temp / power / FPS lows</sys:String>
 
     <!-- ==================== Warning Dialog ==================== -->
 

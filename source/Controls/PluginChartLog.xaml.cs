@@ -23,7 +23,7 @@ namespace GameActivity.Controls
 {
     /// <summary>
     /// User control providing charting functionality to visualize game activity logs,
-    /// including CPU, GPU, RAM, FPS, temperatures, and power usage over time.
+    /// including CPU, GPU, RAM, FPS, FPS 1%/0.1% lows, temperatures, and power usage over time.
     /// </summary>
     public partial class PluginChartLog : PluginUserControlExtend
     {
@@ -63,6 +63,8 @@ namespace GameActivity.Controls
         private LineSeries _gpuTSeries;
         private LineSeries _cpuPSeries;
         private LineSeries _gpuPSeries;
+        private LineSeries _fps1PercentLowSeries;
+        private LineSeries _fps0Point1PercentLowSeries;
 
         /// <summary>
         /// Above this many samples in the visible window, line markers are hidden for readability.
@@ -272,9 +274,37 @@ namespace GameActivity.Controls
             new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback)
         );
 
+        /// <summary>Controls visibility of the FPS 1% Low series.</summary>
+        public bool DisplayFps1PercentLow
+        {
+            get => (bool)GetValue(DisplayFps1PercentLowProperty);
+            set => SetValue(DisplayFps1PercentLowProperty, value);
+        }
+        public static readonly DependencyProperty DisplayFps1PercentLowProperty =
+            DependencyProperty.Register(
+                nameof(DisplayFps1PercentLow),
+                typeof(bool),
+                typeof(PluginChartLog),
+                new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback)
+            );
+
+        /// <summary>Controls visibility of the FPS 0.1% Low series.</summary>
+        public bool DisplayFps0Point1PercentLow
+        {
+            get => (bool)GetValue(DisplayFps0Point1PercentLowProperty);
+            set => SetValue(DisplayFps0Point1PercentLowProperty, value);
+        }
+        public static readonly DependencyProperty DisplayFps0Point1PercentLowProperty =
+            DependencyProperty.Register(
+                nameof(DisplayFps0Point1PercentLow),
+                typeof(bool),
+                typeof(PluginChartLog),
+                new FrameworkPropertyMetadata(false, ControlsPropertyChangedCallback)
+            );
+
         /// <summary>
         /// When true: bypasses AxisVariator/limit pagination and renders the entire
-        /// session dataset. Also forces all 8 series visible regardless of individual
+        /// session dataset. Also forces all 10 series visible regardless of individual
         /// Display* flags. Driven by the nav bar toggle or by an external XAML binding.
         /// </summary>
         public bool ShowAllData
@@ -425,6 +455,8 @@ namespace GameActivity.Controls
                     DisplayGpuT = false;
                     DisplayCpuP = false;
                     DisplayGpuP = false;
+                    DisplayFps1PercentLow = false;
+                    DisplayFps0Point1PercentLow = false;
 
                     // ShowAllData is not reset from plugin settings — it is owned by the
                     // nav bar toggle or by the caller's XAML binding.
@@ -511,6 +543,8 @@ namespace GameActivity.Controls
             ControlDataContext.DisplayGpuT = DisplayGpuT;
             ControlDataContext.DisplayCpuP = DisplayCpuP;
             ControlDataContext.DisplayGpuP = DisplayGpuP;
+            ControlDataContext.DisplayFps1PercentLow = DisplayFps1PercentLow;
+            ControlDataContext.DisplayFps0Point1PercentLow = DisplayFps0Point1PercentLow;
 
             // ── Nav bar defaults ───────────────────────────────────────────
             bool showNavBar = ShowNavBar;
@@ -771,7 +805,7 @@ namespace GameActivity.Controls
         /// <param name="titleChart">An optional title for the chart.</param>
         /// <param name="showAll">
         /// When true: bypasses <see cref="AxisVariator"/> and <see cref="AxisLimit"/>
-        /// and renders the complete dataset. All 8 series are forced visible.
+        /// and renders the complete dataset. All 10 series are forced visible.
         /// </param>
         public void GetActivityForGamesLogGraphics(
             GameActivities gameActivities,
@@ -898,6 +932,8 @@ namespace GameActivity.Controls
                     ChartValues<double> gpuTValues = new ChartValues<double>();
                     ChartValues<double> cpuPValues = new ChartValues<double>();
                     ChartValues<double> gpuPValues = new ChartValues<double>();
+                    ChartValues<double> fps1PercentLowValues = new ChartValues<double>();
+                    ChartValues<double> fps0Point1PercentLowValues = new ChartValues<double>();
 
                     foreach (ActivityDetailsData log in gameLogsDefinitive)
                     {
@@ -909,6 +945,8 @@ namespace GameActivity.Controls
                         gpuTValues.Add(log.GPUT);
                         cpuPValues.Add(log.CPUP);
                         gpuPValues.Add(log.GPUP);
+                        fps1PercentLowValues.Add(log.FPS1PercentLow);
+                        fps0Point1PercentLowValues.Add(log.FPS0Point1PercentLow);
                     }
 
                     this.Dispatcher.BeginInvoke(
@@ -948,6 +986,14 @@ namespace GameActivity.Controls
                                 Brush gpuPBrush = TryGetThemeBrush(
                                     "GameActivityGpuPBrush",
                                     "#FFFFCDD2"
+                                );
+                                Brush fps1LowBrush = TryGetThemeBrush(
+                                    "GameActivityFps1PercentLowBrush",
+                                    "#FF00BFA5"
+                                );
+                                Brush fps01LowBrush = TryGetThemeBrush(
+                                    "GameActivityFps0Point1PercentLowBrush",
+                                    "#FF00E676"
                                 );
 
                                 _cpuSeries = new LineSeries
@@ -1056,6 +1102,38 @@ namespace GameActivity.Controls
                                     Values = gpuPValues,
                                     ScalesYAt = 1,
                                 };
+                                _fps1PercentLowSeries = new LineSeries
+                                {
+                                    Title = ResourceProvider.GetString("LOCGameActivityFps1PercentLow"),
+                                    Stroke = fps1LowBrush,
+                                    Fill = Brushes.Transparent,
+                                    StrokeThickness = 1.5,
+                                    StrokeDashArray = new System.Windows.Media.DoubleCollection
+                                    {
+                                        6,
+                                        2,
+                                    },
+                                    PointGeometrySize = 4,
+                                    Values = fps1PercentLowValues,
+                                    ScalesYAt = 1,
+                                };
+                                _fps0Point1PercentLowSeries = new LineSeries
+                                {
+                                    Title = ResourceProvider.GetString(
+                                        "LOCGameActivityFps0Point1PercentLow"
+                                    ),
+                                    Stroke = fps01LowBrush,
+                                    Fill = Brushes.Transparent,
+                                    StrokeThickness = 1.5,
+                                    StrokeDashArray = new System.Windows.Media.DoubleCollection
+                                    {
+                                        1,
+                                        2,
+                                    },
+                                    PointGeometrySize = 4,
+                                    Values = fps0Point1PercentLowValues,
+                                    ScalesYAt = 1,
+                                };
 
                                 int visibleSampleCount = gameLogsDefinitive.Count;
                                 if (visibleSampleCount > ChartLogPointMarkerMaxCount)
@@ -1068,7 +1146,9 @@ namespace GameActivity.Controls
                                         _cpuTSeries,
                                         _gpuTSeries,
                                         _cpuPSeries,
-                                        _gpuPSeries
+                                        _gpuPSeries,
+                                        _fps1PercentLowSeries,
+                                        _fps0Point1PercentLowSeries
                                     );
                                 }
 
@@ -1082,6 +1162,8 @@ namespace GameActivity.Controls
                                     _gpuTSeries,
                                     _cpuPSeries,
                                     _gpuPSeries,
+                                    _fps1PercentLowSeries,
+                                    _fps0Point1PercentLowSeries,
                                 };
 
                                 // Persist the effective window size for Prev() and NavBar_FirstClicked clamping.
@@ -1178,8 +1260,20 @@ namespace GameActivity.Controls
             DisplayGpuP = !DisplayGpuP;
         }
 
+        /// <summary>Toggles FPS 1% Low series visibility.</summary>
+        public void ToggleFps1PercentLow()
+        {
+            DisplayFps1PercentLow = !DisplayFps1PercentLow;
+        }
+
+        /// <summary>Toggles FPS 0.1% Low series visibility.</summary>
+        public void ToggleFps0Point1PercentLow()
+        {
+            DisplayFps0Point1PercentLow = !DisplayFps0Point1PercentLow;
+        }
+
         /// <summary>
-        /// Applies visibility to all 8 series according to Display* flags.
+        /// Applies visibility to all 10 series according to Display* flags.
         /// </summary>
         /// <param name="forceAllVisible">
         /// When true (ShowAllData mode), every series is forced to <see cref="Visibility.Visible"/> —
@@ -1226,6 +1320,20 @@ namespace GameActivity.Controls
             {
                 _gpuPSeries.Visibility =
                     (forceAllVisible || DisplayGpuP) ? Visibility.Visible : Visibility.Collapsed;
+            }
+            if (_fps1PercentLowSeries != null)
+            {
+                _fps1PercentLowSeries.Visibility =
+                    (forceAllVisible || DisplayFps1PercentLow)
+                        ? Visibility.Visible
+                        : Visibility.Collapsed;
+            }
+            if (_fps0Point1PercentLowSeries != null)
+            {
+                _fps0Point1PercentLowSeries.Visibility =
+                    (forceAllVisible || DisplayFps0Point1PercentLow)
+                        ? Visibility.Visible
+                        : Visibility.Collapsed;
             }
         }
 
@@ -1410,7 +1518,9 @@ namespace GameActivity.Controls
 
         private bool _displayMoreData;
 
-        /// <summary>When true, the extended sensor group (CpuT, GpuT, CpuP, GpuP) toggle buttons are shown.</summary>
+        /// <summary>
+        /// When true, the extended sensor group (CpuT, GpuT, CpuP, GpuP, FPS 1% / 0.1% Low) toggle buttons are shown.
+        /// </summary>
         public bool DisplayMoreData
         {
             get => _displayMoreData;
@@ -1451,6 +1561,24 @@ namespace GameActivity.Controls
         {
             get => _displayGpuP;
             set => SetValue(ref _displayGpuP, value);
+        }
+
+        private bool _displayFps1PercentLow;
+
+        /// <summary>Mirror of <see cref="PluginChartLog.DisplayFps1PercentLow"/>.</summary>
+        public bool DisplayFps1PercentLow
+        {
+            get => _displayFps1PercentLow;
+            set => SetValue(ref _displayFps1PercentLow, value);
+        }
+
+        private bool _displayFps0Point1PercentLow;
+
+        /// <summary>Mirror of <see cref="PluginChartLog.DisplayFps0Point1PercentLow"/>.</summary>
+        public bool DisplayFps0Point1PercentLow
+        {
+            get => _displayFps0Point1PercentLow;
+            set => SetValue(ref _displayFps0Point1PercentLow, value);
         }
 
         // ── ShowAllData ────────────────────────────────────────────────────────
@@ -1558,6 +1686,12 @@ namespace GameActivity.Controls
         /// <summary>Bound to the GPU power toggle button in the filter bar.</summary>
         public RelayCommand CmdToggleGpuP { get; }
 
+        /// <summary>Bound to the FPS 1% Low toggle in the filter bar.</summary>
+        public RelayCommand CmdToggleFps1PercentLow { get; }
+
+        /// <summary>Bound to the FPS 0.1% Low toggle in the filter bar.</summary>
+        public RelayCommand CmdToggleFps0Point1PercentLow { get; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PluginChartLogDataContext"/> class.
         /// Wires up commands for toggling sensor series visibility.
@@ -1575,6 +1709,10 @@ namespace GameActivity.Controls
             CmdToggleGpuT = new RelayCommand(() => _control?.ToggleGpuT());
             CmdToggleCpuP = new RelayCommand(() => _control?.ToggleCpuP());
             CmdToggleGpuP = new RelayCommand(() => _control?.ToggleGpuP());
+            CmdToggleFps1PercentLow = new RelayCommand(() => _control?.ToggleFps1PercentLow());
+            CmdToggleFps0Point1PercentLow = new RelayCommand(
+                () => _control?.ToggleFps0Point1PercentLow()
+            );
         }
 
         private PluginChartLog _control;

@@ -172,9 +172,9 @@
                         Visibility="{Binding DisplayMoreData, Converter={StaticResource BooleanToVisibilityConverter}}"
                         Margin="0,2,0,2" />
 
-                <!-- ── Group 2 : Temp / Power — hidden by default ── -->
+                <!-- ── Group 2 : temp, power, FPS lows — hidden by default ── -->
                 <TextBlock Grid.Column="0" Grid.Row="2"
-                           Text="{DynamicResource LOCGameActivityGroupTempPower}"
+                           Text="{DynamicResource LOCGameActivityGroupLogSensors}"
                            Style="{DynamicResource ViewColumnLabelText}"
                            Visibility="{Binding DisplayMoreData, Converter={StaticResource BooleanToVisibilityConverter}}"
                            VerticalAlignment="Center"
@@ -205,6 +205,18 @@
                               IsChecked="{Binding DisplayGpuP, Mode=OneWay}"
                               Command="{Binding CmdToggleGpuP}">
                         <TextBlock Text="{DynamicResource LOCGameActivityGpuPower}"
+                                   Style="{DynamicResource BaseTextBlockStyle}" />
+                    </CheckBox>
+                    <CheckBox Style="{DynamicResource CompactCheckBox}"
+                              IsChecked="{Binding DisplayFps1PercentLow, Mode=OneWay}"
+                              Command="{Binding CmdToggleFps1PercentLow}">
+                        <TextBlock Text="{DynamicResource LOCGameActivityLabelFps1PercentLowShort}"
+                                   Style="{DynamicResource BaseTextBlockStyle}" />
+                    </CheckBox>
+                    <CheckBox Style="{DynamicResource CompactCheckBox}"
+                              IsChecked="{Binding DisplayFps0Point1PercentLow, Mode=OneWay}"
+                              Command="{Binding CmdToggleFps0Point1PercentLow}">
+                        <TextBlock Text="{DynamicResource LOCGameActivityLabelFps0Point1PercentLowShort}"
                                    Style="{DynamicResource BaseTextBlockStyle}" />
                     </CheckBox>
                 </StackPanel>
