@@ -78,6 +78,10 @@ namespace GameActivity.Views
                 HideColumn(lvAvgCpuP, lvAvgCpuPHeader, true);
                 HideColumn(lvAvgGpuT, lvAvgGpuTHeader, true);
                 HideColumn(lvAvgCpuT, lvAvgCpuTHeader, true);
+                HideColumn(lvSessionFpsStdDev, lvSessionFpsStdDevHeader, true);
+                HideColumn(lvSessionFpsMedian, lvSessionFpsMedianHeader, true);
+                HideColumn(lvSessionFpsMax, lvSessionFpsMaxHeader, true);
+                HideColumn(lvSessionFpsMin, lvSessionFpsMinHeader, true);
                 HideColumn(lvAvgFps, lvAvgFpsHeader, true);
                 HideColumn(lvAvgRam, lvAvgRamHeader, true);
                 HideColumn(lvAvgGpu, lvAvgGpuHeader, true);

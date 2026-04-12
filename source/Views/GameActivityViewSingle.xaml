@@ -453,6 +453,60 @@
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
 
+                            <!-- Logged FPS — min / max / median / sample SD (same visibility as Avg FPS when logging is off) -->
+                            <GridViewColumn x:Name="lvSessionFpsMin" Width="auto">
+                                <GridViewColumnHeader Content="{DynamicResource LOCGameActivitySessionFpsMin}"
+                                                      controlsShared:ListViewColumnOptions.DisableSorting="True"
+                                                      Name="lvSessionFpsMinHeader" />
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Label Content="{Binding LoggedFpsMin}"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Stretch"
+                                               Style="{DynamicResource ListExtendStyleLabel}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn x:Name="lvSessionFpsMax" Width="auto">
+                                <GridViewColumnHeader Content="{DynamicResource LOCGameActivitySessionFpsMax}"
+                                                      controlsShared:ListViewColumnOptions.DisableSorting="True"
+                                                      Name="lvSessionFpsMaxHeader" />
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Label Content="{Binding LoggedFpsMax}"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Stretch"
+                                               Style="{DynamicResource ListExtendStyleLabel}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn x:Name="lvSessionFpsMedian" Width="auto">
+                                <GridViewColumnHeader Content="{DynamicResource LOCGameActivitySessionFpsMedian}"
+                                                      controlsShared:ListViewColumnOptions.DisableSorting="True"
+                                                      Name="lvSessionFpsMedianHeader" />
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Label Content="{Binding LoggedFpsMedian}"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Stretch"
+                                               Style="{DynamicResource ListExtendStyleLabel}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn x:Name="lvSessionFpsStdDev" Width="auto">
+                                <GridViewColumnHeader Content="{DynamicResource LOCGameActivitySessionFpsStdDev}"
+                                                      controlsShared:ListViewColumnOptions.DisableSorting="True"
+                                                      Name="lvSessionFpsStdDevHeader" />
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Label Content="{Binding LoggedFpsStdDev}"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Stretch"
+                                               Style="{DynamicResource ListExtendStyleLabel}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
                             <!-- CPU temp -->
                             <GridViewColumn x:Name="lvAvgCpuT" Width="auto">
                                 <GridViewColumnHeader Content="{DynamicResource LOCGameActivityAvgCpuT}"

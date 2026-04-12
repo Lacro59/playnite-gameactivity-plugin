@@ -185,6 +185,10 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpu">Avg GPU</sys:String>
     <sys:String x:Key="LOCGameActivityAvgRam">Avg RAM</sys:String>
     <sys:String x:Key="LOCGameActivityAvgFps">Avg FPS</sys:String>
+    <sys:String x:Key="LOCGameActivitySessionFpsMin">Min FPS</sys:String>
+    <sys:String x:Key="LOCGameActivitySessionFpsMax">Max FPS</sys:String>
+    <sys:String x:Key="LOCGameActivitySessionFpsMedian">Median FPS</sys:String>
+    <sys:String x:Key="LOCGameActivitySessionFpsStdDev">FPS SD</sys:String>
     <sys:String x:Key="LOCGameActivityAvgCpuT">Avg CPU T°</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpuT">Avg GPU T°</sys:String>
     <sys:String x:Key="LOCGameActivityAvgCpuP">Avg CPU W</sys:String>

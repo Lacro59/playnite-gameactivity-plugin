@@ -501,6 +501,7 @@ namespace GameActivity.ViewModels
                     {
                         ulong elapsed = _gameActivities.FilterItems[i].ElapsedSeconds;
                         DateTime dateSession = Convert.ToDateTime(_gameActivities.FilterItems[i].DateSession).ToLocalTime();
+                        DateTime dateSessionUtc = dateSession.ToUniversalTime();
                         string sourceName = _gameActivities.FilterItems[i].SourceName;
 
                         TextBlockWithIconMode iconMode = (PluginDatabase.PluginSettings.ModeStoreIcon == 1)
@@ -511,14 +512,18 @@ namespace GameActivity.ViewModels
                         {
                             GameLastActivity = dateSession,
                             GameElapsedSeconds = elapsed,
-                            AvgCPU = _gameActivities.AvgCPU(dateSession.ToUniversalTime()) + "%",
-                            AvgGPU = _gameActivities.AvgGPU(dateSession.ToUniversalTime()) + "%",
-                            AvgRAM = _gameActivities.AvgRAM(dateSession.ToUniversalTime()) + "%",
-                            AvgFPS = _gameActivities.AvgFPS(dateSession.ToUniversalTime()) + "",
-                            AvgCPUT = _gameActivities.AvgCPUT(dateSession.ToUniversalTime()) + "°",
-                            AvgGPUT = _gameActivities.AvgGPUT(dateSession.ToUniversalTime()) + "°",
-                            AvgCPUP = _gameActivities.AvgCPUP(dateSession.ToUniversalTime()) + "W",
-                            AvgGPUP = _gameActivities.AvgGPUP(dateSession.ToUniversalTime()) + "W",
+                            AvgCPU = _gameActivities.AvgCPU(dateSessionUtc) + "%",
+                            AvgGPU = _gameActivities.AvgGPU(dateSessionUtc) + "%",
+                            AvgRAM = _gameActivities.AvgRAM(dateSessionUtc) + "%",
+                            AvgFPS = _gameActivities.AvgFPS(dateSessionUtc) + "",
+                            LoggedFpsMin = _gameActivities.MinFPS(dateSessionUtc).ToString(),
+                            LoggedFpsMax = _gameActivities.MaxFPS(dateSessionUtc).ToString(),
+                            LoggedFpsMedian = _gameActivities.MedianFPS(dateSessionUtc).ToString(),
+                            LoggedFpsStdDev = _gameActivities.StdDevFPS(dateSessionUtc).ToString(),
+                            AvgCPUT = _gameActivities.AvgCPUT(dateSessionUtc) + "°",
+                            AvgGPUT = _gameActivities.AvgGPUT(dateSessionUtc) + "°",
+                            AvgCPUP = _gameActivities.AvgCPUP(dateSessionUtc) + "W",
+                            AvgGPUP = _gameActivities.AvgGPUP(dateSessionUtc) + "W",
 
                             GameSourceName = sourceName,
                             TypeStoreIcon = iconMode,

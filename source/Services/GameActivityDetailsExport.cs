@@ -15,6 +15,25 @@ namespace GameActivity.Services
 	{
 		private DateTime _sessionDateUtc;
 
+		/// <inheritdoc />
+		/// Session-level FPS aggregates are not offered on per-sample detail export (redundant with the Fps column).
+		protected override bool IncludeSessionFpsAggregateColumns
+		{
+			get { return false; }
+		}
+
+		/// <inheritdoc />
+		protected override bool IncludeDateLogColumn
+		{
+			get { return true; }
+		}
+
+		/// <inheritdoc />
+		protected override bool UseAverageColumnHeaders
+		{
+			get { return false; }
+		}
+
 		/// <summary>
 		/// Opens the export dialog and writes CSV rows for the session identified by <paramref name="sessionDateSession"/>.
 		/// </summary>

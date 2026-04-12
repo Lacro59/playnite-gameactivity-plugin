@@ -26,6 +26,19 @@ namespace GameActivity.Models
         public string AvgGPU { get; set; }
         public string AvgRAM { get; set; }
         public string AvgFPS { get; set; }
+
+        /// <summary>Minimum FPS from logged samples for this session (display only).</summary>
+        public string LoggedFpsMin { get; set; }
+
+        /// <summary>Maximum FPS from logged samples for this session (display only).</summary>
+        public string LoggedFpsMax { get; set; }
+
+        /// <summary>Median FPS from logged samples for this session (display only).</summary>
+        public string LoggedFpsMedian { get; set; }
+
+        /// <summary>Sample standard deviation of FPS from logged samples (display only).</summary>
+        public string LoggedFpsStdDev { get; set; }
+
         public string AvgCPUT { get; set; }
         public string AvgGPUT { get; set; }
         public string AvgCPUP { get; set; }

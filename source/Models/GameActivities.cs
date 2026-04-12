@@ -54,19 +54,73 @@ namespace GameActivity.Models
 		{
 			get
 			{
-				List<int> fpsValues = Items
-					.Where(x => x?.Details != null)
-					.SelectMany(x => x.Details)
-					.Where(x => x != null && x.FPS > 0)
-					.Select(x => x.FPS)
-					.ToList();
-
+				List<int> fpsValues = GetAllSessionFpsValues();
 				if (fpsValues.Count == 0)
 				{
 					return 0;
 				}
 
 				return (int)Math.Round(fpsValues.Average());
+			}
+		}
+
+		/// <summary>
+		/// Gets the minimum FPS observed across all sessions (only samples with FPS &gt; 0).
+		/// </summary>
+		[DontSerialize]
+		public int MinFpsAllSession
+		{
+			get
+			{
+				List<int> fpsValues = GetAllSessionFpsValues();
+				if (fpsValues.Count == 0)
+				{
+					return 0;
+				}
+
+				return fpsValues.Min();
+			}
+		}
+
+		/// <summary>
+		/// Gets the maximum FPS observed across all sessions (only samples with FPS &gt; 0).
+		/// </summary>
+		[DontSerialize]
+		public int MaxFpsAllSession
+		{
+			get
+			{
+				List<int> fpsValues = GetAllSessionFpsValues();
+				if (fpsValues.Count == 0)
+				{
+					return 0;
+				}
+
+				return fpsValues.Max();
+			}
+		}
+
+		/// <summary>
+		/// Gets the median FPS across all sessions (only samples with FPS &gt; 0).
+		/// </summary>
+		[DontSerialize]
+		public int MedianFpsAllSession
+		{
+			get
+			{
+				return CalculateMedianFps(GetAllSessionFpsValues());
+			}
+		}
+
+		/// <summary>
+		/// Gets the sample standard deviation of FPS across all sessions (only samples with FPS &gt; 0; divisor <c>n - 1</c> when <c>n ≥ 2</c>).
+		/// </summary>
+		[DontSerialize]
+		public int StdDevFpsAllSession
+		{
+			get
+			{
+				return CalculateSampleStdDevFps(GetAllSessionFpsValues());
 			}
 		}
 
@@ -110,6 +164,58 @@ namespace GameActivity.Models
 		public int AvgFPS(DateTime dateSession)
 		{
 			return CalculateAverage(dateSession, data => data.FPS);
+		}
+
+		/// <summary>
+		/// Gets the minimum FPS for a specific session (only samples with FPS &gt; 0).
+		/// </summary>
+		/// <param name="dateSession">The session date.</param>
+		/// <returns>The minimum FPS, or 0 if no data is available.</returns>
+		public int MinFPS(DateTime dateSession)
+		{
+			List<int> fpsValues = GetSessionFpsValues(dateSession);
+			if (fpsValues.Count == 0)
+			{
+				return 0;
+			}
+
+			return fpsValues.Min();
+		}
+
+		/// <summary>
+		/// Gets the maximum FPS for a specific session (only samples with FPS &gt; 0).
+		/// </summary>
+		/// <param name="dateSession">The session date.</param>
+		/// <returns>The maximum FPS, or 0 if no data is available.</returns>
+		public int MaxFPS(DateTime dateSession)
+		{
+			List<int> fpsValues = GetSessionFpsValues(dateSession);
+			if (fpsValues.Count == 0)
+			{
+				return 0;
+			}
+
+			return fpsValues.Max();
+		}
+
+		/// <summary>
+		/// Gets the median FPS for a specific session (only samples with FPS &gt; 0).
+		/// </summary>
+		/// <param name="dateSession">The session date.</param>
+		/// <returns>The median FPS, or 0 if no data is available.</returns>
+		public int MedianFPS(DateTime dateSession)
+		{
+			return CalculateMedianFps(GetSessionFpsValues(dateSession));
+		}
+
+		/// <summary>
+		/// Gets the sample standard deviation of FPS for a specific session (only samples with FPS &gt; 0; divisor <c>n - 1</c> when <c>n ≥ 2</c>).
+		/// </summary>
+		/// <param name="dateSession">The session date.</param>
+		/// <returns>The standard deviation in FPS (rounded), or 0 if fewer than two samples.</returns>
+		public int StdDevFPS(DateTime dateSession)
+		{
+			return CalculateSampleStdDevFps(GetSessionFpsValues(dateSession));
 		}
 
 		/// <summary>
@@ -452,6 +558,79 @@ namespace GameActivity.Models
 			}
 
 			return activity.Details;
+		}
+
+		/// <summary>
+		/// Collects all FPS samples &gt; 0 across every activity session.
+		/// </summary>
+		private List<int> GetAllSessionFpsValues()
+		{
+			if (Items == null)
+			{
+				return new List<int>();
+			}
+
+			return Items
+				.Where(x => x?.Details != null)
+				.SelectMany(x => x.Details)
+				.Where(x => x != null && x.FPS > 0)
+				.Select(x => x.FPS)
+				.ToList();
+		}
+
+		/// <summary>
+		/// Collects FPS samples &gt; 0 for the session matching <paramref name="dateSession"/>.
+		/// </summary>
+		private List<int> GetSessionFpsValues(DateTime dateSession)
+		{
+			return GetActivityDetails(dateSession)
+				.Where(x => x != null && x.FPS > 0)
+				.Select(x => x.FPS)
+				.ToList();
+		}
+
+		/// <summary>
+		/// Computes the median of FPS samples (does not mutate the input list).
+		/// </summary>
+		private static int CalculateMedianFps(List<int> fpsValues)
+		{
+			if (fpsValues == null || fpsValues.Count == 0)
+			{
+				return 0;
+			}
+
+			List<int> sorted = new List<int>(fpsValues);
+			sorted.Sort();
+			int count = sorted.Count;
+			if ((count % 2) == 1)
+			{
+				return sorted[count / 2];
+			}
+
+			int mid = count / 2;
+			return (int)Math.Round((sorted[mid - 1] + (double)sorted[mid]) / 2.0);
+		}
+
+		/// <summary>
+		/// Sample standard deviation (square root of unbiased sample variance, divisor <c>n - 1</c>).
+		/// </summary>
+		private static int CalculateSampleStdDevFps(List<int> fpsValues)
+		{
+			if (fpsValues == null || fpsValues.Count < 2)
+			{
+				return 0;
+			}
+
+			double mean = fpsValues.Average();
+			double sumSquaredDeviations = 0;
+			for (int i = 0; i < fpsValues.Count; i++)
+			{
+				double d = fpsValues[i] - mean;
+				sumSquaredDeviations += d * d;
+			}
+
+			double variance = sumSquaredDeviations / (fpsValues.Count - 1);
+			return (int)Math.Round(Math.Sqrt(variance));
 		}
 
 		#endregion
