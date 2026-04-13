@@ -1,7 +1,7 @@
 ﻿using CommonPlayniteShared.Converters;
 using CommonPluginsShared;
 using CommonPluginsShared.Converters;
-using GameActivity.Views;
+using GameActivity.Models;
 using Playnite.SDK;
 using System;
 using System.Collections.Generic;

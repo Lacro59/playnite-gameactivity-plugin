@@ -152,6 +152,7 @@
     <Compile Include="Models\ActivityBackup.cs" />
     <Compile Include="Models\ExportData\ExportData.cs" />
     <Compile Include="Models\ExportData\ExportDataAll.cs" />
+    <Compile Include="Models\GanttChartModels.cs" />
     <Compile Include="Models\GameActivities.cs" />
     <Compile Include="Models\LibreHardwareData.cs" />
     <Compile Include="Models\ListActivities.cs" />
@@ -256,6 +257,7 @@
     <Compile Include="Services\GameActivityWindows.cs" />
     <Compile Include="ViewModels\GameActivityAddTimeViewModel.cs" />
     <Compile Include="ViewModels\GameActivityMergeTimeViewModel.cs" />
+    <Compile Include="ViewModels\GameActivityGanttViewModel.cs" />
     <Compile Include="ViewModels\GameActivityViewModel.cs" />
     <Compile Include="ViewModels\GameActivityViewSingleViewModel.cs" />
     <Compile Include="ViewModels\ProviderPerformanceChartsViewModel.cs" />
