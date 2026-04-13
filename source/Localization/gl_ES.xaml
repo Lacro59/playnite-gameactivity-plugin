@@ -28,6 +28,12 @@ Usouse a diferenza de tempo de xogo: {1} s.</sys:String>
     <sys:String x:Key="LOCGameActivitiesTitle">Actividades do xogo</sys:String>
     <sys:String x:Key="LOCGameActivityViewGamesActivities">Ver actividades dos xogos</sys:String>
     <sys:String x:Key="LOCGameActivityViewGameActivity">Ver actividade do xogo</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderPerfCharts">Provider performance charts</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderPerfChartsTitle">Provider performance (live)</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderPerfChartsHint">When enabled, only the provider actually used for each metric in aggregation is shown (per chart). Otherwise pick providers below. Values refresh every 5 seconds (last 6 minutes shown).</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderPerfChartsNoProviders">No hardware monitoring providers are registered. Enable at least one provider in GameActivity settings.</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderPerfChartsLegend">By provider</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderPerfChartsAggregatorMode">Used values (aggregation)</sys:String>
 
 
     <!-- ==================== Gantt View ==================== -->
@@ -81,6 +87,22 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">Log CPU, GPU, RAM and FPS performance during a game session.</sys:String>
     <sys:String x:Key="LOCGameActivityTimeInterval">Comprobar intervalo de tempo</sys:String>
     <sys:String x:Key="LOCGameActivityTimeLabel">minuto(s)</sys:String>
+    <sys:String x:Key="LOCGameActivityHardwareMonitoringProvidersSection">Hardware monitoring providers</sys:String>
+    <sys:String x:Key="LOCGameActivityHardwareProvidersLatencyIntro" xml:space="preserve">Coloured pill: typical relative cost of one metrics read
+red = slower
+orange = medium
+green = faster</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderLatencySlow">Slow</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderLatencyMedium">Medium</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderLatencyFast">Fast</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderLatencyTipWmi">WMI is usually the slowest option: several WMI queries per sample.</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderLatencyTipPerformanceCounter">Performance counters are in the middle: short multi-sample averaging.</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderLatencyTipLibreLocal">Local LibreHardware Monitor (HTTP on this PC) is usually fast.</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderLatencyTipLibreRemote">Remote LibreHardware web server: medium cost because of network round-trips.</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderLatencyTipHwinfoShared">HWiNFO shared memory: medium — depends on HWiNFO and how many sensors you read.</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderLatencyTipHwinfoGadget">HWiNFO gadget (registry indices): medium — depends on HWiNFO and index reads.</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderLatencyTipRivaTuner">RivaTuner (RTSS) shared memory is usually very fast.</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderLatencyTipMsiAfterburner">MSI Afterburner MAHM shared memory is usually very fast.</sys:String>
 
     <!-- Hardware monitors -->
     <sys:String x:Key="LOCGameActivityUsedLibreHardware">Use LibreHardware Monitor</sys:String>
@@ -183,6 +205,16 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpu">Media da GPU</sys:String>
     <sys:String x:Key="LOCGameActivityAvgRam">Media da RAM</sys:String>
     <sys:String x:Key="LOCGameActivityAvgFps">Media de FPS</sys:String>
+    <sys:String x:Key="LOCGameActivitySessionFpsMin">Min FPS</sys:String>
+    <sys:String x:Key="LOCGameActivitySessionFpsMax">Max FPS</sys:String>
+    <sys:String x:Key="LOCGameActivitySessionFpsMedian">Median FPS</sys:String>
+    <sys:String x:Key="LOCGameActivitySessionFpsStdDev">FPS SD</sys:String>
+    <sys:String x:Key="LOCGameActivityFps1PercentLow">Framerate 1% Low (FPS)</sys:String>
+    <sys:String x:Key="LOCGameActivityFps0Point1PercentLow">Framerate 0.1% Low (FPS)</sys:String>
+    <sys:String x:Key="LOCGameActivityFps1PercentLowAvg">Avg Framerate 1% Low</sys:String>
+    <sys:String x:Key="LOCGameActivityFps1PercentLowMin">Min Framerate 1% Low</sys:String>
+    <sys:String x:Key="LOCGameActivityFps0Point1PercentLowAvg">Avg Framerate 0.1% Low</sys:String>
+    <sys:String x:Key="LOCGameActivityFps0Point1PercentLowMin">Min Framerate 0.1% Low</sys:String>
     <sys:String x:Key="LOCGameActivityAvgCpuT">Avg CPU T°</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpuT">Avg GPU T°</sys:String>
     <sys:String x:Key="LOCGameActivityAvgCpuP">Avg CPU W</sys:String>
@@ -199,12 +231,15 @@ Click for more information.</sys:String>
     <sys:String x:Key="LOCGameActivityLabelGpuT">GPU T°</sys:String>
     <sys:String x:Key="LOCGameActivityLabelCpuP">CPU W</sys:String>
     <sys:String x:Key="LOCGameActivityLabelGpuP">GPU W</sys:String>
-    
+    <sys:String x:Key="LOCGameActivityLabelFps1PercentLowShort">1% Low</sys:String>
+    <sys:String x:Key="LOCGameActivityLabelFps0Point1PercentLowShort">0.1% Low</sys:String>
+
     <sys:String x:Key="LOCGameActivityShowAllData">Show all data</sys:String>
 
     <!-- Group header labels for the two filter bar rows -->
     <sys:String x:Key="LOCGameActivityGroupUsage">Usage</sys:String>
     <sys:String x:Key="LOCGameActivityGroupTempPower">Temp / Power</sys:String>
+    <sys:String x:Key="LOCGameActivityGroupLogSensors">Temp / power / FPS lows</sys:String>
 
     <!-- ==================== Warning Dialog ==================== -->
 
