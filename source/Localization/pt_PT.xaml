@@ -4,7 +4,7 @@
     <!-- ==================== General ==================== -->
 
     <sys:String x:Key="LOCGameActivity">GameActivity</sys:String>
-    <sys:String x:Key="LOCGameActivityTitle">Atividade</sys:String>
+    <sys:String x:Key="LOCGameActivityTitle">Activity</sys:String>
 
     <sys:String x:Key="LOCGameActivityNoPlaytime" xml:space="preserve">There is no play time for {0}.
 Used the difference play time: {1}s.</sys:String>
@@ -42,6 +42,8 @@ Used the difference play time: {1}s.</sys:String>
     <sys:String x:Key="LOCGameActivitySetNumberDay">Set number of days</sys:String>
     <sys:String x:Key="LOCGameActivityPeriod">Period</sys:String>
     <sys:String x:Key="LOCGameActivitySetLastDate">Set the last date</sys:String>
+    <sys:String x:Key="LOCGameActivityOnlyActiveGames">Only active games in period</sys:String>
+    <sys:String x:Key="LOCGameActivityNoDataForFilters">No game matches the current filters.</sys:String>
 
     <!-- ==================== GamesDataMismatch view ==================== -->
 
