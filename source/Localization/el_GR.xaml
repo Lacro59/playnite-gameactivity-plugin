@@ -3,15 +3,15 @@
 
     <!-- ==================== General ==================== -->
 
-    <sys:String x:Key="LOCGameActivity">Δραστηριότητα Παιχνιδιών</sys:String>
-    <sys:String x:Key="LOCGameActivityTitle">Δραστηριότητα</sys:String>
+    <sys:String x:Key="LOCGameActivity">GameActivity</sys:String>
+    <sys:String x:Key="LOCGameActivityTitle">Activity</sys:String>
 
-    <sys:String x:Key="LOCGameActivityNoPlaytime" xml:space="preserve">Δεν υπάρχει χρόνος παιχνιδιού για {0}.
-Χρησιμοποιηθηκε διαφορετικος χρόνος παιχνιδιού: {1}s.</sys:String>
+    <sys:String x:Key="LOCGameActivityNoPlaytime" xml:space="preserve">There is no play time for {0}.
+Used the difference play time: {1}s.</sys:String>
 
     <sys:String x:Key="LOCGameActivityProviderError">{0} provider failed to initialize.</sys:String>
 
-    <sys:String x:Key="LOCGameActivityDefaultAction">Προεπιλεγμένη ενέργεια</sys:String>
+    <sys:String x:Key="LOCGameActivityDefaultAction">Default action</sys:String>
 
 
     <!-- ==================== Notifications ==================== -->
@@ -24,10 +24,10 @@
 
     <!-- ==================== Main View ==================== -->
 
-    <sys:String x:Key="LOCGamesActivitiesTitle">Δραστηριότητες παιχνιδιών</sys:String>
-    <sys:String x:Key="LOCGameActivitiesTitle">Δραστηριότητες παιχνιδιού</sys:String>
-    <sys:String x:Key="LOCGameActivityViewGamesActivities">Προβολή Δραστηριότητας Παιχνιδιών</sys:String>
-    <sys:String x:Key="LOCGameActivityViewGameActivity">Προβολή δραστηριότητας παιχνιδιού</sys:String>
+    <sys:String x:Key="LOCGamesActivitiesTitle">Games activities</sys:String>
+    <sys:String x:Key="LOCGameActivitiesTitle">Game activities</sys:String>
+    <sys:String x:Key="LOCGameActivityViewGamesActivities">View games activities</sys:String>
+    <sys:String x:Key="LOCGameActivityViewGameActivity">View game activity</sys:String>
     <sys:String x:Key="LOCGameActivityProviderPerfCharts">Provider performance charts</sys:String>
     <sys:String x:Key="LOCGameActivityProviderPerfChartsTitle">Provider performance (live)</sys:String>
     <sys:String x:Key="LOCGameActivityProviderPerfChartsHint">When enabled, only the provider actually used for each metric in aggregation is shown (per chart). Otherwise pick providers below. Values refresh every 5 seconds (last 6 minutes shown).</sys:String>
@@ -38,10 +38,12 @@
 
     <!-- ==================== Gantt View ==================== -->
 
-    <sys:String x:Key="LOCGameActivityGanttView">Προβολή Gantt</sys:String>
-    <sys:String x:Key="LOCGameActivitySetNumberDay">Ορισμός αριθμού ημερών</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriod">Περίοδος</sys:String>
-    <sys:String x:Key="LOCGameActivitySetLastDate">Ορίστε την τελευταία ημερομηνία</sys:String>
+    <sys:String x:Key="LOCGameActivityGanttView">Gantt view</sys:String>
+    <sys:String x:Key="LOCGameActivitySetNumberDay">Set number of days</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriod">Period</sys:String>
+    <sys:String x:Key="LOCGameActivitySetLastDate">Set the last date</sys:String>
+    <sys:String x:Key="LOCGameActivityOnlyActiveGames">Only active games in period</sys:String>
+    <sys:String x:Key="LOCGameActivityNoDataForFilters">No game matches the current filters.</sys:String>
 
     <!-- ==================== GamesDataMismatch view ==================== -->
 
@@ -60,8 +62,8 @@
     <sys:String x:Key="LOCGaBackupExist" xml:space="preserve">There is backup data for {0}.
 Probably after a Playnite crash.
 Click for more information.</sys:String>
-    <sys:String x:Key="LOCGaDateSession">Ημερομηνία συνεδρίας</sys:String>
-    <sys:String x:Key="LOCGaPlayTimeSession">Συνεδρία Χρόνου Παιχνιδιού</sys:String>
+    <sys:String x:Key="LOCGaDateSession">Date session</sys:String>
+    <sys:String x:Key="LOCGaPlayTimeSession">Play time session</sys:String>
 
 
     <!-- ==================== Game Data Mismatch ==================== -->
@@ -76,17 +78,17 @@ Click for more information.</sys:String>
 
     <!-- ==================== Merge ==================== -->
 
-    <sys:String x:Key="LOCGaMerge">Συγχώνευση</sys:String>
-    <sys:String x:Key="LOCGaMergeSession">Συγχώνευση Συνεδριών</sys:String>
+    <sys:String x:Key="LOCGaMerge">Merge</sys:String>
+    <sys:String x:Key="LOCGaMergeSession">Merge game session</sys:String>
 
 
     <!-- ==================== Settings ==================== -->
 
     <!-- Logging -->
-    <sys:String x:Key="LOCGameActivityActiveLog">Ενεργοποίηση καταγραφής</sys:String>
+    <sys:String x:Key="LOCGameActivityActiveLog">Enable logging</sys:String>
     <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">Log CPU, GPU, RAM and FPS performance during a game session.</sys:String>
-    <sys:String x:Key="LOCGameActivityTimeInterval">Χρονικό διάστημα ελέγχου</sys:String>
-    <sys:String x:Key="LOCGameActivityTimeLabel">λεπτό/ά</sys:String>
+    <sys:String x:Key="LOCGameActivityTimeInterval">Check time interval</sys:String>
+    <sys:String x:Key="LOCGameActivityTimeLabel">minute(s)</sys:String>
     <sys:String x:Key="LOCGameActivityHardwareMonitoringProvidersSection">Hardware monitoring providers</sys:String>
     <sys:String x:Key="LOCGameActivityHardwareProvidersLatencyIntro" xml:space="preserve">Coloured pill: typical relative cost of one metrics read
 red = slower
@@ -107,17 +109,17 @@ green = faster</sys:String>
     <!-- Hardware monitors -->
     <sys:String x:Key="LOCGameActivityUsedLibreHardware">Use LibreHardware Monitor</sys:String>
     <sys:String x:Key="LOCGameActivityRemoteWebServer">Via remote web server</sys:String>
-    <sys:String x:Key="LOCGameActivityUseMsiAfterburner">Χρήση MSI Afterburner</sys:String>
+    <sys:String x:Key="LOCGameActivityUseMsiAfterburner">Use MSI Afterburner</sys:String>
     <sys:String x:Key="LOCGameActivityMsiAbSensorHelp">Pick a row after Refresh (Afterburner running). The list shows the MAHM source name, optional GPU adapter from the MAHM GPU table, localized label when useful, and units. Only the source name is stored; leave empty for the default English name.</sys:String>
     <sys:String x:Key="LOCGameActivityMsiAbRefreshSensors">Refresh sensor list</sys:String>
     <sys:String x:Key="LOCGameActivityUseHWiNFOSharedMemory">Use HWiNFO shared memory</sys:String>
-    <sys:String x:Key="LOCGameActivityUseHWiNFOGadget">Χρήση αναφοράς gadget HWiNFO</sys:String>
-    <sys:String x:Key="LOCGameActivityIndex">Ευρετήριο</sys:String>
+    <sys:String x:Key="LOCGameActivityUseHWiNFOGadget">Use HWiNFO gadget reporting</sys:String>
+    <sys:String x:Key="LOCGameActivityIndex">Index</sys:String>
     <sys:String x:Key="LOCGameActivitySensorsID">Sensor ID</sys:String>
     <sys:String x:Key="LOCGameActivityElementID">Element ID</sys:String>
 
     <!-- Sensor labels -->
-    <sys:String x:Key="LOCGameActivityGpuUsage">Χρήση GPU</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuUsage">GPU usage</sys:String>
     <sys:String x:Key="LOCGameActivityFps">FPS</sys:String>
     <sys:String x:Key="LOCGameActivityGpuTemp">GPU T°</sys:String>
     <sys:String x:Key="LOCGameActivityCpuTemp">CPU T°</sys:String>
@@ -127,14 +129,14 @@ green = faster</sys:String>
     <sys:String x:Key="LOCGameActivityRamUsage">RAM usage</sys:String>
 
     <!-- Warnings -->
-    <sys:String x:Key="LOCGameActivityActiveWarning">Ενεργοποίηση προειδοποιήσεων</sys:String>
+    <sys:String x:Key="LOCGameActivityActiveWarning">Enable warnings</sys:String>
     <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Displays a warning message at the end of the game session if defined thresholds are exceeded.</sys:String>
-    <sys:String x:Key="LOCGameActivityMinFps">Ελάχιστα FPS</sys:String>
+    <sys:String x:Key="LOCGameActivityMinFps">Min FPS</sys:String>
     <sys:String x:Key="LOCGameActivityMaxCpuTemp">Max CPU T°</sys:String>
     <sys:String x:Key="LOCGameActivityMaxGpuTemp">Max GPU T°</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxCpuUsage">Μέγιστη χρήση επεξεργαστή</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxGpuUsage">Μέγιστη χρήση GPU</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxRamUsage">Μέγιστη χρήση Μνήμης</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxCpuUsage">Max CPU usage</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxGpuUsage">Max GPU usage</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxRamUsage">Max RAM usage</sys:String>
 
     <!-- Playtime -->
     <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">Merge playtime across sessions on chart</sys:String>
@@ -142,7 +144,7 @@ green = faster</sys:String>
     <sys:String x:Key="LOCGameActivityIgnoreSession">Ignore short play sessions</sys:String>
 
     <!-- Integration / Chart -->
-    <sys:String x:Key="LOCGameActivityListGamesFields">Πεδία παιχνιδιού προς εμφάνιση</sys:String>
+    <sys:String x:Key="LOCGameActivityListGamesFields">Game fields to be displayed</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationChartTime">Display chart with game session times</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationChartLog">Display chart with game session logs</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">Toggle button with details</sys:String>
