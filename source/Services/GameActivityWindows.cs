@@ -84,7 +84,7 @@ namespace GameActivity.Services
 				ResourceProvider.GetString("LOCGameActivityProviderPerfChartsTitle"),
 				viewExtension,
 				windowOptions);
-			windowExtension.ShowDialog();
+			windowExtension.Show();
 		}
 
 		public override void ShowPluginDataMismatch()
