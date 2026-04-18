@@ -74,6 +74,9 @@
       <HintPath>packages\AngleSharp.0.9.9\lib\net45\AngleSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Ardalis.GuardClauses, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Ardalis.GuardClauses.5.0.0\lib\netstandard2.0\Ardalis.GuardClauses.dll</HintPath>
+    </Reference>
     <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
       <HintPath>packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
     </Reference>
@@ -83,14 +86,8 @@
     <Reference Include="MoreLinq, Version=3.3.2.0, Culture=neutral, PublicKeyToken=384d532d7e88985d, processorArchitecture=MSIL">
       <HintPath>packages\morelinq.3.3.2\lib\net451\MoreLinq.dll</HintPath>
     </Reference>
-    <Reference Include="MSIAfterburnerNET.Common, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\MSIAfterburnerNET.Common.1.0.2\lib\net462\MSIAfterburnerNET.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="MSIAfterburnerNET.HM, Version=1.0.7.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\MSIAfterburnerNET.HM.1.0.7\lib\net462\MSIAfterburnerNET.HM.dll</HintPath>
-    </Reference>
-    <Reference Include="Playnite.SDK, Version=6.11.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\PlayniteSDK.6.11.0\lib\net462\Playnite.SDK.dll</HintPath>
+    <Reference Include="Playnite.SDK, Version=6.15.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\PlayniteSDK.6.15.0\lib\net462\Playnite.SDK.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="PresentationCore" />
@@ -150,16 +147,13 @@
     <Compile Include="Controls\PluginChartTime.xaml.cs">
       <DependentUpon>PluginChartTime.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\TimePicker\TimePicker.xaml.cs">
-      <DependentUpon>TimePicker.xaml</DependentUpon>
-    </Compile>
     <Compile Include="GameActivity.cs" />
     <Compile Include="GameActivitySettings.cs" />
     <Compile Include="Models\ActivityBackup.cs" />
     <Compile Include="Models\ExportData\ExportData.cs" />
     <Compile Include="Models\ExportData\ExportDataAll.cs" />
+    <Compile Include="Models\GanttChartModels.cs" />
     <Compile Include="Models\GameActivities.cs" />
-    <Compile Include="Models\GameActivitiesCollection.cs" />
     <Compile Include="Models\LibreHardwareData.cs" />
     <Compile Include="Models\ListActivities.cs" />
     <Compile Include="Models\QuickSearchItemSource.cs" />
@@ -172,14 +166,24 @@
     <Compile Include="playnite-plugincommon\CommonPluginsControls\Controls\ControlPickerGradient.xaml.cs">
       <DependentUpon>ControlPickerGradient.xaml</DependentUpon>
     </Compile>
+    <Compile Include="playnite-plugincommon\CommonPluginsControls\Controls\NavBarToogle.cs" />
+    <Compile Include="playnite-plugincommon\CommonPluginsControls\Controls\PluginChartNavBar.xaml.cs">
+      <DependentUpon>PluginChartNavBar.xaml</DependentUpon>
+    </Compile>
     <Compile Include="playnite-plugincommon\CommonPluginsControls\Controls\TextBlockTrimmed.xaml.cs">
       <DependentUpon>TextBlockTrimmed.xaml</DependentUpon>
     </Compile>
     <Compile Include="playnite-plugincommon\CommonPluginsControls\Controls\TextBlockWithIcon.xaml.cs">
       <DependentUpon>TextBlockWithIcon.xaml</DependentUpon>
     </Compile>
+    <Compile Include="playnite-plugincommon\CommonPluginsControls\Controls\TimePicker.xaml.cs">
+      <DependentUpon>TimePicker.xaml</DependentUpon>
+    </Compile>
     <Compile Include="playnite-plugincommon\CommonPluginsControls\LiveChartsCommon\CustomerForSingle.cs" />
     <Compile Include="playnite-plugincommon\CommonPluginsControls\LiveChartsCommon\CustomerForTime.cs" />
+    <Compile Include="playnite-plugincommon\CommonPluginsControls\LiveChartsCommon\CustomerToolTipForLog.xaml.cs">
+      <DependentUpon>CustomerToolTipForLog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="playnite-plugincommon\CommonPluginsControls\LiveChartsCommon\CustomerToolTipForMultipleSingle.xaml.cs">
       <DependentUpon>CustomerToolTipForMultipleSingle.xaml</DependentUpon>
     </Compile>
@@ -192,29 +196,73 @@
     <Compile Include="playnite-plugincommon\CommonPluginsControls\LiveChartsCommon\CustomerToolTipForTime.xaml.cs">
       <DependentUpon>CustomerToolTipForTime.xaml</DependentUpon>
     </Compile>
+    <Compile Include="playnite-plugincommon\CommonPluginsControls\PlayniteControls\DdItemListSelectionBox.xaml.cs">
+      <DependentUpon>DdItemListSelectionBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="playnite-plugincommon\CommonPluginsControls\PlayniteControls\NullableIntBox.xaml.cs">
+      <DependentUpon>NullableIntBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="playnite-plugincommon\CommonPluginsControls\PlayniteControls\NumericBox.xaml.cs">
       <DependentUpon>NumericBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="playnite-plugincommon\CommonPluginsControls\PlayniteControls\SearchBox.xaml.cs">
       <DependentUpon>SearchBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="playnite-plugincommon\CommonPluginsControls\ViewsModels\ExportCsvViewModel.cs" />
+    <Compile Include="playnite-plugincommon\CommonPluginsControls\ViewsModels\DatabaseMaintenanceViewModel.cs" />
+    <Compile Include="playnite-plugincommon\CommonPluginsControls\ViewsModels\TimePickerViewModel.cs" />
     <Compile Include="playnite-plugincommon\CommonPluginsControls\Views\ListDataWithoutGame.xaml.cs">
       <DependentUpon>ListDataWithoutGame.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="playnite-plugincommon\CommonPluginsControls\Views\ListWithNoData.xaml.cs">
+      <DependentUpon>ListWithNoData.xaml</DependentUpon>
     </Compile>
     <Compile Include="playnite-plugincommon\CommonPluginsControls\Views\OptionsDownloadData.xaml.cs">
       <DependentUpon>OptionsDownloadData.xaml</DependentUpon>
     </Compile>
+    <Compile Include="playnite-plugincommon\CommonPluginsControls\Views\ExportCsvView.xaml.cs">
+      <DependentUpon>ExportCsvView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="playnite-plugincommon\CommonPluginsControls\Views\DatabaseMaintenanceView.xaml.cs">
+      <DependentUpon>DatabaseMaintenanceView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="playnite-plugincommon\CommonPluginsControls\Views\TransfertData.xaml.cs">
       <DependentUpon>TransfertData.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Services\ActivityDatabase.cs" />
+    <Compile Include="Services\GameActivityDatabase.cs" />
+    <Compile Include="Services\GameActivityExport.cs" />
+    <Compile Include="Services\GameActivityDetailsExport.cs" />
+    <Compile Include="Services\GameActivityMenus.cs" />
+    <Compile Include="Services\GameActivityMonitoring.cs" />
     <Compile Include="Services\GameActivityStats.cs" />
     <Compile Include="Services\GameActivityTopPanelItem.cs" />
     <Compile Include="Services\GameActivityViewSidebar.cs" />
-    <Compile Include="Services\LibreHardware.cs" />
-    <Compile Include="Services\PerfCounter.cs" />
-    <Compile Include="Services\UpdateVisitorLibreHardware.cs" />
-    <Compile Include="Services\UpdateVisitorOpenHardware.cs" />
+    <Compile Include="Services\HardwareMonitoring\Core\MonitoringConfiguration.cs" />
+    <Compile Include="Services\HardwareMonitoring\Core\HardwareDataAggregator.cs" />
+    <Compile Include="Services\HardwareMonitoring\Core\IHardwareDataProvider.cs" />
+    <Compile Include="Services\HardwareMonitoring\Models\HardwareMetrics.cs" />
+    <Compile Include="Services\HardwareMonitoring\Models\MetricType.cs" />
+    <Compile Include="Services\HardwareMonitoring\Models\ProviderCapabilities.cs" />
+    <Compile Include="Services\HardwareMonitoring\Models\MahmSensorListEntry.cs" />
+    <Compile Include="Services\HardwareMonitoring\Core\BaseHardwareProvider.cs" />
+    <Compile Include="Services\HardwareMonitoring\Providers\HWiNFOProvider.cs" />
+    <Compile Include="Services\HardwareMonitoring\Providers\LibreHardwareProvider.cs" />
+    <Compile Include="Services\HardwareMonitoring\Providers\MsiAfterburnerProvider.cs" />
+    <Compile Include="Services\HardwareMonitoring\Providers\PerformanceCounterProvider.cs" />
+    <Compile Include="Services\HardwareMonitoring\Providers\RivaTunerProvider.cs" />
+    <Compile Include="Services\HardwareMonitoring\Providers\WMIProvider.cs" />
+    <Compile Include="Services\HardwareMonitoring\Utilities\MetricsValidator.cs" />
+    <Compile Include="Services\HardwareMonitoring\Utilities\MonitoringDiagnostics.cs" />
+    <Compile Include="Services\HardwareMonitoring\Utilities\ProviderHealthMonitor.cs" />
+    <Compile Include="Services\GameActivityWindows.cs" />
+    <Compile Include="ViewModels\GameActivityAddTimeViewModel.cs" />
+    <Compile Include="ViewModels\GameActivityMergeTimeViewModel.cs" />
+    <Compile Include="ViewModels\GameActivityGanttViewModel.cs" />
+    <Compile Include="ViewModels\GameActivityViewModel.cs" />
+    <Compile Include="ViewModels\GameActivityViewSingleViewModel.cs" />
+    <Compile Include="ViewModels\ProviderPerformanceChartsViewModel.cs" />
+    <Compile Include="ViewModels\GamesDataMismatchViewModel.cs" />
+    <Compile Include="playnite-plugincommon\CommonPluginsControls\ViewsModels\TransfertDataViewModel.cs" />
     <Compile Include="Views\GameActivityAddTime.xaml.cs">
       <DependentUpon>GameActivityAddTime.xaml</DependentUpon>
     </Compile>
@@ -238,6 +286,9 @@
     </Compile>
     <Compile Include="Views\GameActivityViewSingle.xaml.cs">
       <DependentUpon>GameActivityViewSingle.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ProviderPerformanceChartsView.xaml.cs">
+      <DependentUpon>ProviderPerformanceChartsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\GamesDataMismatch.xaml.cs">
       <DependentUpon>GamesDataMismatch.xaml</DependentUpon>
@@ -368,10 +419,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\TimePicker\TimePicker.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <None Include="Localization\ar_SA.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -475,11 +522,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="playnite-plugincommon\CommonPluginsControls\Controls\PluginChartNavBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="playnite-plugincommon\CommonPluginsControls\Controls\TextBlockTrimmed.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="playnite-plugincommon\CommonPluginsControls\Controls\TextBlockWithIcon.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="playnite-plugincommon\CommonPluginsControls\Controls\TimePicker.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="playnite-plugincommon\CommonPluginsControls\LiveChartsCommon\CustomerToolTipForLog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -499,6 +558,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="playnite-plugincommon\CommonPluginsControls\PlayniteControls\DdItemListSelectionBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="playnite-plugincommon\CommonPluginsControls\PlayniteControls\NullableIntBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="playnite-plugincommon\CommonPluginsControls\PlayniteControls\NumericBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -511,7 +578,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="playnite-plugincommon\CommonPluginsControls\Views\ListWithNoData.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="playnite-plugincommon\CommonPluginsControls\Views\OptionsDownloadData.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="playnite-plugincommon\CommonPluginsControls\Views\ExportCsvView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="playnite-plugincommon\CommonPluginsControls\Views\DatabaseMaintenanceView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -547,6 +626,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\ProviderPerformanceChartsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\GamesDataMismatch.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -560,9 +643,6 @@
     <None Include="icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\OpenHardwareMonitorLib.dll" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="playnite-plugincommon\CommonPluginsResources\CommonPluginsResources.csproj">
@@ -583,9 +663,6 @@
     <None Include="Resources\command-line.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\LibreHardwareMonitorLib.dll" />
   </ItemGroup>
   <Import Project="playnite-plugincommon\CommonPluginsShared\CommonPluginsShared.projitems" Label="Shared" />
   <Import Project="playnite-plugincommon\CommonPlayniteShared\CommonPlayniteShared.projitems" Label="Shared" />

@@ -3,50 +3,52 @@
         x:Class="GameActivity.Controls.PluginButton"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:GameActivity.Controls"
-        xmlns:converters="clr-namespace:CommonPlayniteShared.Converters"
-        xmlns:commonpluginsshared="clr-namespace:CommonPluginsShared.Converters"
         mc:Ignorable="d" d:DesignHeight="40"
-        d:DataContext="{d:DesignInstance Type=local:PluginButtonDataContext, IsDesignTimeCreatable=True}">
+        d:DataContext="{d:DesignInstance Type=local:PluginButtonDataContext}">
 
     <controls:PluginUserControlExtend.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <converters:InvertedBooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter" />
-        <converters:PlayTimeToStringConverter x:Key="PlayTimeToStringConverter" />
-        <commonpluginsshared:HeightToFontSizeConverter x:Key="HeightToFontSizeConverter" />
     </controls:PluginUserControlExtend.Resources>
 
     <Button Name="PART_PluginButton"
-            Click="PART_PluginButton_Click" Style="{StaticResource {x:Type Button}}">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto" />
-                <ColumnDefinition Width="auto" />
-            </Grid.ColumnDefinitions>
+            Click="PART_PluginButton_Click"
+            Style="{StaticResource {x:Type Button}}"
+            VerticalAlignment="Stretch"
+            ToolTip="{DynamicResource LOCGameActivityTitle}">
 
-            <!-- Without details -->
-            <TextBlock Text="{Binding Text, Mode=OneWay, FallbackValue='&#xe97f;'}" FontFamily="{DynamicResource FontIcoFont}"
-                       Grid.Column="0" VerticalAlignment="Center"
-                       FontSize="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=FontSize}" />
+        <StackPanel Orientation="Horizontal"
+                    VerticalAlignment="Center"
+                    Margin="2,0">
 
-            <!-- With details -->
-            <Grid Grid.Column="1" Margin="3,0,0,0"
-                  Visibility="{Binding DisplayDetails, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="3" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
+            <!-- Icon -->
+            <TextBlock Text="{Binding Text, Mode=OneWay, FallbackValue='&#xe97f;'}"
+                       FontFamily="{DynamicResource FontIcoFont}"
+                       FontSize="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=FontSize}"
+                       VerticalAlignment="Center" />
 
-                <TextBlock Grid.Row="0" Text="{Binding LastActivity, FallbackValue='27/02/2021'}" Margin="0,-3,0,-3" Padding="5,3,5,5"
-                           FontSize="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight, Converter={StaticResource HeightToFontSizeConverter}}" />
+            <!-- Detail panel — two stacked lines, compact width -->
+            <StackPanel Orientation="Vertical"
+                        VerticalAlignment="Center"
+                        Margin="5,0,0,0"
+                        Visibility="{Binding DisplayDetails, Converter={StaticResource BooleanToVisibilityConverter}}">
 
-                <TextBlock Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Margin="0,-3,0,-3" Padding="5,3,5,5"
-                           Text="{Binding LastPlaytimeString, FallbackValue='23 minutes'}"
-                           FontSize="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight, Converter={StaticResource HeightToFontSizeConverter}}" />
-            </Grid>
-        </Grid>
+                <!-- Last session date — primary, full brightness -->
+                <TextBlock Text="{Binding LastActivity, FallbackValue='27/02/2021'}"
+                           FontSize="11"
+                           FontWeight="SemiBold"
+                           LineHeight="13" />
+
+                <!-- Last session duration — secondary, muted -->
+                <TextBlock Text="{Binding LastPlaytimeString, FallbackValue='23 minutes'}"
+                           FontSize="10"
+                           Foreground="{DynamicResource TextBrushDarker}"
+                           LineHeight="12" />
+
+            </StackPanel>
+        </StackPanel>
     </Button>
+
 </controls:PluginUserControlExtend>

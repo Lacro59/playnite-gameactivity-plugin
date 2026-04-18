@@ -1,13 +1,24 @@
 ﻿<UserControl x:Class="GameActivity.Controls.GanttControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:GameActivity.Controls"
-             mc:Ignorable="d" d:DesignHeight="60" d:DesignWidth="300"
+             mc:Ignorable="d"
+             d:DesignHeight="60" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance Type=local:DataContextGanttControl, IsDesignTimeCreatable=True}">
-    
+
+    <!--
+        GanttControl — Compact activity Gantt bar.
+        Columns are built entirely in code-behind via DefineColumn() / SetData() / SetDataDate().
+        This XAML only declares the root Grid that code-behind populates.
+
+        Design-time preview uses two static columns so the designer stays usable.
+    -->
+
     <Grid Name="PART_Gantt">
+
+        <!-- Design-time column stubs (replaced at runtime by DefineColumn()) -->
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
@@ -15,20 +26,26 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
+        <!-- Design-time preview cell — date label, 270° rotation -->
         <Grid Grid.Column="0">
-            <TextBlock Text="12/01/2022" TextAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Style="{DynamicResource BaseTextBlockStyle}"
+                       Text="01/01"
+                       TextAlignment="Center"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center">
                 <TextBlock.LayoutTransform>
-                    <RotateTransform Angle="300"  />
-                  </TextBlock.LayoutTransform>
-            </TextBlock>
-        </Grid>
-
-        <Grid Grid.Column="1">
-            <TextBlock Text="12/01/2022" TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBlock.LayoutTransform>
-                    <RotateTransform Angle="270"  />
+                    <RotateTransform Angle="270" />
                 </TextBlock.LayoutTransform>
             </TextBlock>
         </Grid>
+
+        <!-- Design-time preview cell — activity block -->
+        <Grid Grid.Column="1">
+            <Border Background="{DynamicResource GlyphBrush}"
+                    BorderBrush="{DynamicResource PopupBorderBrush}"
+                    BorderThickness="{DynamicResource ControlBorderThickness}"
+                    CornerRadius="{DynamicResource ControlCornerRadius}" />
+        </Grid>
+
     </Grid>
 </UserControl>

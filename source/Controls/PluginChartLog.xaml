@@ -1,93 +1,311 @@
-﻿<controls:PluginUserControlExtend
+<controls:PluginUserControlExtend
         xmlns:controls="clr-namespace:CommonPluginsShared.Controls"
         x:Class="GameActivity.Controls.PluginChartLog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:GameActivity.Controls"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
-        xmlns:livechartscommon="clr-namespace:CommonPluginsControls.LiveChartsCommon"
-        mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=local:PluginChartLogDataContext, IsDesignTimeCreatable=True}"
+        xmlns:livechartscommon="clr-namespace:CommonPluginsControls.LiveChartsCommon" 
+        xmlns:controls1="clr-namespace:CommonPluginsControls.Controls"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=local:PluginChartLogDataContext}"
         MinHeight="{Binding RelativeSource={RelativeSource AncestorType=ContentControl}, Path=MinHeight}"
         Height="{Binding ChartLogHeight}"
         MaxHeight="{Binding RelativeSource={RelativeSource AncestorType=ContentControl}, Path=MaxHeight}">
 
     <controls:PluginUserControlExtend.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+
+        <!--
+            Storyboard targets are resolved at Begin(target) call time from code-behind.
+            TargetName is intentionally absent — Style.Triggers does not support it;
+            only ControlTemplate.Triggers does.
+        -->
+        <Storyboard x:Key="FilterBarShowAnimation">
+            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
+                             From="0" To="1" Duration="0:0:0.18">
+                <DoubleAnimation.EasingFunction>
+                    <CubicEase EasingMode="EaseOut" />
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                             From="0" To="1" Duration="0:0:0.18" />
+        </Storyboard>
+
+        <Storyboard x:Key="FilterBarHideAnimation">
+            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
+                             From="1" To="0" Duration="0:0:0.15">
+                <DoubleAnimation.EasingFunction>
+                    <CubicEase EasingMode="EaseIn" />
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                             From="1" To="0" Duration="0:0:0.15" />
+        </Storyboard>
     </controls:PluginUserControlExtend.Resources>
-    
+
+    <!--
+        Layout: 3 rows.
+          Row 0 — navigation bar  (Auto, collapses to 0 when ShowNavBar=False)
+          Row 1 — filter bar      (Auto, unchanged from original)
+          Row 2 — chart           (* , unchanged from original)
+    -->
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*"    />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0" Margin="0,0,0,10"
-              Visibility="{Binding UseControls, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=True}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="5" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="5" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="5" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+        <!-- ===== Row 0 — Navigation bar ===== -->
+        <!--
+            ShowNavBar DP controls visibility.
+            ShowAllData is two-way: the nav bar toggles it and PluginChartLog.cs
+            mirrors the change back into its own DP via NavBar_ShowAllToggled.
+            NavLabel is empty for ChartLog (no week/period concept).
+        -->
+        <controls1:PluginChartNavBar
+            x:Name="PART_NavBar"
+            Grid.Row="0"
+            Margin="0,0,0,4"
+            ShowNavBar="{Binding ShowNavBar}"
+            ShowAllData="{Binding ShowAllData}"
+            NavLabel="{Binding NavLabel}"
+            PageSize="{Binding PageSize}"
+            FirstClicked="NavBar_FirstClicked"
+            PagePrevClicked="NavBar_PagePrevClicked"
+            PrevClicked="NavBar_PrevClicked"
+            ShowAllToggled="NavBar_ShowAllToggled"
+            NextClicked="NavBar_NextClicked"
+            PageNextClicked="NavBar_PageNextClicked"
+            LastClicked="NavBar_LastClicked">
+            <controls1:PluginChartNavBar.Style>
+                <Style TargetType="{x:Type controls1:PluginChartNavBar}">
+                    <Setter Property="Visibility" Value="Visible" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding HasNoData}" Value="True">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </controls1:PluginChartNavBar.Style>
+        </controls1:PluginChartNavBar>
 
-            <CheckBox Grid.Column="0" IsChecked="{Binding DisplayCpu, Mode=OneWay}" Click="CheckBoxDisplayCpu_Click">
-                <Label Content="CPU" />
-            </CheckBox>
-            <CheckBox Grid.Column="2" IsChecked="{Binding DisplayGpu, Mode=OneWay}" Click="CheckBoxDisplayGpu_Click">
-                <Label Content="GPU" />
-            </CheckBox>
-            <CheckBox Grid.Column="4" IsChecked="{Binding DisplayRam, Mode=OneWay}" Click="CheckBoxDisplayRam_Click">
-                <Label Content="RAM" />
-            </CheckBox>
-            <CheckBox Grid.Column="6" IsChecked="{Binding DisplayFps, Mode=OneWay}" Click="CheckBoxDisplayFps_Click">
-                <Label Content="FPS" />
-            </CheckBox>
-        </Grid>
+        <!-- ===== Row 1 — Filter bar (CompactCheckBox for minimal vertical footprint) ===== -->
+        <Border Grid.Row="1"
+                x:Name="PART_FilterBar"
+                Margin="0,0,0,6"
+                RenderTransformOrigin="0.5,0">
+            <Border.Style>
+                <Style TargetType="{x:Type Border}" BasedOn="{StaticResource FilterCardBorder}">
+                    <Setter Property="Margin" Value="0,0,0,6" />
+                    <Setter Property="RenderTransformOrigin" Value="0.5,0" />
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding UseControls}" Value="True" />
+                                <Condition Binding="{Binding HasNoData}" Value="False" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Visibility" Value="Visible" />
+                        </MultiDataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
 
-        <Grid Name="PART_GridContener" Grid.Row="1">
-            <lvc:CartesianChart LegendLocation="Bottom" Name="PART_ChartLogActivity" 
-                                UpdaterTick="PART_ChartLogActivity_UpdaterTick"
-                                DisableAnimations="{Binding DisableAnimations}" AnimationsSpeed="10"
-                                Width="{Binding ElementName=PART_GridContener, Path=ActualWidth}"
-                                Height="{Binding ElementName=PART_GridContener, Path=ActualHeight}">
-                <lvc:CartesianChart.ChartLegend>
-                    <lvc:DefaultLegend Height="2" Visibility="Hidden" />
-                </lvc:CartesianChart.ChartLegend>
-                
-                <lvc:CartesianChart.DataTooltip>
-                    <livechartscommon:CustomerToolTipForMultipleTime />
-                </lvc:CartesianChart.DataTooltip>
+            <Border.RenderTransform>
+                <ScaleTransform ScaleY="1" />
+            </Border.RenderTransform>
 
-                <lvc:CartesianChart.AxisX>
-                    <lvc:Axis Name="PART_ChartLogActivityLabelsX" ShowLabels="{Binding ChartLogAxis}" MinValue="0"
-                              LabelsRotation="{Binding LabelsRotationValue}"
-                              FontSize="{DynamicResource FontSize}" FontFamily="{DynamicResource FontFamily}">
-                        <lvc:Axis.Separator>
-                            <lvc:Separator Step="1" />
-                        </lvc:Axis.Separator>
-                    </lvc:Axis>
-                </lvc:CartesianChart.AxisX>
+            <!-- Grid: fixed label column (col 0, MinWidth=90) aligns checkboxes
+                 of both rows at the same X offset regardless of label text length. -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-                <lvc:CartesianChart.AxisY>
-                    <lvc:Axis Name="PART_ChartLogActivityLabelsY" ShowLabels="{Binding ChartLogOrdinates}" MinValue="0"
-                              FontSize="{DynamicResource FontSize}" FontFamily="{DynamicResource FontFamily}">
-                        <lvc:Axis.Separator>
-                            <lvc:Separator></lvc:Separator>
-                        </lvc:Axis.Separator>
-                    </lvc:Axis>
-                    <lvc:Axis Name="PART_ChartLogActivityLabelsY_FPS" ShowLabels="{Binding ChartLogOrdinates}" MinValue="0"
-                              FontSize="{DynamicResource FontSize}" FontFamily="{DynamicResource FontFamily}" Position="RightTop">
-                        <lvc:Axis.Separator>
-                            <lvc:Separator IsEnabled="False"></lvc:Separator>
-                        </lvc:Axis.Separator>
-                    </lvc:Axis>
-                </lvc:CartesianChart.AxisY>
-            </lvc:CartesianChart>
-        </Grid>
+                <!-- ── Group 1 : Usage ── -->
+                <TextBlock Grid.Column="0" Grid.Row="0"
+                           Text="{DynamicResource LOCGameActivityGroupUsage}"
+                           Style="{DynamicResource ViewColumnLabelText}"
+                           VerticalAlignment="Center"
+                           MinWidth="90" />
+
+                <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal">
+                    <CheckBox Style="{DynamicResource CompactCheckBox}"
+                              IsChecked="{Binding DisplayCpu, Mode=OneWay}"
+                              Command="{Binding CmdToggleCpu}">
+                        <TextBlock Text="{DynamicResource LOCGameActivityLabelCpu}"
+                                   Style="{DynamicResource BaseTextBlockStyle}" />
+                    </CheckBox>
+                    <CheckBox Style="{DynamicResource CompactCheckBox}"
+                              IsChecked="{Binding DisplayGpu, Mode=OneWay}"
+                              Command="{Binding CmdToggleGpu}">
+                        <TextBlock Text="{DynamicResource LOCGameActivityLabelGpu}"
+                                   Style="{DynamicResource BaseTextBlockStyle}" />
+                    </CheckBox>
+                    <CheckBox Style="{DynamicResource CompactCheckBox}"
+                              IsChecked="{Binding DisplayRam, Mode=OneWay}"
+                              Command="{Binding CmdToggleRam}">
+                        <TextBlock Text="{DynamicResource LOCGameActivityLabelRam}"
+                                   Style="{DynamicResource BaseTextBlockStyle}" />
+                    </CheckBox>
+                    <CheckBox Style="{DynamicResource CompactCheckBox}"
+                              IsChecked="{Binding DisplayFps, Mode=OneWay}"
+                              Command="{Binding CmdToggleFps}">
+                        <TextBlock Text="{DynamicResource LOCGameActivityLabelFps}"
+                                   Style="{DynamicResource BaseTextBlockStyle}" />
+                    </CheckBox>
+                </StackPanel>
+
+                <!-- Separator — only shown when DisplayMoreData is true -->
+                <Border Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"
+                        Style="{DynamicResource TopSeparatorBorder}"
+                        Visibility="{Binding DisplayMoreData, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Margin="0,2,0,2" />
+
+                <!-- ── Group 2 : temp, power, FPS lows — hidden by default ── -->
+                <TextBlock Grid.Column="0" Grid.Row="2"
+                           Text="{DynamicResource LOCGameActivityGroupLogSensors}"
+                           Style="{DynamicResource ViewColumnLabelText}"
+                           Visibility="{Binding DisplayMoreData, Converter={StaticResource BooleanToVisibilityConverter}}"
+                           VerticalAlignment="Center"
+                           MinWidth="90" />
+
+                <StackPanel Grid.Column="1" Grid.Row="2"
+                            Orientation="Horizontal"
+                            Visibility="{Binding DisplayMoreData, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <CheckBox Style="{DynamicResource CompactCheckBox}"
+                              IsChecked="{Binding DisplayCpuT, Mode=OneWay}"
+                              Command="{Binding CmdToggleCpuT}">
+                        <TextBlock Text="{DynamicResource LOCGameActivityCpuTemp}"
+                                   Style="{DynamicResource BaseTextBlockStyle}" />
+                    </CheckBox>
+                    <CheckBox Style="{DynamicResource CompactCheckBox}"
+                              IsChecked="{Binding DisplayGpuT, Mode=OneWay}"
+                              Command="{Binding CmdToggleGpuT}">
+                        <TextBlock Text="{DynamicResource LOCGameActivityGpuTemp}"
+                                   Style="{DynamicResource BaseTextBlockStyle}" />
+                    </CheckBox>
+                    <CheckBox Style="{DynamicResource CompactCheckBox}"
+                              IsChecked="{Binding DisplayCpuP, Mode=OneWay}"
+                              Command="{Binding CmdToggleCpuP}">
+                        <TextBlock Text="{DynamicResource LOCGameActivityCpuPower}"
+                                   Style="{DynamicResource BaseTextBlockStyle}" />
+                    </CheckBox>
+                    <CheckBox Style="{DynamicResource CompactCheckBox}"
+                              IsChecked="{Binding DisplayGpuP, Mode=OneWay}"
+                              Command="{Binding CmdToggleGpuP}">
+                        <TextBlock Text="{DynamicResource LOCGameActivityGpuPower}"
+                                   Style="{DynamicResource BaseTextBlockStyle}" />
+                    </CheckBox>
+                    <CheckBox Style="{DynamicResource CompactCheckBox}"
+                              IsChecked="{Binding DisplayFps1PercentLow, Mode=OneWay}"
+                              Command="{Binding CmdToggleFps1PercentLow}">
+                        <TextBlock Text="{DynamicResource LOCGameActivityLabelFps1PercentLowShort}"
+                                   Style="{DynamicResource BaseTextBlockStyle}" />
+                    </CheckBox>
+                    <CheckBox Style="{DynamicResource CompactCheckBox}"
+                              IsChecked="{Binding DisplayFps0Point1PercentLow, Mode=OneWay}"
+                              Command="{Binding CmdToggleFps0Point1PercentLow}">
+                        <TextBlock Text="{DynamicResource LOCGameActivityLabelFps0Point1PercentLowShort}"
+                                   Style="{DynamicResource BaseTextBlockStyle}" />
+                    </CheckBox>
+                </StackPanel>
+
+            </Grid>
+        </Border>
+
+        <!-- ===== Row 2 — Chart container ===== -->
+        <Border Grid.Row="2">
+            <Border.Style>
+                <Style TargetType="{x:Type Border}" BasedOn="{StaticResource CardBorder}">
+                    <Setter Property="Padding" Value="0" />
+                    <Setter Property="Visibility" Value="Visible" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding HasNoData}" Value="True">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <Grid Name="PART_GridContener">
+                <lvc:CartesianChart LegendLocation="Bottom"
+                                    Name="PART_ChartLogActivity"
+                                    UpdaterTick="PART_ChartLogActivity_UpdaterTick"
+                                    DisableAnimations="{Binding DisableAnimations}"
+                                    AnimationsSpeed="10"
+                                    Width="{Binding ElementName=PART_GridContener, Path=ActualWidth}"
+                                    Height="{Binding ElementName=PART_GridContener, Path=ActualHeight}">
+
+                    <lvc:CartesianChart.ChartLegend>
+                        <!-- Legend hidden: filter bar checkboxes serve as interactive legend -->
+                        <lvc:DefaultLegend Height="2" Visibility="Hidden" />
+                    </lvc:CartesianChart.ChartLegend>
+
+                    <lvc:CartesianChart.DataTooltip>
+                        <livechartscommon:CustomerToolTipForLog />
+                    </lvc:CartesianChart.DataTooltip>
+
+                    <lvc:CartesianChart.AxisX>
+                        <lvc:Axis Name="PART_ChartLogActivityLabelsX"
+                                  ShowLabels="{Binding ChartLogAxis}"
+                                  MinValue="0"
+                                  LabelsRotation="{Binding LabelsRotationValue}"
+                                  FontSize="{DynamicResource FontSizeSmall}"
+                                  FontFamily="{DynamicResource FontFamily}">
+                            <lvc:Axis.Separator>
+                                <lvc:Separator Step="1" IsEnabled="False" />
+                            </lvc:Axis.Separator>
+                        </lvc:Axis>
+                    </lvc:CartesianChart.AxisX>
+
+                    <lvc:CartesianChart.AxisY>
+                        <!-- Y0 (left): CPU / GPU / RAM usage in % -->
+                        <lvc:Axis Name="PART_ChartLogActivityLabelsY"
+                                  ShowLabels="{Binding ChartLogOrdinates}"
+                                  MinValue="0"
+                                  FontSize="{DynamicResource FontSizeSmall}"
+                                  FontFamily="{DynamicResource FontFamily}">
+                            <lvc:Axis.Separator>
+                                <lvc:Separator />
+                            </lvc:Axis.Separator>
+                        </lvc:Axis>
+                        <!-- Y1 (right): FPS + Temp °C + Power W — non-% values share this axis -->
+                        <lvc:Axis Name="PART_ChartLogActivityLabelsY_FPS"
+                                  ShowLabels="{Binding ChartLogOrdinates}"
+                                  MinValue="0"
+                                  FontSize="{DynamicResource FontSizeSmall}"
+                                  FontFamily="{DynamicResource FontFamily}"
+                                  Position="RightTop">
+                            <lvc:Axis.Separator>
+                                <lvc:Separator IsEnabled="False" />
+                            </lvc:Axis.Separator>
+                        </lvc:Axis>
+                    </lvc:CartesianChart.AxisY>
+
+                </lvc:CartesianChart>
+
+            </Grid>
+        </Border>
+
+        <TextBlock Text="{DynamicResource LOCCommonNoDataAvailable}"
+                   Style="{DynamicResource BaseTextBlockStyle}"
+                   Foreground="{DynamicResource TextBrushDarker}"
+                   FontStyle="Italic"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Grid.Row="3"
+                   Visibility="{Binding HasNoData, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
     </Grid>
+
 </controls:PluginUserControlExtend>

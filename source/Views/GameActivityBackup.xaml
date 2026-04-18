@@ -1,13 +1,14 @@
 ﻿<UserControl x:Class="GameActivity.Views.GameActivityBackup"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:GameActivity.Views"
              xmlns:converters="clr-namespace:CommonPluginsShared.Converters"
-             xmlns:converters1="clr-namespace:CommonPlayniteShared.Converters" 
+             xmlns:converters1="clr-namespace:CommonPlayniteShared.Converters"
              xmlns:controls="clr-namespace:GameActivity.Controls"
-             mc:Ignorable="d" d:DesignHeight="350" d:DesignWidth="800">
+             mc:Ignorable="d" d:DesignHeight="420" d:DesignWidth="820"
+             Background="{DynamicResource WindowBackgourndBrush}">
 
     <UserControl.Resources>
         <converters:LocalDateConverter x:Key="LocalDateConverter" />
@@ -15,65 +16,173 @@
         <converters1:PlayTimeToStringConverter x:Key="PlayTimeToStringConverter" />
     </UserControl.Resources>
 
-    <DockPanel Margin="10" Loaded="Grid_Loaded" LastChildFill="True">
-        <Border BorderThickness="0,1,0,0" BorderBrush="{StaticResource NormalBorderBrush}"
-                Margin="0,10,0,0" Grid.Column="0" Grid.ColumnSpan="10" Grid.Row="10"
-                DockPanel.Dock="Bottom">
-            <DockPanel KeyboardNavigation.TabNavigation="Local" LastChildFill="False" Margin="0,5">
-                <Button TabIndex="3" Name="PART_BtRemove" Content="{DynamicResource LOCRemoveTitle}" 
+    <!-- Root layout: content above, action bar pinned at bottom -->
+    <Border Style="{StaticResource TopSeparatorBorder}"
+            DockPanel.Dock="Bottom"
+            Margin="0,8,0,0">
+
+        <DockPanel Margin="16" LastChildFill="True">
+
+            <!-- ═══════════════════════════════════════════════════════════
+             ACTION BAR — pinned to bottom, docked first so it stays
+             visible regardless of content height
+             ═══════════════════════════════════════════════════════════ -->
+            <Border DockPanel.Dock="Bottom"
+                BorderThickness="0,1,0,0"
+                BorderBrush="{DynamicResource NormalBorderBrush}"
+                Margin="0,12,0,0">
+                <DockPanel KeyboardNavigation.TabNavigation="Local"
+                       LastChildFill="False"
+                       Margin="0,10,0,0">
+
+                    <!-- Destructive action on the right, far from Add -->
+                    <Button Name="PART_BtRemove"
+                        TabIndex="2"
+                        Content="{DynamicResource LOCRemoveTitle}"
                         DockPanel.Dock="Right"
-                        Style="{StaticResource BottomButton}" Click="PART_BtRemove_Click" />
+                        Style="{DynamicResource WarningButton}"
+                        Command="{Binding CmdRemove}" />
 
-                <Button TabIndex="1" Name="PART_BtClose" Content="{DynamicResource LOCCancelLabel}" 
+                    <Button Name="PART_BtClose"
+                        TabIndex="1"
+                        Content="{DynamicResource LOCCancelLabel}"
                         DockPanel.Dock="Right"
-                        Style="{StaticResource BottomButton}" Click="PART_BtClose_Click" />
+                        Style="{DynamicResource SecondaryButton}"
+                        Command="{Binding CmdClose}" />
 
-                <Button TabIndex="0" Name="PART_BtAdd" Content="{DynamicResource LOCAddTitle}" 
-                        DockPanel.Dock="Right" 
-                        Style="{StaticResource BottomButton}" Click="PART_BtAdd_Click" />
-            </DockPanel>
-        </Border>
+                    <Button Name="PART_BtAdd"
+                        TabIndex="0"
+                        Content="{DynamicResource LOCAddTitle}"
+                        DockPanel.Dock="Right"
+                        Style="{DynamicResource PrimaryButton}"
+                        Command="{Binding CmdAdd}" />
+                </DockPanel>
+            </Border>
 
-        <DockPanel LastChildFill="False">
-            <Image Width="250" StretchDirection="Both" Stretch="Uniform"
-                   Margin="0,0,20,0"
-                   DockPanel.Dock="Left"
-                   Source="{Binding Cover}"
-                   RenderOptions.BitmapScalingMode="Fant" />
+            <!-- ═══════════════════════════════════════════════════════════
+             MAIN CONTENT AREA
+             ═══════════════════════════════════════════════════════════ -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <!-- Cover image — fixed width as requested -->
+                    <ColumnDefinition Width="auto" />
+                    <!-- Separator spacer -->
+                    <ColumnDefinition Width="20" />
+                    <!-- Metadata + chart column -->
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-            <!-- Game logs -->
-            <StackPanel Name="PART_ChartLogContener" DockPanel.Dock="Right" Margin="0,50,0,0" Width="330">
-                <controls:PluginChartLog IgnoreSettings="True" AxisLimit="10" DisableAnimations="True" />
-            </StackPanel>
-            
-            <TextBlock DockPanel.Dock="Top" Width="500"
-                       Text="{Binding Name, FallbackValue='Game Name'}"
-                       FontSize="{DynamicResource FontSizeLargest}" TextWrapping="Wrap"
-                       Foreground="{DynamicResource TextBrush}" />
+                <!-- ── Cover image ─────────────────────────────────────── -->
+                <Border Grid.Column="0"
+                    CornerRadius="6"
+                    ClipToBounds="True"
+                    Width="250"
+                    Height="250"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Background="{DynamicResource PanelSeparatorBrush}">
+                    <Image Stretch="UniformToFill"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       StretchDirection="Both"
+                       Source="{Binding Cover}"
+                       RenderOptions.BitmapScalingMode="Fant" />
+                </Border>
 
-            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,10,0,0">
-                <TextBlock Text="{DynamicResource LOCGaDateSession}" Foreground="{DynamicResource TextBrush}" />
-                <TextBlock Text="{Binding DateSession, FallbackValue='xx/xx/xx xx:xx:xx', Converter={StaticResource LocalDateTimeConverter}}"
-                           Margin="10,0,0,0" Foreground="{DynamicResource TextBrush}" />
-            </StackPanel>
+                <!-- ── Right column: title + cards + chart ─────────────── -->
+                <StackPanel Grid.Column="2" Orientation="Vertical">
 
-            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,10,0,0">
-                <TextBlock Text="{DynamicResource LOCGameActivityLvGamesElapsedSeconds}" Foreground="{DynamicResource TextBrush}" />
-                <TextBlock Text="{Binding ElapsedSeconds, FallbackValue='36min', Converter={StaticResource PlayTimeToStringConverter}}"
-                           Margin="10,0,0,0" Foreground="{DynamicResource TextBrush}" />
-            </StackPanel>
+                    <!-- Game title -->
+                    <TextBlock Text="{Binding Name, FallbackValue='Game Name'}"
+                           Style="{DynamicResource BaseTextBlockStyle}"
+                           FontSize="{DynamicResource FontSizeLargest}"
+                           FontWeight="SemiBold"
+                           TextWrapping="Wrap"
+                           Foreground="{DynamicResource TextBrush}"
+                           Margin="0,0,0,14" />
 
-            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,30,0,0">
-                <TextBlock Text="{DynamicResource LOCLastPlayedLabel}" Foreground="{DynamicResource TextBrush}" />
-                <TextBlock Text="{Binding DateLastPlayed, FallbackValue='xx/xx/xx xx:xx:xx', Converter={StaticResource LocalDateTimeConverter}}"
-                           Margin="10,0,0,0" Foreground="{DynamicResource TextBrush}" />
-            </StackPanel>
+                    <!-- ── Card 1: Backup session info ─────────────────── -->
+                    <Border Style="{DynamicResource SectionBorder}" Margin="0,0,0,10">
+                        <StackPanel>
+                            <!-- Card header -->
+                            <TextBlock Text="{DynamicResource LOCGaBackupDataInfo}"
+                                   Style="{DynamicResource BaseTextBlockStyle}"
+                                   FontSize="{DynamicResource FontSize}"
+                                   FontWeight="SemiBold"
+                                   Foreground="{DynamicResource GlyphBrush}"
+                                   Margin="0,0,0,8" />
 
-            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,10,0,0">
-                <TextBlock Text="{DynamicResource LOCTimePlayed}" Foreground="{DynamicResource TextBrush}" />
-                <TextBlock Text="{Binding Playtime, FallbackValue='xxh xxmin', Converter={StaticResource PlayTimeToStringConverter}}"
-                           Margin="10,0,0,0" Foreground="{DynamicResource TextBrush}" />
-            </StackPanel>
+                            <!-- Date session row -->
+                            <DockPanel Margin="0,4,0,0">
+                                <TextBlock DockPanel.Dock="Left"
+                                       Style="{DynamicResource BaseTextBlockStyle}"
+                                       Text="{DynamicResource LOCGaDateSession}"
+                                       Foreground="{DynamicResource TextBrushDarker}"
+                                       Width="160" />
+                                <TextBlock Style="{DynamicResource BaseTextBlockStyle}"
+                                       Text="{Binding DateSession, FallbackValue='--', Converter={StaticResource LocalDateTimeConverter}}"
+                                       Foreground="{DynamicResource TextBrush}" />
+                            </DockPanel>
+
+                            <!-- Session duration row -->
+                            <DockPanel Margin="0,6,0,0">
+                                <TextBlock DockPanel.Dock="Left"
+                                       Style="{DynamicResource BaseTextBlockStyle}"
+                                       Text="{DynamicResource LOCGameActivityLvGamesElapsedSeconds}"
+                                       Foreground="{DynamicResource TextBrushDarker}"
+                                       Width="160" />
+                                <TextBlock Style="{DynamicResource BaseTextBlockStyle}"
+                                       Text="{Binding ElapsedSeconds, FallbackValue='--', Converter={StaticResource PlayTimeToStringConverter}}"
+                                       Foreground="{DynamicResource TextBrush}" />
+                            </DockPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- ── Card 2: Current Playnite game state ─────────── -->
+                    <Border Style="{DynamicResource SectionBorder}" Margin="0,0,0,10">
+                        <StackPanel>
+                            <!-- Card header -->
+                            <TextBlock Text="{DynamicResource LOCGaCurrentGameState}"
+                                   Style="{DynamicResource BaseTextBlockStyle}"
+                                   FontSize="{DynamicResource FontSize}"
+                                   FontWeight="SemiBold"
+                                   Foreground="{DynamicResource GlyphBrush}"
+                                   Margin="0,0,0,8" />
+
+                            <!-- Last played row -->
+                            <DockPanel Margin="0,4,0,0">
+                                <TextBlock DockPanel.Dock="Left"
+                                       Style="{DynamicResource BaseTextBlockStyle}"
+                                       Text="{DynamicResource LOCLastPlayedLabel}"
+                                       Foreground="{DynamicResource TextBrushDarker}"
+                                       Width="160" />
+                                <TextBlock Style="{DynamicResource BaseTextBlockStyle}"
+                                       Text="{Binding DateLastPlayed, FallbackValue='--', Converter={StaticResource LocalDateTimeConverter}}"
+                                       Foreground="{DynamicResource TextBrush}" />
+                            </DockPanel>
+
+                            <!-- Total playtime row -->
+                            <DockPanel Margin="0,6,0,0">
+                                <TextBlock DockPanel.Dock="Left"
+                                       Style="{DynamicResource BaseTextBlockStyle}"
+                                       Text="{DynamicResource LOCTimePlayed}"
+                                       Foreground="{DynamicResource TextBrushDarker}"
+                                       Width="160" />
+                                <TextBlock Style="{DynamicResource BaseTextBlockStyle}"
+                                       Text="{Binding Playtime, FallbackValue='--', Converter={StaticResource PlayTimeToStringConverter}}"
+                                       Foreground="{DynamicResource TextBrush}" />
+                            </DockPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- ── Chart log (preserved as-is per spec) ────────── -->
+                    <StackPanel Name="PART_ChartLogContener" Margin="0,4,0,0" Height="160">
+                        <controls:PluginChartLog IgnoreSettings="True" AxisLimit="10" DisableAnimations="True" />
+                    </StackPanel>
+
+                </StackPanel>
+            </Grid>
         </DockPanel>
-    </DockPanel>
+
+    </Border>
 </UserControl>

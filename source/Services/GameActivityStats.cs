@@ -12,16 +12,16 @@ namespace GameActivity.Services
     public class GameActivityStats
     {
         private static ILogger Logger => LogManager.GetLogger();
-        private static ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
+        private static GameActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
 
 
         public static ulong GetPlayTimeYear(uint year, bool withHidden)
         {
             try
             {
-                return (ulong)PluginDatabase.Database.Items
-                        .Where(x => x.Value.HasData && !x.Value.IsDeleted && (withHidden || x.Value.Hidden == false))
-                        .SelectMany(x => x.Value.Items)
+                return (ulong)PluginDatabase.GetListGameActivity()
+						.Where(x => x.HasData && !x.IsDeleted && (withHidden || x.Hidden == false))
+                        .SelectMany(x => x.Items)
                         .Where(x => x.DateSession != null && ((DateTime)x.DateSession).ToLocalTime().Year == year)
                         .Sum(x => (long)x.ElapsedSeconds);
             }
@@ -37,9 +37,9 @@ namespace GameActivity.Services
         {
             try
             {
-                return (ulong)PluginDatabase.Database.Items
-                        .Where(x => x.Value.HasData && !x.Value.IsDeleted && (withHidden || x.Value.Hidden == false))
-                        .SelectMany(x => x.Value.Items)
+                return (ulong)PluginDatabase.GetListGameActivity()
+						.Where(x => x.HasData && !x.IsDeleted && (withHidden || x.Hidden == false))
+                        .SelectMany(x => x.Items)
                         .Where(x => x.DateSession != null && ((DateTime)x.DateSession).ToLocalTime().Year == year && ((DateTime)x.DateSession).ToLocalTime().Month == month)
                         .Sum(x => (long)x.ElapsedSeconds);
             }

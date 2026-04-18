@@ -16,7 +16,7 @@ namespace GameActivity
     {
         private static ILogger Logger => LogManager.GetLogger();
 
-        private ActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
+        private GameActivityDatabase PluginDatabase => GameActivity.PluginDatabase;
 
         private StackPanel SpControl { get; set; }
 
@@ -51,39 +51,6 @@ namespace GameActivity
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
         }
-
-
-        private void CbLogging_Click(object sender, RoutedEventArgs e)
-        {
-            CheckBox cb = (CheckBox)sender;
-
-            if ((cb.Name == "cbUseMsiAfterburner") && (bool)cb.IsChecked)
-            {
-                cbUseHWiNFOSharedMemory.IsChecked = false;
-                cbUseHWiNFOGadget.IsChecked = false;
-            }
-            if (cb.Name == "cbUseHWiNFOSharedMemory" && (bool)cb.IsChecked)
-            {
-                cbUseMsiAfterburner.IsChecked = false;
-                cbUseHWiNFOGadget.IsChecked = false;
-
-                PART_TabHWiNFO.SelectedIndex = 0;
-            }
-            if (cb.Name == "cbUseHWiNFOGadget" && (bool)cb.IsChecked)
-            {
-                cbUseMsiAfterburner.IsChecked = false;
-                cbUseHWiNFOSharedMemory.IsChecked = false;
-
-                PART_TabHWiNFO.SelectedIndex = 1;
-            }
-        }
-
-        private void Hyperlink_Click(object sender, RoutedEventArgs e)
-        {
-            FrameworkElement link = (FrameworkElement)sender;
-            _ = Process.Start((string)link.Tag);
-        }
-
 
         #region SetColors
         private void BtPickColor_Click(object sender, RoutedEventArgs e)
@@ -120,11 +87,11 @@ namespace GameActivity
                     if (SpControl.Tag != null)
                     {
                         int.TryParse((string)SpControl.Tag, out int index);
-                        PluginDatabase.PluginSettings.Settings.StoreColors[index].Fill = new SolidColorBrush(color);
+                        PluginDatabase.PluginSettings.StoreColors[index].Fill = new SolidColorBrush(color);
                     }
                     else
                     {
-                        PluginDatabase.PluginSettings.Settings.ChartColors = new SolidColorBrush(color);
+                        PluginDatabase.PluginSettings.ChartColors = new SolidColorBrush(color);
                     }
                 }
             }
@@ -172,7 +139,7 @@ namespace GameActivity
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             PART_Color.Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#2195f2");
-            PluginDatabase.PluginSettings.Settings.ChartColors = (SolidColorBrush)new BrushConverter().ConvertFrom("#2195f2");
+            PluginDatabase.PluginSettings.ChartColors = (SolidColorBrush)new BrushConverter().ConvertFrom("#2195f2");
         }
         #endregion
     }

@@ -1,11 +1,9 @@
 ﻿using CommonPluginsControls.Controls;
-using GameActivity.Services;
 using Playnite.SDK.Data;
 using Playnite.SDK;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using CommonPluginsShared;
+using CommonPluginsShared.Commands;
 
 namespace GameActivity.Models
 {
@@ -28,6 +26,31 @@ namespace GameActivity.Models
         public string AvgGPU { get; set; }
         public string AvgRAM { get; set; }
         public string AvgFPS { get; set; }
+
+        /// <summary>Minimum FPS from logged samples for this session (display only).</summary>
+        public string LoggedFpsMin { get; set; }
+
+        /// <summary>Maximum FPS from logged samples for this session (display only).</summary>
+        public string LoggedFpsMax { get; set; }
+
+        /// <summary>Median FPS from logged samples for this session (display only).</summary>
+        public string LoggedFpsMedian { get; set; }
+
+        /// <summary>Sample standard deviation of FPS from logged samples (display only).</summary>
+        public string LoggedFpsStdDev { get; set; }
+
+        /// <summary>Average Framerate 1% Low (FPS) from logged samples (MSI MAHM when configured).</summary>
+        public string LoggedFps1PercentLowAvg { get; set; }
+
+        /// <summary>Minimum Framerate 1% Low (FPS) from logged samples (worst sample).</summary>
+        public string LoggedFps1PercentLowMin { get; set; }
+
+        /// <summary>Average Framerate 0.1% Low (FPS) from logged samples.</summary>
+        public string LoggedFps0Point1PercentLowAvg { get; set; }
+
+        /// <summary>Minimum Framerate 0.1% Low (FPS) from logged samples (worst sample).</summary>
+        public string LoggedFps0Point1PercentLowMin { get; set; }
+
         public string AvgCPUT { get; set; }
         public string AvgGPUT { get; set; }
         public string AvgCPUP { get; set; }
@@ -50,7 +73,7 @@ namespace GameActivity.Models
         public string SourceIconText { get; set; }
 
         [DontSerialize]
-        public RelayCommand<Guid> GoToGame => Commands.GoToGame;
+        public RelayCommand<Guid> GoToGame => CommandsNavigation.GoToGame;
 
         [DontSerialize]
         public bool GameExist => API.Instance.Database.Games.Get(Id) != null;

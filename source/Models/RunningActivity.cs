@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Timers;
 
 namespace GameActivity.Models
 {
@@ -10,12 +10,12 @@ namespace GameActivity.Models
     {
         public Guid Id { get; set; }
 
-        public System.Timers.Timer timer { get; set; }
+        public Timer Timer { get; set; }
         public GameActivities GameActivitiesLog { get; set; }
         public List<WarningData> WarningsMessage { get; set; } = new List<WarningData>();
 
-        public System.Timers.Timer timerBackup { get; set; }
-        public ActivityBackup activityBackup { get; set; }
+        public Timer TimerBackup { get; set; }
+        public ActivityBackup ActivityBackup { get; set; }
 
         public ulong PlaytimeOnStarted { get; set; }
     }
