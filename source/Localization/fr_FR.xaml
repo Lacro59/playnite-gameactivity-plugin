@@ -216,7 +216,7 @@ vert moyen = plus rapide</sys:String>
     <sys:String x:Key="LOCGameActivityFps1PercentLowAvg">Framerate moyen 1% Bas</sys:String>
     <sys:String x:Key="LOCGameActivityFps1PercentLowMin">Framerate min 1% Bas</sys:String>
     <sys:String x:Key="LOCGameActivityFps0Point1PercentLowAvg">Framerate moyen 0,1% Bas</sys:String>
-    <sys:String x:Key="LOCGameActivityFps0Point1PercentLowMin">Min Framerate 0.1% Low</sys:String>
+    <sys:String x:Key="LOCGameActivityFps0Point1PercentLowMin">Framerate min 0,1% Bas</sys:String>
     <sys:String x:Key="LOCGameActivityAvgCpuT">CPU moyen T</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpuT">GPU moyen T</sys:String>
     <sys:String x:Key="LOCGameActivityAvgCpuP">CPU moyen P</sys:String>
@@ -233,20 +233,20 @@ vert moyen = plus rapide</sys:String>
     <sys:String x:Key="LOCGameActivityLabelGpuT">GPU T°</sys:String>
     <sys:String x:Key="LOCGameActivityLabelCpuP">CPU W</sys:String>
     <sys:String x:Key="LOCGameActivityLabelGpuP">GPU W</sys:String>
-    <sys:String x:Key="LOCGameActivityLabelFps1PercentLowShort">1% Low</sys:String>
-    <sys:String x:Key="LOCGameActivityLabelFps0Point1PercentLowShort">0.1% Low</sys:String>
+    <sys:String x:Key="LOCGameActivityLabelFps1PercentLowShort">1% Bas</sys:String>
+    <sys:String x:Key="LOCGameActivityLabelFps0Point1PercentLowShort">0,1% Bas</sys:String>
 
-    <sys:String x:Key="LOCGameActivityShowAllData">Show all data</sys:String>
+    <sys:String x:Key="LOCGameActivityShowAllData">Afficher toutes les données</sys:String>
 
     <!-- Group header labels for the two filter bar rows -->
     <sys:String x:Key="LOCGameActivityGroupUsage">Usage</sys:String>
-    <sys:String x:Key="LOCGameActivityGroupTempPower">Temp / Power</sys:String>
-    <sys:String x:Key="LOCGameActivityGroupLogSensors">Temp / power / FPS lows</sys:String>
+    <sys:String x:Key="LOCGameActivityGroupTempPower">Température / Puissance</sys:String>
+    <sys:String x:Key="LOCGameActivityGroupLogSensors">Température / Puissance / Flux FPS</sys:String>
 
     <!-- ==================== Warning Dialog ==================== -->
 
     <sys:String x:Key="LOCGameActivityWarningCaption">Avertissements durant la session de jeu</sys:String>
-    <sys:String x:Key="LOCGameActivityWarningAt">At</sys:String>
+    <sys:String x:Key="LOCGameActivityWarningAt">À</sys:String>
 
 
     <!-- ==================== Quick Search ==================== -->
@@ -260,7 +260,7 @@ vert moyen = plus rapide</sys:String>
     <!-- ==================== Add / Edit Session ==================== -->
 
     <sys:String x:Key="LOCGameActivitySessionDetailsExportFileTag">Session-performance-log</sys:String>
-    <sys:String x:Key="LOCGameActivityExportSessionDetails">Export this session's performance samples to CSV. The suggested file name includes the game title and session start (local time).</sys:String>
+    <sys:String x:Key="LOCGameActivityExportSessionDetails">Exportez les échantillons de performances de cette session en CSV. Le nom de fichier suggéré inclut le titre du jeu et le début de la session (heure locale).</sys:String>
 
     <sys:String x:Key="LOCGaAddNewGameSession">Ajouter une nouvelle session de jeu</sys:String>
     <sys:String x:Key="LOCGaDateStart">Date de début</sys:String>
