@@ -102,7 +102,7 @@
     <!-- ════════════════════════════════════════════════════════════════════════
          Root layout: toolbar at the bottom, list fills remaining space.
     ════════════════════════════════════════════════════════════════════════ -->
-    <Border Style="{StaticResource TopSeparatorBorder}"
+    <Border Style="{DynamicResource TopSeparatorBorder}"
             DockPanel.Dock="Bottom"
             Margin="0,8,0,0">
         

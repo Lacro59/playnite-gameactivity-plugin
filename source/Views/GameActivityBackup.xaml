@@ -17,7 +17,7 @@
     </UserControl.Resources>
 
     <!-- Root layout: content above, action bar pinned at bottom -->
-    <Border Style="{StaticResource TopSeparatorBorder}"
+    <Border Style="{DynamicResource TopSeparatorBorder}"
             DockPanel.Dock="Bottom"
             Margin="0,8,0,0">
 
