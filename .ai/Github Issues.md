@@ -1,6 +1,6 @@
 # Git Commit Message Convention
 
-## 1. Template brut
+## 1. Raw template
 
 ```text
 <type>(<scope>): <description>
@@ -10,25 +10,26 @@
 <footer>
 ```
 
-## 2. Guide de rédaction
+## 2. Writing guide
 
 ### Format
 
-- **Type** : `fix`, `feat`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`.
-- **Scope** : optionnel, indique le module ou le fichier concerné, par exemple `api` ou `middleware`.
-- **Subject** : utiliser l’impératif, sans majuscule au début, sans point final.
-- **Body** : optionnel, explique le **pourquoi** et le **comment**, pas seulement le **quoi**.
-- **Footer** : permet de référencer une issue, par exemple `Fixes #123`.
+- **Type**: `fix`, `feat`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`.
+- **Scope**: optional, indicates the impacted module or file, for example `api` or `middleware`.
+- **Subject**: use the imperative mood, with no leading capital letter and no trailing period.
+- **Body**: optional, explain the **why** and **how**, not only the **what**.
+- **Footer**: references an issue, for example `Fixes #123`.
+- **Ticket reference (required)**: always include the full GitHub issue URL in the message (example: `https://github.com/Lacro59/playnite-gameactivity-plugin/issues/252`).
 
-### Exemples
+### Examples
 
-#### Correctif simple
+#### Simple fix
 
 ```text
 fix(ui): resolve button misalignment on login page
 ```
 
-#### Correctif détaillé
+#### Detailed fix
 
 ```text
 fix(api): handle null values in user profile update
@@ -46,3 +47,8 @@ Closes #456
 | Close an issue  | `Fixes`, `Closes`, `Resolves` | `Fixes #123`             |
 | Link to issue   | `Ref`, `See`                  | `Ref #123`               |
 | Multiple issues | `Fixes`                       | `Fixes #123, Fixes #124` |
+
+---
+
+**Last Updated:** 2026-04-20
+**Version:** 1.2
