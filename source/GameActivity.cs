@@ -275,9 +275,33 @@ namespace GameActivity
                     {
                         Thread.Sleep(5000);
                         // Temporary workaround for PlayState paused time until Playnite allows to share data among extensions
-                        elapsedSeconds = PluginDatabase.PluginSettings.SubstPlayStateTime && ExistsPlayStateInfoFile()
+                        ulong fallbackElapsedSeconds = PluginDatabase.PluginSettings.SubstPlayStateTime && ExistsPlayStateInfoFile()
                             ? args.Game.Playtime - runningActivity.PlaytimeOnStarted - GetPlayStatePausedTimeInfo(args.Game)
                             : args.Game.Playtime - runningActivity.PlaytimeOnStarted;
+
+                        DateTime sessionStartUtc = runningActivity.ActivityBackup?.DateSession
+                            ?? runningActivity.GameActivitiesLog.GetLastSessionActivity(false).DateSession;
+                        ulong wallClockElapsedSeconds = 0;
+                        if (sessionStartUtc > DateTime.MinValue)
+                        {
+                            long elapsedFromDateSession = (long)(DateTime.UtcNow - sessionStartUtc).TotalSeconds;
+                            wallClockElapsedSeconds = elapsedFromDateSession > 0
+                                ? (ulong)elapsedFromDateSession
+                                : 0;
+                        }
+
+                        if (IsFallbackElapsedSuspicious(fallbackElapsedSeconds, wallClockElapsedSeconds))
+                        {
+                            elapsedSeconds = wallClockElapsedSeconds;
+                            Logger.Warn(
+                                $"Suspicious playtime fallback detected for {args.Game.Name}. " +
+                                $"Fallback={fallbackElapsedSeconds}s, WallClock={wallClockElapsedSeconds}s. " +
+                                "Using wall-clock elapsed seconds.");
+                        }
+                        else
+                        {
+                            elapsedSeconds = fallbackElapsedSeconds;
+                        }
 
                         PlayniteApi.Notifications.Add(new NotificationMessage(
                             $"{PluginDatabase.PluginName}- noElapsedSeconds",
@@ -350,6 +374,21 @@ namespace GameActivity
 
             // Check that the GameId is the same as the paused game. If so, return the paused time. If not, return 0.
             return game.Id.ToString() == Id ? PausedSeconds : 0;
+        }
+
+        private static bool IsFallbackElapsedSuspicious(ulong fallbackElapsedSeconds, ulong wallClockElapsedSeconds)
+        {
+            if (wallClockElapsedSeconds == 0)
+            {
+                return false;
+            }
+
+            // Keep a small tolerance for delayed events and scheduler jitter.
+            ulong wallClockWithTolerance = wallClockElapsedSeconds + 300;
+            bool isTooHighComparedToWallClock = fallbackElapsedSeconds > wallClockWithTolerance;
+            bool isMoreThanDoubleWallClock = fallbackElapsedSeconds > (wallClockElapsedSeconds * 2);
+
+            return isTooHighComparedToWallClock && isMoreThanDoubleWallClock;
         }
         
         #endregion

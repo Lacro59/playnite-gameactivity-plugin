@@ -43,10 +43,10 @@ Fixes https://github.com/Lacro59/playnite-gameactivity-plugin/issues/456
 
 ## 3. Cheat sheet GitHub
 
-| Action          | Keyword                       | Syntax                                                                                          |
-| --------------- | ----------------------------- | ----------------------------------------------------------------------------------------------- |
-| Close an issue  | `Fixes`, `Closes`, `Resolves` | `Fixes https://github.com/Lacro59/playnite-gameactivity-plugin/issues/123`                     |
-| Link to issue   | `Ref`, `See`                  | `Ref https://github.com/Lacro59/playnite-gameactivity-plugin/issues/123`                       |
+| Action          | Keyword                       | Syntax                                                                                                                                               |
+| --------------- | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Close an issue  | `Fixes`, `Closes`, `Resolves` | `Fixes https://github.com/Lacro59/playnite-gameactivity-plugin/issues/123`                                                                           |
+| Link to issue   | `Ref`, `See`                  | `Ref https://github.com/Lacro59/playnite-gameactivity-plugin/issues/123`                                                                             |
 | Multiple issues | `Fixes`                       | `Fixes https://github.com/Lacro59/playnite-gameactivity-plugin/issues/123, Fixes https://github.com/Lacro59/playnite-gameactivity-plugin/issues/124` |
 
 ---
