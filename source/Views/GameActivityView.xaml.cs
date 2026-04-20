@@ -355,6 +355,47 @@ namespace GameActivity.Views
         }
 
         /// <summary>
+        /// Refreshes sidebar data when the existing view instance becomes visible again.
+        /// Keeps current month and active filters while reloading charts and game rows.
+        /// </summary>
+        public void RefreshOnReopen()
+        {
+            if (!IsLoaded)
+            {
+                RoutedEventHandler onLoaded = null;
+                onLoaded = (s, e) =>
+                {
+                    Loaded -= onLoaded;
+                    RefreshOnReopen();
+                };
+                Loaded += onLoaded;
+                return;
+            }
+
+            Guid? selectedGameId = (lvGames.SelectedItem as ListActivities)?.Id;
+
+            GetActivityByMonth(YearCurrent, MonthCurrent);
+            GetActivityByWeek(YearCurrent, MonthCurrent);
+            GetActivityByDay(YearCurrent, MonthCurrent);
+            GetActivityByListGame();
+
+            if (selectedGameId != null)
+            {
+                Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, (Action)delegate
+                {
+                    ListActivities matched = ViewModel.FilteredActivityList?.FirstOrDefault(x => x.Id == selectedGameId.Value);
+                    if (matched == null)
+                    {
+                        return;
+                    }
+
+                    lvGames.SelectedItem = matched;
+                    lvGames.ScrollIntoView(matched);
+                });
+            }
+        }
+
+        /// <summary>
         /// Hides a GridView column and optionally forces it to remain hidden in ListViewExtend management.
         /// </summary>
         private static void HideColumn(GridViewColumn column, GridViewColumnHeader header, bool forceHidden = false)

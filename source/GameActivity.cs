@@ -3,6 +3,7 @@ using CommonPluginsShared;
 using CommonPluginsShared.Controls;
 using CommonPluginsShared.PlayniteExtended;
 using GameActivity.Controls;
+using GameActivity.Views;
 using GameActivity.Models;
 using GameActivity.Services;
 using Playnite.SDK;
@@ -28,6 +29,7 @@ namespace GameActivity
         internal TopPanelItem TopPanelItem { get; set; }
         internal SidebarItem SidebarItem { get; set; }
         internal SidebarItemControl SidebarItemControl { get; set; }
+        internal GameActivityView SidebarView { get; set; }
 
 		// Hardware monitoring system
 		internal GameActivityMonitoring GameActivityMonitoring { get; set; }
