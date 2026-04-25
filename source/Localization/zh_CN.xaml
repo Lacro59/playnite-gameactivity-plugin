@@ -3,93 +3,93 @@
 
     <!-- ==================== General ==================== -->
 
-    <sys:String x:Key="LOCGameActivity">GameActivity</sys:String>
+    <sys:String x:Key="LOCGameActivity">游戏活动</sys:String>
     <sys:String x:Key="LOCGameActivityTitle">活动记录</sys:String>
 
-    <sys:String x:Key="LOCGameActivityNoPlaytime" xml:space="preserve">There is no play time for {0}.
-Used the difference play time: {1}s.</sys:String>
+    <sys:String x:Key="LOCGameActivityNoPlaytime" xml:space="preserve">{0} 没有游玩时间。
+使用了不同的游玩时间：{1} 秒。</sys:String>
 
-    <sys:String x:Key="LOCGameActivityProviderError">{0} provider failed to initialize.</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderError">{0} 数据源初始化失败。</sys:String>
 
-    <sys:String x:Key="LOCGameActivityDefaultAction">Default action</sys:String>
+    <sys:String x:Key="LOCGameActivityDefaultAction">默认指令</sys:String>
 
 
     <!-- ==================== Notifications ==================== -->
 
-    <sys:String x:Key="LOCGameActivityNotificationHWiNFO">HWiNFO logging is enabled but the application is not running.</sys:String>
-    <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">MSI Afterburner logging is enabled but the application is not running.</sys:String>
-    <sys:String x:Key="LOCGameActivityNotificationRivaTuner">RivaTuner Statistics Server (RTSS) logging is enabled but the application is not running.</sys:String>
-    <sys:String x:Key="LOCGameActivityNotificationLibreHardware">LibreHardware Monitor remote server is not accessible.</sys:String>
+    <sys:String x:Key="LOCGameActivityNotificationHWiNFO">HWiNFO 记录已启用，但应用程序未运行。</sys:String>
+    <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">MSI AfterBurner 记录已启用，但应用程序未运行。</sys:String>
+    <sys:String x:Key="LOCGameActivityNotificationRivaTuner">RivaTuner Statistics Server（RTSS）记录已启用，但应用程序未运行。</sys:String>
+    <sys:String x:Key="LOCGameActivityNotificationLibreHardware">LibreHardware Monitor 远程服务器无法访问。</sys:String>
 
 
     <!-- ==================== Main View ==================== -->
 
-    <sys:String x:Key="LOCGamesActivitiesTitle">Games activities</sys:String>
-    <sys:String x:Key="LOCGameActivitiesTitle">Game activities</sys:String>
-    <sys:String x:Key="LOCGameActivityViewGamesActivities">View games activities</sys:String>
-    <sys:String x:Key="LOCGameActivityViewGameActivity">View game activity</sys:String>
-    <sys:String x:Key="LOCGameActivityProviderPerfCharts">Provider performance charts</sys:String>
-    <sys:String x:Key="LOCGameActivityProviderPerfChartsTitle">Provider performance (live)</sys:String>
-    <sys:String x:Key="LOCGameActivityProviderPerfChartsHint">When enabled, only the provider actually used for each metric in aggregation is shown (per chart). Otherwise pick providers below. Values refresh every 5 seconds (last 6 minutes shown).</sys:String>
-    <sys:String x:Key="LOCGameActivityProviderPerfChartsNoProviders">No hardware monitoring providers are registered. Enable at least one provider in GameActivity settings.</sys:String>
-    <sys:String x:Key="LOCGameActivityProviderPerfChartsLegend">By provider</sys:String>
-    <sys:String x:Key="LOCGameActivityProviderPerfChartsAggregatorMode">Used values (aggregation)</sys:String>
+    <sys:String x:Key="LOCGamesActivitiesTitle">游戏活动</sys:String>
+    <sys:String x:Key="LOCGameActivitiesTitle">游戏活动</sys:String>
+    <sys:String x:Key="LOCGameActivityViewGamesActivities">查看游戏活动</sys:String>
+    <sys:String x:Key="LOCGameActivityViewGameActivity">查看游戏活动</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderPerfCharts">数据源性能图表</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderPerfChartsTitle">数据源性能图表（实时）</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderPerfChartsHint">若启用，将只显示每次运行中实际使用的数据源（按图表）。若禁用，请选择下方的数据源。只显示最近 6 分钟的记录，且每 5 分钟刷新一次。</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderPerfChartsNoProviders">未注册硬件监测数据源，请现在游戏活动设置中启用至少一个数据源。</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderPerfChartsLegend">按数据源</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderPerfChartsAggregatorMode">使用的值（合计）</sys:String>
 
 
     <!-- ==================== Gantt View ==================== -->
 
-    <sys:String x:Key="LOCGameActivityGanttView">Gantt view</sys:String>
-    <sys:String x:Key="LOCGameActivitySetNumberDay">Set number of days</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriod">Period</sys:String>
-    <sys:String x:Key="LOCGameActivitySetLastDate">Set the last date</sys:String>
-    <sys:String x:Key="LOCGameActivityOnlyActiveGames">Only active games in period</sys:String>
-    <sys:String x:Key="LOCGameActivityNoDataForFilters">No game matches the current filters.</sys:String>
+    <sys:String x:Key="LOCGameActivityGanttView">甘特图</sys:String>
+    <sys:String x:Key="LOCGameActivitySetNumberDay">设定天数</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriod">时间段</sys:String>
+    <sys:String x:Key="LOCGameActivitySetLastDate">设定最后日期</sys:String>
+    <sys:String x:Key="LOCGameActivityOnlyActiveGames">仅时间段内有活动的游戏</sys:String>
+    <sys:String x:Key="LOCGameActivityNoDataForFilters">当前筛选器下无匹配的游戏</sys:String>
 
     <!-- ==================== GamesDataMismatch view ==================== -->
 
-    <sys:String x:Key="LOCGaDataMismatchSectionGa">GameActivity data</sys:String>
-    <sys:String x:Key="LOCGaDataMismatchSectionPlaynite">Playnite data</sys:String>
-    <sys:String x:Key="LOCGaDataMismatchApplyAllTooltip">Override Playnite data with GameActivity data for all listed games</sys:String>
-    <sys:String x:Key="LOCGaDataMismatchApplyHeader">Apply</sys:String>
-    <sys:String x:Key="LOCGaDataMismatchEmpty">No data mismatch detected.</sys:String>
-    <sys:String x:Key="LOCGaDataMismatchApplyAllConfirmTitle">Override all – are you sure?</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchSectionGa">游戏活动数据</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchSectionPlaynite">Playnite 数据</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchApplyAllTooltip">以游戏活动插件数据覆盖所有列出游戏的 Playnite 数据</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchApplyHeader">应用</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchEmpty">没有发现不匹配数据。</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchApplyAllConfirmTitle">是否确定全部覆盖？</sys:String>
 
 
     <!-- ==================== GameActivityBackup ================ -->
 
-    <sys:String x:Key="LOCGaBackupDataInfo">Backup session info</sys:String>
-    <sys:String x:Key="LOCGaCurrentGameState">Current game state</sys:String>
-    <sys:String x:Key="LOCGaBackupExist" xml:space="preserve">There is backup data for {0}.
-Probably after a Playnite crash.
-Click for more information.</sys:String>
-    <sys:String x:Key="LOCGaDateSession">Date session</sys:String>
-    <sys:String x:Key="LOCGaPlayTimeSession">Play time session</sys:String>
+    <sys:String x:Key="LOCGaBackupDataInfo">备份会话信息</sys:String>
+    <sys:String x:Key="LOCGaCurrentGameState">当前游戏状态</sys:String>
+    <sys:String x:Key="LOCGaBackupExist" xml:space="preserve">存在 {0} 的备份数据。
+可能是在 Playnite 崩溃后出现的。
+点击获取更多信息。</sys:String>
+    <sys:String x:Key="LOCGaDateSession">会话日期</sys:String>
+    <sys:String x:Key="LOCGaPlayTimeSession">会话游玩时长</sys:String>
 
 
     <!-- ==================== Game Data Mismatch ==================== -->
 
-    <sys:String x:Key="LOCGaGamesDataMismatch">Game data mismatch</sys:String>
-    <sys:String x:Key="LOCGaSessionCount">Session count</sys:String>
-    <sys:String x:Key="LOCGaSessionPlayed">Sessions played</sys:String>
-    <sys:String x:Key="LOCGaGaToPlaynite">Override Playnite data with GameActivity data</sys:String>
-    <sys:String x:Key="LOCGaPlayniteToGa">Override GameActivity data with Playnite data</sys:String>
-    <sys:String x:Key="LOCGaPlayniteToGaWarning">This irreversible action will overwrite the play count and times in Playnite with data from GameActivity.</sys:String>
+    <sys:String x:Key="LOCGaGamesDataMismatch">游戏数据不匹配</sys:String>
+    <sys:String x:Key="LOCGaSessionCount">会话次数</sys:String>
+    <sys:String x:Key="LOCGaSessionPlayed">已游玩会话</sys:String>
+    <sys:String x:Key="LOCGaGaToPlaynite">以游戏活动插件数据覆盖 Playnite 数据</sys:String>
+    <sys:String x:Key="LOCGaPlayniteToGa">以 Playnite 数据覆盖游戏活动插件数据</sys:String>
+    <sys:String x:Key="LOCGaPlayniteToGaWarning">将以游戏活动插件数据覆盖 Playnite 记录的游玩次数和时长，此操作不可逆。</sys:String>
 
 
     <!-- ==================== Merge ==================== -->
 
-    <sys:String x:Key="LOCGaMerge">Merge</sys:String>
-    <sys:String x:Key="LOCGaMergeSession">Merge game session</sys:String>
+    <sys:String x:Key="LOCGaMerge">合并</sys:String>
+    <sys:String x:Key="LOCGaMergeSession">合并游戏会话</sys:String>
 
 
     <!-- ==================== Settings ==================== -->
 
     <!-- Logging -->
-    <sys:String x:Key="LOCGameActivityActiveLog">Enable logging</sys:String>
-    <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">Log CPU, GPU, RAM and FPS performance during a game session.</sys:String>
-    <sys:String x:Key="LOCGameActivityTimeInterval">Check time interval</sys:String>
-    <sys:String x:Key="LOCGameActivityTimeLabel">minute(s)</sys:String>
-    <sys:String x:Key="LOCGameActivityHardwareMonitoringProvidersSection">Hardware monitoring providers</sys:String>
+    <sys:String x:Key="LOCGameActivityActiveLog">启用性能记录</sys:String>
+    <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">游戏时记录 CPU、GPU、内存使用情况和帧率。</sys:String>
+    <sys:String x:Key="LOCGameActivityTimeInterval">监测时间间隔</sys:String>
+    <sys:String x:Key="LOCGameActivityTimeLabel">分钟</sys:String>
+    <sys:String x:Key="LOCGameActivityHardwareMonitoringProvidersSection">硬件监测数据源</sys:String>
     <sys:String x:Key="LOCGameActivityHardwareProvidersLatencyIntro" xml:space="preserve">Coloured pill: typical relative cost of one metrics read
 red = slower
 orange = medium
