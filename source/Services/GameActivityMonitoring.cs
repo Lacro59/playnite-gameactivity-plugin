@@ -125,6 +125,11 @@ namespace GameActivity.Services
                 TryRegisterProvider(() => new HWiNFOProvider(), "HWiNFO");
             }
 
+            if (PluginDatabase.PluginSettings.UseHWiNFOGadget)
+            {
+                TryRegisterProvider(() => new HWiNFOGadgetProvider(), "HWiNFO Gadget");
+            }
+
             if (PluginDatabase.PluginSettings.UseWMI)
             {
                 TryRegisterProvider(() => new WMIProvider(), "WMI");
@@ -711,6 +716,7 @@ namespace GameActivity.Services
             switch (providerName)
             {
                 case "HWiNFO":
+                case "HWiNFOGadget":
                     if (IsProcessRunning("HWiNFO32") || IsProcessRunning("HWiNFO64"))
                     {
                         return null;
