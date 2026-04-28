@@ -21,9 +21,11 @@ namespace GameActivity.Services.HardwareMonitoring.Providers
 
 		public override ProviderCapabilities Capabilities => new ProviderCapabilities
 		{
-			SupportedMetrics = MetricType.FPS | MetricType.CpuUsage | MetricType.CpuTemperature |
-							 MetricType.CpuPower | MetricType.GpuUsage | MetricType.GpuTemperature |
-							 MetricType.GpuPower,
+			SupportedMetrics = MetricType.FPS |
+							 MetricType.Framerate1PercentLow | MetricType.Framerate0Point1PercentLow |
+							 MetricType.CpuUsage | MetricType.CpuTemperature | MetricType.CpuPower |
+							 MetricType.GpuUsage | MetricType.GpuTemperature | MetricType.GpuPower |
+							 MetricType.RamUsage,
 			Priority = 4,
 			RequiresExternalApp = true,
 			RequiresAdminRights = false
@@ -44,16 +46,24 @@ namespace GameActivity.Services.HardwareMonitoring.Providers
 			{
 				FPS_SensorsID = s.HWiNFO_fps_sensorsID,
 				FPS_ElementID = s.HWiNFO_fps_elementID,
+				FPS1PercentLow_SensorsID = s.HWiNFO_fps1PercentLow_sensorsID,
+				FPS1PercentLow_ElementID = s.HWiNFO_fps1PercentLow_elementID,
+				FPS0Point1PercentLow_SensorsID = s.HWiNFO_fps0Point1PercentLow_sensorsID,
+				FPS0Point1PercentLow_ElementID = s.HWiNFO_fps0Point1PercentLow_elementID,
 				GPU_SensorsID = s.HWiNFO_gpu_sensorsID,
 				GPU_ElementID = s.HWiNFO_gpu_elementID,
 				GPUT_SensorsID = s.HWiNFO_gpuT_sensorsID,
 				GPUT_ElementID = s.HWiNFO_gpuT_elementID,
+				CPU_SensorsID = s.HWiNFO_cpu_sensorsID,
+				CPU_ElementID = s.HWiNFO_cpu_elementID,
 				CPUT_SensorsID = s.HWiNFO_cpuT_sensorsID,
 				CPUT_ElementID = s.HWiNFO_cpuT_elementID,
 				GPUP_SensorsID = s.HWiNFO_gpuP_sensorsID,
 				GPUP_ElementID = s.HWiNFO_gpuP_elementID,
 				CPUP_SensorsID = s.HWiNFO_cpuP_sensorsID,
-				CPUP_ElementID = s.HWiNFO_cpuP_elementID
+				CPUP_ElementID = s.HWiNFO_cpuP_elementID,
+				RAM_SensorsID = s.HWiNFO_ram_sensorsID,
+				RAM_ElementID = s.HWiNFO_ram_elementID
 			};
 		}
 
@@ -94,6 +104,16 @@ namespace GameActivity.Services.HardwareMonitoring.Providers
 				{
 					metrics.FPS = GetSensorValue(sensorObj, config.FPS_ElementID);
 				}
+				if (config.FPS1PercentLow_SensorsID != null &&
+					sensorsID.Equals(config.FPS1PercentLow_SensorsID, StringComparison.OrdinalIgnoreCase))
+				{
+					metrics.FPS1PercentLow = GetSensorValue(sensorObj, config.FPS1PercentLow_ElementID);
+				}
+				if (config.FPS0Point1PercentLow_SensorsID != null &&
+					sensorsID.Equals(config.FPS0Point1PercentLow_SensorsID, StringComparison.OrdinalIgnoreCase))
+				{
+					metrics.FPS0Point1PercentLow = GetSensorValue(sensorObj, config.FPS0Point1PercentLow_ElementID);
+				}
 
 				// GPU Usage
 				if (config.GPU_SensorsID != null &&
@@ -122,12 +142,22 @@ namespace GameActivity.Services.HardwareMonitoring.Providers
 				{
 					metrics.GpuPower = GetSensorValue(sensorObj, config.GPUP_ElementID);
 				}
+				if (config.CPU_SensorsID != null &&
+					sensorsID.Equals(config.CPU_SensorsID, StringComparison.OrdinalIgnoreCase))
+				{
+					metrics.CpuUsage = GetSensorValue(sensorObj, config.CPU_ElementID);
+				}
 
 				// CPU Power
 				if (config.CPUP_SensorsID != null &&
 					sensorsID.Equals(config.CPUP_SensorsID, StringComparison.OrdinalIgnoreCase))
 				{
 					metrics.CpuPower = GetSensorValue(sensorObj, config.CPUP_ElementID);
+				}
+				if (config.RAM_SensorsID != null &&
+					sensorsID.Equals(config.RAM_SensorsID, StringComparison.OrdinalIgnoreCase))
+				{
+					metrics.RamUsage = GetSensorValue(sensorObj, config.RAM_ElementID);
 				}
 			}
 
@@ -158,8 +188,14 @@ namespace GameActivity.Services.HardwareMonitoring.Providers
 	{
 		public string FPS_SensorsID { get; set; }
 		public string FPS_ElementID { get; set; }
+		public string FPS1PercentLow_SensorsID { get; set; }
+		public string FPS1PercentLow_ElementID { get; set; }
+		public string FPS0Point1PercentLow_SensorsID { get; set; }
+		public string FPS0Point1PercentLow_ElementID { get; set; }
 		public string GPU_SensorsID { get; set; }
 		public string GPU_ElementID { get; set; }
+		public string CPU_SensorsID { get; set; }
+		public string CPU_ElementID { get; set; }
 		public string GPUT_SensorsID { get; set; }
 		public string GPUT_ElementID { get; set; }
 		public string CPUT_SensorsID { get; set; }
@@ -168,5 +204,7 @@ namespace GameActivity.Services.HardwareMonitoring.Providers
 		public string GPUP_ElementID { get; set; }
 		public string CPUP_SensorsID { get; set; }
 		public string CPUP_ElementID { get; set; }
+		public string RAM_SensorsID { get; set; }
+		public string RAM_ElementID { get; set; }
 	}
 }

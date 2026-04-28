@@ -14,8 +14,11 @@ namespace GameActivity.Services.HardwareMonitoring.Providers
 
 		public override ProviderCapabilities Capabilities => new ProviderCapabilities
 		{
-			SupportedMetrics = MetricType.FPS | MetricType.GpuUsage | MetricType.GpuTemperature |
-							 MetricType.CpuTemperature | MetricType.GpuPower | MetricType.CpuPower,
+			SupportedMetrics = MetricType.FPS |
+							 MetricType.Framerate1PercentLow | MetricType.Framerate0Point1PercentLow |
+							 MetricType.CpuUsage | MetricType.CpuTemperature | MetricType.CpuPower |
+							 MetricType.GpuUsage | MetricType.GpuTemperature | MetricType.GpuPower |
+							 MetricType.RamUsage,
 			Priority = 3,
 			RequiresExternalApp = true,
 			RequiresAdminRights = false
@@ -33,11 +36,15 @@ namespace GameActivity.Services.HardwareMonitoring.Providers
 
 				// A configured index plus readable registry value is enough to consider the provider available.
 				return TryReadInt(settings.HWiNFO_fps_index).HasValue ||
+					   TryReadInt(settings.HWiNFO_fps1PercentLow_index).HasValue ||
+					   TryReadInt(settings.HWiNFO_fps0Point1PercentLow_index).HasValue ||
 					   TryReadInt(settings.HWiNFO_gpu_index).HasValue ||
+					   TryReadInt(settings.HWiNFO_cpu_index).HasValue ||
 					   TryReadInt(settings.HWiNFO_gpuT_index).HasValue ||
 					   TryReadInt(settings.HWiNFO_cpuT_index).HasValue ||
 					   TryReadInt(settings.HWiNFO_gpuP_index).HasValue ||
-					   TryReadInt(settings.HWiNFO_cpuP_index).HasValue;
+					   TryReadInt(settings.HWiNFO_cpuP_index).HasValue ||
+					   TryReadInt(settings.HWiNFO_ram_index).HasValue;
 			}
 			catch (Exception ex)
 			{
@@ -56,11 +63,15 @@ namespace GameActivity.Services.HardwareMonitoring.Providers
 			}
 
 			metrics.FPS = TryReadInt(settings.HWiNFO_fps_index);
+			metrics.FPS1PercentLow = TryReadInt(settings.HWiNFO_fps1PercentLow_index);
+			metrics.FPS0Point1PercentLow = TryReadInt(settings.HWiNFO_fps0Point1PercentLow_index);
 			metrics.GpuUsage = TryReadInt(settings.HWiNFO_gpu_index);
+			metrics.CpuUsage = TryReadInt(settings.HWiNFO_cpu_index);
 			metrics.GpuTemperature = TryReadInt(settings.HWiNFO_gpuT_index);
 			metrics.CpuTemperature = TryReadInt(settings.HWiNFO_cpuT_index);
 			metrics.GpuPower = TryReadInt(settings.HWiNFO_gpuP_index);
 			metrics.CpuPower = TryReadInt(settings.HWiNFO_cpuP_index);
+			metrics.RamUsage = TryReadInt(settings.HWiNFO_ram_index);
 
 			return metrics;
 		}

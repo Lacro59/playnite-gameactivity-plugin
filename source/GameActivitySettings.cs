@@ -347,22 +347,23 @@ namespace GameActivity
         public bool UseHWiNFOGadget { get; set; } = false;
 
         // Shared-memory sensor identifiers
-        /// <summary>HWiNFO shared-memory sensor ID for GPU load.</summary>
-        public string HWiNFO_gpu_sensorsID { get; set; } = string.Empty;
-        /// <summary>HWiNFO shared-memory element ID for GPU load.</summary>
-        public string HWiNFO_gpu_elementID { get; set; } = string.Empty;
         /// <summary>HWiNFO shared-memory sensor ID for FPS.</summary>
         public string HWiNFO_fps_sensorsID { get; set; } = string.Empty;
         /// <summary>HWiNFO shared-memory element ID for FPS.</summary>
         public string HWiNFO_fps_elementID { get; set; } = string.Empty;
-        /// <summary>HWiNFO shared-memory sensor ID for GPU temperature.</summary>
-        public string HWiNFO_gpuT_sensorsID { get; set; } = string.Empty;
-        /// <summary>HWiNFO shared-memory element ID for GPU temperature.</summary>
-        public string HWiNFO_gpuT_elementID { get; set; } = string.Empty;
-        /// <summary>HWiNFO shared-memory sensor ID for GPU power.</summary>
-        public string HWiNFO_gpuP_sensorsID { get; set; } = string.Empty;
-        /// <summary>HWiNFO shared-memory element ID for GPU power.</summary>
-        public string HWiNFO_gpuP_elementID { get; set; } = string.Empty;
+        /// <summary>HWiNFO shared-memory sensor ID for Framerate 1% Low.</summary>
+        public string HWiNFO_fps1PercentLow_sensorsID { get; set; } = string.Empty;
+        /// <summary>HWiNFO shared-memory element ID for Framerate 1% Low.</summary>
+        public string HWiNFO_fps1PercentLow_elementID { get; set; } = string.Empty;
+        /// <summary>HWiNFO shared-memory sensor ID for Framerate 0.1% Low.</summary>
+        public string HWiNFO_fps0Point1PercentLow_sensorsID { get; set; } = string.Empty;
+        /// <summary>HWiNFO shared-memory element ID for Framerate 0.1% Low.</summary>
+        public string HWiNFO_fps0Point1PercentLow_elementID { get; set; } = string.Empty;
+
+        /// <summary>HWiNFO shared-memory sensor ID for CPU usage.</summary>
+        public string HWiNFO_cpu_sensorsID { get; set; } = string.Empty;
+        /// <summary>HWiNFO shared-memory element ID for CPU usage.</summary>
+        public string HWiNFO_cpu_elementID { get; set; } = string.Empty;
         /// <summary>HWiNFO shared-memory sensor ID for CPU temperature.</summary>
         public string HWiNFO_cpuT_sensorsID { get; set; } = string.Empty;
         /// <summary>HWiNFO shared-memory element ID for CPU temperature.</summary>
@@ -372,19 +373,48 @@ namespace GameActivity
         /// <summary>HWiNFO shared-memory element ID for CPU power.</summary>
         public string HWiNFO_cpuP_elementID { get; set; } = string.Empty;
 
+        /// <summary>HWiNFO shared-memory sensor ID for GPU load.</summary>
+        public string HWiNFO_gpu_sensorsID { get; set; } = string.Empty;
+        /// <summary>HWiNFO shared-memory element ID for GPU load.</summary>
+        public string HWiNFO_gpu_elementID { get; set; } = string.Empty;
+        /// <summary>HWiNFO shared-memory sensor ID for GPU temperature.</summary>
+        public string HWiNFO_gpuT_sensorsID { get; set; } = string.Empty;
+        /// <summary>HWiNFO shared-memory element ID for GPU temperature.</summary>
+        public string HWiNFO_gpuT_elementID { get; set; } = string.Empty;
+        /// <summary>HWiNFO shared-memory sensor ID for GPU power.</summary>
+        public string HWiNFO_gpuP_sensorsID { get; set; } = string.Empty;
+        /// <summary>HWiNFO shared-memory element ID for GPU power.</summary>
+        public string HWiNFO_gpuP_elementID { get; set; } = string.Empty;
+
+        /// <summary>HWiNFO shared-memory sensor ID for RAM usage.</summary>
+        public string HWiNFO_ram_sensorsID { get; set; } = string.Empty;
+        /// <summary>HWiNFO shared-memory element ID for RAM usage.</summary>
+        public string HWiNFO_ram_elementID { get; set; } = string.Empty;
+
         // Gadget (registry) sensor indices
-        /// <summary>Registry index for GPU load (Gadget mode).</summary>
-        public long HWiNFO_gpu_index { get; set; } = 0;
         /// <summary>Registry index for FPS (Gadget mode).</summary>
         public long HWiNFO_fps_index { get; set; } = 0;
-        /// <summary>Registry index for GPU temperature (Gadget mode).</summary>
-        public long HWiNFO_gpuT_index { get; set; } = 0;
+        /// <summary>Registry index for Framerate 1% Low (Gadget mode).</summary>
+        public long HWiNFO_fps1PercentLow_index { get; set; } = 0;
+        /// <summary>Registry index for Framerate 0.1% Low (Gadget mode).</summary>
+        public long HWiNFO_fps0Point1PercentLow_index { get; set; } = 0;
+
+        /// <summary>Registry index for CPU usage (Gadget mode).</summary>
+        public long HWiNFO_cpu_index { get; set; } = 0;
         /// <summary>Registry index for CPU temperature (Gadget mode).</summary>
         public long HWiNFO_cpuT_index { get; set; } = 0;
-        /// <summary>Registry index for GPU power (Gadget mode).</summary>
-        public long HWiNFO_gpuP_index { get; set; } = 0;
         /// <summary>Registry index for CPU power (Gadget mode).</summary>
         public long HWiNFO_cpuP_index { get; set; } = 0;
+
+        /// <summary>Registry index for GPU load (Gadget mode).</summary>
+        public long HWiNFO_gpu_index { get; set; } = 0;
+        /// <summary>Registry index for GPU temperature (Gadget mode).</summary>
+        public long HWiNFO_gpuT_index { get; set; } = 0;
+        /// <summary>Registry index for GPU power (Gadget mode).</summary>
+        public long HWiNFO_gpuP_index { get; set; } = 0;
+
+        /// <summary>Registry index for RAM usage (Gadget mode).</summary>
+        public long HWiNFO_ram_index { get; set; } = 0;
 
         // ── MSI Afterburner ───────────────────────────────────────────────────
         /// <summary>Use MSI Afterburner as a data source (legacy — prefer RivaTuner).</summary>
@@ -557,12 +587,21 @@ namespace GameActivity
             {
                 if (UseHWiNFOGadget)
                 {
-                    return HWiNFO_fps_index > 0 || HWiNFO_gpu_index > 0;
+                    return HWiNFO_fps_index > 0 ||
+                           HWiNFO_fps1PercentLow_index > 0 ||
+                           HWiNFO_fps0Point1PercentLow_index > 0 ||
+                           HWiNFO_gpu_index > 0 ||
+                           HWiNFO_cpu_index > 0 ||
+                           HWiNFO_ram_index > 0;
                 }
                 if (UseHWiNFOSharedMemory)
                 {
                     return !string.IsNullOrEmpty(HWiNFO_fps_sensorsID) ||
-                           !string.IsNullOrEmpty(HWiNFO_gpu_sensorsID);
+                           !string.IsNullOrEmpty(HWiNFO_fps1PercentLow_sensorsID) ||
+                           !string.IsNullOrEmpty(HWiNFO_fps0Point1PercentLow_sensorsID) ||
+                           !string.IsNullOrEmpty(HWiNFO_gpu_sensorsID) ||
+                           !string.IsNullOrEmpty(HWiNFO_cpu_sensorsID) ||
+                           !string.IsNullOrEmpty(HWiNFO_ram_sensorsID);
                 }
                 return false;
             }
