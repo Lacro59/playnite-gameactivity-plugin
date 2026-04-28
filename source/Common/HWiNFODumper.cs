@@ -21,6 +21,7 @@ namespace GameActivity
         public List<JsonObj> ReadMem()
         {
             HWiNFOMemory = new _HWiNFO_SHARED_MEM();
+            data = new List<JsonObj>();
             try
             {
                 mmf = MemoryMappedFile.OpenExisting(HWiNFO_SHARED_MEM_FILE_NAME, MemoryMappedFileRights.Read);
