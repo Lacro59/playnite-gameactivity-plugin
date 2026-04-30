@@ -260,6 +260,11 @@ namespace GameActivity.Services
             Logger.Info($"DataLogging_stop - {API.Instance.Database.Games.Get(id)?.Name} - {id}");
 
             RunningActivity runningActivity = _runningActivities.Find(x => x.Id == id);
+            if (runningActivity == null)
+            {
+                Logger.Warn($"No runningActivity find for {id}");
+                return;
+            }
 
             if (runningActivity.WarningsMessage.Count != 0
                 && API.Instance.ApplicationInfo.Mode == ApplicationMode.Desktop)
@@ -294,6 +299,12 @@ namespace GameActivity.Services
                         true, PluginDatabase.PluginName
                     );
                 }
+            }
+
+            if (runningActivity.Timer == null)
+            {
+                Logger.Warn($"No logging timer find for {id}");
+                return;
             }
 
             runningActivity.Timer.AutoReset = false;
@@ -485,6 +496,12 @@ namespace GameActivity.Services
             if (runningActivity == null)
             {
                 Logger.Warn($"No runningActivity find for {id}");
+                return;
+            }
+
+            if (runningActivity.TimerBackup == null)
+            {
+                Logger.Warn($"No backup timer find for {id}");
                 return;
             }
 

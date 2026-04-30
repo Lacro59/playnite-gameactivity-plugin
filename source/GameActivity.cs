@@ -196,10 +196,14 @@ namespace GameActivity
         {
 			try
             {
+                string sessionCorrelationId = $"{args.Game.Id:N}-{DateTime.UtcNow.Ticks}";
+                Logger.Info($"OnGameStarted - {args.Game?.Name} - {args.Game?.Id} - Session:{sessionCorrelationId}");
+
                 RunningActivity runningActivity = new RunningActivity
                 {
                     Id = args.Game.Id,
-                    PlaytimeOnStarted = args.Game.Playtime
+                    PlaytimeOnStarted = args.Game.Playtime,
+                    SessionCorrelationId = sessionCorrelationId
                 };
 				GameActivityMonitoring.AddRunningActivity(runningActivity);
 
@@ -257,6 +261,13 @@ namespace GameActivity
                 try
                 {
                     RunningActivity runningActivity = GameActivityMonitoring.GetRunningActivity(args.Game.Id);
+                    string sessionCorrelationId = runningActivity?.SessionCorrelationId ?? "unknown";
+                    Logger.Info($"OnGameStopped received - {args.Game?.Name} - {args.Game?.Id} - Session:{sessionCorrelationId} - ElapsedSeconds:{args.ElapsedSeconds}");
+
+                    if (runningActivity == null)
+                    {
+                        Logger.Warn($"OnGameStopped: no running activity found for {args.Game?.Name} - {args.Game?.Id} - Session:{sessionCorrelationId}");
+                    }
                     GameActivityMonitoring.DataBackup_stop(args.Game.Id);
 
                     // Stop timer if log is enable.
@@ -327,6 +338,7 @@ namespace GameActivity
 
                     // Delete running data
                     GameActivityMonitoring.RemoveRunningActivity(runningActivity);
+                    Logger.Info($"OnGameStopped completed - {args.Game?.Name} - {args.Game?.Id} - Session:{sessionCorrelationId} - ElapsedSeconds:{elapsedSeconds}");
                 }
                 catch (Exception ex)
                 {
