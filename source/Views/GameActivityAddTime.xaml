@@ -24,6 +24,9 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="12"   />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="12"   />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="12"   />
                 <RowDefinition Height="*"    />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
@@ -151,6 +154,23 @@
                         <ColumnDefinition Width="110" />
                         <ColumnDefinition Width="*"   />
                     </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" VerticalAlignment="Center"
+                               Style="{DynamicResource ViewColumnLabelText}"
+                               Text="{DynamicResource LOCGameActivityPCName}" />
+                    <ComboBox Grid.Column="1" VerticalAlignment="Center"
+                              Style="{DynamicResource FilterComboBox}"
+                              ItemsSource="{Binding ConfigurationOptions}"
+                              SelectedItem="{Binding SelectedConfiguration, Mode=TwoWay}"
+                              DisplayMemberPath="DisplayName" />
+                </Grid>
+            </Border>
+
+            <Border Grid.Row="8" Style="{DynamicResource CardBorder}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="110" />
+                        <ColumnDefinition Width="*"   />
+                    </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" Style="{DynamicResource ViewColumnLabelText}"
                                Text="{DynamicResource LOCGameActivityLvGamesElapsedSeconds}" />
                     <TextBlock Grid.Column="1" Style="{DynamicResource ViewColumnValueText}"
@@ -159,7 +179,7 @@
                 </Grid>
             </Border>
 
-            <Border Grid.Row="8" Style="{DynamicResource TopSeparatorBorder}" Padding="0,10,0,0">
+            <Border Grid.Row="11" Style="{DynamicResource TopSeparatorBorder}" Padding="0,10,0,0">
                 <DockPanel LastChildFill="False">
                     <Button Content="{DynamicResource LOCConfirmLabel}" 
                             DockPanel.Dock="Right"
