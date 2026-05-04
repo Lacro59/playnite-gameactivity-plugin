@@ -119,6 +119,9 @@ green = faster</sys:String>
     <sys:String x:Key="LOCGameActivityIndex">Index</sys:String>
     <sys:String x:Key="LOCGameActivitySensorsID">Sensor ID</sys:String>
     <sys:String x:Key="LOCGameActivityElementID">Element ID</sys:String>
+    <sys:String x:Key="LOCGameActivityInstanceID">Instance ID</sys:String>
+    <sys:String x:Key="LOCGameActivityInstanceIDHWiNFOHelp" xml:space="preserve">Optional — HWiNFO sensor instance (dwSensorInst).
+Use when several devices share the same Sensor ID (e.g. multiple GPUs). Decimal or hexadecimal (0x…).</sys:String>
 
     <!-- Sensor labels -->
     <sys:String x:Key="LOCGameActivityGpuUsage">GPU usage</sys:String>

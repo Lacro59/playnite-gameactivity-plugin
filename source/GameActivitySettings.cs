@@ -351,45 +351,65 @@ namespace GameActivity
         public string HWiNFO_fps_sensorsID { get; set; } = string.Empty;
         /// <summary>HWiNFO shared-memory element ID for FPS.</summary>
         public string HWiNFO_fps_elementID { get; set; } = string.Empty;
+        /// <summary>HWiNFO shared-memory sensor instance (<c>dwSensorInst</c>) for FPS; optional.</summary>
+        public string HWiNFO_fps_instanceID { get; set; } = string.Empty;
         /// <summary>HWiNFO shared-memory sensor ID for Framerate 1% Low.</summary>
         public string HWiNFO_fps1PercentLow_sensorsID { get; set; } = string.Empty;
         /// <summary>HWiNFO shared-memory element ID for Framerate 1% Low.</summary>
         public string HWiNFO_fps1PercentLow_elementID { get; set; } = string.Empty;
+        /// <summary>HWiNFO shared-memory sensor instance for Framerate 1% Low; optional.</summary>
+        public string HWiNFO_fps1PercentLow_instanceID { get; set; } = string.Empty;
         /// <summary>HWiNFO shared-memory sensor ID for Framerate 0.1% Low.</summary>
         public string HWiNFO_fps0Point1PercentLow_sensorsID { get; set; } = string.Empty;
         /// <summary>HWiNFO shared-memory element ID for Framerate 0.1% Low.</summary>
         public string HWiNFO_fps0Point1PercentLow_elementID { get; set; } = string.Empty;
+        /// <summary>HWiNFO shared-memory sensor instance for Framerate 0.1% Low; optional.</summary>
+        public string HWiNFO_fps0Point1PercentLow_instanceID { get; set; } = string.Empty;
 
         /// <summary>HWiNFO shared-memory sensor ID for CPU usage.</summary>
         public string HWiNFO_cpu_sensorsID { get; set; } = string.Empty;
         /// <summary>HWiNFO shared-memory element ID for CPU usage.</summary>
         public string HWiNFO_cpu_elementID { get; set; } = string.Empty;
+        /// <summary>HWiNFO shared-memory sensor instance for CPU usage; optional.</summary>
+        public string HWiNFO_cpu_instanceID { get; set; } = string.Empty;
         /// <summary>HWiNFO shared-memory sensor ID for CPU temperature.</summary>
         public string HWiNFO_cpuT_sensorsID { get; set; } = string.Empty;
         /// <summary>HWiNFO shared-memory element ID for CPU temperature.</summary>
         public string HWiNFO_cpuT_elementID { get; set; } = string.Empty;
+        /// <summary>HWiNFO shared-memory sensor instance for CPU temperature; optional.</summary>
+        public string HWiNFO_cpuT_instanceID { get; set; } = string.Empty;
         /// <summary>HWiNFO shared-memory sensor ID for CPU power.</summary>
         public string HWiNFO_cpuP_sensorsID { get; set; } = string.Empty;
         /// <summary>HWiNFO shared-memory element ID for CPU power.</summary>
         public string HWiNFO_cpuP_elementID { get; set; } = string.Empty;
+        /// <summary>HWiNFO shared-memory sensor instance for CPU power; optional.</summary>
+        public string HWiNFO_cpuP_instanceID { get; set; } = string.Empty;
 
         /// <summary>HWiNFO shared-memory sensor ID for GPU load.</summary>
         public string HWiNFO_gpu_sensorsID { get; set; } = string.Empty;
         /// <summary>HWiNFO shared-memory element ID for GPU load.</summary>
         public string HWiNFO_gpu_elementID { get; set; } = string.Empty;
+        /// <summary>HWiNFO shared-memory sensor instance for GPU load; optional (multi-GPU).</summary>
+        public string HWiNFO_gpu_instanceID { get; set; } = string.Empty;
         /// <summary>HWiNFO shared-memory sensor ID for GPU temperature.</summary>
         public string HWiNFO_gpuT_sensorsID { get; set; } = string.Empty;
         /// <summary>HWiNFO shared-memory element ID for GPU temperature.</summary>
         public string HWiNFO_gpuT_elementID { get; set; } = string.Empty;
+        /// <summary>HWiNFO shared-memory sensor instance for GPU temperature; optional (multi-GPU).</summary>
+        public string HWiNFO_gpuT_instanceID { get; set; } = string.Empty;
         /// <summary>HWiNFO shared-memory sensor ID for GPU power.</summary>
         public string HWiNFO_gpuP_sensorsID { get; set; } = string.Empty;
         /// <summary>HWiNFO shared-memory element ID for GPU power.</summary>
         public string HWiNFO_gpuP_elementID { get; set; } = string.Empty;
+        /// <summary>HWiNFO shared-memory sensor instance for GPU power; optional (multi-GPU).</summary>
+        public string HWiNFO_gpuP_instanceID { get; set; } = string.Empty;
 
         /// <summary>HWiNFO shared-memory sensor ID for RAM usage.</summary>
         public string HWiNFO_ram_sensorsID { get; set; } = string.Empty;
         /// <summary>HWiNFO shared-memory element ID for RAM usage.</summary>
         public string HWiNFO_ram_elementID { get; set; } = string.Empty;
+        /// <summary>HWiNFO shared-memory sensor instance for RAM usage; optional.</summary>
+        public string HWiNFO_ram_instanceID { get; set; } = string.Empty;
 
         // Gadget (registry) sensor indices
         /// <summary>Registry index for FPS (Gadget mode).</summary>
