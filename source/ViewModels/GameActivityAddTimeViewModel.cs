@@ -41,6 +41,8 @@ namespace GameActivity.ViewModels
         private ObservableCollection<ConfigurationOption> _configurationOptions = new ObservableCollection<ConfigurationOption>();
         private ConfigurationOption _selectedConfiguration;
         private string _customActionNameInput = string.Empty;
+        private bool _adjustSessionLogsWithSession = true;
+        private bool _isAdjustSessionLogsOptionVisible;
 
         #region Properties
 
@@ -56,6 +58,16 @@ namespace GameActivity.ViewModels
         public ListCollectionView PlayActionsView { get => _playActionsView; private set => SetValue(ref _playActionsView, value); }
         public ObservableCollection<ConfigurationOption> ConfigurationOptions { get => _configurationOptions; private set => SetValue(ref _configurationOptions, value); }
         public ConfigurationOption SelectedConfiguration { get => _selectedConfiguration; set => SetValue(ref _selectedConfiguration, value); }
+
+        /// <summary>
+        /// When true and the option is shown, log samples outside the new session UTC window are removed on save (never added).
+        /// </summary>
+        public bool AdjustSessionLogsWithSession { get => _adjustSessionLogsWithSession; set => SetValue(ref _adjustSessionLogsWithSession, value); }
+
+        /// <summary>
+        /// True when editing a session, logging is enabled in settings, and the session has performance log entries.
+        /// </summary>
+        public bool IsAdjustSessionLogsOptionVisible { get => _isAdjustSessionLogsOptionVisible; private set => SetValue(ref _isAdjustSessionLogsOptionVisible, value); }
 
         /// <summary>
         /// Input for the new custom action name.
@@ -134,6 +146,7 @@ namespace GameActivity.ViewModels
 
             RebuildPlayActionsView();
             RefreshElapsed();
+            RefreshAdjustLogsOptionVisibility();
         }
 
         private void ApplyEditData()
@@ -179,6 +192,11 @@ namespace GameActivity.ViewModels
                 }
                 activity.PlatformIDs = _game.PlatformIds;
                 activity.SourceID = _game.SourceId;
+
+                if (IsStartLocked && IsAdjustSessionLogsOptionVisible && AdjustSessionLogsWithSession)
+                {
+                    TrimActivityDetailsToSessionUtcWindow(activity);
+                }
 
                 ResultActivity = activity;
                 CloseRequested?.Invoke(this, EventArgs.Empty);
@@ -269,6 +287,58 @@ namespace GameActivity.ViewModels
         }
 
         private static DateTime ParseDateTime(DateTime d, string t) => DateTime.Parse(d.ToString("yyyy-MM-dd") + " " + t);
+
+        private void RefreshAdjustLogsOptionVisibility()
+        {
+            bool visible = PluginDatabase.PluginSettings.EnableLogging
+                && IsStartLocked
+                && _activityEdit != null
+                && _activityEdit.Details != null
+                && _activityEdit.Details.Count > 0;
+            IsAdjustSessionLogsOptionVisible = visible;
+        }
+
+        /// <summary>
+        /// Keeps only performance log samples whose timestamp lies within the session UTC interval.
+        /// This only removes entries (e.g. after shortening the session); it never adds samples.
+        /// </summary>
+        private static void TrimActivityDetailsToSessionUtcWindow(Activity activity)
+        {
+            if (activity == null || activity.Details == null || activity.Details.Count == 0)
+            {
+                return;
+            }
+
+            DateTime sessionStartUtc = ToUtcComparable(activity.DateSession);
+            DateTime sessionEndUtc = sessionStartUtc.AddSeconds((double)activity.ElapsedSeconds);
+
+            List<ActivityDetailsData> kept = activity.Details
+                .Where(d =>
+                {
+                    if (!d.Datelog.HasValue)
+                    {
+                        return false;
+                    }
+                    DateTime logUtc = ToUtcComparable(d.Datelog.Value);
+                    return logUtc >= sessionStartUtc && logUtc <= sessionEndUtc;
+                })
+                .ToList();
+
+            activity.Details = kept;
+        }
+
+        private static DateTime ToUtcComparable(DateTime dt)
+        {
+            if (dt.Kind == DateTimeKind.Utc)
+            {
+                return dt;
+            }
+            if (dt.Kind == DateTimeKind.Local)
+            {
+                return dt.ToUniversalTime();
+            }
+            return DateTime.SpecifyKind(dt, DateTimeKind.Utc);
+        }
     }
 
     public class CbListHeader

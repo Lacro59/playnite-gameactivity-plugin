@@ -269,6 +269,8 @@ green = faster</sys:String>
     <sys:String x:Key="LOCGaDateEnd">End date</sys:String>
     <sys:String x:Key="LOCGaGameActions">Game actions</sys:String>
     <sys:String x:Key="LOCGaCustomGameActions">Custom game actions</sys:String>
+    <sys:String x:Key="LOCGaAdjustLogsWithSession">Trim performance log samples to match the session</sys:String>
+    <sys:String x:Key="LOCGaAdjustLogsWithSessionToolTip">When the session duration is reduced, remove log samples that fall outside the new start–end window. Samples are never added; entries without a timestamp are removed when trimming.</sys:String>
 
 
     <!-- ==================== PlayState Integration ==================== -->

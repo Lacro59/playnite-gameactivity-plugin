@@ -12,11 +12,14 @@
 
     <UserControl.Resources>
         <converters:InvertedBoolenConverter x:Key="InvertedBoolenConverter" />
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
 
     <Border Padding="16">
         <Grid>
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="12"   />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="12"   />
                 <RowDefinition Height="Auto" />
@@ -179,7 +182,19 @@
                 </Grid>
             </Border>
 
-            <Border Grid.Row="11" Style="{DynamicResource TopSeparatorBorder}" Padding="0,10,0,0">
+            <Border Grid.Row="10" Style="{DynamicResource CardBorder}"
+                    Visibility="{Binding IsAdjustSessionLogsOptionVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <CheckBox IsChecked="{Binding AdjustSessionLogsWithSession, Mode=TwoWay}"
+                          VerticalAlignment="Center">
+                    <CheckBox.ToolTip>
+                        <ToolTip Content="{DynamicResource LOCGaAdjustLogsWithSessionToolTip}" />
+                    </CheckBox.ToolTip>
+                    <TextBlock Style="{DynamicResource BaseTextBlockStyle}" TextWrapping="Wrap"
+                               Text="{DynamicResource LOCGaAdjustLogsWithSession}" />
+                </CheckBox>
+            </Border>
+
+            <Border Grid.Row="13" Style="{DynamicResource TopSeparatorBorder}" Padding="0,10,0,0">
                 <DockPanel LastChildFill="False">
                     <Button Content="{DynamicResource LOCConfirmLabel}" 
                             DockPanel.Dock="Right"
