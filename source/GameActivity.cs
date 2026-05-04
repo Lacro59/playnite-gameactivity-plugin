@@ -256,24 +256,32 @@ namespace GameActivity
         // Add code to be executed when game is preparing to be started.
         public override void OnGameStopped(OnGameStoppedEventArgs args)
         {
+            if (args == null || args.Game == null)
+            {
+                Logger.Warn("OnGameStopped called with null arguments or game reference.");
+                return;
+            }
+
+            Game game = args.Game;
+
             _ = Task.Run(() =>
             {
                 try
                 {
-                    RunningActivity runningActivity = GameActivityMonitoring.GetRunningActivity(args.Game.Id);
+                    RunningActivity runningActivity = GameActivityMonitoring.GetRunningActivity(game.Id);
                     string sessionCorrelationId = runningActivity?.SessionCorrelationId ?? "unknown";
-                    Logger.Info($"OnGameStopped received - {args.Game?.Name} - {args.Game?.Id} - Session:{sessionCorrelationId} - ElapsedSeconds:{args.ElapsedSeconds}");
+                    Logger.Info($"OnGameStopped received - {game.Name} - {game.Id} - Session:{sessionCorrelationId} - ElapsedSeconds:{args.ElapsedSeconds}");
 
                     if (runningActivity == null)
                     {
-                        Logger.Warn($"OnGameStopped: no running activity found for {args.Game?.Name} - {args.Game?.Id} - Session:{sessionCorrelationId}");
+                        Logger.Warn($"OnGameStopped: no running activity found for {game.Name} - {game.Id} - Session:{sessionCorrelationId}");
                     }
-                    GameActivityMonitoring.DataBackup_stop(args.Game.Id);
+                    GameActivityMonitoring.DataBackup_stop(game.Id);
 
                     // Stop timer if log is enable.
                     if (PluginDatabase.PluginSettings.EnableLogging)
                     {
-						GameActivityMonitoring.DataLogging_stop(args.Game.Id);
+						GameActivityMonitoring.DataLogging_stop(game.Id);
                     }
 
                     if (runningActivity == null)
@@ -287,8 +295,8 @@ namespace GameActivity
                         Thread.Sleep(5000);
                         // Temporary workaround for PlayState paused time until Playnite allows to share data among extensions
                         ulong fallbackElapsedSeconds = PluginDatabase.PluginSettings.SubstPlayStateTime && ExistsPlayStateInfoFile()
-                            ? args.Game.Playtime - runningActivity.PlaytimeOnStarted - GetPlayStatePausedTimeInfo(args.Game)
-                            : args.Game.Playtime - runningActivity.PlaytimeOnStarted;
+                            ? game.Playtime - runningActivity.PlaytimeOnStarted - GetPlayStatePausedTimeInfo(game)
+                            : game.Playtime - runningActivity.PlaytimeOnStarted;
 
                         DateTime sessionStartUtc = runningActivity.ActivityBackup?.DateSession
                             ?? runningActivity.GameActivitiesLog.GetLastSessionActivity(false).DateSession;
@@ -305,7 +313,7 @@ namespace GameActivity
                         {
                             elapsedSeconds = wallClockElapsedSeconds;
                             Logger.Warn(
-                                $"Suspicious playtime fallback detected for {args.Game.Name}. " +
+                                $"Suspicious playtime fallback detected for {game.Name}. " +
                                 $"Fallback={fallbackElapsedSeconds}s, WallClock={wallClockElapsedSeconds}s. " +
                                 "Using wall-clock elapsed seconds.");
                         }
@@ -316,14 +324,14 @@ namespace GameActivity
 
                         PlayniteApi.Notifications.Add(new NotificationMessage(
                             $"{PluginDatabase.PluginName}- noElapsedSeconds",
-                            PluginDatabase.PluginName + Environment.NewLine + string.Format(ResourceProvider.GetString("LOCGameActivityNoPlaytime"), args.Game.Name, elapsedSeconds),
+                            PluginDatabase.PluginName + Environment.NewLine + string.Format(ResourceProvider.GetString("LOCGameActivityNoPlaytime"), game.Name, elapsedSeconds),
                             NotificationType.Info
                         ));
                     }
                     else if (PluginDatabase.PluginSettings.SubstPlayStateTime && ExistsPlayStateInfoFile()) // Temporary workaround for PlayState paused time until Playnite allows to share data among extensions
                     {
                         Thread.Sleep(10000); // Necessary since PlayState is executed after GameActivity.
-                        elapsedSeconds -= GetPlayStatePausedTimeInfo(args.Game);
+                        elapsedSeconds -= GetPlayStatePausedTimeInfo(game);
                     }
 
                     // Infos
@@ -331,14 +339,14 @@ namespace GameActivity
                     Common.LogDebug(true, Serialization.ToJson(runningActivity.GameActivitiesLog));
                     PluginDatabase.Update(runningActivity.GameActivitiesLog);
 
-                    if (PluginDatabase.GameContext != null && args.Game.Id == PluginDatabase.GameContext.Id)
+                    if (PluginDatabase.GameContext != null && game.Id == PluginDatabase.GameContext.Id)
                     {
                         PluginDatabase.SetThemesResources(PluginDatabase.GameContext);
                     }
 
                     // Delete running data
                     GameActivityMonitoring.RemoveRunningActivity(runningActivity);
-                    Logger.Info($"OnGameStopped completed - {args.Game?.Name} - {args.Game?.Id} - Session:{sessionCorrelationId} - ElapsedSeconds:{elapsedSeconds}");
+                    Logger.Info($"OnGameStopped completed - {game.Name} - {game.Id} - Session:{sessionCorrelationId} - ElapsedSeconds:{elapsedSeconds}");
                 }
                 catch (Exception ex)
                 {
@@ -347,7 +355,7 @@ namespace GameActivity
             });
 
             // Delete backup
-            string pathFileBackup = Path.Combine(PluginDatabase.Paths.PluginUserDataPath, $"SaveSession_{args.Game.Id}.json");
+            string pathFileBackup = Path.Combine(PluginDatabase.Paths.PluginUserDataPath, $"SaveSession_{game.Id}.json");
             FileSystem.DeleteFile(pathFileBackup);
         }
 
