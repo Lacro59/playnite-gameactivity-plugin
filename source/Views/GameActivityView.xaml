@@ -716,8 +716,8 @@
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="10" />
-                                    <ColumnDefinition Width="70" />
-                                    <ColumnDefinition Width="70" />
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="80" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
 
