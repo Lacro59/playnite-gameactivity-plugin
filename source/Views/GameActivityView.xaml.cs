@@ -123,7 +123,7 @@ namespace GameActivity.Views
 
         public int YearCurrent { get => ViewModel.YearCurrent; set => ViewModel.YearCurrent = value; }
         public int MonthCurrent { get => ViewModel.MonthCurrent; set => ViewModel.MonthCurrent = value; }
-        public string GameIDCurrent { get => ViewModel.GameIDCurrent; set => ViewModel.GameIDCurrent = value; }
+        public Guid? GameIDCurrent { get => ViewModel.GameIDCurrent; set => ViewModel.GameIDCurrent = value; }
         public int VariateurTime { get => ViewModel.VariateurTime; set => ViewModel.VariateurTime = value; }
         public int VariateurLog { get => ViewModel.VariateurLog; set => ViewModel.VariateurLog = value; }
         public int VariateurLogTemp { get => ViewModel.VariateurLogTemp; set => ViewModel.VariateurLogTemp = value; }
@@ -2085,9 +2085,15 @@ namespace GameActivity.Views
         /// </summary>
         /// <param name="gameID"></param>
         /// <param name="variateur"></param>
-        public void GetActivityForGamesTimeGraphics(string gameID, bool isNavigation = false)
+        public void GetActivityForGamesTimeGraphics(Guid? gameId, bool isNavigation = false)
         {
-            PART_GameActivityChartTime.GameContext = API.Instance.Database.Games.Get(Guid.Parse(gameID));
+            if (gameId == null || gameId == Guid.Empty)
+            {
+                PART_GameActivityChartTime.GameContext = null;
+                return;
+            }
+
+            PART_GameActivityChartTime.GameContext = API.Instance.Database.Games.Get(gameId.Value);
             PART_GameActivityChartTime.DisableAnimations = true;
             PART_GameActivityChartTime.AxisVariator = VariateurTime;
 
@@ -2101,11 +2107,18 @@ namespace GameActivity.Views
         /// Get data detail for the selected game.
         /// </summary>
         /// <param name="gameID"></param>
-        public void GetActivityForGamesLogGraphics(string gameID, DateTime? dateSelected = null, string title = "", bool isNavigation = false)
+        public void GetActivityForGamesLogGraphics(Guid? gameId, DateTime? dateSelected = null, string title = "", bool isNavigation = false)
         {
-            GameActivities gameActivities = GameActivity.PluginDatabase.Get(Guid.Parse(gameID));
+            if (gameId == null || gameId == Guid.Empty)
+            {
+                PART_GameActivityChartLog.GameContext = null;
+                return;
+            }
 
-            PART_GameActivityChartLog.GameContext = API.Instance.Database.Games.Get(Guid.Parse(gameID));
+            Guid parsedGameId = gameId.Value;
+            GameActivities gameActivities = GameActivity.PluginDatabase.Get(parsedGameId);
+
+            PART_GameActivityChartLog.GameContext = API.Instance.Database.Games.Get(parsedGameId);
             PART_GameActivityChartLog.DisableAnimations = true;
             PART_GameActivityChartLog.DateSelected = dateSelected;
             PART_GameActivityChartLog.TitleChart = title;
@@ -2113,11 +2126,23 @@ namespace GameActivity.Views
 
             if (!isNavigation)
             {
-                gameLabel.Content = dateSelected == null || dateSelected == default(DateTime)
-                    ? ResourceProvider.GetString("LOCGameActivityLogTitleDate") + " ("
-                        + Convert.ToDateTime(gameActivities.GetLastSession()).ToString(Constants.DateUiFormat) + ")"
-                    : ResourceProvider.GetString("LOCGameActivityLogTitleDate") + " "
+                DateTime? lastSession = gameActivities?.GetLastSession();
+                bool hasDateSelection = dateSelected != null && dateSelected != default(DateTime);
+
+                if (hasDateSelection)
+                {
+                    gameLabel.Content = ResourceProvider.GetString("LOCGameActivityLogTitleDate") + " "
                         + Convert.ToDateTime(dateSelected).ToString(Constants.DateUiFormat);
+                }
+                else if (lastSession != null && lastSession != default(DateTime))
+                {
+                    gameLabel.Content = ResourceProvider.GetString("LOCGameActivityLogTitleDate") + " ("
+                        + Convert.ToDateTime(lastSession).ToString(Constants.DateUiFormat) + ")";
+                }
+                else
+                {
+                    gameLabel.Content = ResourceProvider.GetString("LOCGameActivityLogTitleDate");
+                }
             }
         }
         #endregion
@@ -2163,9 +2188,22 @@ namespace GameActivity.Views
                 if (((List<ListActivities>)item.ItemsSource)?.Count > 0)
                 {
                     ListActivities gameItem = (ListActivities)item.SelectedItem;
-                    if (gameItem?.GameId == null) { return; }
+                    if (string.IsNullOrEmpty(gameItem?.GameId))
+                    {
+                        GameIDCurrent = null;
+                        ClearPcConfigurationDetails();
+                        return;
+                    }
 
-                    GameIDCurrent = gameItem.GameId;
+                    Guid parsedGameId;
+                    if (!Guid.TryParse(gameItem.GameId, out parsedGameId))
+                    {
+                        GameIDCurrent = null;
+                        ClearPcConfigurationDetails();
+                        return;
+                    }
+
+                    GameIDCurrent = parsedGameId;
 
                     if (IsGameTime)
                     {
@@ -2186,27 +2224,49 @@ namespace GameActivity.Views
                     index = ((ListActivities)lvGames.SelectedItem).PCConfigurationId;
                 }
 
-                if (index != -1 && index < PluginDatabase.SystemConfigurationManager.GetConfigurations().Count)
+                List<SystemConfiguration> configurations = PluginDatabase.SystemConfigurationManager.GetConfigurations();
+                if (index != -1 && index < configurations.Count)
                 {
-                    SystemConfiguration Configuration = PluginDatabase.SystemConfigurationManager.GetConfigurations()[index];
-
-                    PART_PcName.Content = Configuration.Name;
-                    PART_Os.Content = Configuration.Os;
-                    PART_CpuName.Content = Configuration.Cpu;
-                    PART_GpuName.Content = Configuration.GpuName;
-                    PART_Ram.Content = Configuration.RamUsage;
-                    PART_PcConfigExpander.Tag = string.Format("{0} · {1} · {2}", Configuration.Name, Configuration.Cpu, Configuration.GpuName);
+                    ApplyPcConfigurationDetails(configurations[index]);
                 }
                 else
                 {
-                    PART_PcName.Content = string.Empty;
-                    PART_Os.Content = string.Empty;
-                    PART_CpuName.Content = string.Empty;
-                    PART_GpuName.Content = string.Empty;
-                    PART_Ram.Content = string.Empty;
-                    PART_PcConfigExpander.Tag = string.Empty;
+                    ClearPcConfigurationDetails();
                 }
             }
+        }
+
+        /// <summary>
+        /// Applies selected PC configuration details to the UI panel.
+        /// </summary>
+        /// <param name="configuration">Selected configuration.</param>
+        private void ApplyPcConfigurationDetails(SystemConfiguration configuration)
+        {
+            if (configuration == null)
+            {
+                ClearPcConfigurationDetails();
+                return;
+            }
+
+            PART_PcName.Content = configuration.Name;
+            PART_Os.Content = configuration.Os;
+            PART_CpuName.Content = configuration.Cpu;
+            PART_GpuName.Content = configuration.GpuName;
+            PART_Ram.Content = configuration.RamUsage;
+            PART_PcConfigExpander.Tag = string.Format("{0} · {1} · {2}", configuration.Name, configuration.Cpu, configuration.GpuName);
+        }
+
+        /// <summary>
+        /// Clears selected PC configuration details from the UI panel.
+        /// </summary>
+        private void ClearPcConfigurationDetails()
+        {
+            PART_PcName.Content = string.Empty;
+            PART_Os.Content = string.Empty;
+            PART_CpuName.Content = string.Empty;
+            PART_GpuName.Content = string.Empty;
+            PART_Ram.Content = string.Empty;
+            PART_PcConfigExpander.Tag = string.Empty;
         }
 
 
@@ -2262,8 +2322,9 @@ namespace GameActivity.Views
                     ToggleButtonLog.IsChecked = false;
                     GetActivityForGamesTimeGraphics(GameIDCurrent);
                 }
-                catch
+                catch (Exception ex)
                 {
+                    Common.LogError(ex, false, "Failed to switch GameActivity chart mode to Time", true, PluginDatabase.PluginName);
                 }
             }
 
@@ -2274,8 +2335,9 @@ namespace GameActivity.Views
                     toggleButton.IsChecked = true;
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                Common.LogError(ex, false, "Failed to validate GameActivity toggle buttons state (Time)", true, PluginDatabase.PluginName);
             }
         }
 
@@ -2290,8 +2352,9 @@ namespace GameActivity.Views
                     ToggleButtonTime.IsChecked = false;
                     GetActivityForGamesLogGraphics(GameIDCurrent);
                 }
-                catch
+                catch (Exception ex)
                 {
+                    Common.LogError(ex, false, "Failed to switch GameActivity chart mode to Log", true, PluginDatabase.PluginName);
                 }
             }
 
@@ -2302,8 +2365,9 @@ namespace GameActivity.Views
                     toggleButton.IsChecked = true;
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                Common.LogError(ex, false, "Failed to validate GameActivity toggle buttons state (Log)", true, PluginDatabase.PluginName);
             }
         }
 

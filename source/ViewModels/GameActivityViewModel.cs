@@ -38,8 +38,8 @@ namespace GameActivity.ViewModels
             set => SetValue(ref _monthCurrent, value);
         }
 
-        private string _gameIdCurrent;
-        public string GameIDCurrent
+        private Guid? _gameIdCurrent;
+        public Guid? GameIDCurrent
         {
             get => _gameIdCurrent;
             set => SetValue(ref _gameIdCurrent, value);
