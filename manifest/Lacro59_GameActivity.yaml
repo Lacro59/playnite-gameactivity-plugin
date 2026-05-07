@@ -250,16 +250,3 @@ Packages:
     Changelog:
       - 'Fixed: Crash on settings view'
       - 'Fixed: No more GPU Usage tracking'
-  - Version: 3.4
-    RequiredApiVersion: 6.16.0
-    ReleaseDate: 2026-04-19
-    PackageUrl: https://github.com/Lacro59/playnite-gameactivity-plugin/releases/download/v3.4/playnite-gameactivity-plugin_3_4.pext
-    Changelog:
-      - 'Added: New monitoring screen with provider performance charts and a Gantt timeline view'
-      - 'Added: New FPS tracking metrics including 1% and 0.1% lows'
-      - 'Added: Session details export and improved activity export options'
-      - 'Added: MSI Afterburner MAHM sensor integration for hardware monitoring'
-      - 'Updated: Localizations'
-      - 'Optimized: Main activity view and chart readability'
-      - 'Fixed: Time warning display now consistently uses local time'
-      - 'Improved: Minor UI consistency updates and stability fixes'
