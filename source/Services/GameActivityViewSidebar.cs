@@ -29,7 +29,12 @@ namespace GameActivity.Services
                 {
                     plugin.SidebarItemControl = new SidebarItemControl();
                     plugin.SidebarItemControl.SetTitle(ResourceProvider.GetString("LOCGamesActivitiesTitle"));
-                    plugin.SidebarItemControl.AddContent(new GameActivityView(plugin));
+                    plugin.SidebarView = new GameActivityView(plugin);
+                    plugin.SidebarItemControl.AddContent(plugin.SidebarView);
+                }
+                else
+                {
+                    plugin.SidebarView?.RefreshOnReopen();
                 }
                 return plugin.SidebarItemControl;
             };

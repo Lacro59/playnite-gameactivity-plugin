@@ -10,48 +10,28 @@ alwaysApply: true
 - Produce production-ready, maintainable, and high-performance Playnite plugin code.
 - Improve existing code quality when touching code (refactor, simplify, remove duplication).
 
-## Technical Constraints
+## C# and plugin code (`.cs`)
 
-- Keep strict compatibility with `.NET Framework 4.6.2` and `C# 7.0` maximum.
-- Do not use C# 8+ features (nullable reference types, switch expressions, records, init-only setters, range operator, using declarations).
-- Only use dependencies compatible with `.NET Framework 4.6.2`.
+When writing, editing, or reviewing **C#** (plugin logic, services, view models, non-XAML resources), follow **`.ai/Instructions & Rules.md`** end to end. It is the single source of truth for:
 
-## Implementation Priority (strict order)
+- Clarification policy, language (English for code and docs), and documentation expectations
+- Naming conventions, C# 7.0 / .NET Framework 4.6.2 constraints, and dependency priority (`playnite-plugincommon` → Playnite SDK → BCL → NuGet with pros/cons)
+- Playnite architecture, lifecycle, API usage (logging, serialization, localization keys usage from code, dialogs), and project-specific notes (`PluginExtended`, consistency section)
+- Threading, asynchrony, performance, coding standards (clean code, braces, regions, async suffix, error handling), logging, and testing targets
 
-1. Reuse or extend code from `source/playnite-plugincommon/`.
-2. Use `Playnite.SDK` APIs and patterns.
-3. Use native .NET/BCL.
-4. Add a NuGet package only if justified, with explicit pros/cons versus native implementation.
+**Before changing `.cs` files, open or @-mention `.ai/Instructions & Rules.md`** so its full guidance is in context.
 
-## C# Coding Standards
+## UI, XAML, and threading for views
 
-- Follow naming conventions: `PascalCase`, `camelCase`, `_camelCase`, and `I*` interfaces.
-- Always use braces for `if`, `for`, `foreach`, `while`, and similar control blocks.
-- Prefer guard clauses, low nesting, single-responsibility methods, and clear intent.
-- Validate input and null values before use.
-- Async methods returning `Task` must end with `Async`.
-- Avoid `dynamic` unless absolutely necessary.
-- Use `#region`/`#endregion` when it improves readability in larger files, and consistently organize classes with `Properties`, `Commands`, and `Methods` regions where applicable.
-
-## Playnite-Specific Rules
-
-- Use appropriate plugin lifecycle hooks (`OnApplicationStarted`, `OnGameStarted`, `OnGameStopped`, etc.).
-- Inject and propagate `IPlayniteAPI` to sub-services.
-- Use `LogManager.GetLogger()` for logging.
-- Log exceptions with context (`logger.Error(ex, "Context message")`).
-- Use `ResourceProvider.GetString(...)` for localization.
-
-## UI, XAML, and Threading
-
-- Follow `.ai/Playnite UI Modernization, Localization and Common Styling.md` for UI, styling, and localization.
+- Follow **`.ai/Playnite UI Modernization, Localization and Common Styling.md`** for views, controls, styling, and localization structure.
 - Localization keys and entries must be added or modified only in the appropriate `LocSource.xaml` scope (`source/playnite-plugincommon/CommonPluginsResources/Localization/Common` for shared strings, or `source/Localization` for plugin-specific strings).
 - Do not add user-facing localized strings or localization keys in C# files, XAML views, or any other resource files outside the selected `LocSource.xaml`.
 - Use dispatcher access for UI updates from background work.
 - Never block UI thread with `.Result` or `.Wait()`; prefer `await`.
 
-## Documentation and Delivery Rules
+(Additional threading and async rules for all code also appear in **`.ai/Instructions & Rules.md`**.)
 
-- Keep code, comments, XML docs, and README updates in English.
-- Document public APIs with XML documentation.
-- Ask for clarification when requirements are ambiguous or context is missing.
-- Deliver complete, working solutions; do not leave TODO placeholders.
+## Documentation and delivery (summary)
+
+- Keep code, comments, XML docs, and README updates in English; document public APIs; no TODO placeholders.
+- Full detail: **`.ai/Instructions & Rules.md`** (Language and Documentation, Response Rules, Out of Scope).

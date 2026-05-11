@@ -238,8 +238,10 @@ namespace GameActivity.ViewModels
 
                     _gameActivities.DeleteActivity(activity.GameLastActivity);
 
-                    // Update last-played date from remaining items.
-                    _gameContext.LastActivity = _gameActivities?.Items?.Max(x => x.DateSession) ?? (DateTime?)null;
+                    // Playnite expects a local-facing "Last played" value.
+                    _gameContext.LastActivity = _gameActivities?.Items?.Any() == true
+                        ? _gameActivities.Items.Max(x => x.DateSession).ToLocalTime()
+                        : (DateTime?)null;
 
                     API.Instance.Database.Games.Update(_gameContext);
                     PluginDatabase.Update(_gameActivities);
@@ -283,7 +285,7 @@ namespace GameActivity.ViewModels
                             _gameContext.PlayCount++;
                         }
 
-                        _gameContext.LastActivity = (DateTime)_gameActivities.Items.Max(x => x.DateSession);
+                        _gameContext.LastActivity = _gameActivities.Items.Max(x => x.DateSession).ToLocalTime();
                         API.Instance.Database.Games.Update(_gameContext);
                         PluginDatabase.Update(_gameActivities);
                     }
@@ -333,7 +335,7 @@ namespace GameActivity.ViewModels
                             _gameContext.Playtime += viewExtension.Activity.ElapsedSeconds - originalElapsed;
                         }
 
-                        _gameContext.LastActivity = (DateTime)_gameActivities.Items.Max(x => x.DateSession);
+                        _gameContext.LastActivity = _gameActivities.Items.Max(x => x.DateSession).ToLocalTime();
                         API.Instance.Database.Games.Update(_gameContext);
                         PluginDatabase.Update(_gameActivities);
                     }

@@ -198,7 +198,7 @@ namespace GameActivity.ViewModels
 
             game.PlayCount = ga.Count;
             game.Playtime = ga.SessionPlaytime;
-            game.LastActivity = ga.GetLastSessionActivity()?.DateSession;
+            game.LastActivity = ga.GetLastSessionActivity()?.DateSession.ToLocalTime();
             API.Instance.Database.Games.Update(game);
             return true;
         }

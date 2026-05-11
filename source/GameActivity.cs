@@ -3,6 +3,7 @@ using CommonPluginsShared;
 using CommonPluginsShared.Controls;
 using CommonPluginsShared.PlayniteExtended;
 using GameActivity.Controls;
+using GameActivity.Views;
 using GameActivity.Models;
 using GameActivity.Services;
 using Playnite.SDK;
@@ -28,6 +29,7 @@ namespace GameActivity
         internal TopPanelItem TopPanelItem { get; set; }
         internal SidebarItem SidebarItem { get; set; }
         internal SidebarItemControl SidebarItemControl { get; set; }
+        internal GameActivityView SidebarView { get; set; }
 
 		// Hardware monitoring system
 		internal GameActivityMonitoring GameActivityMonitoring { get; set; }
@@ -194,10 +196,14 @@ namespace GameActivity
         {
 			try
             {
+                string sessionCorrelationId = $"{args.Game.Id:N}-{DateTime.UtcNow.Ticks}";
+                Logger.Info($"OnGameStarted - {args.Game?.Name} - {args.Game?.Id} - Session:{sessionCorrelationId}");
+
                 RunningActivity runningActivity = new RunningActivity
                 {
                     Id = args.Game.Id,
-                    PlaytimeOnStarted = args.Game.Playtime
+                    PlaytimeOnStarted = args.Game.Playtime,
+                    SessionCorrelationId = sessionCorrelationId
                 };
 				GameActivityMonitoring.AddRunningActivity(runningActivity);
 
@@ -250,17 +256,32 @@ namespace GameActivity
         // Add code to be executed when game is preparing to be started.
         public override void OnGameStopped(OnGameStoppedEventArgs args)
         {
+            if (args == null || args.Game == null)
+            {
+                Logger.Warn("OnGameStopped called with null arguments or game reference.");
+                return;
+            }
+
+            Game game = args.Game;
+
             _ = Task.Run(() =>
             {
                 try
                 {
-                    RunningActivity runningActivity = GameActivityMonitoring.GetRunningActivity(args.Game.Id);
-                    GameActivityMonitoring.DataBackup_stop(args.Game.Id);
+                    RunningActivity runningActivity = GameActivityMonitoring.GetRunningActivity(game.Id);
+                    string sessionCorrelationId = runningActivity?.SessionCorrelationId ?? "unknown";
+                    Logger.Info($"OnGameStopped received - {game.Name} - {game.Id} - Session:{sessionCorrelationId} - ElapsedSeconds:{args.ElapsedSeconds}");
+
+                    if (runningActivity == null)
+                    {
+                        Logger.Warn($"OnGameStopped: no running activity found for {game.Name} - {game.Id} - Session:{sessionCorrelationId}");
+                    }
+                    GameActivityMonitoring.DataBackup_stop(game.Id);
 
                     // Stop timer if log is enable.
                     if (PluginDatabase.PluginSettings.EnableLogging)
                     {
-						GameActivityMonitoring.DataLogging_stop(args.Game.Id);
+						GameActivityMonitoring.DataLogging_stop(game.Id);
                     }
 
                     if (runningActivity == null)
@@ -273,20 +294,44 @@ namespace GameActivity
                     {
                         Thread.Sleep(5000);
                         // Temporary workaround for PlayState paused time until Playnite allows to share data among extensions
-                        elapsedSeconds = PluginDatabase.PluginSettings.SubstPlayStateTime && ExistsPlayStateInfoFile()
-                            ? args.Game.Playtime - runningActivity.PlaytimeOnStarted - GetPlayStatePausedTimeInfo(args.Game)
-                            : args.Game.Playtime - runningActivity.PlaytimeOnStarted;
+                        ulong fallbackElapsedSeconds = PluginDatabase.PluginSettings.SubstPlayStateTime && ExistsPlayStateInfoFile()
+                            ? game.Playtime - runningActivity.PlaytimeOnStarted - GetPlayStatePausedTimeInfo(game)
+                            : game.Playtime - runningActivity.PlaytimeOnStarted;
+
+                        DateTime sessionStartUtc = runningActivity.ActivityBackup?.DateSession
+                            ?? runningActivity.GameActivitiesLog.GetLastSessionActivity(false).DateSession;
+                        ulong wallClockElapsedSeconds = 0;
+                        if (sessionStartUtc > DateTime.MinValue)
+                        {
+                            long elapsedFromDateSession = (long)(DateTime.UtcNow - sessionStartUtc).TotalSeconds;
+                            wallClockElapsedSeconds = elapsedFromDateSession > 0
+                                ? (ulong)elapsedFromDateSession
+                                : 0;
+                        }
+
+                        if (IsFallbackElapsedSuspicious(fallbackElapsedSeconds, wallClockElapsedSeconds))
+                        {
+                            elapsedSeconds = wallClockElapsedSeconds;
+                            Logger.Warn(
+                                $"Suspicious playtime fallback detected for {game.Name}. " +
+                                $"Fallback={fallbackElapsedSeconds}s, WallClock={wallClockElapsedSeconds}s. " +
+                                "Using wall-clock elapsed seconds.");
+                        }
+                        else
+                        {
+                            elapsedSeconds = fallbackElapsedSeconds;
+                        }
 
                         PlayniteApi.Notifications.Add(new NotificationMessage(
                             $"{PluginDatabase.PluginName}- noElapsedSeconds",
-                            PluginDatabase.PluginName + Environment.NewLine + string.Format(ResourceProvider.GetString("LOCGameActivityNoPlaytime"), args.Game.Name, elapsedSeconds),
+                            PluginDatabase.PluginName + Environment.NewLine + string.Format(ResourceProvider.GetString("LOCGameActivityNoPlaytime"), game.Name, elapsedSeconds),
                             NotificationType.Info
                         ));
                     }
                     else if (PluginDatabase.PluginSettings.SubstPlayStateTime && ExistsPlayStateInfoFile()) // Temporary workaround for PlayState paused time until Playnite allows to share data among extensions
                     {
                         Thread.Sleep(10000); // Necessary since PlayState is executed after GameActivity.
-                        elapsedSeconds -= GetPlayStatePausedTimeInfo(args.Game);
+                        elapsedSeconds -= GetPlayStatePausedTimeInfo(game);
                     }
 
                     // Infos
@@ -294,13 +339,14 @@ namespace GameActivity
                     Common.LogDebug(true, Serialization.ToJson(runningActivity.GameActivitiesLog));
                     PluginDatabase.Update(runningActivity.GameActivitiesLog);
 
-                    if (PluginDatabase.GameContext != null && args.Game.Id == PluginDatabase.GameContext.Id)
+                    if (PluginDatabase.GameContext != null && game.Id == PluginDatabase.GameContext.Id)
                     {
                         PluginDatabase.SetThemesResources(PluginDatabase.GameContext);
                     }
 
                     // Delete running data
                     GameActivityMonitoring.RemoveRunningActivity(runningActivity);
+                    Logger.Info($"OnGameStopped completed - {game.Name} - {game.Id} - Session:{sessionCorrelationId} - ElapsedSeconds:{elapsedSeconds}");
                 }
                 catch (Exception ex)
                 {
@@ -309,7 +355,7 @@ namespace GameActivity
             });
 
             // Delete backup
-            string pathFileBackup = Path.Combine(PluginDatabase.Paths.PluginUserDataPath, $"SaveSession_{args.Game.Id}.json");
+            string pathFileBackup = Path.Combine(PluginDatabase.Paths.PluginUserDataPath, $"SaveSession_{game.Id}.json");
             FileSystem.DeleteFile(pathFileBackup);
         }
 
@@ -348,6 +394,21 @@ namespace GameActivity
 
             // Check that the GameId is the same as the paused game. If so, return the paused time. If not, return 0.
             return game.Id.ToString() == Id ? PausedSeconds : 0;
+        }
+
+        private static bool IsFallbackElapsedSuspicious(ulong fallbackElapsedSeconds, ulong wallClockElapsedSeconds)
+        {
+            if (wallClockElapsedSeconds == 0)
+            {
+                return false;
+            }
+
+            // Keep a small tolerance for delayed events and scheduler jitter.
+            ulong wallClockWithTolerance = wallClockElapsedSeconds + 300;
+            bool isTooHighComparedToWallClock = fallbackElapsedSeconds > wallClockWithTolerance;
+            bool isMoreThanDoubleWallClock = fallbackElapsedSeconds > (wallClockElapsedSeconds * 2);
+
+            return isTooHighComparedToWallClock && isMoreThanDoubleWallClock;
         }
         
         #endregion

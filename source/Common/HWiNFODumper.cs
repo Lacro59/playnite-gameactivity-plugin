@@ -21,6 +21,7 @@ namespace GameActivity
         public List<JsonObj> ReadMem()
         {
             HWiNFOMemory = new _HWiNFO_SHARED_MEM();
+            data = new List<JsonObj>();
             try
             {
                 mmf = MemoryMappedFile.OpenExisting(HWiNFO_SHARED_MEM_FILE_NAME, MemoryMappedFileRights.Read);
@@ -49,7 +50,8 @@ namespace GameActivity
                     {
                         szSensorNameOrig = structure.szSensorNameOrig,
                         szSensorNameUser = structure.szSensorNameUser,
-                        szSensorSensorID = ""+structure.dwSensorID,
+                        szSensorSensorID = "" + structure.dwSensorID,
+                        szSensorInst = "" + structure.dwSensorInst,
                         sensors = new List<_HWiNFO_ELEMENT>()
                     };
                     data.Add(obj);
@@ -144,6 +146,8 @@ namespace GameActivity
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = HWiNFO_SENSORS_STRING_LEN)]
             public string szSensorNameUser;
             public string szSensorSensorID;
+            /// <summary>Sensor instance (<c>dwSensorInst</c>) — disambiguates entries that share <see cref="szSensorSensorID"/>.</summary>
+            public string szSensorInst;
             public List<_HWiNFO_ELEMENT> sensors;
         }
     }

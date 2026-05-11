@@ -145,7 +145,7 @@ namespace GameActivity.ViewModels
 
                 pluginDataRoot.Items.Remove(time);
 
-                _gameContext.LastActivity = pluginDataRoot.Items.Max(x => x.DateSession);
+                _gameContext.LastActivity = pluginDataRoot.Items.Max(x => x.DateSession).ToLocalTime();
 
                 if (_gameContext.PlayCount != 0)
                 {

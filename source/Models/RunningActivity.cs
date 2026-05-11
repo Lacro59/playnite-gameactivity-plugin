@@ -18,5 +18,7 @@ namespace GameActivity.Models
         public ActivityBackup ActivityBackup { get; set; }
 
         public ulong PlaytimeOnStarted { get; set; }
+
+        public string SessionCorrelationId { get; set; }
     }
 }

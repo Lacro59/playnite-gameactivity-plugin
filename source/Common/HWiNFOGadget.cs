@@ -7,13 +7,19 @@ using System.Threading.Tasks;
 
 namespace GameActivity
 {
-    class HWiNFOGadget
+    public static class HWiNFOGadget
     {
         public static string GetData(long idx)
         {
             using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\HWiNFO64\VSB"))
             {
-                return key?.GetValue($"ValueRaw{idx}").ToString();
+                object value = key?.GetValue($"ValueRaw{idx}");
+                if (value == null)
+                {
+                    return null;
+                }
+
+                return value.ToString();
             }
         }
     }

@@ -1,12 +1,14 @@
 using CommonPlayniteShared.Converters;
 using CommonPluginsShared;
 using CommonPluginsShared.Extensions;
+using CommonPluginsShared.SystemInfo;
 using GameActivity.Models;
 using GameActivity.Services;
 using Playnite.SDK;
 using Playnite.SDK.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Data;
@@ -36,7 +38,11 @@ namespace GameActivity.ViewModels
         private string _confirmLabel;
         private CbListHeader _selectedPlayAction;
         private ListCollectionView _playActionsView;
+        private ObservableCollection<ConfigurationOption> _configurationOptions = new ObservableCollection<ConfigurationOption>();
+        private ConfigurationOption _selectedConfiguration;
         private string _customActionNameInput = string.Empty;
+        private bool _adjustSessionLogsWithSession = true;
+        private bool _isAdjustSessionLogsOptionVisible;
 
         #region Properties
 
@@ -50,6 +56,18 @@ namespace GameActivity.ViewModels
         public string ConfirmLabel { get => _confirmLabel; private set => SetValue(ref _confirmLabel, value); }
         public CbListHeader SelectedPlayAction { get => _selectedPlayAction; set => SetValue(ref _selectedPlayAction, value); }
         public ListCollectionView PlayActionsView { get => _playActionsView; private set => SetValue(ref _playActionsView, value); }
+        public ObservableCollection<ConfigurationOption> ConfigurationOptions { get => _configurationOptions; private set => SetValue(ref _configurationOptions, value); }
+        public ConfigurationOption SelectedConfiguration { get => _selectedConfiguration; set => SetValue(ref _selectedConfiguration, value); }
+
+        /// <summary>
+        /// When true and the option is shown, log samples outside the new session UTC window are removed on save (never added).
+        /// </summary>
+        public bool AdjustSessionLogsWithSession { get => _adjustSessionLogsWithSession; set => SetValue(ref _adjustSessionLogsWithSession, value); }
+
+        /// <summary>
+        /// True when editing a session, logging is enabled in settings, and the session has performance log entries.
+        /// </summary>
+        public bool IsAdjustSessionLogsOptionVisible { get => _isAdjustSessionLogsOptionVisible; private set => SetValue(ref _isAdjustSessionLogsOptionVisible, value); }
 
         /// <summary>
         /// Input for the new custom action name.
@@ -91,6 +109,7 @@ namespace GameActivity.ViewModels
             _selectedDateEnd = now;
             _selectedTimeEnd = now.ToString("HH:mm:ss");
 
+            InitializeConfigurations();
             InitializeActionList(game);
 
             // Commands
@@ -127,6 +146,7 @@ namespace GameActivity.ViewModels
 
             RebuildPlayActionsView();
             RefreshElapsed();
+            RefreshAdjustLogsOptionVisibility();
         }
 
         private void ApplyEditData()
@@ -148,6 +168,8 @@ namespace GameActivity.ViewModels
                 SelectedPlayAction = new CbListHeader { Name = actionName, Category = ResourceProvider.GetString("LOCOther") };
                 _cbListHeaders.Add(SelectedPlayAction);
             }
+
+            SelectedConfiguration = ConfigurationOptions.FirstOrDefault(x => x.Index == _activityEdit.IdConfiguration);
         }
 
         private void ExecuteConfirm()
@@ -160,9 +182,21 @@ namespace GameActivity.ViewModels
                 Activity activity = IsStartLocked ? _activityEdit : new Activity { DateSession = start.ToUniversalTime() };
                 activity.GameActionName = SelectedPlayAction?.Name ?? ResourceProvider.GetString("LOCGameActivityDefaultAction");
                 activity.ElapsedSeconds = (ulong)(end - start).TotalSeconds;
-                activity.IdConfiguration = PluginDatabase.SystemConfigurationManager.GetConfigurationIndex();
+                if (SelectedConfiguration != null)
+                {
+                    activity.IdConfiguration = SelectedConfiguration.Index;
+                }
+                else if (!IsStartLocked)
+                {
+                    activity.IdConfiguration = PluginDatabase.SystemConfigurationManager.GetConfigurationIndex();
+                }
                 activity.PlatformIDs = _game.PlatformIds;
                 activity.SourceID = _game.SourceId;
+
+                if (IsStartLocked && IsAdjustSessionLogsOptionVisible && AdjustSessionLogsWithSession)
+                {
+                    TrimActivityDetailsToSessionUtcWindow(activity);
+                }
 
                 ResultActivity = activity;
                 CloseRequested?.Invoke(this, EventArgs.Empty);
@@ -225,7 +259,86 @@ namespace GameActivity.ViewModels
             PluginDatabase.PersistSettingsAction?.Invoke();
         }
 
+        private void InitializeConfigurations()
+        {
+            List<ConfigurationOption> options = new List<ConfigurationOption>();
+            List<SystemConfiguration> configurations = PluginDatabase.SystemConfigurationManager.GetConfigurations();
+            for (int i = 0; i < configurations.Count; i++)
+            {
+                string configurationName = string.IsNullOrWhiteSpace(configurations[i].Name) ? ResourceProvider.GetString("LOCUnknownLabel") : configurations[i].Name;
+                string cpuName = string.IsNullOrWhiteSpace(configurations[i].Cpu) ? ResourceProvider.GetString("LOCUnknownLabel") : configurations[i].Cpu;
+                string gpuName = string.IsNullOrWhiteSpace(configurations[i].GpuName) ? ResourceProvider.GetString("LOCUnknownLabel") : configurations[i].GpuName;
+                options.Add(new ConfigurationOption
+                {
+                    Index = i,
+                    Name = configurationName,
+                    DisplayName = string.Format("{0} · {1} · {2}", configurationName, cpuName, gpuName)
+                });
+            }
+
+            options = options
+                .OrderBy(x => x.DisplayName, StringComparer.CurrentCultureIgnoreCase)
+                .ToList();
+
+            ConfigurationOptions = new ObservableCollection<ConfigurationOption>(options);
+
+            int currentConfigurationIndex = PluginDatabase.SystemConfigurationManager.GetConfigurationIndex();
+            SelectedConfiguration = options.FirstOrDefault(x => x.Index == currentConfigurationIndex);
+        }
+
         private static DateTime ParseDateTime(DateTime d, string t) => DateTime.Parse(d.ToString("yyyy-MM-dd") + " " + t);
+
+        private void RefreshAdjustLogsOptionVisibility()
+        {
+            bool visible = PluginDatabase.PluginSettings.EnableLogging
+                && IsStartLocked
+                && _activityEdit != null
+                && _activityEdit.Details != null
+                && _activityEdit.Details.Count > 0;
+            IsAdjustSessionLogsOptionVisible = visible;
+        }
+
+        /// <summary>
+        /// Keeps only performance log samples whose timestamp lies within the session UTC interval.
+        /// This only removes entries (e.g. after shortening the session); it never adds samples.
+        /// </summary>
+        private static void TrimActivityDetailsToSessionUtcWindow(Activity activity)
+        {
+            if (activity == null || activity.Details == null || activity.Details.Count == 0)
+            {
+                return;
+            }
+
+            DateTime sessionStartUtc = ToUtcComparable(activity.DateSession);
+            DateTime sessionEndUtc = sessionStartUtc.AddSeconds((double)activity.ElapsedSeconds);
+
+            List<ActivityDetailsData> kept = activity.Details
+                .Where(d =>
+                {
+                    if (!d.Datelog.HasValue)
+                    {
+                        return false;
+                    }
+                    DateTime logUtc = ToUtcComparable(d.Datelog.Value);
+                    return logUtc >= sessionStartUtc && logUtc <= sessionEndUtc;
+                })
+                .ToList();
+
+            activity.Details = kept;
+        }
+
+        private static DateTime ToUtcComparable(DateTime dt)
+        {
+            if (dt.Kind == DateTimeKind.Utc)
+            {
+                return dt;
+            }
+            if (dt.Kind == DateTimeKind.Local)
+            {
+                return dt.ToUniversalTime();
+            }
+            return DateTime.SpecifyKind(dt, DateTimeKind.Utc);
+        }
     }
 
     public class CbListHeader
@@ -233,5 +346,12 @@ namespace GameActivity.ViewModels
         public string Category { get; set; }
         public string Name { get; set; }
         public bool IsCustom { get; set; }
+    }
+
+    public class ConfigurationOption
+    {
+        public int Index { get; set; }
+        public string Name { get; set; }
+        public string DisplayName { get; set; }
     }
 }
