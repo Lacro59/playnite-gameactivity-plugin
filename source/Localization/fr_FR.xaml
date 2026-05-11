@@ -176,10 +176,10 @@ vert moyen = plus rapide</sys:String>
 
     <sys:String x:Key="LOCGameActivityRecentActivity">Activité récente</sys:String>
     <sys:String x:Key="LOCGameActivityNoRecentActivity">Pas d'activité récente</sys:String>
-    <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} h / {1} semaine</sys:String>
-    <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} h / {1} semaines</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} heures sur {1} semaine</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} heures sur {1} semaines</sys:String>
     <sys:String x:Key="LOCGameActivityAvgPerDay">Temps moyen par jour</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgPerSession">Moy. par session</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgPerSession">Temps moyen par session</sys:String>
     <sys:String x:Key="LOCGameActivityFirstSession">Première session</sys:String>
     <sys:String x:Key="LOCGameActivityLastSession">Dernière session</sys:String>
 

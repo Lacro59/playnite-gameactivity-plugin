@@ -37,7 +37,14 @@ support changelog automation:
 
 ### Footer
 
-- **Ticket reference (required)**: always include the full GitHub issue URL
+- **GitHub issue reference**:
+  - **When an issue exists**: include the full GitHub issue URL in the
+    footer, using the keywords from section 3 (`Fixes`, `Closes`, `Ref`,
+    `See`, and so on).
+  - **When there is no associated issue**: do **not** invent a URL or
+    placeholder link. Omit the issue line entirely. The header (and
+    optional body) must still describe the change clearly enough to
+    stand alone in the history.
 - **Trailer policy**: do not add tool-generated trailers
   (for example: `Made-with: Cursor`)
 
@@ -95,7 +102,18 @@ Added a null-check validator before database persistence.
 Fixes https://github.com/Lacro59/playnite-gameactivity-plugin/issues/456
 ```
 
+### Change without a tracked issue
+
+No `Fixes` / `Closes` / `Ref` line in the footer; the header and body
+carry the full intent.
+
+```text
+chore(build): bump target framework reference in csproj
+
+Aligns the project file with the solution-wide SDK version used locally.
+```
+
 ---
 
-**Last updated**: 2026-04-20  
-**Version**: 1.4
+**Last updated**: 2026-05-04  
+**Version**: 1.5
