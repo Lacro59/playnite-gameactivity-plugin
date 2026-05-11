@@ -32,7 +32,7 @@
     <sys:String x:Key="LOCGameActivityProviderPerfChartsTitle">Provider performance (live)</sys:String>
     <sys:String x:Key="LOCGameActivityProviderPerfChartsHint">When enabled, only the provider actually used for each metric in aggregation is shown (per chart). Otherwise pick providers below. Values refresh every 5 seconds (last 6 minutes shown).</sys:String>
     <sys:String x:Key="LOCGameActivityProviderPerfChartsNoProviders">No hardware monitoring providers are registered. Enable at least one provider in GameActivity settings.</sys:String>
-    <sys:String x:Key="LOCGameActivityProviderPerfChartsLegend">By provider</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderPerfChartsLegend">По провайдеру</sys:String>
     <sys:String x:Key="LOCGameActivityProviderPerfChartsAggregatorMode">Used values (aggregation)</sys:String>
 
 
@@ -47,10 +47,10 @@
 
     <!-- ==================== GamesDataMismatch view ==================== -->
 
-    <sys:String x:Key="LOCGaDataMismatchSectionGa">GameActivity data</sys:String>
-    <sys:String x:Key="LOCGaDataMismatchSectionPlaynite">Playnite data</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchSectionGa">Данные GameActivity</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchSectionPlaynite">Данные Playnite</sys:String>
     <sys:String x:Key="LOCGaDataMismatchApplyAllTooltip">Override Playnite data with GameActivity data for all listed games</sys:String>
-    <sys:String x:Key="LOCGaDataMismatchApplyHeader">Apply</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchApplyHeader">Применить</sys:String>
     <sys:String x:Key="LOCGaDataMismatchEmpty">No data mismatch detected.</sys:String>
     <sys:String x:Key="LOCGaDataMismatchApplyAllConfirmTitle">Override all – are you sure?</sys:String>
 
@@ -69,8 +69,8 @@
     <!-- ==================== Game Data Mismatch ==================== -->
 
     <sys:String x:Key="LOCGaGamesDataMismatch">Game data mismatch</sys:String>
-    <sys:String x:Key="LOCGaSessionCount">Session count</sys:String>
-    <sys:String x:Key="LOCGaSessionPlayed">Sessions played</sys:String>
+    <sys:String x:Key="LOCGaSessionCount">Количество сессий</sys:String>
+    <sys:String x:Key="LOCGaSessionPlayed">Сессий сыграно</sys:String>
     <sys:String x:Key="LOCGaGaToPlaynite">Override Playnite data with GameActivity data</sys:String>
     <sys:String x:Key="LOCGaPlayniteToGa">Override GameActivity data with Playnite data</sys:String>
     <sys:String x:Key="LOCGaPlayniteToGaWarning">This irreversible action will overwrite the play count and times in Playnite with data from GameActivity.</sys:String>
@@ -227,7 +227,7 @@ green = faster</sys:String>
     <!-- Sensor short labels (filter bar checkboxes) -->
     <sys:String x:Key="LOCGameActivityLabelCpu">CPU</sys:String>
     <sys:String x:Key="LOCGameActivityLabelGpu">GPU</sys:String>
-    <sys:String x:Key="LOCGameActivityLabelRam">RAM</sys:String>
+    <sys:String x:Key="LOCGameActivityLabelRam">ОЗУ</sys:String>
     <sys:String x:Key="LOCGameActivityLabelFps">FPS</sys:String>
     <sys:String x:Key="LOCGameActivityLabelCpuT">CPU T°</sys:String>
     <sys:String x:Key="LOCGameActivityLabelGpuT">GPU T°</sys:String>
@@ -236,10 +236,10 @@ green = faster</sys:String>
     <sys:String x:Key="LOCGameActivityLabelFps1PercentLowShort">1% Low</sys:String>
     <sys:String x:Key="LOCGameActivityLabelFps0Point1PercentLowShort">0.1% Low</sys:String>
 
-    <sys:String x:Key="LOCGameActivityShowAllData">Show all data</sys:String>
+    <sys:String x:Key="LOCGameActivityShowAllData">Показать все данные</sys:String>
 
     <!-- Group header labels for the two filter bar rows -->
-    <sys:String x:Key="LOCGameActivityGroupUsage">Usage</sys:String>
+    <sys:String x:Key="LOCGameActivityGroupUsage">Использование</sys:String>
     <sys:String x:Key="LOCGameActivityGroupTempPower">Temp / Power</sys:String>
     <sys:String x:Key="LOCGameActivityGroupLogSensors">Temp / power / FPS lows</sys:String>
 
@@ -259,8 +259,8 @@ green = faster</sys:String>
 
     <!-- ==================== Add / Edit Session ==================== -->
 
-    <sys:String x:Key="LOCGameActivitySessionDetailsExportFileTag">Session-performance-log</sys:String>
-    <sys:String x:Key="LOCGameActivityExportSessionDetails">Export this session's performance samples to CSV. The suggested file name includes the game title and session start (local time).</sys:String>
+    <sys:String x:Key="LOCGameActivitySessionDetailsExportFileTag">Лог производительности сессии</sys:String>
+    <sys:String x:Key="LOCGameActivityExportSessionDetails">Экспортировать примеры производительности этой сессии в CSV. Предлагаемое имя файла должно включать название игры и время начала сессии (местное время).</sys:String>
 
     <sys:String x:Key="LOCGaAddNewGameSession">Добавить новую игровую сессию</sys:String>
     <sys:String x:Key="LOCGaDateStart">Дата начала</sys:String>
