@@ -250,3 +250,34 @@ Packages:
     Changelog:
       - 'Fixed: Crash on settings view'
       - 'Fixed: No more GPU Usage tracking'
+  - Version: 3.4
+    RequiredApiVersion: 6.16.0
+    ReleaseDate: 2026-04-19
+    PackageUrl: https://github.com/Lacro59/playnite-gameactivity-plugin/releases/download/v3.4/playnite-gameactivity-plugin_3_4.pext
+    Changelog:
+      - 'Added: Hardware monitoring screen with performance charts and a session timeline (Gantt) view'
+      - 'Added: FPS charts now include 1% and 0.1% low values'
+      - 'Added: Export session details and more options to export your activity data'
+      - 'Added: Hardware stats from MSI Afterburner in charts'
+      - 'Updated: Translations'
+      - 'Optimized: Main activity view and chart readability'
+      - 'Fixed: Time warnings now use your local time'
+      - 'Improved: General stability and interface polish'
+  - Version: 3.5
+    RequiredApiVersion: 6.16.0
+    ReleaseDate: 2026-05-15
+    PackageUrl: https://github.com/Lacro59/playnite-gameactivity-plugin/releases/download/v3.5/playnite-gameactivity-plugin_3_5.pext
+    Changelog:
+      - 'Added: HWiNFO Gadget mode and more hardware stats in charts'
+      - 'Added: Choose which HWiNFO sensor to use when several share the same name'
+      - 'Added: Option to shorten performance logs for short play sessions'
+      - 'Fixed: More reliable tracking when a game stops'
+      - 'Fixed: Crash or bad data when stopping a game in some cases'
+      - 'Fixed: Play time no longer over-counted after the PC was in sleep or standby'
+      - 'Fixed: Last played date in Playnite now matches your local time'
+      - 'Fixed: Game Activity panel refreshes when you open it again from the sidebar'
+      - 'Fixed: Session start and end times can be set to the second and match what you type'
+      - 'Fixed: Session settings kept when you edit an existing session'
+      - 'Fixed: HWiNFO readings refresh correctly after a sensor list change'
+      - 'Improved: Game list selection and column layout in the main view'
+      - 'Updated: Translations'
