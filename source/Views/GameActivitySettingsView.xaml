@@ -10,6 +10,7 @@
              xmlns:controls="clr-namespace:CommonPluginsControls.Controls"
              xmlns:convertersshared="clr-namespace:CommonPluginsShared.Converters"
              xmlns:playnitecontrols="clr-namespace:CommonPluginsControls.PlayniteControls"
+             xmlns:settings="clr-namespace:CommonPluginsControls.Settings"
              xmlns:GameActivity="clr-namespace:GameActivity"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance GameActivity:GameActivitySettingsViewModel}"
@@ -1346,6 +1347,9 @@
                 </DockPanel>
             </ScrollViewer>
         </TabItem>
+
+        <TabItem Header="{DynamicResource LOCCommonDebugTab}">
+            <settings:PluginDebugSettingsSection PluginName="GameActivity" Margin="10" />
+        </TabItem>
     </TabControl>
 </UserControl>
-    

@@ -727,7 +727,7 @@ namespace GameActivity
         /// <inheritdoc/>
         public void EndEdit()
         {
-            _plugin.SavePluginSettings(Settings);
+            PersistSettings(_plugin, Settings);
             GameActivity.PluginDatabase.PluginSettings = this.Settings;
 
             if (API.Instance.ApplicationInfo.Mode == ApplicationMode.Desktop)

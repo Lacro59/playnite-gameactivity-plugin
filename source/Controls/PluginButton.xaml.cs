@@ -35,6 +35,7 @@ namespace GameActivity.Controls
             var timer = new DebugTimer("PluginButton.ctor");
 #endif
 
+            AlwaysShow = true;
             _plugin = plugin;
             InitializeComponent();
 

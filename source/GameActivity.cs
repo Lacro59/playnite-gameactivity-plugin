@@ -78,7 +78,7 @@ namespace GameActivity
                 string ButtonName = ((Button)sender).Name;
                 if (ButtonName == "PART_CustomGameActivityButton")
                 {
-                    Common.LogDebug(true, $"OnCustomThemeButtonClick()");
+                    Common.LogDebug($"OnCustomThemeButtonClick()");
                     PluginDatabase.PluginWindows.ShowPluginGameDataWindow(this, PluginDatabase.GameContext);
                 }
             }
@@ -336,7 +336,7 @@ namespace GameActivity
 
                     // Infos
                     runningActivity.GameActivitiesLog.GetLastSessionActivity(false).ElapsedSeconds = elapsedSeconds;
-                    Common.LogDebug(true, Serialization.ToJson(runningActivity.GameActivitiesLog));
+                    Common.LogDebug(Serialization.ToJson(runningActivity.GameActivitiesLog));
                     PluginDatabase.Update(runningActivity.GameActivitiesLog);
 
                     if (PluginDatabase.GameContext != null && game.Id == PluginDatabase.GameContext.Id)

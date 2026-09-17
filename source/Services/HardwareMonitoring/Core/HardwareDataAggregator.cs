@@ -346,7 +346,6 @@ namespace GameActivity.Services.HardwareMonitoring.Core
             foreach (Tuple<string, double> sample in latencySamples)
             {
                 Common.LogDebug(
-                    true,
                     string.Format(
                         "Provider raw metrics read latency (fast→slow) — {0}: {1:F3} ms",
                         sample.Item1,
@@ -354,7 +353,6 @@ namespace GameActivity.Services.HardwareMonitoring.Core
             }
 
             Common.LogDebug(
-                true,
                 string.Format(
                     "Provider raw metrics read batch wall clock: {0:F3} ms",
                     batchWatch.Elapsed.TotalMilliseconds));

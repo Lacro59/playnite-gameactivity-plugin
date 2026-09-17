@@ -2166,7 +2166,7 @@ namespace GameActivity.Views
             // Source for game add manually.
             _ = arrayReturn.AddMissing("Playnite");
 
-            Common.LogDebug(true, Serialization.ToJson(arrayReturn));
+            Common.LogDebug(Serialization.ToJson(arrayReturn));
             return arrayReturn;
         }
 

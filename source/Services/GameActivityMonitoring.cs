@@ -353,7 +353,7 @@ namespace GameActivity.Services
 
                 _healthMonitor?.RecordCycle(metrics);
 
-                Common.LogDebug(true,
+                Common.LogDebug(
                     $"Metrics sources - FPS:{metrics.Source.FPS} FPS1%:{metrics.Source.FPS1PercentLow} FPS0.1%:{metrics.Source.FPS0Point1PercentLow} " +
                     $"CPU:{metrics.Source.CpuUsage} GPU:{metrics.Source.GpuUsage} RAM:{metrics.Source.RamUsage}");
 
@@ -382,7 +382,7 @@ namespace GameActivity.Services
 
                 currentActivity.Details.Add(activityDetailsData);
 
-                Common.LogDebug(true, $"Logged metrics: {Serialization.ToJson(activityDetailsData)}");
+                Common.LogDebug($"Logged metrics: {Serialization.ToJson(activityDetailsData)}");
             }
             catch (Exception ex)
             {
