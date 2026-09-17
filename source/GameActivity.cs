@@ -205,15 +205,7 @@ namespace GameActivity
                     PlaytimeOnStarted = args.Game.Playtime,
                     SessionCorrelationId = sessionCorrelationId
                 };
-				GameActivityMonitoring.AddRunningActivity(runningActivity);
-
-				GameActivityMonitoring.DataBackup_start(args.Game.Id);
-
-                // start timer if log is enable.
-                if (PluginDatabase.PluginSettings.EnableLogging)
-                {
-					GameActivityMonitoring.DataLogging_start(args.Game.Id);
-                }
+                GameActivityMonitoring.AddRunningActivity(runningActivity);
 
                 DateTime DateSession = DateTime.Now.ToUniversalTime();
 
@@ -240,6 +232,14 @@ namespace GameActivity
                     PlatformIDs = args.Game.PlatformIds ?? new List<Guid>(),
                     ItemsDetailsDatas = new List<ActivityDetailsData>()
                 };
+
+                // Start timers only after ActivityBackup and session log are ready.
+                GameActivityMonitoring.DataBackup_start(args.Game.Id);
+
+                if (PluginDatabase.PluginSettings.EnableLogging)
+                {
+                    GameActivityMonitoring.DataLogging_start(args.Game.Id);
+                }
             }
             catch (Exception ex)
             {
@@ -276,12 +276,14 @@ namespace GameActivity
                     {
                         Logger.Warn($"OnGameStopped: no running activity found for {game.Name} - {game.Id} - Session:{sessionCorrelationId}");
                     }
-                    GameActivityMonitoring.DataBackup_stop(game.Id);
+
+                    // Stop timers on this session instance only (overlapping start must not kill the new session).
+                    GameActivityMonitoring.DataBackup_stop(runningActivity);
 
                     // Stop timer if log is enable.
                     if (PluginDatabase.PluginSettings.EnableLogging)
                     {
-						GameActivityMonitoring.DataLogging_stop(game.Id);
+                        GameActivityMonitoring.DataLogging_stop(game.Id);
                     }
 
                     if (runningActivity == null)
