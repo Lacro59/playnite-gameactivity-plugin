@@ -255,6 +255,43 @@ namespace GameActivity
 
         #endregion
 
+        #region Chart Log — View window series (IgnoreSettings)
+
+        // Separate from Appearance theme flags (DisplayCpu…). Used by PluginChartLog when IgnoreSettings is true
+        // (GameActivityView / ViewSingle / Backup). Defaults match DependencyProperty defaults on the control.
+
+        /// <summary>View chart: CPU usage series visibility.</summary>
+        public bool ViewChartLogDisplayCpu { get; set; } = true;
+
+        /// <summary>View chart: GPU usage series visibility.</summary>
+        public bool ViewChartLogDisplayGpu { get; set; } = true;
+
+        /// <summary>View chart: RAM usage series visibility.</summary>
+        public bool ViewChartLogDisplayRam { get; set; } = true;
+
+        /// <summary>View chart: FPS series visibility.</summary>
+        public bool ViewChartLogDisplayFps { get; set; } = true;
+
+        /// <summary>View chart: CPU temperature series visibility.</summary>
+        public bool ViewChartLogDisplayCpuT { get; set; } = false;
+
+        /// <summary>View chart: GPU temperature series visibility.</summary>
+        public bool ViewChartLogDisplayGpuT { get; set; } = false;
+
+        /// <summary>View chart: CPU power series visibility.</summary>
+        public bool ViewChartLogDisplayCpuP { get; set; } = false;
+
+        /// <summary>View chart: GPU power series visibility.</summary>
+        public bool ViewChartLogDisplayGpuP { get; set; } = false;
+
+        /// <summary>View chart: FPS 1% Low series visibility.</summary>
+        public bool ViewChartLogDisplayFps1PercentLow { get; set; } = false;
+
+        /// <summary>View chart: FPS 0.1% Low series visibility.</summary>
+        public bool ViewChartLogDisplayFps0Point1PercentLow { get; set; } = false;
+
+        #endregion
+
         #region Visual Customization
 
         /// <summary>Show store/platform launcher icons in the list view.</summary>

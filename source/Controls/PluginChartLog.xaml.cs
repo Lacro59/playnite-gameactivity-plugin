@@ -446,22 +446,82 @@ namespace GameActivity.Controls
                     PluginDatabase.DatabaseItemCollectionChanged +=
                         CreateDatabaseCollectionChangedHandler<GameActivities>();
 
-                    DisplayCpu = PluginDatabase.PluginSettings.DisplayCpu;
-                    DisplayGpu = PluginDatabase.PluginSettings.DisplayGpu;
-                    DisplayRam = PluginDatabase.PluginSettings.DisplayRam;
-                    DisplayFps = PluginDatabase.PluginSettings.DisplayFps;
-
-                    DisplayCpuT = false;
-                    DisplayGpuT = false;
-                    DisplayCpuP = false;
-                    DisplayGpuP = false;
-                    DisplayFps1PercentLow = false;
-                    DisplayFps0Point1PercentLow = false;
+                    ApplySeriesVisibilityFromSettings();
 
                     // ShowAllData is not reset from plugin settings — it is owned by the
                     // nav bar toggle or by the caller's XAML binding.
                 }
             );
+        }
+
+        /// <summary>
+        /// Loads series visibility DPs from theme Appearance settings or from view-specific
+        /// <c>ViewChartLogDisplay*</c> flags when <see cref="IgnoreSettings"/> is true.
+        /// </summary>
+        private void ApplySeriesVisibilityFromSettings()
+        {
+            var settings = PluginDatabase.PluginSettings;
+            if (settings == null)
+            {
+                return;
+            }
+
+            if (IgnoreSettings)
+            {
+                DisplayCpu = settings.ViewChartLogDisplayCpu;
+                DisplayGpu = settings.ViewChartLogDisplayGpu;
+                DisplayRam = settings.ViewChartLogDisplayRam;
+                DisplayFps = settings.ViewChartLogDisplayFps;
+                DisplayCpuT = settings.ViewChartLogDisplayCpuT;
+                DisplayGpuT = settings.ViewChartLogDisplayGpuT;
+                DisplayCpuP = settings.ViewChartLogDisplayCpuP;
+                DisplayGpuP = settings.ViewChartLogDisplayGpuP;
+                DisplayFps1PercentLow = settings.ViewChartLogDisplayFps1PercentLow;
+                DisplayFps0Point1PercentLow = settings.ViewChartLogDisplayFps0Point1PercentLow;
+                return;
+            }
+
+            DisplayCpu = settings.DisplayCpu;
+            DisplayGpu = settings.DisplayGpu;
+            DisplayRam = settings.DisplayRam;
+            DisplayFps = settings.DisplayFps;
+            DisplayCpuT = false;
+            DisplayGpuT = false;
+            DisplayCpuP = false;
+            DisplayGpuP = false;
+            DisplayFps1PercentLow = false;
+            DisplayFps0Point1PercentLow = false;
+        }
+
+        /// <summary>
+        /// Persists current series visibility into view-specific settings when this control
+        /// is used outside Appearance (IgnoreSettings). No-op for theme integration instances.
+        /// </summary>
+        private void PersistViewSeriesVisibility()
+        {
+            if (!IgnoreSettings)
+            {
+                return;
+            }
+
+            var settings = PluginDatabase.PluginSettings;
+            if (settings == null)
+            {
+                return;
+            }
+
+            settings.ViewChartLogDisplayCpu = DisplayCpu;
+            settings.ViewChartLogDisplayGpu = DisplayGpu;
+            settings.ViewChartLogDisplayRam = DisplayRam;
+            settings.ViewChartLogDisplayFps = DisplayFps;
+            settings.ViewChartLogDisplayCpuT = DisplayCpuT;
+            settings.ViewChartLogDisplayGpuT = DisplayGpuT;
+            settings.ViewChartLogDisplayCpuP = DisplayCpuP;
+            settings.ViewChartLogDisplayGpuP = DisplayGpuP;
+            settings.ViewChartLogDisplayFps1PercentLow = DisplayFps1PercentLow;
+            settings.ViewChartLogDisplayFps0Point1PercentLow = DisplayFps0Point1PercentLow;
+
+            PluginDatabase.PersistSettingsAction?.Invoke();
         }
 
         // ── Filter bar slide animation triggered by UseControls changes ────────
@@ -502,6 +562,9 @@ namespace GameActivity.Controls
         /// </summary>
         public override void SetDefaultDataContext()
         {
+            // Re-apply after IgnoreSettings may have been set post-ctor (object initializer / XAML).
+            ApplySeriesVisibilityFromSettings();
+
             bool isActivated = PluginDatabase.PluginSettings.EnableIntegrationChartLog;
             double chartLogHeight = PluginDatabase.PluginSettings.ChartLogHeight;
             bool chartLogAxis = PluginDatabase.PluginSettings.ChartLogAxis;
@@ -554,6 +617,7 @@ namespace GameActivity.Controls
             }
 
             ControlDataContext.ShowNavBar = showNavBar;
+            ControlDataContext.ShowSaveViewSeriesButton = IgnoreSettings;
             ControlDataContext.NavLabel = string.Empty;
 
             // ── Resolve effective abscissa limit and push to nav bar ───────
@@ -1273,6 +1337,15 @@ namespace GameActivity.Controls
         }
 
         /// <summary>
+        /// Persists the current series selection for view windows (<see cref="IgnoreSettings"/>).
+        /// Invoked by the Usage-row Save button — no-op on theme integration charts.
+        /// </summary>
+        public void SaveViewSeriesVisibility()
+        {
+            PersistViewSeriesVisibility();
+        }
+
+        /// <summary>
         /// Applies visibility to all 10 series according to Display* flags.
         /// </summary>
         /// <param name="forceAllVisible">
@@ -1660,6 +1733,17 @@ namespace GameActivity.Controls
             set => SetValue(ref _hasNoData, value);
         }
 
+        private bool _showSaveViewSeriesButton;
+
+        /// <summary>
+        /// When true, shows the Usage-row Save button (view windows with <c>IgnoreSettings</c> only).
+        /// </summary>
+        public bool ShowSaveViewSeriesButton
+        {
+            get => _showSaveViewSeriesButton;
+            set => SetValue(ref _showSaveViewSeriesButton, value);
+        }
+
         // ── RelayCommands ─────────────────────────────────────────────────────
 
         /// <summary>Bound to the CPU toggle button in the filter bar.</summary>
@@ -1692,6 +1776,9 @@ namespace GameActivity.Controls
         /// <summary>Bound to the FPS 0.1% Low toggle in the filter bar.</summary>
         public RelayCommand CmdToggleFps0Point1PercentLow { get; }
 
+        /// <summary>Persists view-window series selection (<c>ViewChartLog*</c>).</summary>
+        public RelayCommand CmdSaveViewSeries { get; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PluginChartLogDataContext"/> class.
         /// Wires up commands for toggling sensor series visibility.
@@ -1713,6 +1800,7 @@ namespace GameActivity.Controls
             CmdToggleFps0Point1PercentLow = new RelayCommand(
                 () => _control?.ToggleFps0Point1PercentLow()
             );
+            CmdSaveViewSeries = new RelayCommand(() => _control?.SaveViewSeriesVisibility());
         }
 
         private PluginChartLog _control;

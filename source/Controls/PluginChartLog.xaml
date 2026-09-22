@@ -125,6 +125,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -166,8 +167,19 @@
                     </CheckBox>
                 </StackPanel>
 
+                <!-- View-only: persist ViewChartLog* (IgnoreSettings). Glyph = Playnite filter Save (&#xee00;). -->
+                <Button Grid.Column="2" Grid.Row="0"
+                        Style="{DynamicResource IconButton}"
+                        Content="&#xee00;"
+                        Margin="8,0,0,0"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Right"
+                        Command="{Binding CmdSaveViewSeries}"
+                        ToolTip="{DynamicResource LOCGameActivitySaveChartSeries}"
+                        Visibility="{Binding ShowSaveViewSeriesButton, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
                 <!-- Separator — only shown when DisplayMoreData is true -->
-                <Border Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"
+                <Border Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3"
                         Style="{DynamicResource TopSeparatorBorder}"
                         Visibility="{Binding DisplayMoreData, Converter={StaticResource BooleanToVisibilityConverter}}"
                         Margin="0,2,0,2" />
@@ -180,7 +192,7 @@
                            VerticalAlignment="Center"
                            MinWidth="90" />
 
-                <StackPanel Grid.Column="1" Grid.Row="2"
+                <StackPanel Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2"
                             Orientation="Horizontal"
                             Visibility="{Binding DisplayMoreData, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <CheckBox Style="{DynamicResource CompactCheckBox}"

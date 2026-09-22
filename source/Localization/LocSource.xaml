@@ -245,6 +245,7 @@ Use when several devices share the same Sensor ID (e.g. multiple GPUs). Decimal 
 
     <!-- Group header labels for the two filter bar rows -->
     <sys:String x:Key="LOCGameActivityGroupUsage">Usage</sys:String>
+    <sys:String x:Key="LOCGameActivitySaveChartSeries">Save series selection</sys:String>
     <sys:String x:Key="LOCGameActivityGroupTempPower">Temp / Power</sys:String>
     <sys:String x:Key="LOCGameActivityGroupLogSensors">Temp / power / FPS lows</sys:String>
 
