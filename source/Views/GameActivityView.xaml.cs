@@ -1608,7 +1608,8 @@ namespace GameActivity.Views
                     }
                     else
                     {
-                        if (PluginDatabase.PluginSettings.StoreColors.Count == 0)
+                        if (PluginDatabase.PluginSettings.StoreColors == null
+                            || PluginDatabase.PluginSettings.StoreColors.Count == 0)
                         {
                             PluginDatabase.PluginSettings.StoreColors = GameActivitySettingsViewModel.GetDefaultStoreColors();
                         }
@@ -1636,7 +1637,9 @@ namespace GameActivity.Views
                             }
 
                             Brush fill = PluginDatabase.PluginSettings.StoreColors
-                                .Where(x => x.Name.Contains(sourceName, StringComparison.InvariantCultureIgnoreCase))
+                                ?.Where(x => x != null
+                                    && !string.IsNullOrEmpty(x.Name)
+                                    && x.Name.Contains(sourceName, StringComparison.InvariantCultureIgnoreCase))
                                 .FirstOrDefault()?.Fill;
 
                             activityByWeekSeries.Add(new StackedColumnSeries
@@ -1792,7 +1795,8 @@ namespace GameActivity.Views
 
                 // Prepare data.
                 string[] labels = new string[listNoDelete.Count];
-                if (PluginDatabase.PluginSettings.StoreColors.Count == 0)
+                if (PluginDatabase.PluginSettings.StoreColors == null
+                    || PluginDatabase.PluginSettings.StoreColors.Count == 0)
                 {
                     PluginDatabase.PluginSettings.StoreColors = GameActivitySettingsViewModel.GetDefaultStoreColors();
                 }
@@ -1806,7 +1810,10 @@ namespace GameActivity.Views
 
                     Brush Fill = null;
                     Fill = PluginDatabase.PluginSettings.StoreColors
-                                .Where(x => x.Name.Contains(listNoDelete[iSource], StringComparison.InvariantCultureIgnoreCase))?.FirstOrDefault()?.Fill;
+                                ?.Where(x => x != null
+                                    && !string.IsNullOrEmpty(x.Name)
+                                    && x.Name.Contains(listNoDelete[iSource], StringComparison.InvariantCultureIgnoreCase))
+                                .FirstOrDefault()?.Fill;
 
 
                     Values = new ChartValues<CustomerForTime>();
