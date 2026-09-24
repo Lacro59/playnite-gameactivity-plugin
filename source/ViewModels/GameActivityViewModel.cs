@@ -246,19 +246,19 @@ namespace GameActivity.ViewModels
         }
 
         /// <summary>
-        /// Applies a period preset using the current anchor (or now for relative presets).
+        /// Applies a period kind using the current anchor.
         /// </summary>
-        /// <param name="kind">Preset to apply.</param>
+        /// <param name="kind">Period length / navigation unit to apply.</param>
         public void SetPeriod(ActivityPeriodKind kind)
         {
             SetPeriod(kind, new DateTime(YearCurrent, MonthCurrent, 1));
         }
 
         /// <summary>
-        /// Applies a period preset anchored on the given date.
+        /// Applies a period kind anchored on the given date.
         /// </summary>
-        /// <param name="kind">Preset to apply.</param>
-        /// <param name="anchor">Reference date for month/year and end of rolling windows.</param>
+        /// <param name="kind">Period length / navigation unit to apply.</param>
+        /// <param name="anchor">Reference date for month/year and end of multi-day windows.</param>
         public void SetPeriod(ActivityPeriodKind kind, DateTime anchor)
         {
             ApplyPeriodBounds(kind, anchor);
@@ -350,14 +350,14 @@ namespace GameActivity.ViewModels
             switch (kind)
             {
                 case ActivityPeriodKind.Last7Days:
-                    return ResourceProvider.GetString("LOCGameActivityPeriodPresetLast7Days");
+                    return ResourceProvider.GetString("LOCGameActivityPeriodPreset7Days");
                 case ActivityPeriodKind.Last3Months:
-                    return ResourceProvider.GetString("LOCGameActivityPeriodPresetLast3Months");
+                    return ResourceProvider.GetString("LOCGameActivityPeriodPreset3Months");
                 case ActivityPeriodKind.Year:
-                    return ResourceProvider.GetString("LOCGameActivityPeriodPresetThisYear");
+                    return ResourceProvider.GetString("LOCGameActivityPeriodPresetYear");
                 case ActivityPeriodKind.Month:
                 default:
-                    return ResourceProvider.GetString("LOCGameActivityPeriodPresetThisMonth");
+                    return ResourceProvider.GetString("LOCGameActivityPeriodPresetMonth");
             }
         }
 

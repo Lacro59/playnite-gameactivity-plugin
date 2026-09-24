@@ -51,8 +51,33 @@ namespace GameActivity.Services
             return 0;
         }
 
+        /// <summary>
+        /// Total playtime (seconds) for all sessions in an inclusive local period.
+        /// </summary>
+        /// <param name="periodStart">Inclusive local start.</param>
+        /// <param name="periodEnd">Inclusive local end.</param>
+        /// <param name="withHidden">When true, include hidden games.</param>
+        /// <returns>Sum of elapsed seconds, or 0 on error.</returns>
+        public static ulong GetPlayTimePeriod(DateTime periodStart, DateTime periodEnd, bool withHidden)
+        {
+            try
+            {
+                return (ulong)PluginDatabase.GetListGameActivity()
+                    .Where(x => x.HasData && !x.IsDeleted && (withHidden || x.Hidden == false))
+                    .SelectMany(x => x.Items)
+                    .Where(x =>
+                    {
+                        DateTime local = x.DateSession.ToLocalTime();
+                        return local >= periodStart && local <= periodEnd;
+                    })
+                    .Sum(x => (long)x.ElapsedSeconds);
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex, false, true, PluginDatabase.PluginName);
+            }
 
-
-
+            return 0;
+        }
     }
 }

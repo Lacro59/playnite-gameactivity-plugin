@@ -462,6 +462,26 @@ namespace GameActivity.Models
 		}
 
 		/// <summary>
+		/// Gets all activities whose local session date falls within an inclusive period.
+		/// </summary>
+		/// <param name="periodStart">Inclusive local start.</param>
+		/// <param name="periodEnd">Inclusive local end.</param>
+		/// <returns>Ordered list of activities in the period.</returns>
+		public List<Activity> GetActivities(DateTime periodStart, DateTime periodEnd)
+		{
+			DateTime start = periodStart;
+			DateTime end = periodEnd;
+			return Items
+				.Where(x =>
+				{
+					DateTime local = x.DateSession.ToLocalTime();
+					return local >= start && local <= end;
+				})
+				.OrderBy(x => x.DateSession)
+				.ToList();
+		}
+
+		/// <summary>
 		/// Gets all activities within a specified number of weeks.
 		/// </summary>
 		/// <param name="week">Number of weeks to look back (currently unused, uses settings).</param>
