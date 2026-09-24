@@ -14,12 +14,18 @@
                 <RowDefinition Height="30" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition x:Name="PART_PieColumn" Width="0.45*" />
+            </Grid.ColumnDefinitions>
 
             <TextBlock x:Name="PART_Chart_Label"
                        Style="{DynamicResource SectionHeaderText}"
-                       HorizontalAlignment="Center" Grid.Row="0" />
+                       HorizontalAlignment="Center"
+                       Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" />
 
-            <lvc:CartesianChart x:Name="PART_Chart" LegendLocation="None" Grid.Row="1"
+            <lvc:CartesianChart x:Name="PART_Chart" LegendLocation="None"
+                                Grid.Row="1" Grid.Column="0"
                                 DisableAnimations="True" AnimationsSpeed="10"
                                 FontFamily="{DynamicResource CommonFont}">
                 <lvc:CartesianChart.DataTooltip>
@@ -38,6 +44,17 @@
                               FontSize="{DynamicResource FontSize}" FontFamily="{DynamicResource FontFamily}" />
                 </lvc:CartesianChart.AxisY>
             </lvc:CartesianChart>
+
+            <lvc:PieChart x:Name="PART_ChartPie" LegendLocation="None"
+                          Grid.Row="1" Grid.Column="1"
+                          DisableAnimations="True" AnimationsSpeed="10"
+                          Margin="8,0,0,0"
+                          FontFamily="{DynamicResource CommonFont}"
+                          Visibility="Collapsed">
+                <lvc:PieChart.DataTooltip>
+                    <livechartscommon:CustomerToolTipForTime x:Name="PART_ChartPie_ToolTip" />
+                </lvc:PieChart.DataTooltip>
+            </lvc:PieChart>
         </Grid>
     </Border>
 </UserControl>

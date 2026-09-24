@@ -26,13 +26,19 @@
                     <RowDefinition Height="30" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="0.55*" />
+                </Grid.ColumnDefinitions>
 
                 <TextBlock x:Name="PART_ChartTotal_Label"
                            Style="{DynamicResource SectionHeaderText}"
                            Text="{DynamicResource LOCGameActivityTotalHoursBySources}"
-                           HorizontalAlignment="Center" Grid.Row="0" />
+                           HorizontalAlignment="Center"
+                           Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" />
 
-                <lvc:CartesianChart x:Name="PART_ChartTotal" LegendLocation="None" Grid.Row="1"
+                <lvc:CartesianChart x:Name="PART_ChartTotal" LegendLocation="None"
+                                    Grid.Row="1" Grid.Column="0"
                                     DisableAnimations="True" AnimationsSpeed="10"
                                     FontFamily="{DynamicResource CommonFont}">
                     <lvc:CartesianChart.DataTooltip>
@@ -51,6 +57,16 @@
                                   FontSize="{DynamicResource FontSize}" FontFamily="{DynamicResource FontFamily}" />
                     </lvc:CartesianChart.AxisY>
                 </lvc:CartesianChart>
+
+                <lvc:PieChart x:Name="PART_ChartTotalPie" LegendLocation="None"
+                              Grid.Row="1" Grid.Column="1"
+                              DisableAnimations="True" AnimationsSpeed="10"
+                              Margin="8,0,0,0"
+                              FontFamily="{DynamicResource CommonFont}">
+                    <lvc:PieChart.DataTooltip>
+                        <livechartscommon:CustomerToolTipForTime x:Name="PART_ChartTotalPie_ToolTip" />
+                    </lvc:PieChart.DataTooltip>
+                </lvc:PieChart>
             </Grid>
         </Border>
 

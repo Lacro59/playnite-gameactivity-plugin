@@ -35,6 +35,9 @@ namespace GameActivity.Controls
         /// <summary>Total hours by source chart.</summary>
         public CartesianChart ChartTotal => PART_ChartTotal;
 
+        /// <summary>Complementary pie for total hours by source.</summary>
+        public PieChart ChartTotalPie => PART_ChartTotalPie;
+
         /// <summary>Total chart X axis.</summary>
         public Axis ChartTotalX => PART_ChartTotal_X;
 
@@ -100,6 +103,7 @@ namespace GameActivity.Controls
         public void ConfigureDefaultTooltips(bool showIcon, TextBlockWithIconMode modeComplet)
         {
             BindTotalTooltip();
+            BindTotalPieTooltip();
             BindDayTooltip();
             BindWeekSourcesTooltip(showIcon, modeComplet, null);
             Common.LogDebug($"PeriodView: AggregateSources ConfigureDefaultTooltips matrix applied showIcon={showIcon}");
@@ -114,6 +118,18 @@ namespace GameActivity.Controls
             PART_ChartTotal_ToolTip.ShowLabel = true;
             PART_ChartTotal_ToolTip.Mode = TextBlockWithIconMode.TextOnly;
             PART_ChartTotal.DataTooltip = PART_ChartTotal_ToolTip;
+        }
+
+        /// <summary>
+        /// Total pie: source name + playtime (no icon), same matrix as <see cref="BindTotalTooltip"/>.
+        /// </summary>
+        public void BindTotalPieTooltip()
+        {
+            PART_ChartTotalPie_ToolTip.ShowIcon = false;
+            PART_ChartTotalPie_ToolTip.ShowLabel = true;
+            PART_ChartTotalPie_ToolTip.ShowSeriesColor = true;
+            PART_ChartTotalPie_ToolTip.Mode = TextBlockWithIconMode.TextOnly;
+            PART_ChartTotalPie.DataTooltip = PART_ChartTotalPie_ToolTip;
         }
 
         /// <summary>

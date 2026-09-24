@@ -246,6 +246,7 @@
     <Compile Include="Services\GameActivityDetailsExport.cs" />
     <Compile Include="Services\GameActivityMenus.cs" />
     <Compile Include="Services\GameActivityMonitoring.cs" />
+    <Compile Include="Services\AggregatePieChartHelper.cs" />
     <Compile Include="Services\GameActivityStats.cs" />
     <Compile Include="Services\GameActivityTopPanelItem.cs" />
     <Compile Include="Services\GameActivityViewSidebar.cs" />

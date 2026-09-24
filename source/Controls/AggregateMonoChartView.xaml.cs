@@ -1,3 +1,4 @@
+using System.Windows;
 using System.Windows.Controls;
 using CommonPluginsControls.Controls;
 using CommonPluginsControls.LiveChartsCommon;
@@ -9,7 +10,7 @@ using Playnite.SDK;
 namespace GameActivity.Controls
 {
     /// <summary>
-    /// Single-column aggregate chart (Games / Genres / Tags) with fixed tooltip settings per kind.
+    /// Aggregate chart host (Games / Genres / Tags): columns plus optional complementary pie (Games / Genres only).
     /// </summary>
     public partial class AggregateMonoChartView : UserControl
     {
@@ -24,6 +25,9 @@ namespace GameActivity.Controls
 
         /// <summary>Main column chart.</summary>
         public CartesianChart Chart => PART_Chart;
+
+        /// <summary>Complementary pie chart (Games / Genres).</summary>
+        public PieChart ChartPie => PART_ChartPie;
 
         /// <summary>X axis.</summary>
         public Axis ChartX => PART_Chart_X;
@@ -42,6 +46,9 @@ namespace GameActivity.Controls
 
         /// <summary>Default tooltip instance from XAML (replaced on each reload).</summary>
         public CustomerToolTipForTime ChartToolTip => PART_Chart_ToolTip;
+
+        /// <summary>Pie tooltip instance from XAML.</summary>
+        public CustomerToolTipForTime ChartPieToolTip => PART_ChartPie_ToolTip;
 
         /// <summary>
         /// Initializes the mono aggregate chart view.
@@ -62,6 +69,7 @@ namespace GameActivity.Controls
             bool showIcon;
             bool showLabel;
             TextBlockWithIconMode mode;
+            bool showPie;
 
             switch (kind)
             {
@@ -70,24 +78,28 @@ namespace GameActivity.Controls
                     showIcon = true;
                     showLabel = true;
                     mode = TextBlockWithIconMode.IconFirstWithText;
+                    showPie = true;
                     break;
                 case AggregateKind.Genres:
                     titleKey = "LOCGameActivityTotalHoursByGenres";
                     showIcon = false;
                     showLabel = true;
                     mode = TextBlockWithIconMode.TextOnly;
+                    showPie = true;
                     break;
                 case AggregateKind.Tags:
                     titleKey = "LOCGameActivityTotalHoursByTags";
                     showIcon = false;
                     showLabel = true;
                     mode = TextBlockWithIconMode.TextOnly;
+                    showPie = false;
                     break;
                 default:
                     titleKey = "LOCGameActivityTotalHoursByGames";
                     showIcon = false;
                     showLabel = false;
                     mode = TextBlockWithIconMode.TextOnly;
+                    showPie = false;
                     break;
             }
 
@@ -95,16 +107,52 @@ namespace GameActivity.Controls
             PART_Chart_ToolTip.ShowIcon = showIcon;
             PART_Chart_ToolTip.ShowLabel = showLabel;
             PART_Chart_ToolTip.Mode = mode;
+            PART_ChartPie_ToolTip.ShowIcon = showIcon;
+            PART_ChartPie_ToolTip.ShowLabel = showLabel;
+            PART_ChartPie_ToolTip.Mode = mode;
+            PART_ChartPie_ToolTip.ShowSeriesColor = showPie;
             BindChartTooltip();
-            Common.LogDebug($"PeriodView: AggregateMono ApplyKind={kind} tooltip icon={showIcon} label={showLabel} mode={mode}");
+            BindPieTooltip();
+            SetPieVisible(showPie);
+            Common.LogDebug($"PeriodView: AggregateMono ApplyKind={kind} tooltip icon={showIcon} label={showLabel} mode={mode} pie={showPie}");
         }
 
         /// <summary>
-        /// Re-assigns the kind-configured tooltip instance to the chart (single source of truth with <see cref="ApplyKind"/>).
+        /// Shows or hides the complementary pie column (Tags stays columns-only).
+        /// </summary>
+        /// <param name="visible">True to show the pie panel.</param>
+        public void SetPieVisible(bool visible)
+        {
+            if (visible)
+            {
+                PART_PieColumn.Width = new GridLength(0.45, GridUnitType.Star);
+                PART_ChartPie.Visibility = Visibility.Visible;
+                Grid.SetColumnSpan(PART_Chart_Label, 2);
+            }
+            else
+            {
+                PART_PieColumn.Width = new GridLength(0);
+                PART_ChartPie.Visibility = Visibility.Collapsed;
+                PART_ChartPie.Series = null;
+                Grid.SetColumnSpan(PART_Chart_Label, 1);
+            }
+        }
+
+        /// <summary>
+        /// Re-assigns the kind-configured tooltip instance to the column chart.
         /// </summary>
         public void BindChartTooltip()
         {
             PART_Chart.DataTooltip = PART_Chart_ToolTip;
+        }
+
+        /// <summary>
+        /// Re-assigns the kind-configured tooltip instance to the pie chart.
+        /// </summary>
+        public void BindPieTooltip()
+        {
+            PART_ChartPie_ToolTip.ShowSeriesColor = Kind == AggregateKind.Games || Kind == AggregateKind.Genres;
+            PART_ChartPie.DataTooltip = PART_ChartPie_ToolTip;
         }
 
         /// <summary>

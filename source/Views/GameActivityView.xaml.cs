@@ -117,43 +117,6 @@ namespace GameActivity.Views
         }
 
         /// <summary>
-        /// Keeps the top <paramref name="topN"/> entries by playtime and folds the rest into an "Others" bucket.
-        /// </summary>
-        private static List<KeyValuePair<string, ulong>> ReduceToTopNWithOthers(
-            Dictionary<string, ulong> source,
-            int topN,
-            string othersLabel)
-        {
-            List<KeyValuePair<string, ulong>> ordered = source
-                .OrderByDescending(x => x.Value)
-                .ToList();
-
-            if (ordered.Count <= topN)
-            {
-                return ordered;
-            }
-
-            List<KeyValuePair<string, ulong>> result = new List<KeyValuePair<string, ulong>>(topN + 1);
-            for (int i = 0; i < topN; i++)
-            {
-                result.Add(ordered[i]);
-            }
-
-            ulong othersTotal = 0;
-            for (int i = topN; i < ordered.Count; i++)
-            {
-                othersTotal += ordered[i].Value;
-            }
-
-            if (othersTotal > 0)
-            {
-                result.Add(new KeyValuePair<string, ulong>(othersLabel, othersTotal));
-            }
-
-            return result;
-        }
-
-        /// <summary>
         /// Shows only the ContentControl host for the active <see cref="AggregateKind"/>.
         /// </summary>
         private void SetAggregateHostVisibility()
@@ -1083,10 +1046,28 @@ namespace GameActivity.Views
 
                 // Build plain data only (no LiveCharts/WPF types here).
                 List<KeyValuePair<string, ulong>> chartPairs = kindSnapshot == AggregateKind.Games
-                    ? ReduceToTopNWithOthers(activityByMonth, GamesChartTopCount, othersLabel)
+                    ? AggregatePieChartHelper.ReduceToTopNWithOthers(activityByMonth, GamesChartTopCount, othersLabel)
                     : activityByMonth.ToList();
 
-                Common.LogDebug($"PeriodView: MonthChart series={chartPairs.Count} rawKeys={activityByMonth.Count} mode={kindSnapshot}");
+                bool showMonoPie = kindSnapshot == AggregateKind.Games || kindSnapshot == AggregateKind.Genres;
+                bool showSourcesPie = kindSnapshot == AggregateKind.Sources;
+                List<CustomerForTime> pieItems = null;
+                if (showMonoPie || showSourcesPie)
+                {
+                    List<KeyValuePair<string, ulong>> piePairs = AggregatePieChartHelper.ReduceForPie(activityByMonth, othersLabel);
+                    pieItems = AggregatePieChartHelper.ToCustomerForTime(piePairs);
+                    if (kindSnapshot == AggregateKind.Games)
+                    {
+                        for (int iPie = 0; iPie < pieItems.Count; iPie++)
+                        {
+                            CustomerForTime piePoint = pieItems[iPie];
+                            string rawIcon = gameIconByName.ContainsKey(piePoint.Name) ? gameIconByName[piePoint.Name] : string.Empty;
+                            ApplyGameChartIcon(piePoint, rawIcon);
+                        }
+                    }
+                }
+
+                Common.LogDebug($"PeriodView: MonthChart series={chartPairs.Count} rawKeys={activityByMonth.Count} mode={kindSnapshot} pie={(pieItems == null ? 0 : pieItems.Count)}");
 
                 List<CustomerForTime> items = new List<CustomerForTime>(chartPairs.Count);
                 string[] labels = new string[chartPairs.Count];
@@ -1149,6 +1130,9 @@ namespace GameActivity.Views
                 {
                     myVersion,
                     items,
+                    pieItems,
+                    showMonoPie,
+                    showSourcesPie,
                     labels,
                     labelsRotation,
                     fontSize,
@@ -1217,6 +1201,7 @@ namespace GameActivity.Views
                         totalChart.Visibility = Visibility.Hidden;
                         totalLabel.Visibility = Visibility.Hidden;
                         totalCard.Visibility = Visibility.Collapsed;
+                        PART_AggregateSourcesCharts.ChartTotalPie.Visibility = Visibility.Collapsed;
                         Grid.SetColumn(PART_AggregateSourcesCharts.DayGrid, 0);
                         Grid.SetColumnSpan(PART_AggregateSourcesCharts.DayGrid, 3);
                     }
@@ -1225,6 +1210,12 @@ namespace GameActivity.Views
                         totalChart.Visibility = result.showTotalHoursChart ? Visibility.Visible : Visibility.Hidden;
                         totalLabel.Visibility = result.showTotalHoursLabel ? Visibility.Visible : Visibility.Hidden;
                         totalCard.Visibility = result.showTotalHoursChart ? Visibility.Visible : Visibility.Collapsed;
+                        if (useSourcesCharts)
+                        {
+                            PART_AggregateSourcesCharts.ChartTotalPie.Visibility = result.showTotalHoursChart
+                                ? Visibility.Visible
+                                : Visibility.Collapsed;
+                        }
                     }
 
                     Grid.SetColumnSpan(totalGrid, useSourcesCharts ? 1 : 5);
@@ -1248,25 +1239,109 @@ namespace GameActivity.Views
                         values.Add(result.items[i]);
                     }
 
-                    SeriesCollection chartSeries = new SeriesCollection
+                    bool matchPieBarColors = (result.showMonoPie || result.showSourcesPie)
+                        && result.pieItems != null
+                        && result.pieItems.Count > 0
+                        && !(result.adjustGridDay && useSourcesCharts);
+
+                    SeriesCollection chartSeries;
+                    Dictionary<string, System.Windows.Media.Brush> brushMap = null;
+                    if (matchPieBarColors)
                     {
-                        new ColumnSeries
+                        if (useSourcesCharts
+                            && (PluginDatabase.PluginSettings.StoreColors == null
+                                || PluginDatabase.PluginSettings.StoreColors.Count == 0))
                         {
-                            Title = string.Empty,
-                            Values = values,
-                            Fill = PluginDatabase.PluginSettings.ChartColors
+                            PluginDatabase.PluginSettings.StoreColors = GameActivitySettingsViewModel.GetDefaultStoreColors();
                         }
-                    };
+
+                        brushMap = AggregatePieChartHelper.BuildNameBrushMap(
+                            result.pieItems,
+                            result.items,
+                            useSourcesCharts ? PluginDatabase.PluginSettings.ChartColors : null,
+                            useSourcesCharts ? PluginDatabase.PluginSettings.StoreColors : null,
+                            useSourcesCharts);
+
+                        chartSeries = AggregatePieChartHelper.BuildColoredColumnSeries(
+                            result.items,
+                            brushMap,
+                            PluginDatabase.PluginSettings.ChartColors);
+                    }
+                    else
+                    {
+                        chartSeries = new SeriesCollection
+                        {
+                            new ColumnSeries
+                            {
+                                Title = string.Empty,
+                                Values = values,
+                                Fill = PluginDatabase.PluginSettings.ChartColors
+                            }
+                        };
+                    }
 
                     totalChart.Series = chartSeries;
 
                     if (useSourcesCharts)
                     {
                         PART_AggregateSourcesCharts.BindTotalTooltip();
+                        if (result.showSourcesPie && result.showTotalHoursChart && result.pieItems != null)
+                        {
+                            if (brushMap == null)
+                            {
+                                if (PluginDatabase.PluginSettings.StoreColors == null
+                                    || PluginDatabase.PluginSettings.StoreColors.Count == 0)
+                                {
+                                    PluginDatabase.PluginSettings.StoreColors = GameActivitySettingsViewModel.GetDefaultStoreColors();
+                                }
+
+                                brushMap = AggregatePieChartHelper.BuildNameBrushMap(
+                                    result.pieItems,
+                                    result.items,
+                                    PluginDatabase.PluginSettings.ChartColors,
+                                    PluginDatabase.PluginSettings.StoreColors,
+                                    true);
+                            }
+
+                            PART_AggregateSourcesCharts.ChartTotalPie.Series = AggregatePieChartHelper.BuildPieSeries(
+                                result.pieItems,
+                                brushMap,
+                                PluginDatabase.PluginSettings.ChartColors);
+                            PART_AggregateSourcesCharts.BindTotalPieTooltip();
+                            Common.LogDebug($"PeriodView: MonthChart pie bind mode=Sources slices={result.pieItems.Count}");
+                        }
+                        else
+                        {
+                            PART_AggregateSourcesCharts.ChartTotalPie.Series = null;
+                        }
                     }
                     else
                     {
                         monoCharts.BindChartTooltip();
+                        if (result.showMonoPie && result.pieItems != null)
+                        {
+                            monoCharts.SetPieVisible(true);
+                            if (brushMap == null)
+                            {
+                                brushMap = AggregatePieChartHelper.BuildNameBrushMap(
+                                    result.pieItems,
+                                    result.items,
+                                    null,
+                                    null,
+                                    false);
+                            }
+
+                            monoCharts.ChartPie.Series = AggregatePieChartHelper.BuildPieSeries(
+                                result.pieItems,
+                                brushMap,
+                                null);
+                            monoCharts.BindPieTooltip();
+                            Common.LogDebug($"PeriodView: MonthChart pie bind mode={kindSnapshot} slices={result.pieItems.Count}");
+                        }
+                        else
+                        {
+                            monoCharts.SetPieVisible(false);
+                        }
                     }
 
                     totalAxisX.Labels = result.labels;
