@@ -823,7 +823,7 @@ namespace GameActivity.Views
                     fontSize = showLauncherIcons ? 30 : (double)ResourceProvider.GetResource("FontSize");
                     tooltipMode = TextBlockWithIconMode.TextOnly;
                     showTooltipIcon = false;
-                    showTooltipLabel = false;
+                    showTooltipLabel = true;
                     break;
                 case AggregateKind.Tags:
                     labelsRotation = 30;
@@ -843,9 +843,9 @@ namespace GameActivity.Views
                     // Games — same slant as Sources day chart LabelsRotation in AggregateSourcesChartView.
                     labelsRotation = 30;
                     fontSize = (double)ResourceProvider.GetResource("FontSize");
-                    tooltipMode = TextBlockWithIconMode.IconFirstOnly;
+                    tooltipMode = TextBlockWithIconMode.IconFirstWithText;
                     showTooltipIcon = true;
-                    showTooltipLabel = false;
+                    showTooltipLabel = true;
                     break;
             }
 
@@ -1260,12 +1260,14 @@ namespace GameActivity.Views
 
                     totalChart.Series = chartSeries;
 
-                    totalChart.DataTooltip = new CustomerToolTipForTime
+                    if (useSourcesCharts)
                     {
-                        ShowIcon = result.showTooltipIcon,
-                        ShowLabel = result.showTooltipLabel,
-                        Mode = result.tooltipMode
-                    };
+                        PART_AggregateSourcesCharts.BindTotalTooltip();
+                    }
+                    else
+                    {
+                        monoCharts.BindChartTooltip();
+                    }
 
                     totalAxisX.Labels = result.labels;
                     totalAxisX.ShowLabels = true;
@@ -1470,13 +1472,7 @@ namespace GameActivity.Views
                     Func<double, string> activityForGameLogFormatter = value => (string)Converter.Convert((ulong)value, null, null, CultureInfo.CurrentCulture);
 
                     PART_AggregateSourcesCharts.ChartByDayY.LabelFormatter = activityForGameLogFormatter;
-                    // Day series under Sources: playtime only (no date label in tooltip).
-                    PART_AggregateSourcesCharts.ChartByDay.DataTooltip = new CustomerToolTipForTime
-                    {
-                        ShowIcon = false,
-                        ShowLabel = false,
-                        Mode = TextBlockWithIconMode.TextOnly
-                    };
+                    PART_AggregateSourcesCharts.BindDayTooltip();
                     PART_AggregateSourcesCharts.ChartByDay.Series = activityByDaySeries;
                     PART_AggregateSourcesCharts.ChartByDayY.MinValue = 0;
                     PART_AggregateSourcesCharts.ChartByDayX.Labels = data.Labels;
@@ -1795,15 +1791,7 @@ namespace GameActivity.Views
                         }
 
                         // Cumul week series under Sources: playtime only (week range stays in title when enabled).
-                        PART_AggregateSourcesCharts.ChartByWeek.DataTooltip = new CustomerToolTipForTime
-                        {
-                            ShowIcon = false,
-                            ShowLabel = false,
-                            ShowTitle = true,
-                            Mode = TextBlockWithIconMode.TextOnly,
-                            ShowWeekPeriode = true,
-                            DatesPeriodes = data.DatesPeriodes
-                        };
+                        PART_AggregateSourcesCharts.BindWeekCumulTooltip(data.DatesPeriodes);
 
                         SeriesCollection activityByWeekSeries = new SeriesCollection();
                         activityByWeekSeries.Add(new ColumnSeries
@@ -1823,14 +1811,7 @@ namespace GameActivity.Views
                             PluginDatabase.PluginSettings.StoreColors = GameActivitySettingsViewModel.GetDefaultStoreColors();
                         }
 
-                        PART_AggregateSourcesCharts.ChartByWeek.DataTooltip = new CustomerToolTipForMultipleTime
-                        {
-                            ShowIcon = ShowIcon,
-                            ShowTitle = true,
-                            Mode = ModeComplet,
-                            ShowWeekPeriode = true,
-                            DatesPeriodes = data.DatesPeriodes
-                        };
+                        PART_AggregateSourcesCharts.BindWeekSourcesTooltip(ShowIcon, ModeComplet, data.DatesPeriodes);
 
                         SeriesCollection activityByWeekSeries = new SeriesCollection();
                         for (int iSource = 0; iSource < data.SourceNames.Count; iSource++)
@@ -1842,7 +1823,13 @@ namespace GameActivity.Views
                             ChartValues<CustomerForTime> values = new ChartValues<CustomerForTime>();
                             for (int w = 0; w < data.DatesPeriodes.Count; w++)
                             {
-                                values.Add(new CustomerForTime { Name = sourceName, Values = (int)valuesArr[w] });
+                                values.Add(new CustomerForTime
+                                {
+                                    Name = sourceName,
+                                    Values = (int)valuesArr[w],
+                                    Icon = PlayniteTools.GetPlatformIcon(sourceName),
+                                    IconText = TransformIcon.Get(sourceName)
+                                });
                             }
 
                             Brush fill = PluginDatabase.PluginSettings.StoreColors

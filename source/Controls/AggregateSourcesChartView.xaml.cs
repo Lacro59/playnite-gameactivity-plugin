@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using CommonPluginsControls.Controls;
@@ -10,9 +11,12 @@ namespace GameActivity.Controls
     /// <summary>
     /// Sources aggregate charts: total playtime by store, hours by day, and hours by week.
     /// Owned by <see cref="Views.GameActivityView"/>; period bounds stay in the parent ViewModel.
+    /// Tooltip matrix (name/date/icon flags) lives only in the Bind*Tooltip methods below.
     /// </summary>
     public partial class AggregateSourcesChartView : UserControl
     {
+        private CustomerToolTipForTime _weekCumulToolTip;
+
         /// <summary>True after the first successful <see cref="MarkLoaded"/> (lazy entry).</summary>
         public bool HasBeenLoaded { get; private set; }
 
@@ -22,10 +26,10 @@ namespace GameActivity.Controls
         /// <summary>Total chart tooltip.</summary>
         public CustomerToolTipForTime ChartTotalToolTip => PART_ChartTotal_ToolTip;
 
-        /// <summary>Day chart tooltip.</summary>
-        public CustomerToolTipForMultipleTime ChartByDayToolTip => PART_ChartByDay_ToolTip;
+        /// <summary>Day chart tooltip (date + time).</summary>
+        public CustomerToolTipForTime ChartByDayToolTip => PART_ChartByDay_ToolTip;
 
-        /// <summary>Week chart tooltip.</summary>
+        /// <summary>Week chart multi-source tooltip (XAML default; swapped for cumul).</summary>
         public CustomerToolTipForMultipleTime ChartByWeekToolTip => PART_ChartByWeek_ToolTip;
 
         /// <summary>Total hours by source chart.</summary>
@@ -88,23 +92,75 @@ namespace GameActivity.Controls
         }
 
         /// <summary>
-        /// Applies launcher icon / tooltip defaults for Sources (time-only on total; multi-time day/week).
+        /// Applies the Sources tooltip matrix once (total / day / week multi defaults).
+        /// Call at host creation; reloads re-apply via Bind*Tooltip.
         /// </summary>
         /// <param name="showIcon">Whether launcher icons are enabled in settings.</param>
-        /// <param name="modeComplet">Icon+text mode from settings (kept for day/week multi tooltips).</param>
+        /// <param name="modeComplet">Icon+text mode from settings (week multi).</param>
         public void ConfigureDefaultTooltips(bool showIcon, TextBlockWithIconMode modeComplet)
         {
+            BindTotalTooltip();
+            BindDayTooltip();
+            BindWeekSourcesTooltip(showIcon, modeComplet, null);
+            Common.LogDebug($"PeriodView: AggregateSources ConfigureDefaultTooltips matrix applied showIcon={showIcon}");
+        }
+
+        /// <summary>
+        /// Total chart: source name + playtime (no icon).
+        /// </summary>
+        public void BindTotalTooltip()
+        {
             PART_ChartTotal_ToolTip.ShowIcon = false;
-            PART_ChartTotal_ToolTip.ShowLabel = false;
+            PART_ChartTotal_ToolTip.ShowLabel = true;
             PART_ChartTotal_ToolTip.Mode = TextBlockWithIconMode.TextOnly;
+            PART_ChartTotal.DataTooltip = PART_ChartTotal_ToolTip;
+        }
 
-            PART_ChartByDay_ToolTip.ShowIcon = showIcon;
-            PART_ChartByDay_ToolTip.Mode = modeComplet;
+        /// <summary>
+        /// Day chart (principal): date + playtime.
+        /// </summary>
+        public void BindDayTooltip()
+        {
+            PART_ChartByDay_ToolTip.ShowIcon = false;
+            PART_ChartByDay_ToolTip.ShowLabel = true;
+            PART_ChartByDay_ToolTip.Mode = TextBlockWithIconMode.TextOnly;
+            PART_ChartByDay.DataTooltip = PART_ChartByDay_ToolTip;
+        }
 
+        /// <summary>
+        /// Week chart cumul: playtime only (+ week range in title when DatesPeriodes set).
+        /// </summary>
+        /// <param name="datesPeriodes">Week date ranges for the title subtitle; may be null.</param>
+        public void BindWeekCumulTooltip(List<WeekStartEnd> datesPeriodes)
+        {
+            if (_weekCumulToolTip == null)
+            {
+                _weekCumulToolTip = new CustomerToolTipForTime();
+            }
+
+            _weekCumulToolTip.ShowIcon = false;
+            _weekCumulToolTip.ShowLabel = false;
+            _weekCumulToolTip.ShowTitle = true;
+            _weekCumulToolTip.Mode = TextBlockWithIconMode.TextOnly;
+            _weekCumulToolTip.ShowWeekPeriode = true;
+            _weekCumulToolTip.DatesPeriodes = datesPeriodes ?? new List<WeekStartEnd>();
+            PART_ChartByWeek.DataTooltip = _weekCumulToolTip;
+        }
+
+        /// <summary>
+        /// Week chart by source: icon + name + playtime (multi-series).
+        /// </summary>
+        /// <param name="showIcon">Whether launcher icons are enabled.</param>
+        /// <param name="modeComplet">Icon+text mode from settings.</param>
+        /// <param name="datesPeriodes">Week date ranges for the title subtitle; may be null.</param>
+        public void BindWeekSourcesTooltip(bool showIcon, TextBlockWithIconMode modeComplet, List<WeekStartEnd> datesPeriodes)
+        {
             PART_ChartByWeek_ToolTip.ShowIcon = showIcon;
+            PART_ChartByWeek_ToolTip.ShowTitle = true;
             PART_ChartByWeek_ToolTip.Mode = modeComplet;
             PART_ChartByWeek_ToolTip.ShowWeekPeriode = true;
-            Common.LogDebug($"PeriodView: AggregateSources ConfigureDefaultTooltips total=timeOnly day/week showIcon={showIcon}");
+            PART_ChartByWeek_ToolTip.DatesPeriodes = datesPeriodes ?? new List<WeekStartEnd>();
+            PART_ChartByWeek.DataTooltip = PART_ChartByWeek_ToolTip;
         }
 
         /// <summary>

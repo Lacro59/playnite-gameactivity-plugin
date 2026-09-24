@@ -135,7 +135,7 @@
                                           Margin="0,0,8,0"
                                           DisplayMemberPath="Label"
                                           SelectionChanged="PeriodPreset_SelectionChanged"
-                                          ToolTip="{DynamicResource LOCGameActivityPeriod}" />
+                                          ToolTip="{DynamicResource LOCGameActivityPeriodLengthTooltip}" />
                                 <DatePicker VerticalAlignment="Center"
                                         Style="{StaticResource DatePickerIconOnly}"
                                         SelectedDateChanged="DatePicker_SelectedDateChanged"
@@ -262,7 +262,7 @@
                                                                                 <commonpluginscontrols:TextBlockWithIcon Mode="IconTextFirstWithText"
                                                                                                                      Icon="{Binding ElementName=PART_CbSource, Path=Tag.SourceIcon}"
                                                                                                                      IconText="{Binding ElementName=PART_CbSource, Path=Tag.SourceIconText}"
-                                                                                                                     Text="{Binding ElementName=PART_CbSource, Path=Tag.SourceName}" />
+                                                                                                                     LabelText="{Binding ElementName=PART_CbSource, Path=Tag.SourceName}" />
                                                                             </CheckBox>
                                                                         </DataTemplate>
                                                                     </Setter.Value>

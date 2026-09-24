@@ -68,8 +68,8 @@ namespace GameActivity.Controls
                 case AggregateKind.Games:
                     titleKey = "LOCGameActivityTotalHoursByGames";
                     showIcon = true;
-                    showLabel = false;
-                    mode = TextBlockWithIconMode.IconFirstOnly;
+                    showLabel = true;
+                    mode = TextBlockWithIconMode.IconFirstWithText;
                     break;
                 case AggregateKind.Genres:
                     titleKey = "LOCGameActivityTotalHoursByGenres";
@@ -95,7 +95,16 @@ namespace GameActivity.Controls
             PART_Chart_ToolTip.ShowIcon = showIcon;
             PART_Chart_ToolTip.ShowLabel = showLabel;
             PART_Chart_ToolTip.Mode = mode;
+            BindChartTooltip();
             Common.LogDebug($"PeriodView: AggregateMono ApplyKind={kind} tooltip icon={showIcon} label={showLabel} mode={mode}");
+        }
+
+        /// <summary>
+        /// Re-assigns the kind-configured tooltip instance to the chart (single source of truth with <see cref="ApplyKind"/>).
+        /// </summary>
+        public void BindChartTooltip()
+        {
+            PART_Chart.DataTooltip = PART_Chart_ToolTip;
         }
 
         /// <summary>
@@ -129,7 +138,7 @@ namespace GameActivity.Controls
         }
     }
 
-    /// <summary>Games aggregate mono chart (icon + time tooltip).</summary>
+    /// <summary>Games aggregate mono chart (icon + name + time tooltip).</summary>
     public class AggregateGamesChartView : AggregateMonoChartView
     {
         /// <summary>Initializes a Games aggregate chart.</summary>
