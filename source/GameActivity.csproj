@@ -147,9 +147,17 @@
     <Compile Include="Controls\PluginChartTime.xaml.cs">
       <DependentUpon>PluginChartTime.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\AggregateSourcesChartView.xaml.cs">
+      <DependentUpon>AggregateSourcesChartView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\AggregateMonoChartView.xaml.cs">
+      <DependentUpon>AggregateMonoChartView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GameActivity.cs" />
     <Compile Include="GameActivitySettings.cs" />
     <Compile Include="Models\ActivityBackup.cs" />
+    <Compile Include="Models\ActivityPeriodKind.cs" />
+    <Compile Include="Models\AggregateKind.cs" />
     <Compile Include="Models\ExportData\ExportData.cs" />
     <Compile Include="Models\ExportData\ExportDataAll.cs" />
     <Compile Include="Models\GanttChartModels.cs" />
@@ -420,6 +428,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\PluginChartTime.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\AggregateSourcesChartView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\AggregateMonoChartView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
