@@ -784,8 +784,8 @@ namespace GameActivity.Views
                 case AggregateKind.Sources:
                     labelsRotation = showLauncherIcons ? 0 : 160;
                     fontSize = showLauncherIcons ? 30 : (double)ResourceProvider.GetResource("FontSize");
-                    tooltipMode = TextBlockWithIconMode.TextOnly;
-                    showTooltipIcon = false;
+                    tooltipMode = showLauncherIcons ? ModeComplet : TextBlockWithIconMode.TextOnly;
+                    showTooltipIcon = showLauncherIcons;
                     showTooltipLabel = true;
                     break;
                 case AggregateKind.Tags:
@@ -1091,7 +1091,7 @@ namespace GameActivity.Views
                     else if (kindSnapshot == AggregateKind.Sources)
                     {
                         point.Icon = PlayniteTools.GetPlatformIcon(fullName);
-                        point.IconText = TransformIcon.Get(fullName);
+                        point.IconText = TransformIcon.Get(fullName, returnDefault: true);
                     }
                     else
                     {
@@ -1107,7 +1107,7 @@ namespace GameActivity.Views
                     }
                     else if (showLauncherIcons && kindSnapshot == AggregateKind.Sources)
                     {
-                        labels[compteur] = TransformIcon.Get(fullName);
+                        labels[compteur] = TransformIcon.Get(fullName, returnDefault: true);
                     }
                     else
                     {
@@ -1284,7 +1284,7 @@ namespace GameActivity.Views
 
                     if (useSourcesCharts)
                     {
-                        PART_AggregateSourcesCharts.BindTotalTooltip();
+                        PART_AggregateSourcesCharts.BindTotalTooltip(ShowIcon, ModeComplet);
                         if (result.showSourcesPie && result.showTotalHoursChart && result.pieItems != null)
                         {
                             if (brushMap == null)
@@ -1307,7 +1307,7 @@ namespace GameActivity.Views
                                 result.pieItems,
                                 brushMap,
                                 PluginDatabase.PluginSettings.ChartColors);
-                            PART_AggregateSourcesCharts.BindTotalPieTooltip();
+                            PART_AggregateSourcesCharts.BindTotalPieTooltip(ShowIcon, ModeComplet);
                             Common.LogDebug($"PeriodView: MonthChart pie bind mode=Sources slices={result.pieItems.Count}");
                         }
                         else
@@ -1778,7 +1778,7 @@ namespace GameActivity.Views
                 for (int i = 0; i < sourceNamesWithData.Count; i++)
                 {
                     string src = sourceNamesWithData[i];
-                    sourceLabels.Add(showLauncherIcons ? TransformIcon.Get(src) : src);
+                    sourceLabels.Add(showLauncherIcons ? TransformIcon.Get(src, returnDefault: true) : src);
                     valuesBySourceArr[i] = valuesBySource[src];
                 }
 
@@ -1903,7 +1903,7 @@ namespace GameActivity.Views
                                     Name = sourceName,
                                     Values = (int)valuesArr[w],
                                     Icon = PlayniteTools.GetPlatformIcon(sourceName),
-                                    IconText = TransformIcon.Get(sourceName)
+                                    IconText = TransformIcon.Get(sourceName, returnDefault: true)
                                 });
                             }
 

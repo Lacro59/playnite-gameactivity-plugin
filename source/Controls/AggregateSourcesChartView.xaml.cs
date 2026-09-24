@@ -99,36 +99,40 @@ namespace GameActivity.Controls
         /// Call at host creation; reloads re-apply via Bind*Tooltip.
         /// </summary>
         /// <param name="showIcon">Whether launcher icons are enabled in settings.</param>
-        /// <param name="modeComplet">Icon+text mode from settings (week multi).</param>
+        /// <param name="modeComplet">Icon+text mode from settings (total / week multi).</param>
         public void ConfigureDefaultTooltips(bool showIcon, TextBlockWithIconMode modeComplet)
         {
-            BindTotalTooltip();
-            BindTotalPieTooltip();
+            BindTotalTooltip(showIcon, modeComplet);
+            BindTotalPieTooltip(showIcon, modeComplet);
             BindDayTooltip();
             BindWeekSourcesTooltip(showIcon, modeComplet, null);
             Common.LogDebug($"PeriodView: AggregateSources ConfigureDefaultTooltips matrix applied showIcon={showIcon}");
         }
 
         /// <summary>
-        /// Total chart: source name + playtime (no icon).
+        /// Total chart: source icon (when enabled) + name + playtime.
         /// </summary>
-        public void BindTotalTooltip()
+        /// <param name="showIcon">Whether launcher icons are enabled.</param>
+        /// <param name="modeComplet">Icon+text mode from settings.</param>
+        public void BindTotalTooltip(bool showIcon, TextBlockWithIconMode modeComplet)
         {
-            PART_ChartTotal_ToolTip.ShowIcon = false;
+            PART_ChartTotal_ToolTip.ShowIcon = showIcon;
             PART_ChartTotal_ToolTip.ShowLabel = true;
-            PART_ChartTotal_ToolTip.Mode = TextBlockWithIconMode.TextOnly;
+            PART_ChartTotal_ToolTip.Mode = showIcon ? modeComplet : TextBlockWithIconMode.TextOnly;
             PART_ChartTotal.DataTooltip = PART_ChartTotal_ToolTip;
         }
 
         /// <summary>
-        /// Total pie: source name + playtime (no icon), same matrix as <see cref="BindTotalTooltip"/>.
+        /// Total pie: source icon (when enabled) + name + playtime, same matrix as <see cref="BindTotalTooltip"/>.
         /// </summary>
-        public void BindTotalPieTooltip()
+        /// <param name="showIcon">Whether launcher icons are enabled.</param>
+        /// <param name="modeComplet">Icon+text mode from settings.</param>
+        public void BindTotalPieTooltip(bool showIcon, TextBlockWithIconMode modeComplet)
         {
-            PART_ChartTotalPie_ToolTip.ShowIcon = false;
+            PART_ChartTotalPie_ToolTip.ShowIcon = showIcon;
             PART_ChartTotalPie_ToolTip.ShowLabel = true;
             PART_ChartTotalPie_ToolTip.ShowSeriesColor = true;
-            PART_ChartTotalPie_ToolTip.Mode = TextBlockWithIconMode.TextOnly;
+            PART_ChartTotalPie_ToolTip.Mode = showIcon ? modeComplet : TextBlockWithIconMode.TextOnly;
             PART_ChartTotalPie.DataTooltip = PART_ChartTotalPie_ToolTip;
         }
 
