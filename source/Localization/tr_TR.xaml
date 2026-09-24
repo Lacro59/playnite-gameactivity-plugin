@@ -1,5 +1,7 @@
 ﻿<?xml version="1.0"?>
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <!-- ==================== General ==================== -->
 
@@ -117,6 +119,9 @@ green = faster</sys:String>
     <sys:String x:Key="LOCGameActivityIndex">Fihrist</sys:String>
     <sys:String x:Key="LOCGameActivitySensorsID">Sensör kimliği</sys:String>
     <sys:String x:Key="LOCGameActivityElementID">Öğe kimliği</sys:String>
+    <sys:String x:Key="LOCGameActivityInstanceID">Instance ID</sys:String>
+    <sys:String x:Key="LOCGameActivityInstanceIDHWiNFOHelp" xml:space="preserve">Optional — HWiNFO sensor instance (dwSensorInst).
+Use when several devices share the same Sensor ID (e.g. multiple GPUs). Decimal or hexadecimal (0x…).</sys:String>
 
     <!-- Sensor labels -->
     <sys:String x:Key="LOCGameActivityGpuUsage">GPU kullanımı</sys:String>
@@ -198,6 +203,23 @@ green = faster</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Geçen süre</sys:String>
     <sys:String x:Key="LOCGameActivityTimePlayedInMonth">Oynanan süre (ay)</sys:String>
     <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">Oynanan süre (dönem)</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPreset7Days">7 days</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPresetMonth">Month</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPreset3Months">3 months</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPresetYear">Year</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPrevious">Previous period</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodNext">Next period</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodSelectMonth">Select month</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodLengthTooltip">Period length (Prev/Next navigate by this unit)</sys:String>
+    <sys:String x:Key="LOCGameActivityAggregateGames">Games</sys:String>
+    <sys:String x:Key="LOCGameActivityChartOthers">Others</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodSessions">Sessions in period</sys:String>
+    <sys:String x:Key="LOCGameActivityLvGamesLastActivityInPeriod">Last session in period</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByGames">Total hours by game</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursBySources">Total hours by source</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByGenres">Total hours by genre</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByTags">Total hours by tag</sys:String>
+    <sys:String x:Key="LOCGameActivityOpenGameDetails">Open game activity details</sys:String>
     <sys:String x:Key="LOCGameActivityDateSession">Oturum tarihi</sys:String>
     <sys:String x:Key="LOCGameActivityDateLog">Oturum günlüğü</sys:String>
     <sys:String x:Key="LOCGameActivityPCName">Bilgisayar adı</sys:String>
@@ -240,6 +262,7 @@ green = faster</sys:String>
 
     <!-- Group header labels for the two filter bar rows -->
     <sys:String x:Key="LOCGameActivityGroupUsage">Usage</sys:String>
+    <sys:String x:Key="LOCGameActivitySaveChartSeries">Save series selection</sys:String>
     <sys:String x:Key="LOCGameActivityGroupTempPower">Temp / Power</sys:String>
     <sys:String x:Key="LOCGameActivityGroupLogSensors">Temp / power / FPS lows</sys:String>
 
@@ -267,6 +290,8 @@ green = faster</sys:String>
     <sys:String x:Key="LOCGaDateEnd">Tarih sonu</sys:String>
     <sys:String x:Key="LOCGaGameActions">Oyun etkinlikleri</sys:String>
     <sys:String x:Key="LOCGaCustomGameActions">Kişisel oyun eylemleri</sys:String>
+    <sys:String x:Key="LOCGaAdjustLogsWithSession">Trim performance log samples to match the session</sys:String>
+    <sys:String x:Key="LOCGaAdjustLogsWithSessionToolTip">When the session duration is reduced, remove log samples that fall outside the new start–end window. Samples are never added; entries without a timestamp are removed when trimming.</sys:String>
 
 
     <!-- ==================== PlayState Integration ==================== -->

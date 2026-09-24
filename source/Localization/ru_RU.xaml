@@ -1,5 +1,7 @@
 ﻿<?xml version="1.0"?>
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <!-- ==================== General ==================== -->
 
@@ -9,31 +11,33 @@
     <sys:String x:Key="LOCGameActivityNoPlaytime" xml:space="preserve">Не существует времени для {0}.
 Использует разницу в игровом времени: {1}с.</sys:String>
 
-    <sys:String x:Key="LOCGameActivityProviderError">{0} provider failed to initialize.</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderError">Ошибка инициализации провайдера {0}.</sys:String>
 
     <sys:String x:Key="LOCGameActivityDefaultAction">Действие по умолчанию</sys:String>
 
 
     <!-- ==================== Notifications ==================== -->
 
-    <sys:String x:Key="LOCGameActivityNotificationHWiNFO">Журнал HWiNFO включён, но приложение не запущено.</sys:String>
-    <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">Логи MSI AfterBurner включены, но приложение не запущено.</sys:String>
-    <sys:String x:Key="LOCGameActivityNotificationRivaTuner">RivaTuner Statistics Server (RTSS) logging is enabled but the application is not running.</sys:String>
-    <sys:String x:Key="LOCGameActivityNotificationLibreHardware">LibreHardware Monitor remote server is not accessible.</sys:String>
+    <sys:String x:Key="LOCGameActivityNotificationHWiNFO">Ведение журнала HWiNFO включено, но приложение не запущено.</sys:String>
+    <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">Ведение журнала MSI AfterBurner включено, но приложение не запущено.</sys:String>
+    <sys:String x:Key="LOCGameActivityNotificationRivaTuner">Ведение журнала RivaTuner Statistics Server (RTSS) включено, но приложение не запущено.</sys:String>
+    <sys:String x:Key="LOCGameActivityNotificationLibreHardware">Удалённый сервер LibreHardware Monitor недоступен.</sys:String>
 
 
     <!-- ==================== Main View ==================== -->
 
-    <sys:String x:Key="LOCGamesActivitiesTitle">Действия в игра</sys:String>
+    <sys:String x:Key="LOCGamesActivitiesTitle">Действия в играх</sys:String>
     <sys:String x:Key="LOCGameActivitiesTitle">Действия в игре</sys:String>
-    <sys:String x:Key="LOCGameActivityViewGamesActivities">Посмотреть игровые активности</sys:String>
+    <sys:String x:Key="LOCGameActivityViewGamesActivities">Посмотреть все игровые активности</sys:String>
     <sys:String x:Key="LOCGameActivityViewGameActivity">Просмотреть игровую активность</sys:String>
-    <sys:String x:Key="LOCGameActivityProviderPerfCharts">Provider performance charts</sys:String>
-    <sys:String x:Key="LOCGameActivityProviderPerfChartsTitle">Provider performance (live)</sys:String>
-    <sys:String x:Key="LOCGameActivityProviderPerfChartsHint">When enabled, only the provider actually used for each metric in aggregation is shown (per chart). Otherwise pick providers below. Values refresh every 5 seconds (last 6 minutes shown).</sys:String>
-    <sys:String x:Key="LOCGameActivityProviderPerfChartsNoProviders">No hardware monitoring providers are registered. Enable at least one provider in GameActivity settings.</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderPerfCharts">Графики производительности провайдеров</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderPerfChartsTitle">Производительность провайдера (live)</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderPerfChartsHint">Если включено, отображается только провайдер, фактически используемый для каждой метрики при агрегации (на график).
+В противном случае выберите провайдеров ниже. Значения обновляются каждые 5 секунд (показаны последние 6 минут).</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderPerfChartsNoProviders">Провайдеры мониторинга оборудования не зарегистрированы.
+Включите хотя бы один провайдер в настройках GameActivity.</sys:String>
     <sys:String x:Key="LOCGameActivityProviderPerfChartsLegend">По провайдеру</sys:String>
-    <sys:String x:Key="LOCGameActivityProviderPerfChartsAggregatorMode">Used values (aggregation)</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderPerfChartsAggregatorMode">Используемые значения (агрегация)</sys:String>
 
 
     <!-- ==================== Gantt View ==================== -->
@@ -41,45 +45,45 @@
     <sys:String x:Key="LOCGameActivityGanttView">Диаграмма Ганта</sys:String>
     <sys:String x:Key="LOCGameActivitySetNumberDay">Выберите количество дней</sys:String>
     <sys:String x:Key="LOCGameActivityPeriod">Период</sys:String>
-    <sys:String x:Key="LOCGameActivitySetLastDate">Установить последнюю да</sys:String>
-    <sys:String x:Key="LOCGameActivityOnlyActiveGames">Only active games in period</sys:String>
-    <sys:String x:Key="LOCGameActivityNoDataForFilters">No game matches the current filters.</sys:String>
+    <sys:String x:Key="LOCGameActivitySetLastDate">Установить последнюю дату</sys:String>
+    <sys:String x:Key="LOCGameActivityOnlyActiveGames">Только активные игры за период</sys:String>
+    <sys:String x:Key="LOCGameActivityNoDataForFilters">Нет игр, соответствующих текущим фильтрам.</sys:String>
 
     <!-- ==================== GamesDataMismatch view ==================== -->
 
     <sys:String x:Key="LOCGaDataMismatchSectionGa">Данные GameActivity</sys:String>
     <sys:String x:Key="LOCGaDataMismatchSectionPlaynite">Данные Playnite</sys:String>
-    <sys:String x:Key="LOCGaDataMismatchApplyAllTooltip">Override Playnite data with GameActivity data for all listed games</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchApplyAllTooltip">Заменить данные Playnite данными GameActivity для всех перечисленных игр</sys:String>
     <sys:String x:Key="LOCGaDataMismatchApplyHeader">Применить</sys:String>
-    <sys:String x:Key="LOCGaDataMismatchEmpty">No data mismatch detected.</sys:String>
-    <sys:String x:Key="LOCGaDataMismatchApplyAllConfirmTitle">Override all – are you sure?</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchEmpty">Несоответствий данных не обнаружено.</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchApplyAllConfirmTitle">Перезаписать всё — вы уверены?</sys:String>
 
 
     <!-- ==================== GameActivityBackup ================ -->
 
     <sys:String x:Key="LOCGaBackupDataInfo">Информация о резервном копировании</sys:String>
-    <sys:String x:Key="LOCGaCurrentGameState">Current game state</sys:String>
-    <sys:String x:Key="LOCGaBackupExist" xml:space="preserve">Имеется резервная копия {0}.
-Возможно после сбоя воспроизведения.
+    <sys:String x:Key="LOCGaCurrentGameState">Текущее состояние игры</sys:String>
+    <sys:String x:Key="LOCGaBackupExist" xml:space="preserve">Есть резервная копия данных для {0}.
+Вероятно, после сбоя Playnite.
 Нажмите для получения дополнительной информации.</sys:String>
-    <sys:String x:Key="LOCGaDateSession">Последняя сессия</sys:String>
+    <sys:String x:Key="LOCGaDateSession">Дата сессии</sys:String>
     <sys:String x:Key="LOCGaPlayTimeSession">Время игры</sys:String>
 
 
     <!-- ==================== Game Data Mismatch ==================== -->
 
-    <sys:String x:Key="LOCGaGamesDataMismatch">Game data mismatch</sys:String>
+    <sys:String x:Key="LOCGaGamesDataMismatch">Несоответствие данных игры</sys:String>
     <sys:String x:Key="LOCGaSessionCount">Количество сессий</sys:String>
-    <sys:String x:Key="LOCGaSessionPlayed">Сессий сыграно</sys:String>
-    <sys:String x:Key="LOCGaGaToPlaynite">Override Playnite data with GameActivity data</sys:String>
-    <sys:String x:Key="LOCGaPlayniteToGa">Override GameActivity data with Playnite data</sys:String>
-    <sys:String x:Key="LOCGaPlayniteToGaWarning">This irreversible action will overwrite the play count and times in Playnite with data from GameActivity.</sys:String>
+    <sys:String x:Key="LOCGaSessionPlayed">В сессии сыграно</sys:String>
+    <sys:String x:Key="LOCGaGaToPlaynite">Установить данные из GameActivity в Playnite</sys:String>
+    <sys:String x:Key="LOCGaPlayniteToGa">Установить данные Playnite в GameActivity</sys:String>
+    <sys:String x:Key="LOCGaPlayniteToGaWarning">Это необратимое действие приведёт к тому, что количество сыгранных игр и их время в Playnite будут перезаписаны данными из GameActivity.</sys:String>
 
 
     <!-- ==================== Merge ==================== -->
 
     <sys:String x:Key="LOCGaMerge">Объединить</sys:String>
-    <sys:String x:Key="LOCGaMergeSession">Объединить игровой сеан</sys:String>
+    <sys:String x:Key="LOCGaMergeSession">Объединить игровую сессию</sys:String>
 
 
     <!-- ==================== Settings ==================== -->
@@ -89,54 +93,57 @@
     <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">Журнал производительности процессора, видеокарты, оперативной памяти и фреймрейт во время игровой сессии.</sys:String>
     <sys:String x:Key="LOCGameActivityTimeInterval">Период проверки</sys:String>
     <sys:String x:Key="LOCGameActivityTimeLabel">минут(ы)</sys:String>
-    <sys:String x:Key="LOCGameActivityHardwareMonitoringProvidersSection">Hardware monitoring providers</sys:String>
-    <sys:String x:Key="LOCGameActivityHardwareProvidersLatencyIntro" xml:space="preserve">Coloured pill: typical relative cost of one metrics read
-red = slower
-orange = medium
-green = faster</sys:String>
-    <sys:String x:Key="LOCGameActivityProviderLatencySlow">Slow</sys:String>
-    <sys:String x:Key="LOCGameActivityProviderLatencyMedium">Medium</sys:String>
-    <sys:String x:Key="LOCGameActivityProviderLatencyFast">Fast</sys:String>
-    <sys:String x:Key="LOCGameActivityProviderLatencyTipWmi">WMI is usually the slowest option: several WMI queries per sample.</sys:String>
-    <sys:String x:Key="LOCGameActivityProviderLatencyTipPerformanceCounter">Performance counters are in the middle: short multi-sample averaging.</sys:String>
-    <sys:String x:Key="LOCGameActivityProviderLatencyTipLibreLocal">Local LibreHardware Monitor (HTTP on this PC) is usually fast.</sys:String>
-    <sys:String x:Key="LOCGameActivityProviderLatencyTipLibreRemote">Remote LibreHardware web server: medium cost because of network round-trips.</sys:String>
-    <sys:String x:Key="LOCGameActivityProviderLatencyTipHwinfoShared">HWiNFO shared memory: medium — depends on HWiNFO and how many sensors you read.</sys:String>
-    <sys:String x:Key="LOCGameActivityProviderLatencyTipHwinfoGadget">HWiNFO gadget (registry indices): medium — depends on HWiNFO and index reads.</sys:String>
-    <sys:String x:Key="LOCGameActivityProviderLatencyTipRivaTuner">RivaTuner (RTSS) shared memory is usually very fast.</sys:String>
-    <sys:String x:Key="LOCGameActivityProviderLatencyTipMsiAfterburner">MSI Afterburner MAHM shared memory is usually very fast.</sys:String>
+    <sys:String x:Key="LOCGameActivityHardwareMonitoringProvidersSection">Провайдеры мониторинга оборудования</sys:String>
+    <sys:String x:Key="LOCGameActivityHardwareProvidersLatencyIntro" xml:space="preserve">Цветная метка: типичная стоимость одного чтения метрик
+красный = медленно
+оранжевый = средне
+зеленый = быстро</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderLatencySlow">Медленно</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderLatencyMedium">Средне</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderLatencyFast">Быстро</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderLatencyTipWmi">WMI обычно самый медленный вариант: несколько WMI-запросов на выборку.</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderLatencyTipPerformanceCounter">Счётчики производительности — средний вариант: усреднение по нескольким выборкам.</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderLatencyTipLibreLocal">Локальный LibreHardware Monitor (HTTP на этом ПК) обычно работает быстро.</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderLatencyTipLibreRemote">Удалённый веб-сервер LibreHardware: средняя стоимость из-за сетевых задержек.</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderLatencyTipHwinfoShared">Общая память HWiNFO: средне — зависит от HWiNFO и количества считываемых датчиков.</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderLatencyTipHwinfoGadget">Гаджет HWiNFO (индексы реестра): средне — зависит от HWiNFO и чтения индексов.</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderLatencyTipRivaTuner">Общая память RivaTuner (RTSS) обычно работает очень быстро.</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderLatencyTipMsiAfterburner">Общая память MSI Afterburner MAHM обычно работает очень быстро.</sys:String>
 
     <!-- Hardware monitors -->
-    <sys:String x:Key="LOCGameActivityUsedLibreHardware">Вместо этого используется LibreHarwareMonitor</sys:String>
-    <sys:String x:Key="LOCGameActivityRemoteWebServer">С удаленным веб-сервером</sys:String>
+    <sys:String x:Key="LOCGameActivityUsedLibreHardware">Использовать LibreHardware Monitor</sys:String>
+    <sys:String x:Key="LOCGameActivityRemoteWebServer">Через удалённый веб-сервер</sys:String>
     <sys:String x:Key="LOCGameActivityUseMsiAfterburner">Использовать MSI Afterburner</sys:String>
-    <sys:String x:Key="LOCGameActivityMsiAbSensorHelp">Pick a row after Refresh (Afterburner running). The list shows the MAHM source name, optional GPU adapter from the MAHM GPU table, localized label when useful, and units. Only the source name is stored; leave empty for the default English name.</sys:String>
-    <sys:String x:Key="LOCGameActivityMsiAbRefreshSensors">Refresh sensor list</sys:String>
+    <sys:String x:Key="LOCGameActivityMsiAbSensorHelp">Выберите строку после обновления (Afterburner должен быть запущен). В списке отображается имя источника MAHM, GPU адаптер (опционально), локализованная метка и единицы измерения. Сохраняется только имя источника; оставьте пустым для стандартного английского имени.</sys:String>
+    <sys:String x:Key="LOCGameActivityMsiAbRefreshSensors">Обновить список сенсоров</sys:String>
     <sys:String x:Key="LOCGameActivityUseHWiNFOSharedMemory">Использовать общую память HWiNFO</sys:String>
     <sys:String x:Key="LOCGameActivityUseHWiNFOGadget">Использовать отчёты о гаджетах HWiNFO</sys:String>
     <sys:String x:Key="LOCGameActivityIndex">Главная страница</sys:String>
     <sys:String x:Key="LOCGameActivitySensorsID">ID сенсоров</sys:String>
     <sys:String x:Key="LOCGameActivityElementID">Id элемента</sys:String>
+    <sys:String x:Key="LOCGameActivityInstanceID">ID экземпляра</sys:String>
+    <sys:String x:Key="LOCGameActivityInstanceIDHWiNFOHelp" xml:space="preserve">Опционально — экземпляр датчика HWiNFO (dwSensorInst).
+Используйте, если несколько устройств имеют одинаковый ID датчика (например, несколько видеокарт). В десятичном или шестнадцатеричном (0x…) формате.</sys:String>
 
     <!-- Sensor labels -->
-    <sys:String x:Key="LOCGameActivityGpuUsage">использ. GPU</sys:String>
-    <sys:String x:Key="LOCGameActivityFps">FPS</sys:String>
-    <sys:String x:Key="LOCGameActivityGpuTemp">Температура видеокарты</sys:String>
-    <sys:String x:Key="LOCGameActivityCpuTemp">Температура процессора</sys:String>
-    <sys:String x:Key="LOCGameActivityCpuPower">Мощность Ц</sys:String>
-    <sys:String x:Key="LOCGameActivityGpuPower">Мощность GPU</sys:String>
-    <sys:String x:Key="LOCGameActivityCpuUsage">Использ. CPU</sys:String>
-    <sys:String x:Key="LOCGameActivityRamUsage">Использ. RAM</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuUsage">Исп-е ГП</sys:String>
+    <sys:String x:Key="LOCGameActivityFps">Кадр/сек</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuTemp">ГП T°</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuTemp">ЦП T°</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuPower">ЦП W</sys:String>
+    <sys:String x:Key="LOCGameActivityGpuPower">ГП W</sys:String>
+    <sys:String x:Key="LOCGameActivityCpuUsage">Исп-е ЦП</sys:String>
+    <sys:String x:Key="LOCGameActivityRamUsage">Исп-е ОЗУ</sys:String>
 
     <!-- Warnings -->
     <sys:String x:Key="LOCGameActivityActiveWarning">Включить предупреждения</sys:String>
-    <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Отображает предупреждающее сообщение в конце сеанса игры в кратце.</sys:String>
-    <sys:String x:Key="LOCGameActivityMinFps">Минимальный FPS</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxCpuTemp">Макс. темпер. процессора</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxGpuTemp">Макс. темпер. видеокарты</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxCpuUsage">Макс. Использ. процессора</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxGpuUsage">Макс. Использ. видеокарты</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxRamUsage">Макс. Использ. оперативной памяти</sys:String>
+    <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Отображает предупреждение в конце игровой сессии, если превышены заданные пороги.</sys:String>
+    <sys:String x:Key="LOCGameActivityMinFps">Мин. FPS</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxCpuTemp">Макс. ЦП T°</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxGpuTemp">Макс. ГП T°</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxCpuUsage">Макс. исп-е ЦП</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxGpuUsage">Макс. исп-е ГП</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxRamUsage">Макс. исп-е ОЗУ</sys:String>
 
     <!-- Playtime -->
     <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">Объединить игровые сессии на графике</sys:String>
@@ -145,9 +152,9 @@ green = faster</sys:String>
 
     <!-- Integration / Chart -->
     <sys:String x:Key="LOCGameActivityListGamesFields">Поля для отображения</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationChartTime">Отображение графика с временем игровых сессии</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationChartLog">Отображение графика с журналом игровох сессии</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">Прогресс на кнопке</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationChartTime">Отображение графика с временем игровых сессий</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationChartLog">Отображение графика с журналом игровых сессий</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">Кнопка переключения деталей</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">Количество данных по горизонтальной оси</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationChartTimeTruncate">Округлять данные о времени по умолчанию</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabels">Показывать метки по горизонтальной оси</sys:String>
@@ -155,31 +162,31 @@ green = faster</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicLogOptions">Настройки диаграммы</sys:String>
     <sys:String x:Key="LOCGameActivityUseControls">Использовать управление графиком</sys:String>
     <sys:String x:Key="LOCGameActivitySelectChartSeriesToDisplay">Выбрать данные для отображения в графике</sys:String>
-    <sys:String x:Key="LOCGameActivityMoreData">Display more data (temperature and power)</sys:String>
+    <sys:String x:Key="LOCGameActivityMoreData">Показывать больше данных (температура и мощность)</sys:String>
 
     <!-- Variators -->
     <sys:String x:Key="LOCGameActivitySetVariatorTime">Задать вариант времени</sys:String>
-    <sys:String x:Key="LOCGameActivitySetVariatorLog">Задать вариант времени</sys:String>
+    <sys:String x:Key="LOCGameActivitySetVariatorLog">Задать вариант лога</sys:String>
 
     <!-- Icon -->
-    <sys:String x:Key="LOCGameActivityIconFrom">Выберите иконку Origin</sys:String>
-    <sys:String x:Key="LOCGameActivityIconFromLibrary">Использовать значок, определенный в библиотеке</sys:String>
-    <sys:String x:Key="LOCGameActivityIconFromFont">Использовать значок, указанный в шрифте плагина</sys:String>
+    <sys:String x:Key="LOCGameActivityIconFrom">Выберите источник значка</sys:String>
+    <sys:String x:Key="LOCGameActivityIconFromLibrary">Использовать значок, определённый в библиотеке</sys:String>
+    <sys:String x:Key="LOCGameActivityIconFromFont">Использовать иконку, указанную в шрифте плагина</sys:String>
 
     <!-- Misc settings -->
     <sys:String x:Key="LOCGameActivityRecentActivityWeek">Количество недель для недавней активности</sys:String>
-    <sys:String x:Key="LOCGameActivityExternalApp">External app</sys:String>
-    <sys:String x:Key="LOCGameActivityBuiltIn">Built-in</sys:String>
+    <sys:String x:Key="LOCGameActivityExternalApp">Внешнее приложение</sys:String>
+    <sys:String x:Key="LOCGameActivityBuiltIn">Встроенный</sys:String>
 
 
     <!-- ==================== Game Activity View (Single) ==================== -->
 
     <sys:String x:Key="LOCGameActivityRecentActivity">Недавняя активность</sys:String>
     <sys:String x:Key="LOCGameActivityNoRecentActivity">Нет активности в последнее время</sys:String>
-    <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} часов за {1} неделю</sys:String>
-    <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} часов за {1} недель</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} ч / {1} нед</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} ч / {1} нед</sys:String>
     <sys:String x:Key="LOCGameActivityAvgPerDay">Среднее время в день</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgPerSession">Среднее время за сеанс</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgPerSession">Среднее время сессии</sys:String>
     <sys:String x:Key="LOCGameActivityFirstSession">Первая сессия</sys:String>
     <sys:String x:Key="LOCGameActivityLastSession">Последняя сессия</sys:String>
 
@@ -194,54 +201,72 @@ green = faster</sys:String>
     <sys:String x:Key="LOCGameActivityTimeTitle">Всего часов по дням</sys:String>
     <sys:String x:Key="LOCGameActivityLogTitle">Детали последней сессии</sys:String>
     <sys:String x:Key="LOCGameActivityLogTitleDate">Детали сессии для</sys:String>
-    <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Последняя сессия</sys:String>
-    <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Проведённое время</sys:String>
-    <sys:String x:Key="LOCGameActivityTimePlayedInMonth">Time played (month)</sys:String>
-    <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">Time played (period)</sys:String>
-    <sys:String x:Key="LOCGameActivityDateSession">Date session</sys:String>
-    <sys:String x:Key="LOCGameActivityDateLog">Date log</sys:String>
+    <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Посл. сессия</sys:String>
+    <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Время сессии</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInMonth">Время игры (за месяц)</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">Время игры (период)</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPreset7Days">7 days</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPresetMonth">Month</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPreset3Months">3 months</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPresetYear">Year</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPrevious">Previous period</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodNext">Next period</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodSelectMonth">Select month</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodLengthTooltip">Period length (Prev/Next navigate by this unit)</sys:String>
+    <sys:String x:Key="LOCGameActivityAggregateGames">Games</sys:String>
+    <sys:String x:Key="LOCGameActivityChartOthers">Others</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodSessions">Sessions in period</sys:String>
+    <sys:String x:Key="LOCGameActivityLvGamesLastActivityInPeriod">Last session in period</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByGames">Total hours by game</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursBySources">Total hours by source</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByGenres">Total hours by genre</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByTags">Total hours by tag</sys:String>
+    <sys:String x:Key="LOCGameActivityOpenGameDetails">Open game activity details</sys:String>
+    <sys:String x:Key="LOCGameActivityDateSession">Дата сессии</sys:String>
+    <sys:String x:Key="LOCGameActivityDateLog">Дата записи</sys:String>
     <sys:String x:Key="LOCGameActivityPCName">Имя ПК</sys:String>
 
     <!-- Average sensor columns -->
-    <sys:String x:Key="LOCGameActivityAvgCpu">Среднее значение Ц</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgGpu">Среднее значение Г</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgRam">Среднее значение ОЗУ</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgFps">Средний ФПС</sys:String>
-    <sys:String x:Key="LOCGameActivitySessionFpsMin">Min FPS</sys:String>
-    <sys:String x:Key="LOCGameActivitySessionFpsMax">Max FPS</sys:String>
-    <sys:String x:Key="LOCGameActivitySessionFpsMedian">Median FPS</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgCpu">Сред. ЦП</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgGpu">Сред. ГП</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgRam">Сред. ОЗУ</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgFps">Средний FPS</sys:String>
+    <sys:String x:Key="LOCGameActivitySessionFpsMin">Мин. FPS</sys:String>
+    <sys:String x:Key="LOCGameActivitySessionFpsMax">Макс. FPS</sys:String>
+    <sys:String x:Key="LOCGameActivitySessionFpsMedian">Медиана FPS</sys:String>
     <sys:String x:Key="LOCGameActivitySessionFpsStdDev">FPS SD</sys:String>
-    <sys:String x:Key="LOCGameActivityFps1PercentLow">Framerate 1% Low (FPS)</sys:String>
-    <sys:String x:Key="LOCGameActivityFps0Point1PercentLow">Framerate 0.1% Low (FPS)</sys:String>
-    <sys:String x:Key="LOCGameActivityFps1PercentLowAvg">Avg Framerate 1% Low</sys:String>
-    <sys:String x:Key="LOCGameActivityFps1PercentLowMin">Min Framerate 1% Low</sys:String>
-    <sys:String x:Key="LOCGameActivityFps0Point1PercentLowAvg">Avg Framerate 0.1% Low</sys:String>
-    <sys:String x:Key="LOCGameActivityFps0Point1PercentLowMin">Min Framerate 0.1% Low</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgCpuT">Средний ЦП T</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgGpuT">Средний GPU T</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgCpuP">Средний ЦП P</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgGpuP">Среднее GPU P</sys:String>
+    <sys:String x:Key="LOCGameActivityFps1PercentLow">1% низш. FPS</sys:String>
+    <sys:String x:Key="LOCGameActivityFps0Point1PercentLow">0.1% низш. FPS</sys:String>
+    <sys:String x:Key="LOCGameActivityFps1PercentLowAvg">Ср. 1% низш.</sys:String>
+    <sys:String x:Key="LOCGameActivityFps1PercentLowMin">Мин. 1% низш.</sys:String>
+    <sys:String x:Key="LOCGameActivityFps0Point1PercentLowAvg">Ср. 0.1% низш. FPS</sys:String>
+    <sys:String x:Key="LOCGameActivityFps0Point1PercentLowMin">Мин. 0.1% низш. FPS</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgCpuT">Средний ЦП T°</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgGpuT">Средний ГП T°</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgCpuP">Средний ЦП W</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgGpuP">Среднее ГП W</sys:String>
 
     <!-- =================== PluginChartLog ==================== -->
 
     <!-- Sensor short labels (filter bar checkboxes) -->
-    <sys:String x:Key="LOCGameActivityLabelCpu">CPU</sys:String>
-    <sys:String x:Key="LOCGameActivityLabelGpu">GPU</sys:String>
+    <sys:String x:Key="LOCGameActivityLabelCpu">ЦП</sys:String>
+    <sys:String x:Key="LOCGameActivityLabelGpu">ГП</sys:String>
     <sys:String x:Key="LOCGameActivityLabelRam">ОЗУ</sys:String>
     <sys:String x:Key="LOCGameActivityLabelFps">FPS</sys:String>
-    <sys:String x:Key="LOCGameActivityLabelCpuT">CPU T°</sys:String>
-    <sys:String x:Key="LOCGameActivityLabelGpuT">GPU T°</sys:String>
-    <sys:String x:Key="LOCGameActivityLabelCpuP">CPU W</sys:String>
-    <sys:String x:Key="LOCGameActivityLabelGpuP">GPU W</sys:String>
-    <sys:String x:Key="LOCGameActivityLabelFps1PercentLowShort">1% Low</sys:String>
-    <sys:String x:Key="LOCGameActivityLabelFps0Point1PercentLowShort">0.1% Low</sys:String>
+    <sys:String x:Key="LOCGameActivityLabelCpuT">ЦП T°</sys:String>
+    <sys:String x:Key="LOCGameActivityLabelGpuT">ГП T°</sys:String>
+    <sys:String x:Key="LOCGameActivityLabelCpuP">ЦП W</sys:String>
+    <sys:String x:Key="LOCGameActivityLabelGpuP">ГП W</sys:String>
+    <sys:String x:Key="LOCGameActivityLabelFps1PercentLowShort">1% низш.</sys:String>
+    <sys:String x:Key="LOCGameActivityLabelFps0Point1PercentLowShort">0.1% низш.</sys:String>
 
     <sys:String x:Key="LOCGameActivityShowAllData">Показать все данные</sys:String>
 
     <!-- Group header labels for the two filter bar rows -->
     <sys:String x:Key="LOCGameActivityGroupUsage">Использование</sys:String>
-    <sys:String x:Key="LOCGameActivityGroupTempPower">Temp / Power</sys:String>
-    <sys:String x:Key="LOCGameActivityGroupLogSensors">Temp / power / FPS lows</sys:String>
+    <sys:String x:Key="LOCGameActivitySaveChartSeries">Save series selection</sys:String>
+    <sys:String x:Key="LOCGameActivityGroupTempPower">Темп / Мощность</sys:String>
+    <sys:String x:Key="LOCGameActivityGroupLogSensors">Темп / Мощность / FPS низш.</sys:String>
 
     <!-- ==================== Warning Dialog ==================== -->
 
@@ -259,14 +284,16 @@ green = faster</sys:String>
 
     <!-- ==================== Add / Edit Session ==================== -->
 
-    <sys:String x:Key="LOCGameActivitySessionDetailsExportFileTag">Лог производительности сессии</sys:String>
-    <sys:String x:Key="LOCGameActivityExportSessionDetails">Экспортировать примеры производительности этой сессии в CSV. Предлагаемое имя файла должно включать название игры и время начала сессии (местное время).</sys:String>
+    <sys:String x:Key="LOCGameActivitySessionDetailsExportFileTag">Лог-производительности-сессии</sys:String>
+    <sys:String x:Key="LOCGameActivityExportSessionDetails">Экспортировать данные о производительности этой сессии в CSV. Предлагаемое имя файла включает название игры и начало сессии (местное время).</sys:String>
 
     <sys:String x:Key="LOCGaAddNewGameSession">Добавить новую игровую сессию</sys:String>
     <sys:String x:Key="LOCGaDateStart">Дата начала</sys:String>
-    <sys:String x:Key="LOCGaDateEnd">Дата Окончания</sys:String>
+    <sys:String x:Key="LOCGaDateEnd">Дата окончания</sys:String>
     <sys:String x:Key="LOCGaGameActions">Действия в игре</sys:String>
     <sys:String x:Key="LOCGaCustomGameActions">Пользовательские действия в игре</sys:String>
+    <sys:String x:Key="LOCGaAdjustLogsWithSession">Обрезать фрагменты лога производительности в соответствии с сессией</sys:String>
+    <sys:String x:Key="LOCGaAdjustLogsWithSessionToolTip">При сокращении длительности сессии удаляйте записи логов, которые выходят за пределы нового временного окна «начало–конец». Записи никогда не добавляются; элементы без метки времени удаляются при обрезке.</sys:String>
 
 
     <!-- ==================== PlayState Integration ==================== -->

@@ -1,5 +1,7 @@
 ﻿<?xml version="1.0"?>
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <!-- ==================== General ==================== -->
 
@@ -9,7 +11,7 @@
     <sys:String x:Key="LOCGameActivityNoPlaytime" xml:space="preserve">Nincs játékidő a következőhöz: {0}.
 A játékidő különbségét használta: {1}. </sys:String>
 
-    <sys:String x:Key="LOCGameActivityProviderError">{0} provider failed to initialize.</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderError">{0} szolgáltató inicializálása sikertelen volt.</sys:String>
 
     <sys:String x:Key="LOCGameActivityDefaultAction">Alapértelmezett művelet</sys:String>
 
@@ -18,22 +20,22 @@ A játékidő különbségét használta: {1}. </sys:String>
 
     <sys:String x:Key="LOCGameActivityNotificationHWiNFO">A HWiNFO naplózás engedélyezve van, de az alkalmazás nem fut.</sys:String>
     <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">Az MSI AfterBurner naplózás engedélyezve van, de az alkalmazás nem fut.</sys:String>
-    <sys:String x:Key="LOCGameActivityNotificationRivaTuner">RivaTuner Statistics Server (RTSS) logging is enabled but the application is not running.</sys:String>
-    <sys:String x:Key="LOCGameActivityNotificationLibreHardware">LibreHardware Monitor remote server is not accessible.</sys:String>
+    <sys:String x:Key="LOCGameActivityNotificationRivaTuner">A RivaTuner Statistics Server (RTSS) naplózás engedélyezve van, de az alkalmazás nem fut.</sys:String>
+    <sys:String x:Key="LOCGameActivityNotificationLibreHardware">A LibreHardware Monitor távoli szerver nem érhető el.</sys:String>
 
 
     <!-- ==================== Main View ==================== -->
 
     <sys:String x:Key="LOCGamesActivitiesTitle">Játéktevékenységek</sys:String>
-    <sys:String x:Key="LOCGameActivitiesTitle">Játéktevékenység</sys:String>
+    <sys:String x:Key="LOCGameActivitiesTitle">Játéktevékenységek</sys:String>
     <sys:String x:Key="LOCGameActivityViewGamesActivities">Játéktevékenységek megtekintése</sys:String>
     <sys:String x:Key="LOCGameActivityViewGameActivity">Játéktevékenység megtekintése</sys:String>
-    <sys:String x:Key="LOCGameActivityProviderPerfCharts">Provider performance charts</sys:String>
-    <sys:String x:Key="LOCGameActivityProviderPerfChartsTitle">Provider performance (live)</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderPerfCharts">Szolgáltatói teljesítménydiagramok</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderPerfChartsTitle">Szolgáltatói teljesítmény (élő)</sys:String>
     <sys:String x:Key="LOCGameActivityProviderPerfChartsHint">When enabled, only the provider actually used for each metric in aggregation is shown (per chart). Otherwise pick providers below. Values refresh every 5 seconds (last 6 minutes shown).</sys:String>
-    <sys:String x:Key="LOCGameActivityProviderPerfChartsNoProviders">No hardware monitoring providers are registered. Enable at least one provider in GameActivity settings.</sys:String>
-    <sys:String x:Key="LOCGameActivityProviderPerfChartsLegend">By provider</sys:String>
-    <sys:String x:Key="LOCGameActivityProviderPerfChartsAggregatorMode">Used values (aggregation)</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderPerfChartsNoProviders">Nincs regisztrálva egyetlen hardverfigyelő szolgáltató sem. Kérjük, engedélyezzen legalább egy szolgáltatót a GameActivity beállításaiban.</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderPerfChartsLegend">Szolgáltató szerint</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderPerfChartsAggregatorMode">Használt értékek (összesítés)</sys:String>
 
 
     <!-- ==================== Gantt View ==================== -->
@@ -42,23 +44,23 @@ A játékidő különbségét használta: {1}. </sys:String>
     <sys:String x:Key="LOCGameActivitySetNumberDay">Napok számának beállítása</sys:String>
     <sys:String x:Key="LOCGameActivityPeriod">Időszak</sys:String>
     <sys:String x:Key="LOCGameActivitySetLastDate">Az utolsó dátum beállítása</sys:String>
-    <sys:String x:Key="LOCGameActivityOnlyActiveGames">Only active games in period</sys:String>
-    <sys:String x:Key="LOCGameActivityNoDataForFilters">No game matches the current filters.</sys:String>
+    <sys:String x:Key="LOCGameActivityOnlyActiveGames">Csak az aktív játékok egy időszakban</sys:String>
+    <sys:String x:Key="LOCGameActivityNoDataForFilters">Nincs a jelenlegi szűrőknek megfelelő játék.</sys:String>
 
     <!-- ==================== GamesDataMismatch view ==================== -->
 
-    <sys:String x:Key="LOCGaDataMismatchSectionGa">GameActivity data</sys:String>
-    <sys:String x:Key="LOCGaDataMismatchSectionPlaynite">Playnite data</sys:String>
-    <sys:String x:Key="LOCGaDataMismatchApplyAllTooltip">Override Playnite data with GameActivity data for all listed games</sys:String>
-    <sys:String x:Key="LOCGaDataMismatchApplyHeader">Apply</sys:String>
-    <sys:String x:Key="LOCGaDataMismatchEmpty">No data mismatch detected.</sys:String>
-    <sys:String x:Key="LOCGaDataMismatchApplyAllConfirmTitle">Override all – are you sure?</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchSectionGa">JátékAktivitás adat</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchSectionPlaynite">Playnite adat</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchApplyAllTooltip">Playnite adat felülírása a GameActivity adatával az összes felsorolt játéknál</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchApplyHeader">Alkalmaz</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchEmpty">Nem észleltünk adateltérést.</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchApplyAllConfirmTitle">Az összes felülírása - biztos vagy benne?</sys:String>
 
 
     <!-- ==================== GameActivityBackup ================ -->
 
     <sys:String x:Key="LOCGaBackupDataInfo">Adatok biztonsági mentése</sys:String>
-    <sys:String x:Key="LOCGaCurrentGameState">Current game state</sys:String>
+    <sys:String x:Key="LOCGaCurrentGameState">Aktuális játék állapot</sys:String>
     <sys:String x:Key="LOCGaBackupExist" xml:space="preserve">Biztonsági mentés elérhető a következőhöz: {0}.
 Valószínűleg a Playnite összeomlása utánról.
 Kattintson további információkért.</sys:String>
@@ -68,12 +70,12 @@ Kattintson további információkért.</sys:String>
 
     <!-- ==================== Game Data Mismatch ==================== -->
 
-    <sys:String x:Key="LOCGaGamesDataMismatch">Game data mismatch</sys:String>
+    <sys:String x:Key="LOCGaGamesDataMismatch">Játékadatok eltérése</sys:String>
     <sys:String x:Key="LOCGaSessionCount">Session count</sys:String>
-    <sys:String x:Key="LOCGaSessionPlayed">Sessions played</sys:String>
-    <sys:String x:Key="LOCGaGaToPlaynite">Override Playnite data with GameActivity data</sys:String>
-    <sys:String x:Key="LOCGaPlayniteToGa">Override GameActivity data with Playnite data</sys:String>
-    <sys:String x:Key="LOCGaPlayniteToGaWarning">This irreversible action will overwrite the play count and times in Playnite with data from GameActivity.</sys:String>
+    <sys:String x:Key="LOCGaSessionPlayed">Session played</sys:String>
+    <sys:String x:Key="LOCGaGaToPlaynite">Playnite adat felülírása a GameActivity adatával</sys:String>
+    <sys:String x:Key="LOCGaPlayniteToGa">GameActivity adat felülírása a Playnite adatával</sys:String>
+    <sys:String x:Key="LOCGaPlayniteToGaWarning">This irreversible action will force the play count and times coming from GameActivity to Playnite.</sys:String>
 
 
     <!-- ==================== Merge ==================== -->
@@ -94,29 +96,32 @@ Kattintson további információkért.</sys:String>
 red = slower
 orange = medium
 green = faster</sys:String>
-    <sys:String x:Key="LOCGameActivityProviderLatencySlow">Slow</sys:String>
-    <sys:String x:Key="LOCGameActivityProviderLatencyMedium">Medium</sys:String>
-    <sys:String x:Key="LOCGameActivityProviderLatencyFast">Fast</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderLatencySlow">Lassú</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderLatencyMedium">Közepes</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderLatencyFast">Gyors</sys:String>
     <sys:String x:Key="LOCGameActivityProviderLatencyTipWmi">WMI is usually the slowest option: several WMI queries per sample.</sys:String>
     <sys:String x:Key="LOCGameActivityProviderLatencyTipPerformanceCounter">Performance counters are in the middle: short multi-sample averaging.</sys:String>
-    <sys:String x:Key="LOCGameActivityProviderLatencyTipLibreLocal">Local LibreHardware Monitor (HTTP on this PC) is usually fast.</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderLatencyTipLibreLocal">Helyi LibreHardware Monitor (HTTP ezen a gépen) általában gyorsabb.</sys:String>
     <sys:String x:Key="LOCGameActivityProviderLatencyTipLibreRemote">Remote LibreHardware web server: medium cost because of network round-trips.</sys:String>
     <sys:String x:Key="LOCGameActivityProviderLatencyTipHwinfoShared">HWiNFO shared memory: medium — depends on HWiNFO and how many sensors you read.</sys:String>
     <sys:String x:Key="LOCGameActivityProviderLatencyTipHwinfoGadget">HWiNFO gadget (registry indices): medium — depends on HWiNFO and index reads.</sys:String>
-    <sys:String x:Key="LOCGameActivityProviderLatencyTipRivaTuner">RivaTuner (RTSS) shared memory is usually very fast.</sys:String>
-    <sys:String x:Key="LOCGameActivityProviderLatencyTipMsiAfterburner">MSI Afterburner MAHM shared memory is usually very fast.</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderLatencyTipRivaTuner">RivaTuner (RTSS) megosztott memória általában nagyon gyors.</sys:String>
+    <sys:String x:Key="LOCGameActivityProviderLatencyTipMsiAfterburner">MSI Afterburner MAHM megosztott memória általában nagyon gyors.</sys:String>
 
     <!-- Hardware monitors -->
-    <sys:String x:Key="LOCGameActivityUsedLibreHardware">Use LibreHardware Monitor</sys:String>
-    <sys:String x:Key="LOCGameActivityRemoteWebServer">Távoli webkiszolgálóval</sys:String>
+    <sys:String x:Key="LOCGameActivityUsedLibreHardware">LibreHardware Monitor használata</sys:String>
+    <sys:String x:Key="LOCGameActivityRemoteWebServer">Távoli webszerveren keresztül</sys:String>
     <sys:String x:Key="LOCGameActivityUseMsiAfterburner">MSI Afterburner használata</sys:String>
     <sys:String x:Key="LOCGameActivityMsiAbSensorHelp">Pick a row after Refresh (Afterburner running). The list shows the MAHM source name, optional GPU adapter from the MAHM GPU table, localized label when useful, and units. Only the source name is stored; leave empty for the default English name.</sys:String>
-    <sys:String x:Key="LOCGameActivityMsiAbRefreshSensors">Refresh sensor list</sys:String>
+    <sys:String x:Key="LOCGameActivityMsiAbRefreshSensors">Szenzor lista frissítése</sys:String>
     <sys:String x:Key="LOCGameActivityUseHWiNFOSharedMemory">HWiNFO megosztott memória használata</sys:String>
     <sys:String x:Key="LOCGameActivityUseHWiNFOGadget">Use HWiNFO gadget reporting</sys:String>
     <sys:String x:Key="LOCGameActivityIndex">Index</sys:String>
-    <sys:String x:Key="LOCGameActivitySensorsID">Érzékelő ID</sys:String>
-    <sys:String x:Key="LOCGameActivityElementID">Elem ID</sys:String>
+    <sys:String x:Key="LOCGameActivitySensorsID">Érzékelő azonosító</sys:String>
+    <sys:String x:Key="LOCGameActivityElementID">Elem azonosító</sys:String>
+    <sys:String x:Key="LOCGameActivityInstanceID">Instance ID</sys:String>
+    <sys:String x:Key="LOCGameActivityInstanceIDHWiNFOHelp" xml:space="preserve">Optional — HWiNFO sensor instance (dwSensorInst).
+Use when several devices share the same Sensor ID (e.g. multiple GPUs). Decimal or hexadecimal (0x…).</sys:String>
 
     <!-- Sensor labels -->
     <sys:String x:Key="LOCGameActivityGpuUsage">GPU használat</sys:String>
@@ -130,7 +135,7 @@ green = faster</sys:String>
 
     <!-- Warnings -->
     <sys:String x:Key="LOCGameActivityActiveWarning">Figyelmeztetések engedélyezése</sys:String>
-    <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Figyelmeztető üzenet megjelenítése a játékmenet végén, a meghatározott határokon belül.</sys:String>
+    <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Figyelmeztető üzenet megjelenítése a játékmenet végén, ha a meghatározott határértéket túllépi.</sys:String>
     <sys:String x:Key="LOCGameActivityMinFps">Minimum FPS</sys:String>
     <sys:String x:Key="LOCGameActivityMaxCpuTemp">Max CPU hőmérséklet</sys:String>
     <sys:String x:Key="LOCGameActivityMaxGpuTemp">Max GPU hőmérséklet</sys:String>
@@ -148,7 +153,7 @@ green = faster</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationChartTime">Diagram megjelenítse a játékmenet idejével</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationChartLog">Diagram megjelenítse a játékmenet naplóival</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationToggleDetails">Kapcsológomb részletekkel</sys:String>
-    <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">Adatok száma a vízszintes tengelyen</sys:String>
+    <sys:String x:Key="LOCGameActivityIntegrationGraphicOptionsCountAbscissa">Adat pontok száma a vízszintes tengelyen</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationChartTimeTruncate">Alapértelmezés szerint csonkolja az időadatokat</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabels">Címkék megjelenítése a vízszintes tengelyen</sys:String>
     <sys:String x:Key="LOCGameActivityIntegrationGraphicShowLabelsOrdinates">Címkék megjelenítése a függőleges tengelyen</sys:String>
@@ -168,18 +173,18 @@ green = faster</sys:String>
 
     <!-- Misc settings -->
     <sys:String x:Key="LOCGameActivityRecentActivityWeek">Number of weeks for recent activity</sys:String>
-    <sys:String x:Key="LOCGameActivityExternalApp">External app</sys:String>
-    <sys:String x:Key="LOCGameActivityBuiltIn">Built-in</sys:String>
+    <sys:String x:Key="LOCGameActivityExternalApp">Külső alkalmazás</sys:String>
+    <sys:String x:Key="LOCGameActivityBuiltIn">Beépített</sys:String>
 
 
     <!-- ==================== Game Activity View (Single) ==================== -->
 
     <sys:String x:Key="LOCGameActivityRecentActivity">Legutóbbi tevékenység</sys:String>
     <sys:String x:Key="LOCGameActivityNoRecentActivity">Nincs friss tevékenység</sys:String>
-    <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} h / {1} week</sys:String>
-    <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} h / {1} weeks</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} óra / {1} hét</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} óra  / {1} hét</sys:String>
     <sys:String x:Key="LOCGameActivityAvgPerDay">Átlagos idő naponta</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgPerSession">Avg. time / session</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgPerSession">Average time per session</sys:String>
     <sys:String x:Key="LOCGameActivityFirstSession">Első játékmenet</sys:String>
     <sys:String x:Key="LOCGameActivityLastSession">Legutóbbi játékmenet</sys:String>
 
@@ -196,8 +201,25 @@ green = faster</sys:String>
     <sys:String x:Key="LOCGameActivityLogTitleDate">Játékmenet részletei a következőre:</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Legutóbbi játékmenet</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Eltelt idő</sys:String>
-    <sys:String x:Key="LOCGameActivityTimePlayedInMonth">Time played (month)</sys:String>
-    <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">Time played (period)</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInMonth">Játékidő (hónap)</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">Játékidő (időszak)</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPreset7Days">7 days</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPresetMonth">Month</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPreset3Months">3 months</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPresetYear">Year</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPrevious">Previous period</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodNext">Next period</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodSelectMonth">Select month</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodLengthTooltip">Period length (Prev/Next navigate by this unit)</sys:String>
+    <sys:String x:Key="LOCGameActivityAggregateGames">Games</sys:String>
+    <sys:String x:Key="LOCGameActivityChartOthers">Others</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodSessions">Sessions in period</sys:String>
+    <sys:String x:Key="LOCGameActivityLvGamesLastActivityInPeriod">Last session in period</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByGames">Total hours by game</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursBySources">Total hours by source</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByGenres">Total hours by genre</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByTags">Total hours by tag</sys:String>
+    <sys:String x:Key="LOCGameActivityOpenGameDetails">Open game activity details</sys:String>
     <sys:String x:Key="LOCGameActivityDateSession">Date session</sys:String>
     <sys:String x:Key="LOCGameActivityDateLog">Date log</sys:String>
     <sys:String x:Key="LOCGameActivityPCName">PC neve</sys:String>
@@ -209,7 +231,7 @@ green = faster</sys:String>
     <sys:String x:Key="LOCGameActivityAvgFps">Átlagos FPS</sys:String>
     <sys:String x:Key="LOCGameActivitySessionFpsMin">Min FPS</sys:String>
     <sys:String x:Key="LOCGameActivitySessionFpsMax">Max FPS</sys:String>
-    <sys:String x:Key="LOCGameActivitySessionFpsMedian">Median FPS</sys:String>
+    <sys:String x:Key="LOCGameActivitySessionFpsMedian">Medián FPS</sys:String>
     <sys:String x:Key="LOCGameActivitySessionFpsStdDev">FPS SD</sys:String>
     <sys:String x:Key="LOCGameActivityFps1PercentLow">Framerate 1% Low (FPS)</sys:String>
     <sys:String x:Key="LOCGameActivityFps0Point1PercentLow">Framerate 0.1% Low (FPS)</sys:String>
@@ -233,13 +255,14 @@ green = faster</sys:String>
     <sys:String x:Key="LOCGameActivityLabelGpuT">GPU T°</sys:String>
     <sys:String x:Key="LOCGameActivityLabelCpuP">CPU W</sys:String>
     <sys:String x:Key="LOCGameActivityLabelGpuP">GPU W</sys:String>
-    <sys:String x:Key="LOCGameActivityLabelFps1PercentLowShort">1% Low</sys:String>
-    <sys:String x:Key="LOCGameActivityLabelFps0Point1PercentLowShort">0.1% Low</sys:String>
+    <sys:String x:Key="LOCGameActivityLabelFps1PercentLowShort">1% Alacsony</sys:String>
+    <sys:String x:Key="LOCGameActivityLabelFps0Point1PercentLowShort">0,1% Alacsony</sys:String>
 
     <sys:String x:Key="LOCGameActivityShowAllData">Show all data</sys:String>
 
     <!-- Group header labels for the two filter bar rows -->
-    <sys:String x:Key="LOCGameActivityGroupUsage">Usage</sys:String>
+    <sys:String x:Key="LOCGameActivityGroupUsage">Használat</sys:String>
+    <sys:String x:Key="LOCGameActivitySaveChartSeries">Save series selection</sys:String>
     <sys:String x:Key="LOCGameActivityGroupTempPower">Temp / Power</sys:String>
     <sys:String x:Key="LOCGameActivityGroupLogSensors">Temp / power / FPS lows</sys:String>
 
@@ -251,9 +274,9 @@ green = faster</sys:String>
 
     <!-- ==================== Quick Search ==================== -->
 
-    <sys:String x:Key="LOCGaQuickSearchDescription">Játékok keresése GameActivity-n</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchDescription">Játékok keresése GameActivity szerint</sys:String>
     <sys:String x:Key="LOCGaQuickSearchByFPS">Keresés FPS alapján</sys:String>
-    <sys:String x:Key="LOCGaQuickSearchByTime">Keresés a játékmenet ideje alapján</sys:String>
+    <sys:String x:Key="LOCGaQuickSearchByTime">Keresés a játékmenet hossza alapján</sys:String>
     <sys:String x:Key="LOCGaQuickSearchByDate">Keresés a játékmenet dátuma alapján</sys:String>
 
 
@@ -264,9 +287,11 @@ green = faster</sys:String>
 
     <sys:String x:Key="LOCGaAddNewGameSession">Új játékmenet hozzáadása</sys:String>
     <sys:String x:Key="LOCGaDateStart">Dátum kezdete</sys:String>
-    <sys:String x:Key="LOCGaDateEnd">Dátum vége</sys:String>
+    <sys:String x:Key="LOCGaDateEnd">Befejezés dátuma</sys:String>
     <sys:String x:Key="LOCGaGameActions">Játékműveletek</sys:String>
     <sys:String x:Key="LOCGaCustomGameActions">Egyéni játékműveletek</sys:String>
+    <sys:String x:Key="LOCGaAdjustLogsWithSession">Trim performance log samples to match the session</sys:String>
+    <sys:String x:Key="LOCGaAdjustLogsWithSessionToolTip">When the session duration is reduced, remove log samples that fall outside the new start–end window. Samples are never added; entries without a timestamp are removed when trimming.</sys:String>
 
 
     <!-- ==================== PlayState Integration ==================== -->

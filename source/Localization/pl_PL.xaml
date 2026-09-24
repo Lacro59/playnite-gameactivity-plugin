@@ -1,9 +1,11 @@
 ﻿<?xml version="1.0"?>
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <!-- ==================== General ==================== -->
 
-    <sys:String x:Key="LOCGameActivity">GameActivity</sys:String>
+    <sys:String x:Key="LOCGameActivity">AktywnośćGry</sys:String>
     <sys:String x:Key="LOCGameActivityTitle">Aktywność</sys:String>
 
     <sys:String x:Key="LOCGameActivityNoPlaytime" xml:space="preserve">Nie ma czasu gry dla {0}.
@@ -73,7 +75,7 @@ Kliknij, aby uzyskać więcej informacji.</sys:String>
     <sys:String x:Key="LOCGaSessionPlayed">Rozegranych sesji</sys:String>
     <sys:String x:Key="LOCGaGaToPlaynite">Ustaw dane GameActivity na Playnite</sys:String>
     <sys:String x:Key="LOCGaPlayniteToGa">Ustaw dane Playnite na GameActivity</sys:String>
-    <sys:String x:Key="LOCGaPlayniteToGaWarning">Ta nieodwracalna akcja spowoduje wymuszenie licznika i czasu gry z GameActivity na Playnite.</sys:String>
+    <sys:String x:Key="LOCGaPlayniteToGaWarning">This irreversible action will force the play count and times coming from GameActivity to Playnite.</sys:String>
 
 
     <!-- ==================== Merge ==================== -->
@@ -117,6 +119,9 @@ green = faster</sys:String>
     <sys:String x:Key="LOCGameActivityIndex">Indeks</sys:String>
     <sys:String x:Key="LOCGameActivitySensorsID">Id czujników</sys:String>
     <sys:String x:Key="LOCGameActivityElementID">Id elementu</sys:String>
+    <sys:String x:Key="LOCGameActivityInstanceID">Instance ID</sys:String>
+    <sys:String x:Key="LOCGameActivityInstanceIDHWiNFOHelp" xml:space="preserve">Optional — HWiNFO sensor instance (dwSensorInst).
+Use when several devices share the same Sensor ID (e.g. multiple GPUs). Decimal or hexadecimal (0x…).</sys:String>
 
     <!-- Sensor labels -->
     <sys:String x:Key="LOCGameActivityGpuUsage">Użycie GPU</sys:String>
@@ -188,7 +193,7 @@ green = faster</sys:String>
 
     <sys:String x:Key="LOCGameActivityTotalHours">Suma godzin</sys:String>
     <sys:String x:Key="LOCGameActivityTotalHoursByWeeks">Całkowita liczba godzin tygodniowo</sys:String>
-    <sys:String x:Key="LOCGameActivityWeekLabel">Tydzie</sys:String>
+    <sys:String x:Key="LOCGameActivityWeekLabel">Tydzień</sys:String>
     <sys:String x:Key="LOCGameActivityTime">Czas</sys:String>
     <sys:String x:Key="LOCGameActivityLog">Dziennik</sys:String>
     <sys:String x:Key="LOCGameActivityTimeTitle">Całkowita liczba godzin dziennie</sys:String>
@@ -198,6 +203,23 @@ green = faster</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Upłynęło czasu</sys:String>
     <sys:String x:Key="LOCGameActivityTimePlayedInMonth">Czas gry (w miesiącu)</sys:String>
     <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">Czas gry (w okresie)</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPreset7Days">7 days</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPresetMonth">Month</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPreset3Months">3 months</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPresetYear">Year</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPrevious">Previous period</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodNext">Next period</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodSelectMonth">Select month</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodLengthTooltip">Period length (Prev/Next navigate by this unit)</sys:String>
+    <sys:String x:Key="LOCGameActivityAggregateGames">Games</sys:String>
+    <sys:String x:Key="LOCGameActivityChartOthers">Others</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodSessions">Sessions in period</sys:String>
+    <sys:String x:Key="LOCGameActivityLvGamesLastActivityInPeriod">Last session in period</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByGames">Total hours by game</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursBySources">Total hours by source</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByGenres">Total hours by genre</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByTags">Total hours by tag</sys:String>
+    <sys:String x:Key="LOCGameActivityOpenGameDetails">Open game activity details</sys:String>
     <sys:String x:Key="LOCGameActivityDateSession">Data sesji</sys:String>
     <sys:String x:Key="LOCGameActivityDateLog">Data logowania</sys:String>
     <sys:String x:Key="LOCGameActivityPCName">Nazwa komputera</sys:String>
@@ -240,6 +262,7 @@ green = faster</sys:String>
 
     <!-- Group header labels for the two filter bar rows -->
     <sys:String x:Key="LOCGameActivityGroupUsage">Usage</sys:String>
+    <sys:String x:Key="LOCGameActivitySaveChartSeries">Save series selection</sys:String>
     <sys:String x:Key="LOCGameActivityGroupTempPower">Temp / Power</sys:String>
     <sys:String x:Key="LOCGameActivityGroupLogSensors">Temp / power / FPS lows</sys:String>
 
@@ -267,6 +290,8 @@ green = faster</sys:String>
     <sys:String x:Key="LOCGaDateEnd">Data zakończenia</sys:String>
     <sys:String x:Key="LOCGaGameActions">Działania w grze</sys:String>
     <sys:String x:Key="LOCGaCustomGameActions">Niestandardowe akcje gry</sys:String>
+    <sys:String x:Key="LOCGaAdjustLogsWithSession">Trim performance log samples to match the session</sys:String>
+    <sys:String x:Key="LOCGaAdjustLogsWithSessionToolTip">When the session duration is reduced, remove log samples that fall outside the new start–end window. Samples are never added; entries without a timestamp are removed when trimming.</sys:String>
 
 
     <!-- ==================== PlayState Integration ==================== -->

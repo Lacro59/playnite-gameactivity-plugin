@@ -1,5 +1,7 @@
 ﻿<?xml version="1.0"?>
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <!-- ==================== General ==================== -->
 
@@ -117,6 +119,9 @@
     <sys:String x:Key="LOCGameActivityIndex">索引</sys:String>
     <sys:String x:Key="LOCGameActivitySensorsID">传感器 ID</sys:String>
     <sys:String x:Key="LOCGameActivityElementID">元素 ID</sys:String>
+    <sys:String x:Key="LOCGameActivityInstanceID">Instance ID</sys:String>
+    <sys:String x:Key="LOCGameActivityInstanceIDHWiNFOHelp" xml:space="preserve">Optional — HWiNFO sensor instance (dwSensorInst).
+Use when several devices share the same Sensor ID (e.g. multiple GPUs). Decimal or hexadecimal (0x…).</sys:String>
 
     <!-- Sensor labels -->
     <sys:String x:Key="LOCGameActivityGpuUsage">GPU 占用</sys:String>
@@ -198,6 +203,23 @@
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">经过时间</sys:String>
     <sys:String x:Key="LOCGameActivityTimePlayedInMonth">游玩时长（月）</sys:String>
     <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">游玩时长（周期）</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPreset7Days">7 days</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPresetMonth">Month</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPreset3Months">3 months</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPresetYear">Year</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPrevious">Previous period</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodNext">Next period</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodSelectMonth">Select month</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodLengthTooltip">Period length (Prev/Next navigate by this unit)</sys:String>
+    <sys:String x:Key="LOCGameActivityAggregateGames">Games</sys:String>
+    <sys:String x:Key="LOCGameActivityChartOthers">Others</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodSessions">Sessions in period</sys:String>
+    <sys:String x:Key="LOCGameActivityLvGamesLastActivityInPeriod">Last session in period</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByGames">Total hours by game</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursBySources">Total hours by source</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByGenres">Total hours by genre</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByTags">Total hours by tag</sys:String>
+    <sys:String x:Key="LOCGameActivityOpenGameDetails">Open game activity details</sys:String>
     <sys:String x:Key="LOCGameActivityDateSession">会话日期</sys:String>
     <sys:String x:Key="LOCGameActivityDateLog">日期记录</sys:String>
     <sys:String x:Key="LOCGameActivityPCName">PC 名称</sys:String>
@@ -240,13 +262,14 @@
 
     <!-- Group header labels for the two filter bar rows -->
     <sys:String x:Key="LOCGameActivityGroupUsage">占用率</sys:String>
+    <sys:String x:Key="LOCGameActivitySaveChartSeries">Save series selection</sys:String>
     <sys:String x:Key="LOCGameActivityGroupTempPower">温度/功耗</sys:String>
     <sys:String x:Key="LOCGameActivityGroupLogSensors">温度/功率/帧率低值</sys:String>
 
     <!-- ==================== Warning Dialog ==================== -->
 
     <sys:String x:Key="LOCGameActivityWarningCaption">游戏会话时的警告</sys:String>
-    <sys:String x:Key="LOCGameActivityWarningAt">At</sys:String>
+    <sys:String x:Key="LOCGameActivityWarningAt">于</sys:String>
 
 
     <!-- ==================== Quick Search ==================== -->
@@ -267,11 +290,13 @@
     <sys:String x:Key="LOCGaDateEnd">结束日期</sys:String>
     <sys:String x:Key="LOCGaGameActions">游戏动作</sys:String>
     <sys:String x:Key="LOCGaCustomGameActions">自定义游戏动作</sys:String>
+    <sys:String x:Key="LOCGaAdjustLogsWithSession">Trim performance log samples to match the session</sys:String>
+    <sys:String x:Key="LOCGaAdjustLogsWithSessionToolTip">When the session duration is reduced, remove log samples that fall outside the new start–end window. Samples are never added; entries without a timestamp are removed when trimming.</sys:String>
 
 
     <!-- ==================== PlayState Integration ==================== -->
 
     <!-- Temporary workaround until Playnite supports cross-extension data sharing -->
-    <sys:String x:Key="LOCGameActivitySubstPlayStateTime">Subtract PlayState pause time from the session duration</sys:String>
+    <sys:String x:Key="LOCGameActivitySubstPlayStateTime">从会话时间中提取出 PlayState 挂起时间</sys:String>
 
 </ResourceDictionary>
