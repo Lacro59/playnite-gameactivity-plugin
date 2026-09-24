@@ -1,7 +1,5 @@
 ﻿<?xml version="1.0"?>
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <!-- ==================== General ==================== -->
 
@@ -18,7 +16,7 @@ Oynama farkı süresi kullanıldı:{1}s.</sys:String>
 
     <!-- ==================== Notifications ==================== -->
 
-    <sys:String x:Key="LOCGameActivityNotificationHWiNFO">HWiNFO günlük kaydı tutma etkin ancak uygulama çalışmıyor.</sys:String>
+    <sys:String x:Key="LOCGameActivityNotificationHWiNFO">HW günlük kaydı tutma etkin ancak uygulama çalışmıyor.</sys:String>
     <sys:String x:Key="LOCGameActivityNotificationMSIAfterBurner">MSI AfterBurner günlük kaydı tutma etkin ancak uygulama çalışmıyor.</sys:String>
     <sys:String x:Key="LOCGameActivityNotificationRivaTuner">RivaTuner Statistics Server (RTSS) logging is enabled but the application is not running.</sys:String>
     <sys:String x:Key="LOCGameActivityNotificationLibreHardware">LibreHardware Monitor remote server is not accessible.</sys:String>
