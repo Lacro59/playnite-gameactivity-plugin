@@ -201,23 +201,23 @@ Playnite のクラッシュ後に作成された可能性があります。
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">経過時間</sys:String>
     <sys:String x:Key="LOCGameActivityTimePlayedInMonth">プレイ時間 (月)</sys:String>
     <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">プレイ時間 (期間)</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriodPreset7Days">7 日間</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPreset7Days">7日間</sys:String>
     <sys:String x:Key="LOCGameActivityPeriodPresetMonth">月</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriodPreset3Months">3 months</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriodPresetYear">Year</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriodPrevious">Previous period</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriodNext">Next period</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriodSelectMonth">Select month</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriodLengthTooltip">Period length (Prev/Next navigate by this unit)</sys:String>
-    <sys:String x:Key="LOCGameActivityAggregateGames">Games</sys:String>
-    <sys:String x:Key="LOCGameActivityChartOthers">Others</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriodSessions">Sessions in period</sys:String>
-    <sys:String x:Key="LOCGameActivityLvGamesLastActivityInPeriod">Last session in period</sys:String>
-    <sys:String x:Key="LOCGameActivityTotalHoursByGames">Total hours by game</sys:String>
-    <sys:String x:Key="LOCGameActivityTotalHoursBySources">Total hours by source</sys:String>
-    <sys:String x:Key="LOCGameActivityTotalHoursByGenres">Total hours by genre</sys:String>
-    <sys:String x:Key="LOCGameActivityTotalHoursByTags">Total hours by tag</sys:String>
-    <sys:String x:Key="LOCGameActivityOpenGameDetails">Open game activity details</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPreset3Months">3か月</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPresetYear">年</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPrevious">前の期間</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodNext">次の期間</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodSelectMonth">月を選択</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodLengthTooltip">期間の長さ（前へ/次へはこの単位で移動）</sys:String>
+    <sys:String x:Key="LOCGameActivityAggregateGames">ゲーム</sys:String>
+    <sys:String x:Key="LOCGameActivityChartOthers">その他</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodSessions">期間内のセッション数</sys:String>
+    <sys:String x:Key="LOCGameActivityLvGamesLastActivityInPeriod">期間内の最終セッション</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByGames">ゲーム別の合計時間</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursBySources">ソース別の合計時間</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByGenres">ジャンル別の合計時間</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByTags">タグ別の合計時間</sys:String>
+    <sys:String x:Key="LOCGameActivityOpenGameDetails">ゲームアクティビティの詳細を開く</sys:String>
     <sys:String x:Key="LOCGameActivityDateSession">セッションの日付</sys:String>
     <sys:String x:Key="LOCGameActivityDateLog">ログの日付</sys:String>
     <sys:String x:Key="LOCGameActivityPCName">PC 名</sys:String>
@@ -260,7 +260,7 @@ Playnite のクラッシュ後に作成された可能性があります。
 
     <!-- Group header labels for the two filter bar rows -->
     <sys:String x:Key="LOCGameActivityGroupUsage">使用率</sys:String>
-    <sys:String x:Key="LOCGameActivitySaveChartSeries">Save series selection</sys:String>
+    <sys:String x:Key="LOCGameActivitySaveChartSeries">系列の選択を保存</sys:String>
     <sys:String x:Key="LOCGameActivityGroupTempPower">温度 / 消費電力</sys:String>
     <sys:String x:Key="LOCGameActivityGroupLogSensors">温度 / 消費電力 / FPS Low</sys:String>
 
