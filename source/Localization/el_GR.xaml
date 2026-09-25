@@ -1,11 +1,9 @@
 ﻿<?xml version="1.0"?>
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <!-- ==================== General ==================== -->
 
-    <sys:String x:Key="LOCGameActivity">Δραστηριότητα Παιχνιδιών </sys:String>
+    <sys:String x:Key="LOCGameActivity">Δραστηριότητα Παιχνιδιών</sys:String>
     <sys:String x:Key="LOCGameActivityTitle">Δραστηριότητα</sys:String>
 
     <sys:String x:Key="LOCGameActivityNoPlaytime" xml:space="preserve">Δεν υπάρχει χρόνος παιχνιδιού για {0}.
@@ -146,7 +144,7 @@ Use when several devices share the same Sensor ID (e.g. multiple GPUs). Decimal 
     <!-- Playtime -->
     <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">Συγχώνευση του χρόνου παιχνιδιού από όλες τις συνεδρίες</sys:String>
     <sys:String x:Key="LOCGameActivityCumulPlaytimeStore">Συνδιασμός του χρόνου παιχνιδιού από όλες τις βιβκιοθήκες</sys:String>
-    <sys:String x:Key="LOCGameActivityIgnoreSession">Αγνόηση σύντομων συνεδριών </sys:String>
+    <sys:String x:Key="LOCGameActivityIgnoreSession">Αγνόηση σύντομων συνεδριών</sys:String>
 
     <!-- Integration / Chart -->
     <sys:String x:Key="LOCGameActivityListGamesFields">Πεδία παιχνιδιού προς εμφάνιση</sys:String>
