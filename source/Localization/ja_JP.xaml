@@ -201,8 +201,8 @@ Playnite のクラッシュ後に作成された可能性があります。
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">経過時間</sys:String>
     <sys:String x:Key="LOCGameActivityTimePlayedInMonth">プレイ時間 (月)</sys:String>
     <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">プレイ時間 (期間)</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriodPreset7Days">7 days</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriodPresetMonth">Month</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPreset7Days">7 日間</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPresetMonth">月</sys:String>
     <sys:String x:Key="LOCGameActivityPeriodPreset3Months">3 months</sys:String>
     <sys:String x:Key="LOCGameActivityPeriodPresetYear">Year</sys:String>
     <sys:String x:Key="LOCGameActivityPeriodPrevious">Previous period</sys:String>
