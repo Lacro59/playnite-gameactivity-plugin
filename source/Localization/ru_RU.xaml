@@ -210,7 +210,7 @@
     <sys:String x:Key="LOCGameActivityPeriodPrevious">Предыдущий период</sys:String>
     <sys:String x:Key="LOCGameActivityPeriodNext">Следующий период</sys:String>
     <sys:String x:Key="LOCGameActivityPeriodSelectMonth">Выберите месяц</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriodLengthTooltip">Period length (Prev/Next navigate by this unit)</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodLengthTooltip">Длина периода (Предыдущая/Следующая - навигация с помощью этого)</sys:String>
     <sys:String x:Key="LOCGameActivityAggregateGames">Игры</sys:String>
     <sys:String x:Key="LOCGameActivityChartOthers">Другое</sys:String>
     <sys:String x:Key="LOCGameActivityPeriodSessions">Сессии в период</sys:String>
@@ -262,7 +262,7 @@
 
     <!-- Group header labels for the two filter bar rows -->
     <sys:String x:Key="LOCGameActivityGroupUsage">Использование</sys:String>
-    <sys:String x:Key="LOCGameActivitySaveChartSeries">Save series selection</sys:String>
+    <sys:String x:Key="LOCGameActivitySaveChartSeries">Сохранить выбор ряда данных</sys:String>
     <sys:String x:Key="LOCGameActivityGroupTempPower">Темп / Мощность</sys:String>
     <sys:String x:Key="LOCGameActivityGroupLogSensors">Темп / Мощность / FPS низш.</sys:String>
 
