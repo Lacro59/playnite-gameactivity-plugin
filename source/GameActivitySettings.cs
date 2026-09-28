@@ -757,17 +757,21 @@ namespace GameActivity
 
             RefreshMsiAfterburnerMahmSensors();
             NotifyMonitoringProviderLatencyPillProperties();
+            GameActivitySettingsView.CancelEditingExcludeTrackingChanges();
         }
 
         /// <inheritdoc/>
         public void CancelEdit()
         {
             Settings = _editingClone;
+            GameActivitySettingsView.CancelEditingExcludeTrackingChanges();
         }
 
         /// <inheritdoc/>
         public void EndEdit()
         {
+            GameActivitySettingsView.ApplyEditingExcludeTrackingChanges();
+
             PersistSettings(_plugin, Settings);
             GameActivity.PluginDatabase.PluginSettings = this.Settings;
 

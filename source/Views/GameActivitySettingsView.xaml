@@ -1348,6 +1348,79 @@
             </ScrollViewer>
         </TabItem>
 
+        <TabItem Header="{DynamicResource LOCGameActivityExcludeTrackingTab}"
+                 GotFocus="TabExcludeTracking_GotFocus">
+            <DockPanel Margin="0,20,0,0">
+                <StackPanel DockPanel.Dock="Top">
+                    <TextBlock Style="{DynamicResource BaseTextBlockStyle}"
+                               TextWrapping="Wrap"
+                               Text="{DynamicResource LOCGameActivityExcludeTrackingDescription}"/>
+
+                    <Button Margin="0,10,0,0"
+                            x:Name="PART_BtnExcludeTrackingAddGame"
+                            Content="{DynamicResource LOCGameActivityExcludeTrackingAddGame}"
+                            MinHeight="26"
+                            HorizontalAlignment="Left"
+                            Click="ButtonExcludeTrackingAddGame_Click"/>
+                </StackPanel>
+
+                <ListBox x:Name="PART_ExcludeTrackingList"
+                         Margin="0,10,0,0">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem"
+                               BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                            <Setter Property="Height"
+                                    Value="32"/>
+                            <Setter Property="Padding"
+                                    Value="4,0"/>
+                            <Setter Property="HorizontalContentAlignment"
+                                    Value="Stretch"/>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Height="28">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="28"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Column="0"
+                                           Style="{DynamicResource ListBoxExtendStyleTextBlock}"
+                                           Text="{Binding Name}"
+                                           VerticalAlignment="Center"
+                                           TextTrimming="CharacterEllipsis"/>
+
+                                <Button x:Name="PART_RemoveButton"
+                                        Grid.Column="1"
+                                        Width="28"
+                                        Height="28"
+                                        Padding="0"
+                                        VerticalAlignment="Center"
+                                        Opacity="0"
+                                        IsHitTestVisible="False"
+                                        Tag="{Binding}"
+                                        ToolTip="{DynamicResource LOCGameActivityExcludeTrackingRemoveTooltip}"
+                                        ContentTemplate="{DynamicResource ClearTextIconTemplate}"
+                                        Click="ButtonExcludeTrackingRemoveItem_Click"/>
+                            </Grid>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}, Path=IsMouseOver}"
+                                             Value="True">
+                                    <Setter TargetName="PART_RemoveButton"
+                                            Property="Opacity"
+                                            Value="1"/>
+                                    <Setter TargetName="PART_RemoveButton"
+                                            Property="IsHitTestVisible"
+                                            Value="True"/>
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel>
+        </TabItem>
+
         <TabItem Header="{DynamicResource LOCCommonDebugTab}">
             <settings:PluginDebugSettingsSection PluginName="GameActivity" Margin="10" />
         </TabItem>

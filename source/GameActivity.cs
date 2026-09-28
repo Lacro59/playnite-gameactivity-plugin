@@ -196,6 +196,18 @@ namespace GameActivity
         {
 			try
             {
+                if (args?.Game == null)
+                {
+                    Logger.Warn("OnGameStarted called with null arguments or game reference.");
+                    return;
+                }
+
+                if (PluginDatabase.IsGameExcludedFromTracking(args.Game))
+                {
+                    Logger.Info($"OnGameStarted skipped - excluded from tracking - {args.Game.Name} - {args.Game.Id}");
+                    return;
+                }
+
                 string sessionCorrelationId = $"{args.Game.Id:N}-{DateTime.UtcNow.Ticks}";
                 Logger.Info($"OnGameStarted - {args.Game?.Name} - {args.Game?.Id} - Session:{sessionCorrelationId}");
 

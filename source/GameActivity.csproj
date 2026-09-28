@@ -292,6 +292,9 @@
     <Compile Include="Views\GameActivitySettingsView.xaml.cs">
       <DependentUpon>GameActivitySettingsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ExcludeTrackingAddGamesView.xaml.cs">
+      <DependentUpon>ExcludeTrackingAddGamesView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Models\ActivityDetails.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -641,6 +644,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\GameActivitySettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ExcludeTrackingAddGamesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -26,6 +26,8 @@ namespace GameActivity.Services
 		// Only used in DEBUG builds for the diagnostic test menu item.
 		private GameActivityMonitoring _monitoring;
 
+		private GameActivityDatabase Database => (GameActivityDatabase)_database;
+
 		/// <summary>
 		/// Initializes a new instance of <see cref="GameActivityMenus"/>.
 		/// </summary>
@@ -78,6 +80,9 @@ namespace GameActivity.Services
 
 			// Capture before lambda to prevent unintended closure capture.
 			Game selectedGame = args.Games.First();
+			List<Game> selectedGames = args.Games.ToList();
+			bool allExcluded = selectedGames.All(g => Database.IsGameExcludedFromTracking(g));
+			string gameMenuSection = ResourceProvider.GetString("LOCGameActivity");
 
 			yield return new GameMenuItem
 			{
@@ -96,10 +101,44 @@ namespace GameActivity.Services
 				}
 			};
 
+			yield return new GameMenuItem
+			{
+				MenuSection = gameMenuSection,
+				Description = allExcluded
+					? ResourceProvider.GetString("LOCGameActivityExcludeTrackingRemove")
+					: ResourceProvider.GetString("LOCGameActivityExcludeTrackingAdd"),
+				Action = (menuArgs) =>
+				{
+					try
+					{
+						foreach (Game game in selectedGames)
+						{
+							if (game == null)
+							{
+								continue;
+							}
+
+							if (allExcluded)
+							{
+								Database.RemoveExcludeTrackingTag(game);
+							}
+							else
+							{
+								Database.AddExcludeTrackingTag(game);
+							}
+						}
+					}
+					catch (Exception ex)
+					{
+						Common.LogError(ex, false, $"[GetGameMenuItems] Failed to toggle exclude tracking for selection ({selectedGames.Count} game(s)).");
+					}
+				}
+			};
+
 #if DEBUG
 			yield return new GameMenuItem
 			{
-				MenuSection = ResourceProvider.GetString("LOCGameActivity"),
+				MenuSection = gameMenuSection,
 				Description = "Test",
 				Action = (menuArgs) => { }
 			};

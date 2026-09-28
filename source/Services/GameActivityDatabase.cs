@@ -54,6 +54,8 @@ namespace GameActivity.Services
 		public GameActivityDatabase(GameActivitySettings pluginSettings, string pluginUserDataPath)
 			: base(pluginSettings, "GameActivity", pluginUserDataPath)
 		{
+			TagBefore = "[GA]";
+
 			PluginWindows = new GameActivityWindows(PluginName, this);
 			PluginExportCsv = new GameActivityExport();
 
@@ -490,6 +492,151 @@ namespace GameActivity.Services
 				legacyItems.FirstOrDefault(x => x.Key.ToString(dateFormat) == lookup);
 
 			return matched.Value ?? new List<ActivityDetailsData>();
+		}
+
+		#endregion
+
+		#region Exclude tracking tag
+
+		// Tag label comes from LOCGameActivityExcludeTrackingTag (localized), prefixed with TagBefore ([GA]).
+		// If the user changes Playnite UI language, ResourceProvider may resolve a different label and CheckTagExist
+		// creates a new tag; games tagged under the previous language no longer match FindExistingExcludeTrackingTagId
+		// until re-tagged. Same limitation as HLTB ignore-sync tags.
+
+		/// <summary>
+		/// Resolves the exclude-tracking tag ID without creating it when missing.
+		/// </summary>
+		/// <returns>Existing tag ID, or <c>null</c>.</returns>
+		private Guid? FindExistingExcludeTrackingTagId()
+		{
+			string tagLabel = ResourceProvider.GetString("LOCGameActivityExcludeTrackingTag");
+			string fullName = TagBefore.IsNullOrEmpty()
+				? tagLabel
+				: string.Format("{0} {1}", TagBefore, tagLabel);
+
+			Tag existing = API.Instance?.Database?.Tags?
+				.FirstOrDefault(t => t != null && string.Equals(t.Name, fullName, StringComparison.Ordinal));
+
+			return existing?.Id;
+		}
+
+		/// <summary>
+		/// Returns the Playnite tag ID used to exclude a game from activity tracking, creating the tag if needed.
+		/// </summary>
+		/// <returns>Tag ID, or <c>null</c> if the tag could not be created.</returns>
+		public Guid? GetExcludeTrackingTagId()
+		{
+			return CheckTagExist(ResourceProvider.GetString("LOCGameActivityExcludeTrackingTag"));
+		}
+
+		/// <inheritdoc/>
+		protected override IEnumerable<Guid> GetProtectedPluginTagIds()
+		{
+			Guid? excludeTagId = FindExistingExcludeTrackingTagId();
+			if (excludeTagId != null)
+			{
+				yield return excludeTagId.Value;
+			}
+		}
+
+		/// <summary>
+		/// Indicates whether the game is tagged to skip GameActivity session tracking.
+		/// </summary>
+		/// <param name="game">Playnite game.</param>
+		/// <returns><c>true</c> when the exclude-tracking tag is present.</returns>
+		public bool IsGameExcludedFromTracking(Game game)
+		{
+			if (game?.TagIds == null || game.TagIds.Count == 0)
+			{
+				return false;
+			}
+
+			Guid? excludeTagId = FindExistingExcludeTrackingTagId();
+			return excludeTagId != null && game.TagIds.Contains(excludeTagId.Value);
+		}
+
+		/// <summary>
+		/// Adds the exclude-tracking tag to the game and persists the change.
+		/// </summary>
+		/// <param name="game">Playnite game.</param>
+		public void AddExcludeTrackingTag(Game game)
+		{
+			if (game == null)
+			{
+				return;
+			}
+
+			Guid? excludeTagId = GetExcludeTrackingTagId();
+			if (excludeTagId == null)
+			{
+				Logger.Warn($"Could not create or resolve exclude tracking tag for {game.Name}");
+				return;
+			}
+
+			AppendTagId(game, excludeTagId.Value);
+			PersistGameUpdate(game);
+			Common.LogDebug($"Added exclude tracking tag for {game.Name}");
+		}
+
+		/// <summary>
+		/// Removes the exclude-tracking tag from the game and persists the change.
+		/// </summary>
+		/// <param name="game">Playnite game.</param>
+		public void RemoveExcludeTrackingTag(Game game)
+		{
+			if (game?.TagIds == null)
+			{
+				return;
+			}
+
+			Guid? excludeTagId = FindExistingExcludeTrackingTagId();
+			if (excludeTagId == null || !game.TagIds.Contains(excludeTagId.Value))
+			{
+				return;
+			}
+
+			game.TagIds.Remove(excludeTagId.Value);
+			PersistGameUpdate(game);
+			Common.LogDebug($"Removed exclude tracking tag for {game.Name}");
+		}
+
+		/// <summary>
+		/// Returns library games that have the exclude-tracking tag, ordered by name.
+		/// </summary>
+		/// <returns>Excluded games.</returns>
+		public List<Game> GetGamesExcludedFromTracking()
+		{
+			Guid? excludeTagId = FindExistingExcludeTrackingTagId();
+			if (excludeTagId == null || API.Instance?.Database?.Games == null)
+			{
+				return new List<Game>();
+			}
+
+			Guid tagId = excludeTagId.Value;
+			return API.Instance.Database.Games
+				.Where(g => g?.TagIds != null && g.TagIds.Contains(tagId))
+				.OrderBy(g => g.Name)
+				.ToList();
+		}
+
+		/// <summary>
+		/// Returns visible library games that are not tagged for exclude-tracking, ordered by name.
+		/// </summary>
+		/// <returns>Games available to add to the exclusion list.</returns>
+		public List<Game> GetGamesAvailableForExcludeTracking()
+		{
+			if (API.Instance?.Database?.Games == null)
+			{
+				return new List<Game>();
+			}
+
+			Guid? excludeTagId = FindExistingExcludeTrackingTagId();
+			Guid tagId = excludeTagId ?? Guid.Empty;
+
+			return API.Instance.Database.Games
+				.Where(g => g != null && !g.Hidden && (excludeTagId == null || g.TagIds == null || !g.TagIds.Contains(tagId)))
+				.OrderBy(g => g.Name)
+				.ToList();
 		}
 
 		#endregion
