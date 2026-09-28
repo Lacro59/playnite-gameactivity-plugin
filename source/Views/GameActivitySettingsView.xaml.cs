@@ -174,9 +174,14 @@ namespace GameActivity
 				ExcludeTrackingAddGamesView view = new ExcludeTrackingAddGamesView(
 					PluginDatabase,
 					_excludeTrackingGames.Select(g => g.Id));
+				WindowOptions windowOptions = new WindowOptions
+				{
+					EnableWindowPersistence = false
+				};
 				Window window = PlayniteUiHelper.CreateExtensionWindow(
 					PluginDatabase.PluginName + " - " + ResourceProvider.GetString("LOCGameActivityExcludeTrackingAddDialogTitle"),
-					view);
+					view,
+					windowOptions);
 				_ = window.ShowDialog();
 
 				if (!view.Confirmed)
@@ -323,9 +328,14 @@ namespace GameActivity
 				ExcludeTrackingAddGamesView view = new ExcludeTrackingAddGamesView(
 					PluginDatabase,
 					_ignoreMismatchGames.Select(g => g.Id));
+				WindowOptions windowOptions = new WindowOptions
+				{
+					EnableWindowPersistence = false
+				};
 				Window window = PlayniteUiHelper.CreateExtensionWindow(
 					PluginDatabase.PluginName + " - " + ResourceProvider.GetString("LOCGameActivityIgnoreMismatchAddDialogTitle"),
-					view);
+					view,
+					windowOptions);
 				_ = window.ShowDialog();
 
 				if (!view.Confirmed)

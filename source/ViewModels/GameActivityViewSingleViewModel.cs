@@ -297,7 +297,8 @@ namespace GameActivity.ViewModels
                     ShowMaximizeButton = false,
                     ShowCloseButton = true,
                     MinHeight = 450,
-                    Width = 500
+                    Width = 500,
+                    EnableWindowPersistence = false
                 };
 
                 try
@@ -351,7 +352,8 @@ namespace GameActivity.ViewModels
                         ShowMaximizeButton = false,
                         ShowCloseButton = true,
                         MinHeight = 450,
-                        Width = 500
+                        Width = 500,
+                        EnableWindowPersistence = false
                     };
 
                     GameActivityAddTime viewExtension = new GameActivityAddTime(_plugin, _gameContext, activity);
@@ -392,7 +394,8 @@ namespace GameActivity.ViewModels
                         ShowMaximizeButton = false,
                         ShowCloseButton = true,
                         Width = 800,
-                        MinHeight = 100
+                        MinHeight = 100,
+                        EnableWindowPersistence = false
                     };
 
                     GameActivityMergeTime viewExtension = new GameActivityMergeTime(_gameContext);

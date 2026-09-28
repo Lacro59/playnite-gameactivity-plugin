@@ -335,7 +335,8 @@ namespace GameActivity.Services
                             ShowMaximizeButton = false,
                             ShowCloseButton = true,
                             MaxHeight = 450,
-                            MinWidth = 480
+                            MinWidth = 480,
+                            EnableWindowPersistence = false
                         };
 
                         WarningsDialogs viewExtension = new WarningsDialogs(runningActivity.WarningsMessage);
@@ -674,6 +675,7 @@ namespace GameActivity.Services
                                                     CanBeResizable = false,
                                                     Height = 380,
                                                     Width = 800,
+                                                    EnableWindowPersistence = false
                                                 };
 
                                                 GameActivityBackup viewExtension = new GameActivityBackup(backupData);
