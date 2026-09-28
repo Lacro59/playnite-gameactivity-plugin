@@ -55,6 +55,12 @@ namespace GameActivity.ViewModels
         public RelayCommand<Guid> ApplySingleCommand { get; }
 
         /// <summary>
+        /// Hides a game from the mismatch list (settings) and persists immediately.
+        /// CommandParameter: <see cref="Guid"/> (the game Id).
+        /// </summary>
+        public RelayCommand<Guid> IgnoreCommand { get; }
+
+        /// <summary>
         /// Navigates to a game in the Playnite library view.
         /// Reuses the shared static command; CommandParameter: <see cref="Guid"/>.
         /// </summary>
@@ -72,6 +78,7 @@ namespace GameActivity.ViewModels
         public GamesDataMismatchViewModel()
         {
             ApplySingleCommand = new RelayCommand<Guid>(ExecuteApplySingle);
+            IgnoreCommand = new RelayCommand<Guid>(ExecuteIgnore);
             ApplyAllCommand = new RelayCommand(ExecuteApplyAll, () => HasData);
             RefreshData();
         }
@@ -103,6 +110,29 @@ namespace GameActivity.ViewModels
                 }
 
                 Logger.Info($"ApplySingle – applied GA data for game {id}.");
+                RefreshData();
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex, false, true, PluginDatabase.PluginName);
+            }
+        }
+
+        /// <summary>
+        /// Adds the game to the ignored-mismatch settings list, persists, then refreshes.
+        /// </summary>
+        /// <param name="id">Playnite game Id passed as CommandParameter from the row.</param>
+        private void ExecuteIgnore(Guid id)
+        {
+            try
+            {
+                if (!PluginDatabase.IgnoreGameFromMismatch(id))
+                {
+                    Logger.Warn($"Ignore – failed for game {id}.");
+                    return;
+                }
+
+                Logger.Info($"Ignore – game {id} added to ignored mismatches list.");
                 RefreshData();
             }
             catch (Exception ex)

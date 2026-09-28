@@ -332,6 +332,12 @@ namespace GameActivity
         /// <summary>Minimum session length in seconds before a session is recorded.</summary>
         public int IgnoreSessionTime { get; set; } = 120;
 
+        /// <summary>
+        /// Playnite game ids hidden from the data consistency / mismatch screen.
+        /// Does not affect session tracking; use the exclude-tracking tag for that.
+        /// </summary>
+        public List<Guid> IgnoredMismatchGameIds { get; set; } = new List<Guid>();
+
         #endregion
 
         #region Hardware Monitoring — General
@@ -728,6 +734,7 @@ namespace GameActivity
             _plugin = plugin ?? throw new ArgumentNullException("plugin");
             Settings = plugin.LoadPluginSettings<GameActivitySettings>() ?? new GameActivitySettings();
             SanitizeStoreColors(Settings);
+            SanitizeIgnoredMismatchGameIds(Settings);
             RefreshMsiAfterburnerMahmSensorsCommand = new RelayCommand(RefreshMsiAfterburnerMahmSensors);
         }
 
@@ -746,6 +753,7 @@ namespace GameActivity
         {
             // Drop corrupt StoreColors before cloning so CancelEdit cannot restore NRE triggers.
             SanitizeStoreColors(Settings);
+            SanitizeIgnoredMismatchGameIds(Settings);
 
             // Snapshot current state so CancelEdit can restore it exactly.
             _editingClone = Serialization.GetClone(Settings);
@@ -777,6 +785,7 @@ namespace GameActivity
         public void EndEdit()
         {
             GameActivitySettingsView.ApplyEditingExcludeTrackingChanges();
+            SanitizeIgnoredMismatchGameIds(Settings);
 
             PersistSettings(_plugin, Settings);
             GameActivity.PluginDatabase.PluginSettings = this.Settings;
@@ -974,6 +983,28 @@ namespace GameActivity
         #endregion
 
         #region Store colours 
+
+        /// <summary>
+        /// Ensures <paramref name="settings"/>.<see cref="GameActivitySettings.IgnoredMismatchGameIds"/> is non-null.
+        /// </summary>
+        /// <param name="settings">Settings instance to sanitize.</param>
+        /// <returns><c>true</c> when the list was replaced because it was null.</returns>
+        internal static bool SanitizeIgnoredMismatchGameIds(GameActivitySettings settings)
+        {
+            if (settings == null)
+            {
+                return false;
+            }
+
+            if (settings.IgnoredMismatchGameIds == null)
+            {
+                Logger.Warn("SanitizeIgnoredMismatchGameIds: IgnoredMismatchGameIds was null; replaced with an empty list.");
+                settings.IgnoredMismatchGameIds = new List<Guid>();
+                return true;
+            }
+
+            return false;
+        }
 
         /// <summary>
         /// Ensures <paramref name="settings"/>.<see cref="GameActivitySettings.StoreColors"/> is non-null

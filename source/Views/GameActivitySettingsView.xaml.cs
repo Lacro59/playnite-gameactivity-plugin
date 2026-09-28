@@ -27,6 +27,9 @@ namespace GameActivity
 		private ObservableCollection<Game> _excludeTrackingGames;
 		private bool _excludeTrackingListInitialized;
 
+		private ObservableCollection<Game> _ignoreMismatchGames;
+		private bool _ignoreMismatchListInitialized;
+
 		/// <summary>
 		/// Pending exclude-tracking game ids edited in the settings UI.
 		/// Null when the Excluded games tab was never opened; EndEdit then leaves tags unchanged.
@@ -227,6 +230,155 @@ namespace GameActivity
 				{
 					_ = _excludeTrackingGames.Remove(toRemove);
 					SyncEditingExcludeTrackingGameIds();
+				}
+			}
+			catch (Exception ex)
+			{
+				Common.LogError(ex, false, true, PluginDatabase.PluginName);
+			}
+		}
+
+		#endregion
+
+		#region Ignore mismatch
+
+		private GameActivitySettings EditingSettings
+		{
+			get
+			{
+				GameActivitySettingsViewModel vm = DataContext as GameActivitySettingsViewModel;
+				return vm?.Settings;
+			}
+		}
+
+		private void TabIgnoreMismatch_GotFocus(object sender, RoutedEventArgs e)
+		{
+			EnsureIgnoreMismatchListInitialized();
+		}
+
+		private void EnsureIgnoreMismatchListInitialized()
+		{
+			try
+			{
+				if (_ignoreMismatchListInitialized)
+				{
+					return;
+				}
+
+				GameActivitySettings settings = EditingSettings;
+				if (settings == null)
+				{
+					return;
+				}
+
+				GameActivitySettingsViewModel.SanitizeIgnoredMismatchGameIds(settings);
+
+				List<Game> games = new List<Game>();
+				if (API.Instance?.Database?.Games != null)
+				{
+					foreach (Guid id in settings.IgnoredMismatchGameIds)
+					{
+						Game game = API.Instance.Database.Games.Get(id);
+						if (game != null)
+						{
+							games.Add(game);
+						}
+					}
+				}
+
+				_ignoreMismatchGames = new ObservableCollection<Game>(games.OrderBy(g => g.Name));
+				PART_IgnoreMismatchList.ItemsSource = _ignoreMismatchGames;
+				SyncIgnoredMismatchGameIds();
+				_ignoreMismatchListInitialized = true;
+			}
+			catch (Exception ex)
+			{
+				Common.LogError(ex, false, true, PluginDatabase?.PluginName);
+			}
+		}
+
+		private void SyncIgnoredMismatchGameIds()
+		{
+			GameActivitySettings settings = EditingSettings;
+			if (settings == null)
+			{
+				return;
+			}
+
+			GameActivitySettingsViewModel.SanitizeIgnoredMismatchGameIds(settings);
+			settings.IgnoredMismatchGameIds = _ignoreMismatchGames?.Select(g => g.Id).ToList() ?? new List<Guid>();
+			Common.LogDebug($"Ignore mismatch settings sync count={settings.IgnoredMismatchGameIds.Count}");
+		}
+
+		private void ButtonIgnoreMismatchAddGame_Click(object sender, RoutedEventArgs e)
+		{
+			try
+			{
+				EnsureIgnoreMismatchListInitialized();
+				if (_ignoreMismatchGames == null)
+				{
+					return;
+				}
+
+				ExcludeTrackingAddGamesView view = new ExcludeTrackingAddGamesView(
+					PluginDatabase,
+					_ignoreMismatchGames.Select(g => g.Id));
+				Window window = PlayniteUiHelper.CreateExtensionWindow(
+					PluginDatabase.PluginName + " - " + ResourceProvider.GetString("LOCGameActivityIgnoreMismatchAddDialogTitle"),
+					view);
+				_ = window.ShowDialog();
+
+				if (!view.Confirmed)
+				{
+					return;
+				}
+
+				foreach (Game game in view.GetSelectedGames())
+				{
+					if (game == null || _ignoreMismatchGames.Any(g => g.Id == game.Id))
+					{
+						continue;
+					}
+
+					_ignoreMismatchGames.Add(game);
+				}
+
+				List<Game> ordered = _ignoreMismatchGames.OrderBy(g => g.Name).ToList();
+				_ignoreMismatchGames.Clear();
+				foreach (Game game in ordered)
+				{
+					_ignoreMismatchGames.Add(game);
+				}
+
+				SyncIgnoredMismatchGameIds();
+			}
+			catch (Exception ex)
+			{
+				Common.LogError(ex, false, true, PluginDatabase.PluginName);
+			}
+		}
+
+		private void ButtonIgnoreMismatchRemoveItem_Click(object sender, RoutedEventArgs e)
+		{
+			try
+			{
+				EnsureIgnoreMismatchListInitialized();
+				if (_ignoreMismatchGames == null || !(sender is Button button))
+				{
+					return;
+				}
+
+				Game game = button.Tag as Game ?? button.DataContext as Game;
+				if (game == null)
+				{
+					return;
+				}
+
+				Game toRemove = _ignoreMismatchGames.FirstOrDefault(g => g.Id == game.Id);
+				if (toRemove != null)
+				{
+					_ = _ignoreMismatchGames.Remove(toRemove);
+					SyncIgnoredMismatchGameIds();
 				}
 			}
 			catch (Exception ex)

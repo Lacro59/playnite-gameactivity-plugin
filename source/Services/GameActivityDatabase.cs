@@ -260,20 +260,77 @@ namespace GameActivity.Services
 					return Enumerable.Empty<GameActivities>();
 				}
 
+				HashSet<Guid> ignoredIds = GetIgnoredMismatchGameIdSet();
+
 				IEnumerable<GameActivities> mismatchData = db
 					.Where(x => x.GameExist
 							  && (x.SessionPlaytime != x.Game.Playtime
 								  || x.Game.PlayCount != (ulong)x.Count)
-							  && (!x.Game.Hidden || withHidden)) ?? Enumerable.Empty<GameActivities>();
+							  && (!x.Game.Hidden || withHidden)
+							  && !ignoredIds.Contains(x.Id)) ?? Enumerable.Empty<GameActivities>();
 
 				List<GameActivities> result = mismatchData.ToList();
-				Common.LogDebug($"GetGamesDataMismatch withHidden={withHidden} count={result.Count}");
+				Common.LogDebug(
+					$"GetGamesDataMismatch withHidden={withHidden} ignored={ignoredIds.Count} count={result.Count}");
 				return result;
 			}
 			catch (Exception ex)
 			{
 				Common.LogError(ex, false, true, PluginName);
 				return Enumerable.Empty<GameActivities>();
+			}
+		}
+
+		/// <summary>
+		/// Builds a set of game ids configured to stay hidden on the mismatch screen.
+		/// </summary>
+		/// <returns>Ignored game ids (empty when none).</returns>
+		private HashSet<Guid> GetIgnoredMismatchGameIdSet()
+		{
+			List<Guid> ignored = PluginSettings?.IgnoredMismatchGameIds;
+			if (ignored == null || ignored.Count == 0)
+			{
+				return new HashSet<Guid>();
+			}
+
+			return new HashSet<Guid>(ignored);
+		}
+
+		/// <summary>
+		/// Adds a game to the ignored-mismatch settings list and persists immediately.
+		/// </summary>
+		/// <param name="gameId">Playnite game id.</param>
+		/// <returns><c>true</c> when the id was added (or already present) and settings were saved.</returns>
+		public bool IgnoreGameFromMismatch(Guid gameId)
+		{
+			if (gameId == Guid.Empty || PluginSettings == null)
+			{
+				Logger.Warn("IgnoreGameFromMismatch – skipped: empty id or null settings.");
+				return false;
+			}
+
+			try
+			{
+				if (PluginSettings.IgnoredMismatchGameIds == null)
+				{
+					PluginSettings.IgnoredMismatchGameIds = new List<Guid>();
+				}
+
+				bool added = false;
+				if (!PluginSettings.IgnoredMismatchGameIds.Contains(gameId))
+				{
+					PluginSettings.IgnoredMismatchGameIds.Add(gameId);
+					added = true;
+				}
+
+				PersistSettingsAction?.Invoke();
+				Common.LogDebug($"IgnoreGameFromMismatch id={gameId} added={added} count={PluginSettings.IgnoredMismatchGameIds.Count}");
+				return true;
+			}
+			catch (Exception ex)
+			{
+				Common.LogError(ex, false, true, PluginName);
+				return false;
 			}
 		}
 
