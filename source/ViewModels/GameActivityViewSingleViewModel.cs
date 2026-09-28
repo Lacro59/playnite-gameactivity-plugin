@@ -70,6 +70,38 @@ namespace GameActivity.ViewModels
             private set => SetValue(ref _timeAvg, value);
         }
 
+        private string _totalGaPlaytime = string.Empty;
+        /// <summary>Total GameActivity playtime (sum of sessions), formatted.</summary>
+        public string TotalGaPlaytime
+        {
+            get => _totalGaPlaytime;
+            private set => SetValue(ref _totalGaPlaytime, value);
+        }
+
+        private string _totalPlaynitePlaytime = string.Empty;
+        /// <summary>Total Playnite library playtime, formatted.</summary>
+        public string TotalPlaynitePlaytime
+        {
+            get => _totalPlaynitePlaytime;
+            private set => SetValue(ref _totalPlaynitePlaytime, value);
+        }
+
+        private bool _hasPlaytimeMismatch;
+        /// <summary>True when GA session total/count diverges from Playnite playtime/play count.</summary>
+        public bool HasPlaytimeMismatch
+        {
+            get => _hasPlaytimeMismatch;
+            private set => SetValue(ref _hasPlaytimeMismatch, value);
+        }
+
+        private string _playtimeMismatchTooltip;
+        /// <summary>Tooltip explaining the GA vs Playnite mismatch; null when values match.</summary>
+        public string PlaytimeMismatchTooltip
+        {
+            get => _playtimeMismatchTooltip;
+            private set => SetValue(ref _playtimeMismatchTooltip, value);
+        }
+
         private string _recentActivity = string.Empty;
         /// <summary>Relative label for the most recent activity (e.g. "2 days ago").</summary>
         public string RecentActivity
@@ -248,6 +280,7 @@ namespace GameActivity.ViewModels
 
                     // Refresh list on UI thread.
                     _ = SessionItems.Remove(activity);
+                    RefreshPlaytimeTotals();
                 }
                 catch (Exception ex)
                 {
@@ -288,6 +321,7 @@ namespace GameActivity.ViewModels
                         _gameContext.LastActivity = _gameActivities.Items.Max(x => x.DateSession).ToLocalTime();
                         API.Instance.Database.Games.Update(_gameContext);
                         PluginDatabase.Update(_gameActivities);
+                        RefreshPlaytimeTotals();
                     }
                 }
                 catch (Exception ex)
@@ -338,6 +372,7 @@ namespace GameActivity.ViewModels
                         _gameContext.LastActivity = _gameActivities.Items.Max(x => x.DateSession).ToLocalTime();
                         API.Instance.Database.Games.Update(_gameContext);
                         PluginDatabase.Update(_gameActivities);
+                        RefreshPlaytimeTotals();
                     }
                 }
                 catch (Exception ex)
@@ -368,6 +403,7 @@ namespace GameActivity.ViewModels
                     // Reload data from database because merge is done in another view-model instance.
                     _gameActivities = PluginDatabase.Get(_gameContext);
                     LoadSessionsAsync();
+                    RefreshPlaytimeTotals();
                 }
                 catch (Exception ex)
                 {
@@ -471,6 +507,8 @@ namespace GameActivity.ViewModels
             TimeAvg = (string)playTimeConverter.Convert(
                 _gameActivities.AvgPlayTime(), null, null, CultureInfo.CurrentCulture);
 
+            RefreshPlaytimeTotals(playTimeConverter);
+
             RecentActivity = _gameActivities.GetRecentActivity();
 
             FirstSession = (string)localDateConverter.Convert(
@@ -485,6 +523,50 @@ namespace GameActivity.ViewModels
 
             // Kick off background loading of the session list.
             LoadSessionsAsync();
+        }
+
+        /// <summary>
+        /// Refreshes dual playtime totals and the mismatch warning used by the stats card.
+        /// </summary>
+        private void RefreshPlaytimeTotals()
+        {
+            RefreshPlaytimeTotals(new PlayTimeToStringConverter());
+        }
+
+        /// <summary>
+        /// Refreshes dual playtime totals and the mismatch warning used by the stats card.
+        /// </summary>
+        /// <param name="playTimeConverter">Shared duration formatter.</param>
+        private void RefreshPlaytimeTotals(PlayTimeToStringConverter playTimeConverter)
+        {
+            ulong gaSeconds = _gameActivities?.SessionPlaytime ?? 0UL;
+            ulong pnSeconds = _gameContext?.Playtime ?? 0UL;
+            ulong gaCount = _gameActivities?.Count ?? 0UL;
+            ulong pnCount = _gameContext?.PlayCount ?? 0UL;
+
+            TotalGaPlaytime = (string)playTimeConverter.Convert(
+                gaSeconds, null, null, CultureInfo.CurrentCulture);
+            TotalPlaynitePlaytime = (string)playTimeConverter.Convert(
+                pnSeconds, null, null, CultureInfo.CurrentCulture);
+
+            bool mismatch = gaSeconds != pnSeconds || gaCount != pnCount;
+            HasPlaytimeMismatch = mismatch;
+            if (mismatch)
+            {
+                PlaytimeMismatchTooltip = string.Format(
+                    CultureInfo.CurrentCulture,
+                    ResourceProvider.GetString("LOCGaPlaytimeMismatchTooltip"),
+                    TotalGaPlaytime,
+                    gaCount,
+                    TotalPlaynitePlaytime,
+                    pnCount);
+                Common.LogDebug(
+                    $"Playtime mismatch for {_gameContext?.Name}: GA={gaSeconds}s/{gaCount}, Playnite={pnSeconds}s/{pnCount}");
+            }
+            else
+            {
+                PlaytimeMismatchTooltip = null;
+            }
         }
 
         /// <summary>

@@ -98,14 +98,28 @@ namespace GameActivity.ViewModels
 
         /// <summary>
         /// Applies GA data to Playnite for a single game then refreshes the list.
+        /// Asks for confirmation first (same warning as Apply all).
         /// </summary>
         /// <param name="id">Playnite game Id passed as CommandParameter from the row.</param>
         private void ExecuteApplySingle(Guid id)
         {
             try
             {
+                MessageBoxResult confirm = API.Instance.Dialogs.ShowMessage(
+                    ResourceProvider.GetString("LOCGaPlayniteToGaWarning"),
+                    ResourceProvider.GetString("LOCGaDataMismatchApplySingleConfirmTitle"),
+                    MessageBoxButton.OKCancel,
+                    MessageBoxImage.Warning);
+
+                if (confirm != MessageBoxResult.OK)
+                {
+                    Common.LogDebug($"ApplySingle – cancelled for game {id}.");
+                    return;
+                }
+
                 if (!ApplyToDatabase(id))
                 {
+                    Logger.Warn($"ApplySingle – ApplyToDatabase returned false for game {id}.");
                     return;
                 }
 

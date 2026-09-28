@@ -1,9 +1,11 @@
 using CommonPluginsShared.Collections;
+using CommonPlayniteShared.Converters;
 using GameActivity.Services;
 using Playnite.SDK;
 using Playnite.SDK.Data;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace GameActivity.Models
@@ -45,6 +47,59 @@ namespace GameActivity.Models
 		/// Gets the total playtime across all sessions in seconds.
 		/// </summary>
 		public ulong SessionPlaytime => (ulong)(Items?.Sum(x => (long)x.ElapsedSeconds) ?? 0);
+
+		/// <summary>
+		/// Signed playtime delta in seconds: GameActivity total minus Playnite total.
+		/// </summary>
+		[DontSerialize]
+		public long PlaytimeDeltaSeconds => (long)SessionPlaytime - (long)Playtime;
+
+		/// <summary>
+		/// True when session playtime differs from Playnite playtime.
+		/// </summary>
+		[DontSerialize]
+		public bool HasPlaytimeDelta => PlaytimeDeltaSeconds != 0L;
+
+		/// <summary>
+		/// True when session count differs from Playnite play count.
+		/// </summary>
+		[DontSerialize]
+		public bool HasPlayCountMismatch => Count != PlayCount;
+
+		/// <summary>
+		/// True when playtime and/or play count diverge from Playnite.
+		/// </summary>
+		[DontSerialize]
+		public bool HasDataMismatch => HasPlaytimeDelta || HasPlayCountMismatch;
+
+		/// <summary>
+		/// Tooltip describing the GA vs Playnite mismatch; null when values match.
+		/// </summary>
+		[DontSerialize]
+		public string DataMismatchTooltip
+		{
+			get
+			{
+				if (!HasDataMismatch)
+				{
+					return null;
+				}
+
+				PlayTimeToStringConverter converter = new PlayTimeToStringConverter();
+				string gaFormatted = (string)converter.Convert(
+					SessionPlaytime, null, null, CultureInfo.CurrentCulture);
+				string pnFormatted = (string)converter.Convert(
+					Playtime, null, null, CultureInfo.CurrentCulture);
+
+				return string.Format(
+					CultureInfo.CurrentCulture,
+					ResourceProvider.GetString("LOCGaPlaytimeMismatchTooltip"),
+					gaFormatted,
+					Count,
+					pnFormatted,
+					PlayCount);
+			}
+		}
 
 		/// <summary>
 		/// Gets the average FPS across all sessions.

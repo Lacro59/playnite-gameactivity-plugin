@@ -9,6 +9,7 @@
              xmlns:commonpluginsshared="clr-namespace:CommonPluginsShared.Converters"
              xmlns:commonpluginscontrols="clr-namespace:CommonPluginsControls.Controls"
              xmlns:viewmodels="clr-namespace:GameActivity.ViewModels"
+             xmlns:local="clr-namespace:GameActivity.Views"
              d:DataContext="{d:DesignInstance Type=viewmodels:GameActivityViewSingleViewModel}"
              mc:Ignorable="d" d:DesignHeight="760" d:DesignWidth="1400"
              Background="{DynamicResource WindowBackgourndBrush}">
@@ -31,6 +32,7 @@
         <BooleanToVisibilityConverter               x:Key="BooleanToVisibilityConverter" />
         <commonpluginsshared:IndexConverter         x:Key="IndexConverter" />
         <converters:InvertedBoolenConverter         x:Key="InvertedBoolenConverter" />
+        <local:BoolToWarningBrushConverter          x:Key="BoolToWarningBrushConverter" />
     </UserControl.Resources>
 
     <!-- ═══════════════════════════════════════════════════════════════════
@@ -101,30 +103,54 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="8" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="8" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="8" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
-                        <!-- Average play-time per session -->
+                        <!-- Total playtime — GameActivity sessions -->
                         <TextBlock Grid.Row="0" Grid.Column="0"
                                    Style="{DynamicResource ViewColumnLabelText}"
-                                   Text="{DynamicResource LOCGameActivityAvgPerSession}" />
+                                   Text="{DynamicResource LOCGaTotalPlaytimeGa}" />
                         <TextBlock Grid.Row="0" Grid.Column="2"
+                                   Style="{DynamicResource StatValue}"
+                                   Text="{Binding TotalGaPlaytime}"
+                                   ToolTip="{Binding PlaytimeMismatchTooltip}"
+                                   Foreground="{Binding HasPlaytimeMismatch, Converter={StaticResource BoolToWarningBrushConverter}}" />
+
+                        <!-- Total playtime — Playnite library -->
+                        <TextBlock Grid.Row="2" Grid.Column="0"
+                                   Style="{DynamicResource ViewColumnLabelText}"
+                                   Text="{DynamicResource LOCGaTotalPlaytimePlaynite}" />
+                        <TextBlock Grid.Row="2" Grid.Column="2"
+                                   Style="{DynamicResource StatValue}"
+                                   Text="{Binding TotalPlaynitePlaytime}"
+                                   ToolTip="{Binding PlaytimeMismatchTooltip}"
+                                   Foreground="{Binding HasPlaytimeMismatch, Converter={StaticResource BoolToWarningBrushConverter}}" />
+
+                        <!-- Average play-time per session -->
+                        <TextBlock Grid.Row="4" Grid.Column="0"
+                                   Style="{DynamicResource ViewColumnLabelText}"
+                                   Text="{DynamicResource LOCGameActivityAvgPerSession}" />
+                        <TextBlock Grid.Row="4" Grid.Column="2"
                                    Style="{DynamicResource StatValue}"
                                    Text="{Binding TimeAvg}" />
 
                         <!-- Most recent activity (relative date) -->
-                        <TextBlock Grid.Row="2" Grid.Column="0"
+                        <TextBlock Grid.Row="6" Grid.Column="0"
                                    Style="{DynamicResource ViewColumnLabelText}"
                                    Text="{DynamicResource LOCGameActivityRecentActivity}" />
-                        <TextBlock Grid.Row="2" Grid.Column="2"
+                        <TextBlock Grid.Row="6" Grid.Column="2"
                                    Style="{DynamicResource StatValue}"
                                    Text="{Binding RecentActivity}" />
 
-                        <Separator Grid.Row="3" Grid.ColumnSpan="3"
+                        <Separator Grid.Row="7" Grid.ColumnSpan="3"
                                    Background="{DynamicResource NormalBorderBrush}"
                                    Margin="0,2" />
 
                         <!-- First / Last session sub-grid -->
-                        <Grid Grid.Row="4" Grid.ColumnSpan="3">
+                        <Grid Grid.Row="8" Grid.ColumnSpan="3">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="8" />
