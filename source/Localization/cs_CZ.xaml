@@ -13,6 +13,17 @@ Used the difference play time: {1}s.</sys:String>
 
     <sys:String x:Key="LOCGameActivityDefaultAction">Default action</sys:String>
 
+    <!-- Exclude tracking (Playnite tag label + game menu + settings) -->
+    <sys:String x:Key="LOCGameActivityExcludeTrackingTag">Ignore tracking</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingAdd">Exclude from activity tracking</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingRemove">Allow activity tracking</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingTab">Excluded games</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingDescription">Games listed here are excluded from GameActivity session tracking (no playtime session, backup, or hardware logging). The Playnite tag &quot;[GA] Ignore tracking&quot; is used so you can also filter these games in the library.</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingAddGame">Add a game</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingAddDialogTitle">Add games to exclusion list</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingAddGameConfirm">Add</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingRemoveTooltip">Remove from exclusion list</sys:String>
+
 
     <!-- ==================== Notifications ==================== -->
 
