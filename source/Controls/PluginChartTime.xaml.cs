@@ -422,6 +422,9 @@ namespace GameActivity.Controls
         /// <param name="pluginGameData">The associated game activity data.</param>
         public override void SetData(Game newContext, PluginGameEntry pluginGameData)
         {
+#if DEBUG
+            DebugTimer setDataTimer = new DebugTimer("PluginChartTime.SetData");
+#endif
             GameActivities gameActivities = (GameActivities)pluginGameData;
 
             MustDisplay =
@@ -431,6 +434,9 @@ namespace GameActivity.Controls
 
             if (!MustDisplay)
             {
+#if DEBUG
+                setDataTimer.Stop("MustDisplay=false");
+#endif
                 return;
             }
 
@@ -459,6 +465,9 @@ namespace GameActivity.Controls
                     );
                 }
 
+#if DEBUG
+                setDataTimer.Stop(ShowByWeeks ? "week showAll/period" : "day showAll/period");
+#endif
                 return;
             }
 
@@ -474,6 +483,14 @@ namespace GameActivity.Controls
             {
                 GetActivityForGamesTimeGraphics(gameActivities, axisVariator, limit);
             }
+
+#if DEBUG
+            setDataTimer.Stop(string.Format(
+                "{0} limit={1} variator={2}",
+                ShowByWeeks ? "week" : "day",
+                limit,
+                axisVariator));
+#endif
         }
 
         // ────────────────────────────────────────────────────────────────────

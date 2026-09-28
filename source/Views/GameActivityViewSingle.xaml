@@ -41,6 +41,18 @@
            Col 2  — Time chart (top) + log chart (bottom) (right panel)
          ═══════════════════════════════════════════════════════════════════ -->
     <Grid Margin="12">
+        <!-- Hidden while IsLoading; shown once SessionItems are bound. -->
+        <Grid Name="PART_DataContent">
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="Visibility" Value="Visible" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsLoading}" Value="True">
+                            <Setter Property="Visibility" Value="Hidden" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
         <Grid.ColumnDefinitions>
             <!-- Left panel: fixed width to fit ListView columns comfortably -->
             <ColumnDefinition Width="600" />
@@ -840,6 +852,29 @@
 
             </Expander>
 
+        </Grid>
+        </Grid>
+
+        <Grid Name="PART_DataLoad" Panel.ZIndex="1">
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsLoading}" Value="True">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <ProgressBar IsIndeterminate="True"
+                         Width="350"
+                         Height="40"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center" />
+            <TextBlock Text="{DynamicResource LOCLoadingLabel}"
+                       Style="{DynamicResource BaseTextBlockStyle}"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center" />
         </Grid>
     </Grid>
 </UserControl>

@@ -882,6 +882,9 @@ namespace GameActivity.Controls
         {
             System.Threading.Tasks.Task.Run(() =>
             {
+#if DEBUG
+                DebugTimer logTimer = new DebugTimer("PluginChartLog.GetActivityForGamesLogGraphics");
+#endif
                 try
                 {
                     List<ActivityDetailsData> activitiesDetails =
@@ -897,6 +900,9 @@ namespace GameActivity.Controls
                                     ControlDataContext.HasNoData = true;
                                     PART_ChartLogActivity.Series = null;
                                     PART_ChartLogActivityLabelsX.Labels = null;
+#if DEBUG
+                                    logTimer.Stop("no data (null)");
+#endif
                                 }
                             )
                         );
@@ -913,6 +919,9 @@ namespace GameActivity.Controls
                                     ControlDataContext.HasNoData = true;
                                     PART_ChartLogActivity.Series = null;
                                     PART_ChartLogActivityLabelsX.Labels = null;
+#if DEBUG
+                                    logTimer.Stop("no data (empty)");
+#endif
                                 }
                             )
                         );
@@ -1018,6 +1027,9 @@ namespace GameActivity.Controls
                         new ThreadStart(
                             delegate
                             {
+#if DEBUG
+                                logTimer.Step("UI bind start");
+#endif
                                 ControlDataContext.HasNoData = false;
                                 Brush cpuBrush = TryGetThemeBrush(
                                     "GameActivityCpuBrush",
@@ -1259,6 +1271,12 @@ namespace GameActivity.Controls
                                 PART_ChartLogActivityLabelsX.Labels = activityForGameLogLabels;
 
                                 SetChartVisibility();
+#if DEBUG
+                                logTimer.Stop(string.Format(
+                                    "bound points={0} total={1}",
+                                    gameLogsDefinitive != null ? gameLogsDefinitive.Count : 0,
+                                    totalDataPoints));
+#endif
                             }
                         )
                     );
@@ -1266,6 +1284,9 @@ namespace GameActivity.Controls
                 catch (Exception ex)
                 {
                     Common.LogError(ex, false, true, PluginDatabase.PluginName);
+#if DEBUG
+                    logTimer.Stop("error");
+#endif
                 }
             });
         }

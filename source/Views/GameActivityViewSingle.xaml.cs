@@ -1,4 +1,5 @@
 using CommonPluginsControls.Controls;
+using CommonPluginsShared;
 using GameActivity.Controls;
 using GameActivity.Models;
 using GameActivity.Services;
@@ -13,6 +14,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
+using System.Windows.Threading;
 
 namespace GameActivity.Views
 {
@@ -33,6 +35,7 @@ namespace GameActivity.Views
         // Chart control references resolved after InitializeComponent.
         private PluginChartTime _chartTime;
         private PluginChartLog _chartLog;
+        private readonly Game _game;
 
         private GameActivityViewSingleViewModel ViewModel => DataContext as GameActivityViewSingleViewModel;
 
@@ -40,18 +43,30 @@ namespace GameActivity.Views
 
         public GameActivityViewSingle(GameActivity plugin, Game game)
         {
+#if DEBUG
+            DebugTimer ctorTimer = new DebugTimer("GameActivityViewSingle.ctor");
+#endif
+            _game = game;
             InitializeComponent();
+#if DEBUG
+            ctorTimer.Step("InitializeComponent done");
+#endif
 
             // Assign ViewModel — all bindings resolve from this point.
             DataContext = new GameActivityViewSingleViewModel(plugin, game);
+#if DEBUG
+            ctorTimer.Step("ViewModel assigned");
+#endif
 
             // Resolve chart controls injected via ContentControl children in XAML.
+            // GameContext is bound after the window is shown (ApplicationIdle) so open is not contended.
             _chartTime = (PluginChartTime)PART_ChartTimeContainer.Children[0];
-            _chartTime.GameContext = game;
             _chartTime.Truncate = PluginDatabase.PluginSettings.ChartTimeTruncate;
 
             _chartLog = (PluginChartLog)PART_LogSection.Child;
-            _chartLog.GameContext = game;
+#if DEBUG
+            ctorTimer.Step("charts resolved (GameContext deferred)");
+#endif
 
             // Configure ListView column visibility.
             ConfigureListViewColumns();
@@ -61,6 +76,39 @@ namespace GameActivity.Views
             lvSessions.ColumnConfigurationFilePath = System.IO.Path.Combine(PluginDatabase.Paths.PluginUserDataPath, "ListViewColumns.json");
             lvSessions.ColumnConfigurationScope = CommonPluginsShared.Controls.ColumnConfigurationScope.Custom;
             lvSessions.ColumnConfigurationKey = "GameActivityViewSingle.lvSessions";
+
+            Loaded += GameActivityViewSingle_OnFirstLoaded;
+#if DEBUG
+            ctorTimer.Stop();
+#endif
+        }
+
+        private void GameActivityViewSingle_OnFirstLoaded(object sender, RoutedEventArgs e)
+        {
+            Loaded -= GameActivityViewSingle_OnFirstLoaded;
+            Dispatcher.BeginInvoke(new Action(BindChartsGameContext), DispatcherPriority.ApplicationIdle);
+        }
+
+        /// <summary>
+        /// Assigns chart game context after the dialog is interactive (deferred from ctor).
+        /// </summary>
+        private void BindChartsGameContext()
+        {
+#if DEBUG
+            DebugTimer chartsTimer = new DebugTimer("GameActivityViewSingle.BindChartsGameContext");
+#endif
+            if (_chartTime != null)
+            {
+                _chartTime.GameContext = _game;
+            }
+
+            if (_chartLog != null)
+            {
+                _chartLog.GameContext = _game;
+            }
+#if DEBUG
+            chartsTimer.Stop();
+#endif
         }
 
         // ─── Column Configuration ─────────────────────────────────────────────────────

@@ -18,6 +18,9 @@ namespace GameActivity.Services
 
         public override void ShowPluginGameDataWindow(GenericPlugin plugin, Game gameContext)
 		{
+#if DEBUG
+			DebugTimer openTimer = new DebugTimer("GameActivityWindows.ShowPluginGameDataWindow(game)");
+#endif
 			WindowOptions windowOptions = new WindowOptions
 			{
 				ShowMinimizeButton = false,
@@ -31,10 +34,18 @@ namespace GameActivity.Services
 			};
 
 			var viewExtension = new GameActivityViewSingle((GameActivity)plugin, gameContext);
+#if DEBUG
+			openTimer.Step("ViewSingle constructed");
+#endif
 			Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(
 				PluginName,
 				viewExtension,
 				windowOptions);
+#if DEBUG
+			openTimer.Step("window created");
+			// Stop before ShowDialog — dialog lifetime is not part of open latency.
+			openTimer.Stop("before ShowDialog");
+#endif
 			windowExtension.ShowDialog();
 		}
 
