@@ -75,6 +75,14 @@
     <sys:String x:Key="LOCGaDataMismatchIgnoreTooltip">Hide this game from the mismatch list (settings). Does not stop session tracking.</sys:String>
     <sys:String x:Key="LOCGaDataMismatchEmpty">Несоответствий данных не обнаружено.</sys:String>
     <sys:String x:Key="LOCGaDataMismatchApplyAllConfirmTitle">Перезаписать всё — вы уверены?</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchApplySingleConfirmTitle">Override this game – are you sure?</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchDeltaHeader">Δ</sys:String>
+
+    <!-- ==================== GameActivityViewSingle — dual playtime ==================== -->
+
+    <sys:String x:Key="LOCGaTotalPlaytimeGa">Total (GameActivity)</sys:String>
+    <sys:String x:Key="LOCGaTotalPlaytimePlaynite">Total (Playnite)</sys:String>
+    <sys:String x:Key="LOCGaPlaytimeMismatchTooltip">Data mismatch — GameActivity: {0} ({1} sessions), Playnite: {2} ({3} plays).</sys:String>
 
 
     <!-- ==================== GameActivityBackup ================ -->
