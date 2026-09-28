@@ -32,6 +32,7 @@ namespace GameActivity.ViewModels
         private string _selectedTimeStart;
         private DateTime _selectedDateEnd;
         private string _selectedTimeEnd;
+        private string _sessionDuration = "00:00:00";
         private string _elapsedTimeDisplay = "--";
         private bool _isAddEnabled;
         private bool _isStartLocked;
@@ -43,13 +44,55 @@ namespace GameActivity.ViewModels
         private string _customActionNameInput = string.Empty;
         private bool _adjustSessionLogsWithSession = true;
         private bool _isAdjustSessionLogsOptionVisible;
+        private bool _isUpdatingFromDuration;
 
         #region Properties
 
-        public DateTime SelectedDateStart { get => _selectedDateStart; set { SetValue(ref _selectedDateStart, value); RefreshElapsed(); } }
+        /// <summary>
+        /// Session start date. When changed (add mode), the end date is aligned to the same calendar day.
+        /// </summary>
+        public DateTime SelectedDateStart
+        {
+            get => _selectedDateStart;
+            set
+            {
+                SetValue(ref _selectedDateStart, value);
+                if (!IsStartLocked)
+                {
+                    SyncEndDateToStartDate();
+                }
+
+                RefreshElapsed();
+            }
+        }
+
         public string SelectedTimeStart { get => _selectedTimeStart; set { SetValue(ref _selectedTimeStart, value); RefreshElapsed(); } }
         public DateTime SelectedDateEnd { get => _selectedDateEnd; set { SetValue(ref _selectedDateEnd, value); RefreshElapsed(); } }
         public string SelectedTimeEnd { get => _selectedTimeEnd; set { SetValue(ref _selectedTimeEnd, value); RefreshElapsed(); } }
+
+        /// <summary>
+        /// Editable session duration (HH:mm:ss, under 24 hours). Changing it recalculates the end date/time.
+        /// </summary>
+        public string SessionDuration
+        {
+            get => _sessionDuration;
+            set
+            {
+                if (string.Equals(_sessionDuration, value, StringComparison.Ordinal))
+                {
+                    return;
+                }
+
+                SetValue(ref _sessionDuration, value);
+                if (_isUpdatingFromDuration)
+                {
+                    return;
+                }
+
+                ApplyDurationToEnd();
+            }
+        }
+
         public string ElapsedTimeDisplay { get => _elapsedTimeDisplay; private set => SetValue(ref _elapsedTimeDisplay, value); }
         public bool IsAddEnabled { get => _isAddEnabled; private set => SetValue(ref _isAddEnabled, value); }
         public bool IsStartLocked { get => _isStartLocked; private set => SetValue(ref _isStartLocked, value); }
@@ -242,8 +285,138 @@ namespace GameActivity.ViewModels
                 ulong diff = e <= s ? 0 : (ulong)(e - s).TotalSeconds;
                 ElapsedTimeDisplay = (string)_playTimeConverter.Convert(diff, null, null, CultureInfo.CurrentCulture);
                 IsAddEnabled = diff > 0;
+                SyncDurationFromElapsed(diff);
             }
-            catch { ElapsedTimeDisplay = "--"; IsAddEnabled = false; }
+            catch (Exception ex)
+            {
+                ElapsedTimeDisplay = "--";
+                IsAddEnabled = false;
+                Common.LogDebug($"GameActivityAddTime: RefreshElapsed failed — {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Aligns the end calendar date to the start date while preserving the end time-of-day string.
+        /// </summary>
+        private void SyncEndDateToStartDate()
+        {
+            DateTime startDate = _selectedDateStart.Date;
+            if (_selectedDateEnd.Date == startDate)
+            {
+                return;
+            }
+
+            Common.LogDebug($"GameActivityAddTime: sync EndDate to StartDate {startDate:yyyy-MM-dd}");
+            SetValue(ref _selectedDateEnd, startDate, nameof(SelectedDateEnd));
+        }
+
+        /// <summary>
+        /// Sets end date/time from start + <see cref="SessionDuration"/>.
+        /// </summary>
+        private void ApplyDurationToEnd()
+        {
+            try
+            {
+                DateTime start = ParseDateTime(_selectedDateStart, _selectedTimeStart);
+                TimeSpan duration = ParseDuration(_sessionDuration);
+                DateTime end = start.Add(duration);
+
+                _isUpdatingFromDuration = true;
+                try
+                {
+                    SetValue(ref _selectedDateEnd, end.Date, nameof(SelectedDateEnd));
+                    SetValue(ref _selectedTimeEnd, end.ToString("HH:mm:ss"), nameof(SelectedTimeEnd));
+                    RefreshElapsed();
+                }
+                finally
+                {
+                    _isUpdatingFromDuration = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex, false, "GameActivityAddTime: ApplyDurationToEnd failed", false, PluginDatabase.PluginName);
+            }
+        }
+
+        /// <summary>
+        /// Updates the duration TimePicker from start/end when the span is under 24 hours.
+        /// Longer sessions keep the previous duration value; end fields remain the source of truth.
+        /// </summary>
+        private void SyncDurationFromElapsed(ulong elapsedSeconds)
+        {
+            if (_isUpdatingFromDuration)
+            {
+                return;
+            }
+
+            const ulong secondsPerDay = 24UL * 60UL * 60UL;
+            if (elapsedSeconds >= secondsPerDay)
+            {
+                return;
+            }
+
+            TimeSpan span = TimeSpan.FromSeconds(elapsedSeconds);
+            string formatted = string.Format(
+                CultureInfo.InvariantCulture,
+                "{0:D2}:{1:D2}:{2:D2}",
+                (int)span.TotalHours,
+                span.Minutes,
+                span.Seconds);
+
+            if (string.Equals(_sessionDuration, formatted, StringComparison.Ordinal))
+            {
+                return;
+            }
+
+            _isUpdatingFromDuration = true;
+            try
+            {
+                SetValue(ref _sessionDuration, formatted, nameof(SessionDuration));
+            }
+            finally
+            {
+                _isUpdatingFromDuration = false;
+            }
+        }
+
+        private static TimeSpan ParseDuration(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return TimeSpan.Zero;
+            }
+
+            string[] parts = value.Split(':');
+            if (parts.Length < 2)
+            {
+                return TimeSpan.Zero;
+            }
+
+            int hours;
+            int minutes;
+            int seconds = 0;
+            if (!int.TryParse(parts[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out hours))
+            {
+                return TimeSpan.Zero;
+            }
+
+            if (!int.TryParse(parts[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out minutes))
+            {
+                return TimeSpan.Zero;
+            }
+
+            if (parts.Length >= 3)
+            {
+                int.TryParse(parts[2], NumberStyles.Integer, CultureInfo.InvariantCulture, out seconds);
+            }
+
+            if (hours < 0 || minutes < 0 || seconds < 0)
+            {
+                return TimeSpan.Zero;
+            }
+
+            return new TimeSpan(hours, minutes, seconds);
         }
 
         private void RebuildPlayActionsView()

@@ -172,11 +172,17 @@
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="110" />
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="12"  />
                         <ColumnDefinition Width="*"   />
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Style="{DynamicResource ViewColumnLabelText}"
+                    <TextBlock Grid.Column="0" VerticalAlignment="Center"
+                               Style="{DynamicResource ViewColumnLabelText}"
                                Text="{DynamicResource LOCGameActivityLvGamesElapsedSeconds}" />
-                    <TextBlock Grid.Column="1" Style="{DynamicResource ViewColumnValueText}"
+                    <controls:TimePicker Grid.Column="1" ShowSeconds="True"
+                                         SelectedTime="{Binding SessionDuration, Mode=TwoWay}" />
+                    <TextBlock Grid.Column="3" VerticalAlignment="Center"
+                               Style="{DynamicResource ViewColumnValueText}"
                                Text="{Binding ElapsedTimeDisplay}" Foreground="{DynamicResource GlyphBrush}"
                                FontWeight="SemiBold" FontSize="{DynamicResource FontSizeLarge}" />
                 </Grid>
