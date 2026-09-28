@@ -196,11 +196,22 @@ namespace GameActivity.Services
 		#region Query
 
 		/// <summary>
-		/// Returns a snapshot list of all <see cref="GameActivities"/> entries in the database.
+		/// Whether UI aggregations should include Playnite hidden games.
+		/// Driven by <see cref="GameActivitySettings.HideHiddenGames"/> (when true, hidden games are excluded).
+		/// </summary>
+		/// <returns><c>true</c> when hidden games must appear in lists, charts and totals.</returns>
+		public bool ShouldIncludeHiddenGames()
+		{
+			return PluginSettings == null || !PluginSettings.HideHiddenGames;
+		}
+
+		/// <summary>
+		/// Returns a snapshot list of <see cref="GameActivities"/> entries for UI aggregations.
+		/// When <see cref="GameActivitySettings.HideHiddenGames"/> is enabled, Playnite hidden games are omitted.
 		/// </summary>
 		/// <remarks>
 		/// For streaming or large datasets, prefer iterating <see cref="Database"/> directly
-		/// to avoid the allocation of a full copy.
+		/// to avoid the allocation of a full copy. Direct <see cref="Database"/> iteration does not apply this filter.
 		/// </remarks>
 		public List<GameActivities> GetListGameActivity()
 		{
@@ -210,9 +221,25 @@ namespace GameActivity.Services
 				return new List<GameActivities>();
 			}
 
-			List<GameActivities> listGameActivity = db?.ToList() ?? new List<GameActivities>();
+			bool includeHidden = ShouldIncludeHiddenGames();
+			IEnumerable<GameActivities> query = db;
+			if (!includeHidden)
+			{
+				query = query.Where(x => !x.Hidden);
+			}
 
-			return listGameActivity;
+			List<GameActivities> list = query.ToList();
+			Common.LogDebug($"GetListGameActivity includeHidden={includeHidden} count={list.Count}");
+			return list;
+		}
+
+		/// <summary>
+		/// Returns mismatched entries using the current <see cref="GameActivitySettings.HideHiddenGames"/> setting.
+		/// </summary>
+		/// <returns>A (possibly empty) sequence of mismatched entries.</returns>
+		public IEnumerable<GameActivities> GetGamesDataMismatch()
+		{
+			return GetGamesDataMismatch(ShouldIncludeHiddenGames());
 		}
 
 		/// <summary>
@@ -239,7 +266,9 @@ namespace GameActivity.Services
 								  || x.Game.PlayCount != (ulong)x.Count)
 							  && (!x.Game.Hidden || withHidden)) ?? Enumerable.Empty<GameActivities>();
 
-				return mismatchData;
+				List<GameActivities> result = mismatchData.ToList();
+				Common.LogDebug($"GetGamesDataMismatch withHidden={withHidden} count={result.Count}");
+				return result;
 			}
 			catch (Exception ex)
 			{

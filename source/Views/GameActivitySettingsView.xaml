@@ -66,6 +66,13 @@
                             <Label Content="{DynamicResource LOCGameActivitySubstPlayStateTime}" />
                         </CheckBox>
 
+                        <CheckBox IsChecked="{Binding Settings.HideHiddenGames}" Margin="0,15,0,0">
+                            <CheckBox.ToolTip>
+                                <ToolTip Content="{DynamicResource LOCGameActivityHideHiddenGamesToolTip}" />
+                            </CheckBox.ToolTip>
+                            <Label Content="{DynamicResource LOCGameActivityHideHiddenGames}" />
+                        </CheckBox>
+
                     </StackPanel>
 
                     <Grid Margin="0,15,0,0">

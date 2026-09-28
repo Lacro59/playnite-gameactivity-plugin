@@ -320,6 +320,12 @@ namespace GameActivity
         /// <summary>Subtract PlayState paused time from the recorded session duration.</summary>
         public bool SubstPlayStateTime { get; set; } = false;
 
+        /// <summary>
+        /// When true, exclude Playnite hidden games from GameActivity stats UI (lists, charts, totals).
+        /// Does not stop session tracking; use the exclude-tracking tag for that.
+        /// </summary>
+        public bool HideHiddenGames { get; set; } = true;
+
         /// <summary>Discard sessions that are shorter than <see cref="IgnoreSessionTime"/>.</summary>
         public bool IgnoreSession { get; set; } = false;
 

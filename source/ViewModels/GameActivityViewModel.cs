@@ -335,7 +335,7 @@ namespace GameActivity.ViewModels
         /// </summary>
         public void UpdateActivityLabel()
         {
-            ulong periodPlaytime = GameActivityStats.GetPlayTimePeriod(PeriodStart, PeriodEnd, false);
+            ulong periodPlaytime = GameActivityStats.GetPlayTimePeriod(PeriodStart, PeriodEnd);
             string playtimeText = (string)_converter.Convert(periodPlaytime, null, null, CultureInfo.CurrentCulture);
             ActivityLabelText = FormatPeriodLabel() + " (" + playtimeText + ")";
         }

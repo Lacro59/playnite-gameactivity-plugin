@@ -84,7 +84,7 @@ namespace GameActivity.ViewModels
         /// </summary>
         private void RefreshData()
         {
-            Items = PluginDatabase.GetGamesDataMismatch(false).ToObservable();
+            Items = PluginDatabase.GetGamesDataMismatch().ToObservable();
         }
 
         // ── Command implementations ──────────────────────────────────────────────
