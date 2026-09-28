@@ -24,6 +24,13 @@ Utilitzada la diferència de temps de joc de: {1}s.</sys:String>
     <sys:String x:Key="LOCGameActivityExcludeTrackingAddGameConfirm">Add</sys:String>
     <sys:String x:Key="LOCGameActivityExcludeTrackingRemoveTooltip">Remove from exclusion list</sys:String>
 
+    <!-- Ignore mismatches (settings list — data consistency screen only) -->
+    <sys:String x:Key="LOCGameActivityIgnoreMismatchTab">Ignored mismatches</sys:String>
+    <sys:String x:Key="LOCGameActivityIgnoreMismatchDescription">Games listed here are hidden from the data consistency / mismatch screen. This does not stop session tracking; use the Excluded games tab for that.</sys:String>
+    <sys:String x:Key="LOCGameActivityIgnoreMismatchAddGame">Add a game</sys:String>
+    <sys:String x:Key="LOCGameActivityIgnoreMismatchAddDialogTitle">Add games to ignored mismatches list</sys:String>
+    <sys:String x:Key="LOCGameActivityIgnoreMismatchRemoveTooltip">Remove from ignored mismatches list</sys:String>
+
 
     <!-- ==================== Notifications ==================== -->
 
@@ -62,6 +69,8 @@ Utilitzada la diferència de temps de joc de: {1}s.</sys:String>
     <sys:String x:Key="LOCGaDataMismatchSectionPlaynite">Playnite data</sys:String>
     <sys:String x:Key="LOCGaDataMismatchApplyAllTooltip">Override Playnite data with GameActivity data for all listed games</sys:String>
     <sys:String x:Key="LOCGaDataMismatchApplyHeader">Apply</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchIgnoreHeader">Ignore</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchIgnoreTooltip">Hide this game from the mismatch list (settings). Does not stop session tracking.</sys:String>
     <sys:String x:Key="LOCGaDataMismatchEmpty">No data mismatch detected.</sys:String>
     <sys:String x:Key="LOCGaDataMismatchApplyAllConfirmTitle">Override all – are you sure?</sys:String>
 
@@ -155,6 +164,8 @@ Use when several devices share the same Sensor ID (e.g. multiple GPUs). Decimal 
     <!-- Playtime -->
     <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">Combinar temps de joc de les sessions al gràfic</sys:String>
     <sys:String x:Key="LOCGameActivityCumulPlaytimeStore">Unificar el temps de les diferents biblioteques</sys:String>
+    <sys:String x:Key="LOCGameActivityHideHiddenGames">Hide Playnite hidden games from stats</sys:String>
+    <sys:String x:Key="LOCGameActivityHideHiddenGamesToolTip">Excludes games marked as Hidden in Playnite from GameActivity lists, charts and totals. Sessions are still recorded; use Exclude from tracking to stop recording.</sys:String>
     <sys:String x:Key="LOCGameActivityIgnoreSession">Ignore short play sessions</sys:String>
 
     <!-- Integration / Chart -->
