@@ -667,8 +667,7 @@
                                             <GridViewColumnHeader Content="{DynamicResource LOCGameActivityLvGamesLastActivity}" />
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <TextBlock Text="{Binding GameLastActivity, Converter={StaticResource LocalDateRelativeConverter}}"
-                                                               ToolTip="{Binding GameLastActivity, Converter={StaticResource LocalDateTimeConverter}}"
+                                                    <TextBlock Text="{Binding GameLastActivity, Converter={StaticResource LocalDateTimeConverter}}"
                                                                Style="{DynamicResource ListExtendStyleTextBlock}" />
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
