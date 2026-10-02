@@ -18,6 +18,9 @@ namespace GameActivity.Services
 
         public override void ShowPluginGameDataWindow(GenericPlugin plugin, Game gameContext)
 		{
+#if DEBUG
+			DebugTimer openTimer = new DebugTimer("GameActivityWindows.ShowPluginGameDataWindow(game)");
+#endif
 			WindowOptions windowOptions = new WindowOptions
 			{
 				ShowMinimizeButton = false,
@@ -26,14 +29,23 @@ namespace GameActivity.Services
 				CanBeResizable = true,
 				Height = 740,
 				MinWidth = 1280,
-				WidthPercent = 90
+				WidthPercent = 90,
+				WindowPersistenceKey = "GameActivity.GameView"
 			};
 
 			var viewExtension = new GameActivityViewSingle((GameActivity)plugin, gameContext);
+#if DEBUG
+			openTimer.Step("ViewSingle constructed");
+#endif
 			Window windowExtension = PlayniteUiHelper.CreateExtensionWindow(
 				PluginName,
 				viewExtension,
 				windowOptions);
+#if DEBUG
+			openTimer.Step("window created");
+			// Stop before ShowDialog — dialog lifetime is not part of open latency.
+			openTimer.Stop("before ShowDialog");
+#endif
 			windowExtension.ShowDialog();
 		}
 
@@ -47,7 +59,8 @@ namespace GameActivity.Services
 				CanBeResizable = true,
 				Height = 740,
 				MaxWidth = 1500,
-				WidthPercent = 80
+				WidthPercent = 80,
+				WindowPersistenceKey = "GameActivity.AllGames"
 			};
 
 			var viewExtension = new GameActivityView((GameActivity)plugin);
@@ -76,7 +89,8 @@ namespace GameActivity.Services
 				CanBeResizable = true,
 				WidthPercent = 88,
 				MinWidth = 720,
-				Height = 760
+				Height = 760,
+				WindowPersistenceKey = "GameActivity.ProviderPerfCharts"
 			};
 
 			var viewExtension = new ProviderPerformanceChartsView(plugin.GameActivityMonitoring);
@@ -97,7 +111,8 @@ namespace GameActivity.Services
 				CanBeResizable = true,
 				WidthPercent = 70,
 				MaxWidth = 1500,
-				Height = 500
+				Height = 500,
+				WindowPersistenceKey = "GameActivity.DataMismatch"
 			};
 
 			GamesDataMismatch viewExtension = new GamesDataMismatch();

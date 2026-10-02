@@ -18,8 +18,17 @@
 
         <!-- ── Converters ───────────────────────────────────────────────────── -->
         <converters:PlayTimeToStringConverter           x:Key="PlayTimeToStringConverter" />
+        <local:SignedPlayTimeToStringConverter          x:Key="SignedPlayTimeToStringConverter" />
+        <local:BoolToWarningBrushConverter              x:Key="BoolToWarningBrushConverter" />
         <BooleanToVisibilityConverter                   x:Key="BoolToVis" />
         <converters:InvertedBooleanToVisibilityConverter x:Key="InvBoolToVis" />
+
+        <!-- ── Section header: Delta (warning accent) ───────────────────────── -->
+        <Style x:Key="DeltaSectionHeaderStyle" TargetType="GridViewColumnHeader" BasedOn="{StaticResource {x:Type GridViewColumnHeader}}">
+            <Setter Property="Foreground"       Value="{DynamicResource WarningBrush}" />
+            <Setter Property="BorderThickness"  Value="0,0,0,1" />
+            <Setter Property="BorderBrush"      Value="{DynamicResource WarningBrush}" />
+        </Style>
 
         <!-- ── Section header: GameActivity (cyan accent) ───────────────────── -->
         <!--
@@ -95,6 +104,16 @@
             <Setter Property="MinWidth"  Value="0" />
             <Setter Property="Margin"    Value="0" />
             <Setter Property="ToolTip"   Value="{DynamicResource LOCGaGaToPlaynite}" />
+        </Style>
+
+        <!-- Ignore: HideIcon (Media.xaml &#xef22;) via FontIcoFont -->
+        <Style x:Key="IgnoreIconButton" TargetType="Button" BasedOn="{StaticResource ModernButton}">
+            <Setter Property="Padding"     Value="6,4" />
+            <Setter Property="MinWidth"    Value="0" />
+            <Setter Property="Margin"      Value="0" />
+            <Setter Property="FontFamily"  Value="{DynamicResource FontIcoFont}" />
+            <Setter Property="FontWeight"  Value="Light" />
+            <Setter Property="ToolTip"     Value="{DynamicResource LOCGaDataMismatchIgnoreTooltip}" />
         </Style>
 
     </UserControl.Resources>
@@ -178,6 +197,20 @@
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
 
+                            <!-- ═══ Column: Ignore (hide from mismatch list) ═════ -->
+                            <GridViewColumn Width="Auto"
+                                            controlsShared:ListViewColumnOptions.DisableSorting="True">
+                                <GridViewColumnHeader Content="{DynamicResource LOCGaDataMismatchIgnoreHeader}" />
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Style="{StaticResource IgnoreIconButton}"
+                                                Command="{Binding DataContext.IgnoreCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}"
+                                                CommandParameter="{Binding Id}"
+                                                Content="&#xef22;" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
                             <!-- ═══ Column: Game name (visible) ══════════════════ -->
                             <GridViewColumn Width="250"
                                             controlsShared:ListViewColumnOptions.SortMemberPath="Name">
@@ -230,8 +263,10 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Count}"
-                                               Style="{DynamicResource BaseTextBlockStyle}"
-                                               HorizontalAlignment="Right" />
+                                                   Style="{DynamicResource BaseTextBlockStyle}"
+                                                   HorizontalAlignment="Right"
+                                                   ToolTip="{Binding DataMismatchTooltip}"
+                                                   Foreground="{Binding HasPlayCountMismatch, Converter={StaticResource BoolToWarningBrushConverter}}" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -244,8 +279,28 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding SessionPlaytime, Converter={StaticResource PlayTimeToStringConverter}}"
-                                               Style="{DynamicResource BaseTextBlockStyle}"
-                                               HorizontalAlignment="Center" />
+                                                   Style="{DynamicResource BaseTextBlockStyle}"
+                                                   HorizontalAlignment="Center"
+                                                   ToolTip="{Binding DataMismatchTooltip}"
+                                                   Foreground="{Binding HasPlaytimeDelta, Converter={StaticResource BoolToWarningBrushConverter}}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <!-- ═══ Column: Δ playtime (GA − Playnite) ═══════════ -->
+                            <GridViewColumn Width="auto"
+                                            controlsShared:ListViewColumnOptions.SortMemberPath="PlaytimeDeltaSeconds">
+                                <GridViewColumnHeader Content="{DynamicResource LOCGaDataMismatchDeltaHeader}"
+                                                  Style="{StaticResource DeltaSectionHeaderStyle}"
+                                                  Tag="PlaytimeDeltaSeconds" />
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding PlaytimeDeltaSeconds, Converter={StaticResource SignedPlayTimeToStringConverter}}"
+                                                   Style="{DynamicResource BaseTextBlockStyle}"
+                                                   HorizontalAlignment="Center"
+                                                   FontWeight="SemiBold"
+                                                   ToolTip="{Binding DataMismatchTooltip}"
+                                                   Foreground="{Binding HasPlaytimeDelta, Converter={StaticResource BoolToWarningBrushConverter}}" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -274,8 +329,10 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding PlayCount}"
-                                               Style="{DynamicResource BaseTextBlockStyle}"
-                                               HorizontalAlignment="Right" />
+                                                   Style="{DynamicResource BaseTextBlockStyle}"
+                                                   HorizontalAlignment="Right"
+                                                   ToolTip="{Binding DataMismatchTooltip}"
+                                                   Foreground="{Binding HasPlayCountMismatch, Converter={StaticResource BoolToWarningBrushConverter}}" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -288,8 +345,10 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Playtime, Converter={StaticResource PlayTimeToStringConverter}}"
-                                               Style="{DynamicResource BaseTextBlockStyle}"
-                                               HorizontalAlignment="Center" />
+                                                   Style="{DynamicResource BaseTextBlockStyle}"
+                                                   HorizontalAlignment="Center"
+                                                   ToolTip="{Binding DataMismatchTooltip}"
+                                                   Foreground="{Binding HasPlaytimeDelta, Converter={StaticResource BoolToWarningBrushConverter}}" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>

@@ -199,6 +199,38 @@ namespace GameActivity.Controls
             new FrameworkPropertyMetadata(0, ControlsPropertyChangedCallback)
         );
 
+        /// <summary>
+        /// Inclusive local start of an optional period filter. <see cref="DateTime.MinValue"/> disables the filter start.
+        /// </summary>
+        public DateTime PeriodFilterStart
+        {
+            get => (DateTime)GetValue(PeriodFilterStartProperty);
+            set => SetValue(PeriodFilterStartProperty, value);
+        }
+
+        public static readonly DependencyProperty PeriodFilterStartProperty = DependencyProperty.Register(
+            nameof(PeriodFilterStart),
+            typeof(DateTime),
+            typeof(PluginChartTime),
+            new FrameworkPropertyMetadata(DateTime.MinValue, ControlsPropertyChangedCallback)
+        );
+
+        /// <summary>
+        /// Inclusive local end of an optional period filter. <see cref="DateTime.MinValue"/> disables the filter end.
+        /// </summary>
+        public DateTime PeriodFilterEnd
+        {
+            get => (DateTime)GetValue(PeriodFilterEndProperty);
+            set => SetValue(PeriodFilterEndProperty, value);
+        }
+
+        public static readonly DependencyProperty PeriodFilterEndProperty = DependencyProperty.Register(
+            nameof(PeriodFilterEnd),
+            typeof(DateTime),
+            typeof(PluginChartTime),
+            new FrameworkPropertyMetadata(DateTime.MinValue, ControlsPropertyChangedCallback)
+        );
+
         #endregion
 
         // ────────────────────────────────────────────────────────────────────
@@ -390,6 +422,9 @@ namespace GameActivity.Controls
         /// <param name="pluginGameData">The associated game activity data.</param>
         public override void SetData(Game newContext, PluginGameEntry pluginGameData)
         {
+#if DEBUG
+            DebugTimer setDataTimer = new DebugTimer("PluginChartTime.SetData");
+#endif
             GameActivities gameActivities = (GameActivities)pluginGameData;
 
             MustDisplay =
@@ -399,19 +434,26 @@ namespace GameActivity.Controls
 
             if (!MustDisplay)
             {
+#if DEBUG
+                setDataTimer.Stop("MustDisplay=false");
+#endif
                 return;
             }
 
             ControlDataContext.ChartTimeAxis = !ControlDataContext.ShowAllData;
 
-            if (ControlDataContext.ShowAllData)
+            // Period filter: always render the full filtered window (all session days in range).
+            bool hasPeriodFilter = PeriodFilterStart != DateTime.MinValue || PeriodFilterEnd != DateTime.MinValue;
+            bool showAllPeriodOrSetting = ControlDataContext.ShowAllData || hasPeriodFilter;
+
+            if (showAllPeriodOrSetting)
             {
                 if (ShowByWeeks)
                 {
                     GetActivityForGamesChartByWeek(
                         gameActivities,
                         0,
-                        Convert.ToInt32(gameActivities.Count)
+                        int.MaxValue
                     );
                 }
                 else
@@ -419,10 +461,13 @@ namespace GameActivity.Controls
                     GetActivityForGamesTimeGraphics(
                         gameActivities,
                         0,
-                        Convert.ToInt32(gameActivities.Count)
+                        int.MaxValue
                     );
                 }
 
+#if DEBUG
+                setDataTimer.Stop(ShowByWeeks ? "week showAll/period" : "day showAll/period");
+#endif
                 return;
             }
 
@@ -438,6 +483,14 @@ namespace GameActivity.Controls
             {
                 GetActivityForGamesTimeGraphics(gameActivities, axisVariator, limit);
             }
+
+#if DEBUG
+            setDataTimer.Stop(string.Format(
+                "{0} limit={1} variator={2}",
+                ShowByWeeks ? "week" : "day",
+                limit,
+                axisVariator));
+#endif
         }
 
         // ────────────────────────────────────────────────────────────────────
@@ -628,7 +681,16 @@ namespace GameActivity.Controls
                 bool hasData4 = false;
                 bool hasData5 = false;
 
-                List<Activity> activities = Serialization.GetClone(gameActivities.FilterItems);
+                List<Activity> activities = ApplyPeriodFilter(Serialization.GetClone(gameActivities.FilterItems));
+                if (activities == null || activities.Count == 0)
+                {
+                    PART_ChartTimeActivity.Series = null;
+                    PART_ChartTimeActivityLabelsX.Labels = null;
+                    _totalDataPoints = 0;
+                    _lastWindowSize = 0;
+                    UpdateNavBarBounds();
+                    return;
+                }
 
                 if (Truncate)
                 {
@@ -793,10 +855,10 @@ namespace GameActivity.Controls
                 for (int iActivity = 0; iActivity < activities.Count; iActivity++)
                 {
                     ulong elapsedSeconds = activities[iActivity].ElapsedSeconds;
-                    string dateSession = Convert
+                    DateTime sessionLocal = Convert
                         .ToDateTime(activities[iActivity].DateSession)
-                        .ToLocalTime()
-                        .ToString("yyyy-MM-dd");
+                        .ToLocalTime();
+                    string dateSession = sessionLocal.ToString("yyyy-MM-dd");
 
                     for (int iDay = effectiveLimit; iDay >= 0; iDay--)
                     {
@@ -829,6 +891,7 @@ namespace GameActivity.Controls
                                 Name = displayName,
                                 SecondaryName = secName,
                                 Values = series1[iDay].Values + (long)elapsedSeconds,
+                                SessionDate = sessionLocal,
                             };
                             continue;
                         }
@@ -840,6 +903,7 @@ namespace GameActivity.Controls
                                 Name = displayName,
                                 SecondaryName = secName,
                                 Values = (long)elapsedSeconds,
+                                SessionDate = sessionLocal,
                             };
                             continue;
                         }
@@ -851,6 +915,7 @@ namespace GameActivity.Controls
                                 Name = displayName,
                                 SecondaryName = secName,
                                 Values = (long)elapsedSeconds,
+                                SessionDate = sessionLocal,
                             };
                             continue;
                         }
@@ -862,6 +927,7 @@ namespace GameActivity.Controls
                                 Name = displayName,
                                 SecondaryName = secName,
                                 Values = (long)elapsedSeconds,
+                                SessionDate = sessionLocal,
                             };
                             continue;
                         }
@@ -873,6 +939,7 @@ namespace GameActivity.Controls
                                 Name = displayName,
                                 SecondaryName = secName,
                                 Values = (long)elapsedSeconds,
+                                SessionDate = sessionLocal,
                             };
                             continue;
                         }
@@ -884,6 +951,7 @@ namespace GameActivity.Controls
                                 Name = displayName,
                                 SecondaryName = secName,
                                 Values = (long)elapsedSeconds,
+                                SessionDate = sessionLocal,
                             };
                             continue;
                         }
@@ -978,8 +1046,16 @@ namespace GameActivity.Controls
         {
             try
             {
-                List<Activity> activities = Serialization.GetClone(gameActivities.FilterItems);
-                if (activities.Count == 0) return;
+                List<Activity> activities = ApplyPeriodFilter(Serialization.GetClone(gameActivities.FilterItems));
+                if (activities == null || activities.Count == 0)
+                {
+                    PART_ChartTimeActivity.Series = null;
+                    PART_ChartTimeActivityLabelsX.Labels = null;
+                    _totalDataPoints = 0;
+                    _lastWindowSize = 0;
+                    UpdateNavBarBounds();
+                    return;
+                }
 
                 // Group all activities by their Monday to identify active weeks
                 var activeWeeks = activities
@@ -1128,6 +1204,42 @@ namespace GameActivity.Controls
                 return string.Format(ResourceProvider.GetString(years == 1 ? "LOCCommonYearAgo" : "LOCCommonYearsAgo") ?? "{0}y ago", years);
             }
             return string.Empty;
+        }
+
+        /// <summary>
+        /// Filters activities to <see cref="PeriodFilterStart"/>–<see cref="PeriodFilterEnd"/> when a period is set.
+        /// </summary>
+        /// <param name="activities">Cloned activity list.</param>
+        /// <returns>Filtered list, or the original when no period filter is active.</returns>
+        private List<Activity> ApplyPeriodFilter(List<Activity> activities)
+        {
+            if (activities == null)
+            {
+                return new List<Activity>();
+            }
+
+            bool hasStart = PeriodFilterStart != DateTime.MinValue;
+            bool hasEnd = PeriodFilterEnd != DateTime.MinValue;
+            if (!hasStart && !hasEnd)
+            {
+                return activities;
+            }
+
+            DateTime start = hasStart ? PeriodFilterStart : DateTime.MinValue;
+            DateTime end = hasEnd ? PeriodFilterEnd : DateTime.MaxValue;
+
+            List<Activity> filtered = new List<Activity>();
+            for (int i = 0; i < activities.Count; i++)
+            {
+                DateTime local = activities[i].DateSession.ToLocalTime();
+                if (local >= start && local <= end)
+                {
+                    filtered.Add(activities[i]);
+                }
+            }
+
+            Common.LogDebug($"PeriodView: ChartTime.ApplyPeriodFilter in={activities.Count} out={filtered.Count} {start:yyyy-MM-dd}..{end:yyyy-MM-dd}");
+            return filtered;
         }
 
         /// <summary>

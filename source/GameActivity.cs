@@ -78,7 +78,7 @@ namespace GameActivity
                 string ButtonName = ((Button)sender).Name;
                 if (ButtonName == "PART_CustomGameActivityButton")
                 {
-                    Common.LogDebug(true, $"OnCustomThemeButtonClick()");
+                    Common.LogDebug($"OnCustomThemeButtonClick()");
                     PluginDatabase.PluginWindows.ShowPluginGameDataWindow(this, PluginDatabase.GameContext);
                 }
             }
@@ -196,6 +196,18 @@ namespace GameActivity
         {
 			try
             {
+                if (args?.Game == null)
+                {
+                    Logger.Warn("OnGameStarted called with null arguments or game reference.");
+                    return;
+                }
+
+                if (PluginDatabase.IsGameExcludedFromTracking(args.Game))
+                {
+                    Logger.Info($"OnGameStarted skipped - excluded from tracking - {args.Game.Name} - {args.Game.Id}");
+                    return;
+                }
+
                 string sessionCorrelationId = $"{args.Game.Id:N}-{DateTime.UtcNow.Ticks}";
                 Logger.Info($"OnGameStarted - {args.Game?.Name} - {args.Game?.Id} - Session:{sessionCorrelationId}");
 
@@ -205,15 +217,7 @@ namespace GameActivity
                     PlaytimeOnStarted = args.Game.Playtime,
                     SessionCorrelationId = sessionCorrelationId
                 };
-				GameActivityMonitoring.AddRunningActivity(runningActivity);
-
-				GameActivityMonitoring.DataBackup_start(args.Game.Id);
-
-                // start timer if log is enable.
-                if (PluginDatabase.PluginSettings.EnableLogging)
-                {
-					GameActivityMonitoring.DataLogging_start(args.Game.Id);
-                }
+                GameActivityMonitoring.AddRunningActivity(runningActivity);
 
                 DateTime DateSession = DateTime.Now.ToUniversalTime();
 
@@ -240,6 +244,14 @@ namespace GameActivity
                     PlatformIDs = args.Game.PlatformIds ?? new List<Guid>(),
                     ItemsDetailsDatas = new List<ActivityDetailsData>()
                 };
+
+                // Start timers only after ActivityBackup and session log are ready.
+                GameActivityMonitoring.DataBackup_start(args.Game.Id);
+
+                if (PluginDatabase.PluginSettings.EnableLogging)
+                {
+                    GameActivityMonitoring.DataLogging_start(args.Game.Id);
+                }
             }
             catch (Exception ex)
             {
@@ -276,12 +288,14 @@ namespace GameActivity
                     {
                         Logger.Warn($"OnGameStopped: no running activity found for {game.Name} - {game.Id} - Session:{sessionCorrelationId}");
                     }
-                    GameActivityMonitoring.DataBackup_stop(game.Id);
+
+                    // Stop timers on this session instance only (overlapping start must not kill the new session).
+                    GameActivityMonitoring.DataBackup_stop(runningActivity);
 
                     // Stop timer if log is enable.
                     if (PluginDatabase.PluginSettings.EnableLogging)
                     {
-						GameActivityMonitoring.DataLogging_stop(game.Id);
+                        GameActivityMonitoring.DataLogging_stop(game.Id);
                     }
 
                     if (runningActivity == null)
@@ -336,7 +350,7 @@ namespace GameActivity
 
                     // Infos
                     runningActivity.GameActivitiesLog.GetLastSessionActivity(false).ElapsedSeconds = elapsedSeconds;
-                    Common.LogDebug(true, Serialization.ToJson(runningActivity.GameActivitiesLog));
+                    Common.LogDebug(Serialization.ToJson(runningActivity.GameActivitiesLog));
                     PluginDatabase.Update(runningActivity.GameActivitiesLog);
 
                     if (PluginDatabase.GameContext != null && game.Id == PluginDatabase.GameContext.Id)

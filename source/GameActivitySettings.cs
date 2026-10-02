@@ -255,6 +255,43 @@ namespace GameActivity
 
         #endregion
 
+        #region Chart Log — View window series (IgnoreSettings)
+
+        // Separate from Appearance theme flags (DisplayCpu…). Used by PluginChartLog when IgnoreSettings is true
+        // (GameActivityView / ViewSingle / Backup). Defaults match DependencyProperty defaults on the control.
+
+        /// <summary>View chart: CPU usage series visibility.</summary>
+        public bool ViewChartLogDisplayCpu { get; set; } = true;
+
+        /// <summary>View chart: GPU usage series visibility.</summary>
+        public bool ViewChartLogDisplayGpu { get; set; } = true;
+
+        /// <summary>View chart: RAM usage series visibility.</summary>
+        public bool ViewChartLogDisplayRam { get; set; } = true;
+
+        /// <summary>View chart: FPS series visibility.</summary>
+        public bool ViewChartLogDisplayFps { get; set; } = true;
+
+        /// <summary>View chart: CPU temperature series visibility.</summary>
+        public bool ViewChartLogDisplayCpuT { get; set; } = false;
+
+        /// <summary>View chart: GPU temperature series visibility.</summary>
+        public bool ViewChartLogDisplayGpuT { get; set; } = false;
+
+        /// <summary>View chart: CPU power series visibility.</summary>
+        public bool ViewChartLogDisplayCpuP { get; set; } = false;
+
+        /// <summary>View chart: GPU power series visibility.</summary>
+        public bool ViewChartLogDisplayGpuP { get; set; } = false;
+
+        /// <summary>View chart: FPS 1% Low series visibility.</summary>
+        public bool ViewChartLogDisplayFps1PercentLow { get; set; } = false;
+
+        /// <summary>View chart: FPS 0.1% Low series visibility.</summary>
+        public bool ViewChartLogDisplayFps0Point1PercentLow { get; set; } = false;
+
+        #endregion
+
         #region Visual Customization
 
         /// <summary>Show store/platform launcher icons in the list view.</summary>
@@ -283,11 +320,23 @@ namespace GameActivity
         /// <summary>Subtract PlayState paused time from the recorded session duration.</summary>
         public bool SubstPlayStateTime { get; set; } = false;
 
+        /// <summary>
+        /// When true, exclude Playnite hidden games from GameActivity stats UI (lists, charts, totals).
+        /// Does not stop session tracking; use the exclude-tracking tag for that.
+        /// </summary>
+        public bool HideHiddenGames { get; set; } = true;
+
         /// <summary>Discard sessions that are shorter than <see cref="IgnoreSessionTime"/>.</summary>
         public bool IgnoreSession { get; set; } = false;
 
         /// <summary>Minimum session length in seconds before a session is recorded.</summary>
         public int IgnoreSessionTime { get; set; } = 120;
+
+        /// <summary>
+        /// Playnite game ids hidden from the data consistency / mismatch screen.
+        /// Does not affect session tracking; use the exclude-tracking tag for that.
+        /// </summary>
+        public List<Guid> IgnoredMismatchGameIds { get; set; } = new List<Guid>();
 
         #endregion
 
@@ -684,6 +733,8 @@ namespace GameActivity
         {
             _plugin = plugin ?? throw new ArgumentNullException("plugin");
             Settings = plugin.LoadPluginSettings<GameActivitySettings>() ?? new GameActivitySettings();
+            SanitizeStoreColors(Settings);
+            SanitizeIgnoredMismatchGameIds(Settings);
             RefreshMsiAfterburnerMahmSensorsCommand = new RelayCommand(RefreshMsiAfterburnerMahmSensors);
         }
 
@@ -700,6 +751,10 @@ namespace GameActivity
         /// <inheritdoc/>
         public void BeginEdit()
         {
+            // Drop corrupt StoreColors before cloning so CancelEdit cannot restore NRE triggers.
+            SanitizeStoreColors(Settings);
+            SanitizeIgnoredMismatchGameIds(Settings);
+
             // Snapshot current state so CancelEdit can restore it exactly.
             _editingClone = Serialization.GetClone(Settings);
 
@@ -716,18 +771,23 @@ namespace GameActivity
 
             RefreshMsiAfterburnerMahmSensors();
             NotifyMonitoringProviderLatencyPillProperties();
+            GameActivitySettingsView.CancelEditingExcludeTrackingChanges();
         }
 
         /// <inheritdoc/>
         public void CancelEdit()
         {
             Settings = _editingClone;
+            GameActivitySettingsView.CancelEditingExcludeTrackingChanges();
         }
 
         /// <inheritdoc/>
         public void EndEdit()
         {
-            _plugin.SavePluginSettings(Settings);
+            GameActivitySettingsView.ApplyEditingExcludeTrackingChanges();
+            SanitizeIgnoredMismatchGameIds(Settings);
+
+            PersistSettings(_plugin, Settings);
             GameActivity.PluginDatabase.PluginSettings = this.Settings;
 
             if (API.Instance.ApplicationInfo.Mode == ApplicationMode.Desktop)
@@ -925,23 +985,95 @@ namespace GameActivity
         #region Store colours 
 
         /// <summary>
+        /// Ensures <paramref name="settings"/>.<see cref="GameActivitySettings.IgnoredMismatchGameIds"/> is non-null.
+        /// </summary>
+        /// <param name="settings">Settings instance to sanitize.</param>
+        /// <returns><c>true</c> when the list was replaced because it was null.</returns>
+        internal static bool SanitizeIgnoredMismatchGameIds(GameActivitySettings settings)
+        {
+            if (settings == null)
+            {
+                return false;
+            }
+
+            if (settings.IgnoredMismatchGameIds == null)
+            {
+                Logger.Warn("SanitizeIgnoredMismatchGameIds: IgnoredMismatchGameIds was null; replaced with an empty list.");
+                settings.IgnoredMismatchGameIds = new List<Guid>();
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Ensures <paramref name="settings"/>.<see cref="GameActivitySettings.StoreColors"/> is non-null
+        /// and free of null entries or entries without a usable <see cref="StoreColor.Name"/>.
+        /// Prevents <see cref="NullReferenceException"/> in settings and chart views.
+        /// </summary>
+        /// <param name="settings">Settings instance to sanitize; ignored if null.</param>
+        /// <returns><c>true</c> if the list was mutated.</returns>
+        internal static bool SanitizeStoreColors(GameActivitySettings settings)
+        {
+            if (settings == null)
+            {
+                return false;
+            }
+
+            if (settings.StoreColors == null)
+            {
+                Logger.Warn("SanitizeStoreColors: StoreColors was null; replaced with an empty list.");
+                settings.StoreColors = new List<StoreColor>();
+                return true;
+            }
+
+            int beforeCount = settings.StoreColors.Count;
+            List<StoreColor> cleaned = settings.StoreColors
+                .Where(c => c != null && !string.IsNullOrEmpty(c.Name))
+                .ToList();
+
+            if (cleaned.Count != beforeCount)
+            {
+                int removed = beforeCount - cleaned.Count;
+                Logger.Warn(
+                    $"SanitizeStoreColors: removed {removed} invalid StoreColor entry/entries " +
+                    $"(null entry or empty Name); {cleaned.Count} remaining.");
+                settings.StoreColors = cleaned;
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Adds <see cref="StoreColor"/> entries for any source or platform that exists in the
         /// database but is not yet present in <see cref="GameActivitySettings.StoreColors"/>.
         /// Guarantees no duplicate names and re-sorts alphabetically when done.
         /// </summary>
         private void UpdateMissingStoreColors()
         {
+            if (Settings.StoreColors == null)
+            {
+                Settings.StoreColors = new List<StoreColor>();
+            }
+
             var items = GameActivity.PluginDatabase.GetGamesList();
+            if (items == null)
+            {
+                return;
+            }
 
             // Build a lookup of already-known names (case-insensitive) for O(1) existence checks.
             // This replaces the repeated All() calls that were O(n) per iteration.
             var existingByName = new HashSet<string>(
-                Settings.StoreColors.Select(c => c.Name),
+                Settings.StoreColors
+                    .Where(c => c != null && !string.IsNullOrEmpty(c.Name))
+                    .Select(c => c.Name),
                 StringComparer.OrdinalIgnoreCase);
 
             // ── Missing sources ───────────────────────────────────────────────────
             var missingSources = items
-                .Where(x => x != null && !Settings.StoreColors.Any(c => c.Id == x.SourceId))
+                .Where(x => x != null && !Settings.StoreColors.Any(c => c != null && c.Id == x.SourceId))
                 .Select(x => x.SourceId)
                 .Distinct()
                 .ToList();
@@ -962,7 +1094,7 @@ namespace GameActivity
             var missingPlatforms = items
                 .Where(x => x != null && x.Platforms != null)
                 .SelectMany(x => x.Platforms)
-                .Where(p => !Settings.StoreColors.Any(c => c.Id == p.Id))
+                .Where(p => p != null && !Settings.StoreColors.Any(c => c != null && c.Id == p.Id))
                 .DistinctBy(p => p.Id)
                 .ToList();
 
@@ -981,6 +1113,7 @@ namespace GameActivity
 
             // Final dedup + sort as safety net (covers pre-existing duplicates in persisted data).
             Settings.StoreColors = Settings.StoreColors
+                .Where(c => c != null && !string.IsNullOrEmpty(c.Name))
                 .DistinctBy(c => c.Name)
                 .OrderBy(c => c.Name, StringComparer.OrdinalIgnoreCase)
                 .ToList();
@@ -992,15 +1125,21 @@ namespace GameActivity
         /// </summary>
         public static List<StoreColor> GetDefaultStoreColors()
         {
-			var items = GameActivity.PluginDatabase.GetGamesList();
+            var items = GameActivity.PluginDatabase.GetGamesList();
+            var byName = new Dictionary<string, StoreColor>(StringComparer.OrdinalIgnoreCase);
 
-			// Use a dict keyed by normalised name to prevent any duplicate, regardless
-			// of whether the collision comes from two sources, two platforms, or a
-			// source/platform pair that resolves to the same display name.
-			var byName = new Dictionary<string, StoreColor>(StringComparer.OrdinalIgnoreCase);
+            if (items == null)
+            {
+                return new List<StoreColor>();
+            }
+
+            // Use a dict keyed by normalised name to prevent any duplicate, regardless
+            // of whether the collision comes from two sources, two platforms, or a
+            // source/platform pair that resolves to the same display name.
 
             // ── Sources ───────────────────────────────────────────────────────────
             var sourceIds = items
+                .Where(x => x != null)
                 .Select(x => x.SourceId)
                 .Distinct()
                 .ToList();
@@ -1019,6 +1158,7 @@ namespace GameActivity
             var platforms = items
                 .Where(x => x != null && x.Platforms != null)
                 .SelectMany(x => x.Platforms)
+                .Where(p => p != null)
                 .DistinctBy(p => p.Id)
                 .ToList();
 

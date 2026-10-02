@@ -19,6 +19,8 @@ using System.Drawing.Imaging;
 using CommonPluginsControls.Controls;
 using System.ComponentModel;
 using System.Windows.Data;
+using System.Windows.Threading;
+using System.Threading;
 
 namespace GameActivity.ViewModels
 {
@@ -70,6 +72,38 @@ namespace GameActivity.ViewModels
             private set => SetValue(ref _timeAvg, value);
         }
 
+        private string _totalGaPlaytime = string.Empty;
+        /// <summary>Total GameActivity playtime (sum of sessions), formatted.</summary>
+        public string TotalGaPlaytime
+        {
+            get => _totalGaPlaytime;
+            private set => SetValue(ref _totalGaPlaytime, value);
+        }
+
+        private string _totalPlaynitePlaytime = string.Empty;
+        /// <summary>Total Playnite library playtime, formatted.</summary>
+        public string TotalPlaynitePlaytime
+        {
+            get => _totalPlaynitePlaytime;
+            private set => SetValue(ref _totalPlaynitePlaytime, value);
+        }
+
+        private bool _hasPlaytimeMismatch;
+        /// <summary>True when GA session total/count diverges from Playnite playtime/play count.</summary>
+        public bool HasPlaytimeMismatch
+        {
+            get => _hasPlaytimeMismatch;
+            private set => SetValue(ref _hasPlaytimeMismatch, value);
+        }
+
+        private string _playtimeMismatchTooltip;
+        /// <summary>Tooltip explaining the GA vs Playnite mismatch; null when values match.</summary>
+        public string PlaytimeMismatchTooltip
+        {
+            get => _playtimeMismatchTooltip;
+            private set => SetValue(ref _playtimeMismatchTooltip, value);
+        }
+
         private string _recentActivity = string.Empty;
         /// <summary>Relative label for the most recent activity (e.g. "2 days ago").</summary>
         public string RecentActivity
@@ -111,6 +145,14 @@ namespace GameActivity.ViewModels
         }
 
         // ─── Session List ─────────────────────────────────────────────────────────────
+
+        private bool _isLoading = true;
+        /// <summary>True while the session list is still loading; drives the loading overlay.</summary>
+        public bool IsLoading
+        {
+            get => _isLoading;
+            private set => SetValue(ref _isLoading, value);
+        }
 
         private ObservableCollection<ListActivities> _sessionItems = new ObservableCollection<ListActivities>();
         /// <summary>Bound to the ListView of recorded sessions.</summary>
@@ -248,6 +290,7 @@ namespace GameActivity.ViewModels
 
                     // Refresh list on UI thread.
                     _ = SessionItems.Remove(activity);
+                    RefreshPlaytimeTotals();
                 }
                 catch (Exception ex)
                 {
@@ -264,7 +307,8 @@ namespace GameActivity.ViewModels
                     ShowMaximizeButton = false,
                     ShowCloseButton = true,
                     MinHeight = 450,
-                    Width = 500
+                    Width = 500,
+                    EnableWindowPersistence = false
                 };
 
                 try
@@ -288,6 +332,7 @@ namespace GameActivity.ViewModels
                         _gameContext.LastActivity = _gameActivities.Items.Max(x => x.DateSession).ToLocalTime();
                         API.Instance.Database.Games.Update(_gameContext);
                         PluginDatabase.Update(_gameActivities);
+                        RefreshPlaytimeTotals();
                     }
                 }
                 catch (Exception ex)
@@ -317,7 +362,8 @@ namespace GameActivity.ViewModels
                         ShowMaximizeButton = false,
                         ShowCloseButton = true,
                         MinHeight = 450,
-                        Width = 500
+                        Width = 500,
+                        EnableWindowPersistence = false
                     };
 
                     GameActivityAddTime viewExtension = new GameActivityAddTime(_plugin, _gameContext, activity);
@@ -338,6 +384,7 @@ namespace GameActivity.ViewModels
                         _gameContext.LastActivity = _gameActivities.Items.Max(x => x.DateSession).ToLocalTime();
                         API.Instance.Database.Games.Update(_gameContext);
                         PluginDatabase.Update(_gameActivities);
+                        RefreshPlaytimeTotals();
                     }
                 }
                 catch (Exception ex)
@@ -357,7 +404,8 @@ namespace GameActivity.ViewModels
                         ShowMaximizeButton = false,
                         ShowCloseButton = true,
                         Width = 800,
-                        MinHeight = 100
+                        MinHeight = 100,
+                        EnableWindowPersistence = false
                     };
 
                     GameActivityMergeTime viewExtension = new GameActivityMergeTime(_gameContext);
@@ -368,6 +416,7 @@ namespace GameActivity.ViewModels
                     // Reload data from database because merge is done in another view-model instance.
                     _gameActivities = PluginDatabase.Get(_gameContext);
                     LoadSessionsAsync();
+                    RefreshPlaytimeTotals();
                 }
                 catch (Exception ex)
                 {
@@ -443,25 +492,14 @@ namespace GameActivity.ViewModels
         // ─── Data Loading ─────────────────────────────────────────────────────────────
 
         /// <summary>
-        /// Loads static data (cover, session stats) synchronously at construction time.
-        /// Heavy list population is deferred to the async method.
+        /// Loads session stats synchronously at construction time.
+        /// Cover decode and session list population run in the background so ShowDialog is not blocked.
         /// </summary>
         private void LoadData()
         {
-            // Cover image — loaded from Playnite's file-path database.
-            if (!_gameContext.CoverImage.IsNullOrEmpty())
-            {
-                try
-                {
-                    string coverPath = API.Instance.Database.GetFullFilePath(_gameContext.CoverImage);
-                    CoverImage = BitmapExtensions.BitmapFromFile(coverPath);
-                }
-                catch (Exception ex)
-                {
-                    Common.LogError(ex, false, $"Failed to load cover for {_gameContext.Name}", false, PluginDatabase.PluginName);
-                }
-            }
-
+#if DEBUG
+            DebugTimer loadTimer = new DebugTimer("GameActivityViewSingleViewModel.LoadData");
+#endif
             // Session aggregate data.
             _gameActivities = PluginDatabase.Get(_gameContext);
 
@@ -470,6 +508,8 @@ namespace GameActivity.ViewModels
 
             TimeAvg = (string)playTimeConverter.Convert(
                 _gameActivities.AvgPlayTime(), null, null, CultureInfo.CurrentCulture);
+
+            RefreshPlaytimeTotals(playTimeConverter);
 
             RecentActivity = _gameActivities.GetRecentActivity();
 
@@ -482,9 +522,128 @@ namespace GameActivity.ViewModels
                 _gameActivities.GetLastSession(), null, null, CultureInfo.CurrentCulture);
             LastSessionElapsedTime = (string)playTimeConverter.Convert(
                 _gameActivities.GetLastSessionActivity().ElapsedSeconds, null, null, CultureInfo.CurrentCulture);
+#if DEBUG
+            loadTimer.Step("Get + stats done");
+#endif
 
-            // Kick off background loading of the session list.
+            // Kick off background loading of the session list and cover (cover was ~2.6s sync).
             LoadSessionsAsync();
+            LoadCoverAsync();
+#if DEBUG
+            loadTimer.Stop("LoadSessionsAsync + LoadCoverAsync kicked");
+#endif
+        }
+
+        /// <summary>
+        /// Decodes the cover off the UI thread (scaled to the 220px display slot) and assigns it when ready.
+        /// </summary>
+        private void LoadCoverAsync()
+        {
+            if (_gameContext == null || _gameContext.CoverImage.IsNullOrEmpty())
+            {
+                return;
+            }
+
+            string coverPath;
+            try
+            {
+                coverPath = API.Instance.Database.GetFullFilePath(_gameContext.CoverImage);
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex, false, $"Failed to resolve cover path for {_gameContext.Name}", false, PluginDatabase.PluginName);
+                return;
+            }
+
+            if (string.IsNullOrEmpty(coverPath))
+            {
+                Common.LogDebug($"No cover file path for {_gameContext.Name}");
+                return;
+            }
+
+            // PART_ImageCover is 220×220; decode at 2× for common DPI scaling.
+            BitmapLoadProperties loadProperties = new BitmapLoadProperties(440, 0);
+            string gameName = _gameContext.Name;
+
+            // BitmapImage.EndInit requires STA — Task.Run (MTA) fails after a long decode.
+            Thread coverThread = new Thread(() =>
+            {
+#if DEBUG
+                DebugTimer coverTimer = new DebugTimer("GameActivityViewSingleViewModel.LoadCoverAsync");
+#endif
+                try
+                {
+                    BitmapImage image = BitmapExtensions.BitmapFromFile(coverPath, loadProperties);
+                    if (image == null)
+                    {
+                        image = BitmapExtensions.BitmapFromFile(coverPath);
+                    }
+#if DEBUG
+                    coverTimer.Step(image == null ? "decode null" : "decode done");
+#endif
+                    Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, (Action)delegate
+                    {
+                        CoverImage = image;
+#if DEBUG
+                        coverTimer.Stop("assigned");
+#endif
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Common.LogError(ex, false, $"Failed to load cover for {gameName}", false, PluginDatabase.PluginName);
+#if DEBUG
+                    coverTimer.Stop("error");
+#endif
+                }
+            });
+            coverThread.IsBackground = true;
+            coverThread.SetApartmentState(ApartmentState.STA);
+            coverThread.Start();
+        }
+
+        /// <summary>
+        /// Refreshes dual playtime totals and the mismatch warning used by the stats card.
+        /// </summary>
+        private void RefreshPlaytimeTotals()
+        {
+            RefreshPlaytimeTotals(new PlayTimeToStringConverter());
+        }
+
+        /// <summary>
+        /// Refreshes dual playtime totals and the mismatch warning used by the stats card.
+        /// </summary>
+        /// <param name="playTimeConverter">Shared duration formatter.</param>
+        private void RefreshPlaytimeTotals(PlayTimeToStringConverter playTimeConverter)
+        {
+            ulong gaSeconds = _gameActivities?.SessionPlaytime ?? 0UL;
+            ulong pnSeconds = _gameContext?.Playtime ?? 0UL;
+            ulong gaCount = _gameActivities?.Count ?? 0UL;
+            ulong pnCount = _gameContext?.PlayCount ?? 0UL;
+
+            TotalGaPlaytime = (string)playTimeConverter.Convert(
+                gaSeconds, null, null, CultureInfo.CurrentCulture);
+            TotalPlaynitePlaytime = (string)playTimeConverter.Convert(
+                pnSeconds, null, null, CultureInfo.CurrentCulture);
+
+            bool mismatch = gaSeconds != pnSeconds || gaCount != pnCount;
+            HasPlaytimeMismatch = mismatch;
+            if (mismatch)
+            {
+                PlaytimeMismatchTooltip = string.Format(
+                    CultureInfo.CurrentCulture,
+                    ResourceProvider.GetString("LOCGaPlaytimeMismatchTooltip"),
+                    TotalGaPlaytime,
+                    gaCount,
+                    TotalPlaynitePlaytime,
+                    pnCount);
+                Common.LogDebug(
+                    $"Playtime mismatch for {_gameContext?.Name}: GA={gaSeconds}s/{gaCount}, Playnite={pnSeconds}s/{pnCount}");
+            }
+            else
+            {
+                PlaytimeMismatchTooltip = null;
+            }
         }
 
         /// <summary>
@@ -495,7 +654,11 @@ namespace GameActivity.ViewModels
         {
             _ = Task.Run(() =>
             {
+#if DEBUG
+                DebugTimer sessionsTimer = new DebugTimer("GameActivityViewSingleViewModel.LoadSessionsAsync");
+#endif
                 ObservableCollection<ListActivities> items = new ObservableCollection<ListActivities>();
+                bool enableLogging = PluginDatabase.PluginSettings.EnableLogging;
 
                 for (int i = 0; i < _gameActivities.FilterItems.Count; i++)
                 {
@@ -510,26 +673,30 @@ namespace GameActivity.ViewModels
                             ? TextBlockWithIconMode.IconTextFirstOnly
                             : TextBlockWithIconMode.IconFirstOnly;
 
+                        SessionHardwareMetrics hw = enableLogging
+                            ? _gameActivities.GetSessionHardwareMetrics(dateSessionUtc)
+                            : new SessionHardwareMetrics();
+
                         items.Add(new ListActivities
                         {
                             GameLastActivity = dateSession,
                             GameElapsedSeconds = elapsed,
-                            AvgCPU = _gameActivities.AvgCPU(dateSessionUtc) + "%",
-                            AvgGPU = _gameActivities.AvgGPU(dateSessionUtc) + "%",
-                            AvgRAM = _gameActivities.AvgRAM(dateSessionUtc) + "%",
-                            AvgFPS = _gameActivities.AvgFPS(dateSessionUtc) + "",
-                            LoggedFpsMin = _gameActivities.MinFPS(dateSessionUtc).ToString(),
-                            LoggedFpsMax = _gameActivities.MaxFPS(dateSessionUtc).ToString(),
-                            LoggedFpsMedian = _gameActivities.MedianFPS(dateSessionUtc).ToString(),
-                            LoggedFpsStdDev = _gameActivities.StdDevFPS(dateSessionUtc).ToString(),
-                            LoggedFps1PercentLowAvg = _gameActivities.AvgFPS1PercentLow(dateSessionUtc).ToString(),
-                            LoggedFps1PercentLowMin = _gameActivities.MinFPS1PercentLow(dateSessionUtc).ToString(),
-                            LoggedFps0Point1PercentLowAvg = _gameActivities.AvgFPS0Point1PercentLow(dateSessionUtc).ToString(),
-                            LoggedFps0Point1PercentLowMin = _gameActivities.MinFPS0Point1PercentLow(dateSessionUtc).ToString(),
-                            AvgCPUT = _gameActivities.AvgCPUT(dateSessionUtc) + "°",
-                            AvgGPUT = _gameActivities.AvgGPUT(dateSessionUtc) + "°",
-                            AvgCPUP = _gameActivities.AvgCPUP(dateSessionUtc) + "W",
-                            AvgGPUP = _gameActivities.AvgGPUP(dateSessionUtc) + "W",
+                            AvgCPU = hw.AvgCpu + "%",
+                            AvgGPU = hw.AvgGpu + "%",
+                            AvgRAM = hw.AvgRam + "%",
+                            AvgFPS = hw.AvgFps.ToString(),
+                            LoggedFpsMin = hw.MinFps.ToString(),
+                            LoggedFpsMax = hw.MaxFps.ToString(),
+                            LoggedFpsMedian = hw.MedianFps.ToString(),
+                            LoggedFpsStdDev = hw.StdDevFps.ToString(),
+                            LoggedFps1PercentLowAvg = hw.AvgFps1PercentLow.ToString(),
+                            LoggedFps1PercentLowMin = hw.MinFps1PercentLow.ToString(),
+                            LoggedFps0Point1PercentLowAvg = hw.AvgFps0Point1PercentLow.ToString(),
+                            LoggedFps0Point1PercentLowMin = hw.MinFps0Point1PercentLow.ToString(),
+                            AvgCPUT = hw.AvgCpuT + "°",
+                            AvgGPUT = hw.AvgGpuT + "°",
+                            AvgCPUP = hw.AvgCpuP + "W",
+                            AvgGPUP = hw.AvgGpuP + "W",
 
                             GameSourceName = sourceName,
                             TypeStoreIcon = iconMode,
@@ -557,11 +724,19 @@ namespace GameActivity.ViewModels
                     }
                 }
 
+#if DEBUG
+                sessionsTimer.Step(string.Format("build done sessions={0} logging={1}", items.Count, enableLogging));
+#endif
+
                 // Marshal back to the UI thread.
                 Application.Current.Dispatcher.BeginInvoke((Action)delegate
                 {
-                    SessionItems = items; 
-                    
+                    SessionItems = items;
+                    IsLoading = false;
+#if DEBUG
+                    sessionsTimer.Step("SessionItems bound");
+#endif
+
                     Application.Current.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.ContextIdle, (Action)delegate
                     {
                         ICollectionView view = CollectionViewSource.GetDefaultView(SessionItems);
@@ -569,6 +744,9 @@ namespace GameActivity.ViewModels
                         {
                             SelectedSession = view.CurrentItem as ListActivities;
                         }
+#if DEBUG
+                        sessionsTimer.Stop("SelectedSession set");
+#endif
                     });
                 });
             });

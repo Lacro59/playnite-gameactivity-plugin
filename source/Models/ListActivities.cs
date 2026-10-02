@@ -15,7 +15,16 @@ namespace GameActivity.Models
         public string GameIcon { get; set; }
         public DateTime GameLastActivity { get; set; }
         public ulong GameElapsedSeconds { get; set; }
-        public ulong TimePlayedInMonth { get; set; }
+
+        /// <summary>Total playtime (seconds) for the active period filter on the home view.</summary>
+        public ulong TimePlayedInPeriod { get; set; }
+
+        /// <summary>Legacy alias of <see cref="TimePlayedInPeriod"/>.</summary>
+        public ulong TimePlayedInMonth
+        {
+            get => TimePlayedInPeriod;
+            set => TimePlayedInPeriod = value;
+        }
 
         public List<string> DateActivity { get; set; }
 

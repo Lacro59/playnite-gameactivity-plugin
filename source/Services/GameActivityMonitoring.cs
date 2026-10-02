@@ -215,19 +215,75 @@ namespace GameActivity.Services
 
         #region RunningActivity management
 
+        /// <summary>
+        /// Registers a running session. If an activity with the same game id already exists,
+        /// its timers are disposed and it is replaced to avoid orphan callbacks.
+        /// </summary>
+        /// <param name="runningActivity">Session activity to track.</param>
         public void AddRunningActivity(RunningActivity runningActivity)
         {
+            RunningActivity existing = _runningActivities.Find(x => x.Id == runningActivity.Id);
+            if (existing != null)
+            {
+                Logger.Warn($"Replacing existing running activity for {runningActivity.Id}");
+                existing.TimerBackup = StopAndDisposeTimer(existing.TimerBackup);
+                existing.Timer = StopAndDisposeTimer(existing.Timer);
+                _runningActivities.Remove(existing);
+            }
+
             _runningActivities.Add(runningActivity);
         }
 
+        /// <summary>
+        /// Returns the first running activity for the given game id, or <c>null</c>.
+        /// </summary>
+        /// <param name="id">Playnite game id.</param>
+        /// <returns>Matching <see cref="RunningActivity"/>, or <c>null</c>.</returns>
         public RunningActivity GetRunningActivity(Guid id)
         {
             return _runningActivities.Find(x => x.Id == id);
         }
 
+        /// <summary>
+        /// Removes a running activity from the list and disposes its logging and backup timers.
+        /// </summary>
+        /// <param name="runningActivity">Session activity to remove; ignored when <c>null</c>.</param>
         public void RemoveRunningActivity(RunningActivity runningActivity)
         {
+            if (runningActivity == null)
+            {
+                return;
+            }
+
+            runningActivity.TimerBackup = StopAndDisposeTimer(runningActivity.TimerBackup);
+            runningActivity.Timer = StopAndDisposeTimer(runningActivity.Timer);
             _runningActivities.Remove(runningActivity);
+        }
+
+        /// <summary>
+        /// Stops and disposes a <see cref="Timer"/> to avoid orphan Elapsed callbacks.
+        /// </summary>
+        /// <param name="timer">Timer to release.</param>
+        /// <returns>Always <c>null</c> so callers can clear the property in one assignment.</returns>
+        private Timer StopAndDisposeTimer(Timer timer)
+        {
+            if (timer == null)
+            {
+                return null;
+            }
+
+            try
+            {
+                timer.AutoReset = false;
+                timer.Stop();
+                timer.Dispose();
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex, true, false, PluginDatabase.PluginName);
+            }
+
+            return null;
         }
 
         #endregion
@@ -279,7 +335,8 @@ namespace GameActivity.Services
                             ShowMaximizeButton = false,
                             ShowCloseButton = true,
                             MaxHeight = 450,
-                            MinWidth = 480
+                            MinWidth = 480,
+                            EnableWindowPersistence = false
                         };
 
                         WarningsDialogs viewExtension = new WarningsDialogs(runningActivity.WarningsMessage);
@@ -353,7 +410,7 @@ namespace GameActivity.Services
 
                 _healthMonitor?.RecordCycle(metrics);
 
-                Common.LogDebug(true,
+                Common.LogDebug(
                     $"Metrics sources - FPS:{metrics.Source.FPS} FPS1%:{metrics.Source.FPS1PercentLow} FPS0.1%:{metrics.Source.FPS0Point1PercentLow} " +
                     $"CPU:{metrics.Source.CpuUsage} GPU:{metrics.Source.GpuUsage} RAM:{metrics.Source.RamUsage}");
 
@@ -382,7 +439,7 @@ namespace GameActivity.Services
 
                 currentActivity.Details.Add(activityDetailsData);
 
-                Common.LogDebug(true, $"Logged metrics: {Serialization.ToJson(activityDetailsData)}");
+                Common.LogDebug($"Logged metrics: {Serialization.ToJson(activityDetailsData)}");
             }
             catch (Exception ex)
             {
@@ -477,6 +534,14 @@ namespace GameActivity.Services
                 return;
             }
 
+            if (runningActivity.ActivityBackup == null)
+            {
+                Logger.Warn($"DataBackup_start skipped: ActivityBackup not ready for {id}");
+                return;
+            }
+
+            runningActivity.TimerBackup = StopAndDisposeTimer(runningActivity.TimerBackup);
+
             runningActivity.TimerBackup = new Timer(
                 PluginDatabase.PluginSettings.TimeIntervalLogging * 60000 + 10000
             )
@@ -488,25 +553,34 @@ namespace GameActivity.Services
         }
 
         /// <summary>
-        /// Stops the session backup timer.
+        /// Stops the session backup timer for the activity matching <paramref name="id"/>.
+        /// Prefer <see cref="DataBackup_stop(RunningActivity)"/> when the instance is already known
+        /// to avoid stopping a newer overlapping session with the same game id.
         /// </summary>
         public void DataBackup_stop(Guid id)
         {
-            RunningActivity runningActivity = _runningActivities.Find(x => x.Id == id);
+            DataBackup_stop(_runningActivities.Find(x => x.Id == id));
+        }
+
+        /// <summary>
+        /// Stops and disposes the backup timer on the given running activity instance.
+        /// </summary>
+        /// <param name="runningActivity">Session activity whose backup timer must be released.</param>
+        public void DataBackup_stop(RunningActivity runningActivity)
+        {
             if (runningActivity == null)
             {
-                Logger.Warn($"No runningActivity find for {id}");
+                Logger.Warn("No runningActivity find for backup stop");
                 return;
             }
 
             if (runningActivity.TimerBackup == null)
             {
-                Logger.Warn($"No backup timer find for {id}");
+                Logger.Warn($"No backup timer find for {runningActivity.Id}");
                 return;
             }
 
-            runningActivity.TimerBackup.AutoReset = false;
-            runningActivity.TimerBackup.Stop();
+            runningActivity.TimerBackup = StopAndDisposeTimer(runningActivity.TimerBackup);
         }
 
         /// <summary>
@@ -518,11 +592,24 @@ namespace GameActivity.Services
             try
             {
                 RunningActivity runningActivity = _runningActivities.Find(x => x.Id == id);
+                if (runningActivity == null || runningActivity.ActivityBackup == null)
+                {
+                    Logger.Warn($"OnTimedBackupEvent skipped: no running activity or backup for {id}");
+                    StopAndDisposeTimer(source as Timer);
+                    return;
+                }
+
+                if (runningActivity.GameActivitiesLog == null)
+                {
+                    Logger.Warn($"OnTimedBackupEvent skipped: GameActivitiesLog missing for {id}");
+                    return;
+                }
 
                 ulong elapsedSeconds = (ulong)(DateTime.UtcNow - runningActivity.ActivityBackup.DateSession).TotalSeconds;
                 runningActivity.ActivityBackup.ElapsedSeconds = elapsedSeconds;
                 Activity currentActivity = runningActivity.GameActivitiesLog.GetLastSessionActivity(false);
-                runningActivity.ActivityBackup.ItemsDetailsDatas = currentActivity.Details ?? new List<ActivityDetailsData>();
+                runningActivity.ActivityBackup.ItemsDetailsDatas =
+                    currentActivity?.Details ?? new List<ActivityDetailsData>();
 
                 string pathFileBackup = Path.Combine(
                     PluginDatabase.Paths.PluginUserDataPath,
@@ -532,7 +619,7 @@ namespace GameActivity.Services
             }
             catch (Exception ex)
             {
-                Common.LogError(ex, false, true, PluginDatabase.PluginName);
+                Common.LogError(ex, false, false, PluginDatabase.PluginName);
             }
         }
 
@@ -588,6 +675,7 @@ namespace GameActivity.Services
                                                     CanBeResizable = false,
                                                     Height = 380,
                                                     Width = 800,
+                                                    EnableWindowPersistence = false
                                                 };
 
                                                 GameActivityBackup viewExtension = new GameActivityBackup(backupData);

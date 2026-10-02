@@ -147,9 +147,17 @@
     <Compile Include="Controls\PluginChartTime.xaml.cs">
       <DependentUpon>PluginChartTime.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\AggregateSourcesChartView.xaml.cs">
+      <DependentUpon>AggregateSourcesChartView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\AggregateMonoChartView.xaml.cs">
+      <DependentUpon>AggregateMonoChartView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GameActivity.cs" />
     <Compile Include="GameActivitySettings.cs" />
     <Compile Include="Models\ActivityBackup.cs" />
+    <Compile Include="Models\ActivityPeriodKind.cs" />
+    <Compile Include="Models\AggregateKind.cs" />
     <Compile Include="Models\ExportData\ExportData.cs" />
     <Compile Include="Models\ExportData\ExportDataAll.cs" />
     <Compile Include="Models\GanttChartModels.cs" />
@@ -181,6 +189,7 @@
     </Compile>
     <Compile Include="playnite-plugincommon\CommonPluginsControls\LiveChartsCommon\CustomerForSingle.cs" />
     <Compile Include="playnite-plugincommon\CommonPluginsControls\LiveChartsCommon\CustomerForTime.cs" />
+    <Compile Include="playnite-plugincommon\CommonPluginsControls\LiveChartsCommon\ObjectToImageSourceConverter.cs" />
     <Compile Include="playnite-plugincommon\CommonPluginsControls\LiveChartsCommon\CustomerToolTipForLog.xaml.cs">
       <DependentUpon>CustomerToolTipForLog.xaml</DependentUpon>
     </Compile>
@@ -211,6 +220,9 @@
     <Compile Include="playnite-plugincommon\CommonPluginsControls\ViewsModels\ExportCsvViewModel.cs" />
     <Compile Include="playnite-plugincommon\CommonPluginsControls\ViewsModels\DatabaseMaintenanceViewModel.cs" />
     <Compile Include="playnite-plugincommon\CommonPluginsControls\ViewsModels\TimePickerViewModel.cs" />
+    <Compile Include="playnite-plugincommon\CommonPluginsControls\Settings\PluginDebugSettingsSection.xaml.cs">
+      <DependentUpon>PluginDebugSettingsSection.xaml</DependentUpon>
+    </Compile>
     <Compile Include="playnite-plugincommon\CommonPluginsControls\Views\ListDataWithoutGame.xaml.cs">
       <DependentUpon>ListDataWithoutGame.xaml</DependentUpon>
     </Compile>
@@ -234,6 +246,7 @@
     <Compile Include="Services\GameActivityDetailsExport.cs" />
     <Compile Include="Services\GameActivityMenus.cs" />
     <Compile Include="Services\GameActivityMonitoring.cs" />
+    <Compile Include="Services\AggregatePieChartHelper.cs" />
     <Compile Include="Services\GameActivityStats.cs" />
     <Compile Include="Services\GameActivityTopPanelItem.cs" />
     <Compile Include="Services\GameActivityViewSidebar.cs" />
@@ -278,6 +291,9 @@
     </Compile>
     <Compile Include="Views\GameActivitySettingsView.xaml.cs">
       <DependentUpon>GameActivitySettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ExcludeTrackingAddGamesView.xaml.cs">
+      <DependentUpon>ExcludeTrackingAddGamesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\ActivityDetails.cs" />
     <Compile Include="Models\Activity.cs" />
@@ -417,6 +433,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\PluginChartTime.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\AggregateSourcesChartView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\AggregateMonoChartView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -575,6 +599,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="playnite-plugincommon\CommonPluginsControls\Settings\PluginDebugSettingsSection.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="playnite-plugincommon\CommonPluginsControls\Views\ListDataWithoutGame.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -616,6 +644,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\GameActivitySettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ExcludeTrackingAddGamesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

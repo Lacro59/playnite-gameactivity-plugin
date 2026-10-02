@@ -1,9 +1,11 @@
 using CommonPluginsShared.Collections;
+using CommonPlayniteShared.Converters;
 using GameActivity.Services;
 using Playnite.SDK;
 using Playnite.SDK.Data;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace GameActivity.Models
@@ -45,6 +47,59 @@ namespace GameActivity.Models
 		/// Gets the total playtime across all sessions in seconds.
 		/// </summary>
 		public ulong SessionPlaytime => (ulong)(Items?.Sum(x => (long)x.ElapsedSeconds) ?? 0);
+
+		/// <summary>
+		/// Signed playtime delta in seconds: GameActivity total minus Playnite total.
+		/// </summary>
+		[DontSerialize]
+		public long PlaytimeDeltaSeconds => (long)SessionPlaytime - (long)Playtime;
+
+		/// <summary>
+		/// True when session playtime differs from Playnite playtime.
+		/// </summary>
+		[DontSerialize]
+		public bool HasPlaytimeDelta => PlaytimeDeltaSeconds != 0L;
+
+		/// <summary>
+		/// True when session count differs from Playnite play count.
+		/// </summary>
+		[DontSerialize]
+		public bool HasPlayCountMismatch => Count != PlayCount;
+
+		/// <summary>
+		/// True when playtime and/or play count diverge from Playnite.
+		/// </summary>
+		[DontSerialize]
+		public bool HasDataMismatch => HasPlaytimeDelta || HasPlayCountMismatch;
+
+		/// <summary>
+		/// Tooltip describing the GA vs Playnite mismatch; null when values match.
+		/// </summary>
+		[DontSerialize]
+		public string DataMismatchTooltip
+		{
+			get
+			{
+				if (!HasDataMismatch)
+				{
+					return null;
+				}
+
+				PlayTimeToStringConverter converter = new PlayTimeToStringConverter();
+				string gaFormatted = (string)converter.Convert(
+					SessionPlaytime, null, null, CultureInfo.CurrentCulture);
+				string pnFormatted = (string)converter.Convert(
+					Playtime, null, null, CultureInfo.CurrentCulture);
+
+				return string.Format(
+					CultureInfo.CurrentCulture,
+					ResourceProvider.GetString("LOCGaPlaytimeMismatchTooltip"),
+					gaFormatted,
+					Count,
+					pnFormatted,
+					PlayCount);
+			}
+		}
 
 		/// <summary>
 		/// Gets the average FPS across all sessions.
@@ -332,6 +387,94 @@ namespace GameActivity.Models
 			return (int)Math.Round(sum / data.Count);
 		}
 
+		/// <summary>
+		/// Computes all session hardware metrics in a single <see cref="GetActivityDetails"/> pass.
+		/// Prefer this over calling AvgCPU/MinFPS/… individually when building list rows.
+		/// </summary>
+		/// <param name="dateSession">Session date (UTC recommended, same convention as Avg* helpers).</param>
+		/// <returns>Aggregates; zeros when the session has no details.</returns>
+		public SessionHardwareMetrics GetSessionHardwareMetrics(DateTime dateSession)
+		{
+			List<ActivityDetailsData> data = GetActivityDetails(dateSession);
+			SessionHardwareMetrics metrics = new SessionHardwareMetrics();
+			if (data == null || data.Count == 0)
+			{
+				return metrics;
+			}
+
+			metrics.AvgCpu = RoundAverageAll(data, d => d.CPU);
+			metrics.AvgGpu = RoundAverageAll(data, d => d.GPU);
+			metrics.AvgRam = RoundAverageAll(data, d => d.RAM);
+			metrics.AvgFps = RoundAverageAll(data, d => d.FPS);
+			metrics.AvgCpuT = RoundAverageAll(data, d => d.CPUT);
+			metrics.AvgGpuT = RoundAverageAll(data, d => d.GPUT);
+			metrics.AvgCpuP = RoundAverageAll(data, d => d.CPUP);
+			metrics.AvgGpuP = RoundAverageAll(data, d => d.GPUP);
+
+			List<int> fpsValues = CollectPositive(data, d => d.FPS);
+			if (fpsValues.Count > 0)
+			{
+				metrics.MinFps = fpsValues.Min();
+				metrics.MaxFps = fpsValues.Max();
+				metrics.MedianFps = CalculateMedianFps(fpsValues);
+				metrics.StdDevFps = CalculateSampleStdDevFps(fpsValues);
+			}
+
+			List<int> fps1Values = CollectPositive(data, d => d.FPS1PercentLow);
+			if (fps1Values.Count > 0)
+			{
+				metrics.AvgFps1PercentLow = (int)Math.Round(fps1Values.Average());
+				metrics.MinFps1PercentLow = fps1Values.Min();
+			}
+
+			List<int> fps01Values = CollectPositive(data, d => d.FPS0Point1PercentLow);
+			if (fps01Values.Count > 0)
+			{
+				metrics.AvgFps0Point1PercentLow = (int)Math.Round(fps01Values.Average());
+				metrics.MinFps0Point1PercentLow = fps01Values.Min();
+			}
+
+			return metrics;
+		}
+
+		private static int RoundAverageAll(List<ActivityDetailsData> data, Func<ActivityDetailsData, int> selector)
+		{
+			decimal sum = 0;
+			for (int i = 0; i < data.Count; i++)
+			{
+				ActivityDetailsData sample = data[i];
+				if (sample == null)
+				{
+					continue;
+				}
+
+				sum += selector(sample);
+			}
+
+			return (int)Math.Round(sum / data.Count);
+		}
+
+		private static List<int> CollectPositive(List<ActivityDetailsData> data, Func<ActivityDetailsData, int> selector)
+		{
+			List<int> values = new List<int>();
+			for (int i = 0; i < data.Count; i++)
+			{
+				ActivityDetailsData sample = data[i];
+				if (sample == null)
+				{
+					continue;
+				}
+
+				int value = selector(sample);
+				if (value > 0)
+				{
+					values.Add(value);
+				}
+			}
+
+			return values;
+		}
+
 		#endregion
 
 		/// <summary>
@@ -457,6 +600,26 @@ namespace GameActivity.Models
 		{
 			return Items
 				.Where(x => x.DateSession.ToLocalTime().Year == year && x.DateSession.ToLocalTime().Month == month)
+				.OrderBy(x => x.DateSession)
+				.ToList();
+		}
+
+		/// <summary>
+		/// Gets all activities whose local session date falls within an inclusive period.
+		/// </summary>
+		/// <param name="periodStart">Inclusive local start.</param>
+		/// <param name="periodEnd">Inclusive local end.</param>
+		/// <returns>Ordered list of activities in the period.</returns>
+		public List<Activity> GetActivities(DateTime periodStart, DateTime periodEnd)
+		{
+			DateTime start = periodStart;
+			DateTime end = periodEnd;
+			return Items
+				.Where(x =>
+				{
+					DateTime local = x.DateSession.ToLocalTime();
+					return local >= start && local <= end;
+				})
 				.OrderBy(x => x.DateSession)
 				.ToList();
 		}
@@ -709,5 +872,59 @@ namespace GameActivity.Models
 	public class LegacyActivityDetailsContainer
 	{
 		public Dictionary<DateTime, List<ActivityDetailsData>> Items { get; set; } = new Dictionary<DateTime, List<ActivityDetailsData>>();
+	}
+
+	/// <summary>
+	/// Hardware metric aggregates for one session, produced by <see cref="GameActivities.GetSessionHardwareMetrics"/>.
+	/// </summary>
+	public sealed class SessionHardwareMetrics
+	{
+		/// <summary>Average CPU usage (%).</summary>
+		public int AvgCpu { get; set; }
+
+		/// <summary>Average GPU usage (%).</summary>
+		public int AvgGpu { get; set; }
+
+		/// <summary>Average RAM usage (%).</summary>
+		public int AvgRam { get; set; }
+
+		/// <summary>Average FPS.</summary>
+		public int AvgFps { get; set; }
+
+		/// <summary>Minimum FPS among samples &gt; 0.</summary>
+		public int MinFps { get; set; }
+
+		/// <summary>Maximum FPS among samples &gt; 0.</summary>
+		public int MaxFps { get; set; }
+
+		/// <summary>Median FPS among samples &gt; 0.</summary>
+		public int MedianFps { get; set; }
+
+		/// <summary>Sample standard deviation of FPS.</summary>
+		public int StdDevFps { get; set; }
+
+		/// <summary>Average 1% low FPS among samples &gt; 0.</summary>
+		public int AvgFps1PercentLow { get; set; }
+
+		/// <summary>Minimum 1% low FPS among samples &gt; 0.</summary>
+		public int MinFps1PercentLow { get; set; }
+
+		/// <summary>Average 0.1% low FPS among samples &gt; 0.</summary>
+		public int AvgFps0Point1PercentLow { get; set; }
+
+		/// <summary>Minimum 0.1% low FPS among samples &gt; 0.</summary>
+		public int MinFps0Point1PercentLow { get; set; }
+
+		/// <summary>Average CPU temperature (°C).</summary>
+		public int AvgCpuT { get; set; }
+
+		/// <summary>Average GPU temperature (°C).</summary>
+		public int AvgGpuT { get; set; }
+
+		/// <summary>Average CPU power (W).</summary>
+		public int AvgCpuP { get; set; }
+
+		/// <summary>Average GPU power (W).</summary>
+		public int AvgGpuP { get; set; }
 	}
 }

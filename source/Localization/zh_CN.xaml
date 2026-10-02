@@ -13,6 +13,24 @@
 
     <sys:String x:Key="LOCGameActivityDefaultAction">默认指令</sys:String>
 
+    <!-- Exclude tracking (Playnite tag label + game menu + settings) -->
+    <sys:String x:Key="LOCGameActivityExcludeTrackingTag">Ignore tracking</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingAdd">Exclude from activity tracking</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingRemove">Allow activity tracking</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingTab">Excluded games</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingDescription">Games listed here are excluded from GameActivity session tracking (no playtime session, backup, or hardware logging). The Playnite tag &quot;[GA] Ignore tracking&quot; is used so you can also filter these games in the library.</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingAddGame">Add a game</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingAddDialogTitle">Add games to exclusion list</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingAddGameConfirm">Add</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingRemoveTooltip">Remove from exclusion list</sys:String>
+
+    <!-- Ignore mismatches (settings list — data consistency screen only) -->
+    <sys:String x:Key="LOCGameActivityIgnoreMismatchTab">Ignored mismatches</sys:String>
+    <sys:String x:Key="LOCGameActivityIgnoreMismatchDescription">Games listed here are hidden from the data consistency / mismatch screen. This does not stop session tracking; use the Excluded games tab for that.</sys:String>
+    <sys:String x:Key="LOCGameActivityIgnoreMismatchAddGame">Add a game</sys:String>
+    <sys:String x:Key="LOCGameActivityIgnoreMismatchAddDialogTitle">Add games to ignored mismatches list</sys:String>
+    <sys:String x:Key="LOCGameActivityIgnoreMismatchRemoveTooltip">Remove from ignored mismatches list</sys:String>
+
 
     <!-- ==================== Notifications ==================== -->
 
@@ -51,8 +69,18 @@
     <sys:String x:Key="LOCGaDataMismatchSectionPlaynite">Playnite 数据</sys:String>
     <sys:String x:Key="LOCGaDataMismatchApplyAllTooltip">以游戏活动插件数据覆盖所有列出游戏的 Playnite 数据</sys:String>
     <sys:String x:Key="LOCGaDataMismatchApplyHeader">应用</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchIgnoreHeader">Ignore</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchIgnoreTooltip">Hide this game from the mismatch list (settings). Does not stop session tracking.</sys:String>
     <sys:String x:Key="LOCGaDataMismatchEmpty">没有发现不匹配数据。</sys:String>
     <sys:String x:Key="LOCGaDataMismatchApplyAllConfirmTitle">是否确定全部覆盖？</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchApplySingleConfirmTitle">Override this game – are you sure?</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchDeltaHeader">Δ</sys:String>
+
+    <!-- ==================== GameActivityViewSingle — dual playtime ==================== -->
+
+    <sys:String x:Key="LOCGaTotalPlaytimeGa">Total (GameActivity)</sys:String>
+    <sys:String x:Key="LOCGaTotalPlaytimePlaynite">Total (Playnite)</sys:String>
+    <sys:String x:Key="LOCGaPlaytimeMismatchTooltip">Data mismatch — GameActivity: {0} ({1} sessions), Playnite: {2} ({3} plays).</sys:String>
 
 
     <!-- ==================== GameActivityBackup ================ -->
@@ -117,6 +145,9 @@
     <sys:String x:Key="LOCGameActivityIndex">索引</sys:String>
     <sys:String x:Key="LOCGameActivitySensorsID">传感器 ID</sys:String>
     <sys:String x:Key="LOCGameActivityElementID">元素 ID</sys:String>
+    <sys:String x:Key="LOCGameActivityInstanceID">Instance ID</sys:String>
+    <sys:String x:Key="LOCGameActivityInstanceIDHWiNFOHelp" xml:space="preserve">Optional — HWiNFO sensor instance (dwSensorInst).
+Use when several devices share the same Sensor ID (e.g. multiple GPUs). Decimal or hexadecimal (0x…).</sys:String>
 
     <!-- Sensor labels -->
     <sys:String x:Key="LOCGameActivityGpuUsage">GPU 占用</sys:String>
@@ -141,6 +172,8 @@
     <!-- Playtime -->
     <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">在图表上合并不同会话的游玩时间</sys:String>
     <sys:String x:Key="LOCGameActivityCumulPlaytimeStore">合并不同库的游玩时间</sys:String>
+    <sys:String x:Key="LOCGameActivityHideHiddenGames">Hide Playnite hidden games from stats</sys:String>
+    <sys:String x:Key="LOCGameActivityHideHiddenGamesToolTip">Excludes games marked as Hidden in Playnite from GameActivity lists, charts and totals. Sessions are still recorded; use Exclude from tracking to stop recording.</sys:String>
     <sys:String x:Key="LOCGameActivityIgnoreSession">忽略时间较短的游戏会话</sys:String>
 
     <!-- Integration / Chart -->
@@ -198,6 +231,23 @@
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">经过时间</sys:String>
     <sys:String x:Key="LOCGameActivityTimePlayedInMonth">游玩时长（月）</sys:String>
     <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">游玩时长（周期）</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPreset7Days">7 days</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPresetMonth">Month</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPreset3Months">3 months</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPresetYear">Year</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPrevious">Previous period</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodNext">Next period</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodSelectMonth">Select month</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodLengthTooltip">Period length (Prev/Next navigate by this unit)</sys:String>
+    <sys:String x:Key="LOCGameActivityAggregateGames">Games</sys:String>
+    <sys:String x:Key="LOCGameActivityChartOthers">Others</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodSessions">Sessions in period</sys:String>
+    <sys:String x:Key="LOCGameActivityLvGamesLastActivityInPeriod">Last session in period</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByGames">Total hours by game</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursBySources">Total hours by source</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByGenres">Total hours by genre</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByTags">Total hours by tag</sys:String>
+    <sys:String x:Key="LOCGameActivityOpenGameDetails">Open game activity details</sys:String>
     <sys:String x:Key="LOCGameActivityDateSession">会话日期</sys:String>
     <sys:String x:Key="LOCGameActivityDateLog">日期记录</sys:String>
     <sys:String x:Key="LOCGameActivityPCName">PC 名称</sys:String>
@@ -240,13 +290,14 @@
 
     <!-- Group header labels for the two filter bar rows -->
     <sys:String x:Key="LOCGameActivityGroupUsage">占用率</sys:String>
+    <sys:String x:Key="LOCGameActivitySaveChartSeries">Save series selection</sys:String>
     <sys:String x:Key="LOCGameActivityGroupTempPower">温度/功耗</sys:String>
     <sys:String x:Key="LOCGameActivityGroupLogSensors">温度/功率/帧率低值</sys:String>
 
     <!-- ==================== Warning Dialog ==================== -->
 
     <sys:String x:Key="LOCGameActivityWarningCaption">游戏会话时的警告</sys:String>
-    <sys:String x:Key="LOCGameActivityWarningAt">At</sys:String>
+    <sys:String x:Key="LOCGameActivityWarningAt">于</sys:String>
 
 
     <!-- ==================== Quick Search ==================== -->
@@ -267,11 +318,13 @@
     <sys:String x:Key="LOCGaDateEnd">结束日期</sys:String>
     <sys:String x:Key="LOCGaGameActions">游戏动作</sys:String>
     <sys:String x:Key="LOCGaCustomGameActions">自定义游戏动作</sys:String>
+    <sys:String x:Key="LOCGaAdjustLogsWithSession">Trim performance log samples to match the session</sys:String>
+    <sys:String x:Key="LOCGaAdjustLogsWithSessionToolTip">When the session duration is reduced, remove log samples that fall outside the new start–end window. Samples are never added; entries without a timestamp are removed when trimming.</sys:String>
 
 
     <!-- ==================== PlayState Integration ==================== -->
 
     <!-- Temporary workaround until Playnite supports cross-extension data sharing -->
-    <sys:String x:Key="LOCGameActivitySubstPlayStateTime">Subtract PlayState pause time from the session duration</sys:String>
+    <sys:String x:Key="LOCGameActivitySubstPlayStateTime">从会话时间中提取出 PlayState 挂起时间</sys:String>
 
 </ResourceDictionary>
