@@ -1,7 +1,5 @@
 ﻿<?xml version="1.0"?>
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <!-- ==================== General ==================== -->
 
@@ -14,6 +12,24 @@ Die Differenz Spielzeit wurde verwendet: {1}s.</sys:String>
     <sys:String x:Key="LOCGameActivityProviderError">Der {0} Provider konnte nicht initialisiert werden.</sys:String>
 
     <sys:String x:Key="LOCGameActivityDefaultAction">Standardaktion</sys:String>
+
+    <!-- Exclude tracking (Playnite tag label + game menu + settings) -->
+    <sys:String x:Key="LOCGameActivityExcludeTrackingTag">Tracking ignorieren</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingAdd">Von Aktivitätenverfolgung ausschließen</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingRemove">Aktivitätsverfolgung erlauben</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingTab">Ausgenommene Spiele</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingDescription">Die hier aufgeführten Spiele sind von der GameActivity Sessionverfolgung ausgeschlossen (keine Spielzeit-Session, Sicherung oder Hardware-Logging). Das Playnite Tag &quot;[GA] Ignore Tracking&quot; wird verwendet, so dass man diese Spiele auch in der Bibliothek filtern kann.</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingAddGame">Spiel hinzufügen</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingAddDialogTitle">Spiele zur Ausschlussliste hinzufügen</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingAddGameConfirm">Hinzufügen</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingRemoveTooltip">Aus der Ausschlussliste entfernen</sys:String>
+
+    <!-- Ignore mismatches (settings list — data consistency screen only) -->
+    <sys:String x:Key="LOCGameActivityIgnoreMismatchTab">Ignored mismatches</sys:String>
+    <sys:String x:Key="LOCGameActivityIgnoreMismatchDescription">Games listed here are hidden from the data consistency / mismatch screen. This does not stop session tracking; use the Excluded games tab for that.</sys:String>
+    <sys:String x:Key="LOCGameActivityIgnoreMismatchAddGame">Add a game</sys:String>
+    <sys:String x:Key="LOCGameActivityIgnoreMismatchAddDialogTitle">Add games to ignored mismatches list</sys:String>
+    <sys:String x:Key="LOCGameActivityIgnoreMismatchRemoveTooltip">Remove from ignored mismatches list</sys:String>
 
 
     <!-- ==================== Notifications ==================== -->
@@ -53,8 +69,18 @@ Die Differenz Spielzeit wurde verwendet: {1}s.</sys:String>
     <sys:String x:Key="LOCGaDataMismatchSectionPlaynite">Playnite data</sys:String>
     <sys:String x:Key="LOCGaDataMismatchApplyAllTooltip">Override Playnite data with GameActivity data for all listed games</sys:String>
     <sys:String x:Key="LOCGaDataMismatchApplyHeader">Apply</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchIgnoreHeader">Ignore</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchIgnoreTooltip">Hide this game from the mismatch list (settings). Does not stop session tracking.</sys:String>
     <sys:String x:Key="LOCGaDataMismatchEmpty">No data mismatch detected.</sys:String>
     <sys:String x:Key="LOCGaDataMismatchApplyAllConfirmTitle">Override all – are you sure?</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchApplySingleConfirmTitle">Override this game – are you sure?</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchDeltaHeader">Δ</sys:String>
+
+    <!-- ==================== GameActivityViewSingle — dual playtime ==================== -->
+
+    <sys:String x:Key="LOCGaTotalPlaytimeGa">Total (GameActivity)</sys:String>
+    <sys:String x:Key="LOCGaTotalPlaytimePlaynite">Total (Playnite)</sys:String>
+    <sys:String x:Key="LOCGaPlaytimeMismatchTooltip">Data mismatch — GameActivity: {0} ({1} sessions), Playnite: {2} ({3} plays).</sys:String>
 
 
     <!-- ==================== GameActivityBackup ================ -->
@@ -146,6 +172,8 @@ Use when several devices share the same Sensor ID (e.g. multiple GPUs). Decimal 
     <!-- Playtime -->
     <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">Spielzeit über alle Sitzungen auf dem Diagramm zusammenführen</sys:String>
     <sys:String x:Key="LOCGameActivityCumulPlaytimeStore">Spielzeit über verschiedene Bibliotheken kombinieren</sys:String>
+    <sys:String x:Key="LOCGameActivityHideHiddenGames">Hide Playnite hidden games from stats</sys:String>
+    <sys:String x:Key="LOCGameActivityHideHiddenGamesToolTip">Excludes games marked as Hidden in Playnite from GameActivity lists, charts and totals. Sessions are still recorded; use Exclude from tracking to stop recording.</sys:String>
     <sys:String x:Key="LOCGameActivityIgnoreSession">Kurze Spielsitzungen ignorieren</sys:String>
 
     <!-- Integration / Chart -->
@@ -222,7 +250,7 @@ Use when several devices share the same Sensor ID (e.g. multiple GPUs). Decimal 
     <sys:String x:Key="LOCGameActivityOpenGameDetails">Open game activity details</sys:String>
     <sys:String x:Key="LOCGameActivityDateSession">Datum Sitzung</sys:String>
     <sys:String x:Key="LOCGameActivityDateLog">Datumsprotokoll</sys:String>
-    <sys:String x:Key="LOCGameActivityPCName">PC name</sys:String>
+    <sys:String x:Key="LOCGameActivityPCName">PC Name</sys:String>
 
     <!-- Average sensor columns -->
     <sys:String x:Key="LOCGameActivityAvgCpu">CPU durchschnitt</sys:String>
@@ -237,8 +265,8 @@ Use when several devices share the same Sensor ID (e.g. multiple GPUs). Decimal 
     <sys:String x:Key="LOCGameActivityFps0Point1PercentLow">Minimale Framerate 0.1 %</sys:String>
     <sys:String x:Key="LOCGameActivityFps1PercentLowAvg">Durchschnittliche Framerate 1 %</sys:String>
     <sys:String x:Key="LOCGameActivityFps1PercentLowMin">Minimale Framerate 1 %</sys:String>
-    <sys:String x:Key="LOCGameActivityFps0Point1PercentLowAvg">Durchschnittliche Framerate 0.1 % </sys:String>
-    <sys:String x:Key="LOCGameActivityFps0Point1PercentLowMin">Minimale Framerate 0,1 % </sys:String>
+    <sys:String x:Key="LOCGameActivityFps0Point1PercentLowAvg">Durchschnittliche Framerate 0.1 %</sys:String>
+    <sys:String x:Key="LOCGameActivityFps0Point1PercentLowMin">Minimale Framerate 0,1 %</sys:String>
     <sys:String x:Key="LOCGameActivityAvgCpuT">CPU Durchschnitt/Zeit°</sys:String>
     <sys:String x:Key="LOCGameActivityAvgGpuT">GPU Durchschnitt/Zeit°</sys:String>
     <sys:String x:Key="LOCGameActivityAvgCpuP">Durchschn. CPU P</sys:String>
@@ -255,7 +283,7 @@ Use when several devices share the same Sensor ID (e.g. multiple GPUs). Decimal 
     <sys:String x:Key="LOCGameActivityLabelGpuT">GPU-T°</sys:String>
     <sys:String x:Key="LOCGameActivityLabelCpuP">CPU W</sys:String>
     <sys:String x:Key="LOCGameActivityLabelGpuP">GPU W</sys:String>
-    <sys:String x:Key="LOCGameActivityLabelFps1PercentLowShort">untere 1% </sys:String>
+    <sys:String x:Key="LOCGameActivityLabelFps1PercentLowShort">untere 1%</sys:String>
     <sys:String x:Key="LOCGameActivityLabelFps0Point1PercentLowShort">untere 0.1%</sys:String>
 
     <sys:String x:Key="LOCGameActivityShowAllData">Alle Daten anzeigen</sys:String>
@@ -282,7 +310,7 @@ Use when several devices share the same Sensor ID (e.g. multiple GPUs). Decimal 
 
     <!-- ==================== Add / Edit Session ==================== -->
 
-    <sys:String x:Key="LOCGameActivitySessionDetailsExportFileTag">Session-performance-log</sys:String>
+    <sys:String x:Key="LOCGameActivitySessionDetailsExportFileTag">Session-Performance-Log</sys:String>
     <sys:String x:Key="LOCGameActivityExportSessionDetails">Exportiert die Performance-Samples dieser Session in ein CSV. Die empfohlene Datei enthält den Spieltitel und den Session-Start (lokale Zeit).</sys:String>
 
     <sys:String x:Key="LOCGaAddNewGameSession">Neue Spielsitzung hinzufügen</sys:String>

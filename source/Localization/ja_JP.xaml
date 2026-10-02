@@ -1,7 +1,5 @@
 ﻿<?xml version="1.0"?>
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <!-- ==================== General ==================== -->
 
@@ -14,6 +12,25 @@
     <sys:String x:Key="LOCGameActivityProviderError">{0} プロバイダーの初期化に失敗しました。</sys:String>
 
     <sys:String x:Key="LOCGameActivityDefaultAction">既定のアクション</sys:String>
+
+    <!-- Exclude tracking (Playnite tag label + game menu + settings) -->
+    <sys:String x:Key="LOCGameActivityExcludeTrackingTag">追跡を無視</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingAdd">アクティビティ追跡から除外</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingRemove">アクティビティ追跡を許可</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingTab">除外したゲーム</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingDescription">ここに表示されているゲームは、GameActivity のセッション追跡から除外されます（プレイ時間セッション、バックアップ、ハードウェアログは記録されません）。
+Playnite タグ &quot;[GA] Ignore tracking&quot; が使用されるため、ライブラリ内でこれらのゲームを絞り込むこともできます。</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingAddGame">ゲームを追加</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingAddDialogTitle">除外リストにゲームを追加</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingAddGameConfirm">追加</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingRemoveTooltip">除外リストから削除</sys:String>
+
+    <!-- Ignore mismatches (settings list — data consistency screen only) -->
+    <sys:String x:Key="LOCGameActivityIgnoreMismatchTab">無視した不一致</sys:String>
+    <sys:String x:Key="LOCGameActivityIgnoreMismatchDescription">ここに表示されているゲームは、データ整合性 / 不一致画面では非表示になります。セッション追跡は停止されません。停止する場合は「除外したゲーム」タブを使用してください。</sys:String>
+    <sys:String x:Key="LOCGameActivityIgnoreMismatchAddGame">ゲームを追加</sys:String>
+    <sys:String x:Key="LOCGameActivityIgnoreMismatchAddDialogTitle">無視する不一致リストにゲームを追加</sys:String>
+    <sys:String x:Key="LOCGameActivityIgnoreMismatchRemoveTooltip">無視する不一致リストから削除</sys:String>
 
 
     <!-- ==================== Notifications ==================== -->
@@ -53,8 +70,18 @@
     <sys:String x:Key="LOCGaDataMismatchSectionPlaynite">Playnite データ</sys:String>
     <sys:String x:Key="LOCGaDataMismatchApplyAllTooltip">一覧のすべてのゲームについて、Playnite データを GameActivity データで上書きする</sys:String>
     <sys:String x:Key="LOCGaDataMismatchApplyHeader">適用</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchIgnoreHeader">無視</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchIgnoreTooltip">このゲームを不一致リスト（設定）から非表示にします。セッション追跡は停止されません。</sys:String>
     <sys:String x:Key="LOCGaDataMismatchEmpty">データの不一致は検出されませんでした。</sys:String>
     <sys:String x:Key="LOCGaDataMismatchApplyAllConfirmTitle">すべて上書きしてもよろしいですか？</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchApplySingleConfirmTitle">このゲームを上書きしますか？</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchDeltaHeader">Δ</sys:String>
+
+    <!-- ==================== GameActivityViewSingle — dual playtime ==================== -->
+
+    <sys:String x:Key="LOCGaTotalPlaytimeGa">合計（GameActivity）</sys:String>
+    <sys:String x:Key="LOCGaTotalPlaytimePlaynite">合計（Playnite）</sys:String>
+    <sys:String x:Key="LOCGaPlaytimeMismatchTooltip">データ不一致 — GameActivity：{0}（{1} セッション）、Playnite：{2}（{3} プレイ）。</sys:String>
 
 
     <!-- ==================== GameActivityBackup ================ -->
@@ -146,6 +173,8 @@ Playnite のクラッシュ後に作成された可能性があります。
     <!-- Playtime -->
     <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">チャート上でセッション間のプレイ時間を統合</sys:String>
     <sys:String x:Key="LOCGameActivityCumulPlaytimeStore">異なるライブラリ間のプレイ時間を合算</sys:String>
+    <sys:String x:Key="LOCGameActivityHideHiddenGames">Playnite で非表示のゲームを統計から除外</sys:String>
+    <sys:String x:Key="LOCGameActivityHideHiddenGamesToolTip">Playnite で非表示に設定されているゲームを、GameActivity のリスト、チャート、合計から除外します。セッションは引き続き記録されます。記録を停止するには「アクティビティ追跡から除外」を使用してください。</sys:String>
     <sys:String x:Key="LOCGameActivityIgnoreSession">短いプレイセッションを無視</sys:String>
 
     <!-- Integration / Chart -->
@@ -203,23 +232,23 @@ Playnite のクラッシュ後に作成された可能性があります。
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">経過時間</sys:String>
     <sys:String x:Key="LOCGameActivityTimePlayedInMonth">プレイ時間 (月)</sys:String>
     <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">プレイ時間 (期間)</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriodPreset7Days">7 days</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriodPresetMonth">Month</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriodPreset3Months">3 months</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriodPresetYear">Year</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriodPrevious">Previous period</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriodNext">Next period</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriodSelectMonth">Select month</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriodLengthTooltip">Period length (Prev/Next navigate by this unit)</sys:String>
-    <sys:String x:Key="LOCGameActivityAggregateGames">Games</sys:String>
-    <sys:String x:Key="LOCGameActivityChartOthers">Others</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriodSessions">Sessions in period</sys:String>
-    <sys:String x:Key="LOCGameActivityLvGamesLastActivityInPeriod">Last session in period</sys:String>
-    <sys:String x:Key="LOCGameActivityTotalHoursByGames">Total hours by game</sys:String>
-    <sys:String x:Key="LOCGameActivityTotalHoursBySources">Total hours by source</sys:String>
-    <sys:String x:Key="LOCGameActivityTotalHoursByGenres">Total hours by genre</sys:String>
-    <sys:String x:Key="LOCGameActivityTotalHoursByTags">Total hours by tag</sys:String>
-    <sys:String x:Key="LOCGameActivityOpenGameDetails">Open game activity details</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPreset7Days">7日間</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPresetMonth">月</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPreset3Months">3か月</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPresetYear">年</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPrevious">前の期間</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodNext">次の期間</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodSelectMonth">月を選択</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodLengthTooltip">期間の長さ（前へ/次へはこの単位で移動）</sys:String>
+    <sys:String x:Key="LOCGameActivityAggregateGames">ゲーム</sys:String>
+    <sys:String x:Key="LOCGameActivityChartOthers">その他</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodSessions">期間内のセッション数</sys:String>
+    <sys:String x:Key="LOCGameActivityLvGamesLastActivityInPeriod">期間内の最終セッション</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByGames">ゲーム別の合計時間</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursBySources">ソース別の合計時間</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByGenres">ジャンル別の合計時間</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByTags">タグ別の合計時間</sys:String>
+    <sys:String x:Key="LOCGameActivityOpenGameDetails">ゲームアクティビティの詳細を開く</sys:String>
     <sys:String x:Key="LOCGameActivityDateSession">セッションの日付</sys:String>
     <sys:String x:Key="LOCGameActivityDateLog">ログの日付</sys:String>
     <sys:String x:Key="LOCGameActivityPCName">PC 名</sys:String>
@@ -262,7 +291,7 @@ Playnite のクラッシュ後に作成された可能性があります。
 
     <!-- Group header labels for the two filter bar rows -->
     <sys:String x:Key="LOCGameActivityGroupUsage">使用率</sys:String>
-    <sys:String x:Key="LOCGameActivitySaveChartSeries">Save series selection</sys:String>
+    <sys:String x:Key="LOCGameActivitySaveChartSeries">系列の選択を保存</sys:String>
     <sys:String x:Key="LOCGameActivityGroupTempPower">温度 / 消費電力</sys:String>
     <sys:String x:Key="LOCGameActivityGroupLogSensors">温度 / 消費電力 / FPS Low</sys:String>
 
