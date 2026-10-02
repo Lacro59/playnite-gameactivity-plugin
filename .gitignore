@@ -13,6 +13,9 @@
 # Graphify (local graph — regenerate with `graphify update .`)
 graphify-out/
 
+# rumdl (markdown linter cache)
+.rumdl_cache/
+
 # Playnite plugin
 [Originals]/
 
