@@ -281,3 +281,27 @@ Packages:
       - 'Fixed: HWiNFO readings refresh correctly after a sensor list change'
       - 'Improved: Game list selection and column layout in the main view'
       - 'Updated: Translations'
+  - Version: 3.6
+    RequiredApiVersion: 6.16.0
+    ReleaseDate: 2026-10-02
+    PackageUrl: https://github.com/Lacro59/playnite-gameactivity-plugin/releases/download/v3.6/playnite-gameactivity-plugin_3_6.pext
+    Changelog:
+      - 'Added: Period view and time filter for per-game activity charts'
+      - 'Added: Complementary pie charts on the aggregate home views'
+      - 'Added: Dual playtime totals with mismatch warnings'
+      - 'Added: Option to ignore games on the data mismatch screen'
+      - 'Added: Option to hide Playnite hidden games from stats'
+      - 'Added: Session duration field and synced end date when editing sessions'
+      - 'Added: Per-game exclusion list for activity tracking'
+      - 'Added: Remember Game Activity window size and position'
+      - 'Fixed: Game list sort and column layout now persist correctly'
+      - 'Fixed: Chart log series visibility remembered across restarts'
+      - 'Fixed: More reliable session backup timer'
+      - 'Fixed: Settings crash when store colors were missing'
+      - 'Fixed: Steam Family Sharing source icon'
+      - 'Fixed: Unknown sources use the Playnite glyph instead of a broken icon'
+      - 'Fixed: Aggregate chart tooltips match the product display rules'
+      - 'Fixed: Game last activity binding in the main activity view'
+      - 'Optimized: Faster open of the single-game activity view'
+      - 'Improved: Aggregate charts isolated per display mode'
+      - 'Updated: Translations'
