@@ -18,7 +18,7 @@ Utilisation de la différence de temps de jeu : {1}s.</sys:String>
     <sys:String x:Key="LOCGameActivityExcludeTrackingAdd">Exclure du suivi d'activité</sys:String>
     <sys:String x:Key="LOCGameActivityExcludeTrackingRemove">Autoriser le suivi d'activité</sys:String>
     <sys:String x:Key="LOCGameActivityExcludeTrackingTab">Jeux exclus</sys:String>
-    <sys:String x:Key="LOCGameActivityExcludeTrackingDescription">Les jeux listés ici sont exclus du suivi de session GameActivity (pas d'enregistrement de session de jeu, de sauvegarde ou de journalisation matérielle). L'étiquette Playnite « [GA] Ignore tracking » est utilisé afin que vous puissiez également filtrer ces jeux dans la bibliothèque.</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingDescription">Les jeux listés ici sont exclus du suivi de session GameActivity (pas d'enregistrement de session de jeu, de sauvegarde ou de journalisation matérielle). L'étiquette Playnite « [GA] Ignore tracking » est utilisé afin que vous puissiez également filtrer ces jeux dans la bibliothèque.</sys:String>
     <sys:String x:Key="LOCGameActivityExcludeTrackingAddGame">Ajouter un jeu</sys:String>
     <sys:String x:Key="LOCGameActivityExcludeTrackingAddDialogTitle">Ajouter des jeux à la liste d’exclusion</sys:String>
     <sys:String x:Key="LOCGameActivityExcludeTrackingAddGameConfirm">Ajouter</sys:String>
@@ -26,10 +26,10 @@ Utilisation de la différence de temps de jeu : {1}s.</sys:String>
 
     <!-- Ignore mismatches (settings list — data consistency screen only) -->
     <sys:String x:Key="LOCGameActivityIgnoreMismatchTab">Ignorer les incohérences</sys:String>
-    <sys:String x:Key="LOCGameActivityIgnoreMismatchDescription">Les jeux listés ici sont masqués de la fenêtre d'« Incohérences de données de jeu ». Cela n'arrête pas le suivi de session ; utilisez l'onglet « Jeux exclus » pour cela.</sys:String>
+    <sys:String x:Key="LOCGameActivityIgnoreMismatchDescription">Les jeux listés ici sont masqués de la fenêtre d'« Incohérences de données de jeu ». Cela n'arrête pas le suivi de session ; utilisez l'onglet « Jeux exclus » pour cela.</sys:String>
     <sys:String x:Key="LOCGameActivityIgnoreMismatchAddGame">Ajouter un jeu</sys:String>
     <sys:String x:Key="LOCGameActivityIgnoreMismatchAddDialogTitle">Ajouter des jeux à la liste « Ignorer les incohérences »</sys:String>
-    <sys:String x:Key="LOCGameActivityIgnoreMismatchRemoveTooltip">Retirer de la liste « Ignorer les incohérences »</sys:String>
+    <sys:String x:Key="LOCGameActivityIgnoreMismatchRemoveTooltip">Retirer de la liste « Ignorer les incohérences »</sys:String>
 
 
     <!-- ==================== Notifications ==================== -->
@@ -86,7 +86,7 @@ Utilisation de la différence de temps de jeu : {1}s.</sys:String>
     <!-- ==================== GameActivityBackup ================ -->
 
     <sys:String x:Key="LOCGaBackupDataInfo">Informations sur la sauvegarde des données</sys:String>
-    <sys:String x:Key="LOCGaCurrentGameState">Etat du jeu actuel</sys:String>
+    <sys:String x:Key="LOCGaCurrentGameState">État du jeu actuel</sys:String>
     <sys:String x:Key="LOCGaBackupExist" xml:space="preserve">Il y a des données de sauvegarde pour {0}.
 Probablement après un plantage de Playnite.
 Cliquez pour plus d'informations.</sys:String>
@@ -96,12 +96,12 @@ Cliquez pour plus d'informations.</sys:String>
 
     <!-- ==================== Game Data Mismatch ==================== -->
 
-    <sys:String x:Key="LOCGaGamesDataMismatch">Incompatibilité des données du jeu</sys:String>
+    <sys:String x:Key="LOCGaGamesDataMismatch">Incohérences de données de jeu</sys:String>
     <sys:String x:Key="LOCGaSessionCount">Nombre de sessions</sys:String>
     <sys:String x:Key="LOCGaSessionPlayed">Session jouée</sys:String>
     <sys:String x:Key="LOCGaGaToPlaynite">Définir les données de GameActivity sur Playnite</sys:String>
     <sys:String x:Key="LOCGaPlayniteToGa">Définir les données de Playnite sur GameActivity</sys:String>
-    <sys:String x:Key="LOCGaPlayniteToGaWarning">Cette action irréversible forcera le nombre de parties et les temps venant de GameActivity sur Playnite.</sys:String>
+    <sys:String x:Key="LOCGaPlayniteToGaWarning">Cette action irréversible forcera le nombre de sessions et les temps venant de GameActivity sur Playnite.</sys:String>
 
 
     <!-- ==================== Merge ==================== -->
@@ -119,9 +119,9 @@ Cliquez pour plus d'informations.</sys:String>
     <sys:String x:Key="LOCGameActivityTimeLabel">minute(s)</sys:String>
     <sys:String x:Key="LOCGameActivityHardwareMonitoringProvidersSection">Fournisseurs de surveillance matérielle</sys:String>
     <sys:String x:Key="LOCGameActivityHardwareProvidersLatencyIntro" xml:space="preserve">Pilule colorée : coût relatif typique d'une métrique lu
-rouge =
-orange =
-vert moyen = plus rapide</sys:String>
+rouge = lent
+orange = moyen
+vert moyen = rapide</sys:String>
     <sys:String x:Key="LOCGameActivityProviderLatencySlow">Lente</sys:String>
     <sys:String x:Key="LOCGameActivityProviderLatencyMedium">Moyenne</sys:String>
     <sys:String x:Key="LOCGameActivityProviderLatencyFast">Rapide</sys:String>
@@ -172,8 +172,8 @@ Use when several devices share the same Sensor ID (e.g. multiple GPUs). Decimal 
     <!-- Playtime -->
     <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">Combiner le temps de jeu des sessions sur le graphique</sys:String>
     <sys:String x:Key="LOCGameActivityCumulPlaytimeStore">Unifier le temps des différentes bibliothèques</sys:String>
-    <sys:String x:Key="LOCGameActivityHideHiddenGames">Hide Playnite hidden games from stats</sys:String>
-    <sys:String x:Key="LOCGameActivityHideHiddenGamesToolTip">Exclut les jeux marqués comme « Masqués » dans Playnite des listes, graphiques et totaux de GameActivity. Les sessions continuent d'être enregistrées ; utilisez l'option « Exclure du suivi » pour arrêter l'enregistrement.</sys:String>
+    <sys:String x:Key="LOCGameActivityHideHiddenGames">Cacher les jeux masqués de Playnite des statistiques</sys:String>
+    <sys:String x:Key="LOCGameActivityHideHiddenGamesToolTip">Exclut les jeux marqués comme « Masqués » dans Playnite des listes, graphiques et totaux de GameActivity. Les sessions continuent d'être enregistrées ; utilisez l'option « Exclure du suivi » pour arrêter l'enregistrement.</sys:String>
     <sys:String x:Key="LOCGameActivityIgnoreSession">Ignorer les sessions de jeu courtes</sys:String>
 
     <!-- Integration / Chart -->
@@ -209,8 +209,8 @@ Use when several devices share the same Sensor ID (e.g. multiple GPUs). Decimal 
 
     <sys:String x:Key="LOCGameActivityRecentActivity">Activité récente</sys:String>
     <sys:String x:Key="LOCGameActivityNoRecentActivity">Pas d'activité récente</sys:String>
-    <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} heures sur {1} semaine</sys:String>
-    <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} heures au cours des dernières {1} semaines</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} h sur {1} sem</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} h sur {1} sem</sys:String>
     <sys:String x:Key="LOCGameActivityAvgPerDay">Moy. par jour</sys:String>
     <sys:String x:Key="LOCGameActivityAvgPerSession">Temps moyen par session</sys:String>
     <sys:String x:Key="LOCGameActivityFirstSession">Première session</sys:String>
