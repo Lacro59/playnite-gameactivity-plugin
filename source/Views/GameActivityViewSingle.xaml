@@ -27,7 +27,7 @@
     <UserControl.Resources>
         <commonpluginsshared:CompareValueConverter  x:Key="CompareValueConverter" />
         <commonpluginsshared:LocalDateTimeConverter x:Key="LocalDateTimeConverter" />
-        <commonpluginsshared:LocalDateRelativeConverter x:Key="LocalDateRelativeConverter" />
+        <converters:DateTimeToLastPlayedConverter   x:Key="DateTimeToLastPlayedConverter" />
         <converters:PlayTimeToStringConverter       x:Key="PlayTimeToStringConverter" />
         <BooleanToVisibilityConverter               x:Key="BooleanToVisibilityConverter" />
         <commonpluginsshared:IndexConverter         x:Key="IndexConverter" />
@@ -296,7 +296,7 @@
                                 <GridViewColumnHeader Content="{DynamicResource LOCGameActivityLvGamesLastActivity}" />
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding GameLastActivity, Converter={StaticResource LocalDateRelativeConverter}}"
+                                        <TextBlock Text="{Binding GameLastActivity, Converter={StaticResource DateTimeToLastPlayedConverter}}"
                                                    ToolTip="{Binding GameLastActivity, Converter={StaticResource LocalDateTimeConverter}}"
                                                    Style="{DynamicResource ListExtendStyleTextBlock}" />
                                     </DataTemplate>

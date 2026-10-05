@@ -22,7 +22,7 @@
         <commonpluginsshared:DefaultIconConverter x:Key="DefaultIconConverter" />
         <commonpluginsshared:CompareValueConverter x:Key="CompareValueConverter" />
         <commonpluginsshared:LocalDateTimeConverter x:Key="LocalDateTimeConverter" />
-        <commonpluginsshared:LocalDateRelativeConverter x:Key="LocalDateRelativeConverter" />
+        <converters:DateTimeToLastPlayedConverter x:Key="DateTimeToLastPlayedConverter" />
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converters:InvertedBooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter" />
 
@@ -353,7 +353,7 @@
                                                 <GridViewColumnHeader Content="{DynamicResource LOCGameActivityLvGamesLastActivityInPeriod}" />
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
-                                                        <TextBlock Text="{Binding GameLastActivity, Converter={StaticResource LocalDateRelativeConverter}}"
+                                                        <TextBlock Text="{Binding GameLastActivity, Converter={StaticResource DateTimeToLastPlayedConverter}}"
                                                            ToolTip="{Binding GameLastActivity, Converter={StaticResource LocalDateTimeConverter}}"
                                                            Style="{DynamicResource ListExtendStyleTextBlock}" />
                                                     </DataTemplate>
