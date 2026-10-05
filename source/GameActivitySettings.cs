@@ -156,6 +156,9 @@ namespace GameActivity
         /// <summary>Whether column order in the list view is persisted between sessions.</summary>
         public bool SaveColumnOrder { get; set; } = false;
 
+        /// <summary>When true, Merge Sessions combo boxes list newest sessions first.</summary>
+        public bool MergeSessionsSortDescending { get; set; } = true;
+
         /// <summary>Show the activity button in the top panel header.</summary>
         public bool EnableIntegrationButtonHeader { get; set; } = false;
 

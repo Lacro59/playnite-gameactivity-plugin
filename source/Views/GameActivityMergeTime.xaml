@@ -60,6 +60,13 @@
                     <TextBlock Grid.Row="0" Grid.Column="0"
                                Style="{DynamicResource ViewColumnLabelText}"
                                Text="{DynamicResource LOCGaDateStart}" />
+                    <Button Grid.Row="0" Grid.Column="1"
+                            Style="{DynamicResource IconButton}"
+                            Content="{Binding SortGlyph}"
+                            ToolTip="{Binding SortToolTip}"
+                            Command="{Binding ToggleSortCommand}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center" />
                     <TextBlock Grid.Row="0" Grid.Column="2"
                                Style="{DynamicResource ViewColumnLabelText}"
                                Text="{DynamicResource LOCGaDateEnd}" />
