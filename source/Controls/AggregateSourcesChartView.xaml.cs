@@ -184,6 +184,42 @@ namespace GameActivity.Controls
         }
 
         /// <summary>
+        /// Repositions the week card when total-by-store charts are hidden (Cumul playtime by store).
+        /// Day stays left full-height; week expands upward into the freed right column.
+        /// </summary>
+        /// <param name="cumulPlaytimeStore">When true, week spans the right column; when false, restore XAML defaults.</param>
+        public void ApplyCumulPlaytimeStoreLayout(bool cumulPlaytimeStore)
+        {
+            // Day: always left column, full height (XAML default).
+            Grid.SetRow(PART_HoursByDayCard, 0);
+            Grid.SetRowSpan(PART_HoursByDayCard, 3);
+            Grid.SetColumn(PART_HoursByDayCard, 0);
+            Grid.SetColumnSpan(PART_HoursByDayCard, 1);
+
+            if (cumulPlaytimeStore)
+            {
+                Grid.SetRow(PART_HoursByWeekCard, 0);
+                Grid.SetRowSpan(PART_HoursByWeekCard, 3);
+                Grid.SetColumn(PART_HoursByWeekCard, 1);
+                Grid.SetColumnSpan(PART_HoursByWeekCard, 1);
+                Common.LogDebug("PeriodView: AggregateSources cumul layout (week expands into right column)");
+            }
+            else
+            {
+                Grid.SetRow(PART_TotalHoursCard, 0);
+                Grid.SetRowSpan(PART_TotalHoursCard, 1);
+                Grid.SetColumn(PART_TotalHoursCard, 1);
+                Grid.SetColumnSpan(PART_TotalHoursCard, 1);
+
+                Grid.SetRow(PART_HoursByWeekCard, 2);
+                Grid.SetRowSpan(PART_HoursByWeekCard, 1);
+                Grid.SetColumn(PART_HoursByWeekCard, 1);
+                Grid.SetColumnSpan(PART_HoursByWeekCard, 1);
+                Common.LogDebug("PeriodView: AggregateSources default layout restored");
+            }
+        }
+
+        /// <summary>
         /// Marks the view as loaded after the first data bind (lazy gate).
         /// </summary>
         public void MarkLoaded()

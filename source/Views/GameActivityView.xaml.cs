@@ -532,9 +532,23 @@ namespace GameActivity.Views
                     if (PluginDatabase.PluginSettings.CumulPlaytimeStore)
                     {
                         // Mono/Sources hosts manage their own visibility.
+                        // Sources charts are lazy; create lightly before Cumul layout (avoid NRE on open).
+                        if (PART_AggregateSourcesCharts == null && PART_AggregateSourcesHost != null)
+                        {
+                            PART_AggregateSourcesCharts = new AggregateSourcesChartView();
+                            PART_AggregateSourcesHost.Content = PART_AggregateSourcesCharts;
+                            PART_AggregateSourcesCharts.ConfigureDefaultTooltips(ShowIcon, ModeComplet);
+                            Common.LogDebug("PeriodView: create AggregateSourcesChartView (CumulPlaytimeStore init layout)");
+                        }
 
-                        Grid.SetColumn(PART_AggregateSourcesCharts.DayGrid, 0);
-                        Grid.SetColumnSpan(PART_AggregateSourcesCharts.DayGrid, 3);
+                        if (PART_AggregateSourcesCharts != null)
+                        {
+                            PART_AggregateSourcesCharts.ApplyCumulPlaytimeStoreLayout(true);
+                        }
+                        else
+                        {
+                            Logger.Warn($"PeriodView: CumulPlaytimeStore init layout skipped (hostNull={PART_AggregateSourcesHost == null} chartsNull=true)");
+                        }
                     }
                 });
 #if DEBUG
@@ -1202,8 +1216,7 @@ namespace GameActivity.Views
                         totalLabel.Visibility = Visibility.Hidden;
                         totalCard.Visibility = Visibility.Collapsed;
                         PART_AggregateSourcesCharts.ChartTotalPie.Visibility = Visibility.Collapsed;
-                        Grid.SetColumn(PART_AggregateSourcesCharts.DayGrid, 0);
-                        Grid.SetColumnSpan(PART_AggregateSourcesCharts.DayGrid, 3);
+                        PART_AggregateSourcesCharts.ApplyCumulPlaytimeStoreLayout(true);
                     }
                     else
                     {
@@ -1215,6 +1228,7 @@ namespace GameActivity.Views
                             PART_AggregateSourcesCharts.ChartTotalPie.Visibility = result.showTotalHoursChart
                                 ? Visibility.Visible
                                 : Visibility.Collapsed;
+                            PART_AggregateSourcesCharts.ApplyCumulPlaytimeStoreLayout(false);
                         }
                     }
 
