@@ -246,7 +246,16 @@
     <Compile Include="Services\GameActivityDetailsExport.cs" />
     <Compile Include="Services\GameActivityMenus.cs" />
     <Compile Include="Services\GameActivityMonitoring.cs" />
+    <Compile Include="Services\ThresholdEvaluator.cs" />
+    <Compile Include="Services\AlarmToast\AlarmToastNative.cs" />
+    <Compile Include="Services\AlarmToast\GameWindowAnchor.cs" />
+    <Compile Include="Services\AlarmToast\AlarmToastWindowFactory.cs" />
+    <Compile Include="Services\AlarmToast\AlarmToastPlacer.cs" />
+    <Compile Include="Services\AlarmToast\AlarmToastService.cs" />
     <Compile Include="Services\AggregatePieChartHelper.cs" />
+    <Compile Include="Views\AlarmToastView.xaml.cs">
+      <DependentUpon>AlarmToastView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Services\GameActivityStats.cs" />
     <Compile Include="Services\GameActivityTopPanelItem.cs" />
     <Compile Include="Services\GameActivityViewSidebar.cs" />
@@ -668,6 +677,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\WarningsDialogs.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\AlarmToastView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Media;
 using System.Windows.Media;
 
 namespace GameActivity
@@ -548,6 +549,40 @@ namespace GameActivity
         /// <summary>Warn when RAM usage exceeds this percentage. <c>0</c> = disabled.</summary>
         public int MaxRamUsage { get; set; } = 0;
 
+        /// <summary>Warn when CPU power exceeds this value in watts. <c>0</c> = disabled.</summary>
+        public int MaxCpuPower { get; set; } = 0;
+
+        /// <summary>Warn when GPU power exceeds this value in watts. <c>0</c> = disabled.</summary>
+        public int MaxGpuPower { get; set; } = 0;
+
+        #endregion
+
+        #region In-game alarm (live toast / sound)
+
+        /// <summary>Enable live in-game alarm checks (independent of session logging).</summary>
+        public bool EnableAlarm { get; set; } = false;
+
+        /// <summary>How often alarm thresholds are evaluated, in minutes (minimum 1).</summary>
+        public int TimeIntervalAlarm { get; set; } = 5;
+
+        /// <summary>Show an in-game toast when alarm thresholds are breached.</summary>
+        public bool EnableAlarmToast { get; set; } = true;
+
+        /// <summary>Play a system sound when alarm thresholds are breached.</summary>
+        public bool EnableAlarmSound { get; set; } = true;
+
+        /// <summary>
+        /// Toast screen corner: <c>0</c> bottom-right, <c>1</c> bottom-left,
+        /// <c>2</c> top-right, <c>3</c> top-left.
+        /// </summary>
+        public int AlarmToastCorner { get; set; } = 0;
+
+        /// <summary>How long the toast stays visible, in seconds.</summary>
+        public int AlarmToastDurationSeconds { get; set; } = 5;
+
+        /// <summary>Toast opacity percentage (<c>1</c>–<c>100</c>).</summary>
+        public int AlarmToastOpacityPercent { get; set; } = 95;
+
         #endregion
 
         #region Analysis & Statistics
@@ -728,6 +763,9 @@ namespace GameActivity
         /// <summary>Reloads <see cref="MsiAfterburnerMahmSensorEntries"/> from MAHM shared memory.</summary>
         public RelayCommand RefreshMsiAfterburnerMahmSensorsCommand { get; private set; }
 
+        /// <summary>Shows a sample in-game alarm toast (and optional sound) from the settings UI.</summary>
+        public RelayCommand PreviewAlarmCommand { get; private set; }
+
 		/// <summary>
 		/// Loads persisted settings (or creates defaults) and applies backward-compatibility patches.
 		/// </summary>
@@ -739,6 +777,73 @@ namespace GameActivity
             SanitizeStoreColors(Settings);
             SanitizeIgnoredMismatchGameIds(Settings);
             RefreshMsiAfterburnerMahmSensorsCommand = new RelayCommand(RefreshMsiAfterburnerMahmSensors);
+            PreviewAlarmCommand = new RelayCommand(PreviewAlarm);
+        }
+
+        /// <summary>
+        /// Fires a sample toast using the current (possibly unsaved) appearance settings.
+        /// Plays a system sound when <see cref="GameActivitySettings.EnableAlarmSound"/> is on.
+        /// </summary>
+        private void PreviewAlarm()
+        {
+            try
+            {
+                GameActivitySettings settings = Settings;
+                if (settings == null)
+                {
+                    return;
+                }
+
+                WarningData sample = CreatePreviewWarning();
+                _plugin.GameActivityMonitoring?.AlarmToastService?.Show(sample, null, settings);
+
+                if (settings.EnableAlarmSound)
+                {
+                    SystemSounds.Exclamation.Play();
+                }
+
+                LogManager.GetLogger().Info(
+                    $"PreviewAlarm - Toast:true Sound:{settings.EnableAlarmSound} Corner:{settings.AlarmToastCorner} Duration:{settings.AlarmToastDurationSeconds}s Opacity:{settings.AlarmToastOpacityPercent}%");
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex, false, true, GameActivity.PluginName);
+            }
+        }
+
+        /// <summary>
+        /// Builds a synthetic warm-sensor snapshot for the settings preview toast.
+        /// </summary>
+        private static WarningData CreatePreviewWarning()
+        {
+            return new WarningData
+            {
+                At = DateTime.Now.ToLocalTime().ToString("HH:mm"),
+                CpuTempData = new Data
+                {
+                    Name = ResourceProvider.GetString("LOCGameActivityCpuTemp"),
+                    Value = 95,
+                    IsWarm = true
+                },
+                GpuTempData = new Data
+                {
+                    Name = ResourceProvider.GetString("LOCGameActivityGpuTemp"),
+                    Value = 88,
+                    IsWarm = true
+                },
+                CpuPowerData = new Data
+                {
+                    Name = ResourceProvider.GetString("LOCGameActivityCpuPower"),
+                    Value = 120,
+                    IsWarm = true
+                },
+                GpuPowerData = new Data
+                {
+                    Name = ResourceProvider.GetString("LOCGameActivityGpuPower"),
+                    Value = 250,
+                    IsWarm = true
+                }
+            };
         }
 
         private void RefreshMsiAfterburnerMahmSensors()
@@ -836,10 +941,53 @@ namespace GameActivity
                                     Settings.MaxGpuTemp > 0 ||
                                     Settings.MaxCpuUsage > 0 ||
                                     Settings.MaxGpuUsage > 0 ||
-                                    Settings.MaxRamUsage > 0;
+                                    Settings.MaxRamUsage > 0 ||
+                                    Settings.MaxCpuPower > 0 ||
+                                    Settings.MaxGpuPower > 0;
                 if (!hasThreshold)
                 {
                     errors.Add("Performance warnings are enabled but no threshold is configured.");
+                }
+            }
+
+            if (Settings.EnableAlarm)
+            {
+                if (Settings.TimeIntervalAlarm < 1)
+                {
+                    errors.Add("Alarm interval must be at least 1 minute.");
+                }
+
+                if (!Settings.EnableAlarmToast && !Settings.EnableAlarmSound)
+                {
+                    errors.Add("In-game alarm is enabled but neither toast nor sound is enabled.");
+                }
+
+                bool hasAlarmThreshold = Settings.MaxCpuTemp > 0 ||
+                                         Settings.MaxGpuTemp > 0 ||
+                                         Settings.MaxCpuPower > 0 ||
+                                         Settings.MaxGpuPower > 0 ||
+                                         Settings.MinFps > 0 ||
+                                         Settings.MaxCpuUsage > 0 ||
+                                         Settings.MaxGpuUsage > 0 ||
+                                         Settings.MaxRamUsage > 0;
+                if (!hasAlarmThreshold)
+                {
+                    errors.Add("In-game alarm is enabled but no threshold is configured.");
+                }
+
+                if (Settings.AlarmToastDurationSeconds < 1)
+                {
+                    errors.Add("Alarm toast duration must be at least 1 second.");
+                }
+
+                if (Settings.AlarmToastOpacityPercent < 1 || Settings.AlarmToastOpacityPercent > 100)
+                {
+                    errors.Add("Alarm toast opacity must be between 1 and 100.");
+                }
+
+                if (Settings.AlarmToastCorner < 0 || Settings.AlarmToastCorner > 3)
+                {
+                    errors.Add("Alarm toast corner is invalid.");
                 }
             }
 

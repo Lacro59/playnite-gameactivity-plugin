@@ -9,6 +9,8 @@
         public Data CpuUsageData { get; set; }
         public Data GpuUsageData { get; set; }
         public Data RamUsageData { get; set; }
+        public Data CpuPowerData { get; set; }
+        public Data GpuPowerData { get; set; }
     }
 
     public class Data

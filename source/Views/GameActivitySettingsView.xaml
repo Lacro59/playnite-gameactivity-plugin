@@ -1301,9 +1301,8 @@
                         </ScrollViewer>
                     </DockPanel>
 
-                    <!-- Warning Section -->
-                    <DockPanel DockPanel.Dock="Bottom" Margin="0,25,0,0"
-                               IsEnabled="{Binding ElementName=cbLogging, Path=IsChecked, TargetNullValue=false}">
+                    <!-- Warning / threshold Section (shared by end-of-session warnings and in-game alarm) -->
+                    <DockPanel DockPanel.Dock="Bottom" Margin="0,25,0,0">
                         <StackPanel DockPanel.Dock="Top">
                             <CheckBox x:Name="cbWarning" IsChecked="{Binding Settings.EnableWarning}">
                                 <CheckBox.ToolTip>
@@ -1313,8 +1312,7 @@
                             </CheckBox>
                         </StackPanel>
 
-                        <StackPanel DockPanel.Dock="Bottom" Margin="50,10,0,0" Orientation="Horizontal" 
-                               IsEnabled="{Binding ElementName=cbWarning, Path=IsChecked, TargetNullValue=false}">
+                        <StackPanel DockPanel.Dock="Bottom" Margin="50,10,0,0" Orientation="Horizontal">
 
                             <StackPanel Orientation="Horizontal" Margin="15,0,0,0">
                                 <Label Content="{DynamicResource LOCGameActivityMaxCpuUsage}" Height="23" Width="135" />
@@ -1332,8 +1330,7 @@
                             </StackPanel>
                         </StackPanel>
 
-                        <StackPanel DockPanel.Dock="Bottom" Margin="50,10,0,0" Orientation="Horizontal" 
-                               IsEnabled="{Binding ElementName=cbWarning, Path=IsChecked, TargetNullValue=false}">
+                        <StackPanel DockPanel.Dock="Bottom" Margin="50,10,0,0" Orientation="Horizontal">
 
                             <StackPanel Orientation="Horizontal" Margin="15,0,0,0">
                                 <Label Content="{DynamicResource LOCGameActivityMaxCpuTemp}" Height="23" Width="135" />
@@ -1349,6 +1346,84 @@
                                 <Label Content="{DynamicResource LOCGameActivityMinFps}" Height="23" Width="135" />
                                 <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.MinFps}" Width="35" PreviewTextInput="NumberValidationTextBox" MaxLength="3" />
                             </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel DockPanel.Dock="Bottom" Margin="50,10,0,0" Orientation="Horizontal">
+
+                            <StackPanel Orientation="Horizontal" Margin="15,0,0,0">
+                                <Label Content="{DynamicResource LOCGameActivityMaxCpuPower}" Height="23" Width="135" />
+                                <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.MaxCpuPower}" Width="35" PreviewTextInput="NumberValidationTextBox" MaxLength="4" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Margin="15,0,0,0">
+                                <Label Content="{DynamicResource LOCGameActivityMaxGpuPower}" Height="23" Width="135" />
+                                <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Settings.MaxGpuPower}" Width="35" PreviewTextInput="NumberValidationTextBox" MaxLength="4" />
+                            </StackPanel>
+                        </StackPanel>
+                    </DockPanel>
+
+                    <!-- In-game alarm Section -->
+                    <DockPanel DockPanel.Dock="Bottom" Margin="0,25,0,0">
+                        <StackPanel DockPanel.Dock="Top">
+                            <CheckBox x:Name="cbAlarm" IsChecked="{Binding Settings.EnableAlarm}">
+                                <CheckBox.ToolTip>
+                                    <ToolTip Content="{DynamicResource LOCGameActivityEnableAlarmToolTip}" />
+                                </CheckBox.ToolTip>
+                                <Label Content="{DynamicResource LOCGameActivityActiveAlarm}" />
+                            </CheckBox>
+                        </StackPanel>
+
+                        <StackPanel DockPanel.Dock="Bottom" Margin="50,10,0,0"
+                                    IsEnabled="{Binding ElementName=cbAlarm, Path=IsChecked, TargetNullValue=false}">
+
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                <Label Content="{DynamicResource LOCGameActivityAlarmInterval}" Height="23" Width="160" />
+                                <TextBox HorizontalAlignment="Left" Height="23" Width="40"
+                                         Text="{Binding Settings.TimeIntervalAlarm}"
+                                         PreviewTextInput="NumberValidationTextBox" MaxLength="3" />
+                                <Label Content="{DynamicResource LOCGameActivityTimeLabel}" Height="23" Margin="8,0,0,0" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                <CheckBox IsChecked="{Binding Settings.EnableAlarmToast}" Margin="0,0,20,0">
+                                    <Label Content="{DynamicResource LOCGameActivityAlarmEnableToast}" />
+                                </CheckBox>
+                                <CheckBox IsChecked="{Binding Settings.EnableAlarmSound}">
+                                    <Label Content="{DynamicResource LOCGameActivityAlarmEnableSound}" />
+                                </CheckBox>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                <Label Content="{DynamicResource LOCGameActivityAlarmToastCorner}" Height="23" Width="160" />
+                                <ComboBox Width="160" SelectedIndex="{Binding Settings.AlarmToastCorner}">
+                                    <ComboBoxItem Content="{DynamicResource LOCGameActivityAlarmToastCornerBottomRight}" />
+                                    <ComboBoxItem Content="{DynamicResource LOCGameActivityAlarmToastCornerBottomLeft}" />
+                                    <ComboBoxItem Content="{DynamicResource LOCGameActivityAlarmToastCornerTopRight}" />
+                                    <ComboBoxItem Content="{DynamicResource LOCGameActivityAlarmToastCornerTopLeft}" />
+                                </ComboBox>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                <Label Content="{DynamicResource LOCGameActivityAlarmToastDuration}" Height="23" Width="160" />
+                                <TextBox HorizontalAlignment="Left" Height="23" Width="40"
+                                         Text="{Binding Settings.AlarmToastDurationSeconds}"
+                                         PreviewTextInput="NumberValidationTextBox" MaxLength="3" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                <Label Content="{DynamicResource LOCGameActivityAlarmToastOpacity}" Height="23" Width="160" />
+                                <TextBox HorizontalAlignment="Left" Height="23" Width="40"
+                                         Text="{Binding Settings.AlarmToastOpacityPercent}"
+                                         PreviewTextInput="NumberValidationTextBox" MaxLength="3" />
+                            </StackPanel>
+
+                            <Button Content="{DynamicResource LOCGameActivityAlarmPreview}"
+                                    ToolTip="{DynamicResource LOCGameActivityAlarmPreviewToolTip}"
+                                    Command="{Binding PreviewAlarmCommand}"
+                                    MinHeight="26"
+                                    MinWidth="120"
+                                    HorizontalAlignment="Left"
+                                    Margin="0,5,0,0" />
                         </StackPanel>
                     </DockPanel>
                 </DockPanel>

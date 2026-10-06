@@ -194,6 +194,40 @@
                                         </StackPanel>
                                     </Border>
 
+                                    <!-- CPU power -->
+                                    <Border Style="{StaticResource SensorChipBorder}"
+                                            Visibility="{Binding CpuPowerData, Converter={StaticResource DataToVisibilityConverter}}">
+                                        <StackPanel>
+                                            <TextBlock Style="{StaticResource SensorNameText}"
+                                                       Text="{Binding CpuPowerData.Name}" />
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Style="{StaticResource SensorValueText}"
+                                                           Text="{Binding CpuPowerData.Value}"
+                                                           Foreground="{Binding CpuPowerData.IsWarm, Converter={StaticResource BoolToWarningBrushConverter}}" />
+                                                <TextBlock Style="{StaticResource SensorValueText}"
+                                                           Text=" W"
+                                                           Foreground="{Binding CpuPowerData.IsWarm, Converter={StaticResource BoolToWarningBrushConverter}}" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Border>
+
+                                    <!-- GPU power -->
+                                    <Border Style="{StaticResource SensorChipBorder}"
+                                            Visibility="{Binding GpuPowerData, Converter={StaticResource DataToVisibilityConverter}}">
+                                        <StackPanel>
+                                            <TextBlock Style="{StaticResource SensorNameText}"
+                                                       Text="{Binding GpuPowerData.Name}" />
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Style="{StaticResource SensorValueText}"
+                                                           Text="{Binding GpuPowerData.Value}"
+                                                           Foreground="{Binding GpuPowerData.IsWarm, Converter={StaticResource BoolToWarningBrushConverter}}" />
+                                                <TextBlock Style="{StaticResource SensorValueText}"
+                                                           Text=" W"
+                                                           Foreground="{Binding GpuPowerData.IsWarm, Converter={StaticResource BoolToWarningBrushConverter}}" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Border>
+
                                 </WrapPanel>
                             </StackPanel>
                         </Border>

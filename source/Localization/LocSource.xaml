@@ -170,6 +170,25 @@ Use when several devices share the same Sensor ID (e.g. multiple GPUs). Decimal 
     <sys:String x:Key="LOCGameActivityMaxCpuUsage">Max CPU usage</sys:String>
     <sys:String x:Key="LOCGameActivityMaxGpuUsage">Max GPU usage</sys:String>
     <sys:String x:Key="LOCGameActivityMaxRamUsage">Max RAM usage</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxCpuPower">Max CPU W</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxGpuPower">Max GPU W</sys:String>
+
+    <!-- In-game alarm -->
+    <sys:String x:Key="LOCGameActivityActiveAlarm">Enable in-game alarm</sys:String>
+    <sys:String x:Key="LOCGameActivityEnableAlarmToolTip">Checks thresholds during play (independent of session logging) and can show a toast and/or play a sound.</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmInterval">Alarm check interval</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmEnableToast">Show toast</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmEnableSound">Play sound</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmToastCorner">Toast corner</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmToastCornerBottomRight">Bottom right</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmToastCornerBottomLeft">Bottom left</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmToastCornerTopRight">Top right</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmToastCornerTopLeft">Top left</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmToastDuration">Toast duration (seconds)</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmToastOpacity">Toast opacity (%)</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmToastTitle">Hardware alert</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmPreview">Test alarm</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmPreviewToolTip">Shows a sample toast with the current corner, duration and opacity. Plays a sound if Play sound is enabled.</sys:String>
 
     <!-- Playtime -->
     <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">Merge playtime across sessions on chart</sys:String>
