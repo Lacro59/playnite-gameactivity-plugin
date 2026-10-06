@@ -1,0 +1,35 @@
+<UserControl x:Class="GameActivity.GameActivitySettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:GameActivity="clr-namespace:GameActivity"
+             xmlns:settings="clr-namespace:CommonPluginsControls.Settings"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance GameActivity:GameActivitySettingsViewModel}">
+
+    <TabControl x:Name="tcRoot"
+                Margin="20">
+        <TabItem x:Name="PART_TabGeneral"
+                 Header="{DynamicResource LOCGameActivity}"/>
+
+        <TabItem x:Name="PART_TabDisplay"
+                 Header="{DynamicResource LOCCommonIntegration}"/>
+
+        <TabItem x:Name="PART_TabMonitoring"
+                 Header="{DynamicResource LOCGameActivityMonitoringTab}"/>
+
+        <TabItem x:Name="PART_TabConfiguration"
+                 Header="{DynamicResource LOCMenuConfigurationTitle}"/>
+
+        <TabItem x:Name="PART_TabExcludeTracking"
+                 Header="{DynamicResource LOCGameActivityExcludeTrackingTab}"/>
+
+        <TabItem x:Name="PART_TabIgnoreMismatch"
+                 Header="{DynamicResource LOCGameActivityIgnoreMismatchTab}"/>
+
+        <TabItem Header="{DynamicResource LOCCommonDebugTab}">
+            <settings:PluginDebugSettingsSection PluginName="GameActivity" Margin="10" />
+        </TabItem>
+    </TabControl>
+</UserControl>

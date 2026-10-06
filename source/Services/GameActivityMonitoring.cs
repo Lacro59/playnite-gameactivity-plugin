@@ -9,6 +9,7 @@ using System.Windows;
 using CommonPlayniteShared.Common;
 using CommonPluginsShared;
 using GameActivity.Models;
+using GameActivity.Services.AlarmToast;
 using GameActivity.Services.HardwareMonitoring.Core;
 using GameActivity.Services.HardwareMonitoring.Models;
 using GameActivity.Services.HardwareMonitoring.Providers;
@@ -36,12 +37,21 @@ namespace GameActivity.Services
         private HardwareDataAggregator _hardwareMonitor;
         private ProviderHealthMonitor _healthMonitor;
         private MonitoringDiagnostics _diagnostics;
+        private readonly AlarmToastService _alarmToastService = new AlarmToastService();
 
         private readonly List<RunningActivity> _runningActivities = new List<RunningActivity>();
 
         public GameActivityMonitoring(GenericPlugin plugin)
         {
             Plugin = plugin;
+        }
+
+        /// <summary>
+        /// In-game alarm toast overlay (also used by settings preview).
+        /// </summary>
+        internal AlarmToastService AlarmToastService
+        {
+            get { return _alarmToastService; }
         }
 
         #region Initialization
@@ -228,6 +238,7 @@ namespace GameActivity.Services
                 Logger.Warn($"Replacing existing running activity for {runningActivity.Id}");
                 existing.TimerBackup = StopAndDisposeTimer(existing.TimerBackup);
                 existing.Timer = StopAndDisposeTimer(existing.Timer);
+                existing.TimerAlarm = StopAndDisposeTimer(existing.TimerAlarm);
                 _runningActivities.Remove(existing);
             }
 
@@ -257,6 +268,7 @@ namespace GameActivity.Services
 
             runningActivity.TimerBackup = StopAndDisposeTimer(runningActivity.TimerBackup);
             runningActivity.Timer = StopAndDisposeTimer(runningActivity.Timer);
+            runningActivity.TimerAlarm = StopAndDisposeTimer(runningActivity.TimerAlarm);
             _runningActivities.Remove(runningActivity);
         }
 
@@ -458,63 +470,175 @@ namespace GameActivity.Services
                 return;
             }
 
-            var settings = PluginDatabase.PluginSettings;
-
-            bool warningMinFps = settings.MinFps != 0 && metrics.FPS.HasValue && settings.MinFps >= metrics.FPS;
-            bool warningMaxCpuTemp = settings.MaxCpuTemp != 0 && metrics.CpuTemperature.HasValue && settings.MaxCpuTemp <= metrics.CpuTemperature;
-            bool warningMaxGpuTemp = settings.MaxGpuTemp != 0 && metrics.GpuTemperature.HasValue && settings.MaxGpuTemp <= metrics.GpuTemperature;
-            bool warningMaxCpuUsage = settings.MaxCpuUsage != 0 && metrics.CpuUsage.HasValue && settings.MaxCpuUsage <= metrics.CpuUsage;
-            bool warningMaxGpuUsage = settings.MaxGpuUsage != 0 && metrics.GpuUsage.HasValue && settings.MaxGpuUsage <= metrics.GpuUsage;
-            bool warningMaxRamUsage = settings.MaxRamUsage != 0 && metrics.RamUsage.HasValue && settings.MaxRamUsage <= metrics.RamUsage;
-
-            if (!warningMinFps && !warningMaxCpuTemp && !warningMaxGpuTemp
-                && !warningMaxCpuUsage && !warningMaxGpuUsage && !warningMaxRamUsage)
+            WarningData message = ThresholdEvaluator.BuildWarningIfBreached(PluginDatabase.PluginSettings, metrics);
+            if (message == null)
             {
                 return;
             }
 
-            var message = new WarningData
-            {
-                At = DateTime.Now.ToLocalTime().ToString("HH:mm"),
-                FpsData = new Data
-                {
-                    Name = ResourceProvider.GetString("LOCGameActivityFps"),
-                    Value = metrics.FPS ?? 0,
-                    IsWarm = warningMinFps,
-                },
-                CpuTempData = new Data
-                {
-                    Name = ResourceProvider.GetString("LOCGameActivityCpuTemp"),
-                    Value = metrics.CpuTemperature ?? 0,
-                    IsWarm = warningMaxCpuTemp,
-                },
-                GpuTempData = new Data
-                {
-                    Name = ResourceProvider.GetString("LOCGameActivityGpuTemp"),
-                    Value = metrics.GpuTemperature ?? 0,
-                    IsWarm = warningMaxGpuTemp,
-                },
-                CpuUsageData = new Data
-                {
-                    Name = ResourceProvider.GetString("LOCGameActivityCpuUsage"),
-                    Value = metrics.CpuUsage ?? 0,
-                    IsWarm = warningMaxCpuUsage,
-                },
-                GpuUsageData = new Data
-                {
-                    Name = ResourceProvider.GetString("LOCGameActivityGpuUsage"),
-                    Value = metrics.GpuUsage ?? 0,
-                    IsWarm = warningMaxGpuUsage,
-                },
-                RamUsageData = new Data
-                {
-                    Name = ResourceProvider.GetString("LOCGameActivityRamUsage"),
-                    Value = metrics.RamUsage ?? 0,
-                    IsWarm = warningMaxRamUsage,
-                },
-            };
-
             runningActivity.WarningsMessage.Add(message);
+        }
+
+        /// <summary>
+        /// Starts the in-game alarm timer for a session.
+        /// Interval comes from <see cref="GameActivitySettings.TimeIntervalAlarm"/> (minutes).
+        /// Independent of <see cref="GameActivitySettings.EnableLogging"/>.
+        /// </summary>
+        /// <param name="id">Playnite game id.</param>
+        public void DataAlarm_start(Guid id)
+        {
+            RunningActivity runningActivity = _runningActivities.Find(x => x.Id == id);
+            if (runningActivity == null)
+            {
+                Logger.Warn($"DataAlarm_start: no runningActivity for {id}");
+                return;
+            }
+
+            int intervalMinutes = PluginDatabase.PluginSettings.TimeIntervalAlarm;
+            if (intervalMinutes < 1)
+            {
+                intervalMinutes = 1;
+            }
+
+            runningActivity.TimerAlarm = StopAndDisposeTimer(runningActivity.TimerAlarm);
+            runningActivity.TimerAlarm = new Timer(intervalMinutes * 60000d)
+            {
+                AutoReset = true,
+            };
+            runningActivity.TimerAlarm.Elapsed += (sender, e) => OnAlarmTimedEvent(sender, e, id);
+            runningActivity.TimerAlarm.Start();
+            Logger.Info($"DataAlarm_start - {API.Instance.Database.Games.Get(id)?.Name} - {id} - Interval:{intervalMinutes}m");
+        }
+
+        /// <summary>
+        /// Stops the in-game alarm timer for the activity matching <paramref name="id"/>.
+        /// Prefer <see cref="DataAlarm_stop(RunningActivity)"/> when the instance is already known.
+        /// </summary>
+        /// <param name="id">Playnite game id.</param>
+        public void DataAlarm_stop(Guid id)
+        {
+            DataAlarm_stop(_runningActivities.Find(x => x.Id == id));
+        }
+
+        /// <summary>
+        /// Stops and disposes the alarm timer on the given running activity instance.
+        /// </summary>
+        /// <param name="runningActivity">Session activity whose alarm timer must be released.</param>
+        public void DataAlarm_stop(RunningActivity runningActivity)
+        {
+            if (runningActivity == null)
+            {
+                return;
+            }
+
+            if (runningActivity.TimerAlarm == null)
+            {
+                return;
+            }
+
+            Logger.Info($"DataAlarm_stop - {runningActivity.Id}");
+            runningActivity.TimerAlarm = StopAndDisposeTimer(runningActivity.TimerAlarm);
+            _alarmToastService.Close();
+        }
+
+        /// <summary>
+        /// Periodic alarm callback: samples hardware metrics and evaluates thresholds,
+        /// then delivers toast / sound via <see cref="DispatchAlarm"/>.
+        /// </summary>
+        private void OnAlarmTimedEvent(object source, ElapsedEventArgs e, Guid id)
+        {
+            RunningActivity runningActivity = _runningActivities.Find(x => x.Id == id);
+            if (runningActivity == null)
+            {
+                Logger.Warn($"OnAlarmTimedEvent: no runningActivity for {id}");
+                StopAndDisposeTimer(source as Timer);
+                return;
+            }
+
+            if (!PluginDatabase.PluginSettings.EnableAlarm)
+            {
+                Common.LogDebug($"OnAlarmTimedEvent skipped (EnableAlarm off) - {id}");
+                return;
+            }
+
+            try
+            {
+                HardwareMetrics metrics = _hardwareMonitor?.GetMetrics() ?? new HardwareMetrics();
+                WarningData warning = ThresholdEvaluator.BuildWarningIfBreached(PluginDatabase.PluginSettings, metrics);
+                if (warning == null || !ThresholdEvaluator.HasWarmSensor(warning))
+                {
+                    Common.LogDebug($"Alarm tick OK (no breach) - {id}");
+                    return;
+                }
+
+                runningActivity.LastAlarmWarning = warning;
+                Logger.Info(
+                    $"Alarm threshold breach - {API.Instance.Database.Games.Get(id)?.Name} - {id} - At:{warning.At}");
+                DispatchAlarm(runningActivity, warning);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, $"Error during alarm tick for {id}");
+            }
+        }
+
+        /// <summary>
+        /// Delivers a live alarm for a threshold breach (toast and/or sound).
+        /// Each channel is gated by its own setting; appearance comes from alarm toast settings.
+        /// </summary>
+        /// <param name="runningActivity">Session that raised the alarm.</param>
+        /// <param name="warning">Warm sensor snapshot.</param>
+        private void DispatchAlarm(RunningActivity runningActivity, WarningData warning)
+        {
+            if (runningActivity == null || warning == null)
+            {
+                return;
+            }
+
+            GameActivitySettings settings = PluginDatabase.PluginSettings;
+            bool enableToast = settings.EnableAlarmToast;
+            bool enableSound = settings.EnableAlarmSound;
+
+            if (!enableToast && !enableSound)
+            {
+                Common.LogDebug($"DispatchAlarm skipped (toast and sound off) - {runningActivity.Id}");
+                return;
+            }
+
+            if (enableToast)
+            {
+                try
+                {
+                    _alarmToastService.Show(warning, runningActivity.StartedProcessId);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex, $"DispatchAlarm toast failed for {runningActivity.Id}");
+                }
+            }
+
+            if (enableSound)
+            {
+                PlayAlarmSound();
+            }
+
+            Logger.Info(
+                $"DispatchAlarm - Game:{runningActivity.Id} Toast:{enableToast} Sound:{enableSound} Corner:{settings.AlarmToastCorner} Duration:{settings.AlarmToastDurationSeconds}s Opacity:{settings.AlarmToastOpacityPercent}%");
+        }
+
+        /// <summary>
+        /// Plays the system exclamation sound for an alarm (in-process, no NAudio host).
+        /// </summary>
+        private void PlayAlarmSound()
+        {
+            try
+            {
+                System.Media.SystemSounds.Exclamation.Play();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, "DispatchAlarm sound failed");
+            }
         }
 
         #endregion
@@ -1105,6 +1229,7 @@ namespace GameActivity.Services
         {
             Logger.Info("Disposing monitoring system");
 
+            _alarmToastService.Close();
             _hardwareMonitor?.Dispose();
             _hardwareMonitor = null;
             _healthMonitor = null;

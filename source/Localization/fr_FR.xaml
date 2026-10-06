@@ -15,21 +15,21 @@ Utilisation de la différence de temps de jeu : {1}s.</sys:String>
 
     <!-- Exclude tracking (Playnite tag label + game menu + settings) -->
     <sys:String x:Key="LOCGameActivityExcludeTrackingTag">Ignore tracking</sys:String>
-    <sys:String x:Key="LOCGameActivityExcludeTrackingAdd">Exclude from activity tracking</sys:String>
-    <sys:String x:Key="LOCGameActivityExcludeTrackingRemove">Allow activity tracking</sys:String>
-    <sys:String x:Key="LOCGameActivityExcludeTrackingTab">Excluded games</sys:String>
-    <sys:String x:Key="LOCGameActivityExcludeTrackingDescription">Games listed here are excluded from GameActivity session tracking (no playtime session, backup, or hardware logging). The Playnite tag &quot;[GA] Ignore tracking&quot; is used so you can also filter these games in the library.</sys:String>
-    <sys:String x:Key="LOCGameActivityExcludeTrackingAddGame">Add a game</sys:String>
-    <sys:String x:Key="LOCGameActivityExcludeTrackingAddDialogTitle">Add games to exclusion list</sys:String>
-    <sys:String x:Key="LOCGameActivityExcludeTrackingAddGameConfirm">Add</sys:String>
-    <sys:String x:Key="LOCGameActivityExcludeTrackingRemoveTooltip">Remove from exclusion list</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingAdd">Exclure du suivi d'activité</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingRemove">Autoriser le suivi d'activité</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingTab">Jeux exclus</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingDescription">Les jeux listés ici sont exclus du suivi de session GameActivity (pas d'enregistrement de session de jeu, de sauvegarde ou de journalisation matérielle). L'étiquette Playnite « [GA] Ignore tracking » est utilisé afin que vous puissiez également filtrer ces jeux dans la bibliothèque.</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingAddGame">Ajouter un jeu</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingAddDialogTitle">Ajouter des jeux à la liste d’exclusion</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingAddGameConfirm">Ajouter</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingRemoveTooltip">Retirer de la liste des exclusions</sys:String>
 
     <!-- Ignore mismatches (settings list — data consistency screen only) -->
-    <sys:String x:Key="LOCGameActivityIgnoreMismatchTab">Ignored mismatches</sys:String>
-    <sys:String x:Key="LOCGameActivityIgnoreMismatchDescription">Games listed here are hidden from the data consistency / mismatch screen. This does not stop session tracking; use the Excluded games tab for that.</sys:String>
-    <sys:String x:Key="LOCGameActivityIgnoreMismatchAddGame">Add a game</sys:String>
-    <sys:String x:Key="LOCGameActivityIgnoreMismatchAddDialogTitle">Add games to ignored mismatches list</sys:String>
-    <sys:String x:Key="LOCGameActivityIgnoreMismatchRemoveTooltip">Remove from ignored mismatches list</sys:String>
+    <sys:String x:Key="LOCGameActivityIgnoreMismatchTab">Ignorer les incohérences</sys:String>
+    <sys:String x:Key="LOCGameActivityIgnoreMismatchDescription">Les jeux listés ici sont masqués de la fenêtre d'« Incohérences de données de jeu ». Cela n'arrête pas le suivi de session ; utilisez l'onglet « Jeux exclus » pour cela.</sys:String>
+    <sys:String x:Key="LOCGameActivityIgnoreMismatchAddGame">Ajouter un jeu</sys:String>
+    <sys:String x:Key="LOCGameActivityIgnoreMismatchAddDialogTitle">Ajouter des jeux à la liste « Ignorer les incohérences »</sys:String>
+    <sys:String x:Key="LOCGameActivityIgnoreMismatchRemoveTooltip">Retirer de la liste « Ignorer les incohérences »</sys:String>
 
 
     <!-- ==================== Notifications ==================== -->
@@ -69,8 +69,8 @@ Utilisation de la différence de temps de jeu : {1}s.</sys:String>
     <sys:String x:Key="LOCGaDataMismatchSectionPlaynite">Données de Playnite</sys:String>
     <sys:String x:Key="LOCGaDataMismatchApplyAllTooltip">Remplacer les données Playnite par des données GameActivity pour tous les jeux listés</sys:String>
     <sys:String x:Key="LOCGaDataMismatchApplyHeader">Appliquer</sys:String>
-    <sys:String x:Key="LOCGaDataMismatchIgnoreHeader">Ignore</sys:String>
-    <sys:String x:Key="LOCGaDataMismatchIgnoreTooltip">Hide this game from the mismatch list (settings). Does not stop session tracking.</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchIgnoreHeader">Ignorer</sys:String>
+    <sys:String x:Key="LOCGaDataMismatchIgnoreTooltip">Cacher ce jeu de la liste d'incohérences (paramètres). N'arrête pas le suivi de session.</sys:String>
     <sys:String x:Key="LOCGaDataMismatchEmpty">Aucune incohérence de données détectée.</sys:String>
     <sys:String x:Key="LOCGaDataMismatchApplyAllConfirmTitle">Remplacer tous les éléments – êtes-vous sûr ?</sys:String>
     <sys:String x:Key="LOCGaDataMismatchApplySingleConfirmTitle">Override this game – are you sure?</sys:String>
@@ -80,13 +80,13 @@ Utilisation de la différence de temps de jeu : {1}s.</sys:String>
 
     <sys:String x:Key="LOCGaTotalPlaytimeGa">Total (GameActivity)</sys:String>
     <sys:String x:Key="LOCGaTotalPlaytimePlaynite">Total (Playnite)</sys:String>
-    <sys:String x:Key="LOCGaPlaytimeMismatchTooltip">Data mismatch — GameActivity: {0} ({1} sessions), Playnite: {2} ({3} plays).</sys:String>
+    <sys:String x:Key="LOCGaPlaytimeMismatchTooltip">Incohérence de données — GameActivity: {0} ({1} sessions), Playnite: {2} ({3} sessions).</sys:String>
 
 
     <!-- ==================== GameActivityBackup ================ -->
 
     <sys:String x:Key="LOCGaBackupDataInfo">Informations sur la sauvegarde des données</sys:String>
-    <sys:String x:Key="LOCGaCurrentGameState">Etat du jeu actuel</sys:String>
+    <sys:String x:Key="LOCGaCurrentGameState">État du jeu actuel</sys:String>
     <sys:String x:Key="LOCGaBackupExist" xml:space="preserve">Il y a des données de sauvegarde pour {0}.
 Probablement après un plantage de Playnite.
 Cliquez pour plus d'informations.</sys:String>
@@ -96,12 +96,12 @@ Cliquez pour plus d'informations.</sys:String>
 
     <!-- ==================== Game Data Mismatch ==================== -->
 
-    <sys:String x:Key="LOCGaGamesDataMismatch">Incompatibilité des données du jeu</sys:String>
+    <sys:String x:Key="LOCGaGamesDataMismatch">Incohérences de données de jeu</sys:String>
     <sys:String x:Key="LOCGaSessionCount">Nombre de sessions</sys:String>
     <sys:String x:Key="LOCGaSessionPlayed">Session jouée</sys:String>
     <sys:String x:Key="LOCGaGaToPlaynite">Définir les données de GameActivity sur Playnite</sys:String>
     <sys:String x:Key="LOCGaPlayniteToGa">Définir les données de Playnite sur GameActivity</sys:String>
-    <sys:String x:Key="LOCGaPlayniteToGaWarning">Cette action irréversible forcera le nombre de parties et les temps venant de GameActivity sur Playnite.</sys:String>
+    <sys:String x:Key="LOCGaPlayniteToGaWarning">Cette action irréversible forcera le nombre de sessions et les temps venant de GameActivity sur Playnite.</sys:String>
 
 
     <!-- ==================== Merge ==================== -->
@@ -112,6 +112,20 @@ Cliquez pour plus d'informations.</sys:String>
 
     <!-- ==================== Settings ==================== -->
 
+    <!-- Settings shell / Monitoring nav -->
+    <sys:String x:Key="LOCGameActivityMonitoringTab">Monitoring</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsNavLogging">Session logging</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsNavThresholds">Thresholds</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsNavWarnings">End-of-session warnings</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsNavAlarm">In-game alarm</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsNavDisplayNavigation">Title bar and sidebar</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsNavDisplayControls">Controls</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsThresholdsHelp">These thresholds are shared by charts, end-of-session warnings, and the in-game alarm. Set a value to 0 to disable that indicator.</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsWarningsUsesThresholds">Uses the thresholds defined under Monitoring → Thresholds.</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsAlarmUsesThresholds">Uses the thresholds defined under Monitoring → Thresholds. Hardware providers can be configured when the alarm is enabled (even if session logging is off).</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsProvidersGateHelp">Editable when session logging or the in-game alarm is enabled. Disable both to leave providers inactive.</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsLoggingProvidersNote">Configure hardware providers under Monitoring → Hardware monitoring providers. Providers are also available when the in-game alarm is on.</sys:String>
+
     <!-- Logging -->
     <sys:String x:Key="LOCGameActivityActiveLog">Activer la journalisation</sys:String>
     <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">Enregistre les performances CPU, GPU, RAM et FPS durant la session de jeu.</sys:String>
@@ -119,9 +133,9 @@ Cliquez pour plus d'informations.</sys:String>
     <sys:String x:Key="LOCGameActivityTimeLabel">minute(s)</sys:String>
     <sys:String x:Key="LOCGameActivityHardwareMonitoringProvidersSection">Fournisseurs de surveillance matérielle</sys:String>
     <sys:String x:Key="LOCGameActivityHardwareProvidersLatencyIntro" xml:space="preserve">Pilule colorée : coût relatif typique d'une métrique lu
-rouge =
-orange =
-vert moyen = plus rapide</sys:String>
+rouge = lent
+orange = moyen
+vert moyen = rapide</sys:String>
     <sys:String x:Key="LOCGameActivityProviderLatencySlow">Lente</sys:String>
     <sys:String x:Key="LOCGameActivityProviderLatencyMedium">Moyenne</sys:String>
     <sys:String x:Key="LOCGameActivityProviderLatencyFast">Rapide</sys:String>
@@ -143,9 +157,9 @@ vert moyen = plus rapide</sys:String>
     <sys:String x:Key="LOCGameActivityUseHWiNFOSharedMemory">Utiliser la mémoire partagée de HWiNFO</sys:String>
     <sys:String x:Key="LOCGameActivityUseHWiNFOGadget">Utiliser le gadget de rapport de HWiNFO</sys:String>
     <sys:String x:Key="LOCGameActivityIndex">Index</sys:String>
-    <sys:String x:Key="LOCGameActivitySensorsID">Id capteurs</sys:String>
-    <sys:String x:Key="LOCGameActivityElementID">Id élément</sys:String>
-    <sys:String x:Key="LOCGameActivityInstanceID">Instance ID</sys:String>
+    <sys:String x:Key="LOCGameActivitySensorsID">ID des capteurs</sys:String>
+    <sys:String x:Key="LOCGameActivityElementID">ID de l'élément</sys:String>
+    <sys:String x:Key="LOCGameActivityInstanceID">ID de l'instance</sys:String>
     <sys:String x:Key="LOCGameActivityInstanceIDHWiNFOHelp" xml:space="preserve">Optional — HWiNFO sensor instance (dwSensorInst).
 Use when several devices share the same Sensor ID (e.g. multiple GPUs). Decimal or hexadecimal (0x…).</sys:String>
 
@@ -161,19 +175,38 @@ Use when several devices share the same Sensor ID (e.g. multiple GPUs). Decimal 
 
     <!-- Warnings -->
     <sys:String x:Key="LOCGameActivityActiveWarning">Activer les avertissements</sys:String>
-    <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Affiche un message d'avertissement à la fin de la session de jeu dans les limites définies.</sys:String>
+    <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Displays an end-of-session warning when defined thresholds are exceeded. Chart warm coloring uses the same thresholds independently (value &gt; 0).</sys:String>
     <sys:String x:Key="LOCGameActivityMinFps">FPS min</sys:String>
     <sys:String x:Key="LOCGameActivityMaxCpuTemp">Temp CPU max</sys:String>
     <sys:String x:Key="LOCGameActivityMaxGpuTemp">Temp GPU max</sys:String>
     <sys:String x:Key="LOCGameActivityMaxCpuUsage">Utilisation CPU max</sys:String>
     <sys:String x:Key="LOCGameActivityMaxGpuUsage">Utilisation GPU max</sys:String>
     <sys:String x:Key="LOCGameActivityMaxRamUsage">Utilisation RAM max</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxCpuPower">Max CPU W</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxGpuPower">Max GPU W</sys:String>
+
+    <!-- In-game alarm -->
+    <sys:String x:Key="LOCGameActivityActiveAlarm">Enable in-game alarm</sys:String>
+    <sys:String x:Key="LOCGameActivityEnableAlarmToolTip">Checks thresholds during play (independent of session logging) and can show a toast and/or play a sound.</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmInterval">Alarm check interval</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmEnableToast">Show toast</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmEnableSound">Play sound</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmToastCorner">Toast corner</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmToastCornerBottomRight">Bottom right</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmToastCornerBottomLeft">Bottom left</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmToastCornerTopRight">Top right</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmToastCornerTopLeft">Top left</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmToastDuration">Toast duration (seconds)</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmToastOpacity">Toast opacity (%)</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmToastTitle">Hardware alert</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmPreview">Test alarm</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmPreviewToolTip">Shows a sample toast with the current corner, duration and opacity. Plays a sound if Play sound is enabled.</sys:String>
 
     <!-- Playtime -->
     <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">Combiner le temps de jeu des sessions sur le graphique</sys:String>
     <sys:String x:Key="LOCGameActivityCumulPlaytimeStore">Unifier le temps des différentes bibliothèques</sys:String>
-    <sys:String x:Key="LOCGameActivityHideHiddenGames">Hide Playnite hidden games from stats</sys:String>
-    <sys:String x:Key="LOCGameActivityHideHiddenGamesToolTip">Excludes games marked as Hidden in Playnite from GameActivity lists, charts and totals. Sessions are still recorded; use Exclude from tracking to stop recording.</sys:String>
+    <sys:String x:Key="LOCGameActivityHideHiddenGames">Cacher les jeux masqués de Playnite des statistiques</sys:String>
+    <sys:String x:Key="LOCGameActivityHideHiddenGamesToolTip">Exclut les jeux marqués comme « Masqués » dans Playnite des listes, graphiques et totaux de GameActivity. Les sessions continuent d'être enregistrées ; utilisez l'option « Exclure du suivi » pour arrêter l'enregistrement.</sys:String>
     <sys:String x:Key="LOCGameActivityIgnoreSession">Ignorer les sessions de jeu courtes</sys:String>
 
     <!-- Integration / Chart -->
@@ -209,9 +242,9 @@ Use when several devices share the same Sensor ID (e.g. multiple GPUs). Decimal 
 
     <sys:String x:Key="LOCGameActivityRecentActivity">Activité récente</sys:String>
     <sys:String x:Key="LOCGameActivityNoRecentActivity">Pas d'activité récente</sys:String>
-    <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} heures sur {1} semaine</sys:String>
-    <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} heures au cours des dernières {1} semaines</sys:String>
-    <sys:String x:Key="LOCGameActivityAvgPerDay">Temps moyen par jour</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivitySingular">{0} h sur {1} sem</sys:String>
+    <sys:String x:Key="LOCGameActivityRecentActivityPlurial">{0} h sur {1} sem</sys:String>
+    <sys:String x:Key="LOCGameActivityAvgPerDay">Moy. par jour</sys:String>
     <sys:String x:Key="LOCGameActivityAvgPerSession">Temps moyen par session</sys:String>
     <sys:String x:Key="LOCGameActivityFirstSession">Première session</sys:String>
     <sys:String x:Key="LOCGameActivityLastSession">Dernière session</sys:String>
@@ -230,24 +263,24 @@ Use when several devices share the same Sensor ID (e.g. multiple GPUs). Decimal 
     <sys:String x:Key="LOCGameActivityLvGamesLastActivity">Dernière session</sys:String>
     <sys:String x:Key="LOCGameActivityLvGamesElapsedSeconds">Temps passés</sys:String>
     <sys:String x:Key="LOCGameActivityTimePlayedInMonth">Temps de jeu (mois)</sys:String>
-    <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">Temps de lecture (période)</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriodPreset7Days">7 days</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriodPresetMonth">Month</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriodPreset3Months">3 months</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriodPresetYear">Year</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriodPrevious">Previous period</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriodNext">Next period</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriodSelectMonth">Select month</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriodLengthTooltip">Period length (Prev/Next navigate by this unit)</sys:String>
-    <sys:String x:Key="LOCGameActivityAggregateGames">Games</sys:String>
-    <sys:String x:Key="LOCGameActivityChartOthers">Others</sys:String>
-    <sys:String x:Key="LOCGameActivityPeriodSessions">Sessions in period</sys:String>
-    <sys:String x:Key="LOCGameActivityLvGamesLastActivityInPeriod">Last session in period</sys:String>
-    <sys:String x:Key="LOCGameActivityTotalHoursByGames">Total hours by game</sys:String>
-    <sys:String x:Key="LOCGameActivityTotalHoursBySources">Total hours by source</sys:String>
-    <sys:String x:Key="LOCGameActivityTotalHoursByGenres">Total hours by genre</sys:String>
-    <sys:String x:Key="LOCGameActivityTotalHoursByTags">Total hours by tag</sys:String>
-    <sys:String x:Key="LOCGameActivityOpenGameDetails">Open game activity details</sys:String>
+    <sys:String x:Key="LOCGameActivityTimePlayedInPeriod">Temps de jeu (période)</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPreset7Days">7 jours</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPresetMonth">Mois</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPreset3Months">3 mois</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPresetYear">Année</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodPrevious">Période précédente</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodNext">Période suivante</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodSelectMonth">Sélectionner un mois</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodLengthTooltip">Longueur de la période (Précédent/Suivant utilise cette unité)</sys:String>
+    <sys:String x:Key="LOCGameActivityAggregateGames">Jeux</sys:String>
+    <sys:String x:Key="LOCGameActivityChartOthers">Autres</sys:String>
+    <sys:String x:Key="LOCGameActivityPeriodSessions">Sessions en période</sys:String>
+    <sys:String x:Key="LOCGameActivityLvGamesLastActivityInPeriod">Dernière session dans la période</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByGames">Total d'heures par jeu</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursBySources">Total d'heures par source</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByGenres">Total d'heures par genre</sys:String>
+    <sys:String x:Key="LOCGameActivityTotalHoursByTags">Total d'heures par étiquette</sys:String>
+    <sys:String x:Key="LOCGameActivityOpenGameDetails">Ouvrir les détails d'activité du jeu</sys:String>
     <sys:String x:Key="LOCGameActivityDateSession">Date de la session</sys:String>
     <sys:String x:Key="LOCGameActivityDateLog">Date du log</sys:String>
     <sys:String x:Key="LOCGameActivityPCName">Nom du PC</sys:String>

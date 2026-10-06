@@ -22,7 +22,7 @@
         <commonpluginsshared:DefaultIconConverter x:Key="DefaultIconConverter" />
         <commonpluginsshared:CompareValueConverter x:Key="CompareValueConverter" />
         <commonpluginsshared:LocalDateTimeConverter x:Key="LocalDateTimeConverter" />
-        <commonpluginsshared:LocalDateRelativeConverter x:Key="LocalDateRelativeConverter" />
+        <converters:DateTimeToLastPlayedConverter x:Key="DateTimeToLastPlayedConverter" />
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converters:InvertedBooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter" />
 
@@ -353,7 +353,7 @@
                                                 <GridViewColumnHeader Content="{DynamicResource LOCGameActivityLvGamesLastActivityInPeriod}" />
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
-                                                        <TextBlock Text="{Binding GameLastActivity, Converter={StaticResource LocalDateRelativeConverter}}"
+                                                        <TextBlock Text="{Binding GameLastActivity, Converter={StaticResource DateTimeToLastPlayedConverter}}"
                                                            ToolTip="{Binding GameLastActivity, Converter={StaticResource LocalDateTimeConverter}}"
                                                            Style="{DynamicResource ListExtendStyleTextBlock}" />
                                                     </DataTemplate>
@@ -592,8 +592,8 @@
                                                                     <Setter Property="Foreground">
                                                                         <Setter.Value>
                                                                             <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
-                                                                                <Binding Path="AvgGPUT" />
-                                                                                <Binding Path="MaxGPUT" />
+                                                                                <Binding Path="AvgCPUP" />
+                                                                                <Binding Path="MaxCPUP" />
                                                                                 <Binding Path="EnableWarm" />
                                                                             </MultiBinding>
                                                                         </Setter.Value>
@@ -621,8 +621,8 @@
                                                                     <Setter Property="Foreground">
                                                                         <Setter.Value>
                                                                             <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
-                                                                                <Binding Path="AvgGPUT" />
-                                                                                <Binding Path="MaxGPUT" />
+                                                                                <Binding Path="AvgGPUP" />
+                                                                                <Binding Path="MaxGPUP" />
                                                                                 <Binding Path="EnableWarm" />
                                                                             </MultiBinding>
                                                                         </Setter.Value>

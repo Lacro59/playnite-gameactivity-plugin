@@ -1,0 +1,65 @@
+<UserControl x:Class="GameActivity.Views.AlarmToastView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             MinWidth="220"
+             MaxWidth="360">
+
+    <Border Style="{DynamicResource SectionBorder}"
+            Padding="12,10"
+            Margin="0"
+            Background="{DynamicResource PopupBackgroundBrush}">
+        <StackPanel>
+            <TextBlock Style="{DynamicResource BaseTextBlockStyle}"
+                       FontWeight="SemiBold"
+                       Text="{Binding Title}"
+                       Margin="0,0,0,4" />
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                <TextBlock Style="{DynamicResource BaseTextBlockStyle}"
+                           FontSize="{DynamicResource FontSizeSmall}"
+                           Foreground="{DynamicResource TextBrushDarker}"
+                           Text="{DynamicResource LOCGameActivityWarningAt}" />
+                <TextBlock Style="{DynamicResource BaseTextBlockStyle}"
+                           FontSize="{DynamicResource FontSizeSmall}"
+                           Foreground="{DynamicResource TextBrushDarker}"
+                           Text=" " />
+                <TextBlock Style="{DynamicResource BaseTextBlockStyle}"
+                           FontSize="{DynamicResource FontSizeSmall}"
+                           FontWeight="SemiBold"
+                           Text="{Binding Timestamp}" />
+            </StackPanel>
+            <ItemsControl ItemsSource="{Binding Items}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="{DynamicResource PanelSeparatorBrush}"
+                                BorderBrush="{DynamicResource NormalBorderBrush}"
+                                BorderThickness="{DynamicResource ControlBorderThickness}"
+                                CornerRadius="{DynamicResource ControlCornerRadius}"
+                                Padding="10,6"
+                                Margin="0,0,8,8"
+                                MinWidth="80">
+                            <StackPanel>
+                                <TextBlock Style="{DynamicResource BaseTextBlockStyle}"
+                                           FontSize="{DynamicResource FontSizeSmall}"
+                                           Foreground="{DynamicResource TextBrushDarker}"
+                                           Text="{Binding Name}"
+                                           Margin="0,0,0,2" />
+                                <TextBlock Style="{DynamicResource BaseTextBlockStyle}"
+                                           FontWeight="SemiBold"
+                                           Foreground="{DynamicResource WarningBrush}"
+                                           Text="{Binding ValueText}" />
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </Border>
+</UserControl>

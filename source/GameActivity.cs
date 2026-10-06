@@ -211,11 +211,16 @@ namespace GameActivity
                 string sessionCorrelationId = $"{args.Game.Id:N}-{DateTime.UtcNow.Ticks}";
                 Logger.Info($"OnGameStarted - {args.Game?.Name} - {args.Game?.Id} - Session:{sessionCorrelationId}");
 
+                int? startedProcessId = args.StartedProcessId > 0 ? args.StartedProcessId : (int?)null;
+                Common.LogDebug(
+                    $"OnGameStarted StartedProcessId:{(startedProcessId.HasValue ? startedProcessId.Value.ToString() : "none")} - Session:{sessionCorrelationId}");
+
                 RunningActivity runningActivity = new RunningActivity
                 {
                     Id = args.Game.Id,
                     PlaytimeOnStarted = args.Game.Playtime,
-                    SessionCorrelationId = sessionCorrelationId
+                    SessionCorrelationId = sessionCorrelationId,
+                    StartedProcessId = startedProcessId
                 };
                 GameActivityMonitoring.AddRunningActivity(runningActivity);
 
@@ -252,6 +257,11 @@ namespace GameActivity
                 {
                     GameActivityMonitoring.DataLogging_start(args.Game.Id);
                 }
+
+                if (PluginDatabase.PluginSettings.EnableAlarm)
+                {
+                    GameActivityMonitoring.DataAlarm_start(args.Game.Id);
+                }
             }
             catch (Exception ex)
             {
@@ -262,6 +272,8 @@ namespace GameActivity
                 {
 					GameActivityMonitoring.DataLogging_stop(args.Game.Id);
                 }
+
+                GameActivityMonitoring.DataAlarm_stop(args.Game.Id);
             }
         }
 
@@ -291,6 +303,7 @@ namespace GameActivity
 
                     // Stop timers on this session instance only (overlapping start must not kill the new session).
                     GameActivityMonitoring.DataBackup_stop(runningActivity);
+                    GameActivityMonitoring.DataAlarm_stop(runningActivity);
 
                     // Stop timer if log is enable.
                     if (PluginDatabase.PluginSettings.EnableLogging)
@@ -482,7 +495,7 @@ namespace GameActivity
 
         public override UserControl GetSettingsView(bool firstRunSettings)
         {
-            return new GameActivitySettingsView();
+            return new GameActivitySettingsView(PluginSettingsViewModel);
         }
         
         #endregion

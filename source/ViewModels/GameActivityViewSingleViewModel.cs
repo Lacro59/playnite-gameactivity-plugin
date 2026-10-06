@@ -703,13 +703,15 @@ namespace GameActivity.ViewModels
                             SourceIcon = PlayniteTools.GetPlatformIcon(sourceName),
                             SourceIconText = TransformIcon.Get(sourceName),
 
-                            EnableWarm = PluginDatabase.PluginSettings.EnableWarning,
+                            EnableWarm = PluginDatabase.PluginSettings.HasActiveChartThresholdIndicators,
                             MaxCPUT = PluginDatabase.PluginSettings.MaxCpuTemp.ToString(),
                             MaxGPUT = PluginDatabase.PluginSettings.MaxGpuTemp.ToString(),
                             MinFPS = PluginDatabase.PluginSettings.MinFps.ToString(),
                             MaxCPU = PluginDatabase.PluginSettings.MaxCpuUsage.ToString(),
                             MaxGPU = PluginDatabase.PluginSettings.MaxGpuUsage.ToString(),
                             MaxRAM = PluginDatabase.PluginSettings.MaxRamUsage.ToString(),
+                            MaxCPUP = PluginDatabase.PluginSettings.MaxCpuPower.ToString(),
+                            MaxGPUP = PluginDatabase.PluginSettings.MaxGpuPower.ToString(),
 
                             PCConfigurationId = _gameActivities.FilterItems[i].IdConfiguration,
                             PCName = _gameActivities.FilterItems[i].Configuration.Name,

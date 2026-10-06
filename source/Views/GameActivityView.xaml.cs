@@ -532,9 +532,23 @@ namespace GameActivity.Views
                     if (PluginDatabase.PluginSettings.CumulPlaytimeStore)
                     {
                         // Mono/Sources hosts manage their own visibility.
+                        // Sources charts are lazy; create lightly before Cumul layout (avoid NRE on open).
+                        if (PART_AggregateSourcesCharts == null && PART_AggregateSourcesHost != null)
+                        {
+                            PART_AggregateSourcesCharts = new AggregateSourcesChartView();
+                            PART_AggregateSourcesHost.Content = PART_AggregateSourcesCharts;
+                            PART_AggregateSourcesCharts.ConfigureDefaultTooltips(ShowIcon, ModeComplet);
+                            Common.LogDebug("PeriodView: create AggregateSourcesChartView (CumulPlaytimeStore init layout)");
+                        }
 
-                        Grid.SetColumn(PART_AggregateSourcesCharts.DayGrid, 0);
-                        Grid.SetColumnSpan(PART_AggregateSourcesCharts.DayGrid, 3);
+                        if (PART_AggregateSourcesCharts != null)
+                        {
+                            PART_AggregateSourcesCharts.ApplyCumulPlaytimeStoreLayout(true);
+                        }
+                        else
+                        {
+                            Logger.Warn($"PeriodView: CumulPlaytimeStore init layout skipped (hostNull={PART_AggregateSourcesHost == null} chartsNull=true)");
+                        }
                     }
                 });
 #if DEBUG
@@ -1202,8 +1216,7 @@ namespace GameActivity.Views
                         totalLabel.Visibility = Visibility.Hidden;
                         totalCard.Visibility = Visibility.Collapsed;
                         PART_AggregateSourcesCharts.ChartTotalPie.Visibility = Visibility.Collapsed;
-                        Grid.SetColumn(PART_AggregateSourcesCharts.DayGrid, 0);
-                        Grid.SetColumnSpan(PART_AggregateSourcesCharts.DayGrid, 3);
+                        PART_AggregateSourcesCharts.ApplyCumulPlaytimeStoreLayout(true);
                     }
                     else
                     {
@@ -1215,6 +1228,7 @@ namespace GameActivity.Views
                             PART_AggregateSourcesCharts.ChartTotalPie.Visibility = result.showTotalHoursChart
                                 ? Visibility.Visible
                                 : Visibility.Collapsed;
+                            PART_AggregateSourcesCharts.ApplyCumulPlaytimeStoreLayout(false);
                         }
                     }
 
@@ -2189,13 +2203,15 @@ namespace GameActivity.Views
                 AvgGPUT = avgGPUT + "°",
                 AvgCPUP = avgCPUP + "W",
                 AvgGPUP = avgGPUP + "W",
-                EnableWarm = PluginDatabase.PluginSettings.EnableWarning,
+                EnableWarm = PluginDatabase.PluginSettings.HasActiveChartThresholdIndicators,
                 MaxCPUT = PluginDatabase.PluginSettings.MaxCpuTemp.ToString(),
                 MaxGPUT = PluginDatabase.PluginSettings.MaxGpuTemp.ToString(),
                 MinFPS = PluginDatabase.PluginSettings.MinFps.ToString(),
                 MaxCPU = PluginDatabase.PluginSettings.MaxCpuUsage.ToString(),
                 MaxGPU = PluginDatabase.PluginSettings.MaxGpuUsage.ToString(),
                 MaxRAM = PluginDatabase.PluginSettings.MaxRamUsage.ToString(),
+                MaxCPUP = PluginDatabase.PluginSettings.MaxCpuPower.ToString(),
+                MaxGPUP = PluginDatabase.PluginSettings.MaxGpuPower.ToString(),
                 PCConfigurationId = sessionActivity.IdConfiguration,
                 PCName = config != null ? config.Name : string.Empty,
                 TypeStoreIcon = ModeSimple,
