@@ -305,3 +305,15 @@ Packages:
       - 'Optimized: Faster open of the single-game activity view'
       - 'Improved: Aggregate charts isolated per display mode'
       - 'Updated: Translations'
+  - Version: 3.7
+    RequiredApiVersion: 6.16.0
+    ReleaseDate: 2026-10-06
+    PackageUrl: https://github.com/Lacro59/playnite-gameactivity-plugin/releases/download/v3.7/playnite-gameactivity-plugin_3_7.pext
+    Changelog:
+      - 'Added: In-game alarm for CPU/GPU temperature and power thresholds (toast and/or sound)'
+      - 'Added: Shared Monitoring thresholds used by charts, end-of-session warnings, and the in-game alarm'
+      - 'Added: Settings reorganized into Monitoring and Appearance sections'
+      - 'Added: Sort toggle for the merge sessions list'
+      - 'Fixed: Crash when opening View all game activity with cumulative store charts enabled'
+      - 'Fixed: Last activity dates follow Playnite absolute/relative date settings'
+      - 'Updated: Translations'
