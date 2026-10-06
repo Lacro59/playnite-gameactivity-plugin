@@ -113,18 +113,18 @@ Klicken Sie für weitere Informationen.</sys:String>
     <!-- ==================== Settings ==================== -->
 
     <!-- Settings shell / Monitoring nav -->
-    <sys:String x:Key="LOCGameActivityMonitoringTab">Monitoring</sys:String>
-    <sys:String x:Key="LOCGameActivitySettingsNavLogging">Session logging</sys:String>
-    <sys:String x:Key="LOCGameActivitySettingsNavThresholds">Thresholds</sys:String>
-    <sys:String x:Key="LOCGameActivitySettingsNavWarnings">End-of-session warnings</sys:String>
-    <sys:String x:Key="LOCGameActivitySettingsNavAlarm">In-game alarm</sys:String>
-    <sys:String x:Key="LOCGameActivitySettingsNavDisplayNavigation">Title bar and sidebar</sys:String>
-    <sys:String x:Key="LOCGameActivitySettingsNavDisplayControls">Controls</sys:String>
-    <sys:String x:Key="LOCGameActivitySettingsThresholdsHelp">These thresholds are shared by charts, end-of-session warnings, and the in-game alarm. Set a value to 0 to disable that indicator.</sys:String>
-    <sys:String x:Key="LOCGameActivitySettingsWarningsUsesThresholds">Uses the thresholds defined under Monitoring → Thresholds.</sys:String>
-    <sys:String x:Key="LOCGameActivitySettingsAlarmUsesThresholds">Uses the thresholds defined under Monitoring → Thresholds. Hardware providers can be configured when the alarm is enabled (even if session logging is off).</sys:String>
-    <sys:String x:Key="LOCGameActivitySettingsProvidersGateHelp">Editable when session logging or the in-game alarm is enabled. Disable both to leave providers inactive.</sys:String>
-    <sys:String x:Key="LOCGameActivitySettingsLoggingProvidersNote">Configure hardware providers under Monitoring → Hardware monitoring providers. Providers are also available when the in-game alarm is on.</sys:String>
+    <sys:String x:Key="LOCGameActivityMonitoringTab">Überwachung</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsNavLogging">Sitzungsprotokollierung</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsNavThresholds">Schwellenwerte</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsNavWarnings">Warnungen zum Ende der Sitzung</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsNavAlarm">In-Game-Alarm</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsNavDisplayNavigation">Titelleiste und Seitenleiste</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsNavDisplayControls">Steuerelemente</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsThresholdsHelp">Diese Schwellenwerte werden von denm Diagrammen, Sitzungsendwarnungen und dem In-Game-Alarm verwendet. Setzen Sie einen Wert auf 0, um diese zu deaktivieren.</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsWarningsUsesThresholds">Verwendet die Schwellenwerte definiert unter Überwachung → Schwellenwerte</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsAlarmUsesThresholds">Verwendet die Schwellenwerte definiert unter Überwachung → Schwellenwerte. Hardwareanbieter können dann konfiguriert werden, wenn der Alarm aktiviert ist (auch wenn die Sitzungsprotokollierung deaktiviert ist).</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsProvidersGateHelp">Bearbeitbar, wenn Sitzungsprotokollierung aktiviert ist oder der In-Game-Alarm aktiviert ist. Deaktivieren Sie beide, um die Anbieter inaktiv zu lassen.</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsLoggingProvidersNote">Konfigurieren Sie Hardwareanbieter unter Überwachung → Hardwareüberwachungsanbieter. Anbieter sind ebenfallls verfügbar wenn der In-Game Alarm aktiv ist.</sys:String>
 
     <!-- Logging -->
     <sys:String x:Key="LOCGameActivityActiveLog">Logging aktivieren</sys:String>
@@ -175,32 +175,32 @@ Use when several devices share the same Sensor ID (e.g. multiple GPUs). Decimal 
 
     <!-- Warnings -->
     <sys:String x:Key="LOCGameActivityActiveWarning">Warnungen aktivieren</sys:String>
-    <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Displays an end-of-session warning when defined thresholds are exceeded. Chart warm coloring uses the same thresholds independently (value &gt; 0).</sys:String>
+    <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Zeigt eine Warnung zum Ende der Sitzung an, wenn definierte Schwellenwerte überschritten werden. Die Charts verwenden die gleichen Schwellenwerte unabhängig (Wert &gt; 0).</sys:String>
     <sys:String x:Key="LOCGameActivityMinFps">Min. FPS</sys:String>
     <sys:String x:Key="LOCGameActivityMaxCpuTemp">Max CPU Temperatur</sys:String>
     <sys:String x:Key="LOCGameActivityMaxGpuTemp">Max GPU Temperatur</sys:String>
     <sys:String x:Key="LOCGameActivityMaxCpuUsage">Max CPU-Nutzung</sys:String>
     <sys:String x:Key="LOCGameActivityMaxGpuUsage">Max GPU Nutzung</sys:String>
     <sys:String x:Key="LOCGameActivityMaxRamUsage">Max RAM-Nutzung</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxCpuPower">Max CPU W</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxGpuPower">Max GPU W</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxCpuPower">Maximale CPU W</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxGpuPower">Maximale GPU W</sys:String>
 
     <!-- In-game alarm -->
-    <sys:String x:Key="LOCGameActivityActiveAlarm">Enable in-game alarm</sys:String>
-    <sys:String x:Key="LOCGameActivityEnableAlarmToolTip">Checks thresholds during play (independent of session logging) and can show a toast and/or play a sound.</sys:String>
-    <sys:String x:Key="LOCGameActivityAlarmInterval">Alarm check interval</sys:String>
-    <sys:String x:Key="LOCGameActivityAlarmEnableToast">Show toast</sys:String>
-    <sys:String x:Key="LOCGameActivityAlarmEnableSound">Play sound</sys:String>
-    <sys:String x:Key="LOCGameActivityAlarmToastCorner">Toast corner</sys:String>
-    <sys:String x:Key="LOCGameActivityAlarmToastCornerBottomRight">Bottom right</sys:String>
-    <sys:String x:Key="LOCGameActivityAlarmToastCornerBottomLeft">Bottom left</sys:String>
-    <sys:String x:Key="LOCGameActivityAlarmToastCornerTopRight">Top right</sys:String>
-    <sys:String x:Key="LOCGameActivityAlarmToastCornerTopLeft">Top left</sys:String>
-    <sys:String x:Key="LOCGameActivityAlarmToastDuration">Toast duration (seconds)</sys:String>
-    <sys:String x:Key="LOCGameActivityAlarmToastOpacity">Toast opacity (%)</sys:String>
-    <sys:String x:Key="LOCGameActivityAlarmToastTitle">Hardware alert</sys:String>
-    <sys:String x:Key="LOCGameActivityAlarmPreview">Test alarm</sys:String>
-    <sys:String x:Key="LOCGameActivityAlarmPreviewToolTip">Shows a sample toast with the current corner, duration and opacity. Plays a sound if Play sound is enabled.</sys:String>
+    <sys:String x:Key="LOCGameActivityActiveAlarm">In-Game-Alarm aktivieren</sys:String>
+    <sys:String x:Key="LOCGameActivityEnableAlarmToolTip">Prüft die Schwellwerte während des Spiels (unabhängig von der Sitzungsprotokollierung) und zeige einen Toast und/oder spiele einen Ton ab.</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmInterval">Alarmprüfungsintervall</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmEnableToast">Schnelle Benachrichtigung zeigen</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmEnableSound">Ton abspielen</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmToastCorner">Benachrichtigungs/Toast Anzeigenplatzierung</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmToastCornerBottomRight">Unten rechts</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmToastCornerBottomLeft">Unten links</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmToastCornerTopRight">Oben rechts</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmToastCornerTopLeft">Oben links</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmToastDuration">Benachrichtigungs/Toast Dauer (Sekunden)</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmToastOpacity">Benachrichtigungs/Toast Deckkraft (%)</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmToastTitle">Hardware-Alarm</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmPreview">Alarm testen</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmPreviewToolTip">Zeigt einen Sample-Toast mit aktueller Ecke, Dauer und Deckkraft. Spielt einen Sound ab, wenn der Play-Ton aktiviert ist.</sys:String>
 
     <!-- Playtime -->
     <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">Spielzeit über alle Sitzungen auf dem Diagramm zusammenführen</sys:String>
