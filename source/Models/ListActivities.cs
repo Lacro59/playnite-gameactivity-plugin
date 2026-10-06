@@ -73,6 +73,12 @@ namespace GameActivity.Models
         public string MaxGPU { get; set; }
         public string MaxRAM { get; set; }
 
+        /// <summary>Max CPU power threshold (watts) for warm coloring; <c>0</c> disables.</summary>
+        public string MaxCPUP { get; set; }
+
+        /// <summary>Max GPU power threshold (watts) for warm coloring; <c>0</c> disables.</summary>
+        public string MaxGPUP { get; set; }
+
         public int PCConfigurationId { get; set; }
         public string PCName { get; set; }
         public string GameActionName { get; set; }

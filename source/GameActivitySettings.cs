@@ -346,8 +346,18 @@ namespace GameActivity
 
         #region Hardware Monitoring — General
 
+        private bool _enableLogging;
+
         /// <summary>Enable hardware metrics logging during gameplay.</summary>
-        public bool EnableLogging { get; set; } = false;
+        public bool EnableLogging
+        {
+            get => _enableLogging;
+            set
+            {
+                SetValue(ref _enableLogging, value);
+                OnPropertyChanged(nameof(IsHardwareProvidersUiEnabled));
+            }
+        }
 
         /// <summary>How often metrics are sampled, in minutes.</summary>
         public int TimeIntervalLogging { get; set; } = 5;
@@ -555,12 +565,42 @@ namespace GameActivity
         /// <summary>Warn when GPU power exceeds this value in watts. <c>0</c> = disabled.</summary>
         public int MaxGpuPower { get; set; } = 0;
 
+        /// <summary>
+        /// True when at least one chart warm-color threshold is configured (&gt; 0).
+        /// Independent of <see cref="EnableWarning"/> (in-game pop-ups).
+        /// </summary>
+        public bool HasActiveChartThresholdIndicators =>
+            MinFps > 0
+            || MaxCpuTemp > 0
+            || MaxGpuTemp > 0
+            || MaxCpuUsage > 0
+            || MaxGpuUsage > 0
+            || MaxRamUsage > 0
+            || MaxCpuPower > 0
+            || MaxGpuPower > 0;
+
         #endregion
 
         #region In-game alarm (live toast / sound)
 
+        private bool _enableAlarm;
+
         /// <summary>Enable live in-game alarm checks (independent of session logging).</summary>
-        public bool EnableAlarm { get; set; } = false;
+        public bool EnableAlarm
+        {
+            get => _enableAlarm;
+            set
+            {
+                SetValue(ref _enableAlarm, value);
+                OnPropertyChanged(nameof(IsHardwareProvidersUiEnabled));
+            }
+        }
+
+        /// <summary>
+        /// Whether hardware provider settings should be editable (session logging and/or in-game alarm need the monitor).
+        /// </summary>
+        [DontSerialize]
+        public bool IsHardwareProvidersUiEnabled => EnableLogging || EnableAlarm;
 
         /// <summary>How often alarm thresholds are evaluated, in minutes (minimum 1).</summary>
         public int TimeIntervalAlarm { get; set; } = 5;

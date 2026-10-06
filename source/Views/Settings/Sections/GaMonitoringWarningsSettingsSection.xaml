@@ -1,0 +1,28 @@
+<UserControl x:Class="GameActivity.Views.GaMonitoringWarningsSettingsSection"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:GameActivity="clr-namespace:GameActivity"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance GameActivity:GameActivitySettingsViewModel}">
+    <UserControl.Resources>
+        <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource CompactCheckBox}" />
+    </UserControl.Resources>
+
+    <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto" Padding="0,8,0,0">
+        <StackPanel>
+            <CheckBox x:Name="cbWarning" IsChecked="{Binding Settings.EnableWarning}">
+                <CheckBox.ToolTip>
+                    <ToolTip Content="{DynamicResource LOCGameActivityEnableWarningToolTip}"></ToolTip>
+                </CheckBox.ToolTip>
+                <Label Content="{DynamicResource LOCGameActivityActiveWarning}" />
+            </CheckBox>
+            <TextBlock Style="{DynamicResource BaseTextBlockStyle}"
+                       TextWrapping="Wrap"
+                       Margin="0,12,0,0"
+                       Opacity="0.75"
+                       Text="{DynamicResource LOCGameActivitySettingsWarningsUsesThresholds}" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

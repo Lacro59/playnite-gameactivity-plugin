@@ -298,8 +298,45 @@
     <Compile Include="Views\GameActivityMergeTime.xaml.cs">
       <DependentUpon>GameActivityMergeTime.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\GameActivitySettingsView.xaml.cs">
+    <Compile Include="Views\Settings\GameActivitySettingsView.xaml.cs">
       <DependentUpon>GameActivitySettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\Navigation\GaSettingsMasterDetailControl.xaml.cs">
+      <DependentUpon>GaSettingsMasterDetailControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\Navigation\GaSettingsNavigationItem.cs" />
+    <Compile Include="Views\Settings\Sections\GaGeneralSettingsSection.xaml.cs">
+      <DependentUpon>GaGeneralSettingsSection.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\Sections\GaDisplayNavigationSettingsSection.xaml.cs">
+      <DependentUpon>GaDisplayNavigationSettingsSection.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\Sections\GaDisplayControlsSettingsSection.xaml.cs">
+      <DependentUpon>GaDisplayControlsSettingsSection.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\Sections\GaConfigurationSettingsSection.xaml.cs">
+      <DependentUpon>GaConfigurationSettingsSection.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\Sections\GaMonitoringLoggingSettingsSection.xaml.cs">
+      <DependentUpon>GaMonitoringLoggingSettingsSection.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\Sections\GaMonitoringProvidersSettingsSection.xaml.cs">
+      <DependentUpon>GaMonitoringProvidersSettingsSection.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\Sections\GaMonitoringThresholdsSettingsSection.xaml.cs">
+      <DependentUpon>GaMonitoringThresholdsSettingsSection.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\Sections\GaMonitoringWarningsSettingsSection.xaml.cs">
+      <DependentUpon>GaMonitoringWarningsSettingsSection.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\Sections\GaMonitoringAlarmSettingsSection.xaml.cs">
+      <DependentUpon>GaMonitoringAlarmSettingsSection.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\Sections\GaExcludeTrackingSettingsSection.xaml.cs">
+      <DependentUpon>GaExcludeTrackingSettingsSection.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\Sections\GaIgnoreMismatchSettingsSection.xaml.cs">
+      <DependentUpon>GaIgnoreMismatchSettingsSection.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ExcludeTrackingAddGamesView.xaml.cs">
       <DependentUpon>ExcludeTrackingAddGamesView.xaml</DependentUpon>
@@ -652,7 +689,55 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\GameActivitySettingsView.xaml">
+    <Page Include="Views\Settings\GameActivitySettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\Navigation\GaSettingsMasterDetailControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\Sections\GaGeneralSettingsSection.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\Sections\GaDisplayNavigationSettingsSection.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\Sections\GaDisplayControlsSettingsSection.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\Sections\GaConfigurationSettingsSection.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\Sections\GaMonitoringLoggingSettingsSection.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\Sections\GaMonitoringProvidersSettingsSection.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\Sections\GaMonitoringThresholdsSettingsSection.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\Sections\GaMonitoringWarningsSettingsSection.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\Sections\GaMonitoringAlarmSettingsSection.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\Sections\GaExcludeTrackingSettingsSection.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\Sections\GaIgnoreMismatchSettingsSection.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

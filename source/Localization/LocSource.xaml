@@ -114,6 +114,20 @@ Click for more information.</sys:String>
 
     <!-- ==================== Settings ==================== -->
 
+    <!-- Settings shell / Monitoring nav -->
+    <sys:String x:Key="LOCGameActivityMonitoringTab">Monitoring</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsNavLogging">Session logging</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsNavThresholds">Thresholds</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsNavWarnings">End-of-session warnings</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsNavAlarm">In-game alarm</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsNavDisplayNavigation">Title bar and sidebar</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsNavDisplayControls">Controls</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsThresholdsHelp">These thresholds are shared by charts, end-of-session warnings, and the in-game alarm. Set a value to 0 to disable that indicator.</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsWarningsUsesThresholds">Uses the thresholds defined under Monitoring → Thresholds.</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsAlarmUsesThresholds">Uses the thresholds defined under Monitoring → Thresholds. Hardware providers can be configured when the alarm is enabled (even if session logging is off).</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsProvidersGateHelp">Editable when session logging or the in-game alarm is enabled. Disable both to leave providers inactive.</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsLoggingProvidersNote">Configure hardware providers under Monitoring → Hardware monitoring providers. Providers are also available when the in-game alarm is on.</sys:String>
+
     <!-- Logging -->
     <sys:String x:Key="LOCGameActivityActiveLog">Enable logging</sys:String>
     <sys:String x:Key="LOCGameActivityEnableLoggingToolTip">Log CPU, GPU, RAM and FPS performance during a game session.</sys:String>
@@ -163,7 +177,7 @@ Use when several devices share the same Sensor ID (e.g. multiple GPUs). Decimal 
 
     <!-- Warnings -->
     <sys:String x:Key="LOCGameActivityActiveWarning">Enable warnings</sys:String>
-    <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Displays a warning message at the end of the game session if defined thresholds are exceeded.</sys:String>
+    <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Displays an end-of-session warning when defined thresholds are exceeded. Chart warm coloring uses the same thresholds independently (value &gt; 0).</sys:String>
     <sys:String x:Key="LOCGameActivityMinFps">Min FPS</sys:String>
     <sys:String x:Key="LOCGameActivityMaxCpuTemp">Max CPU T°</sys:String>
     <sys:String x:Key="LOCGameActivityMaxGpuTemp">Max GPU T°</sys:String>

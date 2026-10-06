@@ -495,7 +495,7 @@ namespace GameActivity
 
         public override UserControl GetSettingsView(bool firstRunSettings)
         {
-            return new GameActivitySettingsView();
+            return new GameActivitySettingsView(PluginSettingsViewModel);
         }
         
         #endregion

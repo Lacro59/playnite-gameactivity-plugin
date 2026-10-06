@@ -592,8 +592,8 @@
                                                                     <Setter Property="Foreground">
                                                                         <Setter.Value>
                                                                             <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
-                                                                                <Binding Path="AvgGPUT" />
-                                                                                <Binding Path="MaxGPUT" />
+                                                                                <Binding Path="AvgCPUP" />
+                                                                                <Binding Path="MaxCPUP" />
                                                                                 <Binding Path="EnableWarm" />
                                                                             </MultiBinding>
                                                                         </Setter.Value>
@@ -621,8 +621,8 @@
                                                                     <Setter Property="Foreground">
                                                                         <Setter.Value>
                                                                             <MultiBinding Converter="{StaticResource CompareValueConverter}" ConverterParameter="1">
-                                                                                <Binding Path="AvgGPUT" />
-                                                                                <Binding Path="MaxGPUT" />
+                                                                                <Binding Path="AvgGPUP" />
+                                                                                <Binding Path="MaxGPUP" />
                                                                                 <Binding Path="EnableWarm" />
                                                                             </MultiBinding>
                                                                         </Setter.Value>
