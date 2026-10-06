@@ -131,7 +131,7 @@ namespace GameActivity.ViewModels
                 OrderActivities(PluginDatabase.Get(game, true).Items));
             MergeActivities = new ObservableCollection<Activity>();
 
-            Logger.Debug(string.Format(
+            Common.LogDebug(string.Format(
                 "Merge sessions dialog opened — descending={0}, game={1}, sessions={2}",
                 SortDescending,
                 game?.Name,
@@ -217,7 +217,7 @@ namespace GameActivity.ViewModels
                 }
             }
 
-            Logger.Debug(string.Format(
+            Common.LogDebug(string.Format(
                 "Merge sessions sort toggled — descending={0}, game={1}",
                 SortDescending,
                 _gameContext?.Name));
