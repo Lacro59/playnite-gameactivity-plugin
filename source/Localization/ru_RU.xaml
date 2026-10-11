@@ -115,13 +115,13 @@
     <!-- ==================== Settings ==================== -->
 
     <!-- Settings shell / Monitoring nav -->
-    <sys:String x:Key="LOCGameActivityMonitoringTab">Monitoring</sys:String>
-    <sys:String x:Key="LOCGameActivitySettingsNavLogging">Session logging</sys:String>
-    <sys:String x:Key="LOCGameActivitySettingsNavThresholds">Thresholds</sys:String>
+    <sys:String x:Key="LOCGameActivityMonitoringTab">Мониторинг</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsNavLogging">Логирование сессии</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsNavThresholds">Пороговые значения</sys:String>
     <sys:String x:Key="LOCGameActivitySettingsNavWarnings">End-of-session warnings</sys:String>
-    <sys:String x:Key="LOCGameActivitySettingsNavAlarm">In-game alarm</sys:String>
-    <sys:String x:Key="LOCGameActivitySettingsNavDisplayNavigation">Title bar and sidebar</sys:String>
-    <sys:String x:Key="LOCGameActivitySettingsNavDisplayControls">Controls</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsNavAlarm">Внутриигровой сигнал</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsNavDisplayNavigation">Заголовок окна и боковая панель</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsNavDisplayControls">Управление</sys:String>
     <sys:String x:Key="LOCGameActivitySettingsThresholdsHelp">These thresholds are shared by charts, end-of-session warnings, and the in-game alarm. Set a value to 0 to disable that indicator.</sys:String>
     <sys:String x:Key="LOCGameActivitySettingsWarningsUsesThresholds">Uses the thresholds defined under Monitoring → Thresholds.</sys:String>
     <sys:String x:Key="LOCGameActivitySettingsAlarmUsesThresholds">Uses the thresholds defined under Monitoring → Thresholds. Hardware providers can be configured when the alarm is enabled (even if session logging is off).</sys:String>
@@ -188,11 +188,11 @@
     <sys:String x:Key="LOCGameActivityMaxGpuPower">Max GPU W</sys:String>
 
     <!-- In-game alarm -->
-    <sys:String x:Key="LOCGameActivityActiveAlarm">Enable in-game alarm</sys:String>
+    <sys:String x:Key="LOCGameActivityActiveAlarm">Включить внутриигровой сигнал</sys:String>
     <sys:String x:Key="LOCGameActivityEnableAlarmToolTip">Checks thresholds during play (independent of session logging) and can show a toast and/or play a sound.</sys:String>
-    <sys:String x:Key="LOCGameActivityAlarmInterval">Alarm check interval</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmInterval">Интервал проверки сигнала</sys:String>
     <sys:String x:Key="LOCGameActivityAlarmEnableToast">Show toast</sys:String>
-    <sys:String x:Key="LOCGameActivityAlarmEnableSound">Play sound</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmEnableSound">Воспроизвести звук</sys:String>
     <sys:String x:Key="LOCGameActivityAlarmToastCorner">Toast corner</sys:String>
     <sys:String x:Key="LOCGameActivityAlarmToastCornerBottomRight">Bottom right</sys:String>
     <sys:String x:Key="LOCGameActivityAlarmToastCornerBottomLeft">Bottom left</sys:String>
@@ -200,8 +200,8 @@
     <sys:String x:Key="LOCGameActivityAlarmToastCornerTopLeft">Top left</sys:String>
     <sys:String x:Key="LOCGameActivityAlarmToastDuration">Toast duration (seconds)</sys:String>
     <sys:String x:Key="LOCGameActivityAlarmToastOpacity">Toast opacity (%)</sys:String>
-    <sys:String x:Key="LOCGameActivityAlarmToastTitle">Hardware alert</sys:String>
-    <sys:String x:Key="LOCGameActivityAlarmPreview">Test alarm</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmToastTitle">Аппаратное оповещение</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmPreview">Тестовый сигнал</sys:String>
     <sys:String x:Key="LOCGameActivityAlarmPreviewToolTip">Shows a sample toast with the current corner, duration and opacity. Plays a sound if Play sound is enabled.</sys:String>
 
     <!-- Playtime -->
