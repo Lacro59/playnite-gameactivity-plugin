@@ -18,7 +18,7 @@
     <sys:String x:Key="LOCGameActivityExcludeTrackingAdd">Исключить из отслеживания активности</sys:String>
     <sys:String x:Key="LOCGameActivityExcludeTrackingRemove">Разрешить отслеживание активности</sys:String>
     <sys:String x:Key="LOCGameActivityExcludeTrackingTab">Исключённые игры</sys:String>
-    <sys:String x:Key="LOCGameActivityExcludeTrackingDescription">Games listed here are excluded from GameActivity session tracking (no playtime session, backup, or hardware logging). The Playnite tag &quot;[GA] Ignore tracking&quot; is used so you can also filter these games in the library.</sys:String>
+    <sys:String x:Key="LOCGameActivityExcludeTrackingDescription">Игры, перечисленные здесь, исключены из отслеживания сеансов GameActivity (не записывается время сеанса, не создаются резервные копии и не ведется аппаратный мониторинг). Для этого используется тег Playnite «[GA] Ignore tracking», поэтому вы также можете отфильтровать эти игры в своей библиотеке.</sys:String>
     <sys:String x:Key="LOCGameActivityExcludeTrackingAddGame">Добавить игру</sys:String>
     <sys:String x:Key="LOCGameActivityExcludeTrackingAddDialogTitle">Добавить игры в список исключений</sys:String>
     <sys:String x:Key="LOCGameActivityExcludeTrackingAddGameConfirm">Добавить</sys:String>
@@ -26,7 +26,7 @@
 
     <!-- Ignore mismatches (settings list — data consistency screen only) -->
     <sys:String x:Key="LOCGameActivityIgnoreMismatchTab">Игнорируемые несовпадения</sys:String>
-    <sys:String x:Key="LOCGameActivityIgnoreMismatchDescription">Games listed here are hidden from the data consistency / mismatch screen. This does not stop session tracking; use the Excluded games tab for that.</sys:String>
+    <sys:String x:Key="LOCGameActivityIgnoreMismatchDescription">Игры, перечисленные здесь, скрыты на экране согласованности данных / несовпадений. Это не останавливает отслеживание сеансов; используйте для этого вкладку «Исключённые игры».</sys:String>
     <sys:String x:Key="LOCGameActivityIgnoreMismatchAddGame">Добавить игру</sys:String>
     <sys:String x:Key="LOCGameActivityIgnoreMismatchAddDialogTitle">Добавить игры в список игнорируемых несовпадений</sys:String>
     <sys:String x:Key="LOCGameActivityIgnoreMismatchRemoveTooltip">Удалить из списка игнорируемых несовпадений</sys:String>
@@ -118,15 +118,15 @@
     <sys:String x:Key="LOCGameActivityMonitoringTab">Мониторинг</sys:String>
     <sys:String x:Key="LOCGameActivitySettingsNavLogging">Логирование сессии</sys:String>
     <sys:String x:Key="LOCGameActivitySettingsNavThresholds">Пороговые значения</sys:String>
-    <sys:String x:Key="LOCGameActivitySettingsNavWarnings">End-of-session warnings</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsNavWarnings">Предупреждения в конце сессии</sys:String>
     <sys:String x:Key="LOCGameActivitySettingsNavAlarm">Внутриигровой сигнал</sys:String>
     <sys:String x:Key="LOCGameActivitySettingsNavDisplayNavigation">Заголовок окна и боковая панель</sys:String>
     <sys:String x:Key="LOCGameActivitySettingsNavDisplayControls">Управление</sys:String>
-    <sys:String x:Key="LOCGameActivitySettingsThresholdsHelp">These thresholds are shared by charts, end-of-session warnings, and the in-game alarm. Set a value to 0 to disable that indicator.</sys:String>
-    <sys:String x:Key="LOCGameActivitySettingsWarningsUsesThresholds">Uses the thresholds defined under Monitoring → Thresholds.</sys:String>
-    <sys:String x:Key="LOCGameActivitySettingsAlarmUsesThresholds">Uses the thresholds defined under Monitoring → Thresholds. Hardware providers can be configured when the alarm is enabled (even if session logging is off).</sys:String>
-    <sys:String x:Key="LOCGameActivitySettingsProvidersGateHelp">Editable when session logging or the in-game alarm is enabled. Disable both to leave providers inactive.</sys:String>
-    <sys:String x:Key="LOCGameActivitySettingsLoggingProvidersNote">Configure hardware providers under Monitoring → Hardware monitoring providers. Providers are also available when the in-game alarm is on.</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsThresholdsHelp">Эти пороговые значения являются общими для графиков, предупреждений в конце сеанса и внутри игрового сигнала. Установите значение на 0, чтобы отключить этот индикатор.</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsWarningsUsesThresholds">Использует пороговые значения, заданные в меню «Мониторинг» → «Пороговые значения».</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsAlarmUsesThresholds">Использует пороговые значения, определенные в разделе &quot;Мониторинг&quot; -&gt; &quot;Пороговые значения&quot;. Аппаратные провайдеры могут быть настроены когда сигнал включен (даже если запись сеанса выключена).</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsProvidersGateHelp">Доступно для редактирования, если включено ведение журнала сеансов или внутриигровой сигнал. Отключите обе функции, чтобы провайдеры оставались неактивными.</sys:String>
+    <sys:String x:Key="LOCGameActivitySettingsLoggingProvidersNote">Настройте провайдеры аппаратного мониторинга в меню «Мониторинг» → «Провайдеры мониторинга оборудования». Провайдеры также доступны, когда включен внутриигровой сигнал.</sys:String>
 
     <!-- Logging -->
     <sys:String x:Key="LOCGameActivityActiveLog">Включить ведение журнала</sys:String>
@@ -177,38 +177,38 @@
 
     <!-- Warnings -->
     <sys:String x:Key="LOCGameActivityActiveWarning">Включить предупреждения</sys:String>
-    <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Displays an end-of-session warning when defined thresholds are exceeded. Chart warm coloring uses the same thresholds independently (value &gt; 0).</sys:String>
+    <sys:String x:Key="LOCGameActivityEnableWarningToolTip">Отображает предупреждение в конце сеанса при превышении заданных пороговых значений. Для «теплой» (предупреждающей) расцветки графика эти же пороговые значения используются независимо (если значение &gt; 0).</sys:String>
     <sys:String x:Key="LOCGameActivityMinFps">Мин. FPS</sys:String>
     <sys:String x:Key="LOCGameActivityMaxCpuTemp">Макс. ЦП T°</sys:String>
     <sys:String x:Key="LOCGameActivityMaxGpuTemp">Макс. ГП T°</sys:String>
     <sys:String x:Key="LOCGameActivityMaxCpuUsage">Макс. исп-е ЦП</sys:String>
     <sys:String x:Key="LOCGameActivityMaxGpuUsage">Макс. исп-е ГП</sys:String>
     <sys:String x:Key="LOCGameActivityMaxRamUsage">Макс. исп-е ОЗУ</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxCpuPower">Max CPU W</sys:String>
-    <sys:String x:Key="LOCGameActivityMaxGpuPower">Max GPU W</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxCpuPower">Max ЦП W</sys:String>
+    <sys:String x:Key="LOCGameActivityMaxGpuPower">Max ГП W</sys:String>
 
     <!-- In-game alarm -->
     <sys:String x:Key="LOCGameActivityActiveAlarm">Включить внутриигровой сигнал</sys:String>
-    <sys:String x:Key="LOCGameActivityEnableAlarmToolTip">Checks thresholds during play (independent of session logging) and can show a toast and/or play a sound.</sys:String>
+    <sys:String x:Key="LOCGameActivityEnableAlarmToolTip">Проверяет пороговые значения во время игры (независимо от ведения журнала сеансов) и может показывать всплывающее уведомление и/или воспроизводить звук.</sys:String>
     <sys:String x:Key="LOCGameActivityAlarmInterval">Интервал проверки сигнала</sys:String>
-    <sys:String x:Key="LOCGameActivityAlarmEnableToast">Show toast</sys:String>
-    <sys:String x:Key="LOCGameActivityAlarmEnableSound">Воспроизвести звук</sys:String>
-    <sys:String x:Key="LOCGameActivityAlarmToastCorner">Toast corner</sys:String>
-    <sys:String x:Key="LOCGameActivityAlarmToastCornerBottomRight">Bottom right</sys:String>
-    <sys:String x:Key="LOCGameActivityAlarmToastCornerBottomLeft">Bottom left</sys:String>
-    <sys:String x:Key="LOCGameActivityAlarmToastCornerTopRight">Top right</sys:String>
-    <sys:String x:Key="LOCGameActivityAlarmToastCornerTopLeft">Top left</sys:String>
-    <sys:String x:Key="LOCGameActivityAlarmToastDuration">Toast duration (seconds)</sys:String>
-    <sys:String x:Key="LOCGameActivityAlarmToastOpacity">Toast opacity (%)</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmEnableToast">Показывать всплывающее уведомление</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmEnableSound">Воспроизводить звук</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmToastCorner">Угол для всплывающего уведомления</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmToastCornerBottomRight">Снизу справа</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmToastCornerBottomLeft">Снизу слева</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmToastCornerTopRight">Вверху справа</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmToastCornerTopLeft">Вверху слева</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmToastDuration">Продолжительность уведомления (в секундах)</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmToastOpacity">Непрозрачность уведомления (%)</sys:String>
     <sys:String x:Key="LOCGameActivityAlarmToastTitle">Аппаратное оповещение</sys:String>
     <sys:String x:Key="LOCGameActivityAlarmPreview">Тестовый сигнал</sys:String>
-    <sys:String x:Key="LOCGameActivityAlarmPreviewToolTip">Shows a sample toast with the current corner, duration and opacity. Plays a sound if Play sound is enabled.</sys:String>
+    <sys:String x:Key="LOCGameActivityAlarmPreviewToolTip">Показывает тестовое всплывающее уведомление с текущими настройками угла отображения, продолжительности и непрозрачности. Воспроизводит звук, если включена опция «Воспроизводить звук» (Play sound).</sys:String>
 
     <!-- Playtime -->
     <sys:String x:Key="LOCGameActivityCumulPlaytimeSession">Объединить игровые сессии на графике</sys:String>
     <sys:String x:Key="LOCGameActivityCumulPlaytimeStore">Унифицировать время различных библиотек</sys:String>
     <sys:String x:Key="LOCGameActivityHideHiddenGames">Скрыть спрятанные игры в Playnite из статистики</sys:String>
-    <sys:String x:Key="LOCGameActivityHideHiddenGamesToolTip">Excludes games marked as Hidden in Playnite from GameActivity lists, charts and totals. Sessions are still recorded; use Exclude from tracking to stop recording.</sys:String>
+    <sys:String x:Key="LOCGameActivityHideHiddenGamesToolTip">Исключает игры, отмеченные как «Скрытые» (Hidden) в Playnite, из списков, графиков и общих итогов GameActivity. Игровые сеансы при этом всё равно записываются; используйте опцию «Исключить из отслеживания» (Exclude from tracking), чтобы прекратить запись.</sys:String>
     <sys:String x:Key="LOCGameActivityIgnoreSession">Игнорировать короткие сессии</sys:String>
 
     <!-- Integration / Chart -->
